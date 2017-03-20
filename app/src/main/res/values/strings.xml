@@ -1,0 +1,27 @@
+<resources>
+
+    <string name="app_name">PSLab</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_saved_experiments">Saved Experiments</string>
+    <string name="nav_design_experiment">Design Experiments</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about_us">About Us</string>
+    <string name="nav_report">Report Issues</string>
+    <string name="nav_help_feedback">Help &amp; Feedback</string>
+
+    <string-array name="nav_item_activity_titles">
+        <item>Home</item>
+        <item>Saved Experiments</item>
+        <item>Design Experiments</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string name="activity_title_about_us">About Us</string>
+    <string name="activity_title_privacy_policy">Privacy Policy</string>
+
+</resources>
