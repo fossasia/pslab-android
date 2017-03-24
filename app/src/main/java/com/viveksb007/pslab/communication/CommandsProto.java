@@ -1,6 +1,10 @@
 package com.viveksb007.pslab.communication;
 
+import android.util.Log;
+
 public class CommandsProto {
+
+    private static String TAG = "CommandsProto";
 
     public int ACKNOWLEDGE = 254;
     public int MAX_SAMPLES = 10000;
@@ -238,5 +242,36 @@ public class CommandsProto {
 
     public int TEN_BIT = 10;
     public int TWELVE_BIT = 12;
+
+    public String applySIPrefix(double value, String unit, int precision) {
+        boolean negative = false;
+        if (value < 0) {
+            negative = true;
+            value *= -1;
+        } else if (value == 0)
+            return "0 " + unit;
+        int exponent = (int) Math.log10(value);
+        if (exponent > 0) {
+            exponent = (exponent / 3) * 3;
+        } else {
+            exponent = ((-1 * exponent + 3) / 3) * (-3);
+        }
+        value *= (Math.pow(10, -exponent));
+        if (value >= 1000.0) {
+            value /= 1000.0;
+            exponent += 3;
+        }
+        if (negative) value *= -1;
+        String PREFIXES = "yzafpnum KMGTPEZY";
+        int prefixLevel = (PREFIXES.length() - 1) / 2;
+        int siLevel = exponent / 3;
+        if (Math.abs(siLevel) > prefixLevel) {
+            Log.e(TAG, "Value Error : Exponent out range of available prefixes.");
+            return "";
+        } else {
+            String format = "%." + precision + "f %s%s";
+            return String.format(format, precision, value, PREFIXES.charAt(siLevel + prefixLevel), unit);
+        }
+    }
 
 }
