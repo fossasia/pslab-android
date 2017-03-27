@@ -1,6 +1,7 @@
 package com.viveksb007.pslab.communication.analogChannel;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by viveksb007 on 24/3/17.
@@ -11,8 +12,8 @@ public class AnalogConstants {
     double gains[] = {1, 2, 4, 5, 8, 10, 16, 32, 1 / 11.};
     String[] allAnalogChannels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
     String[] bipolars = {"CH1", "CH2", "CH3", "MIC"};
-    HashMap<String, double[]> inputRanges = new HashMap<>();
-    HashMap<String, Integer> picADCMultiplex = new HashMap<>();
+    Map<String, double[]> inputRanges = new HashMap<>();
+    Map<String, Integer> picADCMultiplex = new HashMap<>();
 
     public AnalogConstants() {
 

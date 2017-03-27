@@ -6,6 +6,7 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class CommunicationHandler {
 
     private boolean mRts = false;
     private boolean mDtr = false;
+    private boolean connected = false;
 
     private static final int USB_RECIP_INTERFACE = 0x01;
     private static final int USB_RT_ACM = UsbConstants.USB_TYPE_CLASS | USB_RECIP_INTERFACE;
@@ -71,7 +73,94 @@ public class CommunicationHandler {
             throw new IOException("Device not Connected");
         }
         mConnection = mUsbManager.openDevice(mUsbDevice);
+        Log.d(TAG, "Claiming interfaces, count=" + mUsbDevice.getInterfaceCount());
 
+        mControlInterface = mUsbDevice.getInterface(0);
+        Log.d(TAG, "Control interface=" + mControlInterface);
+
+        if (!mConnection.claimInterface(mControlInterface, true)) {
+            throw new IOException("Could not claim control interface.");
+        }
+
+        mControlEndpoint = mControlInterface.getEndpoint(0);
+        Log.d(TAG, "Control endpoint direction: " + mControlEndpoint.getDirection());
+
+        Log.d(TAG, "Claiming data interface.");
+        mDataInterface = mUsbDevice.getInterface(1);
+        Log.d(TAG, "data interface=" + mDataInterface);
+
+        if (!mConnection.claimInterface(mDataInterface, true)) {
+            throw new IOException("Could not claim data interface.");
+        }
+        mReadEndpoint = mDataInterface.getEndpoint(1);
+        Log.d(TAG, "Read endpoint direction: " + mReadEndpoint.getDirection());
+        mWriteEndpoint = mDataInterface.getEndpoint(0);
+        Log.d(TAG, "Write endpoint direction: " + mWriteEndpoint.getDirection());
+        connected = true;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void close() throws IOException {
+        if (mConnection == null) {
+            throw new IOException("Already closed");
+        }
+        mConnection.releaseInterface(mDataInterface);
+        mConnection.releaseInterface(mControlInterface);
+        mConnection.close();
+        connected = false;
+        mConnection = null;
+    }
+
+    public int read(byte[] dest, int bytesToBeRead, int timeoutMillis) throws IOException {
+        int numBytesRead = 0;
+        synchronized (mReadBufferLock) {
+            int readNow;
+            while (numBytesRead < bytesToBeRead) {
+                readNow = mConnection.bulkTransfer(mReadEndpoint, mReadBuffer, bytesToBeRead, timeoutMillis);
+                if (readNow < 0) {
+                    Log.e(TAG, "Read Error: " + numBytesRead);
+                    return numBytesRead;
+                } else {
+                    System.arraycopy(mReadBuffer, 0, dest, numBytesRead, readNow);
+                    numBytesRead += readNow;
+                }
+            }
+        }
+        return numBytesRead;
+    }
+
+    public int write(byte[] src, int timeoutMillis) throws IOException {
+        int written = 0;
+        while (written < src.length) {
+            int writeLength, amtWritten;
+            synchronized (mWriteBufferLock) {
+                writeLength = Math.min(mWriteBuffer.length, src.length - written);
+                // bulk transfer supports offset from API 18
+                amtWritten = mConnection.bulkTransfer(mWriteEndpoint, src, written, writeLength, timeoutMillis);
+            }
+            if (amtWritten < 0) {
+                throw new IOException("Error writing " + writeLength
+                        + " bytes at offset " + written + " length=" + src.length);
+            }
+            written += amtWritten;
+        }
+        return written;
+    }
+
+    public void setBaudRate(int baudRate) {
+        byte[] msg = {
+                (byte) (baudRate & 0xff),
+                (byte) ((baudRate >> 8) & 0xff),
+                (byte) ((baudRate >> 16) & 0xff),
+                (byte) ((baudRate >> 24) & 0xff),
+                (byte) 0,
+                (byte) 0,
+                (byte) 8};
+        sendAcmControlMessage(SET_LINE_CODING, 0, msg);
+        SystemClock.sleep(100);
     }
 
     private int sendAcmControlMessage(int request, int value, byte[] buf) {
