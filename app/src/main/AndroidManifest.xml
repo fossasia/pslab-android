@@ -18,6 +18,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.AboutUs"/>
+        <activity android:name=".activity.HelpAndFeedback"/>
+        <activity android:name=".activity.ReportUs"/>
     </application>
 
 </manifest>
