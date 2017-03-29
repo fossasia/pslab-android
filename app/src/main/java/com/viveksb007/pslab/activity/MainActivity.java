@@ -74,18 +74,18 @@ public class MainActivity extends AppCompatActivity {
         device_found = mCommunicationHandler.device_found;
         if (device_found) {
             Log.d(TAG, "PSLab device found");
+            try {
+                mCommunicationHandler.open();
+                connected = mCommunicationHandler.isConnected();
+                if (connected) {
+                    Log.d(TAG, "Connection established");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Error in establishing connection");
+            }
         } else {
             Log.d(TAG, "PSLab device not found");
-        }
-        try {
-            mCommunicationHandler.open();
-            connected = mCommunicationHandler.isConnected();
-            if (connected) {
-                Log.d(TAG, "Connection established");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Error in establishing connection");
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -142,17 +142,13 @@ public class MainActivity extends AppCompatActivity {
             case 0:
                 return HomeFragment.newInstance(connected, device_found);
             case 1:
-                ApplicationsFragment applicationsFragment = new ApplicationsFragment();
-                return applicationsFragment;
+                return ApplicationsFragment.newInstance();
             case 2:
-                SavedExperiments savedExperiments = new SavedExperiments();
-                return savedExperiments;
+                return SavedExperiments.newInstance();
             case 3:
-                DesignExperiments designExperiments = new DesignExperiments();
-                return designExperiments;
+                return DesignExperiments.newInstance();
             case 4:
-                SettingsFragment settingsFragment = new SettingsFragment();
-                return settingsFragment;
+                return SettingsFragment.newInstance();
             default:
                 return HomeFragment.newInstance(connected, device_found);
         }
