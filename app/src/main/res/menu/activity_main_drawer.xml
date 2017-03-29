@@ -6,6 +6,10 @@
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/nav_home" />
         <item
+            android:id="@+id/nav_applications"
+            android:icon="@drawable/ic_apps_black_24dp"
+            android:title="@string/nav_applications"/>
+        <item
             android:id="@+id/nav_saved_experiments"
             android:icon="@drawable/ic_save_black_24dp"
             android:title="@string/nav_saved_experiments" />

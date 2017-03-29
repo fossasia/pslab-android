@@ -13,9 +13,11 @@
     <string name="nav_about_us">About Us</string>
     <string name="nav_report">Report Issues</string>
     <string name="nav_help_feedback">Help &amp; Feedback</string>
+    <string name="nav_applications">Applications</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
+        <item>Applications</item>
         <item>Saved Experiments</item>
         <item>Design Experiments</item>
         <item>Settings</item>
