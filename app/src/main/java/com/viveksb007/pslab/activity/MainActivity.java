@@ -27,6 +27,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.viveksb007.pslab.R;
 import com.viveksb007.pslab.communication.CommunicationHandler;
+import com.viveksb007.pslab.communication.ScienceLab;
 import com.viveksb007.pslab.fragment.ApplicationsFragment;
 import com.viveksb007.pslab.fragment.DesignExperiments;
 import com.viveksb007.pslab.fragment.HomeFragment;
@@ -61,29 +62,18 @@ public class MainActivity extends AppCompatActivity {
     public static String CURRENT_TAG = TAG_HOME;
     private String[] activityTitles;
 
-    private boolean shouldLoadHomeFragOnBackPress = true, device_found = false, connected = false;
+    private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
-    private CommunicationHandler mCommunicationHandler;
+    private ScienceLab mScienceLab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         usbManager = (UsbManager) getSystemService(USB_SERVICE);
-        mCommunicationHandler = new CommunicationHandler(usbManager);
-        device_found = mCommunicationHandler.device_found;
-        if (device_found) {
+        mScienceLab = new ScienceLab(usbManager);
+        if (mScienceLab.isDeviceFound()) {
             Log.d(TAG, "PSLab device found");
-            try {
-                mCommunicationHandler.open();
-                connected = mCommunicationHandler.isConnected();
-                if (connected) {
-                    Log.d(TAG, "Connection established");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Error in establishing connection");
-            }
         } else {
             Log.d(TAG, "PSLab device not found");
         }
@@ -140,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                return HomeFragment.newInstance(connected, device_found);
+                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound());
             case 1:
                 return ApplicationsFragment.newInstance();
             case 2:
@@ -150,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             case 4:
                 return SettingsFragment.newInstance();
             default:
-                return HomeFragment.newInstance(connected, device_found);
+                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound());
         }
     }
 

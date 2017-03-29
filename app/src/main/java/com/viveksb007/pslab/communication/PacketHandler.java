@@ -25,12 +25,12 @@ public class PacketHandler {
     private int timeout = 500, VERSION_STRING_LENGTH = 2;
     ByteBuffer burstBuffer = ByteBuffer.allocate(2000);
 
-    public PacketHandler(int timeout, UsbManager usbManager) {
+    public PacketHandler(int timeout, CommunicationHandler communicationHandler) {
         this.loadBurst = false;
         this.connected = false;
         this.timeout = timeout;
         this.mCommandsProto = new CommandsProto();
-        this.mCommunicationHandler = new CommunicationHandler(usbManager);
+        this.mCommunicationHandler = communicationHandler;
         connected = mCommunicationHandler.isConnected();
     }
 
