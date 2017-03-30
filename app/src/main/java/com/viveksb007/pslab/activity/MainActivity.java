@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,16 +26,21 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.viveksb007.pslab.R;
+import com.viveksb007.pslab.communication.CommunicationHandler;
+import com.viveksb007.pslab.communication.ScienceLab;
+import com.viveksb007.pslab.fragment.ApplicationsFragment;
 import com.viveksb007.pslab.fragment.DesignExperiments;
 import com.viveksb007.pslab.fragment.HomeFragment;
 import com.viveksb007.pslab.fragment.SavedExperiments;
 import com.viveksb007.pslab.fragment.SettingsFragment;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private UsbManager usbManager;
     private static final String DEVICE_NAME = "PSLAB";
     private LineChart lineChart;
@@ -49,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     public static int navItemIndex = 0;
 
     private static final String TAG_HOME = "home";
+    private static final String TAG_APPLICATIONS = "applications";
     private static final String TAG_SAVED_EXPERIMENTS = "savedExperiments";
     private static final String TAG_DESIGN_EXPERIMENTS = "designExperiments";
     private static final String TAG_SETTINGS = "settings";
@@ -57,18 +64,19 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
+    private ScienceLab mScienceLab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*
         usbManager = (UsbManager) getSystemService(USB_SERVICE);
-        HashMap<String, UsbDevice> deviceList = usbManager.getDeviceList();
-        UsbDevice device = deviceList.get(DEVICE_NAME);
-        lineChart = (LineChart) findViewById(R.id.chart);
-        plotMap();
-        */
+        mScienceLab = new ScienceLab(usbManager);
+        if (mScienceLab.isDeviceFound()) {
+            Log.d(TAG, "PSLab device found");
+        } else {
+            Log.d(TAG, "PSLab device not found");
+        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -122,19 +130,17 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                HomeFragment homeFragment = new HomeFragment();
-                return homeFragment;
+                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound());
             case 1:
-                SavedExperiments savedExperiments = new SavedExperiments();
-                return savedExperiments;
+                return ApplicationsFragment.newInstance();
             case 2:
-                DesignExperiments designExperiments = new DesignExperiments();
-                return designExperiments;
+                return SavedExperiments.newInstance();
             case 3:
-                SettingsFragment settingsFragment = new SettingsFragment();
-                return settingsFragment;
+                return DesignExperiments.newInstance();
+            case 4:
+                return SettingsFragment.newInstance();
             default:
-                return new HomeFragment();
+                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound());
         }
     }
 
@@ -155,16 +161,20 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         break;
-                    case R.id.nav_saved_experiments:
+                    case R.id.nav_applications:
                         navItemIndex = 1;
+                        CURRENT_TAG = TAG_APPLICATIONS;
+                        break;
+                    case R.id.nav_saved_experiments:
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_SAVED_EXPERIMENTS;
                         break;
                     case R.id.nav_design_experiments:
-                        navItemIndex = 2;
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_DESIGN_EXPERIMENTS;
                         break;
                     case R.id.nav_settings:
-                        navItemIndex = 3;
+                        navItemIndex = 4;
                         CURRENT_TAG = TAG_SETTINGS;
                         break;
                     case R.id.nav_about_us:

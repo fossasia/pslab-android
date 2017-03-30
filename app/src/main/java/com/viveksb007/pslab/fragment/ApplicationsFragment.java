@@ -10,20 +10,20 @@ import android.view.ViewGroup;
 import com.viveksb007.pslab.R;
 
 /**
- * Created by viveksb007 on 15/3/17.
+ * Created by viveksb007 on 29/3/17.
  */
 
-public class DesignExperiments extends Fragment {
+public class ApplicationsFragment extends Fragment {
 
-    public static DesignExperiments newInstance() {
-        DesignExperiments designExperiments = new DesignExperiments();
-        return designExperiments;
+    public static ApplicationsFragment newInstance() {
+        ApplicationsFragment applicationsFragment = new ApplicationsFragment();
+        return applicationsFragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.design_experiments_fragment, container, false);
+        View view = inflater.inflate(R.layout.applications_fragment, container, false);
         return view;
     }
 }

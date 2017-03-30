@@ -26,7 +26,7 @@ public class CommunicationHandler {
 
     private boolean mRts = false;
     private boolean mDtr = false;
-    private boolean connected = false;
+    private boolean connected = false, device_found = false;
 
     private static final int USB_RECIP_INTERFACE = 0x01;
     private static final int USB_RT_ACM = UsbConstants.USB_TYPE_CLASS | USB_RECIP_INTERFACE;
@@ -49,7 +49,6 @@ public class CommunicationHandler {
 
     private UsbDeviceConnection mConnection;
 
-    public boolean device_found = false;
     private UsbManager mUsbManager;
 
     public CommunicationHandler(UsbManager usbManager) {
@@ -97,6 +96,10 @@ public class CommunicationHandler {
         mWriteEndpoint = mDataInterface.getEndpoint(0);
         Log.d(TAG, "Write endpoint direction: " + mWriteEndpoint.getDirection());
         connected = true;
+    }
+
+    public boolean isDeviceFound() {
+        return device_found;
     }
 
     public boolean isConnected() {
