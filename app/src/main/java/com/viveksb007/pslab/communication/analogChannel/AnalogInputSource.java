@@ -13,7 +13,7 @@ public class AnalogInputSource {
     double gainValues[], range[];
     boolean gainEnabled = false, inverted = false, caliberationReady = false;
     double gain = 0;
-    int gainPGA, inversion = 1, defaultOffsetCode = 0, scaling = 1;
+    int gainPGA, inversion = 1, defaultOffsetCode = 0, scaling = 1, CHOSA;
     private String channelName;
 
 
@@ -21,6 +21,8 @@ public class AnalogInputSource {
         AnalogConstants analogConstants = new AnalogConstants();
         this.channelName = channelName;
         range = analogConstants.inputRanges.get(channelName);
+        this.gainValues = analogConstants.gains;
+        this.CHOSA = analogConstants.picADCMultiplex.get(channelName);
         if (range[1] - range[0] < 0) {
             inverted = true;
             inversion = -1;
@@ -48,27 +50,37 @@ public class AnalogInputSource {
         return true;
     }
 
-    boolean inRange(){
+    boolean inRange() {
         return true;
     }
 
-    boolean conservativeInRange(){
+    boolean conservativeInRange() {
         return true;
     }
 
-    void loadCalibrationTable(){
+    void loadCalibrationTable() {
 
     }
 
-    void loadPolynomials(){
+    void loadPolynomials() {
 
     }
 
-    void ignoreCalibration(){
+    void ignoreCalibration() {
         caliberationReady = false;
     }
 
     private void regenerateCalibration() {
+        double A = range[0], B = range[1], intercept = range[0];
+        if (gain != 0) {
+            A /= gain;
+            B /= gain;
+        }
+        double slope = B - A;
+        if (caliberationReady & (gain != 8)) {
 
+        } else {
+
+        }
     }
 }
