@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class AnalogInputSource {
 
     private static String TAG = "AnalogInputSource";
@@ -17,7 +16,6 @@ public class AnalogInputSource {
     double gain = 0;
     int gainPGA, inversion = 1, defaultOffsetCode = 0, scaling = 1;
     private String channelName;
-    double[] gain_values = AnalogConstants.gains;
     Map< Integer, Double> calPoly10 = new LinkedHashMap<>(); //(power,coefficient)
     Map< Integer, Double> calPoly12 = new LinkedHashMap<>(); //(power,coefficient)
     Map< Integer, Double> voltToCode10 = new LinkedHashMap<>(); //(power,coefficient)
@@ -28,6 +26,7 @@ public class AnalogInputSource {
         AnalogConstants analogConstants = new AnalogConstants();
         this.channelName = channelName;
         range = analogConstants.inputRanges.get(channelName);
+        gainValues = AnalogConstants.gains;
 
         calPoly10.put(0,0.);
         calPoly10.put(1,3.3/1023);
@@ -61,17 +60,14 @@ public class AnalogInputSource {
             Log.e(channelName,"Analog gain is not available");
             return false;
         }
-        gain = gain_values[g];
+        gain = gainValues[g];
         regenerateCalibration();
         return true;
     }
 
     boolean inRange(double val)
     {
-        double degree0_coeff = voltToCode12.get(0);
-        double degree1_coeff = voltToCode12.get(1);
-        double degree2_coeff = voltToCode12.get(2);
-        double sum = degree0_coeff + val * degree1_coeff + val * val * degree2_coeff;
+        double sum = voltToCode12.get(0) + val * voltToCode12.get(1) + val * val * voltToCode12.get(2);
         if (sum >=50 && sum <=4095)
         {
             return true;
@@ -80,10 +76,7 @@ public class AnalogInputSource {
     }
     boolean conservativeInRange(double val)
     {
-        double degree0_coeff = voltToCode12.get(0);
-        double degree1_coeff = voltToCode12.get(1);
-        double degree2_coeff = voltToCode12.get(2);
-        double solution = degree0_coeff + val * degree1_coeff + val * val * degree2_coeff;
+        double solution = voltToCode12.get(0) + val * voltToCode12.get(1) + val * val * voltToCode12.get(2);
         if (solution >=50 && solution <=4000)
         {
             return true;
@@ -111,23 +104,24 @@ public class AnalogInputSource {
         for(int i=0; i<polys.size(); i++)
         {
             LinkedHashMap<Integer, Double> temp = new LinkedHashMap<>();
-            for(int j=polys.get(i).length-1; j>0; j--)
+            for(int j=polys.get(i).length-1; j>=0; j--)
             {
                 temp.put(j,polys.get(i)[j]);//assuming coeffecient of lowest degree (tuple of polys) is in the end.
             }
-            polynomials.add(temp);  //polynomials will appear like this [(0:1,1:9,2:0),(0:2,1:3,2:4),.....]
+            polynomials.add(temp);  //if I am correct polynomials will appear like this [(0:1,1:9,2:0),(0:2,1:3,2:4),.....]
             temp.clear();
         }
-    }                           //** unsure about this method, still working on it
+    }                           //** unsure about this method
+
     void regenerateCalibration()
     {
         double A,B,intercept,slope;
-        A = range[1];
-        B = range[0];
+        A = range[0];
+        B = range[1];
         intercept = range[0];
         if (gain != -1)
         {
-            gain = gain_values[(int)gain];
+            gain = gainValues[(int)gain];
             B/=gain;
             A/=gain;
         }
@@ -135,7 +129,7 @@ public class AnalogInputSource {
         intercept = A;
         if (calibrationReady && gain!=8)        //special case for 1/11. gain
         {
-            
+
         }
         else
         {
@@ -164,7 +158,7 @@ public class AnalogInputSource {
         return(polynomials.get((int)gain).get(0)+RAW*polynomials.get((int)gain).get(1)+RAW*RAW*polynomials.get((int)gain).get(2)); //gonna define a new method for this
 
     }
-    
+
     double cal10(double RAW)
     {
         RAW *= 4095/1023;
