@@ -115,11 +115,10 @@ public class AnalogInputSource {
             {
                 temp.put(j,polys.get(i)[j]);//assuming coeffecient of lowest degree (tuple of polys) is in the end.
             }
-            polynomials.add(temp);  //if I am correct polynomials will appear like this [(0:1,1:9,2:0),(0:2,1:3,2:4),.....]
+            polynomials.add(temp);  //polynomials will appear like this [(0:1,1:9,2:0),(0:2,1:3,2:4),.....]
             temp.clear();
         }
-    }                           //** unsure about this method
-
+    }                           //** unsure about this method, still working on it
     void regenerateCalibration()
     {
         double A,B,intercept,slope;
@@ -165,7 +164,7 @@ public class AnalogInputSource {
         return(polynomials.get((int)gain).get(0)+RAW*polynomials.get((int)gain).get(1)+RAW*RAW*polynomials.get((int)gain).get(2)); //gonna define a new method for this
 
     }
-
+    
     double cal10(double RAW)
     {
         RAW *= 4095/1023;
@@ -173,6 +172,4 @@ public class AnalogInputSource {
         RAW -= 4095 * avg_shifts / 3.3;
         return(polynomials.get((int)gain).get(0)+RAW*polynomials.get((int)gain).get(1)+RAW*RAW*polynomials.get((int)gain).get(2));
     }
-
-
 }
