@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.viveksb007.pslab.R;
@@ -36,10 +37,16 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         TextView tvDeviceStatus = (TextView) view.findViewById(R.id.tv_device_status);
-        if (deviceFound & deviceConnected)
+        TextView tvVersion = (TextView) view.findViewById(R.id.tv_device_version);
+        ImageView imgViewDeviceStatus = (ImageView) view.findViewById(R.id.img_device_status);
+        if (deviceFound & deviceConnected) {
+            imgViewDeviceStatus.setImageResource(R.drawable.usb_connected);
             tvDeviceStatus.setText("Device Connected Successfully");
-        else
-            tvDeviceStatus.setText("PSLab device not found");
+            tvVersion.setText("PSLAB Version-1.0");
+        } else {
+            imgViewDeviceStatus.setImageResource(R.drawable.usb_disconnected);
+            tvDeviceStatus.setText("PSLab Device not found");
+        }
         return view;
     }
 }
