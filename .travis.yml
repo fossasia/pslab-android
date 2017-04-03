@@ -31,6 +31,10 @@ android:
     # Specify at least one system image
     - sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
     
+    
+before_install:
+ - chmod +x gradlew
+    
 # prevents reuploading of Cache
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
