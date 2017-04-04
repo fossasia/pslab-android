@@ -1,0 +1,60 @@
+language: android
+jdk: 
+ - oraclejdk8
+# Use the Travis Container-Based Infrastructure
+
+branches:
+  only:
+    - master
+
+env:
+  global:
+    - ANDROID_API_LEVEL=25
+    - ANDROID_BUILD_TOOLS_VERSION=25.0.2
+    - ANDROID_ABI=armeabi-v7a
+    - ANDROID_TAG=google_apis
+    - ANDROID_TARGET=android-25
+    - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-$ANDROID_BUILD_TOOLS_VERSION
+    - android-$ANDROID_API_LEVEL
+    # For Google APIs
+    - addon-google_apis-google-$ANDROID_API_LEVEL
+    # Google Play Services
+    - extra-google-google_play_services
+    # Support library
+    - extra-android-support
+    # Latest artifacts in local repository
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+    # Specify at least one system image
+    #- sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
+    
+    
+licenses:
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+    - '.+'
+
+before_install:
+ - chmod +x gradlew
+ - mkdir "$ANDROID_HOME/licenses" || true
+ - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+ - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+before_script:
+
+
+script:
+ - ./gradlew clean assembleDebug
+
+after_success:
+
+notifications:
+  slack:

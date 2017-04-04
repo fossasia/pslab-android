@@ -47,7 +47,7 @@ public class PacketHandler {
         return version;
     }
 
-    private void sendByte(int val) throws IOException {
+    public void sendByte(int val) throws IOException {
         if (!connected) {
             throw new IOException("Device not connected");
         }
@@ -63,7 +63,7 @@ public class PacketHandler {
         }
     }
 
-    private void sendInt(int val) throws IOException {
+    public void sendInt(int val) throws IOException {
         if (!connected) {
             throw new IOException("Device not connected");
         }
@@ -79,7 +79,7 @@ public class PacketHandler {
         }
     }
 
-    private int getAcknowledgement() {
+    public int getAcknowledgement() {
         /*
         fetches the response byte
         1 SUCCESS
@@ -101,7 +101,7 @@ public class PacketHandler {
         }
     }
 
-    private byte getByte() {
+    public byte getByte() {
         try {
             int numByteRead = mCommunicationHandler.read(buffer, 1, timeout);
             if (numByteRead == 1) {
@@ -115,7 +115,7 @@ public class PacketHandler {
         return -1;
     }
 
-    private int getInt() {
+    public int getInt() {
         try {
             int numByteRead = mCommunicationHandler.read(buffer, 2, timeout);
             if (numByteRead == 2) {
@@ -130,7 +130,7 @@ public class PacketHandler {
         return -1;
     }
 
-    private long getLong() {
+    public long getLong() {
         try {
             int numByteRead = mCommunicationHandler.read(buffer, 4, timeout);
             if (numByteRead == 4) {
@@ -145,11 +145,21 @@ public class PacketHandler {
         return -1;
     }
 
-    private boolean waitForData() {
+    public boolean waitForData() {
         return false;
     }
 
-    private byte[] sendBurst() {
+    public int read(byte[] dest, int bytesToRead) throws IOException {
+        int numBytesRead = mCommunicationHandler.read(dest, bytesToRead, timeout);
+        if (numBytesRead == bytesToRead) {
+            return numBytesRead;
+        } else {
+            Log.e(TAG, "Error in packetHandler Reading");
+        }
+        return -1;
+    }
+
+    public byte[] sendBurst() {
         try {
             mCommunicationHandler.write(burstBuffer.array(), timeout);
             burstBuffer.clear();

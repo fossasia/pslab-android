@@ -47,4 +47,19 @@ public class ScienceLab {
     public boolean isConnected() {
         return mCommunicationHandler.isConnected();
     }
+
+    public String getVersion() throws IOException {
+        if (isConnected()) {
+            return mPacketHandler.getVersion();
+        } else {
+            return "Not Connected";
+        }
+    }
+
+    public double getResistence() {
+        return 0;
+    }
+
+    public void ignoreCalibration() {
+    }
 }
