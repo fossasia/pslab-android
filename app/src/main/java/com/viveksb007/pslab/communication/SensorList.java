@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class SensorList {
 
-    Map<Integer, String[]> sensorList = new HashMap<>();
+    public Map<Integer, String[]> sensorList = new HashMap<>();
 
     public SensorList() {
         sensorList.put(0x00, new String[]{"Could be MLX90614. Try 0x5A"});

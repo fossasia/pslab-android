@@ -34,6 +34,10 @@ public class PacketHandler {
         connected = mCommunicationHandler.isConnected();
     }
 
+    public boolean isConnected(){
+        return connected;
+    }
+
     public String getVersion() throws IOException {
         try {
             sendByte(mCommandsProto.COMMON);
