@@ -5,15 +5,15 @@ package com.viveksb007.pslab.communication.analogChannel;
  */
 
 public class AnalogAquisitionChannel {
-    int resolution;
-    AnalogInputSource analogAquisitionChannel;
-    double gain;
-    String name;
-    double calibration_ref196;
-    int length;
-    double timebase;
-    double[] xaxis = new double[10000];
-    double[] yaxis = new double[10000];
+    private int resolution;
+    private AnalogInputSource analogAquisitionChannel;
+    private double gain;
+    private String name;
+    private double calibration_ref196;
+    private int length;
+    private double timebase;
+    private double[] xaxis = new double[10000];
+    private double[] yaxis = new double[10000];
     AnalogAquisitionChannel(String channel) //initialize
     {
         gain = 0;
@@ -41,30 +41,30 @@ public class AnalogAquisitionChannel {
             return (calibration_ref196 * (analogAquisitionChannel.calPoly10.get(0) + analogAquisitionChannel.calPoly10.get(1) * val + analogAquisitionChannel.calPoly10.get(2) * val * val));
         }
     }
-    void set_yval(int pos, int val)
+    void setYVal(int pos, int val)
     {
         yaxis[pos]=fixValue(val);
     }
-    void set_xval(int pos, int val)
+    void setXVal(int pos, int val)
     {
         xaxis[pos]=fixValue(val);
     }
-    void set_params()
+    void setParams()
     {
         //these parameters will be set by the user
     }
-    void RegenerateXAxis()
+    void regenerateXAxis()
     {
         for(int i=0;i<length;i++)
         {
             xaxis[i] = timebase*i;
         }
     }
-    double GetXAxis()
+    double getXAxis()
     {
         return(xaxis[length]);
     }
-    double GetYAxis()
+    double getYAxis()
     {
         return(yaxis[length]);
     }
