@@ -15,8 +15,8 @@ public class DACChannel {
     private int offset;
     private double[] range;
     private double slope,intercept;
-    private Map< Integer, Double> VToCode = new LinkedHashMap<>(); //(power,coefficient)
-    private Map< Integer, Double> CodeToV = new LinkedHashMap<>(); //(power,coefficient)
+    Map< Integer, Double> VToCode = new LinkedHashMap<>(); //(power,coefficient)
+    Map< Integer, Double> CodeToV = new LinkedHashMap<>(); //(power,coefficient)
     String calibration_enabled;
     private List<Double> calibration_table = new ArrayList<>();
     DACChannel(String name, double[] span, int channum)
