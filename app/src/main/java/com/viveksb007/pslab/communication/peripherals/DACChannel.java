@@ -10,25 +10,26 @@ import java.util.Map;
  */
 
 public class DACChannel {
-    String name;
-    int channum,offset;
-    double[] range;
-    double slope,intercept;
-    Map< Integer, Double> VToCode = new LinkedHashMap<>(); //(power,coefficient)
-    Map< Integer, Double> CodeToV = new LinkedHashMap<>(); //(power,coefficient)
+    private String name;
+    int channum;
+    private int offset;
+    private double[] range;
+    private double slope,intercept;
+    private Map< Integer, Double> VToCode = new LinkedHashMap<>(); //(power,coefficient)
+    private Map< Integer, Double> CodeToV = new LinkedHashMap<>(); //(power,coefficient)
     String calibration_enabled;
-    List<Double> calibration_table = new ArrayList<>();
-    public DACChannel(String name, double[] span, int channum)
+    private List<Double> calibration_table = new ArrayList<>();
+    DACChannel(String name, double[] span, int channum)
     {
         this.name = name;
         this.range = span;
         this.channum = channum;
         this.slope = span[1]-span[0];
         this.intercept = span[0];
-        VToCode.put(0,-4095. * intercept / slope);
-        VToCode.put(1,4095. / slope);
-        CodeToV.put(0,intercept);
-        CodeToV.put(1,slope / 4095.);
+        this.VToCode.put(0,-4095. * intercept / slope);
+        this.VToCode.put(1,4095. / slope);
+        this.CodeToV.put(0,intercept);
+        this.CodeToV.put(1,slope / 4095.);
         this.calibration_enabled = "false";
         this.slope = 1;
         this.offset = 0;
