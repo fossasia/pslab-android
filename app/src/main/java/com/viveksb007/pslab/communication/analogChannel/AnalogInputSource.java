@@ -1,41 +1,28 @@
 package com.viveksb007.pslab.communication.analogChannel;
 
 import android.util.Log;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
+/**
+ * Created by viveksb007 on 24/3/17.
+ */
 
 public class AnalogInputSource {
 
     private static String TAG = "AnalogInputSource";
 
-    private double gainValues[], range[];
-    private boolean gainEnabled = false, inverted = false, calibrationReady = false;
-    private double gain = 0;
-    private int gainPGA, inversion = 1, defaultOffsetCode = 0, scaling = 1;
+    double gainValues[], range[];
+    boolean gainEnabled = false, inverted = false, caliberationReady = false;
+    double gain = 0;
+    int gainPGA, inversion = 1, defaultOffsetCode = 0, scaling = 1, CHOSA;
     private String channelName;
-    Map< Integer, Double> calPoly10 = new LinkedHashMap<>(); //(power,coefficient)
-    Map< Integer, Double> calPoly12 = new LinkedHashMap<>(); //(power,coefficient)
-    private Map< Integer, Double> voltToCode10 = new LinkedHashMap<>(); //(power,coefficient)
-    private Map< Integer, Double> voltToCode12 = new LinkedHashMap<>(); //(power,coefficient)
-    private List<Double> adc_shifts = new ArrayList<Double>();
-    private  List<LinkedHashMap<Integer,Double>>polynomials = new ArrayList<>(); //list of maps
-    AnalogInputSource(String channelName) {
+
+
+    public AnalogInputSource(String channelName) {
         AnalogConstants analogConstants = new AnalogConstants();
         this.channelName = channelName;
         range = analogConstants.inputRanges.get(channelName);
-        gainValues = AnalogConstants.gains;
-
-        calPoly10.put(0,0.);
-        calPoly10.put(1,3.3/1023);
-        calPoly10.put(2,0.);
-
-        calPoly12.put(0,0.);
-        calPoly12.put(1,3.3/4095);
-        calPoly12.put(2,0.);
-
+        this.gainValues = analogConstants.gains;
+        this.CHOSA = analogConstants.picADCMultiplex.get(channelName);
         if (range[1] - range[0] < 0) {
             inverted = true;
             inversion = -1;
@@ -53,115 +40,47 @@ public class AnalogInputSource {
         regenerateCalibration();
     }
 
-    Boolean setGain(int g)
-    {
-        if(!gainEnabled)
-        {
-            Log.e(channelName,"Analog gain is not available");
+    boolean setGain(int index) {
+        if (!gainEnabled) {
+            Log.e(TAG, "Analog gain is not available on " + channelName);
             return false;
         }
-        gain = gainValues[g];
+        gain = gainValues[index];
         regenerateCalibration();
         return true;
     }
 
-    boolean inRange(double val)
-    {
-        double sum = voltToCode12.get(0) + val * voltToCode12.get(1) + val * val * voltToCode12.get(2);
-        if (sum >=50 && sum <=4095)
-        {
-            return true;
+    boolean inRange() {
+        return true;
+    }
+
+    boolean conservativeInRange() {
+        return true;
+    }
+
+    void loadCalibrationTable() {
+
+    }
+
+    void loadPolynomials() {
+
+    }
+
+    void ignoreCalibration() {
+        caliberationReady = false;
+    }
+
+    private void regenerateCalibration() {
+        double A = range[0], B = range[1], intercept = range[0];
+        if (gain != 0) {
+            A /= gain;
+            B /= gain;
         }
-        return false;
-    }
-    boolean conservativeInRange(double val)
-    {
-        double solution = voltToCode12.get(0) + val * voltToCode12.get(1) + val * val * voltToCode12.get(2);
-        if (solution >=50 && solution <=4000)
-        {
-            return true;
+        double slope = B - A;
+        if (caliberationReady & (gain != 8)) {
+
+        } else {
+
         }
-        return false;
     }
-
-    List<Double> loadCalibrationTable(double[] table ,double slope, double intercept)
-    {
-        for(int i=0; i<table.length;i++)
-        {
-            adc_shifts.add(table[i]*slope-intercept);
-        }
-        return adc_shifts;
-    }
-
-    void ignoreCalibration()
-    {
-        calibrationReady = false;
-    }
-
-    void loadPolynomials(List<Double []> polys) //polys --> A LIST OF TUPLES (in Python) ~ A LIST OF ARRAYS (IN JAVA))
-                                                //polynomial is a list of hashes and we are gonna load values via loadPolynomials
-    {
-        for(int i=0; i<polys.size(); i++)
-        {
-            LinkedHashMap<Integer, Double> temp = new LinkedHashMap<>();
-            for(int j=polys.get(i).length-1; j>=0; j--)
-            {
-                temp.put(j,polys.get(i)[j]);//assuming coeffecient of lowest degree (tuple of polys) is in the end.
-            }
-            polynomials.add(temp);  //if I am correct polynomials will appear like this [(0:1,1:9,2:0),(0:2,1:3,2:4),.....]
-            temp.clear();
-        }
-    }                           //** unsure about this method
-
-    private void regenerateCalibration()
-    {
-        double A,B,intercept,slope;
-        A = range[1];
-        B = range[0];
-        intercept = range[0];
-        if (gain != -1)
-        {
-            gain = gainValues[(int)gain];
-            B/=gain;
-            A/=gain;
-        }
-        slope = B - A;
-        intercept = A;
-        if (!calibrationReady && gain==8)        //special case for 1/11. gain
-        {
-            calPoly10.clear();
-            calPoly10.put(0,intercept);
-            calPoly10.put(1,slope/1023);
-            calPoly10.put(2,0.);
-            calPoly12.clear();
-            calPoly12.put(0,intercept);
-            calPoly12.put(1,slope/4095);
-            calPoly12.put(2,0.);
-        }                                       //other cases to be added
-        voltToCode10.put(0,-1023*intercept/slope);
-        voltToCode10.put(1,1023./slope);
-        voltToCode10.put(2,0.);
-
-        voltToCode12.put(0,-4095*intercept/slope);
-        voltToCode12.put(1,4095./slope);
-        voltToCode12.put(2,0.);
-    }
-
-    double cal12(double RAW)
-    {
-        double avg_shifts = (adc_shifts.get((int)Math.floor(RAW))+adc_shifts.get((int)Math.ceil(RAW)))/2;
-        RAW -= 4095*avg_shifts/3.3;
-        return(polynomials.get((int)gain).get(0)+RAW*polynomials.get((int)gain).get(1)+RAW*RAW*polynomials.get((int)gain).get(2)); //gonna define a new method for this
-
-    }
-
-    double cal10(double RAW)
-    {
-        RAW *= 4095/1023;
-        double avg_shifts = (adc_shifts.get((int)Math.floor(RAW))+adc_shifts.get((int)Math.ceil(RAW)))/2;
-        RAW -= 4095 * avg_shifts / 3.3;
-        return(polynomials.get((int)gain).get(0)+RAW*polynomials.get((int)gain).get(1)+RAW*RAW*polynomials.get((int)gain).get(2));
-    }
-
-
 }
