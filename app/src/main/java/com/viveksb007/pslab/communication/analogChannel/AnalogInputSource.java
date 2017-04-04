@@ -1,28 +1,28 @@
 package com.viveksb007.pslab.communication.analogChannel;
 
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class AnalogInputSource {
 
     private static String TAG = "AnalogInputSource";
 
-    double gainValues[], range[];
-    boolean gainEnabled = false, inverted = false, calibrationReady = false;
-    double gain = 0;
-    int gainPGA, inversion = 1, defaultOffsetCode = 0, scaling = 1;
+    private double gainValues[], range[];
+    private boolean gainEnabled = false, inverted = false, calibrationReady = false;
+    private double gain = 0;
+    private int gainPGA, inversion = 1, defaultOffsetCode = 0, scaling = 1;
     private String channelName;
     Map< Integer, Double> calPoly10 = new LinkedHashMap<>(); //(power,coefficient)
     Map< Integer, Double> calPoly12 = new LinkedHashMap<>(); //(power,coefficient)
-    Map< Integer, Double> voltToCode10 = new LinkedHashMap<>(); //(power,coefficient)
-    Map< Integer, Double> voltToCode12 = new LinkedHashMap<>(); //(power,coefficient)
-    List<Double> adc_shifts = new ArrayList<Double>();
-    List<LinkedHashMap<Integer,Double>>polynomials = new ArrayList<>(); //list of maps
-    public AnalogInputSource(String channelName) {
+    private Map< Integer, Double> voltToCode10 = new LinkedHashMap<>(); //(power,coefficient)
+    private Map< Integer, Double> voltToCode12 = new LinkedHashMap<>(); //(power,coefficient)
+    private List<Double> adc_shifts = new ArrayList<Double>();
+    private  List<LinkedHashMap<Integer,Double>>polynomials = new ArrayList<>(); //list of maps
+    AnalogInputSource(String channelName) {
         AnalogConstants analogConstants = new AnalogConstants();
         this.channelName = channelName;
         range = analogConstants.inputRanges.get(channelName);
@@ -113,11 +113,11 @@ public class AnalogInputSource {
         }
     }                           //** unsure about this method
 
-    void regenerateCalibration()
+    private void regenerateCalibration()
     {
         double A,B,intercept,slope;
-        A = range[0];
-        B = range[1];
+        A = range[1];
+        B = range[0];
         intercept = range[0];
         if (gain != -1)
         {
@@ -127,11 +127,7 @@ public class AnalogInputSource {
         }
         slope = B - A;
         intercept = A;
-        if (calibrationReady && gain!=8)        //special case for 1/11. gain
-        {
-
-        }
-        else
+        if (!calibrationReady && gain==8)        //special case for 1/11. gain
         {
             calPoly10.clear();
             calPoly10.put(0,intercept);
@@ -141,7 +137,7 @@ public class AnalogInputSource {
             calPoly12.put(0,intercept);
             calPoly12.put(1,slope/4095);
             calPoly12.put(2,0.);
-        }
+        }                                       //other cases to be added
         voltToCode10.put(0,-1023*intercept/slope);
         voltToCode10.put(1,1023./slope);
         voltToCode10.put(2,0.);
@@ -166,4 +162,6 @@ public class AnalogInputSource {
         RAW -= 4095 * avg_shifts / 3.3;
         return(polynomials.get((int)gain).get(0)+RAW*polynomials.get((int)gain).get(1)+RAW*RAW*polynomials.get((int)gain).get(2));
     }
+
+
 }
