@@ -5,6 +5,8 @@ This is Android App for performing experiments with [PSLab](http://pslab.fossasi
 
 **PSLab** is a new addition to FOSSASIA Science Lab. This tiny pocket lab provides an array of necessary equipments for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger.
 
+## Build Status
+***Travis CI***
 
 [![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=master)](https://travis-ci.org/fossasia/pslab-android)
 
