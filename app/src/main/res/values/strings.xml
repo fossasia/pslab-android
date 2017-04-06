@@ -15,6 +15,15 @@
     <string name="nav_help_feedback">Help &amp; Feedback</string>
     <string name="nav_applications">Applications</string>
 
+    <string name="oscilloscope">Oscilloscope</string>
+    <string name="control">Control</string>
+    <string name="advance_control">Advance Control</string>
+    <string name="logical_analyzer">Logical Analyzer</string>
+    <string name="data_sensor_logger">Data Sensor Logger</string>
+    <string name="w_sensor_logger">Wireless Sensor</string>
+    <string name="sensor_qview">Sensor QuickView</string>
+    <string name="w_sensor_qview">Data Sensor Logger</string>
+
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
         <item>Applications</item>
