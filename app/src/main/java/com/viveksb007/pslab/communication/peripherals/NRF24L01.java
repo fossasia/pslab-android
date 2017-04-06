@@ -382,6 +382,7 @@ public class NRF24L01 {
     }
 
     public ArrayList<Character> transactionWithRetries(int[] data, int retries) throws IOException {
+        if (retries == -1) retries = 5;
         ArrayList<Character> reply = null;
         while (retries > 0) {
             reply = transaction(data, 0, 200);
