@@ -1,6 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                app:srcCompat="@drawable/osciloscope"
+                android:id="@+id/imageButton3"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:text="@string/oscilloscope"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView2"
+                android:gravity="center" />
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                app:srcCompat="@drawable/control"
+                android:id="@+id/imageButton4"
+                android:layout_weight="0.03"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:text="@string/control"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:gravity="center"
+                android:layout_weight="0.03" />
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                app:srcCompat="@drawable/advance"
+                android:id="@+id/imageButton6"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:text="@string/advance_control"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView4"
+                android:gravity="center" />
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                app:srcCompat="@drawable/la"
+                android:id="@+id/imageButton7"
+                android:scaleType="fitCenter"/>
+
+
+            <TextView
+                android:text="@string/logical_analyzer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView5"
+                android:gravity="center"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                app:srcCompat="@drawable/sensor"
+                android:id="@+id/imageButton8"
+                android:scaleType="fitCenter"/>
+            <TextView
+                android:text="@string/data_sensor_logger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView6"
+                android:gravity="center"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                app:srcCompat="@drawable/wirelesssensor"
+                android:id="@+id/imageButton11"
+                android:scaleType="fitCenter"/>
+            <TextView
+                android:text="@string/data_sensor_logger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView8"
+                android:gravity="center"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                app:srcCompat="@drawable/sensor_quickview"
+                android:id="@+id/imageButton12"
+                android:scaleType="fitCenter"/>
+            <TextView
+                android:text="@string/sensor_qview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView7"
+                android:gravity="center"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                app:srcCompat="@drawable/wireless_sensor_quickview"
+                android:id="@+id/imageButton15"
+                android:scaleType="fitCenter"/>
+            <TextView
+                android:text="@string/w_sensor_qview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView9"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
