@@ -3,10 +3,6 @@ jdk:
  - oraclejdk8
 # Use the Travis Container-Based Infrastructure
 
-branches:
-  only:
-    - master
-
 env:
   global:
     - ANDROID_API_LEVEL=25
@@ -52,9 +48,11 @@ before_script:
 
 
 script:
- - ./gradlew clean assembleDebug
+ - ./gradlew build
 
 after_success:
+  - chmod +x upload-apk.sh
+  - ./upload-apk.sh
 
 notifications:
   slack:
