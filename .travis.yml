@@ -52,7 +52,7 @@ script:
 
 after_success:
   - chmod +x upload-apk.sh
-  - ./upload-apk.sh
+  - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./upload-apk.sh; fi'
 
 notifications:
   slack:
