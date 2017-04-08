@@ -10,7 +10,7 @@ cd $HOME
 git config --global user.email "noreply@travis.com"
 git config --global user.name "Travis CI" 
 #clone the repository in the buildApk folder
-git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossasia/pslab-android apk > /dev/null
+git clone --quiet --branch=apk https://viveksb007:$GITHUB_API_KEY@github.com/fossasia/pslab-android apk > /dev/null
 cp -Rf $HOME/buildApk/*
 cd apk
 
