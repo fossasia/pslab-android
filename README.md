@@ -1,19 +1,20 @@
 # pslab-android
 PSLab Android App
 
+[![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=master)](https://travis-ci.org/fossasia/pslab-android)
+[![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
+
 This is Android App for performing experiments with [PSLab](http://pslab.fossasia.org/).
 
 **PSLab** is a new addition to FOSSASIA Science Lab. This tiny pocket lab provides an array of necessary equipments for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger.
 
-## Build Status and Review Badges 
-**Travis CI**  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Codacy**
-
-[![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=master)](https://travis-ci.org/fossasia/pslab-android)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
-
 ## Roadmap
  - First we need to get communication between Android App and PSLab working.
  
+## Setup to use PSLab with Android App
+To use PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ) and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.
+
 ## Communication
 Our chat channel is on gitter here: https://gitter.im/fossasia/pslab
 
