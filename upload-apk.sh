@@ -11,8 +11,9 @@ git config --global user.email "noreply@travis.com"
 git config --global user.name "Travis CI" 
 #clone the repository in the buildApk folder
 git clone --quiet --branch=apk https://wavicles:$GITHUB_API_KEY@github.com/fossasia/pslab-android apk > /dev/null
-cp -Rf $HOME/buildApk/*
+
 cd apk
+cp -Rf $HOME/buildApk/*  ./
 
 git checkout --orphan workaround
 git add -A
