@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.viveksb007.pslab">
+    package="org.fossasia.pslab">
 
     <uses-feature android:name="android.hardware.usb.host"/>
 
@@ -12,16 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name="org.fossasia.pslab.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.AboutUs"/>
-        <activity android:name=".activity.HelpAndFeedback"/>
-        <activity android:name=".activity.ReportUs"/>
+        <activity android:name="org.fossasia.pslab.activity.MainActivity" />
+        <activity android:name="org.fossasia.pslab.activity.AboutUs"/>
+        <activity android:name="org.fossasia.pslab.activity.HelpAndFeedback"/>
+        <activity android:name="org.fossasia.pslab.activity.ReportUs"/>
     </application>
 
 </manifest>
