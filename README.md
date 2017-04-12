@@ -12,6 +12,31 @@ Our chat channel is on gitter here: https://gitter.im/fossasia/pslab
 
 ## Roadmap
  - First we need to get communication between Android App and PSLab working.
+
+## How to set up the Android app in your development environment
+
+### Development Setup
+
+Before you begin, you should already have the Android Studio SDK downloaded and set up correctly. You can find a guide on how to do this here: [Setting up Android Studio](http://developer.android.com/sdk/installing/index.html?pkg=studio)
+
+### Setting up the Android Project
+
+1. Download the _pslab-android_ project source. You can do this either by forking and cloning the repository (recommended if you plan on pushing changes) or by downloading it as a ZIP file and extracting it.
+
+2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select _Import Project (Eclipse ADT, Gradle, etc.)_
+
+3. Navigate to the directory where you saved the pslab-android project, select the "pslab-android" folder, and hit OK. Android Studio should now begin building the project with Gradle.
+
+4. Once this process is complete and Android Studio opens, check the Console for any build errors.
+
+  - _Note:_ If you receive a Gradle sync error titled, "failed to find ...", you should click on the link below the error message (if available) that says _Install missing platform(s) and sync project_ and allow Android studio to fetch you what is missing.
+
+5. Once all build errors have been resolved, you should be all set to build the app and test it.
+
+6. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
+
+7. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or presing the Run icon in the toolbar.
+ 
  
 ## Setup to use PSLab with Android App
 To use PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ) and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.
