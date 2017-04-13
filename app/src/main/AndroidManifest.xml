@@ -12,16 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="org.fossasia.pslab.activity.SplashActivity">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="org.fossasia.pslab.activity.MainActivity" />
-        <activity android:name="org.fossasia.pslab.activity.AboutUs"/>
-        <activity android:name="org.fossasia.pslab.activity.HelpAndFeedback"/>
-        <activity android:name="org.fossasia.pslab.activity.ReportUs"/>
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.AboutUs"/>
+        <activity android:name=".activity.HelpAndFeedback"/>
+        <activity android:name=".activity.ReportUs"/>
     </application>
 
 </manifest>

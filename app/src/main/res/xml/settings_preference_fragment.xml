@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="App Settings">
+    <CheckBoxPreference
+        android:key="setting_auto_start"
+        android:summary="Auto start app when PSLab device is connected"
+        android:title="Auto Start" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                         android.R.anim.fade_out);
-                fragmentTransaction.replace(org.fossasia.pslab.R.id.frame, fragment, CURRENT_TAG);
+                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
                 fragmentTransaction.commitAllowingStateLoss();
             }
         };
@@ -157,35 +157,35 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case org.fossasia.pslab.R.id.nav_home:
+                    case R.id.nav_home:
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         break;
-                    case org.fossasia.pslab.R.id.nav_applications:
+                    case R.id.nav_applications:
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_APPLICATIONS;
                         break;
-                    case org.fossasia.pslab.R.id.nav_saved_experiments:
+                    case R.id.nav_saved_experiments:
                         navItemIndex = 2;
                         CURRENT_TAG = TAG_SAVED_EXPERIMENTS;
                         break;
-                    case org.fossasia.pslab.R.id.nav_design_experiments:
+                    case R.id.nav_design_experiments:
                         navItemIndex = 3;
                         CURRENT_TAG = TAG_DESIGN_EXPERIMENTS;
                         break;
-                    case org.fossasia.pslab.R.id.nav_settings:
+                    case R.id.nav_settings:
                         navItemIndex = 4;
                         CURRENT_TAG = TAG_SETTINGS;
                         break;
-                    case org.fossasia.pslab.R.id.nav_about_us:
+                    case R.id.nav_about_us:
                         startActivity(new Intent(MainActivity.this, AboutUs.class));
                         drawer.closeDrawers();
                         break;
-                    case org.fossasia.pslab.R.id.nav_help_feedback:
+                    case R.id.nav_help_feedback:
                         startActivity(new Intent(MainActivity.this, HelpAndFeedback.class));
                         drawer.closeDrawers();
                         break;
-                    case org.fossasia.pslab.R.id.nav_report_us:
+                    case R.id.nav_report_us:
                         startActivity(new Intent(MainActivity.this, ReportUs.class));
                         drawer.closeDrawers();
                         break;
