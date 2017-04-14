@@ -15,7 +15,7 @@ public class DigitalChannel {
     public static final int EVERY_EDGE = 1;
     public static final int DISABLED = 0;
 
-    public String[] digitalChannelNames = {"ID1", "ID2", "ID3", "ID4", "SEN", "EXT", "CNTR"};
+    public static String[] digitalChannelNames = {"ID1", "ID2", "ID3", "ID4", "SEN", "EXT", "CNTR"};
     String channelName, dataType;
     boolean initialStateOverride;
     int channelNumber, length, initialState, prescalar, trigger, dlength, plotLength, maxTime, mode;

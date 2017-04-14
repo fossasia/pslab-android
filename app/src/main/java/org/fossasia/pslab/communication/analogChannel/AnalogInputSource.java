@@ -13,19 +13,24 @@ public class AnalogInputSource {
     private double gainValues[], range[];
     private boolean gainEnabled = false, inverted = false, calibrationReady = false;
     private double gain = 0;
-    private int gainPGA, inversion = 1, defaultOffsetCode = 0, scaling = 1;
+    public int gainPGA,CHOSA;
+    private int inversion = 1;
+    private int defaultOffsetCode = 0;
+    private int scaling = 1;
     private String channelName;
-    Map< Integer, Double> calPoly10 = new LinkedHashMap<>(); //(power,coefficient)
-    Map< Integer, Double> calPoly12 = new LinkedHashMap<>(); //(power,coefficient)
-    Map< Integer, Double> voltToCode10 = new LinkedHashMap<>(); //(power,coefficient)
+    public Map< Integer, Double> calPoly10 = new LinkedHashMap<>(); //(power,coefficient)
+    public Map< Integer, Double> calPoly12 = new LinkedHashMap<>(); //(power,coefficient)
+    public Map< Integer, Double> voltToCode10 = new LinkedHashMap<>(); //(power,coefficient)
     private Map< Integer, Double> voltToCode12 = new LinkedHashMap<>(); //(power,coefficient)
-    private List<Double> adc_shifts = new ArrayList<Double>();
+    private List<Double> adc_shifts = new ArrayList<>();
     private  List<LinkedHashMap<Integer,Double>>polynomials = new ArrayList<>(); //list of maps
-    AnalogInputSource(String channelName) {
+
+    public AnalogInputSource(String channelName) {
         AnalogConstants analogConstants = new AnalogConstants();
         this.channelName = channelName;
         range = analogConstants.inputRanges.get(channelName);
-        gainValues = AnalogConstants.gains;
+        gainValues = analogConstants.gains;
+        this.CHOSA = analogConstants.picADCMultiplex.get(channelName);
 
         calPoly10.put(0,0.);
         calPoly10.put(1,3.3/1023);
@@ -52,14 +57,14 @@ public class AnalogInputSource {
         regenerateCalibration();
     }
 
-    Boolean setGain(int g)
+    public Boolean setGain(int index)
     {
         if(!gainEnabled)
         {
             Log.e(channelName,"Analog gain is not available");
             return false;
         }
-        gain = gainValues[g];
+        gain = gainValues[index];
         regenerateCalibration();
         return true;
     }
