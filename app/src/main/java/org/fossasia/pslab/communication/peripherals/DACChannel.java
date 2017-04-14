@@ -56,10 +56,10 @@ public class DACChannel {
                 return 4095;
             }
         } else if (calibration_enabled.equals("twopoint")) {
-            if (slope + offset <= 0) {
+            if (slope * v + offset <= 0) {
                 return 0;
-            } else if (slope + offset > 0 && slope + offset < 4095) {
-                return ((int) (slope + offset));
+            } else if (slope * v + offset > 0 && slope * v + offset < 4095) {
+                return ((int) (slope * v + offset));
             } else {
                 return 4095;
             }

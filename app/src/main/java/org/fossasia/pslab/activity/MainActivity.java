@@ -1,6 +1,9 @@
 package org.fossasia.pslab.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
@@ -19,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -38,6 +42,8 @@ import java.util.List;
 
 import org.fossasia.pslab.R;
 
+import static android.R.attr.filter;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -51,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imgProfile;
     private TextView txtName;
     private Toolbar toolbar;
-
     public static int navItemIndex = 0;
 
     private static final String TAG_HOME = "home";
@@ -66,18 +71,15 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     private ScienceLab mScienceLab;
 
+    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         usbManager = (UsbManager) getSystemService(USB_SERVICE);
         mScienceLab = new ScienceLab(usbManager);
-        if (mScienceLab.isDeviceFound()) {
-            Log.d(TAG, "PSLab device found");
-        } else {
-            Log.d(TAG, "PSLab device not found");
-        }
-
+        IntentFilter filter;
         toolbar = (Toolbar) findViewById(org.fossasia.pslab.R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -93,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
         loadNavHeader();
 
+        filter = new IntentFilter(ACTION_USB_PERMISSION);
+        registerReceiver(mUsbReceiver, filter);
+
         setUpNavigationView();
 
         if (savedInstanceState == null) {
@@ -100,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+
     }
+
 
     private void loadHomeFragment() {
         selectNavMenu();
@@ -254,4 +261,31 @@ public class MainActivity extends AppCompatActivity {
         lineChart.setData(new LineData(dataSets));
         lineChart.invalidate();
     }
+    BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_USB_PERMISSION.equals(action)) {
+                synchronized (this) {
+                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                        if (mScienceLab.isDeviceFound()) {
+                            Toast.makeText(getBaseContext(), "Device found!!", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "PSLab device found");
+                        }
+                        else {
+                            Toast.makeText(getBaseContext(), "Problem!, Reconnect device", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "Problem !");
+                        }
+                    }
+                    else {
+                        Toast.makeText(getBaseContext(), "No device connected. check connections.", Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "PSLab device not found");
+                        }
+                    }
+                }
+            else {
+                    Toast.makeText(getBaseContext(), "Please grant permissions to access the device", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 }

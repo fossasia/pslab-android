@@ -18,7 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.MainActivity" >
+             <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+             </intent-filter>
+        </activity>
         <activity android:name=".activity.AboutUs"/>
         <activity android:name=".activity.HelpAndFeedback"/>
         <activity android:name=".activity.ReportUs"/>
