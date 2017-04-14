@@ -9,9 +9,9 @@ import java.util.Arrays;
 public class AnalogAquisitionChannel {
 
     private int resolution;
-    private AnalogInputSource analogAquisitionChannel;
+    private AnalogInputSource analogInputSource;
     private double gain;
-    private String name;
+    private String channel;
     private double calibration_ref196;
     private int length;
     private double timebase;
@@ -22,20 +22,21 @@ public class AnalogAquisitionChannel {
     {
         gain = 0;
         String channel_names[] = new AnalogConstants().allAnalogChannels;
+        this.channel = channel;
         calibration_ref196 = 1.;
         resolution = 10;
         length = 100;
         timebase = 1.;
         Arrays.fill(xaxis, 0);
         Arrays.fill(yaxis, 0);
-        analogAquisitionChannel = new AnalogInputSource(channel);
+        analogInputSource = new AnalogInputSource("CH1");
     }
 
     double fixValue(int val) {
         if (resolution == 12) {
-            return (calibration_ref196 * (analogAquisitionChannel.calPoly12.get(0) + analogAquisitionChannel.calPoly12.get(1) * val + analogAquisitionChannel.calPoly12.get(2) * val * val));
+            return (calibration_ref196 * (analogInputSource.calPoly12.get(0) + analogInputSource.calPoly12.get(1) * val + analogInputSource.calPoly12.get(2) * val * val));
         } else {
-            return (calibration_ref196 * (analogAquisitionChannel.calPoly10.get(0) + analogAquisitionChannel.calPoly10.get(1) * val + analogAquisitionChannel.calPoly10.get(2) * val * val));
+            return (calibration_ref196 * (analogInputSource.calPoly10.get(0) + analogInputSource.calPoly10.get(1) * val + analogInputSource.calPoly10.get(2) * val * val));
         }
     }
 
@@ -47,8 +48,14 @@ public class AnalogAquisitionChannel {
         xaxis[pos] = fixValue(val);
     }
 
-    void setParams() {
-        //these parameters will be set by the user
+    public void setParams(String channel, int length, double timebase, int resolution, AnalogInputSource source, double gain) {
+        if (gain != -1) this.gain = gain;
+        if (source != null) this.analogInputSource = source;
+        if (channel != null) this.channel = channel;
+        if (resolution != -1) this.resolution = resolution;
+        if (length != -1) this.length = length;
+        if (timebase != -1) this.timebase = timebase;
+        regenerateXAxis();
     }
 
     void regenerateXAxis() {

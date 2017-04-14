@@ -10,6 +10,7 @@ import org.fossasia.pslab.communication.digitalChannel.DigitalChannel;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.peripherals.MCP4728;
 import org.fossasia.pslab.communication.peripherals.NRF24L01;
+import org.fossasia.pslab.communication.peripherals.RadioLink;
 import org.fossasia.pslab.communication.peripherals.SPI;
 
 import java.io.IOException;
@@ -39,10 +40,10 @@ public class ScienceLab {
     public int DAC_SHIFTS_PV3B = 9;
 
     public int BAUD = 1000000;
-    public int DDS_CLOCK, timebase, MAX_SAMPLES, samples, triggerLevel, triggerChannel, errorCount,
+    public int DDS_CLOCK, MAX_SAMPLES, samples, triggerLevel, triggerChannel, errorCount,
             channelsInBuffer, digitalChannelsInBuffer, dataSplitting, sin1Frequency, sin2Frequency;
     double[] currents, currentScalars, gainValues;
-    double SOCKET_CAPACITANCE, resistanceScaling;
+    double SOCKET_CAPACITANCE, resistanceScaling, timebase;
     String[] allAnalogChannels, allDigitalChannels;
     Map<String, AnalogInputSource> analogInputSources;
     Map<String, Integer> squareWaveFrequency, gains;
@@ -149,8 +150,8 @@ public class ScienceLab {
         for (int i = 0; i < sample; i++) {
             vals.add(getRawAverageVoltage(channelName));
         }
-        // return average of vals after some polynomial thing
-        
+        // todo : return average of vals after some polynomial manipulation
+
     }
 
     private double getRawAverageVoltage(String channelName) {
@@ -208,6 +209,7 @@ public class ScienceLab {
     }
 
     public double getResistence() {
+
         return 0;
     }
 
@@ -342,6 +344,158 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public Map<Integer, ArrayList<Integer>> getRadioLinks() {
+        try {
+            return this.nrf.getNodeList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public RadioLink newRadioLink() {
+        return new RadioLink(this.nrf, -1);
+    }
+
+    public void servo4(double angle1, double angle2, double angle3, double angle4) {
+        int params = (1 << 5) | 2;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SQR4);
+            mPacketHandler.sendInt(10000);
+            mPacketHandler.sendInt(750 + (int) (angle1 * 1900 / 180));
+            mPacketHandler.sendInt(0);
+            mPacketHandler.sendInt(750 + (int) (angle2 * 1900 / 180));
+            mPacketHandler.sendInt(0);
+            mPacketHandler.sendInt(750 + (int) (angle3 * 1900 / 180));
+            mPacketHandler.sendInt(0);
+            mPacketHandler.sendInt(750 + (int) (angle4 * 1900 / 180));
+            mPacketHandler.sendInt(params);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void enableUARTPassThrough(int baudrate, boolean persist) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.PASSTHROUGHS);
+            mPacketHandler.sendByte(mCommandsProto.PASS_UART);
+            if (persist)
+                mPacketHandler.sendByte(1);
+            else
+                mPacketHandler.sendByte(0);
+            mPacketHandler.sendInt((int) Math.round(((64e6 / baudrate) / 4) - 1));
+            Log.v(TAG, "BRG2VAL: " + Math.round(((64e6 / baudrate) / 4) - 1));
+            // sleep for 0.1 sec
+            byte[] junk = new byte[100];
+            mPacketHandler.read(junk, 100);
+            // Log junk to see :D
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public double estimateDistance() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
+            mPacketHandler.sendByte(mCommandsProto.HCSR04_HEADER);
+            int timeoutMSB = (int) ((0.3 * 64e6)) >> 16;
+            mPacketHandler.sendInt(timeoutMSB);
+            long A = mPacketHandler.getLong();
+            long B = mPacketHandler.getLong();
+            int timeout = mPacketHandler.getInt(); // tmt??
+            mPacketHandler.getAcknowledgement();
+            if (timeout >= timeoutMSB || B == 0) return 0;
+            return (330 * (B - A + 20) / 64e6) / 2;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void opticalArray(double ss, int delay, String channel, int resolution, int tweak) { // ss- stands for?
+        int samples = 3694;
+        if (resolution == -1) resolution = 10;
+        if (tweak == -1) tweak = 1;
+
+        try {
+            mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
+            mPacketHandler.sendByte(mCommandsProto.TCD1304_HEADER);
+            if (resolution == 10)
+                mPacketHandler.sendByte(calcCHOSA(channel));
+            else
+                mPacketHandler.sendByte(calcCHOSA(channel) | 0x80);
+            mPacketHandler.sendByte(tweak);
+            mPacketHandler.sendInt(delay);
+            mPacketHandler.sendInt((int) ss * 64);
+            this.timebase = ss;
+            this.aChannels.get(0).setParams("CH1", samples, this.timebase, resolution, this.analogInputSources.get(channel), -1);
+            this.samples = samples;
+            this.channelsInBuffer = 1;
+            // sleep for (2 * delay * 1e-6)
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setUARTBaud(int BAUD) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.UART_2);
+            mPacketHandler.sendByte(mCommandsProto.SET_BAUD);
+            mPacketHandler.sendInt((int) Math.round(((64e6 / BAUD) / 4) - 1));
+            Log.v(TAG, "BRG2VAL: " + Math.round(((64e6 / BAUD) / 4) - 1));
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeUART(char character) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.UART_2);
+            mPacketHandler.sendByte(mCommandsProto.SEND_BYTE);
+            mPacketHandler.sendByte(character);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public byte readUART() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.UART_2);
+            mPacketHandler.sendByte(mCommandsProto.READ_BYTE);
+            return mPacketHandler.getByte();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int readUARTStatus() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.UART_2);
+            mPacketHandler.sendByte(mCommandsProto.READ_UART2_STATUS);
+            return mPacketHandler.getByte();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void readLog() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.READ_LOG);
+            // String log =  mPacketHandler.readline()   -- implement readline in PacketHandler
+            mPacketHandler.getAcknowledgement();
+            // return log;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
