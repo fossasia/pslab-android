@@ -359,6 +359,123 @@ public class ScienceLab {
         return new RadioLink(this.nrf, -1);
     }
 
+    public void stepperMotor(int steps, int delay, int direction) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
+            mPacketHandler.sendByte(mCommandsProto.STEPPER_MOTOR);
+            mPacketHandler.sendInt((steps << 1) | direction);
+            mPacketHandler.sendInt(delay);
+            // todo : sleep for (steps * delay * 1e-3)
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void WS2812B(int[][] colors, String output) {
+        if (output == null) output = "CS1";
+        int pin;
+        switch (output) {
+            case "CS1":
+                pin = mCommandsProto.SET_RGB1;
+                break;
+            case "CS2":
+                pin = mCommandsProto.SET_RGB2;
+                break;
+            case "SQR1":
+                pin = mCommandsProto.SET_RGB3;
+                break;
+            default:
+                Log.e(TAG, "Invalid Output");
+                return;
+        }
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(pin);
+            mPacketHandler.sendByte(colors.length * 3);
+            // todo : cross check access of 2D colors array
+            for (int[] col : colors) {
+                mPacketHandler.sendByte(col[1]); // Green
+                mPacketHandler.sendByte(col[0]); // Red
+                mPacketHandler.sendByte(col[2]); // Blue
+            }
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public long deviceID() {
+        int a = readProgramAddress(0x800FF8);
+        int b = readProgramAddress(0x800FFa);
+        int c = readProgramAddress(0x800FFc);
+        int d = readProgramAddress(0x800FFe);
+        long value = d | (c << 16) | (b << 32) | (a << 48);
+        Log.v(TAG, "device ID : " + value);
+        return value;
+    }
+
+    public int readProgramAddress(int address) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.READ_PROGRAM_ADDRESS);
+            mPacketHandler.sendInt(address & 0xffff);
+            mPacketHandler.sendInt((address >> 16) & 0xffff);
+            int value = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            return value;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void writeProgramAddress(int address, int value) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.WRITE_PROGRAM_ADDRESS);
+            mPacketHandler.sendInt(address & 0xffff);
+            mPacketHandler.sendInt((address >> 16) & 0xffff);
+            mPacketHandler.sendInt(value);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int readDataAddress(int address) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.READ_DATA_ADDRESS);
+            mPacketHandler.sendInt(address & 0xffff);
+            int value = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            return value;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void writeDataAddress(int address, int value) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.WRITE_DATA_ADDRESS);
+            mPacketHandler.sendInt(address & 0xffff);
+            mPacketHandler.sendInt(value);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stepForward(int steps, int delay) {
+        this.stepperMotor(steps, delay, 1);
+    }
+
+    public void stepBackward(int steps, int delay) {
+        this.stepperMotor(steps, delay, 0);
+    }
+
     public void servo4(double angle1, double angle2, double angle3, double angle4) {
         int params = (1 << 5) | 2;
         try {
@@ -372,7 +489,7 @@ public class ScienceLab {
             mPacketHandler.sendInt(750 + (int) (angle3 * 1900 / 180));
             mPacketHandler.sendInt(0);
             mPacketHandler.sendInt(750 + (int) (angle4 * 1900 / 180));
-            mPacketHandler.sendInt(params);
+            mPacketHandler.sendByte(params);
             mPacketHandler.getAcknowledgement();
         } catch (IOException e) {
             e.printStackTrace();
