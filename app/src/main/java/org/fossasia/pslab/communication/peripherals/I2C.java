@@ -90,6 +90,11 @@ public class I2C {
         return (packetHandler.getAcknowledgement() >> 4);
     }
 
+    public ArrayList<Byte> simpleRead(int address, int numBytes) throws IOException {
+        this.start(address, 1);
+        return this.read(numBytes);
+    }
+
     public ArrayList<Byte> read(int length) throws IOException {
         ArrayList<Byte> data = new ArrayList<>();
         for (int i = 0; i < length - 1; i++) {
@@ -161,7 +166,7 @@ public class I2C {
         ArrayList<Integer> addresses = new ArrayList<>();
         for (int i = 0; i < 128; i++) {
             int x = start(i, 0);
-            if((x & 1) == 0){
+            if ((x & 1) == 0) {
                 addresses.add(i);
             }
             stop();

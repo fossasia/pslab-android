@@ -16,6 +16,7 @@ import org.fossasia.pslab.communication.peripherals.SPI;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -359,6 +360,98 @@ public class ScienceLab {
         return new RadioLink(this.nrf, -1);
     }
 
+
+    public void setState(Map<String, Integer> args) {
+        int data = 0;
+        if (args.containsKey("SQR1")) {
+            data |= (0x10 | args.get("SQR1"));
+        }
+        if (args.containsKey("SQR2")) {
+            data |= (0x20 | (args.get("SQR2") << 1));
+        }
+        if (args.containsKey("SQR3")) {
+            data |= (0x40 | (args.get("SQR3") << 2));
+        }
+        if (args.containsKey("SQR4")) {
+            data |= (0x80 | (args.get("SQR4") << 3));
+        }
+        try {
+            mPacketHandler.sendByte(mCommandsProto.DOUT);
+            mPacketHandler.sendByte(mCommandsProto.SET_STATE);
+            mPacketHandler.sendByte(data);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public int setSqr1(int frequency, double dutyCycle, boolean onlyPrepare) {
+        if (dutyCycle == -1) dutyCycle = 50;
+        if (frequency == 0 || dutyCycle == 0) return -1;
+        if (frequency > 10e6) {
+            Log.v(TAG, "Frequency is greater than 10MHz. Please use map_reference_clock for 16 & 32MHz outputs");
+            return 0;
+        }
+        int[] p = new int[]{1, 8, 64, 256};
+        int prescalar = 0, wavelength = 0;
+        while (prescalar <= 3) {
+            wavelength = (int) (64e6 / frequency / p[prescalar]);
+            if (wavelength < 65525) break;
+            prescalar++;
+        }
+        if (prescalar == 4 || wavelength == 0) {
+            Log.v(TAG, "Out of Range");
+            return -1;
+        }
+        int highTime = (int) (wavelength * dutyCycle / 100);
+        if (onlyPrepare) {
+            Map<String, Integer> args = new LinkedHashMap<>();
+            args.put("SQR1", 0);
+            this.setState(args);
+        }
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SET_SQR1);
+            mPacketHandler.sendInt(Math.round(wavelength));
+            mPacketHandler.sendInt(Math.round(highTime));
+            if (onlyPrepare) prescalar |= 0x4;
+            mPacketHandler.sendByte(prescalar);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.squareWaveFrequency.put("SQR1", (int) (64e6 / wavelength / p[prescalar & 0x3]));
+        return this.squareWaveFrequency.get("SQR1");
+    }
+
+    public int setSqr2(int frequency, double dutyCycle) {
+        int[] p = new int[]{1, 8, 64, 256};
+        int prescalar = 0, wavelength = 0;
+        while (prescalar <= 3) {
+            wavelength = (int) (64e6 / frequency / p[prescalar]);
+            if (wavelength < 65525) break;
+            prescalar++;
+        }
+        if (prescalar == 4 || wavelength == 0) {
+            Log.v(TAG, "Out of Range");
+            return -1;
+        }
+        int highTime = (int) (wavelength * dutyCycle / 100);
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SET_SQR2);
+            mPacketHandler.sendInt(Math.round(wavelength));
+            mPacketHandler.sendInt(Math.round(highTime));
+            mPacketHandler.sendByte(prescalar);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.squareWaveFrequency.put("SQR2", (int) (64e6 / wavelength / p[prescalar & 0x3]));
+        return this.squareWaveFrequency.get("SQR2");
+    }
+
     public void stepperMotor(int steps, int delay, int direction) {
         try {
             mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
@@ -387,8 +480,47 @@ public class ScienceLab {
         }
     }
 
-    public void sqrPWM(){
-
+    public int sqrPWM(int frequency, double h0, double p1, double h1, double p2, double h2, double p3, double h3, boolean pulse) {
+        if (frequency == 0 || h0 == 0 || h1 == 0 || h2 == 0 || h3 == 0) return -1;
+        if (frequency > 10e6) {
+            Log.v(TAG, "Frequency is greater than 10MHz. Please use map_reference_clock for 16 & 32MHz outputs");
+            return -1;
+        }
+        int[] p = new int[]{1, 8, 64, 256};
+        int prescalar = 0, wavelength = 0;
+        while (prescalar <= 3) {
+            wavelength = (int) (64e6 / frequency / p[prescalar]);
+            if (wavelength < 65525) break;
+            prescalar++;
+        }
+        if (prescalar == 4 || wavelength == 0) {
+            Log.v(TAG, "Out of Range");
+            return -1;
+        }
+        if (!pulse) prescalar |= (1 << 5);
+        int a1 = (int) (p1 % 1 * wavelength), b1 = (int) ((h1 + p1) % 1 * wavelength);
+        int a2 = (int) (p2 % 1 * wavelength), b2 = (int) ((h2 + p2) % 1 * wavelength);
+        int a3 = (int) (p3 % 1 * wavelength), b3 = (int) ((h3 + p3) % 1 * wavelength);
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SQR4);
+            mPacketHandler.sendInt(wavelength - 1);
+            mPacketHandler.sendInt((int) (wavelength * h0) - 1);
+            mPacketHandler.sendInt(Math.max(0, a1 - 1));
+            mPacketHandler.sendInt(Math.max(1, b1 - 1));
+            mPacketHandler.sendInt(Math.max(0, a2 - 1));
+            mPacketHandler.sendInt(Math.max(1, b2 - 1));
+            mPacketHandler.sendInt(Math.max(0, a3 - 1));
+            mPacketHandler.sendInt(Math.max(1, b3 - 1));
+            mPacketHandler.sendByte(prescalar);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (String channel : new String[]{"SQR1", "SQR2", "SQR3", "SQR4"}) {
+            this.squareWaveFrequency.put(channel, (int) (64e6 / wavelength / p[prescalar & 0x3]));
+        }
+        return (int) (64e6 / wavelength / p[prescalar & 0x3]);
     }
 
     public void mapReferenceClock(ArrayList<String> args, int scalar) {
