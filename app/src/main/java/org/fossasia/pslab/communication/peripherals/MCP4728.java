@@ -44,31 +44,32 @@ public class MCP4728 {
         VREFS = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
         i2c = new I2C(packetHandler);
         addr = 0x60 | devid;
-        CHANS.put("PCS", new DACChannel("PCS", new double[]{0, 3.3 * 10 - 3}, 0));
+        CHANS.put("PCS", new DACChannel("PCS", new double[]{0, 3.3e-3}, 0));
         CHANS.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1));
         CHANS.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2));
         CHANS.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3));
         CHANNELMAP.put(0, "PCS");
         CHANNELMAP.put(1, "PV3");
         CHANNELMAP.put(2, "PV2");
-        CHANNELMAP.put(3, "PV3");
+        CHANNELMAP.put(3, "PV1");
     }
 
     void ignoreCalibration(String name) {
         CHANS.get(name).calibration_enabled = "false";
     }
 
-    double setVoltage(String name, int v) {
+    public double setVoltage(String name, int v) {
         DACChannel dacChannel = CHANS.get(name);
         v = (int) (Math.round(dacChannel.VToCode.get(0) + dacChannel.VToCode.get(1) * v + dacChannel.VToCode.get(2) * v * v));
         return setRawVoltage("name", v);
     }
 
-    void getVoltage(String name) {
-
+    public int getVoltage(String name) {
+        // todo : add method when resolved in pslab-python
+        return -1;
     }
 
-    double setCurrent(int v) {
+    public double setCurrent(int v) {
         DACChannel dacChannel = CHANS.get("PCS");
         v = (int) (Math.round(dacChannel.VToCode.get(0) + dacChannel.VToCode.get(1) * v + dacChannel.VToCode.get(2) * v * v));
         return setRawVoltage("PCS", v);

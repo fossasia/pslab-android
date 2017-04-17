@@ -371,6 +371,79 @@ public class ScienceLab {
         }
     }
 
+    public void setSqrs(int wavelength, int phase, int highTime1, int highTime2, int prescalar) {
+        if (prescalar == -1) prescalar = 1;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SET_SQRS);
+            mPacketHandler.sendInt(wavelength);
+            mPacketHandler.sendInt(phase);
+            mPacketHandler.sendInt(highTime1);
+            mPacketHandler.sendInt(highTime2);
+            mPacketHandler.sendByte(prescalar);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sqrPWM(){
+
+    }
+
+    public void mapReferenceClock(ArrayList<String> args, int scalar) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.MAP_REFERENCE);
+            int channel = 0;
+            if (args.contains("SQR1")) channel |= 1;
+            if (args.contains("SQR2")) channel |= 2;
+            if (args.contains("SQR3")) channel |= 4;
+            if (args.contains("SQR4")) channel |= 8;
+            if (args.contains("WAVEGEN")) channel |= 16;
+            mPacketHandler.sendByte(channel);
+            mPacketHandler.sendByte(scalar);
+            if (args.contains("WAVEGEN")) {
+                this.DDS_CLOCK = (int) 128e6 / (1 << scalar);
+            }
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setPV1(int value) {
+        this.dac.setVoltage("PV1", value);
+    }
+
+    public void setPV2(int value) {
+        this.dac.setVoltage("PV2", value);
+    }
+
+    public void setPV3(int value) {
+        this.dac.setVoltage("PV3", value);
+    }
+
+    public void setPCS(int value) {
+        this.dac.setCurrent(value);
+    }
+
+    public int getPV1() {
+        return this.dac.getVoltage("PV1");
+    }
+
+    public int getPV2() {
+        return this.dac.getVoltage("PV2");
+    }
+
+    public int getPV3() {
+        return this.dac.getVoltage("PV3");
+    }
+
+    public int getPCS() {
+        return this.dac.getVoltage("PCS");
+    }
+
     public void WS2812B(int[][] colors, String output) {
         if (output == null) output = "CS1";
         int pin;
