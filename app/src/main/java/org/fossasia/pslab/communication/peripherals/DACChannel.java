@@ -28,8 +28,10 @@ public class DACChannel {
         this.intercept = span[0];
         this.VToCode.put(0, -4095. * intercept / slope);
         this.VToCode.put(1, 4095. / slope);
+        this.VToCode.put(2,0.);
         this.CodeToV.put(0, intercept);
         this.CodeToV.put(1, slope / 4095.);
+        this.CodeToV.put(2,0.);
         this.calibration_enabled = "false";
         this.slope = 1;
         this.offset = 0;
