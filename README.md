@@ -37,6 +37,15 @@ Before you begin, you should already have the Android Studio SDK downloaded and 
 
 7. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or presing the Run icon in the toolbar.
  
+If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
+
+You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through usb cable. 
+
+To debug over Wi-Fi : http://stackoverflow.com/questions/4893953/run-install-debug-android-applications-over-wi-fi
+ 
+Note : 
+1. Don't upgrade the gradle version, when Android Studio prompts to upgrade gradle version.
+2. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/org/fossasia/pslab/communication/CommunicationHandler.java) 
  
 ## Setup to use PSLab with Android App
 To use PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ) and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.
