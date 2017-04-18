@@ -78,7 +78,7 @@ public class NRF24L01 {
     public int CURRENT_ADDRESS = 0xAAAA01;
     private int nodePos = 0, status = 0;
     private int NODELIST_MAXLENGTH = 15;
-    private boolean connected = false, ready = false;
+    public boolean connected = false, ready = false;
 
     private Map<Integer, Integer> sigs = new LinkedHashMap<>();
     private PacketHandler packetHandler;
