@@ -60,7 +60,7 @@ public class MCP4728 {
 
     public double setVoltage(String name, int v) {
         DACChannel dacChannel = CHANS.get(name);
-        v = (int) (Math.round(dacChannel.VToCode.get(0) + dacChannel.VToCode.get(1) * v + dacChannel.VToCode.get(2) * v * v));
+        v = (int) (Math.round(dacChannel.VToCode.get(0) + dacChannel.VToCode.get(1) * v);
         return setRawVoltage("name", v);
     }
 
@@ -71,7 +71,7 @@ public class MCP4728 {
 
     public double setCurrent(int v) {
         DACChannel dacChannel = CHANS.get("PCS");
-        v = (int) (Math.round(dacChannel.VToCode.get(0) + dacChannel.VToCode.get(1) * v + dacChannel.VToCode.get(2) * v * v));
+        v = (int) (Math.round(dacChannel.VToCode.get(0) + dacChannel.VToCode.get(1) * v);
         return setRawVoltage("PCS", v);
     }
 
