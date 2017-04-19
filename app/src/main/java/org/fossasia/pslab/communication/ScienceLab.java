@@ -250,6 +250,199 @@ public class ScienceLab {
         return 0;
     }
 
+
+    /* WAVEGEN SECTION */
+
+    public void setWave(String channel, int frequency) {
+        if (channel.equals("W1"))
+            this.setW1(frequency, null);
+        else if (channel.equals("W2"))
+            this.setW2(frequency, null);
+    }
+
+    public int setSine1(int frequency) {
+        return this.setW1(frequency, "sine");
+    }
+
+    public int setSine2(int frequency) {
+        return this.setW2(frequency, "sine");
+    }
+
+    public int setW1(double frequency, String waveType) {
+        int HIGHRES, tableSize;
+        if (frequency < 0.1) {
+            Log.v(TAG, "frequency too low");
+            return -1;
+        } else if (frequency < 1100) {
+            HIGHRES = 1;
+            tableSize = 512;
+        } else {
+            HIGHRES = 0;
+            tableSize = 32;
+        }
+        if (waveType != null) {
+            if (waveType.equals("sine") | waveType.equals("tria")) {
+                if (!(this.waveType.get("W1").equals(waveType))) {
+                    this.loadEquation("W1", waveType);
+                }
+            } else {
+                Log.v(TAG, "Not a valid waveform. try sine or tria");
+            }
+        }
+        int[] p = new int[]{1, 8, 64, 256};
+        int prescalar = 0, wavelength = 0;
+        while (prescalar <= 3) {
+            wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
+            frequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
+            if (wavelength < 65525) break;
+            prescalar++;
+        }
+        if (prescalar == 4) {
+            Log.v(TAG, "Out of range");
+            return -1;
+        }
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SET_SINE1);
+            mPacketHandler.sendByte(HIGHRES | (prescalar << 1));
+            mPacketHandler.sendInt(wavelength - 1);
+            mPacketHandler.getAcknowledgement();
+            this.sin1Frequency = (int) frequency;
+            return this.sin1Frequency;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int setW2(double frequency, String waveType) {
+        int HIGHRES = 0, tableSize = 0;
+        if (frequency < 0.1) {
+            Log.v(TAG, "frequency too low");
+            return -1;
+        } else if (frequency < 1100) {
+            HIGHRES = 1;
+            tableSize = 512;
+        } else {
+            HIGHRES = 0;
+            tableSize = 32;
+        }
+        if (waveType != null) {
+            if (waveType.equals("sine") | waveType.equals("tria")) {
+                if (!(this.waveType.get("W2").equals(waveType))) {
+                    this.loadEquation("W2", waveType);
+                }
+            } else {
+                Log.v(TAG, "Not a valid waveform. try sine or tria");
+            }
+        }
+        int[] p = new int[]{1, 8, 64, 256};
+        int prescalar = 0, wavelength = 0;
+        while (prescalar <= 3) {
+            wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
+            frequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
+            if (wavelength < 65525) break;
+            prescalar++;
+        }
+        if (prescalar == 4) {
+            Log.v(TAG, "Out of range");
+            return -1;
+        }
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SET_SINE2);
+            mPacketHandler.sendByte(HIGHRES | (prescalar << 1));
+            mPacketHandler.sendInt(wavelength - 1);
+            mPacketHandler.getAcknowledgement();
+            this.sin2Frequency = (int) frequency;
+            return this.sin2Frequency;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int readBackWaveform(String channel) {
+        if (channel.equals("W1"))
+            return this.sin1Frequency;
+        else if (channel.equals("W2"))
+            return this.sin2Frequency;
+        else if (channel.startsWith("SQR"))
+            return this.squareWaveFrequency.get(channel);
+        return -1;
+    }
+
+    public int setWaves(double frequency, double phase, double frequency2) {
+        // used frequency as double ( python code demanded ), maybe its taken in KHz or something ( Clarify )
+        int HIGHRES = 0, tableSize = 0, HIGHRES2 = 0, tableSize2 = 0, wavelength = 0, wavelength2 = 0;
+        if (frequency2 == -1) frequency2 = frequency;
+        if (frequency < 0.1) {
+            Log.v(TAG, "frequency 1 too low");
+            return -1;
+        } else if (frequency < 1100) {
+            HIGHRES = 1;
+            tableSize = 512;
+        } else {
+            HIGHRES = 0;
+            tableSize = 32;
+        }
+        if (frequency2 < 0.1) {
+            Log.v(TAG, "frequency 2 too low");
+            return -1;
+        } else if (frequency2 < 1100) {
+            HIGHRES2 = 1;
+            tableSize2 = 512;
+        } else {
+            HIGHRES2 = 0;
+            tableSize2 = 32;
+        }
+        if (frequency < 1 || frequency2 < 1)
+            Log.v(TAG, "extremely low frequencies will have reduced amplitudes due to AC coupling restrictions");
+
+        int[] p = new int[]{1, 8, 64, 256};
+        int prescalar = 0, retFrequency = 0;
+        while (prescalar <= 3) {
+            wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
+            retFrequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
+            if (wavelength < 65525) break;
+            prescalar++;
+        }
+        if (prescalar == 4) {
+            Log.v(TAG, "#1 out of range");
+            return -1;
+        }
+        int prescalar2 = 0, retFrequency2 = 0;
+        while (prescalar2 <= 3) {
+            wavelength2 = (int) (64e6 / frequency2 / p[prescalar2] / tableSize2);
+            retFrequency2 = (int) ((64e6 / wavelength2 / p[prescalar2] / tableSize2));
+            if (wavelength2 < 65525) break;
+            prescalar2++;
+        }
+        if (prescalar2 == 4) {
+            Log.v(TAG, "#2 out of range");
+            return -1;
+        }
+
+        int phaseCoarse = (int) (tableSize2 * (phase) / 360.);
+        int phaseFine = (int) (wavelength2 * (phase - (phaseCoarse) * 360. / tableSize2) / (360. / tableSize2));
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SET_BOTH_WG);
+            mPacketHandler.sendInt(wavelength - 1);
+            mPacketHandler.sendInt(wavelength2 - 1);
+            mPacketHandler.sendInt(phaseCoarse);
+            mPacketHandler.sendInt(phaseFine);
+            mPacketHandler.sendByte((prescalar2 << 4) | (prescalar << 2) | (HIGHRES2 << 1) | (HIGHRES));
+            mPacketHandler.getAcknowledgement();
+            this.sin1Frequency = retFrequency;
+            this.sin2Frequency = retFrequency2;
+            return retFrequency;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public void loadEquation(String channel, String function) {
         double[] span = new double[2];
         if (function.equals("sine")) {
