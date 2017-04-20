@@ -48,9 +48,8 @@ public class TSL2561 {
     private I2C i2c;
     private int full, infra;
     private ArrayList<Character> _infra_, _full_;
-    private HashMap<String, ArrayList> params = new java.util.HashMap<>();
-
-
+    private HashMap<String, ArrayList> params = new HashMap<>();
+    
     public TSL2561(I2C i2c) throws IOException, InterruptedException {
         this.i2c = i2c;
         // set timing 101ms & 16x gain
@@ -82,8 +81,7 @@ public class TSL2561 {
     public int[] getRaw() throws IOException {
         _full_ = i2c.readBulk(ADDRESS, 0x80 | 0x20 | 0x0E, 2);
         _infra_ = i2c.readBulk(ADDRESS, 0x80 | 0x20 | 0x0C, 2);
-        if(!_infra_.isEmpty())
-        {
+        if(!_infra_.isEmpty()) {
             full = (_full_.get(0) << 8) | _full_.get(0);
             infra = (_infra_.get(0) <<8) | _infra_.get(0);
             return (new int[] {full, infra, full - infra});
@@ -94,17 +92,12 @@ public class TSL2561 {
 
     public void setGain(String _gain_) throws IOException {
         if(_gain_.equals("1x"))
-        {
             gain = GAIN_1X;
-        }
+
         else if (_gain_.equals("16x"))
-        {
             gain = GAIN_16X;
-        }
         else
-        {
             gain = GAIN_OX;
-        }
         i2c.writeBulk(ADDRESS, new int[]{COMMAND_BIT | REGISTER_TIMING, gain | timing});
     }
 
@@ -123,18 +116,9 @@ public class TSL2561 {
     }
 
     public void _wait_() throws InterruptedException {
-        if (timing == INTEGRATIONTIME_13MS)
-        {
-            TimeUnit.MILLISECONDS.sleep(14);
-        }
-        if (timing == INTEGRATIONTIME_101MS)
-        {
-            TimeUnit.MILLISECONDS.sleep(102);
-        }
-        if (timing == INTEGRATIONTIME_402MS)
-        {
-            TimeUnit.MILLISECONDS.sleep(403);
-        }
+        if (timing == INTEGRATIONTIME_13MS)  TimeUnit.MILLISECONDS.sleep(14);
+        if (timing == INTEGRATIONTIME_101MS) TimeUnit.MILLISECONDS.sleep(102);
+        if (timing == INTEGRATIONTIME_402MS) TimeUnit.MILLISECONDS.sleep(403);
 
     }
 
