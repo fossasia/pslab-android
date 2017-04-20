@@ -1,6 +1,8 @@
 package org.fossasia.pslab.communication;
 
 import android.hardware.usb.UsbManager;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 
 import org.fossasia.pslab.communication.analogChannel.AnalogAquisitionChannel;
@@ -69,6 +71,7 @@ public class ScienceLab {
         if (isDeviceFound()) {
             try {
                 mCommunicationHandler.open();
+                //SystemClock.sleep(200);
                 mPacketHandler = new PacketHandler(500, mCommunicationHandler);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -819,5 +822,9 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void disconnect() throws IOException {
+        mCommunicationHandler.close();
     }
 }

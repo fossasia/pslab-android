@@ -1,7 +1,6 @@
 package org.fossasia.pslab.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -33,6 +32,7 @@ import org.fossasia.pslab.fragment.HomeFragment;
 import org.fossasia.pslab.fragment.SavedExperiments;
 import org.fossasia.pslab.fragment.SettingsFragment;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +41,6 @@ import org.fossasia.pslab.R;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private UsbManager usbManager;
-    private static final String DEVICE_NAME = "PSLAB";
-    private LineChart lineChart;
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        usbManager = (UsbManager) getSystemService(USB_SERVICE);
+        UsbManager usbManager = (UsbManager) getSystemService(USB_SERVICE);
         mScienceLab = new ScienceLab(usbManager);
         if (mScienceLab.isDeviceFound()) {
             Log.d(TAG, "PSLab device found");
@@ -112,7 +109,12 @@ public class MainActivity extends AppCompatActivity {
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                Fragment fragment = getHomeFragment();
+                Fragment fragment = null;
+                try {
+                    fragment = getHomeFragment();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                         android.R.anim.fade_out);
@@ -127,10 +129,10 @@ public class MainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
-    private Fragment getHomeFragment() {
+    private Fragment getHomeFragment() throws IOException {
         switch (navItemIndex) {
             case 0:
-                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound());
+                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound(),mScienceLab.getVersion());
             case 1:
                 return ApplicationsFragment.newInstance();
             case 2:
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             case 4:
                 return SettingsFragment.newInstance();
             default:
-                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound());
+                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound(),mScienceLab.getVersion());
         }
     }
 
@@ -234,24 +236,13 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-
-    private void plotMap() {
-        List<Entry> sinEntries = new ArrayList<>();
-        List<Entry> cosEntries = new ArrayList<>();
-        for (float i = 0; i < 7f; i += 0.02f) {
-            sinEntries.add(new Entry(i, (float) Math.sin(i)));
-            cosEntries.add(new Entry(i, (float) Math.cos(i)));
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            mScienceLab.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        List<ILineDataSet> dataSets = new ArrayList<>();
-        LineDataSet sinSet = new LineDataSet(sinEntries, "sin curve");
-        LineDataSet cosSet = new LineDataSet(cosEntries, "cos curve");
-        cosSet.setColor(Color.GREEN);
-        cosSet.setCircleColor(Color.GREEN);
-        sinSet.setColor(Color.BLUE);
-        sinSet.setCircleColor(Color.BLUE);
-        dataSets.add(sinSet);
-        dataSets.add(cosSet);
-        lineChart.setData(new LineData(dataSets));
-        lineChart.invalidate();
     }
 }
