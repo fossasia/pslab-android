@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+
 import static java.lang.Math.pow;
 
 /**
@@ -97,7 +98,6 @@ public class BMP180 {
         int [] delays = {5, 8, 14, 26};
         i2c.writeBulk(ADDRESS, new int[] {REG_CONTROL, oversampling});
         TimeUnit.MILLISECONDS.sleep(delays[oversampling]);
-
     }
 
     public Double readPressure() throws IOException {
@@ -110,8 +110,7 @@ public class BMP180 {
             double z = (p - x) / y;
             pressure = (p2 * pow(z, 2)) + (p1 * z) + p0;
             return pressure;
-        }
-        else
+        } else
             return null;
     }
 

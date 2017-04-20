@@ -57,10 +57,10 @@ public class ScienceLab {
     private PacketHandler mPacketHandler;
     private CommandsProto mCommandsProto;
     private AnalogConstants mAnalogConstants;
-    private I2C i2C;
-    private SPI spi;
-    private NRF24L01 nrf;
-    private MCP4728 dac;
+    public I2C i2C;
+    public SPI spi;
+    public NRF24L01 nrf;
+    public MCP4728 dac;
 
     public ScienceLab(UsbManager usbManager) {
         mCommandsProto = new CommandsProto();
