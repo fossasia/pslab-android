@@ -9,11 +9,11 @@ import java.util.Map;
 
 public class AnalogConstants {
 
-    static double gains[] = {1, 2, 4, 5, 8, 10, 16, 32, 1 / 11.};
-    static String[] allAnalogChannels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
-    static String[] bipolars = {"CH1", "CH2", "CH3", "MIC"};
-    static Map<String, double[]> inputRanges = new HashMap<>();
-    static Map<String, Integer> picADCMultiplex = new HashMap<>();
+    public double[] gains = {1, 2, 4, 5, 8, 10, 16, 32, 1 / 11.};
+    public String[] allAnalogChannels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
+    public String[] biPolars = {"CH1", "CH2", "CH3", "MIC"};
+    public Map<String, double[]> inputRanges = new HashMap<>();
+    public Map<String, Integer> picADCMultiplex = new HashMap<>();
 
     public AnalogConstants() {
 
