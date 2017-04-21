@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.fossasia.pslab">
 
-    <uses-feature android:name="android.hardware.usb.host"/>
+    <uses-feature android:name="android.hardware.usb.host" />
 
 
     <application
@@ -18,14 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" >
-             <intent-filter>
+        <activity android:name=".activity.MainActivity">
+            <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-             </intent-filter>
+            </intent-filter>
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
         </activity>
-        <activity android:name=".activity.AboutUs"/>
-        <activity android:name=".activity.HelpAndFeedback"/>
-        <activity android:name=".activity.ReportUs"/>
+        <activity android:name=".activity.AboutUs" />
+        <activity android:name=".activity.HelpAndFeedback" />
+        <activity android:name=".activity.ReportUs" />
     </application>
-    
+
 </manifest>

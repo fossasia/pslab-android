@@ -19,9 +19,9 @@ public class PacketHandler {
     private boolean loadBurst, connected;
     int inputQueueSize = 0, BAUD = 1000000;
     private CommunicationHandler mCommunicationHandler = null;
-    String version = "", expectedVersion = "CS";
+    String version = "";
     private CommandsProto mCommandsProto;
-    private int timeout = 500, VERSION_STRING_LENGTH = 2;
+    private int timeout = 500, VERSION_STRING_LENGTH = 15;
     ByteBuffer burstBuffer = ByteBuffer.allocate(2000);
 
     public PacketHandler(int timeout, CommunicationHandler communicationHandler) {
@@ -33,11 +33,11 @@ public class PacketHandler {
         connected = mCommunicationHandler.isConnected();
     }
 
-    public boolean isConnected(){
+    public boolean isConnected() {
         return connected;
     }
 
-    public String getVersion() throws IOException {
+    public String getVersion() {
         try {
             sendByte(mCommandsProto.COMMON);
             sendByte(mCommandsProto.GET_VERSION);
