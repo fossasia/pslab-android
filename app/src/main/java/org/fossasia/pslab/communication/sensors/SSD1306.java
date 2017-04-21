@@ -1,9 +1,5 @@
 package org.fossasia.pslab.communication.sensors;
 
-import android.content.Context;
-import android.hardware.usb.UsbManager;
-
-import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 
 import java.io.IOException;
@@ -17,6 +13,14 @@ import static java.lang.Math.abs;
 
 /**
  * Created by akarshan on 4/20/17.
+
+ *  //  functions that are needed to be handled in ScienceLab.java
+        load("logo");
+        scroll("topright");
+        TimeUnit.MILLISECONDS.sleep(2800);
+        scroll("stop");
+
+ *      ScienceLab instance of i2c needs to be passed to SSD1306 class constructor
  */
 
 public class SSD1306 {
@@ -32,11 +36,11 @@ public class SSD1306 {
     private int HEIGHT = 64;
 
     private int rotation = 0;
-    private int cursor_y = 0;
-    private int cursor_x = 0;
-    private int textsize = 1;
-    private int textcolor =1;
-    private int textbgcolor = 0;
+    private int cursorY = 0;
+    private int cursorX = 0;
+    private int textSize = 1;
+    private int textColor =1;
+    private int textbgColor = 0;
     private boolean wrap = true;
 
     private int SSD1306_128_64 = 1;
@@ -173,14 +177,9 @@ public class SSD1306 {
     private int[] buff;
     private I2C i2C;
 
-    public SSD1306(Context context) throws IOException, InterruptedException {
-        UsbManager usbManager= (UsbManager) context.getSystemService(Context.USB_SERVICE);  //obtain an instance of UsbManager
-        ScienceLab scienceLab = new ScienceLab(usbManager);
-        this.i2C = scienceLab.i2C;
-        load("logo");
-        scroll("topright");
-        TimeUnit.MILLISECONDS.sleep(2800);
-        scroll("stop");
+    public SSD1306(I2C i2C) throws IOException, InterruptedException {
+
+        this.i2C = i2C;
 
         buff = new int[1024];
         Arrays.fill(buff,0);
@@ -368,16 +367,16 @@ public class SSD1306 {
 
     public void writeChar(int c) {
         if (c == '\n') {
-            cursor_y += textsize * 8;
-            cursor_x = 0;
+            cursorY += textSize * 8;
+            cursorX = 0;
         }
         else if(c == '\r'){ }
         else {
-            drawChar(cursor_x, cursor_y, c, textcolor, textbgcolor, textsize);
-            cursor_x += textsize * 6;
-            if (wrap & (cursor_x > (_width - textsize * 6))){
-                cursor_y += textsize * 8;
-                cursor_x = 0;
+            drawChar(cursorX, cursorY, c, textColor, textbgColor, textSize);
+            cursorX += textSize * 6;
+            if (wrap & (cursorX > (_width - textSize * 6))){
+                cursorY += textSize * 8;
+                cursorX = 0;
             }
         }
     }
@@ -409,20 +408,20 @@ public class SSD1306 {
     }
 
     public void setCursor(int x, int y) {
-        cursor_x = x;
-        cursor_y = y;
+        cursorX = x;
+        cursorY = y;
     }
 
     public void setTextSize(int size){
         if(size > 0)
-            textsize = size;
+            textSize = size;
         else
-            textsize = 1;
+            textSize = 1;
     }
 
     public void setTextColor(int color, int backgroundcolor){
-        textcolor = color;
-        textbgcolor = backgroundcolor;
+        textColor = color;
+        textbgColor = backgroundcolor;
     }
 
     public void setTextWrap(boolean w){
