@@ -252,8 +252,41 @@ public class ScienceLab {
         return 0;
     }
 
-    public void getCTMUVoltage(int channel) {
+    public void caliberateCTMU(double[] scalars) {
+        this.currents = new double[]{0.55e-3, 0.55e-6, 0.55e-5, 0.55e-4};
+        this.currentScalars = scalars;
+    }
 
+    public Double getTemperature() {
+        int cs = 3;
+        double V = getCTMUVoltage("", cs, 0); // todo inspect this binary channel
+        switch (cs) {
+            case 1:
+                return (646 - V * 1000) / 1.92;  // current source = 1
+            case 2:
+                return (701.5 - V * 1000) / 1.74; // current source = 2
+            case 3:
+                return (760 - V * 1000) / 1.56; // current source = 3
+        }
+        return null;
+    }
+
+    public double getCTMUVoltage(String channel, int cRange, int tgen) {
+        if (tgen == -1) tgen = 1;
+        int channelI = 0;
+        if (channel.equals("CAP"))
+            channelI = 5;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.GET_CTMU_VOLTAGE);
+            mPacketHandler.sendByte((channelI) | (cRange << 5) | (tgen << 7));
+            int v = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            return (3.3 * v / 16 / 4095.);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public void startCTMU(int cRange, int trim, int tgen) { // naming of arguments ??
@@ -376,7 +409,16 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // todo : verification by read-back
+        boolean equal = true;
+        byte[] receiveData = readBulkFlash(location, data.size());
+        for (int i = 0; i < data.size(); i++) {
+            if (receiveData[i] != (data.get(i) & 0xff)) {
+                equal = false;
+                Log.v(TAG, "Verification by read-back failed");
+            }
+        }
+        if (equal)
+            Log.v(TAG, "Verification by read-back successful");
     }
 
     /* WAVEGEN SECTION */
