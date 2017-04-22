@@ -1,6 +1,7 @@
 package org.fossasia.pslab.communication;
 
 import android.hardware.usb.UsbManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import org.fossasia.pslab.communication.analogChannel.AnalogAquisitionChannel;
@@ -15,6 +16,7 @@ import org.fossasia.pslab.communication.peripherals.SPI;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -250,6 +252,132 @@ public class ScienceLab {
         return 0;
     }
 
+    public void getCTMUVoltage(int channel) {
+
+    }
+
+    public void startCTMU(int cRange, int trim, int tgen) { // naming of arguments ??
+        if (tgen == -1) tgen = 1;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.START_CTMU);
+            mPacketHandler.sendByte(cRange | (tgen << 7));
+            mPacketHandler.sendByte(trim);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stopCTMU() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.STOP_CTMU);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resetHardware() {
+        /*
+        Resets the device, and standalone mode will be enabled if an OLED is connected to the I2C port
+        */
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.RESTORE_STANDALONE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public byte[] readFlash(int page, int location) {
+       /*  Reads 16 BYTES from the specified location  */
+        try {
+            mPacketHandler.sendByte(mCommandsProto.FLASH);
+            mPacketHandler.sendByte(mCommandsProto.READ_FLASH);
+            mPacketHandler.sendByte(page);
+            mPacketHandler.sendByte(location);
+            byte[] data = new byte[16];
+            mPacketHandler.read(data, 16);
+            mPacketHandler.getAcknowledgement();
+            return data;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public byte[] readBulkFlash(int page, int numOfBytes) {
+        /*  Reads BYTES from the specified location  */
+
+        try {
+            mPacketHandler.sendByte(mCommandsProto.FLASH);
+            mPacketHandler.sendByte(mCommandsProto.READ_BULK_FLASH);
+            int bytesToRead = numOfBytes;
+            if (numOfBytes % 2 == 1) bytesToRead += 1;
+            mPacketHandler.sendInt(bytesToRead);
+            mPacketHandler.sendByte(page);
+            byte[] data = new byte[bytesToRead];
+            mPacketHandler.read(data, bytesToRead);
+            mPacketHandler.getAcknowledgement();
+            if (numOfBytes % 2 == 1)
+                return Arrays.copyOfRange(data, 0, data.length - 1);
+            else
+                return Arrays.copyOfRange(data, 0, data.length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void writeFlash(int page, int location, String data) {
+        /*
+        write a 16 BYTE string to the selected location (0-63)
+
+        DO NOT USE THIS UNLESS YOU'RE ABSOLUTELY SURE KNOW THIS!
+		YOU MAY END UP OVERWRITING THE CALIBRATION DATA, AND WILL HAVE
+		TO GO THROUGH THE TROUBLE OF GETTING IT FROM THE MANUFACTURER AND
+		RE-FLASHING IT.
+        */
+        while (data.length() < 16) data += '.';
+        try {
+            mPacketHandler.sendByte(mCommandsProto.FLASH);
+            mPacketHandler.sendByte(mCommandsProto.WRITE_FLASH);
+            mPacketHandler.sendByte(page);
+            mPacketHandler.sendByte(location);
+            mCommunicationHandler.write(data.getBytes(), 500);
+            SystemClock.sleep(100);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeBulkFlash(int location, ArrayList<Integer> data) {
+        /*
+        write a byte array to the entire flash page. Erases any other data
+
+        DO NOT USE THIS UNLESS YOU'RE ABSOLUTELY SURE KNOW THIS!
+		YOU MAY END UP OVERWRITING THE CALIBRATION DATA, AND WILL HAVE
+		TO GO THROUGH THE TROUBLE OF GETTING IT FROM THE MANUFACTURER AND
+		RE-FLASHING IT.
+        */
+        if (data.size() % 2 == 1) data.add(0);
+        try {
+            mPacketHandler.sendByte(mCommandsProto.FLASH);
+            mPacketHandler.sendByte(mCommandsProto.WRITE_BULK_FLASH);
+            mPacketHandler.sendInt(data.size());
+            mPacketHandler.sendByte(location);
+            for (int a : data) {
+                mPacketHandler.sendByte(a);
+            }
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // todo : verification by read-back
+    }
 
     /* WAVEGEN SECTION */
 
