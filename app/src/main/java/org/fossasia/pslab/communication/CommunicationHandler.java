@@ -96,6 +96,9 @@ public class CommunicationHandler {
         mWriteEndpoint = mDataInterface.getEndpoint(0);
         Log.d(TAG, "Write endpoint direction: " + mWriteEndpoint.getDirection());
         connected = true;
+        setBaudRate(1000000);
+        //SystemClock.sleep(1000);
+        clear();
     }
 
     public boolean isDeviceFound() {
@@ -127,6 +130,7 @@ public class CommunicationHandler {
                     Log.e(TAG, "Read Error: " + numBytesRead);
                     return numBytesRead;
                 } else {
+                    Log.v(TAG, "Read something" + mReadBuffer);
                     System.arraycopy(mReadBuffer, 0, dest, numBytesRead, readNow);
                     numBytesRead += readNow;
                 }
@@ -153,6 +157,10 @@ public class CommunicationHandler {
         return written;
     }
 
+    public void clear() {
+        mConnection.bulkTransfer(mReadEndpoint, mReadBuffer, 100, 50);
+    }
+
     public void setBaudRate(int baudRate) {
         byte[] msg = {
                 (byte) (baudRate & 0xff),
@@ -164,6 +172,7 @@ public class CommunicationHandler {
                 (byte) 8};
         sendAcmControlMessage(SET_LINE_CODING, 0, msg);
         SystemClock.sleep(100);
+        clear();
     }
 
     private int sendAcmControlMessage(int request, int value, byte[] buf) {

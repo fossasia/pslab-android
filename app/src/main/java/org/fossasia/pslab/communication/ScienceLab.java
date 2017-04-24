@@ -71,6 +71,7 @@ public class ScienceLab {
         if (isDeviceFound()) {
             try {
                 mCommunicationHandler.open();
+                //SystemClock.sleep(200);
                 mPacketHandler = new PacketHandler(500, mCommunicationHandler);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -1361,5 +1362,9 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void disconnect() throws IOException {
+        mCommunicationHandler.close();
     }
 }
