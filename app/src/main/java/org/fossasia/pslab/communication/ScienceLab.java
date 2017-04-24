@@ -323,7 +323,7 @@ public class ScienceLab {
         }
     }
 
-    public double captureCapacitance() {
+    public double captureCapacitance(int samples, int tg) {
         // todo : implement this method
         return 0;
     }
@@ -371,7 +371,7 @@ public class ScienceLab {
         int samples = 500;
         if (time > 5000 && time < 10e6) {
             if (time > 50e3) samples = 250;
-            double RC = this.captureCapacitance();
+            double RC = this.captureCapacitance(samples, (int) (time / samples)); // todo : complete statement after writing captureCapacitance method
             return RC / 10e3;
         } else {
             Log.v(TAG, "cap out of range " + time + cap);
@@ -381,7 +381,9 @@ public class ScienceLab {
 
     public double getCapacitance() {
         double[] GOOD_VOLTS = new double[]{2.5, 2.8};
-        int CT = 10, CR = 1, iterations = 0;
+        int CT = 10;
+        int CR = 1;
+        int iterations = 0;
         long startTime = System.currentTimeMillis() / 1000;
         while (System.currentTimeMillis() / 1000 - startTime < 1) {
             if (CT > 65000) {
@@ -389,7 +391,8 @@ public class ScienceLab {
                 return this.capacitanceViaRCDischarge();
             }
             double[] temp = getCapacitance(CR, 0, CT);
-            double V = temp[0], C = temp[1];
+            double V = temp[0];
+            double C = temp[1];
             if (CT > 30000 && V < 0.1) {
                 Log.v(TAG, "Capacitance too high for this method");
                 return 0;
@@ -454,7 +457,7 @@ public class ScienceLab {
     public double getCTMUVoltage(String channel, int cRange, int tgen) {
         if (tgen == -1) tgen = 1;
         int channelI = 0;
-        if (channel.equals("CAP"))
+        if ("CAP".equals(channel))
             channelI = 5;
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
@@ -604,9 +607,9 @@ public class ScienceLab {
     /* WAVEGEN SECTION */
 
     public void setWave(String channel, int frequency) {
-        if (channel.equals("W1"))
+        if ("W1".equals(channel))
             this.setW1(frequency, null);
-        else if (channel.equals("W2"))
+        else if ("W2".equals(channel))
             this.setW2(frequency, null);
     }
 
@@ -631,7 +634,7 @@ public class ScienceLab {
             tableSize = 32;
         }
         if (waveType != null) {
-            if (waveType.equals("sine") | waveType.equals("tria")) {
+            if ("sine".equals(waveType) | "tria".equals(waveType)) {
                 if (!(this.waveType.get("W1").equals(waveType))) {
                     this.loadEquation("W1", waveType);
                 }
@@ -666,7 +669,8 @@ public class ScienceLab {
     }
 
     public int setW2(double frequency, String waveType) {
-        int HIGHRES = 0, tableSize = 0;
+        int HIGHRES;
+        int tableSize;
         if (frequency < 0.1) {
             Log.v(TAG, "frequency too low");
             return -1;
@@ -678,7 +682,7 @@ public class ScienceLab {
             tableSize = 32;
         }
         if (waveType != null) {
-            if (waveType.equals("sine") | waveType.equals("tria")) {
+            if ("sine".equals(waveType) | "tria".equals(waveType)) {
                 if (!(this.waveType.get("W2").equals(waveType))) {
                     this.loadEquation("W2", waveType);
                 }
@@ -713,18 +717,18 @@ public class ScienceLab {
     }
 
     public int readBackWaveform(String channel) {
-        if (channel.equals("W1"))
+        if ("W1".equals(channel))
             return this.sin1Frequency;
-        else if (channel.equals("W2"))
+        else if ("W2".equals(channel))
             return this.sin2Frequency;
-        else if (channel.startsWith("SQR"))
+        else if ("SQR".startsWith(channel))
             return this.squareWaveFrequency.get(channel);
         return -1;
     }
 
     public int setWaves(double frequency, double phase, double frequency2) {
         // used frequency as double ( python code demanded ), maybe its taken in KHz or something ( Clarify )
-        int HIGHRES = 0, tableSize = 0, HIGHRES2 = 0, tableSize2 = 0, wavelength = 0, wavelength2 = 0;
+        int HIGHRES, tableSize, HIGHRES2, tableSize2, wavelength = 0, wavelength2 = 0;
         if (frequency2 == -1) frequency2 = frequency;
         if (frequency < 0.1) {
             Log.v(TAG, "frequency 1 too low");
@@ -750,7 +754,8 @@ public class ScienceLab {
             Log.v(TAG, "extremely low frequencies will have reduced amplitudes due to AC coupling restrictions");
 
         int[] p = new int[]{1, 8, 64, 256};
-        int prescalar = 0, retFrequency = 0;
+        int prescalar = 0;
+        int retFrequency = 0;
         while (prescalar <= 3) {
             wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
             retFrequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
@@ -761,7 +766,8 @@ public class ScienceLab {
             Log.v(TAG, "#1 out of range");
             return -1;
         }
-        int prescalar2 = 0, retFrequency2 = 0;
+        int prescalar2 = 0;
+        int retFrequency2 = 0;
         while (prescalar2 <= 3) {
             wavelength2 = (int) (64e6 / frequency2 / p[prescalar2] / tableSize2);
             retFrequency2 = (int) ((64e6 / wavelength2 / p[prescalar2] / tableSize2));
@@ -937,7 +943,8 @@ public class ScienceLab {
             return 0;
         }
         int[] p = new int[]{1, 8, 64, 256};
-        int prescalar = 0, wavelength = 0;
+        int prescalar = 0;
+        int wavelength = 0;
         while (prescalar <= 3) {
             wavelength = (int) (64e6 / frequency / p[prescalar]);
             if (wavelength < 65525) break;
@@ -970,7 +977,8 @@ public class ScienceLab {
 
     public int setSqr2(int frequency, double dutyCycle) {
         int[] p = new int[]{1, 8, 64, 256};
-        int prescalar = 0, wavelength = 0;
+        int prescalar = 0;
+        int wavelength = 0;
         while (prescalar <= 3) {
             wavelength = (int) (64e6 / frequency / p[prescalar]);
             if (wavelength < 65525) break;
