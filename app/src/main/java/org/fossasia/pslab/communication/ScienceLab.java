@@ -252,23 +252,202 @@ public class ScienceLab {
         return 0;
     }
 
-    public void caliberateCTMU(double[] scalars) {
-        this.currents = new double[]{0.55e-3, 0.55e-6, 0.55e-5, 0.55e-4};
-        this.currentScalars = scalars;
+    /* DIGITAL SECTION */
+
+    public int calculateDigitalChannel(String name) {
+        if (Arrays.asList(DigitalChannel.digitalChannelNames).contains(name))
+            return Arrays.asList(DigitalChannel.digitalChannelNames).indexOf(name);
+        else {
+            Log.v(TAG, "Invalid channel " + name + " , selecting ID1 instead ");
+            return 0;
+        }
+    }
+
+    public Map<String, Boolean> getStates() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.DIN);
+            mPacketHandler.sendByte(mCommandsProto.GET_STATES);
+            byte state = mPacketHandler.getByte();
+            mPacketHandler.getAcknowledgement();
+            Map<String, Boolean> states = new LinkedHashMap<>();
+            states.put("ID1", ((state & 1) != 0));
+            states.put("ID2", ((state & 2) != 0));
+            states.put("ID3", ((state & 4) != 0));
+            states.put("ID4", ((state & 8) != 0));
+            return states;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Boolean getState(String inputID) {
+        return this.getStates().get(inputID);
+    }
+
+    public void countPulses(String channel) {
+        if (channel == null) channel = "SEN";
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.START_COUNTING);
+            mPacketHandler.sendByte(this.calculateDigitalChannel(channel));
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int readPulseCount() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.FETCH_COUNT);
+            int count = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            return count;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void chargeCap(int state, int t) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            mPacketHandler.sendByte(mCommandsProto.SET_CAP);
+            mPacketHandler.sendByte(state);
+            mPacketHandler.sendInt(t);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public double captureCapacitance() {
+        // todo : implement this method
+        return 0;
+    }
+
+    public double[] getCapacitorRange(int cTime) {
+        // returns values as a double array arr[0] = v,  arr[1] = c   todo: name these variables 'v','c' properly
+        this.chargeCap(0, 30000);
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.GET_CAP_RANGE);
+            mPacketHandler.sendInt(cTime);
+            int vSum = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            double v = vSum * 3.3 / 16 / 4095;
+            double c = -cTime * 1e-6 / 1e4 / Math.log(1 - v / 3.3);
+            return new double[]{v, c};
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public double[] getCapacitorRange() {
+        /*
+        Charges a capacitor connected to IN1 via a 20K resistor from a 3.3V source for a fixed interval
+		Returns the capacitance calculated using the formula Vc = Vs(1-exp(-t/RC))
+		This function allows an estimation of the parameters to be used with the :func:`get_capacitance` function.
+		*/
+        double[] range = new double[]{1.5, 50e-12};
+        for (int i = 0; i < 4; i++) {
+            range = getCapacitorRange(50 * (int) (Math.pow(10, i)));
+            if (range[0] > 1.5) {
+                if (i == 0 && range[0] > 3.28) {
+                    range[1] = 50e-12;
+                }
+                break;
+            }
+        }
+        return range;
+    }
+
+    public double capacitanceViaRCDischarge() {
+        double cap = getCapacitorRange()[1];
+        double time = 2 * cap * 20e3 * 1e6; // uSec
+        int samples = 500;
+        if (time > 5000 && time < 10e6) {
+            if (time > 50e3) samples = 250;
+            double RC = this.captureCapacitance();
+            return RC / 10e3;
+        } else {
+            Log.v(TAG, "cap out of range " + time + cap);
+            return 0;
+        }
+    }
+
+    public double getCapacitance() {
+        double[] GOOD_VOLTS = new double[]{2.5, 2.8};
+        int CT = 10, CR = 1, iterations = 0;
+        long startTime = System.currentTimeMillis() / 1000;
+        while (System.currentTimeMillis() / 1000 - startTime < 1) {
+            if (CT > 65000) {
+                Log.v(TAG, "CT too high");
+                return this.capacitanceViaRCDischarge();
+            }
+            double[] temp = getCapacitance(CR, 0, CT);
+            double V = temp[0], C = temp[1];
+            if (CT > 30000 && V < 0.1) {
+                Log.v(TAG, "Capacitance too high for this method");
+                return 0;
+            } else if (V > GOOD_VOLTS[0] && V < GOOD_VOLTS[1])
+                return C;
+            else if (V < GOOD_VOLTS[0] && V > 0.01 && CT < 40000) {
+                if (GOOD_VOLTS[0] / V > 1.1 && iterations < 10) {
+                    CT = CT * (int) GOOD_VOLTS[0] / (int) V;
+                    iterations += 1;
+                    Log.v(TAG, "Increased CT " + CT);
+                } else if (iterations == 10)
+                    return 0;
+                else return C;
+            } else if (V <= 0.1 && CR < 3)
+                CR += 1;
+            else if (CR == 3) {
+                Log.v(TAG, "Capture mode");
+                return this.capacitanceViaRCDischarge();
+            }
+        }
+        return 0;
+    }
+
+    public double[] getCapacitance(int currentRange, double trim, int chargeTime) {  // time in uSec
+        this.chargeCap(0, 30000);
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.GET_CAPACITANCE);
+            mPacketHandler.sendByte(currentRange);
+            if (trim < 0)
+                mPacketHandler.sendByte((int) (31 - Math.abs(trim) / 2) | 32);
+            else
+                mPacketHandler.sendByte((int) trim / 2);
+            mPacketHandler.sendInt(chargeTime);
+            SystemClock.sleep((long) (chargeTime * 1e-6 + .02));
+            int VCode = mPacketHandler.getInt();
+            double v = 3.3 * VCode / 4095;
+            mPacketHandler.getAcknowledgement();
+            double chargeCurrent = this.currents[currentRange] * (100 + trim) / 100.0;
+            double c = 0;
+            if (v != 0)
+                c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE) / this.currentScalars[currentRange];
+
+            return new double[]{v, c};
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Double getTemperature() {
         int cs = 3;
         double V = getCTMUVoltage("", cs, 0); // todo inspect this binary channel
-        switch (cs) {
-            case 1:
-                return (646 - V * 1000) / 1.92;  // current source = 1
-            case 2:
-                return (701.5 - V * 1000) / 1.74; // current source = 2
-            case 3:
-                return (760 - V * 1000) / 1.56; // current source = 3
-        }
-        return null;
+        return (760 - V * 1000) / 1.56; // current source = 3 for best results
+    }
+
+    public void caliberateCTMU(double[] scalars) {
+        this.currents = new double[]{0.55e-3, 0.55e-6, 0.55e-5, 0.55e-4};
+        this.currentScalars = scalars;
     }
 
     public double getCTMUVoltage(String channel, int cRange, int tgen) {
