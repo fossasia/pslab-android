@@ -32,15 +32,12 @@ public class MLX90614 {
             Log.d(TAG,"switching baud to 100k");
             i2c.config((int)100e3);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Log.d(TAG,"failed to cahnge baud rate");
         }
         ArrayList<Integer> _readReg_ = new ArrayList<>();
         for(int i = 0;i < 0x20;i++)
-        {
             _readReg_.add(i);
-        }
 
         params.put("readReg", _readReg_);
         params.put("selectSource", new ArrayList(Arrays.asList("object temperature","ambient temperature")) );

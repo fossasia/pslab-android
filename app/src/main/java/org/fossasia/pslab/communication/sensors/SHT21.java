@@ -24,7 +24,7 @@ public class SHT21 {
     public String[] PLOTNAMES = {"Data"};
     public String name = "Humidity/Temperature";
 
-    public HashMap<String, ArrayList> params = new java.util.HashMap<>();
+    public HashMap<String, ArrayList> params = new HashMap<>();
     private I2C i2c;
 
     public SHT21(I2C i2c) throws IOException, InterruptedException {
@@ -41,31 +41,27 @@ public class SHT21 {
     public ArrayList<Double> rawToTemp(ArrayList<Byte> vals) {
         double v;
         ArrayList<Double> _v_ = new ArrayList<>();
-        if(vals.size() != 0)
-        {
+        if(vals.size() != 0) {
             v = (vals.get(0) << 8) | (vals.get(1) & 0xFC);
             v *= 175.72;
             v /= (1 << 16);
             v -= 46.85;
             _v_.add(v);
             return _v_;
-        }
-        return null;
+        }else return null;
     }
 
     public ArrayList<Double> rawToRH(ArrayList<Byte> vals) {
         double v;
         ArrayList<Double> _v_ = new ArrayList<>();
-        if(vals.size() != 0 )
-        {
+        if(vals.size() != 0 ) {
             v = (vals.get(0) << 8) | (vals.get(1) & 0xFC);
             v *= 125.;
             v /= (1 << 16);
             v -= 6;
             _v_.add(v);
             return _v_;
-        }
-        return null;    //returning null instead of False to match return data-type
+        }else return null;    //returning null instead of False to match return data-type
     }
 
     public static int calculate_checksum(ArrayList<Byte> data, int number_of_bytes) {
@@ -76,63 +72,44 @@ public class SHT21 {
         //CRC
         int POLYNOMIAL = 0x131, byteCtr, crc = 0;
         //calculates 8-Bit checksum with given polynomial
-        for(byteCtr = 0; byteCtr < number_of_bytes; byteCtr++)
-        {
+        for(byteCtr = 0; byteCtr < number_of_bytes; byteCtr++) {
             crc  ^= data.get(byteCtr);
             for(int bit = 8; bit > 0; bit--)
             {
                 if((crc & 0X80) != 0)
-                {
                     crc = (crc << 1) ^ POLYNOMIAL;
-                }
                 else
-                {
                     crc = crc << 1;
-                }
             }
-        }
-        return crc;
+        }return crc;
     }
 
     public void selectParameter(String param) {
         if (param.equals("temperature"))
-        {
             selected = TEMP_ADDRESS;
-        }
         else if (param.equals("humidity"))
-        {
             selected = HUMIDITY_ADDRESS;
-        }
     }
 
     public ArrayList<Double> getRaw() throws IOException, InterruptedException {
         ArrayList<Byte> vals;
         i2c.writeBulk(ADDRESS,new int[]{selected});
         if (selected == TEMP_ADDRESS)
-        {
             TimeUnit.MILLISECONDS.sleep(100);
-        }
         else if(selected == HUMIDITY_ADDRESS)
-        {
             TimeUnit.MILLISECONDS.sleep(50);
-        }
         vals = i2c.simpleRead(ADDRESS,3);
-        if (vals.size() != 0)
-        {
+        if (vals.size() != 0) {
             if (calculate_checksum(vals,2) != vals.get(2))
-            {
                 Log.v(TAG,vals.toString());
                 return null;    //returning null instead of False to match return data-type
-            }
         }
         if (selected == TEMP_ADDRESS)
-        {
             return rawToTemp(vals);
-        }
         else if(selected == HUMIDITY_ADDRESS)
-        {
             return rawToRH(vals);
-        }
-        return null;
+        else
+            return null;
     }
+    
 }
