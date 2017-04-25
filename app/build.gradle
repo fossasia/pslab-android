@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -33,5 +36,7 @@ dependencies {
     compile 'com.android.support:preference-v14:25.2.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'org.apache.commons:commons-math3:3.6.1'
+
     testCompile 'junit:junit:4.12'
 }
