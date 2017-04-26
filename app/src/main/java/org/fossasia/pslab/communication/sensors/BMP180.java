@@ -1,7 +1,9 @@
 package org.fossasia.pslab.communication.sensors;
 
 import android.util.Log;
+
 import org.fossasia.pslab.communication.peripherals.I2C;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +34,8 @@ public class BMP180 {
 
     private I2C i2c;
     private int MB;
-    private double c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1,y2, p0, p1, p2, temperature, pressure, baseline;
-    public HashMap<String, ArrayList> params = new java.util.HashMap<>();
+    private double c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, y2, p0, p1, p2, temperature, pressure, baseline;
+    public HashMap<String, ArrayList<Integer>> params = new HashMap<>();
 
     public BMP180(I2C i2c) throws IOException, InterruptedException {
         this.i2c = i2c;
@@ -56,19 +58,20 @@ public class BMP180 {
         p2 = 3038.0 * 100.0 * pow(2, -36);
         temperature = 25;
 
-        Log.v("calib", (new double[]{c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, p0, p1, p2}).toString());
-        params.put("setOversampling",new ArrayList(Arrays.asList(0,1,2,3)));
+        Log.v("calib", Arrays.toString((new double[]{c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, p0, p1, p2})));
+        params.put("setOversampling", new ArrayList<>(Arrays.asList(0, 1, 2, 3)));
         initTemperature();
         readTemperature();
         initPressure();
         baseline = readPressure();
     }
 
-    public short readInt(int addr) throws IOException {
-        return (short)readUInt(addr);   //short is equivalent to numpy.int16()
+    public short readInt(int address) throws IOException {
+        return (short) readUInt(address);   //short is equivalent to numpy.int16()
     }
-    public double readUInt(int addr) throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, addr, 2);
+
+    public double readUInt(int address) throws IOException {
+        ArrayList<Character> vals = i2c.readBulk(ADDRESS, address, 2);
         return 1. * ((vals.get(0) << 8) | vals.get(1));
     }
 
@@ -88,20 +91,19 @@ public class BMP180 {
             return null;
     }
 
-    public void setOversampling(int num)
-    {
+    public void setOversampling(int num) {
         oversampling = num;
     }
 
     public void initPressure() throws IOException, InterruptedException {
         int[] os = {0x34, 0x74, 0xb4, 0xf4};
-        int [] delays = {5, 8, 14, 26};
-        i2c.writeBulk(ADDRESS, new int[] {REG_CONTROL, oversampling});
+        int[] delays = {5, 8, 14, 26};
+        i2c.writeBulk(ADDRESS, new int[]{REG_CONTROL, oversampling});
         TimeUnit.MILLISECONDS.sleep(delays[oversampling]);
     }
 
     public Double readPressure() throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS,REG_RESULT, 3);
+        ArrayList<Character> vals = i2c.readBulk(ADDRESS, REG_RESULT, 3);
         if (vals.size() == 3) {
             double p = 1. * (vals.get(0) << 8) + vals.get(1) + (vals.get(2) / 256.0);
             double s = temperature - 25.0;
@@ -119,7 +121,7 @@ public class BMP180 {
         return (44330.0 * (1 - pow(pressure / baseline, 1 / 5.255)));
     }
 
-    public double sealevel(double pressure, double altitude) {
+    public double seaLevel(double pressure, double altitude) {
         //given a calculated pressure and altitude, return the sealevel
         return (pressure / pow(1 - (altitude / 44330.0), 5.255));
     }
