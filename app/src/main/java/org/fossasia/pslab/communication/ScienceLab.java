@@ -15,8 +15,6 @@ import org.fossasia.pslab.communication.peripherals.RadioLink;
 import org.fossasia.pslab.communication.peripherals.SPI;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -61,7 +59,7 @@ public class ScienceLab {
     private PacketHandler mPacketHandler;
     private CommandsProto mCommandsProto;
     private AnalogConstants mAnalogConstants;
-    private I2C i2C;
+    private I2C i2c;
     private SPI spi;
     private NRF24L01 nrf;
     private MCP4728 dac;
@@ -124,7 +122,7 @@ public class ScienceLab {
         for (int i = 0; i < 4; i++) {
             dChannels.add(new DigitalChannel(i));
         }
-        i2C = new I2C(mPacketHandler);
+        i2c = new I2C(mPacketHandler);
         spi = new SPI(mPacketHandler);
         if (isConnected()) {
             for (String temp : new String[]{"CH1", "CH2"}) {
@@ -1077,7 +1075,7 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.STEPPER_MOTOR);
             mPacketHandler.sendInt((steps << 1) | direction);
             mPacketHandler.sendInt(delay);
-            // todo : sleep for (steps * delay * 1e-3)
+            SystemClock.sleep((long) (steps * delay * 1e-3 * 1000));
         } catch (IOException e) {
             e.printStackTrace();
         }
