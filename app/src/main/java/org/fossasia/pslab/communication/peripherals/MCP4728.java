@@ -32,7 +32,7 @@ public class MCP4728 {
     private I2C i2c;
     private List<Integer> SWITCHEDOFF;
     private List<Integer> VREFS;
-    private Map<String, DACChannel> CHANS = new LinkedHashMap<>();
+    public Map<String, DACChannel> CHANS = new LinkedHashMap<>();
     private Map<Integer, String> CHANNELMAP = new LinkedHashMap<>();
     private int addr;
 
@@ -54,8 +54,8 @@ public class MCP4728 {
         CHANNELMAP.put(3, "PV1");
     }
 
-    void ignoreCalibration(String name) {
-        CHANS.get(name).calibration_enabled = "false";
+    public void ignoreCalibration(String name) {
+        CHANS.get(name).calibrationEnabled = "false";
     }
 
     public double setVoltage(String name, int v) {
@@ -83,7 +83,7 @@ public class MCP4728 {
         } else if (v >= 4095) {
             v = 4095;
         }
-        val = CHAN.ApplyCalibration(v);
+        val = CHAN.applyCalibration(v);
         try {
             i2c.writeBulk(addr, new int[]{64 | (CHAN.channum << 1), (val >> 8) & 0x0F, val & 0xFF});
         } catch (IOException e) {
@@ -92,7 +92,7 @@ public class MCP4728 {
         return (CHAN.VToCode.get(0) + CHAN.VToCode.get(1) * v);
     }
 
-    void writeAll(int v1, int v2, int v3, int v4) {
+    public void writeAll(int v1, int v2, int v3, int v4) {
         try {
             i2c.start(addr, 0);
             i2c.send((v1 >> 8) & 0xF);
@@ -109,7 +109,7 @@ public class MCP4728 {
         }
     }
 
-    void stat() {
+    public void stat() {
         try {
             i2c.start(addr, 0);
             i2c.send(0x0);

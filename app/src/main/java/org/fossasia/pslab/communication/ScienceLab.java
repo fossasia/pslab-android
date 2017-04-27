@@ -15,6 +15,8 @@ import org.fossasia.pslab.communication.peripherals.RadioLink;
 import org.fossasia.pslab.communication.peripherals.SPI;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -104,7 +106,7 @@ public class ScienceLab {
         squareWaveFrequency.put("SQR4", 0);
     }
 
-    private void runInitSequence() throws IOException {
+    private void runInitSequence(Boolean loadCalibrationData) throws IOException {
         ArrayList<String> aboutArray = new ArrayList<>();
         if (!isConnected()) {
             Log.e(TAG, "Check hardware connections. Not connected");
@@ -141,8 +143,82 @@ public class ScienceLab {
         }
         dac = new MCP4728(mPacketHandler);
         this.calibrated = false;
+        // Check for calibration data if connected. And process them if found
+        if (loadCalibrationData && isConnected()) {
+            byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5);
+            if ("READY".equals(new String(Arrays.copyOfRange(capAndPCS, 0, 5), "UTF-8"))) {
+                ArrayList<Double> scalars = new ArrayList<>();
+                // todo : check scalars unpacking might be faulty
+                for (int i = 5; i < capAndPCS.length; i++) {
+                    scalars.add((double) capAndPCS[i]);
+                }
+                this.SOCKET_CAPACITANCE = scalars.get(0);
+                this.dac.CHANS.get("PCS").loadCalibrationTwopoint(scalars.get(1), scalars.get(2).intValue());
+                double[] tempScalars = new double[scalars.size() - 5];
+                for (int i = 4; i < scalars.size(); i++) {
+                    tempScalars[i - 4] = scalars.get(i);
+                }
+                this.calibrateCTMU(tempScalars);
+                this.resistanceScaling = scalars.get(3);
+                // add info in aboutArray
+            } else {
+                this.SOCKET_CAPACITANCE = 42e-12;
+                Log.v(TAG, "Cap and PCS calibration invalid");
+            }
+            byte[] polynomials = readBulkFlash(this.ADC_POLYNOMIALS_LOCATION, 2048);
+            // todo : change to "PSLab" after PSLab firmware is ready
+            if ("SEELablet".equals(new String(Arrays.copyOfRange(polynomials, 0, 9), "UTF-8"))) {
+                Log.v(TAG, "ADC calibration found...");
+                this.calibrated = true;
+                byte[] adcShifts1 = readBulkFlash(this.ADC_SHIFTS_LOCATION1, 2048);
+                byte[] adcShifts2 = readBulkFlash(this.ADC_SHIFTS_LOCATION2, 2048);
+                int count = 0;
+                int tempADC = 0, tempDAC = 0;
+                for (int i = 0; i < polynomials.length - 3; i++) {
+                    if (polynomials[i] == 'S' && polynomials[i + 1] == 'T' && polynomials[i + 2] == 'O' && polynomials[i + 3] == 'P') {
+                        switch (count) {
+                            case 0:
+                                tempADC = i;
+                                count++;
+                                break;
+                            case 1:
+                                tempDAC = i;
+                                count++;
+                                break;
+                        }
+                    }
+                }
+                byte[] adcSlopeOffsets = Arrays.copyOfRange(polynomials, 0, tempADC);
+                byte[] dacSlopeIntercept = Arrays.copyOfRange(polynomials, tempADC + 4, tempDAC);
+                byte[] inlSlopeIntercept = Arrays.copyOfRange(polynomials, tempDAC + 4, polynomials.length);
+
+
+            }
+        }
         // todo : port remaining function
 
+    }
+
+    public double getResistance() {
+        return 0;
+    }
+
+    public void ignoreCalibration() {
+        for (Map.Entry<String, AnalogInputSource> tempAnalogInputSource : this.analogInputSources.entrySet()) {
+            tempAnalogInputSource.getValue().ignoreCalibration();
+            tempAnalogInputSource.getValue().regenerateCalibration();
+        }
+        for (String temp : new String[]{"PV1", "PV2", "PV3"}) {
+            this.dac.ignoreCalibration(temp);
+        }
+    }
+
+    public void close() {
+        try {
+            mCommunicationHandler.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getAverageVoltage(String channelName, int sample) {
@@ -210,14 +286,6 @@ public class ScienceLab {
         } else {
             return "Not Connected";
         }
-    }
-
-    public double getResistence() {
-
-        return 0;
-    }
-
-    public void ignoreCalibration() {
     }
 
     public double setGain(String channel, int gain, boolean force) {
@@ -449,7 +517,7 @@ public class ScienceLab {
         return (760 - V * 1000) / 1.56; // current source = 3 for best results
     }
 
-    public void caliberateCTMU(double[] scalars) {
+    public void calibrateCTMU(double[] scalars) {
         this.currents = new double[]{0.55e-3, 0.55e-6, 0.55e-5, 0.55e-4};
         this.currentScalars = scalars;
     }

@@ -70,7 +70,7 @@ public class I2C {
         packetHandler.getAcknowledgement();
     }
 
-    public void _wait_() throws IOException {
+    public void _wait() throws IOException {
         packetHandler.sendByte(commandsProto.I2C_HEADER);
         packetHandler.sendByte(commandsProto.I2C_WAIT);
         packetHandler.getAcknowledgement();
@@ -161,7 +161,8 @@ public class I2C {
         packetHandler.getAcknowledgement();
     }
 
-    public ArrayList<Integer> scan(int frequency) throws IOException {
+    public ArrayList<Integer> scan(Integer frequency) throws IOException {
+        if (frequency == null) frequency = 100000;
         config(frequency);
         ArrayList<Integer> addresses = new ArrayList<>();
         for (int i = 0; i < 128; i++) {
@@ -179,6 +180,7 @@ public class I2C {
         packetHandler.sendByte(commandsProto.I2C_SEND);
         packetHandler.sendByte(data);
     }
+
 
 
 }
