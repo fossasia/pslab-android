@@ -1,6 +1,7 @@
 package org.fossasia.pslab.communication;
 
 import android.hardware.usb.UsbManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import org.fossasia.pslab.communication.analogChannel.AnalogAquisitionChannel;
@@ -15,6 +16,7 @@ import org.fossasia.pslab.communication.peripherals.SPI;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -69,6 +71,7 @@ public class ScienceLab {
         if (isDeviceFound()) {
             try {
                 mCommunicationHandler.open();
+                //SystemClock.sleep(200);
                 mPacketHandler = new PacketHandler(500, mCommunicationHandler);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -250,6 +253,552 @@ public class ScienceLab {
         return 0;
     }
 
+    /* DIGITAL SECTION */
+
+    public int calculateDigitalChannel(String name) {
+        if (Arrays.asList(DigitalChannel.digitalChannelNames).contains(name))
+            return Arrays.asList(DigitalChannel.digitalChannelNames).indexOf(name);
+        else {
+            Log.v(TAG, "Invalid channel " + name + " , selecting ID1 instead ");
+            return 0;
+        }
+    }
+
+    public Map<String, Boolean> getStates() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.DIN);
+            mPacketHandler.sendByte(mCommandsProto.GET_STATES);
+            byte state = mPacketHandler.getByte();
+            mPacketHandler.getAcknowledgement();
+            Map<String, Boolean> states = new LinkedHashMap<>();
+            states.put("ID1", ((state & 1) != 0));
+            states.put("ID2", ((state & 2) != 0));
+            states.put("ID3", ((state & 4) != 0));
+            states.put("ID4", ((state & 8) != 0));
+            return states;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Boolean getState(String inputID) {
+        return this.getStates().get(inputID);
+    }
+
+    public void countPulses(String channel) {
+        if (channel == null) channel = "SEN";
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.START_COUNTING);
+            mPacketHandler.sendByte(this.calculateDigitalChannel(channel));
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int readPulseCount() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.FETCH_COUNT);
+            int count = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            return count;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void chargeCap(int state, int t) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            mPacketHandler.sendByte(mCommandsProto.SET_CAP);
+            mPacketHandler.sendByte(state);
+            mPacketHandler.sendInt(t);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public double captureCapacitance(int samples, int tg) {
+        // todo : implement this method
+        return 0;
+    }
+
+    public double[] getCapacitorRange(int cTime) {
+        // returns values as a double array arr[0] = v,  arr[1] = c   todo: name these variables 'v','c' properly
+        this.chargeCap(0, 30000);
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.GET_CAP_RANGE);
+            mPacketHandler.sendInt(cTime);
+            int vSum = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            double v = vSum * 3.3 / 16 / 4095;
+            double c = -cTime * 1e-6 / 1e4 / Math.log(1 - v / 3.3);
+            return new double[]{v, c};
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public double[] getCapacitorRange() {
+        /*
+        Charges a capacitor connected to IN1 via a 20K resistor from a 3.3V source for a fixed interval
+		Returns the capacitance calculated using the formula Vc = Vs(1-exp(-t/RC))
+		This function allows an estimation of the parameters to be used with the :func:`get_capacitance` function.
+		*/
+        double[] range = new double[]{1.5, 50e-12};
+        for (int i = 0; i < 4; i++) {
+            range = getCapacitorRange(50 * (int) (Math.pow(10, i)));
+            if (range[0] > 1.5) {
+                if (i == 0 && range[0] > 3.28) {
+                    range[1] = 50e-12;
+                }
+                break;
+            }
+        }
+        return range;
+    }
+
+    public double capacitanceViaRCDischarge() {
+        double cap = getCapacitorRange()[1];
+        double time = 2 * cap * 20e3 * 1e6; // uSec
+        int samples = 500;
+        if (time > 5000 && time < 10e6) {
+            if (time > 50e3) samples = 250;
+            double RC = this.captureCapacitance(samples, (int) (time / samples)); // todo : complete statement after writing captureCapacitance method
+            return RC / 10e3;
+        } else {
+            Log.v(TAG, "cap out of range " + time + cap);
+            return 0;
+        }
+    }
+
+    public double getCapacitance() {
+        double[] GOOD_VOLTS = new double[]{2.5, 2.8};
+        int CT = 10;
+        int CR = 1;
+        int iterations = 0;
+        long startTime = System.currentTimeMillis() / 1000;
+        while (System.currentTimeMillis() / 1000 - startTime < 1) {
+            if (CT > 65000) {
+                Log.v(TAG, "CT too high");
+                return this.capacitanceViaRCDischarge();
+            }
+            double[] temp = getCapacitance(CR, 0, CT);
+            double V = temp[0];
+            double C = temp[1];
+            if (CT > 30000 && V < 0.1) {
+                Log.v(TAG, "Capacitance too high for this method");
+                return 0;
+            } else if (V > GOOD_VOLTS[0] && V < GOOD_VOLTS[1])
+                return C;
+            else if (V < GOOD_VOLTS[0] && V > 0.01 && CT < 40000) {
+                if (GOOD_VOLTS[0] / V > 1.1 && iterations < 10) {
+                    CT = CT * (int) GOOD_VOLTS[0] / (int) V;
+                    iterations += 1;
+                    Log.v(TAG, "Increased CT " + CT);
+                } else if (iterations == 10)
+                    return 0;
+                else return C;
+            } else if (V <= 0.1 && CR < 3)
+                CR += 1;
+            else if (CR == 3) {
+                Log.v(TAG, "Capture mode");
+                return this.capacitanceViaRCDischarge();
+            }
+        }
+        return 0;
+    }
+
+    public double[] getCapacitance(int currentRange, double trim, int chargeTime) {  // time in uSec
+        this.chargeCap(0, 30000);
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.GET_CAPACITANCE);
+            mPacketHandler.sendByte(currentRange);
+            if (trim < 0)
+                mPacketHandler.sendByte((int) (31 - Math.abs(trim) / 2) | 32);
+            else
+                mPacketHandler.sendByte((int) trim / 2);
+            mPacketHandler.sendInt(chargeTime);
+            SystemClock.sleep((long) (chargeTime * 1e-6 + .02));
+            int VCode = mPacketHandler.getInt();
+            double v = 3.3 * VCode / 4095;
+            mPacketHandler.getAcknowledgement();
+            double chargeCurrent = this.currents[currentRange] * (100 + trim) / 100.0;
+            double c = 0;
+            if (v != 0)
+                c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE) / this.currentScalars[currentRange];
+
+            return new double[]{v, c};
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Double getTemperature() {
+        int cs = 3;
+        double V = getCTMUVoltage("", cs, 0); // todo inspect this binary channel
+        return (760 - V * 1000) / 1.56; // current source = 3 for best results
+    }
+
+    public void caliberateCTMU(double[] scalars) {
+        this.currents = new double[]{0.55e-3, 0.55e-6, 0.55e-5, 0.55e-4};
+        this.currentScalars = scalars;
+    }
+
+    public double getCTMUVoltage(String channel, int cRange, int tgen) {
+        if (tgen == -1) tgen = 1;
+        int channelI = 0;
+        if ("CAP".equals(channel))
+            channelI = 5;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.GET_CTMU_VOLTAGE);
+            mPacketHandler.sendByte((channelI) | (cRange << 5) | (tgen << 7));
+            int v = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            return (3.3 * v / 16 / 4095.);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void startCTMU(int cRange, int trim, int tgen) { // naming of arguments ??
+        if (tgen == -1) tgen = 1;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.START_CTMU);
+            mPacketHandler.sendByte(cRange | (tgen << 7));
+            mPacketHandler.sendByte(trim);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stopCTMU() {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.STOP_CTMU);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resetHardware() {
+        /*
+        Resets the device, and standalone mode will be enabled if an OLED is connected to the I2C port
+        */
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.RESTORE_STANDALONE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public byte[] readFlash(int page, int location) {
+       /*  Reads 16 BYTES from the specified location  */
+        try {
+            mPacketHandler.sendByte(mCommandsProto.FLASH);
+            mPacketHandler.sendByte(mCommandsProto.READ_FLASH);
+            mPacketHandler.sendByte(page);
+            mPacketHandler.sendByte(location);
+            byte[] data = new byte[16];
+            mPacketHandler.read(data, 16);
+            mPacketHandler.getAcknowledgement();
+            return data;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public byte[] readBulkFlash(int page, int numOfBytes) {
+        /*  Reads BYTES from the specified location  */
+
+        try {
+            mPacketHandler.sendByte(mCommandsProto.FLASH);
+            mPacketHandler.sendByte(mCommandsProto.READ_BULK_FLASH);
+            int bytesToRead = numOfBytes;
+            if (numOfBytes % 2 == 1) bytesToRead += 1;
+            mPacketHandler.sendInt(bytesToRead);
+            mPacketHandler.sendByte(page);
+            byte[] data = new byte[bytesToRead];
+            mPacketHandler.read(data, bytesToRead);
+            mPacketHandler.getAcknowledgement();
+            if (numOfBytes % 2 == 1)
+                return Arrays.copyOfRange(data, 0, data.length - 1);
+            else
+                return Arrays.copyOfRange(data, 0, data.length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void writeFlash(int page, int location, String data) {
+        /*
+        write a 16 BYTE string to the selected location (0-63)
+
+        DO NOT USE THIS UNLESS YOU'RE ABSOLUTELY SURE KNOW THIS!
+		YOU MAY END UP OVERWRITING THE CALIBRATION DATA, AND WILL HAVE
+		TO GO THROUGH THE TROUBLE OF GETTING IT FROM THE MANUFACTURER AND
+		RE-FLASHING IT.
+        */
+        while (data.length() < 16) data += '.';
+        try {
+            mPacketHandler.sendByte(mCommandsProto.FLASH);
+            mPacketHandler.sendByte(mCommandsProto.WRITE_FLASH);
+            mPacketHandler.sendByte(page);
+            mPacketHandler.sendByte(location);
+            mCommunicationHandler.write(data.getBytes(), 500);
+            SystemClock.sleep(100);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeBulkFlash(int location, ArrayList<Integer> data) {
+        /*
+        write a byte array to the entire flash page. Erases any other data
+
+        DO NOT USE THIS UNLESS YOU'RE ABSOLUTELY SURE KNOW THIS!
+		YOU MAY END UP OVERWRITING THE CALIBRATION DATA, AND WILL HAVE
+		TO GO THROUGH THE TROUBLE OF GETTING IT FROM THE MANUFACTURER AND
+		RE-FLASHING IT.
+        */
+        if (data.size() % 2 == 1) data.add(0);
+        try {
+            mPacketHandler.sendByte(mCommandsProto.FLASH);
+            mPacketHandler.sendByte(mCommandsProto.WRITE_BULK_FLASH);
+            mPacketHandler.sendInt(data.size());
+            mPacketHandler.sendByte(location);
+            for (int a : data) {
+                mPacketHandler.sendByte(a);
+            }
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        boolean equal = true;
+        byte[] receiveData = readBulkFlash(location, data.size());
+        for (int i = 0; i < data.size(); i++) {
+            if (receiveData[i] != (data.get(i) & 0xff)) {
+                equal = false;
+                Log.v(TAG, "Verification by read-back failed");
+            }
+        }
+        if (equal)
+            Log.v(TAG, "Verification by read-back successful");
+    }
+
+    /* WAVEGEN SECTION */
+
+    public void setWave(String channel, int frequency) {
+        if ("W1".equals(channel))
+            this.setW1(frequency, null);
+        else if ("W2".equals(channel))
+            this.setW2(frequency, null);
+    }
+
+    public int setSine1(int frequency) {
+        return this.setW1(frequency, "sine");
+    }
+
+    public int setSine2(int frequency) {
+        return this.setW2(frequency, "sine");
+    }
+
+    public int setW1(double frequency, String waveType) {
+        int HIGHRES, tableSize;
+        if (frequency < 0.1) {
+            Log.v(TAG, "frequency too low");
+            return -1;
+        } else if (frequency < 1100) {
+            HIGHRES = 1;
+            tableSize = 512;
+        } else {
+            HIGHRES = 0;
+            tableSize = 32;
+        }
+        if (waveType != null) {
+            if ("sine".equals(waveType) | "tria".equals(waveType)) {
+                if (!(this.waveType.get("W1").equals(waveType))) {
+                    this.loadEquation("W1", waveType);
+                }
+            } else {
+                Log.v(TAG, "Not a valid waveform. try sine or tria");
+            }
+        }
+        int[] p = new int[]{1, 8, 64, 256};
+        int prescalar = 0, wavelength = 0;
+        while (prescalar <= 3) {
+            wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
+            frequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
+            if (wavelength < 65525) break;
+            prescalar++;
+        }
+        if (prescalar == 4) {
+            Log.v(TAG, "Out of range");
+            return -1;
+        }
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SET_SINE1);
+            mPacketHandler.sendByte(HIGHRES | (prescalar << 1));
+            mPacketHandler.sendInt(wavelength - 1);
+            mPacketHandler.getAcknowledgement();
+            this.sin1Frequency = (int) frequency;
+            return this.sin1Frequency;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int setW2(double frequency, String waveType) {
+        int HIGHRES;
+        int tableSize;
+        if (frequency < 0.1) {
+            Log.v(TAG, "frequency too low");
+            return -1;
+        } else if (frequency < 1100) {
+            HIGHRES = 1;
+            tableSize = 512;
+        } else {
+            HIGHRES = 0;
+            tableSize = 32;
+        }
+        if (waveType != null) {
+            if ("sine".equals(waveType) | "tria".equals(waveType)) {
+                if (!(this.waveType.get("W2").equals(waveType))) {
+                    this.loadEquation("W2", waveType);
+                }
+            } else {
+                Log.v(TAG, "Not a valid waveform. try sine or tria");
+            }
+        }
+        int[] p = new int[]{1, 8, 64, 256};
+        int prescalar = 0, wavelength = 0;
+        while (prescalar <= 3) {
+            wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
+            frequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
+            if (wavelength < 65525) break;
+            prescalar++;
+        }
+        if (prescalar == 4) {
+            Log.v(TAG, "Out of range");
+            return -1;
+        }
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SET_SINE2);
+            mPacketHandler.sendByte(HIGHRES | (prescalar << 1));
+            mPacketHandler.sendInt(wavelength - 1);
+            mPacketHandler.getAcknowledgement();
+            this.sin2Frequency = (int) frequency;
+            return this.sin2Frequency;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int readBackWaveform(String channel) {
+        if ("W1".equals(channel))
+            return this.sin1Frequency;
+        else if ("W2".equals(channel))
+            return this.sin2Frequency;
+        else if ("SQR".startsWith(channel))
+            return this.squareWaveFrequency.get(channel);
+        return -1;
+    }
+
+    public int setWaves(double frequency, double phase, double frequency2) {
+        // used frequency as double ( python code demanded ), maybe its taken in KHz or something ( Clarify )
+        int HIGHRES, tableSize, HIGHRES2, tableSize2, wavelength = 0, wavelength2 = 0;
+        if (frequency2 == -1) frequency2 = frequency;
+        if (frequency < 0.1) {
+            Log.v(TAG, "frequency 1 too low");
+            return -1;
+        } else if (frequency < 1100) {
+            HIGHRES = 1;
+            tableSize = 512;
+        } else {
+            HIGHRES = 0;
+            tableSize = 32;
+        }
+        if (frequency2 < 0.1) {
+            Log.v(TAG, "frequency 2 too low");
+            return -1;
+        } else if (frequency2 < 1100) {
+            HIGHRES2 = 1;
+            tableSize2 = 512;
+        } else {
+            HIGHRES2 = 0;
+            tableSize2 = 32;
+        }
+        if (frequency < 1 || frequency2 < 1)
+            Log.v(TAG, "extremely low frequencies will have reduced amplitudes due to AC coupling restrictions");
+
+        int[] p = new int[]{1, 8, 64, 256};
+        int prescalar = 0;
+        int retFrequency = 0;
+        while (prescalar <= 3) {
+            wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
+            retFrequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
+            if (wavelength < 65525) break;
+            prescalar++;
+        }
+        if (prescalar == 4) {
+            Log.v(TAG, "#1 out of range");
+            return -1;
+        }
+        int prescalar2 = 0;
+        int retFrequency2 = 0;
+        while (prescalar2 <= 3) {
+            wavelength2 = (int) (64e6 / frequency2 / p[prescalar2] / tableSize2);
+            retFrequency2 = (int) ((64e6 / wavelength2 / p[prescalar2] / tableSize2));
+            if (wavelength2 < 65525) break;
+            prescalar2++;
+        }
+        if (prescalar2 == 4) {
+            Log.v(TAG, "#2 out of range");
+            return -1;
+        }
+
+        int phaseCoarse = (int) (tableSize2 * (phase) / 360.);
+        int phaseFine = (int) (wavelength2 * (phase - (phaseCoarse) * 360. / tableSize2) / (360. / tableSize2));
+        try {
+            mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
+            mPacketHandler.sendByte(mCommandsProto.SET_BOTH_WG);
+            mPacketHandler.sendInt(wavelength - 1);
+            mPacketHandler.sendInt(wavelength2 - 1);
+            mPacketHandler.sendInt(phaseCoarse);
+            mPacketHandler.sendInt(phaseFine);
+            mPacketHandler.sendByte((prescalar2 << 4) | (prescalar << 2) | (HIGHRES2 << 1) | (HIGHRES));
+            mPacketHandler.getAcknowledgement();
+            this.sin1Frequency = retFrequency;
+            this.sin2Frequency = retFrequency2;
+            return retFrequency;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public void loadEquation(String channel, String function) {
         double[] span = new double[2];
         if (function.equals("sine")) {
@@ -394,7 +943,8 @@ public class ScienceLab {
             return 0;
         }
         int[] p = new int[]{1, 8, 64, 256};
-        int prescalar = 0, wavelength = 0;
+        int prescalar = 0;
+        int wavelength = 0;
         while (prescalar <= 3) {
             wavelength = (int) (64e6 / frequency / p[prescalar]);
             if (wavelength < 65525) break;
@@ -427,7 +977,8 @@ public class ScienceLab {
 
     public int setSqr2(int frequency, double dutyCycle) {
         int[] p = new int[]{1, 8, 64, 256};
-        int prescalar = 0, wavelength = 0;
+        int prescalar = 0;
+        int wavelength = 0;
         while (prescalar <= 3) {
             wavelength = (int) (64e6 / frequency / p[prescalar]);
             if (wavelength < 65525) break;
@@ -819,5 +1370,9 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void disconnect() throws IOException {
+        mCommunicationHandler.close();
     }
 }
