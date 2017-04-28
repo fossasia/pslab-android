@@ -66,11 +66,8 @@ public class SHT21 {
         } else return null;
     }
 
-    public static int calculate_checksum(ArrayList<Byte> data, int numberOfBytes) {
-        /*
-        5.7 CRC Checksum using the polynomial given in the datasheet
-		Credits: https://github.com/jaques/sht21_python/blob/master/sht21.py
-		*/
+    public static int calculateChecksum(ArrayList<Byte> data, int numberOfBytes) {
+
         //CRC
         int POLYNOMIAL = 0x131, byteCtr, crc = 0;
         //calculates 8-Bit checksum with given polynomial
@@ -102,7 +99,7 @@ public class SHT21 {
             TimeUnit.MILLISECONDS.sleep(50);
         vals = i2c.simpleRead(ADDRESS, 3);
         if (vals.size() != 0) {
-            if (calculate_checksum(vals, 2) != vals.get(2))
+            if (calculateChecksum(vals, 2) != vals.get(2))
                 Log.v(TAG, vals.toString());
             return null;
         }
