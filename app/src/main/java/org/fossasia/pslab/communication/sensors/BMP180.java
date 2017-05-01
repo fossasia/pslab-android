@@ -37,6 +37,7 @@ public class BMP180 {
     private double c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, y2, p0, p1, p2, temperature, pressure, baseline;
     public HashMap<String, ArrayList<Integer>> params = new HashMap<>();
 
+
     public BMP180(I2C i2c) throws IOException, InterruptedException {
         this.i2c = i2c;
         MB = readInt(0xBA);
