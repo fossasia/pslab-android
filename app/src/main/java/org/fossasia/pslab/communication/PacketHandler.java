@@ -34,6 +34,7 @@ public class PacketHandler {
     }
 
     public boolean isConnected() {
+        connected = mCommunicationHandler.isConnected();
         return connected;
     }
 
