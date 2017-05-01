@@ -5,7 +5,6 @@ import org.fossasia.pslab.communication.peripherals.I2C;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class BH1750{
     private String TAG = "BH1750";
@@ -16,12 +15,10 @@ public class BH1750{
     private int RES_4000mLx = 0x13;
     private I2C i2c;
 
-    public int[] gain_choices = {RES_500mLx,RES_1000mLx,RES_4000mLx};
-    public String[] gain_literal_choices = {"500mLx", "1000mLx", "4000mLx"};
+    public int[] gainChoices = {RES_500mLx,RES_1000mLx,RES_4000mLx};
+    public String[] gainLiteralChoices = {"500mLx", "1000mLx", "4000mLx"};
     public int gain = 0;
     public double[] scaling = {2,1,0.25};
-
-    private HashMap<String, ArrayList> params = new HashMap<>();
 
     public int NUMPLOTS = 1;
     public String[] PLOTNAMES={"Lux"};
@@ -30,16 +27,16 @@ public class BH1750{
 
     public void BH1750(I2C i2c) throws IOException, InterruptedException {
         this.i2c = i2c;
-        init("");
+        init();
     }
 
-    public void init(String dummy_variable_to_circumvent_framework_limitation) throws IOException{
+    public void init() throws IOException{
         i2c.writeBulk(ADDRESS,new int[]{RES_500mLx});
     }
 
     public void setRange(String g)throws IOException {
-        int gain = Arrays.asList(gain_literal_choices).indexOf(g);
-        i2c.writeBulk(ADDRESS,new int[]{gain_choices[gain]});
+        int gain = Arrays.asList(gainLiteralChoices).indexOf(g);
+        i2c.writeBulk(ADDRESS,new int[]{gainChoices[gain]});
     }
 
     public ArrayList<Byte> getVals(int numbytes) throws IOException{
@@ -53,6 +50,6 @@ public class BH1750{
             return ((vals.get(0) << 8 | vals.get(1))/1.2)!=0;
         else
             return false;
-        }
+    }
 }
 
