@@ -91,11 +91,11 @@ public class AnalogInputSource {
         return adc_shifts;
     }
 
-    void ignoreCalibration() {
+    public void ignoreCalibration() {
         calibrationReady = false;
     }
 
-    void loadPolynomials(List<Double[]> polys) //polys --> A LIST OF TUPLES (in Python) ~ A LIST OF ARRAYS (IN JAVA))
+    public void loadPolynomials(List<Double[]> polys) //polys --> A LIST OF TUPLES (in Python) ~ A LIST OF ARRAYS (IN JAVA))
     //polynomial is a list of hashes and we are gonna load values via loadPolynomials
     {
         for (int i = 0; i < polys.size(); i++) {
@@ -108,7 +108,7 @@ public class AnalogInputSource {
         }
     }                           //** unsure about this method
 
-    private void regenerateCalibration() {
+    public void regenerateCalibration() {
         double A, B, intercept, slope;
         B = range[1];
         A = range[0];

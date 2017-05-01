@@ -67,6 +67,7 @@ public class SHT21 {
     }
 
     public static int calculateChecksum(ArrayList<Byte> data, int numberOfBytes) {
+
         //CRC
         int POLYNOMIAL = 0x131, byteCtr, crc = 0;
         //calculates 8-Bit checksum with given polynomial
