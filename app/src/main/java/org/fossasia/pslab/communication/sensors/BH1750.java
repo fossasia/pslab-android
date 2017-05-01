@@ -34,7 +34,11 @@ public class BH1750{
         i2c.writeBulk(ADDRESS,new int[]{RES_500mLx});
     }
 
+<<<<<<< HEAD
     public void setRange(String g)throws IOException {
+=======
+    public void setRange(String g) throws IOException {
+>>>>>>> 765e1a28dba6b3f5761d77446d1cf0cc89be7cdb
         int gain = Arrays.asList(gainLiteralChoices).indexOf(g);
         i2c.writeBulk(ADDRESS,new int[]{gainChoices[gain]});
     }
