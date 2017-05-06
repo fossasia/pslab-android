@@ -1,5 +1,6 @@
 package org.fossasia.pslab.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +18,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -35,19 +39,21 @@ import org.fossasia.pslab.fragment.SettingsFragment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.fossasia.pslab.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
-
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
     private ImageView imgProfile;
     private TextView txtName;
     private Toolbar toolbar;
+    private ImageButton refresh;
 
     public static int navItemIndex = 0;
 
@@ -88,9 +94,12 @@ public class MainActivity extends AppCompatActivity {
         imgProfile = (ImageView) navHeader.findViewById(org.fossasia.pslab.R.id.img_profile);
         activityTitles = getResources().getStringArray(org.fossasia.pslab.R.array.nav_item_activity_titles);
 
-        loadNavHeader();
+        refresh = (ImageButton) findViewById(R.id.refresh);
+        refresh.setOnClickListener(MainActivity.this);
 
+        loadNavHeader();
         setUpNavigationView();
+
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
@@ -98,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             loadHomeFragment();
         }
     }
+
 
     private void loadHomeFragment() {
         selectNavMenu();
@@ -243,6 +253,18 @@ public class MainActivity extends AppCompatActivity {
             mScienceLab.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(!mScienceLab.isDeviceFound()){
+            UsbManager usbManager = (UsbManager) getSystemService(USB_SERVICE);
+            mScienceLab = new ScienceLab(usbManager);
+            if (mScienceLab.isDeviceFound())
+                Toast.makeText(getApplicationContext(),"Device Found",Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getApplicationContext(),"Device Not Found",Toast.LENGTH_SHORT).show();
         }
     }
 }

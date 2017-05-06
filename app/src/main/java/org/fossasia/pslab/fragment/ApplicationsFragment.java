@@ -34,5 +34,4 @@ public class ApplicationsFragment extends Fragment {
         applicationsListView.setAdapter(new ApplicationsAdapter(getContext(), applicationsList, imageList));
         return view;
     }
-
 }
