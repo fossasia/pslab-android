@@ -34,9 +34,9 @@ public class AnalogAquisitionChannel {
 
     double fixValue(int val) {
         if (resolution == 12) {
-            return (calibration_ref196 * (analogInputSource.calPoly12.get(0) + analogInputSource.calPoly12.get(1) * val + analogInputSource.calPoly12.get(2) * val * val));
+            return calibration_ref196 * (analogInputSource.calPoly12.value(val));
         } else {
-            return (calibration_ref196 * (analogInputSource.calPoly10.get(0) + analogInputSource.calPoly10.get(1) * val + analogInputSource.calPoly10.get(2) * val * val));
+            return calibration_ref196 * (analogInputSource.calPoly10.value(val));
         }
     }
 
