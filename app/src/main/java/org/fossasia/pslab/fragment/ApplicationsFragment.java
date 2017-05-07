@@ -19,7 +19,7 @@ import org.fossasia.pslab.adapters.ApplicationsAdapter;
 public class ApplicationsFragment extends Fragment {
 
     private String[] applicationsList = {"Oscilloscope", "Control", "Advance Control", "Logical Analyzer", "Data Sensor Logger", "Wireless Sensor", "Sensor QuickView", "Wireless Sensor QuickView"};
-    private int[] imageList = {org.fossasia.pslab.R.drawable.osciloscope, org.fossasia.pslab.R.drawable.control, org.fossasia.pslab.R.drawable.advance, org.fossasia.pslab.R.drawable.la, org.fossasia.pslab.R.drawable.sensor, org.fossasia.pslab.R.drawable.wirelesssensor, org.fossasia.pslab.R.drawable.sensor_quickview, org.fossasia.pslab.R.drawable.wireless_sensor_quickview};
+    private int[] imageList = {org.fossasia.pslab.R.drawable.osc, org.fossasia.pslab.R.drawable.control, org.fossasia.pslab.R.drawable.advance, org.fossasia.pslab.R.drawable.la, org.fossasia.pslab.R.drawable.sensor, org.fossasia.pslab.R.drawable.wirelesssensor, org.fossasia.pslab.R.drawable.sensor_quickview, org.fossasia.pslab.R.drawable.wireless_sensor_quickview};
 
     public static ApplicationsFragment newInstance() {
         ApplicationsFragment applicationsFragment = new ApplicationsFragment();
