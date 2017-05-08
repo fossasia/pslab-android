@@ -67,18 +67,12 @@ public class AnalogInputSource {
 
     boolean inRange(double val) {
         double sum = voltToCode12.value(val);
-        if (sum >= 50 && sum <= 4095) {
-            return true;
-        }
-        return false;
+        return sum >= 50 && sum <= 4095;
     }
 
     boolean conservativeInRange(double val) {
         double solution = voltToCode12.value(val);
-        if (solution >= 50 && solution <= 4000) {
-            return true;
-        }
-        return false;
+        return solution >= 50 && solution <= 4000;
     }
 
     List<Double> loadCalibrationTable(double[] table, double slope, double intercept) {

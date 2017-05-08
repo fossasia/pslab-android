@@ -65,10 +65,10 @@ public class ScienceLab {
     private NRF24L01 nrf;
     private MCP4728 dac;
 
-    public ScienceLab(UsbManager usbManager) {
+    public ScienceLab(CommunicationHandler communicationHandler) {
         mCommandsProto = new CommandsProto();
         mAnalogConstants = new AnalogConstants();
-        mCommunicationHandler = new CommunicationHandler(usbManager);
+        mCommunicationHandler = communicationHandler;
         if (isDeviceFound()) {
             try {
                 mCommunicationHandler.open();

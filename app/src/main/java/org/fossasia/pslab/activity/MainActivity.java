@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import org.fossasia.pslab.communication.CommunicationHandler;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ApplicationsFragment;
 import org.fossasia.pslab.fragment.DesignExperiments;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.others.ScienceLabCommon;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,15 +63,16 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
-    private ScienceLab mScienceLab;
+    private ScienceLabCommon mScienceLabCommon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         UsbManager usbManager = (UsbManager) getSystemService(USB_SERVICE);
-        mScienceLab = new ScienceLab(usbManager);
-        if (mScienceLab.isDeviceFound()) {
+        mScienceLabCommon = ScienceLabCommon.getInstance();
+        mScienceLabCommon.openDevice(new CommunicationHandler(usbManager));
+        if (mScienceLabCommon.scienceLab.isDeviceFound()) {
             Log.d(TAG, "PSLab device found");
         } else {
             Log.d(TAG, "PSLab device not found");
@@ -140,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             case 4:
                 return SettingsFragment.newInstance();
             default:
-                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound(),mScienceLab.getVersion());
+                return HomeFragment.newInstance(mScienceLabCommon.scienceLab.isConnected(), mScienceLabCommon.scienceLab.isDeviceFound(),mScienceLabCommon.scienceLab.getVersion());
         }
     }
 
@@ -238,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            mScienceLab.disconnect();
+            mScienceLabCommon.scienceLab.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
         }
