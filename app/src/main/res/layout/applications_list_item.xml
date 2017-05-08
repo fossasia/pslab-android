@@ -13,7 +13,7 @@
         android:layout_margin="2dp"
         android:background="?attr/colorButtonNormal"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/osciloscope" />
+        app:srcCompat="@drawable/osc" />
 
     <TextView
         android:id="@+id/application_tv"
