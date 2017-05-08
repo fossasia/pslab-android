@@ -131,8 +131,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment getHomeFragment() throws IOException {
         switch (navItemIndex) {
-            case 0:
-                return HomeFragment.newInstance(mScienceLab.isConnected(), mScienceLab.isDeviceFound(),mScienceLab.getVersion());
             case 1:
                 return ApplicationsFragment.newInstance();
             case 2:
