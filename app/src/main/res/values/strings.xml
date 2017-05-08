@@ -34,5 +34,6 @@
 
     <string name="activity_title_about_us">About Us</string>
     <string name="activity_title_privacy_policy">Privacy Policy</string>
+    <string name="application_icon">Application Icon</string>
 
 </resources>
