@@ -5,10 +5,13 @@ PSLab Android App
 [![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
 
-This repository holds the Android App for performing experiments with [PSLab](http://pslab.fossasia.org/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger.
+This repository holds the Android App for performing experiments with [PSLab](http://pslab.fossasia.org/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at: http://pslab.fossasia.org
 
 ## Communication
-Our chat channel is on gitter here: https://gitter.im/fossasia/pslab
+
+Please join us on the following channels:
+* [Pocket Science Channel](https://gitter.im/fossasia/pslab)
+* [Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia)
 
 ## Roadmap
  - First we need to get communication between Android App and PSLab working.
