@@ -4,6 +4,7 @@ import android.hardware.usb.UsbManager;
 import android.os.SystemClock;
 import android.util.Log;
 
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.fossasia.pslab.communication.analogChannel.AnalogAquisitionChannel;
 import org.fossasia.pslab.communication.analogChannel.AnalogConstants;
 import org.fossasia.pslab.communication.analogChannel.AnalogInputSource;
@@ -219,17 +220,19 @@ public class ScienceLab {
         }
     }
 
-    private void getAverageVoltage(String channelName, int sample) {
+    private double getAverageVoltage(String channelName, int sample) {
         if (sample == -1) sample = 1;
-        Map<Integer, Double> poly;
-        // Look for polynomial implementation, this might be flawed
+        PolynomialFunction poly;
+        double sum = 0;
         poly = analogInputSources.get(channelName).calPoly12;
         ArrayList<Double> vals = new ArrayList<>();
         for (int i = 0; i < sample; i++) {
             vals.add(getRawAverageVoltage(channelName));
         }
-        // todo : return average of vals after some polynomial manipulation
-
+        for (int j = 0; j < vals.size(); j++){
+            sum = sum + poly.value(vals.get(j));
+        }
+        return sum / vals.size();
     }
 
     private double getRawAverageVoltage(String channelName) {
