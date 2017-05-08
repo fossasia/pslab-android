@@ -48,11 +48,12 @@ public class ScienceLab {
             channelsInBuffer, digitalChannelsInBuffer, dataSplitting, sin1Frequency, sin2Frequency;
     double[] currents, currentScalars, gainValues, buffer;
     double SOCKET_CAPACITANCE, resistanceScaling, timebase;
+    boolean streaming, calibrated = false;
+
     String[] allAnalogChannels, allDigitalChannels;
     Map<String, AnalogInputSource> analogInputSources;
     Map<String, Integer> squareWaveFrequency, gains;
     Map<String, String> waveType;
-    boolean streaming, calibrated = false;
     List<AnalogAquisitionChannel> aChannels;
     List<DigitalChannel> dChannels;
 
