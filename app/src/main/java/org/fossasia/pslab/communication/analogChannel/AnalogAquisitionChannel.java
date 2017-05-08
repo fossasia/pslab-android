@@ -13,26 +13,25 @@ public class AnalogAquisitionChannel {
     private double gain;
     private String channel;
     private double calibration_ref196;
-    private int length;
+    public int length;
     private double timebase;
-    private double[] xaxis = new double[10000];
-    private double[] yaxis = new double[10000];
+    private double[] xAxis = new double[10000];
+    public double[] yAxis = new double[10000];
 
     public AnalogAquisitionChannel(String channel) //initialize
     {
         gain = 0;
-        String channel_names[] = new AnalogConstants().allAnalogChannels;
         this.channel = channel;
         calibration_ref196 = 1.;
         resolution = 10;
         length = 100;
         timebase = 1.;
-        Arrays.fill(xaxis, 0);
-        Arrays.fill(yaxis, 0);
+        Arrays.fill(xAxis, 0);
+        Arrays.fill(yAxis, 0);
         analogInputSource = new AnalogInputSource("CH1");
     }
 
-    public double[] fixValue(int[] val) {
+    public double[] fixValue(double[] val) {
         double[] calcData = new double[val.length];
         if (resolution == 12)
             for (int i = 0; i < val.length; i++)
@@ -44,15 +43,15 @@ public class AnalogAquisitionChannel {
     }
 
     void setYVal(int pos, int val) {
-        yaxis[pos] = fixValue(new int[]{val})[0];
+        yAxis[pos] = fixValue(new double[]{val})[0];
     }
 
     void setXVal(int pos, int val) {
-        xaxis[pos] = fixValue(new int[]{val})[0];
+        xAxis[pos] = fixValue(new double[]{val})[0];
     }
 
-    public void setParams(String channel, int length, double timebase, int resolution, AnalogInputSource source, double gain) {
-        if (gain != -1) this.gain = gain;
+    public void setParams(String channel, int length, double timebase, int resolution, AnalogInputSource source, Double gain) {
+        if (gain != null) this.gain = gain;
         if (source != null) this.analogInputSource = source;
         if (channel != null) this.channel = channel;
         if (resolution != -1) this.resolution = resolution;
@@ -63,16 +62,16 @@ public class AnalogAquisitionChannel {
 
     void regenerateXAxis() {
         for (int i = 0; i < length; i++) {
-            xaxis[i] = timebase * i;
+            xAxis[i] = timebase * i;
         }
     }
 
-    double getXAxis() {
-        return (xaxis[length]);
+    public double[] getXAxis() {
+        return Arrays.copyOfRange(xAxis,0,length);
     }
 
-    double getYAxis() {
-        return (yaxis[length]);
+    public double[] getYAxis() {
+        return Arrays.copyOfRange(yAxis,0,length);
     }
 
 }

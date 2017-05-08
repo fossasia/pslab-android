@@ -1,6 +1,5 @@
 package org.fossasia.pslab.communication;
 
-import android.hardware.usb.UsbManager;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class ScienceLab {
     public int BAUD = 1000000;
     public int DDS_CLOCK, MAX_SAMPLES, samples, triggerLevel, triggerChannel, errorCount,
             channelsInBuffer, digitalChannelsInBuffer, dataSplitting, sin1Frequency, sin2Frequency;
-    double[] currents, currentScalars, gainValues;
+    double[] currents, currentScalars, gainValues, buffer;
     double SOCKET_CAPACITANCE, resistanceScaling, timebase;
     String[] allAnalogChannels, allDigitalChannels;
     Map<String, AnalogInputSource> analogInputSources;
@@ -115,6 +115,8 @@ public class ScienceLab {
             aChannels.add(new AnalogAquisitionChannel(aChannel));
         }
         gainValues = mAnalogConstants.gains;
+        this.buffer = new double[10000];
+        Arrays.fill(this.buffer, 0);
         SOCKET_CAPACITANCE = 42e-12;
         resistanceScaling = 1;
         allDigitalChannels = DigitalChannel.digitalChannelNames;
@@ -220,6 +222,243 @@ public class ScienceLab {
         }
     }
 
+    private void captureFullSpeed1(String channel, int samples, double timeGap, List<String> args, Integer interval) {
+        if (interval == null) interval = 1000;
+        timeGap = (int) (timeGap * 8) / 8;
+        if (timeGap < 0.5) timeGap = (int) (0.5 * 8) / 8;
+        if (samples > this.MAX_SAMPLES) {
+            Log.v(TAG, "Sample limit exceeded. 10,000 max");
+            samples = this.MAX_SAMPLES;
+        }
+        this.timebase = (int) (timeGap * 8) / 8;
+        this.samples = samples;
+        int CHOSA = this.analogInputSources.get(channel).CHOSA;
+        this.aChannels.get(0).setParams(channel, samples, this.timebase, 10, this.analogInputSources.get(channel), null);
+        this.channelsInBuffer = 1;
+
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            if (args.contains("SET_LOW"))
+                mPacketHandler.sendByte(mCommandsProto.SET_LO_CAPTURE);
+            else if (args.contains("SET_HIGH"))
+                mPacketHandler.sendByte(mCommandsProto.SET_HI_CAPTURE);
+            else if (args.contains("FIRE_PULSES")) {
+                mPacketHandler.sendByte(mCommandsProto.PULSE_TRAIN);
+                Log.v(TAG, "Firing SQR1 pulses for " + interval + " uSec");
+            } else
+                mPacketHandler.sendByte(mCommandsProto.CAPTURE_DMASPEED);
+            mPacketHandler.sendByte(CHOSA);
+            mPacketHandler.sendInt(samples);
+            mPacketHandler.sendInt((int) timeGap * 8);
+            if (args.contains("FIRE_PULSES")) {
+                mPacketHandler.sendInt(interval);
+                SystemClock.sleep((long) (interval * 1e-6));
+            }
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Map<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
+        /*
+        * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
+        */
+
+        this.captureFullSpeed1(channel, samples, timeGap, args, interval);
+        SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1 + ((interval != null) ? interval : 0) * 1e-6));
+        this.fetchChannel(1);
+        Map<String, double[]> retData = new HashMap<>();
+        retData.put("x", this.aChannels.get(0).getXAxis());
+        retData.put("y", this.aChannels.get(0).getYAxis());
+        return retData;
+    }
+
+    private boolean fetchChannel(int channelNumber) {
+        int samples = this.aChannels.get(channelNumber - 1).length;
+        if (channelNumber > this.channelsInBuffer) {
+            Log.v(TAG, "Channel Unavailable");
+            return false;
+        }
+        ArrayList<Byte> listData = new ArrayList<>();
+        try {
+            for (int i = 0; i < samples / this.dataSplitting; i++) {
+                mPacketHandler.sendByte(mCommandsProto.ADC);
+                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
+                mPacketHandler.sendByte(channelNumber - 1);
+                mPacketHandler.sendInt(this.dataSplitting);
+                mPacketHandler.sendInt(i * this.dataSplitting);
+                byte[] data = new byte[this.dataSplitting * 2];
+                mPacketHandler.read(data, this.dataSplitting * 2);
+                for (int j = 0; j < data.length - 1; j++)
+                    listData.add(data[j]);
+                mPacketHandler.getAcknowledgement();
+            }
+
+            if ((samples % this.dataSplitting) != 0) {
+                mPacketHandler.sendByte(mCommandsProto.ADC);
+                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
+                mPacketHandler.sendByte(channelNumber - 1);
+                mPacketHandler.sendInt(samples * this.dataSplitting);
+                mPacketHandler.sendInt(samples - samples % this.dataSplitting);
+                byte[] data = new byte[2 * (samples % this.dataSplitting)];
+                mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
+                for (int j = 0; j < data.length - 1; j++)
+                    listData.add(data[j]);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        for (int i = 0; i < samples; i++) {
+            this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
+        }
+        this.aChannels.get(channelNumber-1).yAxis = this.aChannels.get(channelNumber-1).fixValue(Arrays.copyOfRange(this.buffer,0,samples));
+        return true;
+    }
+
+    private void captureFullSpeedHr1(String channel, int samples, double timeGap, List<String> args) {
+        timeGap = (int) (timeGap * 8) / 8;
+        if (timeGap < 0.5) timeGap = (int) (0.5 * 8) / 8;
+        if (samples > this.MAX_SAMPLES) {
+            Log.v(TAG, "Sample limit exceeded. 10,000 max");
+            samples = this.MAX_SAMPLES;
+        }
+        this.timebase = (int) (timeGap * 8) / 8;
+        this.samples = samples;
+        int CHOSA = this.analogInputSources.get(channel).CHOSA;
+
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            if (args.contains("SET_LOW"))
+                mPacketHandler.sendByte(mCommandsProto.SET_LO_CAPTURE);
+            else if (args.contains("SET_HIGH"))
+                mPacketHandler.sendByte(mCommandsProto.SET_HI_CAPTURE);
+            else if (args.contains("READ_CAP")) {
+                mPacketHandler.sendByte(mCommandsProto.MULTIPOINT_CAPACITANCE);
+            } else
+                mPacketHandler.sendByte(mCommandsProto.CAPTURE_DMASPEED);
+            mPacketHandler.sendByte(CHOSA | 0x80);
+            mPacketHandler.sendInt(samples);
+            mPacketHandler.sendInt((int) timeGap * 8);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void captureFullSpeedHr(String channel, int samples, double timeGap, List<String> args) {
+        this.captureFullSpeedHr1(channel, samples, timeGap, args);
+        SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1));
+        Map<String, double[]> axisData = retrieveBufferData(channel, this.samples, this.timebase);
+        // todo : After proper Calibration implementation in AnalogInputSource, then return timeBase and processed "Y" from this function
+    }
+
+    private Map<String, double[]> retrieveBufferData(String channel, int samples, double timeGap) {
+        ArrayList<Byte> listData = new ArrayList<>();
+        try {
+            for (int i = 0; i < samples / this.dataSplitting; i++) {
+                mPacketHandler.sendByte(mCommandsProto.ADC);
+                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
+                mPacketHandler.sendByte(0);
+                mPacketHandler.sendInt(this.dataSplitting);
+                mPacketHandler.sendInt(i * this.dataSplitting);
+                byte[] data = new byte[this.dataSplitting * 2];
+                mPacketHandler.read(data, this.dataSplitting * 2);
+                for (int j = 0; j < data.length - 1; j++)
+                    listData.add(data[j]);
+                mPacketHandler.getAcknowledgement();
+            }
+
+            if ((samples % this.dataSplitting) != 0) {
+                mPacketHandler.sendByte(mCommandsProto.ADC);
+                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
+                mPacketHandler.sendByte(0);
+                mPacketHandler.sendInt(samples * this.dataSplitting);
+                mPacketHandler.sendInt(samples - samples % this.dataSplitting);
+                byte[] data = new byte[2 * (samples % this.dataSplitting)];
+                mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
+                for (int j = 0; j < data.length - 1; j++)
+                    listData.add(data[j]);
+            }
+
+            for (int i = 0; i < samples; i++) {
+                this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
+            }
+            ArrayList<Double> timeBase = new ArrayList<>();
+            double factor = timeGap * (samples - 1) / samples;
+            for (double i = 0; i < timeGap * (samples - 1); i += factor) timeBase.add(i);
+            double[] timeAxis = new double[timeBase.size()];
+            for (int i = 0; i < timeBase.size(); i++) {
+                timeAxis[i] = timeBase.get(i);
+            }
+            Map<String, double[]> retData = new HashMap<>();
+            retData.put("x", timeAxis);
+            retData.put("y", Arrays.copyOfRange(buffer, 0, samples));
+            return retData;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Map<String, double[]> fetchTrace(int channelNumber) {
+        this.fetchChannel(channelNumber);
+        Map<String, double[]> retData = new HashMap<>();
+        retData.put("x", this.aChannels.get(channelNumber - 1).getXAxis());
+        retData.put("y", this.aChannels.get(channelNumber - 1).getYAxis());
+        return retData;
+    }
+
+    public int[] oscilloscopeProgress() {
+        /*
+        * returns the number of samples acquired by the capture routines, and the conversion_done status
+        *
+        * return structure int[]{conversionDone, samples}
+        */
+
+        int conversionDone = 0;
+        int samples = 0;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_STATUS);
+            conversionDone = mPacketHandler.getByte();
+            samples = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new int[]{conversionDone, samples};
+    }
+
+    public boolean fetchChannelOneShot(int channelNumber) {
+        int offset = 0;
+        int samples = this.aChannels.get(channelNumber - 1).length;
+        if (channelNumber > this.channelsInBuffer) {
+            Log.e(TAG, "Channel unavailable");
+            return false;
+        }
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
+            mPacketHandler.sendByte(channelNumber - 1);
+            mPacketHandler.sendInt(samples);
+            mPacketHandler.sendInt(offset);
+            byte[] data = new byte[samples * 2];
+            mPacketHandler.read(data, samples * 2);
+            mPacketHandler.getAcknowledgement();
+            for (int i = 0; i < samples; i++) {
+                this.buffer[i] = ((data[i * 2] << 8) | data[i * 2 + 1]);
+            }
+            this.aChannels.get(channelNumber-1).yAxis = this.aChannels.get(channelNumber-1).fixValue(Arrays.copyOfRange(this.buffer,0,samples));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     private double getAverageVoltage(String channelName, int sample) {
         if (sample == -1) sample = 1;
         PolynomialFunction poly;
@@ -289,7 +528,8 @@ public class ScienceLab {
         }
     }
 
-    public double setGain(String channel, int gain, boolean force) {
+    public double setGain(String channel, int gain, Boolean force) {
+        if (force == null) force = false;
         if (gain < 0 || gain > 8) {
             Log.v(TAG, "Invalid gain parameter. 0-7 only.");
             return 0;
@@ -320,6 +560,15 @@ public class ScienceLab {
             }
         }
         return 0;
+    }
+
+    public Double selectRange(String channel, double voltageRange) {
+        double[] ranges = new double[]{16, 8, 4, 3, 2, 1.5, 1, .5, 160};
+        if (Arrays.asList(ranges).contains(voltageRange)) {
+            return this.setGain(channel, Arrays.asList(ranges).indexOf(voltageRange), null);
+        } else
+            Log.e(TAG, "Not a valid Range");
+        return null;
     }
 
     /* DIGITAL SECTION */
@@ -1374,7 +1623,7 @@ public class ScienceLab {
             mPacketHandler.sendInt(delay);
             mPacketHandler.sendInt((int) ss * 64);
             this.timebase = ss;
-            this.aChannels.get(0).setParams("CH1", samples, this.timebase, resolution, this.analogInputSources.get(channel), -1);
+            this.aChannels.get(0).setParams("CH1", samples, this.timebase, resolution, this.analogInputSources.get(channel), null);
             this.samples = samples;
             this.channelsInBuffer = 1;
             // sleep for (2 * delay * 1e-6)
