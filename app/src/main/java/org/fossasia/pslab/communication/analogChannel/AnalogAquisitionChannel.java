@@ -32,19 +32,15 @@ public class AnalogAquisitionChannel {
         analogInputSource = new AnalogInputSource("CH1");
     }
 
-    double[] fixValue(int[] val) {
+    public double[] fixValue(int[] val) {
         double[] calcData = new double[val.length];
-        if (resolution == 12) {
-            for (int i = 0; i < val.length; i++) {
-                calcData[i] = (calibration_ref196 * (analogInputSource.calPoly12.get(0) + analogInputSource.calPoly12.get(1) * val[i] + analogInputSource.calPoly12.get(2) * val[i] * val[i]));
-            }
-            return calcData;
-        } else {
-            for (int i = 0; i < val.length; i++) {
-                calcData[i] = (calibration_ref196 * (analogInputSource.calPoly10.get(0) + analogInputSource.calPoly10.get(1) * val[i] + analogInputSource.calPoly10.get(2) * val[i] * val[i]));
-            }
-            return calcData;
-        }
+        if (resolution == 12)
+            for (int i = 0; i < val.length; i++)
+                calcData[i] = calibration_ref196 * (analogInputSource.calPoly12.value(val[i]));
+         else
+            for (int i = 0; i < val.length; i++)
+                calcData[i] = calibration_ref196 * (analogInputSource.calPoly10.value(val[i]));
+        return calcData;
     }
 
     void setYVal(int pos, int val) {

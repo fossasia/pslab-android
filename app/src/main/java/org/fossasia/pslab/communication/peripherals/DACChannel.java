@@ -1,5 +1,7 @@
 package org.fossasia.pslab.communication.peripherals;
 
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,8 +17,8 @@ public class DACChannel {
     private int offset;
     private double[] range;
     private double slope, intercept;
-    Map<Integer, Double> VToCode = new LinkedHashMap<>(); //(power,coefficient)
-    Map<Integer, Double> CodeToV = new LinkedHashMap<>(); //(power,coefficient)
+    PolynomialFunction VToCode;
+    PolynomialFunction CodeToV;
     String calibrationEnabled;
     private List<Double> calibrationTable = new ArrayList<>();
 
@@ -26,10 +28,8 @@ public class DACChannel {
         this.channum = channum;
         this.slope = span[1] - span[0];
         this.intercept = span[0];
-        this.VToCode.put(0, -4095. * intercept / slope);
-        this.VToCode.put(1, 4095. / slope);
-        this.CodeToV.put(0, intercept);
-        this.CodeToV.put(1, slope / 4095.);
+        this.VToCode = new PolynomialFunction(new double[]{-4095. * intercept / slope, 4095. / slope});
+        this.CodeToV = new PolynomialFunction(new double[]{intercept, slope / 4095.});
         this.calibrationEnabled = "false";
         this.slope = 1;
         this.offset = 0;
