@@ -32,20 +32,23 @@ public class AnalogAquisitionChannel {
         analogInputSource = new AnalogInputSource("CH1");
     }
 
-    double fixValue(int val) {
-        if (resolution == 12) {
-            return calibration_ref196 * (analogInputSource.calPoly12.value(val));
-        } else {
-            return calibration_ref196 * (analogInputSource.calPoly10.value(val));
-        }
+    public double[] fixValue(int[] val) {
+        double[] calcData = new double[val.length];
+        if (resolution == 12)
+            for (int i = 0; i < val.length; i++)
+                calcData[i] = calibration_ref196 * (analogInputSource.calPoly12.value(val[i]));
+         else
+            for (int i = 0; i < val.length; i++)
+                calcData[i] = calibration_ref196 * (analogInputSource.calPoly10.value(val[i]));
+        return calcData;
     }
 
     void setYVal(int pos, int val) {
-        yaxis[pos] = fixValue(val);
+        yaxis[pos] = fixValue(new int[]{val})[0];
     }
 
     void setXVal(int pos, int val) {
-        xaxis[pos] = fixValue(val);
+        xaxis[pos] = fixValue(new int[]{val})[0];
     }
 
     public void setParams(String channel, int length, double timebase, int resolution, AnalogInputSource source, double gain) {

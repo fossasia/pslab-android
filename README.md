@@ -13,6 +13,23 @@ Our chat channel is on gitter here: https://gitter.im/fossasia/pslab
 ## Roadmap
  - First we need to get communication between Android App and PSLab working.
 
+## Features
+**Feature**|**Description**|**Status**
+-----|-----|-----
+Home Screen|Show status and version of PSLab device|Established
+Application|Exposes PSLab application like Oscilloscope,etc |Established
+ |Oscilloscope |Shows variation of analog signals | Working
+ |Control |Control voltage and current sources and read results from a variety of electric components | Working
+ |Advanced Control |Generate waveforms and PWM signals, read voltages and control voltage and current sources |
+ |Logical Analyzer |Captures and displays signals from digital system | 
+ |Data Sensor Logger |Captures and displays data from various sensors |
+ |Wireless Sensor |Captures and displays data from various wireless sensors |
+ |Sensor Quick View | |
+ |Wireless Sensor Quick View | |
+ |Settings |Enable Auto-Start |
+ |Saved Experiments |Access Pre-defined and Designed Experiments |
+ |Design Experiments |To Design our own experiments |
+
 ## How to set up the Android app in your development environment
 
 ### Development Setup
