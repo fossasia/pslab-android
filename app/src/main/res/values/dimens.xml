@@ -10,4 +10,12 @@
     <dimen name="profile_width">80dp</dimen>
     <dimen name="profile_height">80dp</dimen>
 
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_radius">2dp</dimen>
+    <dimen name="title_padding">10dp</dimen>
+    <dimen name="image_padding_around">30dp</dimen>
+    <dimen name="image_padding_top">20dp</dimen>
+
+    <dimen name="title_font_size">14sp</dimen>
+
 </resources>
