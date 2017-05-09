@@ -23,6 +23,7 @@ public class I2C {
     private int frequency = 100000;
     private CommandsProto commandsProto;
     private PacketHandler packetHandler;
+    private int totalBytes, channels, samples, timeGap;
 
     public I2C(PacketHandler packetHandler) {
         this.buffer = new double[10000];
@@ -186,6 +187,96 @@ public class I2C {
         packetHandler.sendByte(data);
     }
 
+    public long captureStart(int address, int location, int sampleLength, int totalSamples, int timeGap) {
+        if (timeGap < 20) timeGap = 20;
+        int totalBytes = totalSamples * sampleLength;
+        Log.v(TAG, "Total Bytes Calculated : " + totalBytes);
+        if (totalBytes > commandsProto.MAX_SAMPLES * 2) {
+            Log.v(TAG, "Sample limit exceeded. 10,000 int / 20000 bytes total");
+            totalSamples = commandsProto.MAX_SAMPLES * 2 / sampleLength;
+            totalBytes = commandsProto.MAX_SAMPLES * 2;
+        }
+
+        Log.v(TAG, "Length of each channel " + sampleLength);
+        this.totalBytes = totalBytes;
+        this.channels = sampleLength;
+        this.samples = totalSamples;
+        this.timeGap = timeGap;
+
+        try {
+            packetHandler.sendByte(commandsProto.I2C_HEADER);
+            packetHandler.sendByte(commandsProto.I2C_START_SCOPE);
+            packetHandler.sendByte(address);
+            packetHandler.sendByte(location);
+            packetHandler.sendByte(sampleLength);
+            packetHandler.sendInt(totalSamples);
+            packetHandler.sendInt(timeGap);
+            packetHandler.getAcknowledgement();
+            return (long) (1e-6 * totalSamples * timeGap + 0.5) * 1000;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public ArrayList<Byte> retreiveBuffer() throws IOException {
+        int totalIntSamples = totalBytes / 2;
+        Log.v(TAG, "Fetching samples : " + totalIntSamples + ", split : " + commandsProto.DATA_SPLITTING);
+        ArrayList<Byte> listData = new ArrayList<>();
+        for (int i = 0; i < (totalIntSamples / commandsProto.DATA_SPLITTING); i++) {
+            packetHandler.sendByte(commandsProto.ADC);
+            packetHandler.sendByte(commandsProto.GET_CAPTURE_CHANNEL);
+            packetHandler.sendByte(0);
+            packetHandler.sendInt(commandsProto.DATA_SPLITTING);
+            packetHandler.sendInt(i * commandsProto.DATA_SPLITTING);
+            int remaining = commandsProto.DATA_SPLITTING * 2 + 1;
+            // reading in single go, change if create communication problem
+            byte[] data = new byte[remaining];
+            packetHandler.read(data, remaining);
+            for (int j = 0; j < data.length - 1; j++)
+                listData.add(data[j]);
+        }
+
+        if ((totalIntSamples % commandsProto.DATA_SPLITTING) != 0) {
+            packetHandler.sendByte(commandsProto.ADC);
+            packetHandler.sendByte(commandsProto.GET_CAPTURE_CHANNEL);
+            packetHandler.sendByte(0);
+            packetHandler.sendInt(totalIntSamples % commandsProto.DATA_SPLITTING);
+            packetHandler.sendInt(totalIntSamples - totalIntSamples % commandsProto.DATA_SPLITTING);
+            int remaining = 2 * (totalIntSamples % commandsProto.DATA_SPLITTING) + 1;
+            byte[] data = new byte[remaining];
+            packetHandler.read(data, remaining);
+            for (int j = 0; j < data.length - 1; j++)
+                listData.add(data[j]);
+        }
+
+        Log.v(TAG, "Final Pass : length = " + listData.size());
+        return listData;
+    }
+
+    public Map<String, ArrayList> dataProcessor(ArrayList<Byte> data, Boolean inInt) {
+        if (inInt) {
+            for (int i = 0; i < (this.channels * this.samples) / 2; i++)
+                this.buffer[i] = (data.get(i * 2) << 8) | (data.get(i * 2 + 1));
+        } else {
+            for (int i = 0; i < (this.channels * this.samples); i++)
+                this.buffer[i] = data.get(i);
+        }
+        Map<String, ArrayList> retData = new LinkedHashMap<>();
+        ArrayList<Double> timeBase = new ArrayList<>();
+        double factor = timeGap * (this.samples - 1) / this.samples;
+        for (double i = 0; i < timeGap * (this.samples - 1); i += factor) timeBase.add(i);
+        retData.put("time", timeBase);
+        for (int i = 0; i < this.channels / 2; i++) {
+            ArrayList<Double> yValues = new ArrayList<>();
+            for (int j = i; j < this.samples * this.channels / 2; j += this.channels / 2) {
+                yValues.add(buffer[j]);
+            }
+            retData.put("CH" + String.valueOf(i + 1), yValues);
+        }
+        return retData;
+    }
+
     public Map<String, ArrayList> capture(int address, int location, int sampleLength, int totalSamples, int timeGap, Boolean inInt) {
         /*
         Blocking call that fetches data from I2C sensors like an oscilloscope fetches voltage readings
@@ -259,8 +350,8 @@ public class I2C {
                     listData.add(data[j]);
             }
 
-            if (inInt != null) {
-                for (int i = 0; i < (totalChannels * channelLength); i++)
+            if (inInt) {
+                for (int i = 0; i < (totalChannels * channelLength) / 2; i++)
                     this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
             } else {
                 for (int i = 0; i < (totalChannels * channelLength); i++)

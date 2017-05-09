@@ -223,7 +223,7 @@ public class ScienceLab {
         }
     }
 
-    private void captureFullSpeed1(String channel, int samples, double timeGap, List<String> args, Integer interval) {
+    private void captureFullSpeedInitialize(String channel, int samples, double timeGap, List<String> args, Integer interval) {
         if (interval == null) interval = 1000;
         timeGap = (int) (timeGap * 8) / 8;
         if (timeGap < 0.5) timeGap = (int) (0.5 * 8) / 8;
@@ -266,7 +266,7 @@ public class ScienceLab {
         * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
         */
 
-        this.captureFullSpeed1(channel, samples, timeGap, args, interval);
+        this.captureFullSpeedInitialize(channel, samples, timeGap, args, interval);
         SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1 + ((interval != null) ? interval : 0) * 1e-6));
         this.fetchChannel(1);
         Map<String, double[]> retData = new HashMap<>();
@@ -320,7 +320,7 @@ public class ScienceLab {
         return true;
     }
 
-    private void captureFullSpeedHr1(String channel, int samples, double timeGap, List<String> args) {
+    private void captureFullSpeedHrInitialize(String channel, int samples, double timeGap, List<String> args) {
         timeGap = (int) (timeGap * 8) / 8;
         if (timeGap < 0.5) timeGap = (int) (0.5 * 8) / 8;
         if (samples > this.MAX_SAMPLES) {
@@ -351,7 +351,7 @@ public class ScienceLab {
     }
 
     public void captureFullSpeedHr(String channel, int samples, double timeGap, List<String> args) {
-        this.captureFullSpeedHr1(channel, samples, timeGap, args);
+        this.captureFullSpeedHrInitialize(channel, samples, timeGap, args);
         SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1));
         Map<String, double[]> axisData = retrieveBufferData(channel, this.samples, this.timebase);
         // todo : After proper Calibration implementation in AnalogInputSource, then return timeBase and processed "Y" from this function
