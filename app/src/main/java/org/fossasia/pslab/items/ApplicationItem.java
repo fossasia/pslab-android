@@ -9,8 +9,7 @@ public class ApplicationItem {
     private String applicationName;
     private int applicationIcon;
 
-    // Default constructor
-    public ApplicationItem() {/**/}
+    public ApplicationItem() {}
 
     public ApplicationItem(String applicationName, int applicaitonIcon) {
         this.applicationName = applicationName;
