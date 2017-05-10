@@ -1,6 +1,7 @@
 package org.fossasia.pslab.communication.digitalChannel;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Created by viveksb007 on 26/3/17.
@@ -17,8 +18,8 @@ public class DigitalChannel {
 
     public static String[] digitalChannelNames = {"ID1", "ID2", "ID3", "ID4", "SEN", "EXT", "CNTR"};
     String channelName, dataType;
-    boolean initialStateOverride;
-    int channelNumber, length, initialState, prescalar, trigger, dlength, plotLength, maxTime, mode;
+    boolean initialState;
+    int initialStateOverride, channelNumber, length, prescalar, trigger, dlength, plotLength, maxTime, mode;
     double gain, maxT;
     double xAxis[], yAxis[], timestamps[];
 
@@ -30,7 +31,7 @@ public class DigitalChannel {
         this.yAxis = new double[20000];
         this.timestamps = new double[10000];
         this.length = 100;
-        this.initialState = 0;
+        this.initialState = false;
         this.prescalar = 0;
         this.dataType = "int";
         this.trigger = 0;
@@ -38,7 +39,7 @@ public class DigitalChannel {
         this.plotLength = 0;
         this.maxT = 0;
         this.maxTime = 0;
-        this.initialStateOverride = false;
+        this.initialStateOverride = 0;
         this.mode = EVERY_EDGE;
     }
 
@@ -51,12 +52,12 @@ public class DigitalChannel {
         this.prescalar = prescalar;
     }
 
-    void loadData(int initialState, double[] timestamps) {
-        if (initialStateOverride) {
-            // Code not clear
-            initialStateOverride = false;
+    void loadData(HashMap<String, Boolean> initialStates, double[] timestamps) {
+        if (initialStateOverride != 0) {
+            this.initialState = (initialStateOverride - 1) == 1;
+            this.initialStateOverride = 0;
         } else {
-
+            this.initialState = initialStates.get(channelName);
         }
         System.arraycopy(timestamps, 0, this.timestamps, 0, timestamps.length);
         this.dlength = timestamps.length; //
@@ -84,7 +85,7 @@ public class DigitalChannel {
 
     void generateAxes() {
         int HIGH = 1, LOW = 0, state;
-        if (initialState == 0)
+        if (initialState)
             state = LOW;
         else
             state = HIGH;
