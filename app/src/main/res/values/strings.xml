@@ -21,8 +21,8 @@
     <string name="logical_analyzer">Logical Analyzer</string>
     <string name="data_sensor_logger">Data Sensor Logger</string>
     <string name="w_sensor_logger">Wireless Sensor</string>
-    <string name="sensor_qview">Sensor QuickView</string>
-    <string name="w_sensor_qview">Data Sensor Logger</string>
+    <string name="sensor_quick_view">Sensor QuickView</string>
+    <string name="w_sensor_quick_view">Data Sensor Logger</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Home</item>

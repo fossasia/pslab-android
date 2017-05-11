@@ -29,6 +29,10 @@
         <activity android:name=".activity.AboutUs" />
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ReportUs" />
+        <activity android:name=".activity.ControlActivity" />
+        <activity android:name=".activity.OscilloscopeActivity" />
+        <activity android:name=".activity.AdvancedControlActivity" />
+        <activity android:name=".activity.LogicalAnalyzerActivity" />
     </application>
 
 </manifest>
