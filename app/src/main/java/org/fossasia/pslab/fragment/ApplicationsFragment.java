@@ -1,6 +1,7 @@
 package org.fossasia.pslab.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.fossasia.pslab.activity.AdvancedControlActivity;
+import org.fossasia.pslab.activity.ControlActivity;
+import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
+import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.items.ApplicationItem;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.ApplicationAdapter;
@@ -40,18 +45,36 @@ public class ApplicationsFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.applications_fragment, container, false);
-        // Initiate context
         context = getActivity().getApplicationContext();
-        // Initiate resources
         applicationItemList = new ArrayList<>();
         applicationAdapter = new ApplicationAdapter(context, applicationItemList,
                 new ApplicationAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(ApplicationItem item) {
-                Toast.makeText(context, item.getApplicationName(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+                    @Override
+                    public void onItemClick(ApplicationItem item) {
+                        Toast.makeText(context, item.getApplicationName(),
+                                Toast.LENGTH_LONG).show();
+                        Intent intent;
+                        switch (item.getApplicationName()) {
+                            case "Oscilloscope":
+                                intent = new Intent(context, OscilloscopeActivity.class);
+                                startActivity(intent);
+                                break;
+                            case "Control":
+                                intent = new Intent(context, ControlActivity.class);
+                                startActivity(intent);
+                                break;
+                            case "Advance Control":
+                                intent = new Intent(context, AdvancedControlActivity.class);
+                                startActivity(intent);
+                                break;
+                            case "Logical Analyzer":
+                                intent = new Intent(context, LogicalAnalyzerActivity.class);
+                                startActivity(intent);
+                                break;
+                        }
+
+                    }
+                });
         // Initiate Views
         initiateViews(view);
         // Generate Applications
@@ -109,10 +132,10 @@ public class ApplicationsFragment extends Fragment {
                     getResources().getString(R.string.w_sensor_logger), applications[5])
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.sensor_qview), applications[6])
+                    getResources().getString(R.string.sensor_quick_view), applications[6])
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.w_sensor_qview), applications[7])
+                    getResources().getString(R.string.w_sensor_quick_view), applications[7])
             );
             return null;
         }
