@@ -24,7 +24,7 @@ public class AnalogInputSource {
     public PolynomialFunction calPoly10;
     public PolynomialFunction calPoly12;
     public PolynomialFunction voltToCode10;
-    private PolynomialFunction voltToCode12;
+    public PolynomialFunction voltToCode12;
     private List<Double> adc_shifts = new ArrayList<>();
     private List<PolynomialFunction> polynomials = new ArrayList<>(); //list of maps
 

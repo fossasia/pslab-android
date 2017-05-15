@@ -542,6 +542,28 @@ public class ScienceLab {
 
     }
 
+    public void captureHighResolutionTraces(String channel, int samples, double timeGap, Boolean trigger) {
+        int triggerOrNot = 0;
+        if (trigger) triggerOrNot = 0x80;
+        this.timebase = timeGap;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            int CHOSA = this.analogInputSources.get(channel).CHOSA;
+            if (this.timebase < 3) this.timebase = 3;
+            if (samples > this.MAX_SAMPLES) samples = this.MAX_SAMPLES;
+            this.aChannels.get(0).setParams(channel, samples, timebase, 12, this.analogInputSources.get(channel), null);
+            mPacketHandler.sendByte(mCommandsProto.CAPTURE_12BIT);
+            mPacketHandler.sendByte(CHOSA | triggerOrNot);
+            this.samples = samples;
+            mPacketHandler.sendInt(samples);
+            mPacketHandler.sendInt((int) this.timebase * 8);
+            mPacketHandler.getAcknowledgement();
+            this.channelsInBuffer = 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Map<String, double[]> fetchTrace(int channelNumber) {
         this.fetchChannel(channelNumber);
         Map<String, double[]> retData = new HashMap<>();
@@ -595,6 +617,34 @@ public class ScienceLab {
             e.printStackTrace();
         }
         return true;
+    }
+
+    public void configureTrigger(int channel, String channelName, double voltage, Integer resolution, Integer prescalar) {
+        if (resolution == null) resolution = 10;
+        if (prescalar == null) prescalar = 0;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            mPacketHandler.sendByte(mCommandsProto.CONFIGURE_TRIGGER);
+            mPacketHandler.sendByte((prescalar << 4) | (1 << channel));
+            double level;
+            if (resolution == 12) {
+                level = this.analogInputSources.get(channelName).voltToCode12.value(voltage);
+                if (level < 0) level = 0;
+                else if (level > 4095) level = 4095;
+            } else {
+                level = this.analogInputSources.get(channelName).voltToCode10.value(voltage);
+                if (level < 0) level = 0;
+                else if (level > 1023) level = 1023;
+            }
+            if (level > Math.pow(2, resolution - 1))
+                level = Math.pow(2, resolution - 1);
+            else if (level < 0)
+                level = 0;
+            mPacketHandler.sendInt((int) level);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private double getAverageVoltage(String channelName, Integer sample) {
