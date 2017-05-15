@@ -491,6 +491,57 @@ public class ScienceLab {
         return null;
     }
 
+    public void captureTraces(int number, int samples, double timeGap, String channelOneInput, Boolean trigger, Integer CH123SA) {
+        if (CH123SA == null) CH123SA = 0;
+        if (channelOneInput == null) channelOneInput = "CH1";
+        int triggerOrNot = 0;
+        if (trigger) triggerOrNot = 0x80;
+        this.timebase = timeGap;
+        this.timebase = (int) (this.timebase * 8) / 8;
+        if (!this.analogInputSources.containsKey(channelOneInput)) {
+            Log.e(TAG, "Invalid input channel");
+            return;
+        }
+        int CHOSA = this.analogInputSources.get(channelOneInput).CHOSA;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            if (number == 1) {
+                if (this.timebase < 1.5)
+                    this.timebase = (int) (1.5 * 8) / 8;
+                if (samples > this.MAX_SAMPLES) samples = this.MAX_SAMPLES;
+                this.aChannels.get(0).setParams(channelOneInput, samples, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
+                mPacketHandler.sendByte(mCommandsProto.CAPTURE_ONE);
+                mPacketHandler.sendByte(CHOSA | triggerOrNot);
+            } else if (number == 2) {
+                if (this.timebase < 1.75)
+                    this.timebase = (int) (1.75 * 8) / 8;
+                if (samples > this.MAX_SAMPLES / 2) samples = this.MAX_SAMPLES / 2;
+                this.aChannels.get(0).setParams(channelOneInput, samples, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
+                this.aChannels.get(0).setParams("CH2", samples, this.timebase, 10, this.analogInputSources.get("CH2"), null);
+                mPacketHandler.sendByte(mCommandsProto.CAPTURE_TWO);
+                mPacketHandler.sendByte(CHOSA | triggerOrNot);
+            } else if (number == 3 | number == 4) {
+                if (this.timebase < 1.75)
+                    this.timebase = (int) (1.75 * 8) / 8;
+                if (samples > this.MAX_SAMPLES / 4) samples = this.MAX_SAMPLES / 4;
+                this.aChannels.get(0).setParams(channelOneInput, samples, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
+                for (String temp : new String[]{"CH2", "CH3", "MIC"}) {
+                    this.aChannels.get(0).setParams(temp, samples, this.timebase, 10, this.analogInputSources.get(temp), null);
+                }
+                mPacketHandler.sendByte(mCommandsProto.CAPTURE_FOUR);
+                mPacketHandler.sendByte(CHOSA | (CH123SA << 4) | triggerOrNot);
+            }
+            this.samples = samples;
+            mPacketHandler.sendInt(samples);
+            mPacketHandler.sendInt((int) this.timebase * 8);
+            mPacketHandler.getAcknowledgement();
+            this.channelsInBuffer = number;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public Map<String, double[]> fetchTrace(int channelNumber) {
         this.fetchChannel(channelNumber);
         Map<String, double[]> retData = new HashMap<>();
