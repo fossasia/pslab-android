@@ -230,6 +230,35 @@ public class ScienceLab {
         return this.captureFullSpeed(channel, samples, timeGap, null, null);
     }
 
+    public Map<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap) {
+        if (traceOneRemap == null) traceOneRemap = "CH1";
+        this.captureTraces(2, samples, timeGap, traceOneRemap, null, null);
+        SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
+        while (this.oscilloscopeProgress()[0] == 0) ;
+        this.fetchChannel(1);
+        this.fetchChannel(2);
+        Map<String, double[]> retData = new HashMap<>();
+        retData.put("x", this.aChannels.get(0).getXAxis());
+        retData.put("y1", this.aChannels.get(0).getYAxis());
+        retData.put("y2", this.aChannels.get(1).getYAxis());
+        return retData;
+    }
+
+    public Map<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap) {
+        if (traceOneRemap == null) traceOneRemap = "CH1";
+        this.captureTraces(4, samples, timeGap, traceOneRemap, null, null);
+        SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
+        while (this.oscilloscopeProgress()[0] == 0) ;
+        Map<String, double[]> retData = new HashMap<>();
+        Map<String, double[]> tempMap = this.fetchTrace(1);
+        retData.put("x", tempMap.get("x"));
+        retData.put("y", tempMap.get("y"));
+        retData.put("y2", this.fetchTrace(2).get("y"));
+        retData.put("y3", this.fetchTrace(3).get("y"));
+        retData.put("y4", this.fetchTrace(4).get("y"));
+        return retData;
+    }
+
     public Map<String, ArrayList> captureMultiple(int samples, double timeGap, List<String> args) {
         if (args.size() == 0) {
             Log.v(TAG, "Please specify channels to record");
@@ -277,7 +306,7 @@ public class ScienceLab {
                 mPacketHandler.sendByte(mCommandsProto.ADC);
                 mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
                 mPacketHandler.sendByte(0);
-                mPacketHandler.sendInt(totalSamples * this.dataSplitting);
+                mPacketHandler.sendInt(totalSamples % this.dataSplitting);
                 mPacketHandler.sendInt(totalSamples - totalSamples % this.dataSplitting);
                 byte[] data = new byte[2 * (totalSamples % this.dataSplitting)];
                 mPacketHandler.read(data, 2 * (totalSamples % this.dataSplitting));
