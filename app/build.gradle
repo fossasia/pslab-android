@@ -44,6 +44,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.2.0'
     // Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jakewharton:butterknife:8.6.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
     testCompile 'junit:junit:4.12'
 }
