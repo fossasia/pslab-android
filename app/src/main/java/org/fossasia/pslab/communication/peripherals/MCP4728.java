@@ -34,6 +34,7 @@ public class MCP4728 {
     private List<Integer> VREFS;
     public Map<String, DACChannel> CHANS = new LinkedHashMap<>();
     private Map<Integer, String> CHANNELMAP = new LinkedHashMap<>();
+    private Map<String, Double> values = new LinkedHashMap<>();
     private int addr;
 
     public MCP4728(PacketHandler packetHandler) {
@@ -52,6 +53,10 @@ public class MCP4728 {
         CHANNELMAP.put(1, "PV3");
         CHANNELMAP.put(2, "PV2");
         CHANNELMAP.put(3, "PV1");
+        values.put("PV1", 0.);
+        values.put("PV2", 0.);
+        values.put("PV3", 0.);
+        values.put("PCS", 0.);
     }
 
     public void ignoreCalibration(String name) {
@@ -64,9 +69,8 @@ public class MCP4728 {
         return setRawVoltage("name", v);
     }
 
-    public int getVoltage(String name) {
-        // todo : add method when resolved in pslab-python
-        return -1;
+    public Double getVoltage(String name) {
+        return this.values.get(name);
     }
 
     public double setCurrent(int v) {
@@ -89,7 +93,8 @@ public class MCP4728 {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return (CHAN.VToCode.value(v));
+        this.values.put(name, CHAN.CodeToV.value(v));
+        return this.values.get(name);
     }
 
     public void writeAll(int v1, int v2, int v3, int v4) {
