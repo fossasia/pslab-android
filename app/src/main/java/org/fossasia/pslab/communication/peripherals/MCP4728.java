@@ -30,10 +30,10 @@ public class MCP4728 {
     private double vref;
     private int devid;
     private I2C i2c;
-    private List<Integer> SWITCHEDOFF;
-    private List<Integer> VREFS;
-    public Map<String, DACChannel> CHANS = new LinkedHashMap<>();
-    private Map<Integer, String> CHANNELMAP = new LinkedHashMap<>();
+    private List<Integer> switchedOff;
+    private List<Integer> vRefs;
+    public Map<String, DACChannel> chans = new LinkedHashMap<>();
+    private Map<Integer, String> channelMap = new LinkedHashMap<>();
     private Map<String, Double> values = new LinkedHashMap<>();
     private int addr;
 
@@ -41,18 +41,18 @@ public class MCP4728 {
         this.packetHandler = packetHandler;
         this.vref = 3.3;
         this.devid = 0;
-        SWITCHEDOFF = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
-        VREFS = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+        switchedOff = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+        vRefs = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
         i2c = new I2C(packetHandler);
         addr = 0x60 | devid;
-        CHANS.put("PCS", new DACChannel("PCS", new double[]{0, 3.3e-3}, 0));
-        CHANS.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1));
-        CHANS.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2));
-        CHANS.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3));
-        CHANNELMAP.put(0, "PCS");
-        CHANNELMAP.put(1, "PV3");
-        CHANNELMAP.put(2, "PV2");
-        CHANNELMAP.put(3, "PV1");
+        chans.put("PCS", new DACChannel("PCS", new double[]{0, 3.3e-3}, 0));
+        chans.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1));
+        chans.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2));
+        chans.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3));
+        channelMap.put(0, "PCS");
+        channelMap.put(1, "PV3");
+        channelMap.put(2, "PV2");
+        channelMap.put(3, "PV1");
         values.put("PV1", 0.);
         values.put("PV2", 0.);
         values.put("PV3", 0.);
@@ -60,11 +60,11 @@ public class MCP4728 {
     }
 
     public void ignoreCalibration(String name) {
-        CHANS.get(name).calibrationEnabled = "false";
+        chans.get(name).calibrationEnabled = "false";
     }
 
     public double setVoltage(String name, int v) {
-        DACChannel dacChannel = CHANS.get(name);
+        DACChannel dacChannel = chans.get(name);
         v = (int) (Math.round(dacChannel.VToCode.value(v)));
         return setRawVoltage("name", v);
     }
@@ -74,13 +74,13 @@ public class MCP4728 {
     }
 
     public double setCurrent(int v) {
-        DACChannel dacChannel = CHANS.get("PCS");
+        DACChannel dacChannel = chans.get("PCS");
         v = (int) (Math.round(dacChannel.VToCode.value(v)));
         return setRawVoltage("PCS", v);
     }
 
     private double setRawVoltage(String name, int v) {
-        DACChannel CHAN = CHANS.get(name);
+        DACChannel CHAN = chans.get(name);
         int val;
         if (v <= 0) {
             v = 0;

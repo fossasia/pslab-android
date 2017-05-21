@@ -155,7 +155,7 @@ public class ScienceLab {
                     scalars.add((double) capAndPCS[i]);
                 }
                 this.SOCKET_CAPACITANCE = scalars.get(0);
-                this.dac.CHANS.get("PCS").loadCalibrationTwopoint(scalars.get(1), scalars.get(2).intValue());
+                this.dac.chans.get("PCS").loadCalibrationTwopoint(scalars.get(1), scalars.get(2).intValue());
                 double[] tempScalars = new double[scalars.size() - 5];
                 for (int i = 4; i < scalars.size(); i++) {
                     tempScalars[i - 4] = scalars.get(i);
@@ -1646,19 +1646,19 @@ public class ScienceLab {
         this.dac.setCurrent(value);
     }
 
-    public int getPV1() {
+    public double getPV1() {
         return this.dac.getVoltage("PV1");
     }
 
-    public int getPV2() {
+    public double getPV2() {
         return this.dac.getVoltage("PV2");
     }
 
-    public int getPV3() {
+    public double getPV3() {
         return this.dac.getVoltage("PV3");
     }
 
-    public int getPCS() {
+    public double getPCS() {
         return this.dac.getVoltage("PCS");
     }
 
