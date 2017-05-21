@@ -25,6 +25,8 @@ import org.fossasia.pslab.adapters.ApplicationAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+
 
 /**
  * Created by viveksb007 on 29/3/17.
