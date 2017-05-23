@@ -15,6 +15,7 @@ import org.fossasia.pslab.communication.peripherals.RadioLink;
 import org.fossasia.pslab.communication.peripherals.SPI;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -147,12 +148,30 @@ public class ScienceLab {
         this.calibrated = false;
         // Check for calibration data if connected. And process them if found
         if (loadCalibrationData && isConnected()) {
-            byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5);
-            if ("READY".equals(new String(Arrays.copyOfRange(capAndPCS, 0, 5), "UTF-8"))) {
-                ArrayList<Double> scalars = new ArrayList<>();
-                // todo : check scalars unpacking might be faulty
-                for (int i = 5; i < capAndPCS.length; i++) {
-                    scalars.add((double) capAndPCS[i]);
+
+            /* CAPS AND PCS CALIBRATION */
+            //byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5); // 5 for READY and 32 (8 float numbers) for data
+            ArrayList<Byte> capsAndPCSByteData = new ArrayList<>();
+            for (int i = 0; i <= 37 / 16; i++) {
+                byte[] temp = readFlash(CAP_AND_PCS, i * 16);
+                for (byte a : temp) {
+                    capsAndPCSByteData.add(a);
+                }
+            }
+            Log.v(TAG, "CAPS AND PCS DATA : " + capsAndPCSByteData.toString());
+            String isReady = "";
+            for (int i = 0; i < 5; i++) {
+                try {
+                    isReady += new String(new byte[]{capsAndPCSByteData.get(i)}, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            if ("READY".equals(isReady)) {
+                ArrayList<Float> scalars = new ArrayList<>();
+                for (int i = 0; i < 8; i++) {
+                    // unpacking byte data to float, total 32 bytes -> 8 floats of 4 bytes each
+                    scalars.add(Float.intBitsToFloat((capsAndPCSByteData.get(5 + i * 4) | capsAndPCSByteData.get(5 + i * 4 + 1) | capsAndPCSByteData.get(5 + i * 4 + 2) | capsAndPCSByteData.get(5 + i * 4 + 3))));
                 }
                 this.SOCKET_CAPACITANCE = scalars.get(0);
                 this.dac.CHANS.get("PCS").loadCalibrationTwopoint(scalars.get(1), scalars.get(2).intValue());
@@ -167,17 +186,47 @@ public class ScienceLab {
                 this.SOCKET_CAPACITANCE = 42e-12;
                 Log.v(TAG, "Cap and PCS calibration invalid");
             }
-            byte[] polynomials = readBulkFlash(this.ADC_POLYNOMIALS_LOCATION, 2048);
+
+
+            /* POLYNOMIAL DATA FOR CALIBRATION */
+            //byte[] polynomials = readBulkFlash(this.ADC_POLYNOMIALS_LOCATION, 2048);
+
+            ArrayList<Byte> polynomialsByteData = new ArrayList<>();
+            for (int i = 0; i < 2048 / 16; i++) {
+                byte[] temp = readFlash(ADC_POLYNOMIALS_LOCATION, i * 16);
+                for (byte a : temp) {
+                    polynomialsByteData.add(a);
+                }
+            }
+            String deviceMarker = "";
+            for (int i = 0; i < 9; i++) {
+                try {
+                    deviceMarker += new String(new byte[]{polynomialsByteData.get(i)}, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
             // todo : change to "PSLab" after PSLab firmware is ready
-            if ("SEELablet".equals(new String(Arrays.copyOfRange(polynomials, 0, 9), "UTF-8"))) {
+            if ("SEELablet".equals(deviceMarker)) {
                 Log.v(TAG, "ADC calibration found...");
                 this.calibrated = true;
-                byte[] adcShifts1 = readBulkFlash(this.ADC_SHIFTS_LOCATION1, 2048);
-                byte[] adcShifts2 = readBulkFlash(this.ADC_SHIFTS_LOCATION2, 2048);
+                ArrayList<Byte> adcShifts = new ArrayList<>();
+                for (int i = 0; i < 2048 / 16; i++) {
+                    byte[] temp = readFlash(ADC_SHIFTS_LOCATION1, i * 16);
+                    for (byte a : temp) {
+                        adcShifts.add(a);
+                    }
+                }
+                for (int i = 0; i < 2048 / 16; i++) {
+                    byte[] temp = readFlash(ADC_SHIFTS_LOCATION2, i * 16);
+                    for (byte a : temp) {
+                        adcShifts.add(a);
+                    }
+                }
                 int count = 0;
                 int tempADC = 0, tempDAC = 0;
-                for (int i = 0; i < polynomials.length - 3; i++) {
-                    if (polynomials[i] == 'S' && polynomials[i + 1] == 'T' && polynomials[i + 2] == 'O' && polynomials[i + 3] == 'P') {
+                for (int i = 0; i < polynomialsByteData.size() - 3; i++) {
+                    if (polynomialsByteData.get(i) == 'S' && polynomialsByteData.get(i + 1) == 'T' && polynomialsByteData.get(i + 2) == 'O' && polynomialsByteData.get(i + 3) == 'P') {
                         switch (count) {
                             case 0:
                                 tempADC = i;
@@ -190,9 +239,9 @@ public class ScienceLab {
                         }
                     }
                 }
-                byte[] adcSlopeOffsets = Arrays.copyOfRange(polynomials, 0, tempADC);
-                byte[] dacSlopeIntercept = Arrays.copyOfRange(polynomials, tempADC + 4, tempDAC);
-                byte[] inlSlopeIntercept = Arrays.copyOfRange(polynomials, tempDAC + 4, polynomials.length);
+                List<Byte> adcSlopeOffsets = polynomialsByteData.subList(0, tempADC);  //Arrays.copyOfRange(polynomials, 0, tempADC);
+                List<Byte> dacSlopeIntercept = polynomialsByteData.subList(tempADC + 4, tempDAC);  //Arrays.copyOfRange(polynomials, tempADC + 4, tempDAC);
+                List<Byte> inlSlopeIntercept = polynomialsByteData.subList(tempDAC + 4, polynomialsByteData.size());  //Arrays.copyOfRange(polynomials, tempDAC + 4, polynomialsByteData.size());
 
 
             }
