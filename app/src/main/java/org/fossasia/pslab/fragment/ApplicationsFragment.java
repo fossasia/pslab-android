@@ -2,6 +2,7 @@ package org.fossasia.pslab.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +25,8 @@ import org.fossasia.pslab.adapters.ApplicationAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
 
 
 /**
@@ -76,7 +79,9 @@ public class ApplicationsFragment extends Fragment {
                     }
                 });
         // Initiate Views
-        initiateViews(view);
+        int rows = context.getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT ? 2 : 3;
+        initiateViews(view, rows);
         // Generate Applications
         new loadList().execute();
         // Return created view
@@ -86,10 +91,10 @@ public class ApplicationsFragment extends Fragment {
     /**
      * Initiate Recycler view
      */
-    private void initiateViews(View view) {
+    private void initiateViews(View view, int rows) {
         // Initiate Recycler View with a Grid
         RecyclerView listView = (RecyclerView) view.findViewById(R.id.applications_recycler_view);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, rows);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
         // Set adapter

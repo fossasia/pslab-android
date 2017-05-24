@@ -40,20 +40,25 @@ import java.util.List;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private NavigationView navigationView;
-    private DrawerLayout drawer;
-    private View navHeader;
+    @BindView(R.id.nav_view) NavigationView navigationView;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
+    View navHeader;
     private ImageView imgProfile;
     private TextView txtName;
-    private Toolbar toolbar;
 
     public static int navItemIndex = 0;
 
     private static final String TAG_HOME = "home";
+
     private static final String TAG_APPLICATIONS = "applications";
     private static final String TAG_SAVED_EXPERIMENTS = "savedExperiments";
     private static final String TAG_DESIGN_EXPERIMENTS = "designExperiments";
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         UsbManager usbManager = (UsbManager) getSystemService(USB_SERVICE);
         mScienceLabCommon = ScienceLabCommon.getInstance();
         mScienceLabCommon.openDevice(new CommunicationHandler(usbManager));
@@ -78,13 +84,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "PSLab device not found");
         }
 
-        toolbar = (Toolbar) findViewById(org.fossasia.pslab.R.id.toolbar);
         setSupportActionBar(toolbar);
-
         mHandler = new Handler();
-
-        drawer = (DrawerLayout) findViewById(org.fossasia.pslab.R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(org.fossasia.pslab.R.id.nav_view);
 
         navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(org.fossasia.pslab.R.id.name);
