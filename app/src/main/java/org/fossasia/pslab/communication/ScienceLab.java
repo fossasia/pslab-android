@@ -171,7 +171,12 @@ public class ScienceLab {
                 ArrayList<Float> scalars = new ArrayList<>();
                 for (int i = 0; i < 8; i++) {
                     // unpacking byte data to float, total 32 bytes -> 8 floats of 4 bytes each
-                    scalars.add(Float.intBitsToFloat((capsAndPCSByteData.get(5 + i * 4) | capsAndPCSByteData.get(5 + i * 4 + 1) | capsAndPCSByteData.get(5 + i * 4 + 2) | capsAndPCSByteData.get(5 + i * 4 + 3))));
+                    scalars.add(Float.intBitsToFloat(
+                                    (capsAndPCSByteData.get(5 + i * 4) & 0xFF) |
+                                    (capsAndPCSByteData.get(5 + i * 4 + 1) & 0xFF) << 8 |
+                                    (capsAndPCSByteData.get(5 + i * 4 + 2) & 0xFF) << 16 |
+                                    (capsAndPCSByteData.get(5 + i * 4 + 3) & 0xFF) << 24)
+                    );
                 }
                 this.SOCKET_CAPACITANCE = scalars.get(0);
                 this.dac.CHANS.get("PCS").loadCalibrationTwopoint(scalars.get(1), scalars.get(2).intValue());
@@ -243,6 +248,23 @@ public class ScienceLab {
                 List<Byte> dacSlopeIntercept = polynomialsByteData.subList(tempADC + 4, tempDAC);  //Arrays.copyOfRange(polynomials, tempADC + 4, tempDAC);
                 List<Byte> inlSlopeIntercept = polynomialsByteData.subList(tempDAC + 4, polynomialsByteData.size());  //Arrays.copyOfRange(polynomials, tempDAC + 4, polynomialsByteData.size());
 
+                int marker = 0;
+                List<List<Byte>> tempSplit = new ArrayList<>();
+                for (int i = 0; i < adcSlopeOffsets.size() - 1; i++) {
+                    if (adcSlopeOffsets.get(i) == '>' && adcSlopeOffsets.get(i + 1) == '|') {
+                        if (marker != 0) {
+                            tempSplit.add(adcSlopeOffsets.subList(marker, i));
+                        }
+                        marker = i + 2;
+                    }
+                }
+                Map<Byte, ArrayList<Float>> polyDict = new LinkedHashMap<>();
+                for (List<Byte> temp : tempSplit) {
+                    List<Byte> temp_ = temp.subList(5, temp.size());
+                    for (int i = 0; i < temp_.size() / 16; i++) {
+
+                    }
+                }
 
             }
         }
