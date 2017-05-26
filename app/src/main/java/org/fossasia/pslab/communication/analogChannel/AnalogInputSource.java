@@ -2,6 +2,7 @@ package org.fossasia.pslab.communication.analogChannel;
 
 import android.util.Log;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class AnalogInputSource {
     private static String TAG = "AnalogInputSource";
 
     private double gainValues[], range[];
-    private boolean gainEnabled = false, inverted = false, calibrationReady = false;
+    public boolean gainEnabled = false, inverted = false, calibrationReady = false;
     private double gain = 0;
     public int gainPGA, CHOSA;
     private int inversion = 1;
@@ -75,7 +76,7 @@ public class AnalogInputSource {
         return solution >= 50 && solution <= 4000;
     }
 
-    List<Double> loadCalibrationTable(double[] table, double slope, double intercept) {
+    public List<Double> loadCalibrationTable(double[] table, double slope, double intercept) {
         for (int i = 0; i < table.length; i++) {
             adc_shifts.add(table[i] * slope - intercept);
         }
@@ -86,10 +87,9 @@ public class AnalogInputSource {
         calibrationReady = false;
     }
 
-    public void loadPolynomials(List<double[]> polys)
-    {
+    public void loadPolynomials(ArrayList<Double[]> polys) {
         for (int i = 0; i < polys.size(); i++) {
-            polynomials.add(new PolynomialFunction(polys.get(i)));
+            polynomials.add(new PolynomialFunction(ArrayUtils.toPrimitive(polys.get(i))));
         }
     }
 

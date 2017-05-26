@@ -15,7 +15,7 @@ public class DACChannel {
     private String name;
     int channum;
     private int offset;
-    private double[] range;
+    public double[] range;
     private double slope, intercept;
     PolynomialFunction VToCode;
     PolynomialFunction CodeToV;
