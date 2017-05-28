@@ -244,7 +244,7 @@ public class ScienceLab {
                     for (int j = 0; j < cals.length() / 16; j++) {
                         Double[] poly = new Double[4];
                         for (int k = 0; k < 4; k++) {
-                            poly[k] = ByteBuffer.wrap(cals.substring(k, k + 4).getBytes()).getDouble();
+                            poly[k] = ByteBuffer.wrap(cals.substring((16 * j) + (k * 4), (16 * j) + (k * 4) + 4).getBytes()).getDouble();
                         }
                         polyDict.get(adcSlopeOffsetsSplit[i].substring(0, 3)).add(poly);
                     }
