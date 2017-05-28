@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by viveksb007 on 10/5/17.
  */
@@ -20,5 +22,6 @@ public class OscilloscopeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView();
         scienceLab = ScienceLabCommon.getInstance().scienceLab;
+        ButterKnife.bind(this);
     }
 }
