@@ -283,9 +283,9 @@ public class ScienceLab {
                     if ("PV1".equals(name) | "PV2".equals(name) | "PV3".equals(name)) {
 
                         double[] DACX = new double[4096];
-                        double factor = (this.dac.CHANS.get(name).range[1] - this.dac.CHANS.get(name).range[0]) / 4096;
+                        double factor = (this.dac.chans.get(name).range[1] - this.dac.chans.get(name).range[0]) / 4096;
                         int index = 0;
-                        for (double j = this.dac.CHANS.get(name).range[0]; j <= this.dac.CHANS.get(name).range[1]; j += factor) {
+                        for (double j = this.dac.chans.get(name).range[0]; j <= this.dac.chans.get(name).range[1]; j += factor) {
                             DACX[index++] = j;
                         }
 
