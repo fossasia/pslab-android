@@ -3,6 +3,7 @@ package org.fossasia.pslab.communication;
 import android.os.SystemClock;
 import android.util.Log;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.fossasia.pslab.communication.analogChannel.AnalogAquisitionChannel;
 import org.fossasia.pslab.communication.analogChannel.AnalogConstants;
@@ -15,6 +16,8 @@ import org.fossasia.pslab.communication.peripherals.RadioLink;
 import org.fossasia.pslab.communication.peripherals.SPI;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -147,12 +150,35 @@ public class ScienceLab {
         this.calibrated = false;
         // Check for calibration data if connected. And process them if found
         if (loadCalibrationData && isConnected()) {
-            byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5);
-            if ("READY".equals(new String(Arrays.copyOfRange(capAndPCS, 0, 5), "UTF-8"))) {
-                ArrayList<Double> scalars = new ArrayList<>();
-                // todo : check scalars unpacking might be faulty
-                for (int i = 5; i < capAndPCS.length; i++) {
-                    scalars.add((double) capAndPCS[i]);
+
+            /* CAPS AND PCS CALIBRATION */
+            //byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5); // 5 for READY and 32 (8 float numbers) for data
+            ArrayList<Byte> capsAndPCSByteData = new ArrayList<>();
+            for (int i = 0; i <= 37 / 16; i++) {
+                byte[] temp = readFlash(CAP_AND_PCS, i * 16);
+                for (byte a : temp) {
+                    capsAndPCSByteData.add(a);
+                }
+            }
+            Log.v(TAG, "CAPS AND PCS DATA : " + capsAndPCSByteData.toString());
+            String isReady = "";
+            for (int i = 0; i < 5; i++) {
+                try {
+                    isReady += new String(new byte[]{capsAndPCSByteData.get(i)}, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            if ("READY".equals(isReady)) {
+                ArrayList<Float> scalars = new ArrayList<>();
+                for (int i = 0; i < 8; i++) {
+                    // unpacking byte data to float, total 32 bytes -> 8 floats of 4 bytes each
+                    scalars.add(Float.intBitsToFloat(
+                            (capsAndPCSByteData.get(5 + i * 4) & 0xFF) |
+                                    (capsAndPCSByteData.get(5 + i * 4 + 1) & 0xFF) << 8 |
+                                    (capsAndPCSByteData.get(5 + i * 4 + 2) & 0xFF) << 16 |
+                                    (capsAndPCSByteData.get(5 + i * 4 + 3) & 0xFF) << 24)
+                    );
                 }
                 this.SOCKET_CAPACITANCE = scalars.get(0);
                 this.dac.chans.get("PCS").loadCalibrationTwopoint(scalars.get(1), scalars.get(2).intValue());
@@ -167,17 +193,157 @@ public class ScienceLab {
                 this.SOCKET_CAPACITANCE = 42e-12;
                 Log.v(TAG, "Cap and PCS calibration invalid");
             }
-            byte[] polynomials = readBulkFlash(this.ADC_POLYNOMIALS_LOCATION, 2048);
+
+
+            /* POLYNOMIAL DATA FOR CALIBRATION */
+            //byte[] polynomials = readBulkFlash(this.ADC_POLYNOMIALS_LOCATION, 2048);
+
+            ArrayList<Byte> polynomialsByteData = new ArrayList<>();
+            for (int i = 0; i < 2048 / 16; i++) {
+                byte[] temp = readFlash(ADC_POLYNOMIALS_LOCATION, i * 16);
+                for (byte a : temp) {
+                    polynomialsByteData.add(a);
+                }
+            }
+            String polynomialByteString = "";
+            for (int i = 0; i < 2048; i++) {
+                try {
+                    polynomialByteString += new String(new byte[]{polynomialsByteData.get(i)}, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
             // todo : change to "PSLab" after PSLab firmware is ready
-            if ("SEELablet".equals(new String(Arrays.copyOfRange(polynomials, 0, 9), "UTF-8"))) {
+            if ("SEELablet".equals(polynomialByteString.substring(0, 9))) {
                 Log.v(TAG, "ADC calibration found...");
                 this.calibrated = true;
-                byte[] adcShifts1 = readBulkFlash(this.ADC_SHIFTS_LOCATION1, 2048);
-                byte[] adcShifts2 = readBulkFlash(this.ADC_SHIFTS_LOCATION2, 2048);
+                ArrayList<Byte> adcShifts = new ArrayList<>();
+                for (int i = 0; i < 2048 / 16; i++) {
+                    byte[] temp = readFlash(ADC_SHIFTS_LOCATION1, i * 16);
+                    for (byte a : temp) {
+                        adcShifts.add(a);
+                    }
+                }
+                for (int i = 0; i < 2048 / 16; i++) {
+                    byte[] temp = readFlash(ADC_SHIFTS_LOCATION2, i * 16);
+                    for (byte a : temp) {
+                        adcShifts.add(a);
+                    }
+                }
+                String[] polySections = polynomialByteString.split("STOP");
+                String adcSlopeOffsets = polySections[0];
+                String dacSlopeIntercept = polySections[1];
+                String inlSlopeIntercept = polySections[2];
+
+                Map<String, ArrayList<Double[]>> polyDict = new LinkedHashMap<>();
+                String[] adcSlopeOffsetsSplit = adcSlopeOffsets.split(">|");
+                for (int i = 0; i < adcSlopeOffsetsSplit.length; i++) {
+                    if (i == 0) continue;
+                    String cals = adcSlopeOffsetsSplit[i].substring(5);
+                    polyDict.put(adcSlopeOffsetsSplit[i].substring(0, 3), new ArrayList<Double[]>());
+                    for (int j = 0; j < cals.length() / 16; j++) {
+                        Double[] poly = new Double[4];
+                        for (int k = 0; k < 4; k++) {
+                            poly[k] = ByteBuffer.wrap(cals.substring((16 * j) + (k * 4), (16 * j) + (k * 4) + 4).getBytes()).getDouble();
+                        }
+                        polyDict.get(adcSlopeOffsetsSplit[i].substring(0, 3)).add(poly);
+                    }
+                }
+
+                double[] inlSlopeInterceptD = new double[]{ByteBuffer.wrap(inlSlopeIntercept.substring(0, 4).getBytes()).getDouble(), ByteBuffer.wrap(inlSlopeIntercept.substring(4, 8).getBytes()).getDouble()};
+                double[] adcShiftsDouble = new double[adcShifts.size()];
+                for (int i = 0; i < adcShifts.size(); i++) {
+                    adcShiftsDouble[i] = ByteBuffer.wrap(new byte[]{adcShifts.get(i)}).getDouble();
+                }
+                for (Map.Entry<String, AnalogInputSource> entry : this.analogInputSources.entrySet()) {
+                    this.analogInputSources.get(entry.getKey()).loadCalibrationTable(adcShiftsDouble, inlSlopeInterceptD[0], inlSlopeInterceptD[1]);
+                    if (polyDict.containsKey(entry.getKey())) {
+                        this.analogInputSources.get(entry.getKey()).loadPolynomials(polyDict.get(entry.getKey()));
+                        this.analogInputSources.get(entry.getKey()).calibrationReady = true;
+                    }
+                    this.analogInputSources.get(entry.getKey()).regenerateCalibration();
+                }
+
+                String[] dacSlopeInterceptSplit = dacSlopeIntercept.split(">|");
+                for (int i = 0; i < dacSlopeInterceptSplit.length; i++) {
+                    if (i == 0) continue;
+                    String name = dacSlopeInterceptSplit[i].substring(0, 3);
+                    double[] fits = new double[6];
+                    try {
+                        for (int j = 0; j < 6; j++) {
+                            fits[j] = ByteBuffer.wrap(dacSlopeInterceptSplit[i].substring(5 + j * 4, 5 + (j + 1) * 4).getBytes()).getDouble();
+                        }
+                    } catch (StringIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                        continue;
+                    }
+                    double slope = fits[0];
+                    double intercept = fits[1];
+                    double[] fitVals = Arrays.copyOfRange(fits, 2, fits.length);
+                    if ("PV1".equals(name) | "PV2".equals(name) | "PV3".equals(name)) {
+
+                        double[] DACX = new double[4096];
+                        double factor = (this.dac.chans.get(name).range[1] - this.dac.chans.get(name).range[0]) / 4096;
+                        int index = 0;
+                        for (double j = this.dac.chans.get(name).range[0]; j <= this.dac.chans.get(name).range[1]; j += factor) {
+                            DACX[index++] = j;
+                        }
+
+                        ArrayList<Byte> OFF = new ArrayList<>();
+                        if ("PV1".equals(name)) {
+                            for (int j = 0; j < 2048 / 16; j++) {
+                                byte[] temp = readFlash(DAC_SHIFTS_PV1A, j * 16);
+                                for (byte a : temp) {
+                                    OFF.add(a);
+                                }
+                            }
+                            for (int j = 0; j < 2048 / 16; j++) {
+                                byte[] temp = readFlash(DAC_SHIFTS_PV1B, j * 16);
+                                for (byte a : temp) {
+                                    OFF.add(a);
+                                }
+                            }
+                        }
+                        if ("PV2".equals(name)) {
+                            for (int j = 0; j < 2048 / 16; j++) {
+                                byte[] temp = readFlash(DAC_SHIFTS_PV2A, j * 16);
+                                for (byte a : temp) {
+                                    OFF.add(a);
+                                }
+                            }
+                            for (int j = 0; j < 2048 / 16; j++) {
+                                byte[] temp = readFlash(DAC_SHIFTS_PV2B, j * 16);
+                                for (byte a : temp) {
+                                    OFF.add(a);
+                                }
+                            }
+                        }
+                        if ("PV3".equals(name)) {
+                            for (int j = 0; j < 2048 / 16; j++) {
+                                byte[] temp = readFlash(DAC_SHIFTS_PV3A, j * 16);
+                                for (byte a : temp) {
+                                    OFF.add(a);
+                                }
+                            }
+                            for (int j = 0; j < 2048 / 16; j++) {
+                                byte[] temp = readFlash(DAC_SHIFTS_PV3B, j * 16);
+                                for (byte a : temp) {
+                                    OFF.add(a);
+                                }
+                            }
+                        }
+
+                        // todo : port remaining function
+
+                    }
+                }
+
+
+                /*
                 int count = 0;
                 int tempADC = 0, tempDAC = 0;
-                for (int i = 0; i < polynomials.length - 3; i++) {
-                    if (polynomials[i] == 'S' && polynomials[i + 1] == 'T' && polynomials[i + 2] == 'O' && polynomials[i + 3] == 'P') {
+                for (int i = 0; i < polynomialsByteData.size() - 3; i++) {
+                    if (polynomialsByteData.get(i) == 'S' && polynomialsByteData.get(i + 1) == 'T' && polynomialsByteData.get(i + 2) == 'O' && polynomialsByteData.get(i + 3) == 'P') {
                         switch (count) {
                             case 0:
                                 tempADC = i;
@@ -190,15 +356,31 @@ public class ScienceLab {
                         }
                     }
                 }
-                byte[] adcSlopeOffsets = Arrays.copyOfRange(polynomials, 0, tempADC);
-                byte[] dacSlopeIntercept = Arrays.copyOfRange(polynomials, tempADC + 4, tempDAC);
-                byte[] inlSlopeIntercept = Arrays.copyOfRange(polynomials, tempDAC + 4, polynomials.length);
+                List<Byte> adcSlopeOffsets = polynomialsByteData.subList(0, tempADC);  //Arrays.copyOfRange(polynomials, 0, tempADC);
+                List<Byte> dacSlopeIntercept = polynomialsByteData.subList(tempADC + 4, tempDAC);  //Arrays.copyOfRange(polynomials, tempADC + 4, tempDAC);
+                List<Byte> inlSlopeIntercept = polynomialsByteData.subList(tempDAC + 4, polynomialsByteData.size());  //Arrays.copyOfRange(polynomials, tempDAC + 4, polynomialsByteData.size());
 
+                int marker = 0;
+                List<List<Byte>> tempSplit = new ArrayList<>();
+                for (int i = 0; i < adcSlopeOffsets.size() - 1; i++) {
+                    if (adcSlopeOffsets.get(i) == '>' && adcSlopeOffsets.get(i + 1) == '|') {
+                        if (marker != 0) {
+                            tempSplit.add(adcSlopeOffsets.subList(marker, i));
+                        }
+                        marker = i + 2;
+                    }
+                }
+                Map<Byte, ArrayList<Float>> polyDict = new LinkedHashMap<>();
+                for (List<Byte> temp : tempSplit) {
+                    List<Byte> temp_ = temp.subList(5, temp.size());
+                    for (int i = 0; i < temp_.size() / 16; i++) {
+
+                    }
+                }
+                */
 
             }
         }
-        // todo : port remaining function
-
     }
 
     public Double getResistance() {
@@ -259,7 +441,7 @@ public class ScienceLab {
         return retData;
     }
 
-    public Map<String, ArrayList> captureMultiple(int samples, double timeGap, List<String> args) {
+    public Map<String, ArrayList<Double>> captureMultiple(int samples, double timeGap, List<String> args) {
         if (args.size() == 0) {
             Log.v(TAG, "Please specify channels to record");
             return null;
@@ -317,7 +499,7 @@ public class ScienceLab {
             for (int i = 0; i < totalSamples; i++) {
                 this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
             }
-            Map<String, ArrayList> retData = new LinkedHashMap<>();
+            Map<String, ArrayList<Double>> retData = new LinkedHashMap<>();
             ArrayList<Double> timeBase = new ArrayList<>();
             double factor = timeGap * (samples - 1) / samples;
             for (double i = 0; i < timeGap * (samples - 1); i += factor) timeBase.add(i);
