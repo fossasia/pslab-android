@@ -28,21 +28,18 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile "com.android.support:appcompat-v7:$support_lib_version"
+    compile "com.android.support:cardview-v7:$support_lib_version"
+    compile "com.android.support:recyclerview-v7:$support_lib_version"
+    compile "com.android.support:design:$support_lib_version"
+    compile "com.android.support:support-v4:$support_lib_version"
+    compile "com.android.support:preference-v14:$support_lib_version"
+
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:preference-v14:25.2.0'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'org.apache.commons:commons-math3:3.6.1'
     compile 'org.apache.commons:commons-lang3:3.5'
-    // Card View
-    compile 'com.android.support:cardview-v7:25.2.0'
-    // Recycler View
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    // Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:8.6.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
