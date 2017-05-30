@@ -333,7 +333,30 @@ public class ScienceLab {
                             }
                         }
 
-                        // todo : port remaining function
+                        ArrayUtils.reverse(fitVals);
+                        PolynomialFunction fitFunction = new PolynomialFunction(fitVals);
+                        double[] yData = new double[DACX.length];
+                        for (int j = 0; j < DACX.length; j++) {
+                            yData[j] = fitFunction.value(DACX[j]) - (OFF.get(j) * slope + intercept);
+                        }
+                        int LOOKBEHIND = 100;
+                        int LOOKAHEAD = 100;
+                        ArrayList<Double> offset = new ArrayList<>();
+                        for (int j = 0; j < 4096; j++) {
+                            double[] temp = new double[Math.min(4095, j + LOOKAHEAD) - Math.max(j - LOOKBEHIND, 0)];
+                            for (int k = Math.max(j - LOOKBEHIND, 0), p = 0; k < Math.min(4095, j + LOOKAHEAD); k++, p++) {
+                                temp[p] = yData[k] - DACX[j];
+                                if (temp[p] < 0) temp[p] = -temp[p];
+                            }
+                            // finding minimum in temp array
+                            double min = temp[0];
+                            for (double aTemp : temp) {
+                                if (min > aTemp)
+                                    min = aTemp;
+                            }
+                            offset.add(min - (j - Math.max(j - LOOKBEHIND, 0)));
+                        }
+                        this.dac.chans.get(name).loadCalibrationTable(offset);
 
                     }
                 }
