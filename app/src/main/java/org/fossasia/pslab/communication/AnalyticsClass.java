@@ -183,6 +183,126 @@ public class AnalyticsClass {
         return new double[]{returnAmplitude, returnFrequency, returnOffset, returnPhase};
     }
 
+    ParametricUnivariateFunction squareParametricUnivariateFunction = new ParametricUnivariateFunction() {
+        @Override
+        public double value(double x, double... parameters) {
+            double amp = parameters[0];
+            double freq = parameters[1];
+            double phase = parameters[2];
+            double dc = parameters[3]; //dc - duty cycle
+            double offset = parameters[4];
+            return offset + amp * signalSquare(2 * Math.PI * freq * (x - phase), freq, dc);
+        }
+
+        @Override
+        public double[] gradient(double x, double... parameters) {
+            /*partial derivatives w.r.t all the five variables. Square functions are not differentiable
+            at finitely many points, still we have used it anyway since the curve fitter uses the value of
+            gradients. The values are true except at points where the transition from high to low or low to high
+            takes place.*/
+            double a = parameters[0]; //unused for partial derivative
+            double b = parameters[1];
+            double c = parameters[2];
+            double d = parameters[3];
+            double e = parameters[4]; //unused for partial derivative
+
+            return new double[]{
+                    signalSquare(2 * Math.PI * b * (x - c), b, d), 0, 0, 0, 1
+            };
+        }
+    };
+
+    public double[] squareFit(double[] xReal, double[] yReal){
+        int n = xReal.length;
+        double mx = max(yReal);
+        double mn = min(xReal);
+        double offset = (mx + mn)/2;
+        double sumGreaterThanOffset = 0;
+        double sumLesserThanOffset = 0;
+        double n1 = 0; // count of numbers less than offset
+        double n2 = 0; // count of numbers less than offset
+        double[] yTmp = new double[yReal.length];
+        double[] yReal2 = new double[yReal.length];
+        double[] guess;
+        double returnOffset;
+        double returnFrequency;
+        double returnAmplitude;
+        double returnPhase;
+        double returnDC;
+
+        for (int i = 0; i < yReal.length; i++)
+            yReal2[i] = yReal[i] - offset;
+
+        for(int i=0;i < yReal.length; i++){
+            if(yReal[i] > offset){
+                sumGreaterThanOffset += yReal[i];
+                yTmp[i] = 2;
+                n1++;
+            }
+            else if(yReal[i] < offset){
+                sumLesserThanOffset += yReal[i];
+                yTmp[i] = 0;
+                n2++;
+            }
+        }
+
+        double amplitude = (sumGreaterThanOffset / n1) - (sumLesserThanOffset / n2);
+        boolean[] bools = new boolean[yTmp.length];
+        double tmp;
+        for ( int i = 0; i < yTmp.length -1 ; i++){
+            tmp = yTmp[i+1] - yTmp[i];
+            tmp = abs(tmp);
+            bools[i] = tmp > 1;
+        }
+        double[] edges = new double[bools.length];
+        double[] levels = new double[bools.length];
+        int j = 0;
+        for(int i = 0; i < bools.length; i++){
+            if(bools[i]){
+                edges[j] = xReal[i];
+                levels[j] = yTmp[i];
+                j++;
+            }
+        }
+
+        double frequency = 1 / (edges[2] - edges[0]);
+        double phase = edges[0];
+        double dc = 0.5;
+
+        if ( edges.length >= 4){
+            if (levels[0] == 0)
+                dc = (edges[1] - edges[0]) / (edges[2] - edges[0]);
+            else {
+                dc = (edges[2] - edges[1]) / (edges[3] - edges[1]);
+                phase = edges[1];
+            }
+        }
+
+        LevenbergMarquardtOptimizer optimizer = new LevenbergMarquardtOptimizer();
+        CurveFitter fitter = new CurveFitter(optimizer);
+        for (int i = 0; i < n; i++)
+            fitter.addObservedPoint(xReal[i], yReal2[i]);
+
+        guess = new double[]{amplitude, frequency, phase, dc, 0};
+        double[] result = fitter.fit(squareParametricUnivariateFunction, guess);
+
+        amplitude = result[0];
+        frequency = result[1];
+        phase = result[2];
+        dc = result[3];
+        returnOffset = result[4];
+
+        if (frequency < 0)
+            Log.v("squareFit", "negative frequency");
+
+        returnOffset += offset;
+        returnFrequency = 1e6 * abs(frequency);
+        returnAmplitude = abs(amplitude);
+        returnPhase = phase;
+        returnDC = dc;
+
+        return new double[]{returnAmplitude, returnFrequency, returnPhase, returnDC, returnOffset};
+    }
     public double findFrequency(double[] voltage, double samplingInterval){
         int voltageLength = voltage.length;
         double[] frequency;
@@ -379,5 +499,13 @@ public class AnalyticsClass {
             }
         }
         return result;
+    }
+
+    public double signalSquare(double xAxisValue, double freq, double dc) {
+        //This method determines whether at a given x value, the value of y is in the upper half or lower half
+        if (xAxisValue % (2 * Math.PI * freq) <= dc)
+            return 1;
+        else
+            return -1;
     }
 }
