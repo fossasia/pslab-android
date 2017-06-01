@@ -62,9 +62,9 @@ public class BandstopFilter {
         for(int i = -order + 1; i < order; i = i + 2)
             m.add(i);
         p = new Complex[m.size()];
-        for(int i = 0; i < m.size(); i++){
+        for(int i = 0; i < m.size(); i++)
             p[i] = new Complex(-cos(m.get(i) * Math.PI / (2 * order)), -sin(m.get(i) * Math.PI / (2 * order)));
-        }
+
         return p;
     }
 
@@ -81,10 +81,10 @@ public class BandstopFilter {
         // Invert to a highpass filter with desired bandwidth
         for(int i = 0; i < z.length; i++)
             zhp[i] = (bw / 2) / z[i];
+
         Complex numerator = new Complex((bw/2));
-        for(int i = 0; i < p.length; i++){
+        for(int i = 0; i < p.length; i++)
             php[i] = numerator.divide(p[i]);
-        }
 
         // Duplicate poles and zeros and shift from baseband to +wo and -wo
         int l = 0;
@@ -99,9 +99,9 @@ public class BandstopFilter {
 
         // Cancel out gain change caused by inversion
         Complex temp = new Complex(1,0);
-        for(int i = 0; i < p.length; i++){
+        for(int i = 0; i < p.length; i++)
             temp = temp.multiply(p[i].negate());
-        }
+
         pProd = temp.getReal();
         kbs = (int) (k / pProd);
         return new ArrayList<Object>(Arrays.asList(zbs, pbs, kbs));
@@ -129,20 +129,21 @@ public class BandstopFilter {
                 pz2.add(pz[i]);
             }
         }
-        for(int i = 0; i < pz.length / 2; i++){
+
+        for(int i = 0; i < pz.length / 2; i++)
             pz2.add(pz2.get(i).conjugate());
 
-        }
         Complex [] pzRearranged = pz2.toArray(new Complex[pz.length]);
 
         Complex temp = new Complex(1,0);
-        for(int i = 0; i < z.length; i++){
+        for(int i = 0; i < z.length; i++)
             temp = temp.multiply(complexFs2.subtract(z[i]));
-        }
+
+
         Complex temp2 = new Complex(1,0);
-        for(int i = 0; i < p.length; i++){
+        for(int i = 0; i < p.length; i++)
             temp2 = temp2.multiply(complexFs2.subtract(p[i]));
-        }
+
         kz =  (k * (temp.divide(temp2)).getReal());
         return new ArrayList<Object>(Arrays.asList(zz, pzRearranged, kz));
     }
@@ -194,9 +195,10 @@ public class BandstopFilter {
             System.out.println((complexRoot));
             polynomialFunctionArray[i] = complexRoot;
         }
-        for(int i = 0; i < polynomialFunctionArray.length; i ++){
+
+        for(int i = 0; i < polynomialFunctionArray.length; i ++)
             product = polynomialFunctionArray[i].multiply(product);
-        }
+
         return product.getCoefficients();
     }
 

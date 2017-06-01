@@ -10,10 +10,13 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
+import org.fossasia.pslab.filters.BandstopFilter;
+import org.fossasia.pslab.filters.Lfilter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static java.lang.Math.cos;
 import static org.apache.commons.lang3.math.NumberUtils.min;
 import static org.apache.commons.lang3.math.NumberUtils.max;
 import static org.apache.commons.math3.util.FastMath.abs;
@@ -107,8 +110,8 @@ public class AnalyticsClass {
             double d = parameters[3];
             return new double[]{
                     Math.sin(c + 2 * Math.PI * b * x),
-                    2 * a * Math.PI * x * Math.cos(c + 2 * b * Math.PI * x),
-                    a * Math.cos(c + 2 * b * Math.PI * x),
+                    2 * a * Math.PI * x * cos(c + 2 * b * Math.PI * x),
+                    a * cos(c + 2 * b * Math.PI * x),
                     1
             };
         }
@@ -364,6 +367,37 @@ public class AnalyticsClass {
         ));
     }
 
+    //-------------------------- Damped Sine Fit ----------------------------------------//
+
+    public ParametricUnivariateFunction dampedSineParametricUnivariateFunction = new ParametricUnivariateFunction() {
+        @Override
+        public double value(double x, double... parameters) {
+            double amplitude = parameters[0];
+            double frequency = parameters[1];
+            double phase = parameters[2];
+            double offset = parameters[3];
+            double damp = parameters[4];
+            return offset + amplitude * exp(-damp * x) * sin(Math.abs(frequency) * x + phase);
+        }
+
+        @Override
+        public double[] gradient(double x, double... parameters) {
+            double amplitude = parameters[0];
+            double frequency = parameters[1];
+            double phase = parameters[2];
+            double offset = parameters[3];
+            double damp = parameters[4];
+            return new double[]{
+                    exp(-damp * x) * sin(x * frequency + phase),
+                    amplitude * exp(-damp * x) * x * cos(x * frequency + phase),
+                    amplitude * exp(-damp * x) * cos(x * frequency + phase),
+                    -amplitude * exp(-damp * x) * x * sin(x * frequency + phase),
+                    1
+            };
+        }
+    };
+
+
     public double[] getGuessValues(double xReal[], double yReal[], String function) {
         if (function.equals("sine") || function.equals("damped sine")) {
             int n = xReal.length;
@@ -404,6 +438,32 @@ public class AnalyticsClass {
                 return new double[]{amplitude, frequency, phase, offset, 0};
         }
         return null;
+    }
+
+    public double[] arbitFit(double[] xReal, double[] yReal, ParametricUnivariateFunction function, double[] guessValues){
+        int n = xReal.length;
+        LevenbergMarquardtOptimizer optimizer = new LevenbergMarquardtOptimizer();
+        CurveFitter fitter = new CurveFitter(optimizer);
+        for (int i = 0; i < n; i++)
+            fitter.addObservedPoint(xReal[i], yReal[i]);
+        double[] result = fitter.fit(function, guessValues);
+        return result;
+    }
+
+    ArrayList<double[]> butterNotch(double lowCut, double highCut, double fs, int order){
+        double nyq = 0.5 * fs;
+        double low = lowCut / nyq;
+        double high = highCut / nyq;
+        BandstopFilter bandstopFilter = new BandstopFilter(order, new double[]{low, high});
+        return bandstopFilter.abGetter();
+    }
+
+    double[] butterNotchFilter(double[] data, double lowCut, double highCut, double fs, int order){
+        ArrayList<double[]> arrayList = butterNotch(lowCut, highCut, fs, order);
+        double[] b = arrayList.get(0);
+        double[] a = arrayList.get(1);
+        Lfilter lfilter = new Lfilter();
+        return lfilter.filter(b, a, data);
     }
 
     public ArrayList<double[]> fft(double[] signal, double samplingInterval){
