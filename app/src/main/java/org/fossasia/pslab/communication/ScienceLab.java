@@ -423,6 +423,27 @@ public class ScienceLab {
         }
     }
 
+    public String getVersion() throws IOException {
+        if (isConnected()) {
+            return mPacketHandler.getVersion();
+        } else {
+            return "Not Connected";
+        }
+    }
+
+    public Map<Integer, ArrayList<Integer>> getRadioLinks() {
+        try {
+            return this.nrf.getNodeList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public RadioLink newRadioLink() {
+        return new RadioLink(this.nrf, -1);
+    }
+
     public void close() {
         try {
             mCommunicationHandler.close();
@@ -591,52 +612,6 @@ public class ScienceLab {
         retData.put("x", this.aChannels.get(0).getXAxis());
         retData.put("y", this.aChannels.get(0).getYAxis());
         return retData;
-    }
-
-    private boolean fetchChannel(int channelNumber) {
-        int samples = this.aChannels.get(channelNumber - 1).length;
-        if (channelNumber > this.channelsInBuffer) {
-            Log.v(TAG, "Channel Unavailable");
-            return false;
-        }
-        ArrayList<Byte> listData = new ArrayList<>();
-        try {
-            for (int i = 0; i < samples / this.dataSplitting; i++) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(channelNumber - 1);
-                mPacketHandler.sendInt(this.dataSplitting);
-                mPacketHandler.sendInt(i * this.dataSplitting);
-                byte[] data = new byte[this.dataSplitting * 2];
-                mPacketHandler.read(data, this.dataSplitting * 2);
-                for (int j = 0; j < data.length - 1; j++)
-                    listData.add(data[j]);
-                mPacketHandler.getAcknowledgement();
-            }
-
-            if ((samples % this.dataSplitting) != 0) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(channelNumber - 1);
-                mPacketHandler.sendInt(samples * this.dataSplitting);
-                mPacketHandler.sendInt(samples - samples % this.dataSplitting);
-                byte[] data = new byte[2 * (samples % this.dataSplitting)];
-                mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
-                for (int j = 0; j < data.length - 1; j++)
-                    listData.add(data[j]);
-                mPacketHandler.getAcknowledgement();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        for (int i = 0; i < samples; i++) {
-            this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
-        }
-        this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
-        return true;
     }
 
     private void captureFullSpeedHrInitialize(String channel, int samples, double timeGap, List<String> args) {
@@ -827,6 +802,55 @@ public class ScienceLab {
         return new int[]{conversionDone, samples};
     }
 
+
+    private boolean fetchChannel(int channelNumber) {
+        int samples = this.aChannels.get(channelNumber - 1).length;
+        if (channelNumber > this.channelsInBuffer) {
+            Log.v(TAG, "Channel Unavailable");
+            return false;
+        }
+        ArrayList<Byte> listData = new ArrayList<>();
+        try {
+            for (int i = 0; i < samples / this.dataSplitting; i++) {
+                mPacketHandler.sendByte(mCommandsProto.ADC);
+                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
+                mPacketHandler.sendByte(channelNumber - 1);
+                mPacketHandler.sendInt(this.dataSplitting);
+                mPacketHandler.sendInt(i * this.dataSplitting);
+                byte[] data = new byte[this.dataSplitting * 2];
+                mPacketHandler.read(data, this.dataSplitting * 2);
+                for (int j = 0; j < data.length - 1; j++)
+                    listData.add(data[j]);
+                mPacketHandler.getAcknowledgement();
+            }
+
+            if ((samples % this.dataSplitting) != 0) {
+                mPacketHandler.sendByte(mCommandsProto.ADC);
+                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
+                mPacketHandler.sendByte(channelNumber - 1);
+                mPacketHandler.sendInt(samples * this.dataSplitting);
+                mPacketHandler.sendInt(samples - samples % this.dataSplitting);
+                byte[] data = new byte[2 * (samples % this.dataSplitting)];
+                mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
+                for (int j = 0; j < data.length - 1; j++)
+                    listData.add(data[j]);
+                mPacketHandler.getAcknowledgement();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        for (int i = 0; i < samples; i++) {
+            this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
+        }
+        this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
+        return true;
+    }
+
+
+
     public boolean fetchChannelOneShot(int channelNumber) {
         int offset = 0;
         int samples = this.aChannels.get(channelNumber - 1).length;
@@ -881,74 +905,6 @@ public class ScienceLab {
         }
     }
 
-    private double getAverageVoltage(String channelName, Integer sample) {
-        if (sample == null) sample = 1;
-        PolynomialFunction poly;
-        double sum = 0;
-        poly = analogInputSources.get(channelName).calPoly12;
-        ArrayList<Double> vals = new ArrayList<>();
-        for (int i = 0; i < sample; i++) {
-            vals.add(getRawAverageVoltage(channelName));
-        }
-        for (int j = 0; j < vals.size(); j++) {
-            sum = sum + poly.value(vals.get(j));
-        }
-        return sum / vals.size();
-    }
-
-    private double getRawAverageVoltage(String channelName) {
-        try {
-            int chosa = this.calcCHOSA(channelName);
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            mPacketHandler.sendByte(mCommandsProto.GET_VOLTAGE_SUMMED);
-            mPacketHandler.sendByte(chosa);
-            int vSum = mPacketHandler.getInt();
-            mPacketHandler.getAcknowledgement();
-            return vSum / 16.;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Error in getRawAverageVoltage");
-        }
-        return 0;
-    }
-
-    private int calcCHOSA(String channelName) {
-        channelName = channelName.toUpperCase();
-        AnalogInputSource source = analogInputSources.get(channelName);
-        boolean found = false;
-        for (String temp : allAnalogChannels) {
-            if (temp.equals(channelName)) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            Log.e(TAG, "Not a valid channel name. selecting CH1");
-            return calcCHOSA("CH1");
-        }
-
-        return source.CHOSA;
-    }
-
-    public void setDataSplitting(int dataSplitting) {
-        this.dataSplitting = dataSplitting;
-    }
-
-    public boolean isDeviceFound() {
-        return mCommunicationHandler.isDeviceFound();
-    }
-
-    public boolean isConnected() {
-        return mCommunicationHandler.isConnected();
-    }
-
-    public String getVersion() throws IOException {
-        if (isConnected()) {
-            return mPacketHandler.getVersion();
-        } else {
-            return "Not Connected";
-        }
-    }
 
     public double setGain(String channel, int gain, Boolean force) {
         if (force == null) force = false;
@@ -993,6 +949,72 @@ public class ScienceLab {
         return null;
     }
 
+    private int calcCHOSA(String channelName) {
+        channelName = channelName.toUpperCase();
+        AnalogInputSource source = analogInputSources.get(channelName);
+        boolean found = false;
+        for (String temp : allAnalogChannels) {
+            if (temp.equals(channelName)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            Log.e(TAG, "Not a valid channel name. selecting CH1");
+            return calcCHOSA("CH1");
+        }
+
+        return source.CHOSA;
+    }
+
+    private double getAverageVoltage(String channelName, Integer sample) {
+        if (sample == null) sample = 1;
+        PolynomialFunction poly;
+        double sum = 0;
+        poly = analogInputSources.get(channelName).calPoly12;
+        ArrayList<Double> vals = new ArrayList<>();
+        for (int i = 0; i < sample; i++) {
+            vals.add(getRawAverageVoltage(channelName));
+        }
+        for (int j = 0; j < vals.size(); j++) {
+            sum = sum + poly.value(vals.get(j));
+        }
+        return sum / vals.size();
+    }
+
+    private double getRawAverageVoltage(String channelName) {
+        try {
+            int chosa = this.calcCHOSA(channelName);
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            mPacketHandler.sendByte(mCommandsProto.GET_VOLTAGE_SUMMED);
+            mPacketHandler.sendByte(chosa);
+            int vSum = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            return vSum / 16.;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error in getRawAverageVoltage");
+        }
+        return 0;
+    }
+
+
+    public void setDataSplitting(int dataSplitting) {
+        this.dataSplitting = dataSplitting;
+    }
+
+    public boolean isDeviceFound() {
+        return mCommunicationHandler.isDeviceFound();
+    }
+
+    public boolean isConnected() {
+        return mCommunicationHandler.isConnected();
+    }
+
+
+
+
+
     /* DIGITAL SECTION */
 
     public int calculateDigitalChannel(String name) {
@@ -1024,6 +1046,31 @@ public class ScienceLab {
 
     public Boolean getState(String inputID) {
         return this.getStates().get(inputID);
+    }
+
+    public void setState(Map<String, Integer> args) {
+        int data = 0;
+        if (args.containsKey("SQR1")) {
+            data |= (0x10 | args.get("SQR1"));
+        }
+        if (args.containsKey("SQR2")) {
+            data |= (0x20 | (args.get("SQR2") << 1));
+        }
+        if (args.containsKey("SQR3")) {
+            data |= (0x40 | (args.get("SQR3") << 2));
+        }
+        if (args.containsKey("SQR4")) {
+            data |= (0x80 | (args.get("SQR4") << 3));
+        }
+        try {
+            mPacketHandler.sendByte(mCommandsProto.DOUT);
+            mPacketHandler.sendByte(mCommandsProto.SET_STATE);
+            mPacketHandler.sendByte(data);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void countPulses(String channel) {
@@ -1636,44 +1683,6 @@ public class ScienceLab {
         }
     }
 
-    public Map<Integer, ArrayList<Integer>> getRadioLinks() {
-        try {
-            return this.nrf.getNodeList();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public RadioLink newRadioLink() {
-        return new RadioLink(this.nrf, -1);
-    }
-
-
-    public void setState(Map<String, Integer> args) {
-        int data = 0;
-        if (args.containsKey("SQR1")) {
-            data |= (0x10 | args.get("SQR1"));
-        }
-        if (args.containsKey("SQR2")) {
-            data |= (0x20 | (args.get("SQR2") << 1));
-        }
-        if (args.containsKey("SQR3")) {
-            data |= (0x40 | (args.get("SQR3") << 2));
-        }
-        if (args.containsKey("SQR4")) {
-            data |= (0x80 | (args.get("SQR4") << 3));
-        }
-        try {
-            mPacketHandler.sendByte(mCommandsProto.DOUT);
-            mPacketHandler.sendByte(mCommandsProto.SET_STATE);
-            mPacketHandler.sendByte(data);
-            mPacketHandler.getAcknowledgement();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public int setSqr1(int frequency, double dutyCycle, boolean onlyPrepare) {
         if (dutyCycle == -1) dutyCycle = 50;
@@ -1741,18 +1750,6 @@ public class ScienceLab {
         }
         this.squareWaveFrequency.put("SQR2", (int) (64e6 / wavelength / p[prescalar & 0x3]));
         return this.squareWaveFrequency.get("SQR2");
-    }
-
-    public void stepperMotor(int steps, int delay, int direction) {
-        try {
-            mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
-            mPacketHandler.sendByte(mCommandsProto.STEPPER_MOTOR);
-            mPacketHandler.sendInt((steps << 1) | direction);
-            mPacketHandler.sendInt(delay);
-            SystemClock.sleep((long) (steps * delay * 1e-3 * 1000));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void setSqrs(int wavelength, int phase, int highTime1, int highTime2, int prescalar) {
@@ -1835,6 +1832,8 @@ public class ScienceLab {
         }
     }
 
+    /*  ANALOG OUTPUTS  */
+
     public void setPV1(int value) {
         this.dac.setVoltage("PV1", value);
     }
@@ -1900,6 +1899,9 @@ public class ScienceLab {
         }
     }
 
+
+    /* READ PROGRAM AND DATA ADDRESSES */
+
     public long deviceID() {
         int a = readProgramAddress(0x800FF8);
         int b = readProgramAddress(0x800FFa);
@@ -1909,6 +1911,8 @@ public class ScienceLab {
         Log.v(TAG, "device ID : " + value);
         return value;
     }
+
+
 
     public int readProgramAddress(int address) {
         try {
@@ -1959,6 +1963,20 @@ public class ScienceLab {
             mPacketHandler.sendInt(address & 0xffff);
             mPacketHandler.sendInt(value);
             mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* MOTOR SIGNALLING */
+
+    public void stepperMotor(int steps, int delay, int direction) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
+            mPacketHandler.sendByte(mCommandsProto.STEPPER_MOTOR);
+            mPacketHandler.sendInt((steps << 1) | direction);
+            mPacketHandler.sendInt(delay);
+            SystemClock.sleep((long) (steps * delay * 1e-3 * 1000));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -2019,7 +2037,7 @@ public class ScienceLab {
             mPacketHandler.sendInt(timeoutMSB);
             long A = mPacketHandler.getLong();
             long B = mPacketHandler.getLong();
-            int timeout = mPacketHandler.getInt(); // tmt??
+            int timeout = mPacketHandler.getInt();
             mPacketHandler.getAcknowledgement();
             if (timeout >= timeoutMSB || B == 0) return 0;
             return (330 * (B - A + 20) / 64e6) / 2;
