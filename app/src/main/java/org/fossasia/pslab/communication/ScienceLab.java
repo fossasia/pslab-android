@@ -26,6 +26,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Math.abs;
+import static org.apache.commons.lang3.math.NumberUtils.max;
+
 /**
  * Created by viveksb007 on 28/3/17.
  */
@@ -967,6 +970,56 @@ public class ScienceLab {
         return source.CHOSA;
     }
 
+    private double getVoltage(String channelName, Integer sample){
+        this.voltmeterAutoRange(channelName);
+        return this.getAverageVoltage(channelName, sample);
+    }
+
+    private double voltmeterAutoRange(String channelName) {
+        if (this.analogInputSources.get(channelName).gainPGA == 0)
+            return 0;
+        this.setGain(channelName,0,true);
+        double V = this.getAverageVoltage(channelName, null);
+        return this.autoSelectRange(channelName, V);
+    }
+
+    private double autoSelectRange(String channelName, double V) {
+        double[] keys = new double[]{8.0, 4.0, 3.0, 2.0, 1.5, 1.0, 0.5, 0.0};
+        Map<Double,Integer> cutoffs = new HashMap<>();
+        cutoffs.put(8.0,0);
+        cutoffs.put(4.0,1);
+        cutoffs.put(3.0,2);
+        cutoffs.put(2.0,3);
+        cutoffs.put(1.5,4);
+        cutoffs.put(1.0,5);
+        cutoffs.put(0.5,6);
+        cutoffs.put(0.0,7);
+
+        int g = 0;
+        for(int i=0; i < keys.length ; i++) {
+            if (abs(V) > keys[i]) {
+                g = cutoffs.get(keys[i]);
+                break;
+            }
+        }
+        this.setGain(channelName, g, true);
+        return g;
+    }
+
+    private void autoRangeScope(double tg) {
+        Map<String, double[]> tmp = this.captureTwo(1000,tg, null);
+        double[] x = tmp.get("x");
+        double[] y1 = tmp.get("y1");
+        double[] y2 = tmp.get("y2");
+        for(int i=0;i < y1.length; i++){
+            y1[i] = abs(y1[i]);
+            y2[i] = abs(y2[i]);
+        }
+        this.autoSelectRange("CH1",max(y1));
+        this.autoSelectRange("CH2",max(y2));
+
+    }
+
     private double getAverageVoltage(String channelName, Integer sample) {
         if (sample == null) sample = 1;
         PolynomialFunction poly;
@@ -998,6 +1051,80 @@ public class ScienceLab {
         return 0;
     }
 
+    private void fetchBuffer(int startingPosition, int totalPoints) {
+        startingPosition = 0;
+        totalPoints = 100;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
+            mPacketHandler.sendInt(startingPosition);
+            mPacketHandler.sendInt(totalPoints);
+            for(int i=0; i < totalPoints; i++){
+                this.buffer[i] = mPacketHandler.getInt();
+            }
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error in fetching buffer");
+        }
+    }
+
+    private void clearBuffer(int startingPosition, int totalPoints) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.CLEAR_BUFFER);
+            mPacketHandler.sendInt(startingPosition);
+            mPacketHandler.sendInt(totalPoints);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG,"Error in clearing buffer");
+        }
+    }
+
+    private void fillBuffer(int startingPosition, int[] pointArray) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.FILL_BUFFER);
+            mPacketHandler.sendInt(startingPosition);
+            mPacketHandler.sendInt(pointArray.length);
+            for( int i=0; i < pointArray.length; i++) {
+                mPacketHandler.sendInt(pointArray[i]);
+            }
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG,"Error in filling Buffer");
+        }
+
+    }
+
+    private void startStreaming(int tg, String channel) throws IOException{
+        if(this.streaming)
+            this.stopStreaming();
+        try {
+            mPacketHandler.sendByte(mCommandsProto.ADC);
+            mPacketHandler.sendByte(mCommandsProto.START_ADC_STREAMING);
+            mPacketHandler.sendByte(this.calcCHOSA(channel));
+            mPacketHandler.sendInt(tg);
+            this.streaming = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Start streaming failed");
+        }
+    }
+
+    private void stopStreaming() throws IOException {
+        if (this.streaming) {
+            mPacketHandler.sendByte(mCommandsProto.STOP_STREAMING);
+            byte[] data = new byte[2000];
+            mPacketHandler.read(data, 2000);
+            //mPacketHandler.flush(); flush not implemented
+        }
+        else
+            Log.e(TAG, "Not streaming");
+        this.streaming = false;
+    }
 
     public void setDataSplitting(int dataSplitting) {
         this.dataSplitting = dataSplitting;
@@ -1210,7 +1337,7 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.GET_CAPACITANCE);
             mPacketHandler.sendByte(currentRange);
             if (trim < 0)
-                mPacketHandler.sendByte((int) (31 - Math.abs(trim) / 2) | 32);
+                mPacketHandler.sendByte((int) (31 - abs(trim) / 2) | 32);
             else
                 mPacketHandler.sendByte((int) trim / 2);
             mPacketHandler.sendInt(chargeTime);
@@ -1610,7 +1737,7 @@ public class ScienceLab {
                     y.add(Math.sin(x.get(i)));
                     break;
                 case "tria":
-                    y.add(Math.abs(x.get(i) % 4 - 2) - 1);
+                    y.add(abs(x.get(i) % 4 - 2) - 1);
                     break;
             }
         }
