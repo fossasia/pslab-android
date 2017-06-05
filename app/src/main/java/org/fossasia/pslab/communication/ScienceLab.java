@@ -1282,10 +1282,32 @@ public class ScienceLab {
 
     }
 
-    public void pulseTime(String channel, String pulseType, Double timeout) {
+    public double pulseTime(String channel, String pulseType, Double timeout) {
         if (channel == null) channel = "ID1";
         if (pulseType == null) pulseType = "LOW";
         if (timeout == null) timeout = 0.1;
+
+        Map<String, double[]> data = this.measureMultipleDigitalEdges(channel, channel, "rising", "falling", 2, 2, timeout, null, true);
+        if (data != null) {
+            double[] x = data.get("CHANNEL1");
+            double[] y = data.get("CHANNEL2");
+            if (x != null && y != null) { // Both timers registered something. did not timeout
+                if (y[0] > 0) {
+                    if ("HIGH".equals(pulseType))
+                        return y[0];
+                    else if ("LOW".equals(pulseType)) {
+                        return x[1] - y[0];
+                    }
+                } else {
+                    if ("HIGH".equals(pulseType))
+                        return y[1];
+                    else if ("LOW".equals(pulseType)) {
+                        return Math.abs(y[0]);
+                    }
+                }
+            }
+        }
+        return -1;
     }
 
     private Map<String, double[]> measureMultipleDigitalEdges(String channel1, String channel2, String edgeType1, String edgeType2, int points1, int points2, Double timeout, String SQR1, Boolean zero) {
@@ -1367,8 +1389,24 @@ public class ScienceLab {
         return null;
     }
 
-    public void captureEdgesOne() {
-
+    public double[] captureEdgesOne(Integer waitingTime, String aquireChannel, String triggerChannel, Integer aquireMode, Integer triggerMode) {
+        /*
+        Log timestamps of rising/falling edges on one digital input
+        */
+        if (waitingTime == null) waitingTime = 1;
+        if (aquireChannel == null) aquireChannel = "ID1";
+        if (triggerChannel == null) triggerChannel = aquireChannel;
+        if (aquireMode == null) aquireMode = 3;
+        if (triggerMode == null) triggerMode = 3;
+        this.startOneChannelLA(aquireChannel, aquireMode, triggerChannel, triggerMode);
+        SystemClock.sleep(waitingTime * 1000);
+        LinkedHashMap<String, Integer> data = this.getLAInitialStates();
+        long[] temp = this.fetchLongDataFromLA(data.get("A"), 1);
+        double[] retData = new double[temp.length];
+        for (int i = 0; i < temp.length; i++) {
+            retData[i] = temp[i] / 64e6;
+        }
+        return retData;
     }
 
     public void startOneChannelLABackup(Integer trigger, String channel, Integer maximumTime, ArrayList<String> triggerChannels, String edge) {
@@ -1587,7 +1625,7 @@ public class ScienceLab {
         }
     }
 
-    public Map<String, Integer> getLAInitialStates() {
+    public LinkedHashMap<String, Integer> getLAInitialStates() {
         /*
         fetches the initial states of digital inputs that were recorded right before the Logic analyzer was started,
         and the total points each channel recorded
@@ -1614,7 +1652,7 @@ public class ScienceLab {
             if (C < 0) C = 0;
             if (D < 0) D = 0;
 
-            Map<String, Integer> retData = new HashMap<>();
+            LinkedHashMap<String, Integer> retData = new LinkedHashMap<>();
             retData.put("A", A);
             retData.put("B", B);
             retData.put("C", C);
@@ -1753,6 +1791,71 @@ public class ScienceLab {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean fetchLAChannels() {
+        /*
+        reads and stores the channels in this.dChannels.
+        */
+        LinkedHashMap<String, Integer> data = this.getLAInitialStates();
+        for (int i = 0; i < 4; i++) {
+            if (this.dChannels.get(i).channelNumber < this.digitalChannelsInBuffer) {
+                this.fetchLAChannel_(i, data);
+            }
+        }
+        return true;
+    }
+
+    private boolean fetchLAChannel_(Integer channelNumber, LinkedHashMap<String, Integer> initialStates) {
+        DigitalChannel dChan = this.dChannels.get(channelNumber);
+        if (dChan.channelNumber >= this.digitalChannelsInBuffer) {
+            Log.e(TAG, "Channel Unavailable");
+            return false;
+        }
+        int samples = dChan.length;
+
+        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+        tempMap.put("ID1", initialStates.get("ID1"));
+        tempMap.put("ID2", initialStates.get("ID2"));
+        tempMap.put("ID3", initialStates.get("ID3"));
+        tempMap.put("ID4", initialStates.get("ID4"));
+        tempMap.put("SEN", initialStates.get("SEN"));
+
+        if ("int".equals(dChan.dataType)) {
+            //  Used LinkedHashMap above (initialStates) in which iteration is done sequentially as <key-value> were inserted
+            int i = 0;
+            for (Map.Entry<String, Integer> entry : initialStates.entrySet()) {
+                if (dChan.channelNumber == i) {
+                    i = entry.getValue();
+                    break;
+                }
+                i++;
+            }
+            int[] temp = this.fetchIntDataFromLA(i, dChan.channelNumber + 1);
+            double[] data = new double[temp.length];
+            for (int j = 0; j < temp.length; j++) {
+                data[j] = temp[j];
+            }
+            dChan.loadData(tempMap, data);
+        } else {
+            //  Used LinkedHashMap above (initialStates) in which iteration is done sequentially as <key-value> were inserted
+            int i = 0;
+            for (Map.Entry<String, Integer> entry : initialStates.entrySet()) {
+                if (dChan.channelNumber * 2 == i) {
+                    i = entry.getValue();
+                    break;
+                }
+                i++;
+            }
+            long[] temp = this.fetchLongDataFromLA(i, dChan.channelNumber + 1);
+            double[] data = new double[temp.length];
+            for (int j = 0; j < temp.length; j++) {
+                data[j] = temp[j];
+            }
+            dChan.loadData(tempMap, data);
+        }
+        dChan.generateAxes();
+        return true;
     }
 
     public Map<String, Boolean> getStates() {

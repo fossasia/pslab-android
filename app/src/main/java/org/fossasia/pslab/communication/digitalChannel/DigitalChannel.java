@@ -2,6 +2,7 @@ package org.fossasia.pslab.communication.digitalChannel;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by viveksb007 on 26/3/17.
@@ -52,12 +53,16 @@ public class DigitalChannel {
         this.prescalar = prescalar;
     }
 
-    void loadData(HashMap<String, Boolean> initialStates, double[] timestamps) {
+    public void loadData(LinkedHashMap<String, Integer> initialStates, double[] timestamps) {
         if (initialStateOverride != 0) {
             this.initialState = (initialStateOverride - 1) == 1;
             this.initialStateOverride = 0;
         } else {
-            this.initialState = initialStates.get(channelName);
+            if (initialStates.get(channelName) == 1) {
+                this.initialState = true;
+            } else {
+                this.initialState = false;
+            }
         }
         System.arraycopy(timestamps, 0, this.timestamps, 0, timestamps.length);
         this.dlength = timestamps.length; //
@@ -83,7 +88,7 @@ public class DigitalChannel {
 
     }
 
-    void generateAxes() {
+    public void generateAxes() {
         int HIGH = 1, LOW = 0, state;
         if (initialState)
             state = LOW;
