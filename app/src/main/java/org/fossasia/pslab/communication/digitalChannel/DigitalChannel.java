@@ -22,7 +22,7 @@ public class DigitalChannel {
     boolean initialState;
     public int initialStateOverride, channelNumber, length, prescalar, trigger, dlength, plotLength, maxTime, mode;
     double gain, maxT;
-    double xAxis[], yAxis[], timestamps[];
+    public double xAxis[], yAxis[], timestamps[];
 
     public DigitalChannel(int channelNumber) {
         this.channelNumber = channelNumber;

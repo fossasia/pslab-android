@@ -1217,12 +1217,70 @@ public class ScienceLab {
         return 0;
     }
 
-    public void r2rTime() {
-
+    public Double r2rTime(String channel, Integer skipCycle, Integer timeout) {
+        /*
+        Return a list of rising edges that occured within the timeout period.
+        */
+        if (skipCycle == null) skipCycle = 0;
+        if (timeout == null) timeout = 5;
+        if (timeout > 60) timeout = 60;
+        this.startOneChannelLA(channel, 3, null, 0);
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < timeout) {
+            LinkedHashMap<String, Integer> initialStates = this.getLAInitialStates();
+            if (initialStates.get("A") == this.MAX_SAMPLES / 4)
+                initialStates.put("A", 0);
+            if (initialStates.get("A") >= skipCycle + 2) {
+                long[] data = this.fetchLongDataFromLA(initialStates.get("A"), 1);
+                LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+                tempMap.put("ID1", initialStates.get("ID1"));
+                tempMap.put("ID2", initialStates.get("ID2"));
+                tempMap.put("ID3", initialStates.get("ID3"));
+                tempMap.put("ID4", initialStates.get("ID4"));
+                tempMap.put("SEN", initialStates.get("SEN"));
+                double[] doubleData = new double[data.length];
+                for (int i = 0; i < data.length; i++) {
+                    doubleData[i] = data[i];
+                }
+                this.dChannels.get(0).loadData(tempMap, doubleData);
+                return 1e-6 * (this.dChannels.get(0).timestamps[skipCycle + 1] - this.dChannels.get(0).timestamps[0]);
+            }
+            SystemClock.sleep(100);
+        }
+        return null;
     }
 
-    public void f2fTime() {
-
+    public Double f2fTime(String channel, Integer skipCycle, Integer timeout) {
+        /*
+        Return a list of falling edges that occured within the timeout period.
+        */
+        if (skipCycle == null) skipCycle = 0;
+        if (timeout == null) timeout = 5;
+        if (timeout > 60) timeout = 60;
+        this.startOneChannelLA(channel, 2, null, 0);
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < timeout) {
+            LinkedHashMap<String, Integer> initialStates = this.getLAInitialStates();
+            if (initialStates.get("A") == this.MAX_SAMPLES / 4)
+                initialStates.put("A", 0);
+            if (initialStates.get("A") >= skipCycle + 2) {
+                long[] data = this.fetchLongDataFromLA(initialStates.get("A"), 1);
+                LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+                tempMap.put("ID1", initialStates.get("ID1"));
+                tempMap.put("ID2", initialStates.get("ID2"));
+                tempMap.put("ID3", initialStates.get("ID3"));
+                tempMap.put("ID4", initialStates.get("ID4"));
+                tempMap.put("SEN", initialStates.get("SEN"));
+                double[] doubleData = new double[data.length];
+                for (int i = 0; i < data.length; i++) {
+                    doubleData[i] = data[i];
+                }
+                this.dChannels.get(0).loadData(tempMap, doubleData);
+                return 1e-6 * (this.dChannels.get(0).timestamps[skipCycle + 1] - this.dChannels.get(0).timestamps[0]);
+            }
+            SystemClock.sleep(100);
+        }
+        return null;
     }
 
     public Double measureInterval(String channel1, String channel2, String edge1, String edge2, Float timeout) {
@@ -1271,7 +1329,7 @@ public class ScienceLab {
         return null;
     }
 
-    public void dutyCycle(String channel, Double timeout) {
+    public double[] dutyCycle(String channel, Double timeout) {
         /*
         duty cycle measurement on channel
 		returns wavelength(seconds), and length of first half of pulse(high time)
@@ -1279,7 +1337,36 @@ public class ScienceLab {
         */
         if (channel == null) channel = "ID1";
         if (timeout == null) timeout = 1.;
-
+        Map<String, double[]> data = this.measureMultipleDigitalEdges(channel, channel, "rising", "falling", 2, 2, timeout, null, true);
+        double[] retData = new double[2];
+        if (data != null) {
+            double[] x = data.get("CHANNEL1");
+            double[] y = data.get("CHANNEL2");
+            if (x != null && y != null) {  // Both timers registered something. did not timeout
+                if (y[0] > 0) {
+                    retData[0] = y[0];
+                    retData[1] = x[1];
+                } else {
+                    if (y[1] > x[1]) {
+                        retData[0] = -1;
+                        retData[1] = -1;
+                        return retData;
+                    }
+                    retData[0] = y[1];
+                    retData[1] = x[1];
+                }
+                double[] params = new double[2];
+                params[0] = retData[1];
+                params[1] = retData[0] / retData[1];
+                if (params[1] > 0.5) {
+                    Log.v(TAG, Arrays.toString(x) + "\n" + Arrays.toString(y) + "\n" + Arrays.toString(retData));
+                }
+                return params;
+            }
+        }
+        retData[0] = -1;
+        retData[1] = -1;
+        return retData;
     }
 
     public double pulseTime(String channel, String pulseType, Double timeout) {
