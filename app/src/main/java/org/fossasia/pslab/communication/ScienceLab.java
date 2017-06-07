@@ -1142,12 +1142,12 @@ public class ScienceLab {
 
     /* DIGITAL SECTION */
 
-    public int calculateDigitalChannel(String name) {
+    public Integer calculateDigitalChannel(String name) {
         if (Arrays.asList(DigitalChannel.digitalChannelNames).contains(name))
             return Arrays.asList(DigitalChannel.digitalChannelNames).indexOf(name);
         else {
             Log.v(TAG, "Invalid channel " + name + " , selecting ID1 instead ");
-            return 0;
+            return null;
         }
     }
 
@@ -1188,7 +1188,7 @@ public class ScienceLab {
         return null;
     }
 
-    public double getFrequency(String channel, Integer timeout) {
+    public Double getFrequency(String channel, Integer timeout) {
         /*
         Frequency measurement on IDx.
 		Measures time taken for 16 rising edges of input signal.
@@ -1208,13 +1208,13 @@ public class ScienceLab {
             x[0] = mPacketHandler.getLong();
             x[1] = mPacketHandler.getLong();
             mPacketHandler.getAcknowledgement();
-            if (tmt != 0) return 0;
+            if (tmt != 0) return null;
             if ((x[1] - x[0]) != 0)
                 return 16 * 64e6 / (x[1] - x[0]);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return 0;
+        return null;
     }
 
     public Double r2rTime(String channel, Integer skipCycle, Integer timeout) {
@@ -1369,7 +1369,7 @@ public class ScienceLab {
         return retData;
     }
 
-    public double pulseTime(String channel, String pulseType, Double timeout) {
+    public Double pulseTime(String channel, String pulseType, Double timeout) {
         if (channel == null) channel = "ID1";
         if (pulseType == null) pulseType = "LOW";
         if (timeout == null) timeout = 0.1;
@@ -1394,7 +1394,7 @@ public class ScienceLab {
                 }
             }
         }
-        return -1;
+        return null;
     }
 
     private Map<String, double[]> measureMultipleDigitalEdges(String channel1, String channel2, String edgeType1, String edgeType2, int points1, int points2, Double timeout, String SQR1, Boolean zero) {
