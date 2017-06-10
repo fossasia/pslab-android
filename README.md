@@ -80,4 +80,11 @@ Please help us follow the best practice to make it easy for the reviewer as well
  * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
  * If the PR is related to any front end change, please attach relevant screenshots in the pull request description.
 
+## Code style
 
+Please try to follow the mentioned guidelines while writing and submitting your code as it makes easier for the reviewer and other developers to understand.
+
+ * While naming the layout files, ensure that the convention followed is (activity/fragment) _ (name).xml like activity_oscilloscope.xml , fragment_control_main.xml .
+ * Name the views and widgets defined in the layout files as (viewtype/widget) _ (fragment/activity name) _ (no. in the file) like spinner_channel_select_la1 , button_activity_oscilloscope1 .
+ * The activity/fragment file name corresponding to the layout files should be named as                       (activity/fragment name)(activity/fragment).java like ChannelsParameterFragment.java corresponding to the layout file fragment_channels_parameter.xml .
+ * The corresponding widgets for buttons, textboxes, checkboxes etc. in activity files should be named as (viewtype/widget)(fragment/activity name)(no. in the file) like spinnerChannelSelect1 corresponding to spinner_channel_select1 .
