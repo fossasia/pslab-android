@@ -1,0 +1,114 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.fossasia.pslab.fragment.ChannelParametersFragment"
+    android:background="@drawable/rounded_custom_border">
+
+    <CheckBox
+        android:text="CH1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox_ch1_cp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textStyle="normal|bold" />
+
+    <CheckBox
+        android:text="CH2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox_ch2_cp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textStyle="normal|bold" />
+
+    <CheckBox
+        android:text="CH3 (+/- 3.3V)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox_ch3_cp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textStyle="normal|bold" />
+
+    <CheckBox
+        android:text="MICROPHONE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox_mic_cp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:elevation="15dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="Range"
+        android:layout_width="41dp"
+        android:layout_height="32dp"
+        android:id="@+id/tv_range1_cp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/checkBox_ch1_cp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/cardview_dark_background"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:text="Range"
+        android:layout_width="42dp"
+        android:layout_height="32dp"
+        android:id="@+id/tv_range2_cp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/checkBox_ch2_cp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/cardview_dark_background"
+        android:gravity="fill_vertical" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/tv_range2_cp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/spinner_range_ch2_cp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:id="@+id/spinner_channel_select_cp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/spinner_range_ch1_cp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:id="@+id/spinner_range_ch1_cp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tv_range1_cp"
+        android:layout_marginStart="8dp" />
+
+    <TextView
+        android:text="CH2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_ch2_cp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toRightOf="@+id/spinner_range_ch2_cp"
+        android:clickable="true"
+        android:textColor="@android:color/background_dark" />
+
+</android.support.constraint.ConstraintLayout>
