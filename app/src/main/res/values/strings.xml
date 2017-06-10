@@ -36,4 +36,11 @@
     <string name="activity_title_privacy_policy">Privacy Policy</string>
     <string name="application_icon">Application Icon</string>
 
+    <string-array name="select_channel_mode_la">
+        <item>Single Channel Mode</item>
+        <item>Two Channel Mode</item>
+        <item>Three Channel Mode</item>
+        <item>Four Channel Mode</item>
+    </string-array>
+
 </resources>
