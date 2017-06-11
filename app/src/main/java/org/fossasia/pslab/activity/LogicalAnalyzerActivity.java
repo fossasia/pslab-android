@@ -37,6 +37,6 @@ public class LogicalAnalyzerActivity extends AppCompatActivity
     public void channelSelectedNowAnalyze(Bundle params) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        ft.replace(R.id.la_frame_layout, LALogicLinesFragment.newInstance(params,this)).commit();
+        ft.replace(R.id.la_frame_layout, LALogicLinesFragment.newInstance(params, this)).commit();
     }
 }
