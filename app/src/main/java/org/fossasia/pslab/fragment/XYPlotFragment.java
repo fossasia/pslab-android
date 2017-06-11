@@ -50,10 +50,21 @@ public class XYPlotFragment extends Fragment {
         String [] channels = {"CH1", "CH2", "CH3", "MIC"};
         spinnerChannelSelect1 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy1);
         spinnerChannelSelect2 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy2);
-        ArrayAdapter<String> channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+        ArrayAdapter<String> channelsAdapter;
+
+        if(tabletSize){
+            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
+        }
+        else {
+            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+        }
+
         channelsAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
         spinnerChannelSelect1.setAdapter(channelsAdapter);
         spinnerChannelSelect2.setAdapter(channelsAdapter);
+
         spinnerChannelSelect1.setSelection(channelsAdapter.getPosition("CH1"),true);
         spinnerChannelSelect2.setSelection(channelsAdapter.getPosition("CH2"),true);
 

@@ -1,0 +1,87 @@
+<resources>
+    <string name="app_name">PSLab</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_saved_experiments">Saved Experiments</string>
+    <string name="nav_design_experiment">Design Experiments</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about_us">About Us</string>
+    <string name="nav_report">Report Issues</string>
+    <string name="nav_help_feedback">Help &amp; Feedback</string>
+    <string name="nav_applications">Applications</string>
+
+    <string name="oscilloscope">Oscilloscope</string>
+    <string name="control">Control</string>
+    <string name="advance_control">Advance Control</string>
+    <string name="logical_analyzer">Logical Analyzer</string>
+    <string name="data_sensor_logger">Data Sensor Logger</string>
+    <string name="w_sensor_logger">Wireless Sensor</string>
+    <string name="sensor_quick_view">Sensor QuickView</string>
+    <string name="w_sensor_quick_view">Data Sensor Logger</string>
+
+    <string name="control_item_1">Control</string>
+    <string name="control_item_2">Read</string>
+    <string name="control_item_3">Advanced</string>
+
+    <string-array name="nav_item_activity_titles">
+        <item>Home</item>
+        <item>Applications</item>
+        <item>Saved Experiments</item>
+        <item>Design Experiments</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string name="activity_title_about_us">About Us</string>
+    <string name="activity_title_privacy_policy">Privacy Policy</string>
+    <string name="application_icon">Application Icon</string>
+
+    <string-array name="select_channel_mode_la">
+        <item>Single Channel Mode</item>
+        <item>Two Channel Mode</item>
+        <item>Three Channel Mode</item>
+        <item>Four Channel Mode</item>
+    </string-array>
+
+    <string name="set">SET</string>
+    <string name="read">READ</string>
+    <string name="resistance">Resistance</string>
+    <string name="capacitance">Capacitance</string>
+    <string name="frequency">Frequency</string>
+    <string name="count_pulses">Count Pulses</string>
+    <string-array name="ID">
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+    </string-array>
+    <string name="reset">RESET</string>
+    <string name="voltage">Voltage</string>
+    <string name="ch1">CH1</string>
+    <string name="ch2">CH2</string>
+    <string name="ch3">CH3</string>
+    <string name="cap">CAP</string>
+    <string name="sen">SEN</string>
+    <string name="an8">AN8</string>
+    <string name="w1">W1</string>
+    <string name="w2">W2</string>
+    <string name="phase">Phase</string>
+    <string name="output">Output</string>
+    <string name="dutycycle">Duty cycle</string>
+    <string name="sqr1">SQR1</string>
+    <string name="sqr2">SQR2</string>
+    <string name="sqr3">SQR3</string>
+    <string name="sqr4">SQR4</string>
+    <string name="freq_range">10Hz-5kHz</string>
+    <string name="zero">0</string>
+    <string-array name="wave_type">
+        <item>SINE</item>
+        <item>SQUARE</item>
+    </string-array>
+    <string name="digital_outputs">Digital Outputs</string>
+    <string name="configure_PWM">Configure PWM</string>
+    <string name="waveform_generator">Arbitrary Waveform Generator</string>
+</resources>

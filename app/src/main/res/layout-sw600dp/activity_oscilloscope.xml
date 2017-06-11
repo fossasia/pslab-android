@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1"
-    android:id="@+id/parent_layout">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/layout_chart_os"
-        android:layout_width="600dp"
-        android:layout_height="300dp">
+        android:layout_width="1000dp"
+        android:layout_height="600dp">
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart_os"
@@ -46,7 +44,7 @@
             android:textAlignment="center"
             android:textColor="#000"
             android:textStyle="normal|bold"
-            android:textSize="12sp" />
+            android:textSize="18sp" />
 
         <ImageButton
             android:layout_width="match_parent"
@@ -65,7 +63,7 @@
             android:textAlignment="center"
             android:textColor="#000"
             android:textStyle="normal|bold"
-            android:textSize="12sp" />
+            android:textSize="18sp" />
 
         <ImageButton
             android:layout_width="match_parent"
@@ -86,7 +84,7 @@
             android:textColor="#000"
             android:maxLines="1"
             android:textStyle="normal|bold"
-            android:textSize="12sp" />
+            android:textSize="18sp" />
 
         <ImageButton
             android:layout_width="match_parent"
@@ -107,7 +105,7 @@
             android:textAlignment="center"
             android:textColor="#000"
             android:textStyle="normal|bold"
-            android:textSize="12sp"
+            android:textSize="18sp"
             android:elevation="24dp"
             android:layout_marginBottom="2dp" />
 
@@ -123,5 +121,6 @@
         android:layout_toStartOf="@+id/layout_dock_os1">
 
     </FrameLayout>
+
 
 </RelativeLayout>

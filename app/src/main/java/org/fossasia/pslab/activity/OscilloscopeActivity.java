@@ -126,15 +126,28 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     }
 
     public void onWindowFocusChanged() {
+        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
-        RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
-        lineChartParams.height = height * 2 / 3;
-        lineChartParams.width = width * 5 / 6;
-        mChartLayout.setLayoutParams(lineChartParams);
-        RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
-        frameLayoutParams.height = height / 3;
-        frameLayoutParams.width = width * 5 / 6;
-        frameLayout.setLayoutParams(frameLayoutParams);
+        if(tabletSize){
+            RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+            lineChartParams.height = height * 3 / 4;
+            lineChartParams.width = width * 7 / 8;
+            mChartLayout.setLayoutParams(lineChartParams);
+            RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+            frameLayoutParams.height = height / 4;
+            frameLayoutParams.width = width * 7 / 8;
+            frameLayout.setLayoutParams(frameLayoutParams);
+        }
+        else{
+            RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+            lineChartParams.height = height * 2 / 3;
+            lineChartParams.width = width * 5 / 6;
+            mChartLayout.setLayoutParams(lineChartParams);
+            RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+            frameLayoutParams.height = height / 3;
+            frameLayoutParams.width = width * 5 / 6;
+            frameLayout.setLayoutParams(frameLayoutParams);
+        }
     }
 
     protected void addFragment(@IdRes int containerViewId,

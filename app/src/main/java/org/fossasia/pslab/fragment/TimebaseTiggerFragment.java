@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,12 @@ public class TimebaseTiggerFragment extends Fragment {
         textViewTimeBase = (TextView) v.findViewById(R.id.tv_timebase_values_tt);
         textViewTigger = (TextView) v.findViewById(R.id.tv_tigger_values_tt);
         spinnerTiggerChannelSelect = (Spinner) v.findViewById(R.id.spinner_tigger_channel_tt);
+        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+
+        if(tabletSize){
+            textViewTigger.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            textViewTimeBase.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        }
 
         seekBarTimebase.setMax(8);
         seekBarTimebase.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -117,8 +124,16 @@ public class TimebaseTiggerFragment extends Fragment {
         seekBarTigger.setProgress(50);
 
         String [] channels = {"CH1", "CH2", "CH3", "MIC"};
-        ArrayAdapter<String> channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+        ArrayAdapter<String> channelsAdapter;
+        if(tabletSize){
+            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
+        }
+        else {
+            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+        }
+
         channelsAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
         spinnerTiggerChannelSelect.setAdapter(channelsAdapter);
         spinnerTiggerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"),true);
 

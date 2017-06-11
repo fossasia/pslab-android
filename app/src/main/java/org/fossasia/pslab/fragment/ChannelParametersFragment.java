@@ -58,6 +58,7 @@ public class ChannelParametersFragment extends Fragment {
 
         scienceLab = ScienceLabCommon.getInstance().scienceLab;
         mChart = ((OscilloscopeActivity) getActivity()).mChart;
+        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
         String [] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
         String [] channels = {"CH1", "CH2", "CH3", "MIC", "CAP","SEN", "AN8"};
@@ -65,11 +66,17 @@ public class ChannelParametersFragment extends Fragment {
         spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_ch1_cp);
         spinnerRangeCh2 = (Spinner) v.findViewById(R.id.spinner_range_ch2_cp);
         spinnerChannelSelect = (Spinner) v.findViewById(R.id.spinner_channel_select_cp);
-
-        ArrayAdapter<String> rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, ranges);
+        ArrayAdapter<String> rangesAdapter;
+        ArrayAdapter<String> channelsAdapter;
+        if(tabletSize){
+            rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, ranges);
+            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
+        }
+        else {
+            rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, ranges);
+            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+        }
         rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-
-        ArrayAdapter<String> channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
         channelsAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         spinnerRangeCh1.setAdapter(rangesAdapter);

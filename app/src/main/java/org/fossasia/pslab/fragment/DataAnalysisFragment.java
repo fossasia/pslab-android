@@ -53,9 +53,18 @@ public class DataAnalysisFragment extends Fragment {
         spinnerCurveFit = (Spinner) v.findViewById(R.id.spinner_curve_fit_da);
         spinnerChannelSelect1 = (Spinner) v.findViewById(R.id.spinner_channel_select_da1);
         spinnerChannelSelect2 = (Spinner) v.findViewById(R.id.spinner_channel_select_da2);
+        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+        ArrayAdapter<String> curvefitAdapter;
+        ArrayAdapter<String> adapter;
 
-        ArrayAdapter<String> curvefitAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, curvefits);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+        if(tabletSize){
+            curvefitAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, curvefits);
+            adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
+        }
+        else {
+            curvefitAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, curvefits);
+            adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+        }
 
         curvefitAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
