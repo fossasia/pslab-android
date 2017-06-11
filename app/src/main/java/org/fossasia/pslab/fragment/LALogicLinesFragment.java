@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,15 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Line;
 import org.fossasia.pslab.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by viveksb007 on 9/6/17.
@@ -33,7 +37,7 @@ public class LALogicLinesFragment extends Fragment {
     private Bundle params;
     private int channelMode;
     private Context context;
-    private LineChart logicLine1, logicLine2, logicLine3, logicLine4;
+    private LineChart logicLinesChart;
 
     public static LALogicLinesFragment newInstance(Bundle params, Context context) {
         LALogicLinesFragment laLogicLinesFragment = new LALogicLinesFragment();
@@ -53,40 +57,12 @@ public class LALogicLinesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
         LinearLayout llLogicLines = (LinearLayout) v.findViewById(R.id.ll_la_logic_lines);
-        llLogicLines.setWeightSum(channelMode);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f);
-        for (int i = 0; i < channelMode; i++) {
-            switch (i) {
-                case 0:
-                    logicLine1 = new LineChart(context);
-                    logicLine1.setLayoutParams(params);
-                    logicLine1.setDrawBorders(true);
-                    logicLine1.setBorderWidth(2);
-                    llLogicLines.addView(logicLine1);
-                    break;
-                case 1:
-                    logicLine2 = new LineChart(context);
-                    logicLine2.setLayoutParams(params);
-                    logicLine2.setDrawBorders(true);
-                    logicLine2.setBorderWidth(2);
-                    llLogicLines.addView(logicLine2);
-                    break;
-                case 2:
-                    logicLine3 = new LineChart(context);
-                    logicLine3.setLayoutParams(params);
-                    logicLine3.setDrawBorders(true);
-                    logicLine3.setBorderWidth(2);
-                    llLogicLines.addView(logicLine3);
-                    break;
-                case 3:
-                    logicLine4 = new LineChart(context);
-                    logicLine4.setLayoutParams(params);
-                    logicLine4.setDrawBorders(true);
-                    logicLine4.setBorderWidth(2);
-                    llLogicLines.addView(logicLine4);
-                    break;
-            }
-        }
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        logicLinesChart = new LineChart(context);
+        logicLinesChart.setLayoutParams(params);
+        logicLinesChart.setDrawBorders(true);
+        logicLinesChart.setBorderWidth(2);
+        llLogicLines.addView(logicLinesChart);
         return v;
     }
 
@@ -97,49 +73,54 @@ public class LALogicLinesFragment extends Fragment {
     }
 
     private void updateLogicLines() {
-        List<Entry> entries = new ArrayList<>();
         boolean high = false;
-        for (int i = 1; i <= 60; i++) {
-            if (high) {
-                entries.add(new Entry(i, 1));
-            } else {
-                entries.add(new Entry(i, 0));
+        List<ILineDataSet> dataSets = new ArrayList<>();
+        ArrayList<int[]> timeStamps = generateRandomTimeStamps(channelMode);
+        for (int j = 0; j < channelMode; j++) {
+            List<Entry> tempInput = new ArrayList<>();
+            int[] temp = timeStamps.get(j);
+            for (int i = 0; i < temp.length; i++) {
+                if (high) {
+                    tempInput.add(new Entry(temp[i], 1 + (j * 2)));
+                    tempInput.add(new Entry(temp[i], 0 + (j * 2)));
+                } else {
+                    tempInput.add(new Entry(temp[i], 0 + (j * 2)));
+                    tempInput.add(new Entry(temp[i], 1 + (j * 2)));
+                }
+                high = !high;
             }
-            if (i % 5 == 0) high = !high;
+            LineDataSet lineDataSet = new LineDataSet(tempInput, "Input " + (j + 1));
+            lineDataSet.setCircleRadius(1);
+            lineDataSet.setColor(Color.RED);
+            lineDataSet.setCircleColor(Color.GREEN);
+            lineDataSet.setDrawValues(false);
+            lineDataSet.setDrawCircles(false);
+            dataSets.add(lineDataSet);
         }
-        LineDataSet dataSet = new LineDataSet(entries, "Logic Line 1");
+        logicLinesChart.setData(new LineData(dataSets));
+        logicLinesChart.invalidate();
+        /*
+        LineDataSet dataSet = new LineDataSet(entries, "Logic Lines");
         dataSet.setColor(Color.RED);
         dataSet.setCircleRadius(0.1f);
         dataSet.setDrawValues(false);
-        switch (channelMode) {
-            case 1:
-                logicLine1.setData(new LineData(dataSet));
-                logicLine1.invalidate();
-                break;
-            case 2:
-                logicLine1.setData(new LineData(dataSet));
-                logicLine1.invalidate();
-                logicLine2.setData(new LineData(dataSet));
-                logicLine2.invalidate();
-                break;
-            case 3:
-                logicLine1.setData(new LineData(dataSet));
-                logicLine1.invalidate();
-                logicLine2.setData(new LineData(dataSet));
-                logicLine2.invalidate();
-                logicLine3.setData(new LineData(dataSet));
-                logicLine3.invalidate();
-                break;
-            case 4:
-                logicLine1.setData(new LineData(dataSet));
-                logicLine1.invalidate();
-                logicLine2.setData(new LineData(dataSet));
-                logicLine2.invalidate();
-                logicLine3.setData(new LineData(dataSet));
-                logicLine3.invalidate();
-                logicLine4.setData(new LineData(dataSet));
-                logicLine4.invalidate();
-                break;
+        */
+
+    }
+
+    private ArrayList<int[]> generateRandomTimeStamps(int channelMode) {
+        ArrayList<int[]> data = new ArrayList<>();
+        for (int j = 0; j < channelMode; j++) {
+            int[] temp = new int[10];
+            Random random = new Random();
+            for (int i = 0; i < 10; i++) {
+                temp[i] = random.nextInt(((5 * (i + 1) - 1) - (5 * i + 1)) + 1) + (5 * i + 1);
+            }
+            data.add(temp);
         }
+        for (int[] temp : data) {
+            Log.v("timestamp", Arrays.toString(temp));
+        }
+        return data;
     }
 }
