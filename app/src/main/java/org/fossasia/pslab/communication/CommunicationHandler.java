@@ -111,7 +111,7 @@ public class CommunicationHandler {
 
     public void close() throws IOException {
         if (mConnection == null) {
-            throw new IOException("Already closed");
+            return;
         }
         mConnection.releaseInterface(mDataInterface);
         mConnection.releaseInterface(mControlInterface);
