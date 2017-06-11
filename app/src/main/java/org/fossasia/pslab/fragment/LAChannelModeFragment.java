@@ -1,8 +1,6 @@
 package org.fossasia.pslab.fragment;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.ActivityInfo;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -78,7 +76,12 @@ public class LAChannelModeFragment extends Fragment {
                         llChannel3.setVisibility(View.VISIBLE);
                         llChannel4.setVisibility(View.VISIBLE);
                         break;
-
+                    default:
+                        channelMode = 1;
+                        llChannel1.setVisibility(View.VISIBLE);
+                        llChannel2.setVisibility(View.GONE);
+                        llChannel3.setVisibility(View.GONE);
+                        llChannel4.setVisibility(View.GONE);
                 }
             }
 
