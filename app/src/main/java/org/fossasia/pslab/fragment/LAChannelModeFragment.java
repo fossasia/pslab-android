@@ -3,6 +3,7 @@ package org.fossasia.pslab.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
@@ -34,11 +36,6 @@ public class LAChannelModeFragment extends Fragment {
         LAChannelModeFragment laChannelModeFragment = new LAChannelModeFragment();
         laChannelModeFragment.activity = activity;
         return laChannelModeFragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
     }
 
     @Nullable
@@ -102,6 +99,7 @@ public class LAChannelModeFragment extends Fragment {
     }
 
     private View createSingleChannelMode(LayoutInflater inflater) {
+
         View selectView = inflater.inflate(R.layout.logic_analyzer_select_channel_mode, null);
         final Spinner channelSelectSpinner1 = (Spinner) selectView.findViewById(R.id.single_channel_input_1);
         channelSelectSpinner1.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, channels));

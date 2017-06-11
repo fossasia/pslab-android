@@ -11,6 +11,7 @@ import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.LAChannelModeFragment;
 import org.fossasia.pslab.fragment.LALogicLinesFragment;
+
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import butterknife.ButterKnife;
@@ -39,4 +40,5 @@ public class LogicalAnalyzerActivity extends AppCompatActivity
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         ft.replace(R.id.la_frame_layout, LALogicLinesFragment.newInstance(params, this)).commit();
     }
+
 }

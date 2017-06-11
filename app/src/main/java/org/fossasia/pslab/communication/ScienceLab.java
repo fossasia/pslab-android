@@ -853,7 +853,6 @@ public class ScienceLab {
     }
 
 
-
     public boolean fetchChannelOneShot(int channelNumber) {
         int offset = 0;
         int samples = this.aChannels.get(channelNumber - 1).length;
@@ -970,7 +969,7 @@ public class ScienceLab {
         return source.CHOSA;
     }
 
-    private double getVoltage(String channelName, Integer sample){
+    private double getVoltage(String channelName, Integer sample) {
         this.voltmeterAutoRange(channelName);
         return this.getAverageVoltage(channelName, sample);
     }
@@ -978,25 +977,25 @@ public class ScienceLab {
     private double voltmeterAutoRange(String channelName) {
         if (this.analogInputSources.get(channelName).gainPGA == 0)
             return 0;
-        this.setGain(channelName,0,true);
+        this.setGain(channelName, 0, true);
         double V = this.getAverageVoltage(channelName, null);
         return this.autoSelectRange(channelName, V);
     }
 
     private double autoSelectRange(String channelName, double V) {
         double[] keys = new double[]{8.0, 4.0, 3.0, 2.0, 1.5, 1.0, 0.5, 0.0};
-        Map<Double,Integer> cutoffs = new HashMap<>();
-        cutoffs.put(8.0,0);
-        cutoffs.put(4.0,1);
-        cutoffs.put(3.0,2);
-        cutoffs.put(2.0,3);
-        cutoffs.put(1.5,4);
-        cutoffs.put(1.0,5);
-        cutoffs.put(0.5,6);
-        cutoffs.put(0.0,7);
+        Map<Double, Integer> cutoffs = new HashMap<>();
+        cutoffs.put(8.0, 0);
+        cutoffs.put(4.0, 1);
+        cutoffs.put(3.0, 2);
+        cutoffs.put(2.0, 3);
+        cutoffs.put(1.5, 4);
+        cutoffs.put(1.0, 5);
+        cutoffs.put(0.5, 6);
+        cutoffs.put(0.0, 7);
 
         int g = 0;
-        for(int i=0; i < keys.length ; i++) {
+        for (int i = 0; i < keys.length; i++) {
             if (abs(V) > keys[i]) {
                 g = cutoffs.get(keys[i]);
                 break;
@@ -1007,16 +1006,16 @@ public class ScienceLab {
     }
 
     private void autoRangeScope(double tg) {
-        Map<String, double[]> tmp = this.captureTwo(1000,tg, null);
+        Map<String, double[]> tmp = this.captureTwo(1000, tg, null);
         double[] x = tmp.get("x");
         double[] y1 = tmp.get("y1");
         double[] y2 = tmp.get("y2");
-        for(int i=0;i < y1.length; i++){
+        for (int i = 0; i < y1.length; i++) {
             y1[i] = abs(y1[i]);
             y2[i] = abs(y2[i]);
         }
-        this.autoSelectRange("CH1",max(y1));
-        this.autoSelectRange("CH2",max(y2));
+        this.autoSelectRange("CH1", max(y1));
+        this.autoSelectRange("CH2", max(y2));
 
     }
 
@@ -1059,7 +1058,7 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
             mPacketHandler.sendInt(startingPosition);
             mPacketHandler.sendInt(totalPoints);
-            for(int i=0; i < totalPoints; i++){
+            for (int i = 0; i < totalPoints; i++) {
                 this.buffer[i] = mPacketHandler.getInt();
             }
             mPacketHandler.getAcknowledgement();
@@ -1078,7 +1077,7 @@ public class ScienceLab {
             mPacketHandler.getAcknowledgement();
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e(TAG,"Error in clearing buffer");
+            Log.e(TAG, "Error in clearing buffer");
         }
     }
 
@@ -1088,19 +1087,19 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.FILL_BUFFER);
             mPacketHandler.sendInt(startingPosition);
             mPacketHandler.sendInt(pointArray.length);
-            for( int i=0; i < pointArray.length; i++) {
+            for (int i = 0; i < pointArray.length; i++) {
                 mPacketHandler.sendInt(pointArray[i]);
             }
             mPacketHandler.getAcknowledgement();
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e(TAG,"Error in filling Buffer");
+            Log.e(TAG, "Error in filling Buffer");
         }
 
     }
 
-    private void startStreaming(int tg, String channel) throws IOException{
-        if(this.streaming)
+    private void startStreaming(int tg, String channel) throws IOException {
+        if (this.streaming)
             this.stopStreaming();
         try {
             mPacketHandler.sendByte(mCommandsProto.ADC);
@@ -1120,8 +1119,7 @@ public class ScienceLab {
             byte[] data = new byte[2000];
             mPacketHandler.read(data, 2000);
             //mPacketHandler.flush(); flush not implemented
-        }
-        else
+        } else
             Log.e(TAG, "Not streaming");
         this.streaming = false;
     }
@@ -1144,13 +1142,807 @@ public class ScienceLab {
 
     /* DIGITAL SECTION */
 
-    public int calculateDigitalChannel(String name) {
+    public Integer calculateDigitalChannel(String name) {
         if (Arrays.asList(DigitalChannel.digitalChannelNames).contains(name))
             return Arrays.asList(DigitalChannel.digitalChannelNames).indexOf(name);
         else {
             Log.v(TAG, "Invalid channel " + name + " , selecting ID1 instead ");
-            return 0;
+            return null;
         }
+    }
+
+    private Double getHighFrequencyBackup(String pin) {
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.GET_HIGH_FREQUENCY);
+            mPacketHandler.sendByte(this.calculateDigitalChannel(pin));
+            int scale = mPacketHandler.getByte();
+            long value = mPacketHandler.getLong();
+            mPacketHandler.getAcknowledgement();
+            return scale * value / 1.0e-1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Double getHighFrequency(String pin) {
+        /*
+        Retrieves the frequency of the signal connected to ID1. for frequencies > 1MHz
+		also good for lower frequencies, but avoid using it since
+		the oscilloscope cannot be used simultaneously due to hardware limitations.
+		The input frequency is fed to a 32 bit counter for a period of 100mS.
+		The value of the counter at the end of 100mS is used to calculate the frequency.
+        */
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.GET_ALTERNATE_HIGH_FREQUENCY);
+            mPacketHandler.sendByte(this.calculateDigitalChannel(pin));
+            int scale = mPacketHandler.getByte();
+            long value = mPacketHandler.getLong();
+            mPacketHandler.getAcknowledgement();
+            return scale * value / 1.0e-1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Double getFrequency(String channel, Integer timeout) {
+        /*
+        Frequency measurement on IDx.
+		Measures time taken for 16 rising edges of input signal.
+		returns the frequency in Hertz
+        */
+        if (channel == null) channel = "CNTR";
+        if (timeout == null) timeout = 2;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+            mPacketHandler.sendByte(mCommandsProto.GET_FREQUENCY);
+            int timeoutMSB = ((int) (timeout * 64e6)) >> 16;
+            mPacketHandler.sendInt(timeoutMSB);
+            mPacketHandler.sendByte(this.calculateDigitalChannel(channel));
+            mPacketHandler.waitForData(); // todo : complete "waitForData"
+            int tmt = mPacketHandler.getByte();
+            long[] x = new long[2];
+            x[0] = mPacketHandler.getLong();
+            x[1] = mPacketHandler.getLong();
+            mPacketHandler.getAcknowledgement();
+            if (tmt != 0) return null;
+            if ((x[1] - x[0]) != 0)
+                return 16 * 64e6 / (x[1] - x[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Double r2rTime(String channel, Integer skipCycle, Integer timeout) {
+        /*
+        Return a list of rising edges that occured within the timeout period.
+        */
+        if (skipCycle == null) skipCycle = 0;
+        if (timeout == null) timeout = 5;
+        if (timeout > 60) timeout = 60;
+        this.startOneChannelLA(channel, 3, null, 0);
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < timeout) {
+            LinkedHashMap<String, Integer> initialStates = this.getLAInitialStates();
+            if (initialStates.get("A") == this.MAX_SAMPLES / 4)
+                initialStates.put("A", 0);
+            if (initialStates.get("A") >= skipCycle + 2) {
+                long[] data = this.fetchLongDataFromLA(initialStates.get("A"), 1);
+                LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+                tempMap.put("ID1", initialStates.get("ID1"));
+                tempMap.put("ID2", initialStates.get("ID2"));
+                tempMap.put("ID3", initialStates.get("ID3"));
+                tempMap.put("ID4", initialStates.get("ID4"));
+                tempMap.put("SEN", initialStates.get("SEN"));
+                double[] doubleData = new double[data.length];
+                for (int i = 0; i < data.length; i++) {
+                    doubleData[i] = data[i];
+                }
+                this.dChannels.get(0).loadData(tempMap, doubleData);
+                return 1e-6 * (this.dChannels.get(0).timestamps[skipCycle + 1] - this.dChannels.get(0).timestamps[0]);
+            }
+            SystemClock.sleep(100);
+        }
+        return null;
+    }
+
+    public Double f2fTime(String channel, Integer skipCycle, Integer timeout) {
+        /*
+        Return a list of falling edges that occured within the timeout period.
+        */
+        if (skipCycle == null) skipCycle = 0;
+        if (timeout == null) timeout = 5;
+        if (timeout > 60) timeout = 60;
+        this.startOneChannelLA(channel, 2, null, 0);
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < timeout) {
+            LinkedHashMap<String, Integer> initialStates = this.getLAInitialStates();
+            if (initialStates.get("A") == this.MAX_SAMPLES / 4)
+                initialStates.put("A", 0);
+            if (initialStates.get("A") >= skipCycle + 2) {
+                long[] data = this.fetchLongDataFromLA(initialStates.get("A"), 1);
+                LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+                tempMap.put("ID1", initialStates.get("ID1"));
+                tempMap.put("ID2", initialStates.get("ID2"));
+                tempMap.put("ID3", initialStates.get("ID3"));
+                tempMap.put("ID4", initialStates.get("ID4"));
+                tempMap.put("SEN", initialStates.get("SEN"));
+                double[] doubleData = new double[data.length];
+                for (int i = 0; i < data.length; i++) {
+                    doubleData[i] = data[i];
+                }
+                this.dChannels.get(0).loadData(tempMap, doubleData);
+                return 1e-6 * (this.dChannels.get(0).timestamps[skipCycle + 1] - this.dChannels.get(0).timestamps[0]);
+            }
+            SystemClock.sleep(100);
+        }
+        return null;
+    }
+
+    public Double measureInterval(String channel1, String channel2, String edge1, String edge2, Float timeout) {
+        /*
+        Measures time intervals between two logic level changes on any two digital inputs(both can be the same)
+
+		For example, one can measure the time interval between the occurence of a rising edge on ID1, and a falling edge on ID3.
+		If the returned time is negative, it simply means that the event corresponding to channel2 occurred first.
+
+		Returns the calculated time
+        */
+
+        if (timeout == null) timeout = 0.1f;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.INTERVAL_MEASUREMENTS);
+            int timeoutMSB = ((int) (timeout * 64e6)) >> 16;
+            mPacketHandler.sendInt(timeoutMSB);
+            mPacketHandler.sendByte(this.calculateDigitalChannel(channel1) | (this.calculateDigitalChannel(channel2) << 4));
+            int params = 0;
+            if ("rising".equals(edge1))
+                params |= 3;
+            else if ("falling".equals(edge1))
+                params |= 2;
+            else
+                params |= 4;
+
+            if ("rising".equals(edge2))
+                params |= 3 << 3;
+            else if ("falling".equals(edge2))
+                params |= 2 << 3;
+            else
+                params |= 4 << 3;
+
+            mPacketHandler.sendByte(params);
+            long A = mPacketHandler.getLong();
+            long B = mPacketHandler.getLong();
+            int tmt = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            if (tmt > timeoutMSB || B == 0) return null;
+
+            return (B - A + 20) / 64e6;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public double[] dutyCycle(String channel, Double timeout) {
+        /*
+        duty cycle measurement on channel
+		returns wavelength(seconds), and length of first half of pulse(high time)
+		low time = (wavelength - high time)
+        */
+        if (channel == null) channel = "ID1";
+        if (timeout == null) timeout = 1.;
+        Map<String, double[]> data = this.measureMultipleDigitalEdges(channel, channel, "rising", "falling", 2, 2, timeout, null, true);
+        double[] retData = new double[2];
+        if (data != null) {
+            double[] x = data.get("CHANNEL1");
+            double[] y = data.get("CHANNEL2");
+            if (x != null && y != null) {  // Both timers registered something. did not timeout
+                if (y[0] > 0) {
+                    retData[0] = y[0];
+                    retData[1] = x[1];
+                } else {
+                    if (y[1] > x[1]) {
+                        retData[0] = -1;
+                        retData[1] = -1;
+                        return retData;
+                    }
+                    retData[0] = y[1];
+                    retData[1] = x[1];
+                }
+                double[] params = new double[2];
+                params[0] = retData[1];
+                params[1] = retData[0] / retData[1];
+                if (params[1] > 0.5) {
+                    Log.v(TAG, Arrays.toString(x) + "\n" + Arrays.toString(y) + "\n" + Arrays.toString(retData));
+                }
+                return params;
+            }
+        }
+        retData[0] = -1;
+        retData[1] = -1;
+        return retData;
+    }
+
+    public Double pulseTime(String channel, String pulseType, Double timeout) {
+        if (channel == null) channel = "ID1";
+        if (pulseType == null) pulseType = "LOW";
+        if (timeout == null) timeout = 0.1;
+
+        Map<String, double[]> data = this.measureMultipleDigitalEdges(channel, channel, "rising", "falling", 2, 2, timeout, null, true);
+        if (data != null) {
+            double[] x = data.get("CHANNEL1");
+            double[] y = data.get("CHANNEL2");
+            if (x != null && y != null) { // Both timers registered something. did not timeout
+                if (y[0] > 0) {
+                    if ("HIGH".equals(pulseType))
+                        return y[0];
+                    else if ("LOW".equals(pulseType)) {
+                        return x[1] - y[0];
+                    }
+                } else {
+                    if ("HIGH".equals(pulseType))
+                        return y[1];
+                    else if ("LOW".equals(pulseType)) {
+                        return Math.abs(y[0]);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private Map<String, double[]> measureMultipleDigitalEdges(String channel1, String channel2, String edgeType1, String edgeType2, int points1, int points2, Double timeout, String SQR1, Boolean zero) {
+        /*
+        Measures a set of timestamped logic level changes(Type can be selected) from two different digital inputs.
+        */
+        if (timeout == null) timeout = 0.1;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.TIMING_MEASUREMENTS);
+            int timeoutMSB = ((int) (timeout * 64e6)) >> 16;
+            mPacketHandler.sendInt(timeoutMSB);
+            mPacketHandler.sendByte(this.calculateDigitalChannel(channel1) | (this.calculateDigitalChannel(channel2) << 4));
+            int params = 0;
+            if ("rising".equals(edgeType1))
+                params |= 3;
+            else if ("falling".equals(edgeType1))
+                params |= 2;
+            else
+                params |= 4;
+
+            if ("rising".equals(edgeType2))
+                params |= 3 << 3;
+            else if ("falling".equals(edgeType2))
+                params |= 2 << 3;
+            else
+                params |= 4 << 3;
+            if (SQR1 != null) {
+                params |= (1 << 6);
+                if ("HIGH".equals(SQR1))
+                    params |= (1 << 7);
+            }
+            mPacketHandler.sendByte(params);
+            if (points1 > 4) points1 = 4;
+            if (points2 > 4) points2 = 4;
+            mPacketHandler.sendByte(points1 | (points2 << 4));
+
+            //mPacketHandler.waitForData(timeout); todo : complete waitForData in PacketHandler.java
+            long[] A = new long[points1];
+            long[] B = new long[points2];
+            for (int i = 0; i < points1; i++)
+                A[i] = mPacketHandler.getLong();
+            for (int i = 0; i < points2; i++)
+                B[i] = mPacketHandler.getLong();
+            int tmt = mPacketHandler.getInt();
+            mPacketHandler.getAcknowledgement();
+            Map<String, double[]> retData = new HashMap<>();
+            if (tmt > timeoutMSB) {
+                retData.put("CHANNEL1", null);
+                retData.put("CHANNEL2", null);
+                return retData;
+            }
+            if (zero == null) zero = true;
+            double[] A1 = new double[A.length];
+            double[] B1 = new double[B.length];
+            if (zero) {
+                for (int i = 0; i < A.length; i++) {
+                    A[i] -= A[0];
+                    A1[i] = A[i] / 64e6;
+                }
+                for (int i = 0; i < B.length; i++) {
+                    B[i] -= B[0];
+                    B1[i] = B[i] / 64e6;
+                }
+            } else {
+                for (int i = 0; i < A.length; i++) {
+                    A1[i] = A[i] / 64e6;
+                }
+                for (int i = 0; i < B.length; i++) {
+                    B1[i] = B[i] / 64e6;
+                }
+            }
+            retData.put("CHANNEL1", A1);
+            retData.put("CHANNEL2", B1);
+            return retData;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public double[] captureEdgesOne(Integer waitingTime, String aquireChannel, String triggerChannel, Integer aquireMode, Integer triggerMode) {
+        /*
+        Log timestamps of rising/falling edges on one digital input
+        */
+        if (waitingTime == null) waitingTime = 1;
+        if (aquireChannel == null) aquireChannel = "ID1";
+        if (triggerChannel == null) triggerChannel = aquireChannel;
+        if (aquireMode == null) aquireMode = 3;
+        if (triggerMode == null) triggerMode = 3;
+        this.startOneChannelLA(aquireChannel, aquireMode, triggerChannel, triggerMode);
+        SystemClock.sleep(waitingTime * 1000);
+        LinkedHashMap<String, Integer> data = this.getLAInitialStates();
+        long[] temp = this.fetchLongDataFromLA(data.get("A"), 1);
+        double[] retData = new double[temp.length];
+        for (int i = 0; i < temp.length; i++) {
+            retData[i] = temp[i] / 64e6;
+        }
+        return retData;
+    }
+
+    public void startOneChannelLABackup(Integer trigger, String channel, Integer maximumTime, ArrayList<String> triggerChannels, String edge) {
+        /*
+        start logging timestamps of rising/falling edges on ID1
+        */
+        try {
+            this.clearBuffer(0, this.MAX_SAMPLES / 2);
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.START_ONE_CHAN_LA);
+            mPacketHandler.sendInt(this.MAX_SAMPLES / 4);
+            if (triggerChannels != null & (trigger & 1) != 0) {
+                if (triggerChannels.contains("ID1")) trigger |= (1 << 4);
+                if (triggerChannels.contains("ID2")) trigger |= (1 << 5);
+                if (triggerChannels.contains("ID3")) trigger |= (1 << 6);
+            } else {
+                trigger |= 1 << (this.calculateDigitalChannel(channel) + 4);
+            }
+            if ("rising".equals(edge)) trigger |= 2;
+            trigger |= (this.calculateDigitalChannel(channel) << 2);
+
+            mPacketHandler.sendByte(trigger);
+            mPacketHandler.getAcknowledgement();
+            this.digitalChannelsInBuffer = 1;
+            for (DigitalChannel dChan : this.dChannels) {
+                dChan.prescalar = 0;
+                dChan.dataType = "long";
+                dChan.length = this.MAX_SAMPLES / 4;
+                dChan.maxTime = (int) (maximumTime * 1e6);
+                dChan.mode = DigitalChannel.EVERY_EDGE;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startOneChannelLA(String channel, Integer channelMode, String triggerChannel, Integer triggerMode) {
+        if (channel == null) channel = "ID1";
+        if (channelMode == null) channelMode = 1;
+        if (triggerChannel == null) triggerChannel = "ID1";
+        if (triggerMode == null) triggerMode = 3;
+        try {
+            this.clearBuffer(0, this.MAX_SAMPLES / 2);
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.START_ALTERNATE_ONE_CHAN_LA);
+            mPacketHandler.sendInt(this.MAX_SAMPLES / 4);
+            int aqChannel = this.calculateDigitalChannel(channel);
+            int aqMode = channelMode;
+            int trChannel = this.calculateDigitalChannel(triggerChannel);
+            int trMode = triggerMode;
+            mPacketHandler.sendByte((aqChannel << 4) | aqMode);
+            mPacketHandler.sendByte((trChannel << 4) | trMode);
+            mPacketHandler.getAcknowledgement();
+            this.digitalChannelsInBuffer = 1;
+            this.dChannels.get(0).prescalar = 0;
+            this.dChannels.get(0).dataType = "long";
+            this.dChannels.get(0).length = this.MAX_SAMPLES / 4;
+            this.dChannels.get(0).maxTime = (int) (67 * 1e6);
+            this.dChannels.get(0).mode = channelMode;
+            this.dChannels.get(0).channelName = channel;
+            if (trMode == 3 || trMode == 4 || trMode == 5)
+                this.dChannels.get(0).initialStateOverride = 2;
+            else if (trMode == 2)
+                this.dChannels.get(0).initialStateOverride = 1;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startTwoChannelLA(ArrayList<String> channels, ArrayList<Integer> modes, Integer maximumTime, Integer trigger, String edge, String triggerChannel) {
+        if (maximumTime == null) maximumTime = 67;
+        if (trigger == null) trigger = 0;
+        if (edge == null) edge = "rising";
+        if (channels == null) {
+            channels = new ArrayList<>();
+            channels.add("ID1");
+            channels.add("ID2");
+        }
+        if (modes == null) {
+            modes = new ArrayList<>();
+            modes.add(1);
+            modes.add(1);
+        }
+        int[] chans = new int[]{this.calculateDigitalChannel(channels.get(0)), this.calculateDigitalChannel(channels.get(1))};
+        if (triggerChannel == null) triggerChannel = channels.get(0);
+        if (trigger != 0) {
+            trigger = 1;
+            if ("falling".equals(edge)) trigger |= 2;
+            trigger |= (this.calculateDigitalChannel(triggerChannel) << 4);
+        }
+        try {
+            this.clearBuffer(0, this.MAX_SAMPLES);
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.START_TWO_CHAN_LA);
+            mPacketHandler.sendInt(this.MAX_SAMPLES / 4);
+            mPacketHandler.sendByte(trigger);
+            mPacketHandler.sendByte((modes.get(1) << 4) | modes.get(0));
+            mPacketHandler.sendByte((chans[1] << 4) | chans[0]);
+            mPacketHandler.getAcknowledgement();
+            for (int i = 0; i < 2; i++) {
+                DigitalChannel temp = this.dChannels.get(i);
+                temp.prescalar = 0;
+                temp.length = this.MAX_SAMPLES / 4;
+                temp.dataType = "long";
+                temp.maxTime = (int) (maximumTime * 1e6);
+                temp.mode = modes.get(i);
+                temp.channelNumber = chans[i];
+                temp.channelName = channels.get(i);
+            }
+            this.digitalChannelsInBuffer = 2;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startThreeChannelLA(ArrayList<Integer> modes, String triggerChannel, Integer triggerMode) {
+        /*
+        Start logging timestamps of rising/falling edges on ID1,ID2,ID3
+        */
+        if (modes == null) {
+            modes = new ArrayList<>();
+            modes.add(1);
+            modes.add(1);
+            modes.add(1);
+        }
+        if (triggerChannel == null) {
+            triggerChannel = "ID1";
+        }
+        if (triggerMode == null) {
+            triggerMode = 3;
+        }
+        try {
+            this.clearBuffer(0, this.MAX_SAMPLES);
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.START_THREE_CHAN_LA);
+            mPacketHandler.sendInt(this.MAX_SAMPLES / 4);
+            int trChan = this.calculateDigitalChannel(triggerChannel);
+            int trMode = triggerMode;
+
+            mPacketHandler.sendInt(modes.get(0) | (modes.get(1) << 4) | (modes.get(2) << 8));
+            mPacketHandler.sendByte((trChan << 4) | trMode);
+            mPacketHandler.getAcknowledgement();
+            this.digitalChannelsInBuffer = 3;
+
+            for (int i = 0; i < 3; i++) {
+                DigitalChannel temp = this.dChannels.get(i);
+                temp.prescalar = 0;
+                temp.length = this.MAX_SAMPLES / 4;
+                temp.dataType = "int";
+                temp.maxTime = (int) (1e3);
+                temp.mode = modes.get(i);
+                temp.channelName = DigitalChannel.digitalChannelNames[i];
+                if (trMode == 3 || trMode == 4 || trMode == 5) {
+                    temp.initialStateOverride = 2;
+                } else if (trMode == 2) {
+                    temp.initialStateOverride = 1;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startFourChannelLA(Integer trigger, Double maximumTime, ArrayList<Integer> modes, String edge, ArrayList<Boolean> triggerChannel) {
+        /*
+        Four channel Logic Analyzer.
+		Start logging timestamps from a 64MHz counter to record level changes on ID1,ID2,ID3,ID4.
+        */
+        /*
+        triggerChannel[0] -> ID1
+        triggerChannel[1] -> ID2
+        triggerChannel[2] -> ID3
+        */
+        if (trigger == null) trigger = 1;
+        if (maximumTime == null) maximumTime = 0.001;
+        if (modes == null) {
+            modes = new ArrayList<>();
+            modes.add(1);
+            modes.add(1);
+            modes.add(1);
+        }
+        if (edge == null) edge = "0";
+        this.clearBuffer(0, this.MAX_SAMPLES);
+        int prescale = 0;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.START_FOUR_CHAN_LA);
+            mPacketHandler.sendInt(this.MAX_SAMPLES / 4);
+            mPacketHandler.sendInt(modes.get(0) | (modes.get(1) << 4) | (modes.get(2) << 8) | (modes.get(3) << 12));
+            mPacketHandler.sendByte(prescale);
+            int triggerOptions = 0;
+            if (triggerChannel.get(0)) triggerOptions |= 4;
+            if (triggerChannel.get(1)) triggerOptions |= 8;
+            if (triggerChannel.get(2)) triggerOptions |= 16;
+            if (triggerOptions == 0)
+                triggerOptions |= 4;  // Select one trigger channel(ID1) if none selected
+            if ("rising".equals(edge)) triggerOptions |= 2;
+            trigger |= triggerOptions;
+            mPacketHandler.sendByte(trigger);
+            mPacketHandler.getAcknowledgement();
+            this.digitalChannelsInBuffer = 4;
+            int i = 0;
+            for (DigitalChannel dChan : this.dChannels) {
+                dChan.prescalar = prescale;
+                dChan.dataType = "int";
+                dChan.length = this.MAX_SAMPLES / 4;
+                dChan.maxTime = (int) (maximumTime * 1e6);
+                dChan.mode = modes.get(i);
+                dChan.channelName = DigitalChannel.digitalChannelNames[i];
+                i++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public LinkedHashMap<String, Integer> getLAInitialStates() {
+        /*
+        fetches the initial states of digital inputs that were recorded right before the Logic analyzer was started,
+        and the total points each channel recorded
+        */
+        try {
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.GET_INITIAL_DIGITAL_STATES);
+            int initial = mPacketHandler.getInt();
+            int A = (mPacketHandler.getInt() - initial) / 2;
+            int B = (mPacketHandler.getInt() - initial) / 2 - this.MAX_SAMPLES / 4;
+            int C = (mPacketHandler.getInt() - initial) / 2 - 2 * this.MAX_SAMPLES / 4;
+            int D = (mPacketHandler.getInt() - initial) / 2 - 3 * this.MAX_SAMPLES / 4;
+            int s = mPacketHandler.getByte();
+            int sError = mPacketHandler.getByte();
+            mPacketHandler.getAcknowledgement();
+
+            if (A == 0) A = this.MAX_SAMPLES / 4;
+            if (B == 0) B = this.MAX_SAMPLES / 4;
+            if (C == 0) C = this.MAX_SAMPLES / 4;
+            if (D == 0) D = this.MAX_SAMPLES / 4;
+
+            if (A < 0) A = 0;
+            if (B < 0) B = 0;
+            if (C < 0) C = 0;
+            if (D < 0) D = 0;
+
+            LinkedHashMap<String, Integer> retData = new LinkedHashMap<>();
+            retData.put("A", A);
+            retData.put("B", B);
+            retData.put("C", C);
+            retData.put("D", D);
+
+            // putting 1 -> true & 0 -> false
+            if ((s & 1) != 0)
+                retData.put("ID1", 1);
+            else
+                retData.put("ID1", 0);
+
+            if ((s & 2) != 0)
+                retData.put("ID2", 1);
+            else
+                retData.put("ID2", 0);
+
+            if ((s & 4) != 0)
+                retData.put("ID3", 1);
+            else
+                retData.put("ID3", 0);
+
+            if ((s & 8) != 0)
+                retData.put("ID4", 1);
+            else
+                retData.put("ID4", 0);
+
+            if ((s & 16) != 16)
+                retData.put("SEN", 1);
+            else
+                retData.put("SEN", 0);
+
+            return retData;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void stopLA() {
+        /*
+        Stop any running logic analyzer function
+        */
+        try {
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.STOP_LA);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int[] fetchIntDataFromLA(Integer bytes, Integer channel) {
+        /*
+        Fetches the data stored by DMA. integer address increments
+        */
+        if (channel == null) channel = 1;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.FETCH_INT_DMA_DATA);
+            mPacketHandler.sendInt(bytes);
+            mPacketHandler.sendByte(channel - 1);
+            byte[] readData = new byte[bytes * 2];
+            mPacketHandler.read(readData, bytes * 2);
+            int[] t = new int[bytes * 2];
+            Arrays.fill(t, 0);
+            for (int i = 0; i < bytes; i++) {
+                t[i] = ByteBuffer.wrap(Arrays.copyOfRange(readData, 2 * i, 2 * i + 2)).getInt();
+            }
+            mPacketHandler.getAcknowledgement();
+            // Trimming array t
+            int markerA = 0;
+            for (int i = 0; i < t.length; i++) {
+                if (t[i] != 0) {
+                    markerA = i;
+                    break;
+                }
+            }
+            int markerB = 0;
+            for (int i = t.length - 1; i >= 0; i--) {
+                if (t[i] != 0) {
+                    markerB = i;
+                    break;
+                }
+            }
+            int[] trimT = Arrays.copyOfRange(t, markerA, markerB + 1);
+            int rollOver = 0;
+            for (int i = 1; i < trimT.length; i++) {
+                if (t[i] < t[i - 1] && t[i] != 0) {
+                    rollOver++;
+                    for (int j = i; j < trimT.length; j++) {
+                        trimT[j] += 65535;
+                    }
+                }
+            }
+            return trimT;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public long[] fetchLongDataFromLA(Integer bytes, Integer channel) {
+        /*
+        fetches the data stored by DMA. long address increments
+        */
+        if (channel == null) channel = 1;
+        try {
+            mPacketHandler.sendByte(mCommandsProto.TIMING);
+            mPacketHandler.sendByte(mCommandsProto.FETCH_LONG_DMA_DATA);
+            mPacketHandler.sendInt(bytes);
+            mPacketHandler.sendByte(channel - 1);
+            byte[] readData = new byte[bytes * 4];
+            mPacketHandler.read(readData, bytes * 4);
+            mPacketHandler.getAcknowledgement();
+            long[] data = new long[bytes];
+            for (int i = 0; i < bytes; i++) {
+                data[i] = ByteBuffer.wrap(Arrays.copyOfRange(readData, 4 * i, 4 * i + 4)).getLong();
+            }
+            // Trimming array data
+            int markerA = 0;
+            for (int i = 0; i < data.length; i++) {
+                if (data[i] != 0) {
+                    markerA = i;
+                    break;
+                }
+            }
+            int markerB = 0;
+            for (int i = data.length - 1; i >= 0; i--) {
+                if (data[i] != 0) {
+                    markerB = i;
+                    break;
+                }
+            }
+            return Arrays.copyOfRange(data, markerA, markerB + 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean fetchLAChannels() {
+        /*
+        reads and stores the channels in this.dChannels.
+        */
+        LinkedHashMap<String, Integer> data = this.getLAInitialStates();
+        for (int i = 0; i < 4; i++) {
+            if (this.dChannels.get(i).channelNumber < this.digitalChannelsInBuffer) {
+                this.fetchLAChannel_(i, data);
+            }
+        }
+        return true;
+    }
+
+    private boolean fetchLAChannel_(Integer channelNumber, LinkedHashMap<String, Integer> initialStates) {
+        DigitalChannel dChan = this.dChannels.get(channelNumber);
+        if (dChan.channelNumber >= this.digitalChannelsInBuffer) {
+            Log.e(TAG, "Channel Unavailable");
+            return false;
+        }
+        int samples = dChan.length;
+
+        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+        tempMap.put("ID1", initialStates.get("ID1"));
+        tempMap.put("ID2", initialStates.get("ID2"));
+        tempMap.put("ID3", initialStates.get("ID3"));
+        tempMap.put("ID4", initialStates.get("ID4"));
+        tempMap.put("SEN", initialStates.get("SEN"));
+
+        if ("int".equals(dChan.dataType)) {
+            //  Used LinkedHashMap above (initialStates) in which iteration is done sequentially as <key-value> were inserted
+            int i = 0;
+            for (Map.Entry<String, Integer> entry : initialStates.entrySet()) {
+                if (dChan.channelNumber == i) {
+                    i = entry.getValue();
+                    break;
+                }
+                i++;
+            }
+            int[] temp = this.fetchIntDataFromLA(i, dChan.channelNumber + 1);
+            double[] data = new double[temp.length];
+            for (int j = 0; j < temp.length; j++) {
+                data[j] = temp[j];
+            }
+            dChan.loadData(tempMap, data);
+        } else {
+            //  Used LinkedHashMap above (initialStates) in which iteration is done sequentially as <key-value> were inserted
+            int i = 0;
+            for (Map.Entry<String, Integer> entry : initialStates.entrySet()) {
+                if (dChan.channelNumber * 2 == i) {
+                    i = entry.getValue();
+                    break;
+                }
+                i++;
+            }
+            long[] temp = this.fetchLongDataFromLA(i, dChan.channelNumber + 1);
+            double[] data = new double[temp.length];
+            for (int j = 0; j < temp.length; j++) {
+                data[j] = temp[j];
+            }
+            dChan.loadData(tempMap, data);
+        }
+        dChan.generateAxes();
+        return true;
     }
 
     public Map<String, Boolean> getStates() {
@@ -2038,7 +2830,6 @@ public class ScienceLab {
         Log.v(TAG, "device ID : " + value);
         return value;
     }
-
 
 
     public int readProgramAddress(int address) {
