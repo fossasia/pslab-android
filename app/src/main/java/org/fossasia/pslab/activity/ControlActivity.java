@@ -50,14 +50,14 @@ public class ControlActivity extends AppCompatActivity {
                                 break;
                         }
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.frame_layout, selectedFragment);
+                        transaction.replace(R.id.frame_layout_control, selectedFragment);
                         transaction.commit();
                         return true;
                     }
                 });
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, ControlFragmentMain.newInstance());
+        transaction.replace(R.id.frame_layout_control, ControlFragmentMain.newInstance());
         transaction.commit();
     }
 }

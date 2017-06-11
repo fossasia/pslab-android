@@ -8,7 +8,7 @@
     android:layout_marginTop="10dp">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
+        android:id="@+id/cardview_control_main"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_gravity="center"

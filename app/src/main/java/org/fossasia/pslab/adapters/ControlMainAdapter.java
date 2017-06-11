@@ -21,7 +21,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
         public TextView mTextView;
         public ViewHolder(View v) {
             super(v);
-            mCardView = (CardView) v.findViewById(R.id.card_view);
+            mCardView = (CardView) v.findViewById(R.id.cardview_control_main);
             mTextView = (TextView) v.findViewById(R.id.text_control_main1);
         }
     }

@@ -9,7 +9,7 @@
     tools:context="org.fossasia.pslab.activity.ControlActivity">
 
     <FrameLayout
-        android:id="@+id/frame_layout"
+        android:id="@+id/frame_layout_control"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/navigation"
