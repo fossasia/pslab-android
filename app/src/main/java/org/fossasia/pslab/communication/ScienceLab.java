@@ -647,11 +647,18 @@ public class ScienceLab {
         }
     }
 
-    public void captureFullSpeedHr(String channel, int samples, double timeGap, List<String> args) {
+    public Map<String, double[]> captureFullSpeedHr(String channel, int samples, double timeGap, List<String> args) {
         this.captureFullSpeedHrInitialize(channel, samples, timeGap, args);
         SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1));
         Map<String, double[]> axisData = retrieveBufferData(channel, this.samples, this.timebase);
-        // todo : After proper Calibration implementation in AnalogInputSource, then return timeBase and processed "Y" from this function
+        if (axisData == null) {
+            Log.v(TAG, "Retrieved Buffer Data as null");
+            return null;
+        }
+        Map<String, double[]> retData = new HashMap<>();
+        retData.put("x", axisData.get("x"));
+        retData.put("y", this.analogInputSources.get(channel).cal12(axisData.get("y")));
+        return retData;
     }
 
     private Map<String, double[]> retrieveBufferData(String channel, int samples, double timeGap) {
@@ -2029,13 +2036,39 @@ public class ScienceLab {
         }
     }
 
-    public double captureCapacitance(int samples, int tg) {
-        // todo : implement this method
-        return 0;
+    public double[] captureCapacitance(int samples, int timeGap) {
+        AnalyticsClass analyticsClass = new AnalyticsClass();
+        this.chargeCap(1, 50000);
+        Map<String, double[]> data = this.captureFullSpeedHr("CAP", samples, timeGap, Arrays.asList("READ_CAP"));
+        double[] x = data.get("x");
+        double[] y = data.get("y");
+        for (int i = 0; i < x.length; i++) {
+            x[i] = x[i] * 1e-6;
+        }
+        ArrayList<double[]> fitres = analyticsClass.fitExponential(x, y);
+        if (fitres != null) {
+            // Not return extra data as in python-communication library. Not required at this point.
+            return fitres.get(0);
+        }
+        return null;
+    }
+
+    public Double capacitanceViaRCDischarge() {
+        double cap = getCapacitorRange()[1];
+        double time = 2 * cap * 20e3 * 1e6; // uSec
+        int samples = 500;
+        if (time > 5000 && time < 10e6) {
+            if (time > 50e3) samples = 250;
+            double RC = this.captureCapacitance(samples, (int) (time / samples))[1]; // todo : complete statement after writing captureCapacitance method
+            return RC / 10e3;
+        } else {
+            Log.v(TAG, "cap out of range " + time + cap);
+            return null;
+        }
     }
 
     public double[] getCapacitorRange(int cTime) {
-        // returns values as a double array arr[0] = v,  arr[1] = c   todo: name these variables 'v','c' properly
+        // returns values as a double array arr[0] = v,  arr[1] = c
         this.chargeCap(0, 30000);
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
@@ -2071,21 +2104,7 @@ public class ScienceLab {
         return range;
     }
 
-    public double capacitanceViaRCDischarge() {
-        double cap = getCapacitorRange()[1];
-        double time = 2 * cap * 20e3 * 1e6; // uSec
-        int samples = 500;
-        if (time > 5000 && time < 10e6) {
-            if (time > 50e3) samples = 250;
-            double RC = this.captureCapacitance(samples, (int) (time / samples)); // todo : complete statement after writing captureCapacitance method
-            return RC / 10e3;
-        } else {
-            Log.v(TAG, "cap out of range " + time + cap);
-            return 0;
-        }
-    }
-
-    public double getCapacitance() {
+    public Double getCapacitance() {
         double[] GOOD_VOLTS = new double[]{2.5, 2.8};
         int CT = 10;
         int CR = 1;
@@ -2101,7 +2120,7 @@ public class ScienceLab {
             double C = temp[1];
             if (CT > 30000 && V < 0.1) {
                 Log.v(TAG, "Capacitance too high for this method");
-                return 0;
+                return null;
             } else if (V > GOOD_VOLTS[0] && V < GOOD_VOLTS[1])
                 return C;
             else if (V < GOOD_VOLTS[0] && V > 0.01 && CT < 40000) {
@@ -2110,7 +2129,7 @@ public class ScienceLab {
                     iterations += 1;
                     Log.v(TAG, "Increased CT " + CT);
                 } else if (iterations == 10)
-                    return 0;
+                    return null;
                 else return C;
             } else if (V <= 0.1 && CR < 3)
                 CR += 1;
@@ -2119,7 +2138,7 @@ public class ScienceLab {
                 return this.capacitanceViaRCDischarge();
             }
         }
-        return 0;
+        return null;
     }
 
     public double[] getCapacitance(int currentRange, double trim, int chargeTime) {  // time in uSec

@@ -113,17 +113,24 @@ public class AnalogInputSource {
         voltToCode12 = new PolynomialFunction(new double[]{0., 4095., -4095 * intercept / slope});
     }
 
-    double cal12(double RAW) {
-        double avg_shifts = (adc_shifts.get((int) Math.floor(RAW)) + adc_shifts.get((int) Math.ceil(RAW))) / 2;
-        RAW -= 4095 * avg_shifts / 3.3;
-        return (polynomials.get((int) gain).value(RAW));
-
+    public double[] cal12(double[] RAW) {
+        double[] calcData = new double[RAW.length];
+        for (int i = 0; i < RAW.length; i++) {
+            double avg_shifts = (adc_shifts.get((int) Math.floor(RAW[i])) + adc_shifts.get((int) Math.ceil(RAW[i]))) / 2;
+            RAW[i] -= 4095 * avg_shifts / 3.3;
+            calcData[i] = (polynomials.get((int) gain).value(RAW[i]));
+        }
+        return calcData;
     }
 
-    double cal10(double RAW) {
-        RAW *= 4095 / 1023;
-        double avg_shifts = (adc_shifts.get((int) Math.floor(RAW)) + adc_shifts.get((int) Math.ceil(RAW))) / 2;
-        RAW -= 4095 * avg_shifts / 3.3;
-        return (polynomials.get((int) gain).value(RAW));
+    public double[] cal10(double[] RAW) {
+        double[] calcData = new double[RAW.length];
+        for (int i = 0; i < RAW.length; i++) {
+            RAW[i] *= 4095 / 1023;
+            double avg_shifts = (adc_shifts.get((int) Math.floor(RAW[i])) + adc_shifts.get((int) Math.ceil(RAW[i]))) / 2;
+            RAW[i] -= 4095 * avg_shifts / 3.3;
+            calcData[i] = (polynomials.get((int) gain).value(RAW[i]));
+        }
+        return calcData;
     }
 }
