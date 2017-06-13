@@ -6,6 +6,7 @@ import org.fossasia.pslab.communication.CommandsProto;
 import org.fossasia.pslab.communication.PacketHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -91,6 +92,16 @@ public class SPI {
         packetHandler.sendByte(commandsProto.SPI_HEADER);
         packetHandler.sendByte(commandsProto.SEND_SPI16_BURST);
         packetHandler.sendInt(value);
+    }
+
+    public ArrayList<Byte> xfer(int channel, ArrayList<Integer> data) throws IOException {
+        start(channel);
+        ArrayList<Byte> reply = new ArrayList<>();
+        for (Integer a : data) {
+            reply.add(send8(a));
+        }
+        stop(channel);
+        return reply;
     }
 
 }
