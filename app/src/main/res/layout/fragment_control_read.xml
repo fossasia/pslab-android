@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <TableLayout
+        android:id="@+id/tablelayout_control_read1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <TableRow
+            android:id="@+id/tablerow_control_read1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="4"
+                android:layout_marginTop="5dp"
+                android:text="@string/resistance"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+            
+            <Space 
+                android:layout_width="0dp"
+                android:layout_weight="2"/>
+            
+            <Button
+                android:id="@+id/button_control_read1"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="40dp"
+                android:text="@string/read"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/tv_control_read1"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="30dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow_control_read2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/capacitance"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_weight="2"/>
+
+            <Button
+                android:id="@+id/button_control_read2"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="40dp"
+                android:text="@string/read"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/tv_control_read2"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="30dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow_control_read3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/frequency"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinner_control_read1"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:entries="@array/ID">
+            </Spinner>
+
+            <Button
+                android:id="@+id/button_control_read3"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="40dp"
+                android:text="@string/read"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:id="@+id/tv_control_read3"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="30dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow_control_read4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/count_pulses"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinner_control_read2"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:entries="@array/ID">
+            </Spinner>
+
+            <Button
+                android:id="@+id/button_control_read4"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="40dp"
+                android:text="@string/read"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:id="@+id/tv_control_read4"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="30dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow_control_read5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp" >
+
+            <Button
+                android:id="@+id/button_control_read5"
+                android:layout_width="80dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:text="@string/reset"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimaryDark" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow_control_read6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/voltage"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_weight="2"/>
+            
+            <Button
+                android:id="@+id/button_control_read6"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="40dp"
+                android:text="@string/read"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimaryDark"
+                android:layout_marginTop="5dp"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_weight="3"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow_control_read7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/ch1"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_control_read5"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/cap"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_control_read6"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow_control_read8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/ch2"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_control_read7"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/sen"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_control_read8"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow_control_read9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/ch3"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_control_read9"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/an8"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_control_read10"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
