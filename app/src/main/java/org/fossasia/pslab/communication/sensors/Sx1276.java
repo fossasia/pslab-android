@@ -47,7 +47,6 @@ public class Sx1276 {
     private int MODE_LONG_RANGE_MODE = 0x80;
     private int MODE_SLEEP = 0x00;
     private int MODE_STDBY = 0x01;
-    private int ODE_STDBY = 0x01;
     private int MODE_TX = 0x03;
     private int MODE_RX_CONTINUOUS = 0x05;
     private int MODE_RX_SINGLE = 0x06;
@@ -180,7 +179,7 @@ public class Sx1276 {
         setupBytesArray(irqFlags);
         SPIWrite(REG_IRQ_FLAGS, bytes);
 
-        if (((irqFlags & IRQ_RX_DONE_MASK) == 1) && ((irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == 1)) {
+        if (((irqFlags & IRQ_RX_DONE_MASK) == 1) && ((irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == 0)) {
             packetIndex = 0;
             if (implicitHeaderMode == 1) {
                 packetLength = SPIRead(REG_PAYLOAD_LENGTH, 1).get(0);
@@ -224,7 +223,7 @@ public class Sx1276 {
 
     public int checkRx() throws IOException {
         byte irqFlags = SPIRead(REG_IRQ_FLAGS, 1).get(0);
-        if (((irqFlags & IRQ_RX_DONE_MASK) == 1) && ((irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == 1)) {
+        if (((irqFlags & IRQ_RX_DONE_MASK) == 1) && ((irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == 0)) {
             return 1;
         } else {
             return 0;
@@ -305,9 +304,9 @@ public class Sx1276 {
             } else {
                 setupBytesArray(0x84);
                 SPIWrite(REG_PA_DAC, bytes);
-                setupBytesArray(PA_BOOST | 0x70 | (level - 2));
-                SPIWrite(REG_PA_CONFIG, bytes);
             }
+            setupBytesArray(PA_BOOST | 0x70 | (level - 2));
+            SPIWrite(REG_PA_CONFIG, bytes);
         }
         Log.d(name, "Power " + SPIRead(REG_PA_CONFIG, 1).get(0));
     }
@@ -342,9 +341,9 @@ public class Sx1276 {
             SPIWrite(REG_DETECTION_OPTIMIZE, bytes);
             setupBytesArray(0x0a);
             SPIWrite(REG_DETECTION_THRESHOLD, bytes);
-            setupBytesArray((SPIRead(REG_MODEM_CONFIG_2, 1).get(0) & 0x0F) | ((spreadingFactor << 4) & 0xF0));
-            SPIWrite(REG_MODEM_CONFIG_2, bytes);
         }
+        setupBytesArray((SPIRead(REG_MODEM_CONFIG_2, 1).get(0) & 0x0F) | ((spreadingFactor << 4) & 0xF0));
+        SPIWrite(REG_MODEM_CONFIG_2, bytes);
     }
 
     private void setSignalBandwidth(double sbw) throws IOException {
@@ -417,16 +416,16 @@ public class Sx1276 {
 
         if ((irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == 0) {
             packetIndex = 0;
-        }
-        if (implicitHeaderMode == 0) {
-            packetLength = SPIRead(REG_PAYLOAD_LENGTH, 1).get(0);
-        } else {
-            packetLength = SPIRead(REG_RX_NB_BYTES, 1).get(0);
-        }
+            if (implicitHeaderMode == 0) {
+                packetLength = SPIRead(REG_PAYLOAD_LENGTH, 1).get(0);
+            } else {
+                packetLength = SPIRead(REG_RX_NB_BYTES, 1).get(0);
+            }
 
-        SPIWrite(REG_FIFO_ADDR_PTR, SPIRead(REG_FIFO_RX_CURRENT_ADDR, 1));
-        if (onReceive == 1) {
-            Log.d(name, "Packet Length " + packetLength);
+            SPIWrite(REG_FIFO_ADDR_PTR, SPIRead(REG_FIFO_RX_CURRENT_ADDR, 1));
+            if (onReceive == 1) {
+                Log.d(name, "Packet Length " + packetLength);
+            }
         }
 
         setupBytesArray(0);
