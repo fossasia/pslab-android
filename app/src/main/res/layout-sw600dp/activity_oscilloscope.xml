@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/layout_chart_os"
+        android:layout_width="1000dp"
+        android:layout_height="600dp">
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart_os"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_dock_os1"
+        android:layout_weight="1"
+        android:layout_toEndOf="@+id/layout_chart_os"
+        android:background="@drawable/rounded_custom_border_2">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:srcCompat="@drawable/channel_parameters"
+            android:id="@+id/button_channel_parameters_os"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="1dp"
+            android:layout_weight="2" />
+
+        <TextView
+            android:text="Channel Parameters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_channel_os"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textStyle="normal|bold"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:srcCompat="@drawable/timebase"
+            android:id="@+id/button_timebase_os"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="2" />
+
+        <TextView
+            android:text="Timebase and Tigger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_timebase_tigger_os"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textStyle="normal|bold"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/button_data_analysis_os"
+            app:srcCompat="@drawable/data_analysis"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="1dp"
+            android:layout_weight="2" />
+
+        <TextView
+            android:text="Data Analysis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_data_analysis_os"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:maxLines="1"
+            android:textStyle="normal|bold"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:srcCompat="@drawable/xymode"
+            android:id="@+id/button_xy_plot_os"
+            android:scaleType="fitCenter"
+
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="1dp"
+            android:layout_weight="2" />
+
+        <TextView
+            android:text="XY Plot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_xy_plot_os"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textStyle="normal|bold"
+            android:textSize="18sp"
+            android:elevation="24dp"
+            android:layout_marginBottom="2dp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_dock_os2"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_below="@+id/layout_chart_os"
+        android:layout_toStartOf="@+id/layout_dock_os1">
+
+    </FrameLayout>
+
+
+</RelativeLayout>
