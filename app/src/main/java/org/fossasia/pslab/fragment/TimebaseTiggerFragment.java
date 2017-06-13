@@ -8,12 +8,14 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.others.FloatSeekBar;
 
 public class TimebaseTiggerFragment extends Fragment {
@@ -72,25 +74,45 @@ public class TimebaseTiggerFragment extends Fragment {
         seekBarTimebase.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                //incomplete
-                if(progress == 0)
-                    textViewTimeBase.setText("875.00 μs");
-                if(progress == 1)
-                    textViewTimeBase.setText("1.00 ms");
-                if(progress == 2)
-                    textViewTimeBase.setText("2.00 ms");
-                if(progress == 3)
-                    textViewTimeBase.setText("4.00 ms");
-                if(progress == 4)
-                    textViewTimeBase.setText("8.00 ms");
-                if(progress == 5)
-                    textViewTimeBase.setText("25.60 ms");
-                if(progress == 6)
-                    textViewTimeBase.setText("38.40 ms");
-                if(progress == 7)
-                    textViewTimeBase.setText("51.20 ms");
-                if(progress == 8)
-                    textViewTimeBase.setText("102.40 ms");
+
+                switch (progress){
+                    case 0:
+                        textViewTimeBase.setText("875.00 μs");
+                        ((OscilloscopeActivity)getActivity()).setXAxisScale(875);
+                        break;
+                    case 1:
+                        textViewTimeBase.setText("1.00 ms");
+                        ((OscilloscopeActivity)getActivity()).setXAxisScale(1);
+                        break;
+                    case 2:
+                        textViewTimeBase.setText("2.00 ms");
+                        ((OscilloscopeActivity)getActivity()).setXAxisScale(2);
+                        break;
+                    case 3:
+                        textViewTimeBase.setText("4.00 ms");
+                        ((OscilloscopeActivity)getActivity()).setXAxisScale(4);
+                        break;
+                    case 4:
+                        textViewTimeBase.setText("8.00 ms");
+                        ((OscilloscopeActivity)getActivity()).setXAxisScale(8);
+                        break;
+                    case 5:
+                        textViewTimeBase.setText("25.60 ms");
+                        ((OscilloscopeActivity)getActivity()).setXAxisScale(25.60);
+                        break;
+                    case 6:
+                        textViewTimeBase.setText("38.40 ms");
+                        ((OscilloscopeActivity)getActivity()).setXAxisScale(38.40);
+                        break;
+                    case 7:
+                        textViewTimeBase.setText("51.20 ms");
+                        ((OscilloscopeActivity)getActivity()).setXAxisScale(51.20);
+                        break;
+                    case 8:
+                        textViewTimeBase.setText("102.40 ms");
+                        ((OscilloscopeActivity)getActivity()).setXAxisScale(102.40);
+                        break;
+                }
             }
 
             @Override
@@ -103,7 +125,8 @@ public class TimebaseTiggerFragment extends Fragment {
 
             }
         });
-        seekBarTimebase.setProgress(1);
+        seekBarTimebase.setProgress(0);
+
         seekBarTigger.setters(-16.5, 16.5);
         seekBarTigger.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -136,6 +159,17 @@ public class TimebaseTiggerFragment extends Fragment {
 
         spinnerTiggerChannelSelect.setAdapter(channelsAdapter);
         spinnerTiggerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"),true);
+        spinnerTiggerChannelSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((OscilloscopeActivity)getActivity()).tiggerChannel = spinnerTiggerChannelSelect.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return v;
     }
