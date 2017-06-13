@@ -1,5 +1,4 @@
 <resources>
-
     <string name="app_name">PSLab</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -24,6 +23,10 @@
     <string name="sensor_quick_view">Sensor QuickView</string>
     <string name="w_sensor_quick_view">Data Sensor Logger</string>
 
+    <string name="control_item_1">Control</string>
+    <string name="control_item_2">Read</string>
+    <string name="control_item_3">Advanced</string>
+
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
         <item>Applications</item>
@@ -43,4 +46,42 @@
         <item>Four Channel Mode</item>
     </string-array>
 
+    <string name="set">SET</string>
+    <string name="read">READ</string>
+    <string name="resistance">Resistance</string>
+    <string name="capacitance">Capacitance</string>
+    <string name="frequency">Frequency</string>
+    <string name="count_pulses">Count Pulses</string>
+    <string-array name="ID">
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+    </string-array>
+    <string name="reset">RESET</string>
+    <string name="voltage">Voltage</string>
+    <string name="ch1">CH1</string>
+    <string name="ch2">CH2</string>
+    <string name="ch3">CH3</string>
+    <string name="cap">CAP</string>
+    <string name="sen">SEN</string>
+    <string name="an8">AN8</string>
+    <string name="w1">W1</string>
+    <string name="w2">W2</string>
+    <string name="phase">Phase</string>
+    <string name="output">Output</string>
+    <string name="dutycycle">Duty cycle</string>
+    <string name="sqr1">SQR1</string>
+    <string name="sqr2">SQR2</string>
+    <string name="sqr3">SQR3</string>
+    <string name="sqr4">SQR4</string>
+    <string name="freq_range">10Hz-5kHz</string>
+    <string name="zero">0</string>
+    <string-array name="wave_type">
+        <item>SINE</item>
+        <item>SQUARE</item>
+    </string-array>
+    <string name="digital_outputs">Digital Outputs</string>
+    <string name="configure_PWM">Configure PWM</string>
+    <string name="waveform_generator">Arbitrary Waveform Generator</string>
 </resources>

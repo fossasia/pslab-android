@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/linearlayout_control_advanced1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+            <TextView
+                android:id="@+id/tv_control_advanced1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/waveform_generator"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <TableLayout
+            android:id="@+id/tablelayout_control_advanced1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:id="@+id/tablerow_control_advanced1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/tv_control_advanced2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/w1"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_control_advanced3"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/freq_range"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_control_advanced1"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced1"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced2"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+                <Spinner
+                    android:id="@+id/spinner_control_advanced1"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/wave_type">
+                </Spinner>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tablerow_control_advanced2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp" >
+                <TextView
+                    android:id="@+id/tv_control_advanced4"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/w2"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_control_advanced5"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/freq_range"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_control_advanced3"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced2"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced4"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+                <Spinner
+                    android:id="@+id/spinner_control_advanced2"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/wave_type">
+                </Spinner>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tablerow_control_advanced3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp" >
+                <TextView
+                    android:id="@+id/tv_control_advanced6"
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phase"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_control_advanced5"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced3"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced6"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="2"/>
+
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_control_advanced2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="15dp">
+                <Button
+                    android:id="@+id/button_control_advanced7"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/set"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:background="@color/colorPrimaryDark"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_control_advanced3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+            <TextView
+                android:id="@+id/tv_control_advanced7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/configure_PWM"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <TableLayout
+            android:id="@+id/tablelayout_control_advanced2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:id="@+id/tablerow_control_advanced4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/tv_control_advanced8"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/output"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_control_advanced9"
+                    android:layout_width="0dp"
+                    android:layout_weight="3.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phase"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_control_advanced10"
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dutycycle"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tablerow_control_advanced5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/tv_control_advanced11"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sqr1"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_control_advanced12"
+                    android:layout_width="0dp"
+                    android:layout_weight="3.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zero"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_control_advanced8"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced4"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced9"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tablerow_control_advanced6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/tv_control_advanced13"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sqr2"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_control_advanced10"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced5"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced11"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+                <Button
+                    android:id="@+id/button_control_advanced12"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced6"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced13"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tablerow_control_advanced7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp" >
+
+                <TextView
+                    android:id="@+id/tv_control_advanced14"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sqr3"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_control_advanced14"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced7"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced15"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+                <Button
+                    android:id="@+id/button_control_advanced16"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced8"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced17"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tablerow_control_advanced8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/tv_control_advanced15"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sqr4"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_control_advanced18"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced9"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced19"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+                <Button
+                    android:id="@+id/button_control_advanced20"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced10"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced21"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tablerow_control_advanced9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/tv_control_advanced16"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/frequency"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_control_advanced22"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_advanced11"
+                    android:layout_width="0dp"
+                    android:layout_weight="2.5"
+                    android:layout_height="24dp"
+                    android:background="@drawable/control_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_advanced23"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="22dp"
+                    android:background="@drawable/button_plus" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="4"/>
+
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_control_advanced4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="15dp">
+                <Button
+                    android:id="@+id/button_control_advanced24"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/set"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:background="@color/colorPrimaryDark"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_control_advanced5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+
+            <TextView
+                android:id="@+id/tv_control_advanced17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/digital_outputs"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <TableLayout
+            android:id="@+id/tablelayout_control_advanced3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:id="@+id/tablerow_control_advanced10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/tv_control_advanced18"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sqr1"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="12dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkbox_control_advanced1"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_control_advanced19"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sqr2"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="12dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkbox_control_advanced2"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_control_advanced20"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sqr3"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="12dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkbox_control_advanced3"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_control_advanced21"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sqr4"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="12dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkbox_control_advanced4"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content" />
+
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+</ScrollView>

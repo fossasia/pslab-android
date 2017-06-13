@@ -35,14 +35,13 @@ dependencies {
     compile "com.android.support:support-v4:$support_lib_version"
     compile "com.android.support:preference-v14:$support_lib_version"
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'org.apache.commons:commons-math3:3.6.1'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:8.6.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
-
     testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 }
