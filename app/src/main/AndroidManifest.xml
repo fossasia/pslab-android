@@ -32,7 +32,9 @@
         <activity android:name=".activity.ControlActivity" />
         <activity android:name=".activity.OscilloscopeActivity" />
         <activity android:name=".activity.AdvancedControlActivity" />
-        <activity android:name=".activity.LogicalAnalyzerActivity" />
+        <activity
+            android:name=".activity.LogicalAnalyzerActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
