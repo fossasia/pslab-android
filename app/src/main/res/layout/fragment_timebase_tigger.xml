@@ -14,7 +14,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:foregroundGravity="center_vertical"
             android:layout_weight="1">
 
@@ -53,11 +53,11 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
+                android:text="875.00 μs"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_timebase_values_tt"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:layout_width="85dp" />
 
         </TableRow>
 
