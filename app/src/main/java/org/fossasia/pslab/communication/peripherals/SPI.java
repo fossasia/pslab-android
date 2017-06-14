@@ -94,10 +94,10 @@ public class SPI {
         packetHandler.sendInt(value);
     }
 
-    public ArrayList<Byte> xfer(int channel, ArrayList<Integer> data) throws IOException {
+    public ArrayList<Byte> xfer(int channel, ArrayList<Byte> data) throws IOException {
         start(channel);
         ArrayList<Byte> reply = new ArrayList<>();
-        for (Integer a : data) {
+        for (Byte a : data) {
             reply.add(send8(a));
         }
         stop(channel);
