@@ -13,19 +13,20 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.LineData;
-
 
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
@@ -46,7 +47,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         XYPlotFragment.OnFragmentInteractionListener {
 
     private ScienceLab scienceLab;
-    public LineChart mChart;
+    private LineChart mChart;
     private LinearLayout linearLayout;
     private FrameLayout frameLayout;
     private ImageButton channelParametersButton;
@@ -54,8 +55,28 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private ImageButton dataAnalysisButton;
     private ImageButton xyPlotButton;
     private RelativeLayout mChartLayout;
-    int height;
-    int width;
+    private TextView leftYAxisLabel;
+    private TextView leftYAxisLabelUnit;
+    private TextView rightYAxisLabelUnit;
+    private TextView xAxisLabelUnit;
+    private int height;
+    private int width;
+    private double timebase;
+    private XAxis x1;
+    private YAxis y1;
+    private YAxis y2;
+    public boolean isCH1Selected;
+    public boolean isCH2Selected;
+    public boolean isCH3Selected;
+    public boolean isMICSelected;
+    public boolean isFourierTransformSelected;
+    public boolean isXYPlotSelected;
+    public boolean sineFit;
+    public boolean squareFit;
+    private String leftYAxisInput;
+    public String tiggerChannel;
+    public String curveFittingChannel1;
+    public String curveFittingChannel2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +92,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         timebaseButton = (ImageButton) findViewById(R.id.button_timebase_os);
         dataAnalysisButton = (ImageButton) findViewById(R.id.button_data_analysis_os);
         xyPlotButton = (ImageButton) findViewById(R.id.button_xy_plot_os);
+        leftYAxisLabel = (TextView) findViewById(R.id.tv_label_left_yaxis_os);
+        leftYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_left_yaxis_os);
+        rightYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_right_yaxis_os);
+        xAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_xaxis_os);
+        x1 = mChart.getXAxis();
+        y1 = mChart.getAxisLeft();
+        y2 = mChart.getAxisRight();
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -122,7 +150,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             }
         });
 
-        chartInit(mChart);
+        chartInit();
     }
 
     public void onWindowFocusChanged() {
@@ -191,13 +219,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 .show();
     }
 
-    public void chartInit(LineChart mChart){
+    public void chartInit(){
         mChart.setTouchEnabled(true);
         mChart.setHighlightPerDragEnabled(true);
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(true);
         mChart.setDrawGridBackground(false);
         mChart.setPinchZoom(true);
+        mChart.setScaleYEnabled(false);
         mChart.setBackgroundColor(Color.BLACK);
 
         LineData data = new LineData();
@@ -208,21 +237,60 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         l.setForm(Legend.LegendForm.LINE);
         l.setTextColor(Color.WHITE);
 
-        XAxis x1 = mChart.getXAxis();
         x1.setTextColor(Color.WHITE);
         x1.setDrawGridLines(true);
         x1.setAvoidFirstLastClipping(true);
+        x1.setAxisMinimum(0f);
+        x1.setAxisMaximum(875f);
 
-        YAxis y1 = mChart.getAxisLeft();
         y1.setTextColor(Color.WHITE);
-        y1.setAxisMaximum(4f);
-        y1.setAxisMinimum(-4f);
+        y1.setAxisMaximum(16f);
+        y1.setAxisMinimum(-16f);
         y1.setDrawGridLines(true);
 
-        YAxis y2 = mChart.getAxisRight();
-        y2.setAxisMaximum(3f);
-        y2.setAxisMinimum(0f);
+        y2.setAxisMaximum(16f);
+        y2.setAxisMinimum(-16f);
         y2.setTextColor(Color.WHITE);
         y2.setEnabled(true);
+    }
+
+    public void setXAxisScale(double timebase){
+        x1.setAxisMinimum(0);
+        x1.setAxisMaximum((float) timebase);
+        if(timebase == 875f)
+            xAxisLabelUnit.setText("(μs)");
+        else
+            xAxisLabelUnit.setText("(ms)");
+
+        this.timebase = timebase;
+        mChart.fitScreen();
+        mChart.invalidate();
+    }
+
+    public void setLeftYAxisScale(double upperLimit, double lowerLimit){
+        y1.setAxisMaximum((float) upperLimit);
+        y1.setAxisMinimum((float) lowerLimit);
+        if(upperLimit == 500f)
+            leftYAxisLabelUnit.setText("(mV)");
+        else
+            leftYAxisLabelUnit.setText("(V)");
+        mChart.fitScreen();
+        mChart.invalidate();
+    }
+
+    public void setRightYAxisScale(double upperLimit, double lowerLimit){
+        y2.setAxisMaximum((float) upperLimit);
+        y2.setAxisMinimum((float) lowerLimit);
+        if(upperLimit == 500f)
+            rightYAxisLabelUnit.setText("(mV)");
+        else
+            rightYAxisLabelUnit.setText("(V)");
+        mChart.fitScreen();
+        mChart.invalidate();
+    }
+
+    public void setLeftYAxisLabel(String leftYAxisInput){
+        this.leftYAxisInput = leftYAxisInput;
+        leftYAxisLabel.setText(leftYAxisInput);
     }
 }
