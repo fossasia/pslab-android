@@ -12,12 +12,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.items.ChannelAxisFormatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,6 +68,12 @@ public class LALogicLinesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         updateLogicLines();
+        YAxis left = logicLinesChart.getAxisLeft();
+        left.setValueFormatter(new ChannelAxisFormatter());
+        left.setGranularity(1f);
+        left.setTextColor(Color.BLACK);
+        left.setTextSize(12f);
+        logicLinesChart.getAxisRight().setDrawLabels(false);
     }
 
     private void updateLogicLines() {
