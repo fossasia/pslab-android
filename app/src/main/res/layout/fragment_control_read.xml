@@ -19,33 +19,27 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="4"
-                android:layout_marginTop="5dp"
-                android:text="@string/resistance"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-            
-            <Space 
-                android:layout_width="0dp"
-                android:layout_weight="2"/>
-            
             <Button
                 android:id="@+id/button_control_read1"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="40dp"
-                android:text="@string/read"
+                android:layout_weight="1"
+                android:layout_marginTop="5dp"
+                android:text="@string/resistance"
                 android:textColor="@color/white"
+                android:textSize="16sp"
                 android:background="@color/colorPrimaryDark" />
+            
+            <Space 
+                android:layout_width="0dp"
+                android:layout_weight="0.5"/>
 
             <TextView
                 android:id="@+id/tv_control_read1"
                 android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="30dp" />
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:text="" />
         </TableRow>
 
         <TableRow
@@ -57,33 +51,27 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/capacitance"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_weight="2"/>
-
             <Button
                 android:id="@+id/button_control_read2"
                 android:layout_width="0dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:layout_height="40dp"
-                android:text="@string/read"
+                android:layout_marginTop="5dp"
+                android:text="@string/capacitance"
                 android:textColor="@color/white"
-                android:background="@color/colorPrimaryDark" />
+                android:textSize="16sp"
+                android:background="@color/colorPrimaryDark"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_weight="0.5"/>
 
             <TextView
                 android:id="@+id/tv_control_read2"
                 android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="30dp" />
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:text="" />
         </TableRow>
 
         <TableRow
@@ -101,13 +89,13 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/frequency"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spinner_control_read1"
                 android:layout_width="0dp"
-                android:layout_weight="2"
+                android:layout_weight="3.5"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:entries="@array/ID">
@@ -125,8 +113,9 @@
             <TextView
                 android:id="@+id/tv_control_read3"
                 android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="30dp" />
+                android:layout_weight="2.5"
+                android:layout_height="30dp"
+                android:text="" />
 
         </TableRow>
 
@@ -145,13 +134,13 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/count_pulses"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spinner_control_read2"
                 android:layout_width="0dp"
-                android:layout_weight="2"
+                android:layout_weight="3.5"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:entries="@array/ID">
@@ -169,8 +158,9 @@
             <TextView
                 android:id="@+id/tv_control_read4"
                 android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="30dp" />
+                android:layout_weight="2.5"
+                android:layout_height="30dp"
+                android:text="" />
 
         </TableRow>
 
@@ -208,7 +198,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/voltage"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <Space
@@ -246,7 +236,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/ch1"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -255,7 +245,8 @@
                 android:layout_weight="1"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:textSize="20dp"
+                android:text=""
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -264,7 +255,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/cap"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -273,7 +264,8 @@
                 android:layout_weight="1"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:textSize="20dp"
+                android:text=""
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
         </TableRow>
@@ -293,7 +285,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/ch2"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -302,7 +294,8 @@
                 android:layout_weight="1"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:textSize="20dp"
+                android:text=""
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -311,7 +304,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/sen"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -320,7 +313,8 @@
                 android:layout_weight="1"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:textSize="20dp"
+                android:text=""
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
         </TableRow>
@@ -340,7 +334,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/ch3"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -349,7 +343,8 @@
                 android:layout_weight="1"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:textSize="20dp"
+                android:text=""
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -358,7 +353,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/an8"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -367,7 +362,8 @@
                 android:layout_weight="1"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:textSize="20dp"
+                android:text=""
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
         </TableRow>
