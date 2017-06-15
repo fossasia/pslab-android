@@ -177,7 +177,7 @@
             android:text="Channel Parameters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_channel_os"
+            android:id="@+id/tv_channel_parameters_os"
             android:textAlignment="center"
             android:textColor="#000"
             android:textStyle="normal|bold"
