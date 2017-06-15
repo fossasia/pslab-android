@@ -13,8 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 
-import android.view.DragEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -44,7 +42,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         ChannelParametersFragment.OnFragmentInteractionListener,
         TimebaseTiggerFragment.OnFragmentInteractionListener,
         DataAnalysisFragment.OnFragmentInteractionListener,
-        XYPlotFragment.OnFragmentInteractionListener {
+        XYPlotFragment.OnFragmentInteractionListener,
+        View.OnClickListener {
 
     private ScienceLab scienceLab;
     private LineChart mChart;
@@ -55,6 +54,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private ImageButton dataAnalysisButton;
     private ImageButton xyPlotButton;
     private RelativeLayout mChartLayout;
+    private TextView channelParametersTextView;
+    private TextView timebaseTiggerTextView;
+    private TextView dataAnalysisTextView;
+    private TextView xyPlotTextView;
     private TextView leftYAxisLabel;
     private TextView leftYAxisLabelUnit;
     private TextView rightYAxisLabelUnit;
@@ -77,6 +80,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public String tiggerChannel;
     public String curveFittingChannel1;
     public String curveFittingChannel2;
+    Fragment channelParametersFragment;
+    Fragment timebasetiggerFragment;
+    Fragment dataAnalysisFragment;
+    Fragment xyPlotFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,6 +103,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         leftYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_left_yaxis_os);
         rightYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_right_yaxis_os);
         xAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_xaxis_os);
+        channelParametersTextView = (TextView) findViewById(R.id.tv_channel_parameters_os);
+        timebaseTiggerTextView = (TextView) findViewById(R.id.tv_timebase_tigger_os);
+        dataAnalysisTextView = (TextView) findViewById(R.id.tv_data_analysis_os);
+        xyPlotTextView = (TextView) findViewById(R.id.tv_xy_plot_os);
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
         y2 = mChart.getAxisRight();
@@ -108,49 +119,63 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
         onWindowFocusChanged();
 
-        final Fragment channelParametersFragment = new ChannelParametersFragment();
-        final Fragment timebasetiggerFragment = new TimebaseTiggerFragment();
-        final Fragment dataAnalysisFragment = new DataAnalysisFragment();
-        final Fragment xyPlotFragment = new XYPlotFragment();
+        channelParametersFragment = new ChannelParametersFragment();
+        timebasetiggerFragment = new TimebaseTiggerFragment();
+        dataAnalysisFragment = new DataAnalysisFragment();
+        xyPlotFragment = new XYPlotFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
         }
-
-        // going to define a single method handling all the onClick listeners.
-        channelParametersButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
-                return false;
-            }
-        });
-
-        timebaseButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                replaceFragment(R.id.layout_dock_os2, timebasetiggerFragment, "TimebaseTiggerFragment");
-                return false;
-            }
-        });
-
-        dataAnalysisButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
-                return false;
-            }
-        });
-
-        xyPlotButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
-                return false;
-            }
-        });
+        channelParametersButton.setOnClickListener(this);
+        timebaseButton.setOnClickListener(this);
+        dataAnalysisButton.setOnClickListener(this);
+        xyPlotButton.setOnClickListener(this);
+        channelParametersTextView.setOnClickListener(this);
+        timebaseTiggerTextView.setOnClickListener(this);
+        dataAnalysisTextView.setOnClickListener(this);
+        xyPlotTextView.setOnClickListener(this);
 
         chartInit();
+        
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.button_channel_parameters_os:
+                replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+                break;
+
+            case R.id.tv_channel_parameters_os:
+                replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+                break;
+
+            case R.id.button_timebase_os:
+                replaceFragment(R.id.layout_dock_os2, timebasetiggerFragment, "TimebaseTiggerFragment");
+                break;
+
+            case R.id.tv_timebase_tigger_os:
+                replaceFragment(R.id.layout_dock_os2, timebasetiggerFragment, "TimebaseTiggerFragment");
+                break;
+
+            case R.id.button_data_analysis_os:
+                replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
+                break;
+
+            case R.id.tv_data_analysis_os:
+                replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
+                break;
+
+            case R.id.button_xy_plot_os:
+                replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
+                break;
+
+            case R.id.tv_xy_plot_os:
+                replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
+                break;
+        }
     }
 
     public void onWindowFocusChanged() {
