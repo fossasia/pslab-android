@@ -38,6 +38,16 @@ licenses:
     - 'google-gdk-license-.+'
     - '.+'
 
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+  - "${TRAVIS_BUILD_DIR}/gradle/caches/"
+  - "${TRAVIS_BUILD_DIR}/gradle/wrapper/dists/"
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+
 before_install:
  - chmod +x gradlew
  - mkdir "$ANDROID_HOME/licenses" || true
