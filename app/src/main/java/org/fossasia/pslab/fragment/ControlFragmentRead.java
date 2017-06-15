@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.fossasia.pslab.R;
@@ -21,33 +22,31 @@ import butterknife.Unbinder;
  * Created by asitava on 6/6/17.
  */
 
-public class ControlFragmentRead extends Fragment {
+public class ControlFragmentRead extends Fragment implements View.OnClickListener {
 
     private ScienceLab scienceLab;
 
-    @BindView(R.id.tv_control_read1) TextView textControlRead1;
-    @BindView(R.id.tv_control_read2) TextView textControlRead2;
-    @BindView(R.id.tv_control_read3) TextView textControlRead3;
-    @BindView(R.id.tv_control_read4) TextView textControlRead4;
-    @BindView(R.id.tv_control_read5) TextView textControlRead5;
-    @BindView(R.id.tv_control_read6) TextView textControlRead6;
-    @BindView(R.id.tv_control_read7) TextView textControlRead7;
-    @BindView(R.id.tv_control_read8) TextView textControlRead8;
-    @BindView(R.id.tv_control_read9) TextView textControlRead9;
-    @BindView(R.id.tv_control_read10) TextView textControlRead10;
-    @BindView(R.id.button_control_read1) Button buttonControlRead1;
-    @BindView(R.id.button_control_read2) Button buttonControlRead2;
-    @BindView(R.id.button_control_read3) Button buttonControlRead3;
-    @BindView(R.id.button_control_read4) Button buttonControlRead4;
-    @BindView(R.id.button_control_read5) Button buttonControlRead5;
-    @BindView(R.id.button_control_read6) Button buttonControlRead6;
-
-    private Unbinder unbinder;
-
+    private TextView tvControlRead1;
+    private TextView tvControlRead2;
+    private TextView tvControlRead3;
+    private TextView tvControlRead4;
+    private TextView tvControlRead5;
+    private TextView tvControlRead6;
+    private TextView tvControlRead7;
+    private TextView tvControlRead8;
+    private TextView tvControlRead9;
+    private TextView tvControlRead10;
+    private Button buttonControlRead1;
+    private Button buttonControlRead2;
+    private Button buttonControlRead3;
+    private Button buttonControlRead4;
+    private Button buttonControlRead5;
+    private Button buttonControlRead6;
+    private Spinner spinnerControlRead1;
+    private Spinner spinnerControlRead2;
 
     public static ControlFragmentRead newInstance() {
-        ControlFragmentRead controlFragmentRead = new ControlFragmentRead();
-        return controlFragmentRead;
+        return new ControlFragmentRead();
     }
 
     @Override
@@ -59,12 +58,83 @@ public class ControlFragmentRead extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_control_read, container, false);
-        unbinder = ButterKnife.bind(this, view);
+
+        tvControlRead1 = (TextView) view.findViewById(R.id.tv_control_read1);
+        tvControlRead2 = (TextView) view.findViewById(R.id.tv_control_read2);
+        tvControlRead3 = (TextView) view.findViewById(R.id.tv_control_read3);
+        tvControlRead4 = (TextView) view.findViewById(R.id.tv_control_read4);
+        tvControlRead5 = (TextView) view.findViewById(R.id.tv_control_read5);
+        tvControlRead6 = (TextView) view.findViewById(R.id.tv_control_read6);
+        tvControlRead7 = (TextView) view.findViewById(R.id.tv_control_read7);
+        tvControlRead8 = (TextView) view.findViewById(R.id.tv_control_read8);
+        tvControlRead9 = (TextView) view.findViewById(R.id.tv_control_read9);
+        tvControlRead10 = (TextView) view.findViewById(R.id.tv_control_read10);
+        buttonControlRead1 = (Button) view.findViewById(R.id.button_control_read1);
+        buttonControlRead2 = (Button) view.findViewById(R.id.button_control_read2);
+        buttonControlRead3 = (Button) view.findViewById(R.id.button_control_read3);
+        buttonControlRead4 = (Button) view.findViewById(R.id.button_control_read4);
+        buttonControlRead5 = (Button) view.findViewById(R.id.button_control_read5);
+        buttonControlRead6 = (Button) view.findViewById(R.id.button_control_read6);
+        spinnerControlRead1 = (Spinner) view.findViewById(R.id.spinner_control_read1);
+        spinnerControlRead2 = (Spinner) view.findViewById(R.id.spinner_control_read2);
+
+        buttonControlRead1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*double resistance = scienceLab.getResistance();
+                tvControlRead1.setText(String.valueOf(resistance));*/
+            }
+        });
+        buttonControlRead2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               /* double capacitance = scienceLab.getCapacitance();
+                tvControlRead2.setText(String.valueOf(capacitance));*/
+            }
+        });
+        buttonControlRead3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               /* String channel = spinnerControlRead1.getSelectedItem().toString();
+                scienceLab.countPulses(channel);
+                double pulseCount = scienceLab.readPulseCount();
+                tvControlRead3.setText(String.valueOf(pulseCount));*/
+            }
+        });
+        buttonControlRead4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*String channel = spinnerControlRead2.getSelectedItem().toString();
+                double frequency = scienceLab.getFrequency(channel, null);
+                tvControlRead4.setText(String.valueOf(frequency));*/
+            }
+        });
+        buttonControlRead5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvControlRead1.setText(null);
+                tvControlRead2.setText(null);
+                tvControlRead3.setText(null);
+                tvControlRead4.setText(null);
+            }
+        });
+        buttonControlRead6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*tvControlRead5.setText(String.valueOf(scienceLab.getVoltage("CH1", null)));
+                tvControlRead6.setText(String.valueOf(scienceLab.getVoltage("CAP", null)));
+                tvControlRead7.setText(String.valueOf(scienceLab.getVoltage("CH2", null)));
+                tvControlRead8.setText(String.valueOf(scienceLab.getVoltage("SEN", null)));
+                tvControlRead9.setText(String.valueOf(scienceLab.getVoltage("CH3", null)));
+                tvControlRead10.setText(String.valueOf(scienceLab.getVoltage("AN8", null)));*/
+
+            }
+        });
         return view;
     }
 
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    @Override
+    public void onClick(View v) {
+
     }
 }
