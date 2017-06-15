@@ -19,7 +19,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.R;
-import org.fossasia.pslab.items.ChannelAxisFormatter;
+import org.fossasia.pslab.others.ChannelAxisFormatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +36,7 @@ public class LALogicLinesFragment extends Fragment {
     private int channelMode;
     private Context context;
     private LineChart logicLinesChart;
+    private ArrayList<String> channelNames = new ArrayList<>();
 
     public static LALogicLinesFragment newInstance(Bundle params, Context context) {
         LALogicLinesFragment laLogicLinesFragment = new LALogicLinesFragment();
@@ -48,6 +49,27 @@ public class LALogicLinesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.channelMode = params.getInt("channelMode");
+        switch (channelMode) {
+            case 1:
+                channelNames.add(params.getString("inputChannel1"));
+                break;
+            case 2:
+                channelNames.add(params.getString("inputChannel1"));
+                channelNames.add(params.getString("inputChannel2"));
+                break;
+            case 3:
+                channelNames.add(params.getString("inputChannel1"));
+                channelNames.add(params.getString("inputChannel2"));
+                channelNames.add(params.getString("inputChannel3"));
+                break;
+            case 4:
+                channelNames.add(params.getString("inputChannel1"));
+                channelNames.add(params.getString("inputChannel2"));
+                channelNames.add(params.getString("inputChannel3"));
+                channelNames.add(params.getString("inputChannel4"));
+                break;
+            default:
+        }
     }
 
     @Nullable
@@ -69,11 +91,17 @@ public class LALogicLinesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         updateLogicLines();
         YAxis left = logicLinesChart.getAxisLeft();
-        left.setValueFormatter(new ChannelAxisFormatter());
+        left.setValueFormatter(new ChannelAxisFormatter(channelNames, channelMode));
         left.setGranularity(1f);
         left.setTextColor(Color.BLACK);
         left.setTextSize(12f);
         logicLinesChart.getAxisRight().setDrawLabels(false);
+
+        /*  For HIDING GRID LINES
+        logicLinesChart.getAxisLeft().setDrawGridLines(false);
+        logicLinesChart.getAxisRight().setDrawGridLines(false);
+        logicLinesChart.getXAxis().setDrawGridLines(false);
+        */
     }
 
     private void updateLogicLines() {
@@ -83,6 +111,7 @@ public class LALogicLinesFragment extends Fragment {
         for (int j = 0; j < channelMode; j++) {
             List<Entry> tempInput = new ArrayList<>();
             int[] temp = timeStamps.get(j);
+            tempInput.add(new Entry(0, 0 + (j * 2)));
             for (int i = 0; i < temp.length; i++) {
                 if (high) {
                     tempInput.add(new Entry(temp[i], 1 + (j * 2)));
