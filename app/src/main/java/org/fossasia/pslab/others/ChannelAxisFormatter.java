@@ -13,7 +13,7 @@ public class ChannelAxisFormatter implements IAxisValueFormatter {
 
     private ArrayList<String> laChannelNames;
 
-    public ChannelAxisFormatter(ArrayList<String> channelNames, int channelMode) {
+    public ChannelAxisFormatter(ArrayList<String> channelNames) {
         this.laChannelNames = channelNames;
     }
 
@@ -28,8 +28,9 @@ public class ChannelAxisFormatter implements IAxisValueFormatter {
                 return laChannelNames.get(2);
             case 7:
                 return laChannelNames.get(3);
+            default:
+                return "";
         }
-        return "";
     }
 
 }

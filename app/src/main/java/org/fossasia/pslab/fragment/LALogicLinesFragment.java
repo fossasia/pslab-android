@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -37,6 +38,7 @@ public class LALogicLinesFragment extends Fragment {
     private Context context;
     private LineChart logicLinesChart;
     private ArrayList<String> channelNames = new ArrayList<>();
+    private TextView tvTimeUnit;
 
     public static LALogicLinesFragment newInstance(Bundle params, Context context) {
         LALogicLinesFragment laLogicLinesFragment = new LALogicLinesFragment();
@@ -69,6 +71,7 @@ public class LALogicLinesFragment extends Fragment {
                 channelNames.add(params.getString("inputChannel4"));
                 break;
             default:
+                channelNames.add(params.getString("inputChannel1"));
         }
     }
 
@@ -83,6 +86,8 @@ public class LALogicLinesFragment extends Fragment {
         logicLinesChart.setDrawBorders(true);
         logicLinesChart.setBorderWidth(2);
         llLogicLines.addView(logicLinesChart);
+        tvTimeUnit = (TextView) v.findViewById(R.id.la_tv_time_unit);
+        tvTimeUnit.setText("Time -> (ms)");
         return v;
     }
 
@@ -91,13 +96,13 @@ public class LALogicLinesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         updateLogicLines();
         YAxis left = logicLinesChart.getAxisLeft();
-        left.setValueFormatter(new ChannelAxisFormatter(channelNames, channelMode));
+        left.setValueFormatter(new ChannelAxisFormatter(channelNames));
         left.setGranularity(1f);
         left.setTextColor(Color.BLACK);
         left.setTextSize(12f);
         logicLinesChart.getAxisRight().setDrawLabels(false);
 
-        /*  For HIDING GRID LINES
+        /*  For HIGHI
         logicLinesChart.getAxisLeft().setDrawGridLines(false);
         logicLinesChart.getAxisRight().setDrawGridLines(false);
         logicLinesChart.getXAxis().setDrawGridLines(false);
