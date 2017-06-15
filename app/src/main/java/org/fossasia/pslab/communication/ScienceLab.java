@@ -57,11 +57,12 @@ public class ScienceLab {
     boolean streaming, calibrated = false;
 
     String[] allAnalogChannels, allDigitalChannels;
-    Map<String, AnalogInputSource> analogInputSources;
-    Map<String, Integer> squareWaveFrequency, gains;
-    Map<String, String> waveType;
-    List<AnalogAquisitionChannel> aChannels;
-    List<DigitalChannel> dChannels;
+    HashMap<String, AnalogInputSource> analogInputSources = new HashMap<>();
+    HashMap<String, Integer> squareWaveFrequency = new HashMap<>();
+    HashMap<String, Integer> gains = new HashMap<>();
+    HashMap<String, String> waveType = new HashMap<>();
+    ArrayList<AnalogAquisitionChannel> aChannels = new ArrayList<>();
+    ArrayList<DigitalChannel> dChannels = new ArrayList<>();
 
     private CommunicationHandler mCommunicationHandler;
     private PacketHandler mPacketHandler;
@@ -81,6 +82,14 @@ public class ScienceLab {
                 mCommunicationHandler.open();
                 //SystemClock.sleep(200);
                 mPacketHandler = new PacketHandler(500, mCommunicationHandler);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if(isConnected()){
+            initializeVariables();
+            try {
+                runInitSequence(false);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -2581,7 +2590,7 @@ public class ScienceLab {
             double temp = 1 - (y.get(i) / max);
             yMod1.add((int) Math.round(LARGE_MAX - LARGE_MAX * temp));
         }
-        y.clear();
+        y = new ArrayList<Double>();
 
 
         for (int i = 0; i < points.size(); i += 16) {
