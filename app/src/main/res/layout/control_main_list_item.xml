@@ -5,14 +5,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:visibility="visible"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="@dimen/control_card_margin"
+    android:layout_marginEnd="@dimen/control_card_margin"
+    android:layout_marginStart="@dimen/control_card_margin">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardview_control_main"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="@dimen/control_card_height"
         android:layout_gravity="center"
-        card_view:cardCornerRadius="18dp">
+        card_view:cardCornerRadius="@dimen/control_card_radius">
 
         <LinearLayout
             android:id="@+id/linearlayout_control_main1"
@@ -41,9 +43,12 @@
             <EditText
                 android:id="@+id/edittext_control_main1"
                 android:layout_width="70dp"
-                android:layout_height="26dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="25dp"
-                android:background="@drawable/control_edittext" />
+                android:gravity="center"
+                android:padding="@dimen/control_text_padding"
+                android:inputType="numberDecimal"
+                android:background="@drawable/control_edittext"/>
 
             <Button
                 android:id="@+id/button_control_main2"
@@ -75,4 +80,3 @@
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
-

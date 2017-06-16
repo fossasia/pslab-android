@@ -18,4 +18,9 @@
 
     <dimen name="title_font_size">14sp</dimen>
 
+    <dimen name="control_card_margin">10dp</dimen>
+    <dimen name="control_card_height">110dp</dimen>
+    <dimen name="control_card_radius">18dp</dimen>
+    <dimen name="control_text_padding">5dp</dimen>
+
 </resources>
