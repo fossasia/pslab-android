@@ -72,6 +72,21 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (deviceConnected) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        tvVersion.setText(scienceLab.getVersion());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, 100);
+
+        }
+        /*
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

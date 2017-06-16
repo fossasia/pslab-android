@@ -10,9 +10,10 @@ import org.fossasia.pslab.communication.ScienceLab;
  */
 
 public class ScienceLabCommon {
+
     private static final String TAG = "ScienceLabCommon";
     private static ScienceLabCommon scienceLabCommon = null;
-    public ScienceLab scienceLab;
+    public static ScienceLab scienceLab;
     public boolean connected = false;
 
     private ScienceLabCommon() {

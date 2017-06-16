@@ -47,9 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    @BindView(R.id.nav_view) NavigationView navigationView;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     View navHeader;
     private ImageView imgProfile;
@@ -241,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.v(TAG, "MainActivityDestroyed");
         try {
             mScienceLabCommon.scienceLab.disconnect();
         } catch (IOException e) {
