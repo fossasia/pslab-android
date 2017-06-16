@@ -1,8 +1,10 @@
 package org.fossasia.pslab.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.ScienceLabCommon;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,17 +30,20 @@ import butterknife.Unbinder;
 public class HomeFragment extends Fragment {
 
     private boolean deviceFound = false, deviceConnected = false;
-    private String version;
-    @BindView(R.id.tv_device_status) TextView tvDeviceStatus;
-    @BindView(R.id.tv_device_version) TextView tvVersion;
-    @BindView(R.id.img_device_status) ImageView imgViewDeviceStatus;
+    @BindView(R.id.tv_device_status)
+    TextView tvDeviceStatus;
+    @BindView(R.id.tv_device_version)
+    TextView tvVersion;
+    @BindView(R.id.img_device_status)
+    ImageView imgViewDeviceStatus;
     private Unbinder unbinder;
 
-    public static HomeFragment newInstance(boolean deviceConnected, boolean deviceFound, String version) {
+    ScienceLab scienceLab;
+
+    public static HomeFragment newInstance(boolean deviceConnected, boolean deviceFound) {
         HomeFragment homeFragment = new HomeFragment();
         homeFragment.deviceConnected = deviceConnected;
         homeFragment.deviceFound = deviceFound;
-        homeFragment.version = version;
         return homeFragment;
     }
 
@@ -40,17 +51,17 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        scienceLab = ScienceLabCommon.getInstance().scienceLab;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
-        unbinder = ButterKnife.bind(this,view);
+        unbinder = ButterKnife.bind(this, view);
         if (deviceFound & deviceConnected) {
             imgViewDeviceStatus.setImageResource(org.fossasia.pslab.R.drawable.usb_connected);
             tvDeviceStatus.setText("Device Connected Successfully");
-            tvVersion.setText(version);
         } else {
             imgViewDeviceStatus.setImageResource(org.fossasia.pslab.R.drawable.usb_disconnected);
             tvDeviceStatus.setText("PSLab Device not found");
@@ -58,7 +69,116 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    tvVersion.setText(scienceLab.getVersion());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 300);
+
+        final Handler handler = new Handler();
+        final int CAP_AND_PCS = 0;
+        final int ADC_SHIFTS_LOCATION1 = 1;
+        final int ADC_SHIFTS_LOCATION2 = 2;
+        final int ADC_POLYNOMIALS_LOCATION = 3;
+
+
+        final Runnable r4 = new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Byte> polynomialsByteData = new ArrayList<>();
+                byte[] temp = scienceLab.readBulkFlash(ADC_SHIFTS_LOCATION2, 2048);
+                for (int i = 0; i < 2048; i++) {
+                    polynomialsByteData.add(temp[i]);
+                }
+                Log.v("size ", "" + polynomialsByteData.size());
+                Log.v("Stringadc2 ", new String(temp));
+            }
+        };
+
+        final Runnable r3 = new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Byte> polynomialsByteData = new ArrayList<>();
+                byte[] temp = scienceLab.readBulkFlash(ADC_SHIFTS_LOCATION1, 2048);
+                for (int i = 0; i < 2048; i++) {
+                    polynomialsByteData.add(temp[i]);
+                }
+                Log.v("size ", "" + polynomialsByteData.size());
+                Log.v("Stringadc1 ", new String(temp));
+                handler.postDelayed(r4, 1000);
+            }
+        };
+
+        final Runnable r2 = new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Byte> polynomialsByteData = new ArrayList<>();
+                byte[] temp = scienceLab.readBulkFlash(ADC_POLYNOMIALS_LOCATION, 2048);
+                for (int i = 0; i < 2048; i++) {
+                    polynomialsByteData.add(temp[i]);
+                }
+                Log.v("size ", "" + polynomialsByteData.size());
+                Log.v("String ", new String(temp));
+                handler.postDelayed(r3, 1000);
+            }
+        };
+
+        Runnable r1 = new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Byte> capsAndPcs = new ArrayList<Byte>();
+                byte[] cps = scienceLab.readBulkFlash(CAP_AND_PCS, 8 * 4 + 5);
+                for (int i = 0; i < 37; i++) {
+                    capsAndPcs.add(cps[i]);
+                }
+                Log.v("cps size : ", capsAndPcs.size() + "");
+                Log.v("String ", new String(cps));
+                handler.postDelayed(r2, 1000);
+            }
+        };
+
+        handler.postDelayed(r1, 1000);
+
+
+        /*
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                ArrayList<Byte> polynomialsByteData = new ArrayList<>();
+                for (int i = 0; i < 2048 / 16; i++) {
+                    byte[] temp = scienceLab.readFlash(3, i * 16);
+                    for (byte a : temp) {
+                        polynomialsByteData.add(a);
+                    }
+                }
+                Log.v("size ", "" + polynomialsByteData.size());
+                byte[] data = new byte[2048];
+                for (int i = 0; i < 2048; i++) {
+                    data[i] = polynomialsByteData.get(i);
+                }
+                try {
+                    String strData = new String(data, "US-ASCII");
+                    Log.v("String Data", strData);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 2000);
+        */
+
+    }
+
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }

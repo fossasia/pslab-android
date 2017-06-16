@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class PacketHandler {
 
     private static final String TAG = "PacketHandler";
-    private final int BUFSIZE = 2000;
+    private final int BUFSIZE = 10000;
     private byte[] buffer = new byte[BUFSIZE];
     private boolean loadBurst, connected;
     int inputQueueSize = 0, BAUD = 1000000;

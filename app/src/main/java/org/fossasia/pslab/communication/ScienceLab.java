@@ -1,5 +1,6 @@
 package org.fossasia.pslab.communication;
 
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -86,7 +87,7 @@ public class ScienceLab {
                 e.printStackTrace();
             }
         }
-        if(isConnected()){
+        if (isConnected()) {
             initializeVariables();
             try {
                 runInitSequence(false);
@@ -194,7 +195,8 @@ public class ScienceLab {
                 }
                 this.SOCKET_CAPACITANCE = scalars.get(0);
                 this.dac.chans.get("PCS").loadCalibrationTwopoint(scalars.get(1), scalars.get(2).intValue());
-                double[] tempScalars = new double[scalars.size() - 5];
+                double[] tempScalars = new double[scalars.size() - 4];
+                Log.v("Scalar size", String.valueOf(scalars.size()));
                 for (int i = 4; i < scalars.size(); i++) {
                     tempScalars[i - 4] = scalars.get(i);
                 }
@@ -217,6 +219,9 @@ public class ScienceLab {
                     polynomialsByteData.add(a);
                 }
             }
+
+            Log.v("PolynomialByteDataSize:", "" + polynomialsByteData.size());
+
             String polynomialByteString = "";
             for (int i = 0; i < 2048; i++) {
                 try {
@@ -225,6 +230,7 @@ public class ScienceLab {
                     e.printStackTrace();
                 }
             }
+
             // todo : change to "PSLab" after PSLab firmware is ready
             if ("SEELablet".equals(polynomialByteString.substring(0, 9))) {
                 Log.v(TAG, "ADC calibration found...");
@@ -2248,10 +2254,10 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.READ_FLASH);
             mPacketHandler.sendByte(page);
             mPacketHandler.sendByte(location);
-            byte[] data = new byte[16];
-            mPacketHandler.read(data, 16);
-            mPacketHandler.getAcknowledgement();
-            return data;
+            byte[] data = new byte[17];
+            mPacketHandler.read(data, 17);
+            //mPacketHandler.getAcknowledgement();
+            return Arrays.copyOfRange(data, 0, 16);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -2268,9 +2274,9 @@ public class ScienceLab {
             if (numOfBytes % 2 == 1) bytesToRead += 1;
             mPacketHandler.sendInt(bytesToRead);
             mPacketHandler.sendByte(page);
-            byte[] data = new byte[bytesToRead];
-            mPacketHandler.read(data, bytesToRead);
-            mPacketHandler.getAcknowledgement();
+            byte[] data = new byte[bytesToRead + 1];
+            mPacketHandler.read(data, bytesToRead + 1);
+            //mPacketHandler.getAcknowledgement();
             if (numOfBytes % 2 == 1)
                 return Arrays.copyOfRange(data, 0, data.length - 1);
             else

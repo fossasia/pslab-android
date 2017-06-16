@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             case 4:
                 return SettingsFragment.newInstance();
             default:
-                return HomeFragment.newInstance(mScienceLabCommon.scienceLab.isConnected(), mScienceLabCommon.scienceLab.isDeviceFound(),mScienceLabCommon.scienceLab.getVersion());
+                return HomeFragment.newInstance(mScienceLabCommon.scienceLab.isConnected(), mScienceLabCommon.scienceLab.isDeviceFound());
         }
     }
 
