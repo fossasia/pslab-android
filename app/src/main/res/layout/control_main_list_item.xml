@@ -29,7 +29,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="22dp"
                 android:text=""
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:textStyle="bold"/>
 
             <Button
@@ -59,9 +59,11 @@
             <Button
                 android:id="@+id/button_control_main3"
                 android:layout_width="50dp"
-                android:layout_height="38dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="22dp"
-                android:text="@string/set" />
+                android:text="@string/set"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimaryDark"/>
             <TextView
                 android:id="@+id/text_control_main2"
                 android:layout_width="110dp"
