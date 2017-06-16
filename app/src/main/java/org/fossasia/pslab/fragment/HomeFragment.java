@@ -94,12 +94,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 ArrayList<Byte> polynomialsByteData = new ArrayList<>();
-                byte[] temp = scienceLab.readBulkFlash(ADC_SHIFTS_LOCATION2, 2048);
-                for (int i = 0; i < 2048; i++) {
-                    polynomialsByteData.add(temp[i]);
+                for (int i = 0; i < 2048 / 16; i++) {
+                    byte[] temp = scienceLab.readFlash(ADC_SHIFTS_LOCATION2, i * 2);
+                    for (byte a : temp) {
+                        polynomialsByteData.add(a);
+                    }
                 }
                 Log.v("size ", "" + polynomialsByteData.size());
-                Log.v("Stringadc2 ", new String(temp));
+                byte[] data = new byte[2048];
+                for (int i = 0; i < 2048; i++) {
+                    data[i] = polynomialsByteData.get(i);
+                }
+                Log.v("String ", new String(data));
             }
         };
 
@@ -107,12 +113,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 ArrayList<Byte> polynomialsByteData = new ArrayList<>();
-                byte[] temp = scienceLab.readBulkFlash(ADC_SHIFTS_LOCATION1, 2048);
-                for (int i = 0; i < 2048; i++) {
-                    polynomialsByteData.add(temp[i]);
+                for (int i = 0; i < 2048 / 16; i++) {
+                    byte[] temp = scienceLab.readFlash(ADC_SHIFTS_LOCATION1, i);
+                    for (byte a : temp) {
+                        polynomialsByteData.add(a);
+                    }
                 }
                 Log.v("size ", "" + polynomialsByteData.size());
-                Log.v("Stringadc1 ", new String(temp));
+                byte[] data = new byte[2048];
+                for (int i = 0; i < 2048; i++) {
+                    data[i] = polynomialsByteData.get(i);
+                }
+                Log.v("String ", new String(data));
                 handler.postDelayed(r4, 1000);
             }
         };
@@ -121,12 +133,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 ArrayList<Byte> polynomialsByteData = new ArrayList<>();
-                byte[] temp = scienceLab.readBulkFlash(ADC_POLYNOMIALS_LOCATION, 2048);
-                for (int i = 0; i < 2048; i++) {
-                    polynomialsByteData.add(temp[i]);
+                for (int i = 0; i < 2048 / 16; i++) {
+                    byte[] temp = scienceLab.readFlash(ADC_POLYNOMIALS_LOCATION, i);
+                    for (byte a : temp) {
+                        polynomialsByteData.add(a);
+                    }
                 }
                 Log.v("size ", "" + polynomialsByteData.size());
-                Log.v("String ", new String(temp));
+                byte[] data = new byte[2048];
+                for (int i = 0; i < 2048; i++) {
+                    data[i] = polynomialsByteData.get(i);
+                }
+                Log.v("String ", new String(data));
                 handler.postDelayed(r3, 1000);
             }
         };
