@@ -1,6 +1,11 @@
 package org.fossasia.pslab.activity;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -18,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -72,13 +78,26 @@ public class MainActivity extends AppCompatActivity {
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
     private ScienceLabCommon mScienceLabCommon;
+    UsbManager usbManager;
+
+    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
+    private PendingIntent mPermissionIntent;
+    UsbAccessory accessory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        UsbManager usbManager = (UsbManager) getSystemService(USB_SERVICE);
+        usbManager = (UsbManager) getSystemService(USB_SERVICE);
+
+        if(android.os.Build.VERSION.SDK_INT < 18){
+            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+            IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+            registerReceiver(mUsbReceiver, filter);
+            usbManager.requestPermission(accessory, mPermissionIntent);
+        }
+
         mScienceLabCommon = ScienceLabCommon.getInstance();
         mScienceLabCommon.openDevice(new CommunicationHandler(usbManager));
         if (ScienceLabCommon.scienceLab.isDeviceFound()) {
@@ -250,5 +269,27 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(android.os.Build.VERSION.SDK_INT < 18){
+            unregisterReceiver(mUsbReceiver);
+        }
     }
+
+    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_USB_PERMISSION.equals(action)) {
+                synchronized (this) {
+                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                        //permission granted
+                    }
+                    else {
+                        Log.d(TAG, "permission denied for PSLab");
+                        Toast.makeText(getApplicationContext(), "Please grant permissions to access PSLab", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        }
+    };
+
 }
