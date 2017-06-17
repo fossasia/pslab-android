@@ -13,11 +13,10 @@ import android.widget.TextView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.InitializationVariable;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +37,10 @@ public class HomeFragment extends Fragment {
     ImageView imgViewDeviceStatus;
     private Unbinder unbinder;
 
+    @BindView(R.id.tv_initialisation_status)
+    TextView tvInitializationStatus;
+    public static InitializationVariable booleanVariable;
+
     ScienceLab scienceLab;
 
     public static HomeFragment newInstance(boolean deviceConnected, boolean deviceFound) {
@@ -51,7 +54,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        scienceLab = ScienceLabCommon.getInstance().scienceLab;
+        scienceLab = ScienceLabCommon.scienceLab;
+        booleanVariable = new InitializationVariable();
+        if (scienceLab.calibrated)
+            booleanVariable.setVariable(true);
+        else
+            booleanVariable.setVariable(false);
     }
 
     @Nullable
@@ -79,14 +87,32 @@ public class HomeFragment extends Fragment {
                 public void run() {
                     try {
                         tvVersion.setText(scienceLab.getVersion());
+                        tvInitializationStatus.setText("Initialising Wait ...");
+                        if (booleanVariable.isInitialised())
+                            tvInitializationStatus.setText("Initialsation Completed");
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }, 100);
 
+        } else {
+            tvVersion.setText("Not Connected");
         }
-        /*
+
+        booleanVariable.setValueChangeListener(new InitializationVariable.onValueChangeListener() {
+            @Override
+            public void onChange() {
+                if (booleanVariable.isInitialised())
+                    tvInitializationStatus.setText("Initialsation Completed");
+                else
+                    tvInitializationStatus.setText("Initialising Wait ...");
+            }
+        });
+
+        /*  DEBUGGING CODE FOR REFERENCE
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

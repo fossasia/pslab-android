@@ -15,6 +15,7 @@ import org.fossasia.pslab.communication.peripherals.MCP4728;
 import org.fossasia.pslab.communication.peripherals.NRF24L01;
 import org.fossasia.pslab.communication.peripherals.RadioLink;
 import org.fossasia.pslab.communication.peripherals.SPI;
+import org.fossasia.pslab.fragment.HomeFragment;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -56,7 +57,7 @@ public class ScienceLab {
             channelsInBuffer, digitalChannelsInBuffer, dataSplitting, sin1Frequency, sin2Frequency;
     double[] currents, currentScalars, gainValues, buffer;
     double SOCKET_CAPACITANCE, resistanceScaling, timebase;
-    boolean streaming, calibrated = false;
+    public boolean streaming, calibrated = false;
 
     String[] allAnalogChannels, allDigitalChannels;
     HashMap<String, AnalogInputSource> analogInputSources = new HashMap<>();
@@ -95,6 +96,8 @@ public class ScienceLab {
                 public void run() {
                     try {
                         runInitSequence(true);
+                        calibrated = true;
+                        HomeFragment.booleanVariable.setVariable(true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -172,6 +175,7 @@ public class ScienceLab {
 
             /* CAPS AND PCS CALIBRATION */
             //byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5); // 5 for READY and 32 (8 float numbers) for data
+
             ArrayList<Byte> capsAndPCSByteData = new ArrayList<>();
             for (int i = 0; i <= 37 / 16; i++) {
                 byte[] temp = readFlash(CAP_AND_PCS, i);
@@ -226,7 +230,7 @@ public class ScienceLab {
                 }
             }
 
-            Log.v("PolynomialByteDataSize:", "" + polynomialsByteData.size());
+            //Log.v("PolynomialByteDataSize:", "" + polynomialsByteData.size());
 
             String polynomialByteString = "";
             for (int i = 0; i < 2048; i++) {
@@ -265,12 +269,14 @@ public class ScienceLab {
 
                 Map<String, ArrayList<Double[]>> polyDict = new LinkedHashMap<>();
                 String[] adcSlopeOffsetsSplit = adcSlopeOffsets.split(Pattern.quote(">|"));
+                /*
                 for (String temp : adcSlopeOffsetsSplit) {
                     Log.v("zz", temp);
                 }
+                */
                 for (int i = 0; i < adcSlopeOffsetsSplit.length; i++) {
                     if (i == 0) continue;
-                    Log.v("" + i, adcSlopeOffsetsSplit[i]);
+                    //Log.v("" + i, adcSlopeOffsetsSplit[i]);
                     String cals = adcSlopeOffsetsSplit[i].substring(5);
                     polyDict.put(adcSlopeOffsetsSplit[i].substring(0, 3), new ArrayList<Double[]>());
                     for (int j = 0; j < cals.length() / 16; j++) {
@@ -287,7 +293,6 @@ public class ScienceLab {
                 double[] adcShiftsDouble = new double[adcShifts.size()];
                 for (int i = 0; i < adcShifts.size(); i++) {
                     adcShiftsDouble[i] = ByteBuffer.wrap(new byte[]{0, adcShifts.get(i)}).getShort();
-                    Log.v("" + i, "" + adcShiftsDouble[i]);
                 }
                 for (Map.Entry<String, AnalogInputSource> entry : this.analogInputSources.entrySet()) {
                     this.analogInputSources.get(entry.getKey()).loadCalibrationTable(adcShiftsDouble, inlSlopeInterceptD[0], inlSlopeInterceptD[1]);

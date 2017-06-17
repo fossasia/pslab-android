@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         UsbManager usbManager = (UsbManager) getSystemService(USB_SERVICE);
         mScienceLabCommon = ScienceLabCommon.getInstance();
         mScienceLabCommon.openDevice(new CommunicationHandler(usbManager));
-        if (mScienceLabCommon.scienceLab.isDeviceFound()) {
+        if (ScienceLabCommon.scienceLab.isDeviceFound()) {
             Log.d(TAG, "PSLab device found");
         } else {
             Log.d(TAG, "PSLab device not found");
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             case 4:
                 return SettingsFragment.newInstance();
             default:
-                return HomeFragment.newInstance(mScienceLabCommon.scienceLab.isConnected(), mScienceLabCommon.scienceLab.isDeviceFound());
+                return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
         }
     }
 
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Log.v(TAG, "MainActivityDestroyed");
         try {
-            mScienceLabCommon.scienceLab.disconnect();
+            ScienceLabCommon.scienceLab.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
         }
