@@ -12,7 +12,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cardview_control_main"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/control_card_height"
+        android:layout_height="100dp"
         android:layout_gravity="center"
         card_view:cardCornerRadius="@dimen/control_card_radius">
 
@@ -20,62 +20,67 @@
             android:id="@+id/linearlayout_control_main1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp">
 
             <TextView
-                android:id="@+id/text_control_main1"
-                android:layout_width="65dp"
+                android:id="@+id/tv_control_main1"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="30dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
                 android:text=""
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
             <Button
                 android:id="@+id/button_control_main1"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="22dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="20dp"
                 android:background="@drawable/button_minus" />
 
             <EditText
-                android:id="@+id/edittext_control_main1"
-                android:layout_width="70dp"
+                android:id="@+id/edittext_control_main"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
                 android:layout_height="30dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="3dp"
                 android:gravity="center"
                 android:padding="@dimen/control_text_padding"
                 android:inputType="numberDecimal"
-                android:background="@drawable/control_edittext"/>
+                android:background="@drawable/control_edittext" />
 
             <Button
                 android:id="@+id/button_control_main2"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="22dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="20dp"
                 android:background="@drawable/button_plus" />
             <Button
                 android:id="@+id/button_control_main3"
-                android:layout_width="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
                 android:layout_height="35dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
                 android:text="@string/set"
                 android:textColor="@color/white"
                 android:background="@color/colorPrimaryDark"/>
             <TextView
-                android:id="@+id/text_control_main2"
-                android:layout_width="110dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="22dp" />
+                android:id="@+id/tv_control_main2"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="30dp" />
         </LinearLayout>
 
         <SeekBar
-            android:id="@+id/seekbar_control_main1"
+            android:id="@+id/seekbar_control_main"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="60dp" />
     </android.support.v7.widget.CardView>
 
