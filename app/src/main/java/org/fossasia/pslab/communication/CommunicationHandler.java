@@ -131,7 +131,7 @@ public class CommunicationHandler {
                     Log.e(TAG, "Read Error: " + numBytesRead);
                     return numBytesRead;
                 } else {
-                    Log.v(TAG, "Read something" + mReadBuffer);
+                    //Log.v(TAG, "Read something" + mReadBuffer);
                     System.arraycopy(mReadBuffer, 0, dest, numBytesRead, readNow);
                     numBytesRead += readNow;
                 }
