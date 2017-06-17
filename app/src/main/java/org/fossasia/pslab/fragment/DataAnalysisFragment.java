@@ -7,10 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.OscilloscopeActivity;
 
 public class DataAnalysisFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +28,7 @@ public class DataAnalysisFragment extends Fragment {
     private Spinner spinnerCurveFit;
     private Spinner spinnerChannelSelect1;
     private Spinner spinnerChannelSelect2;
+    private CheckBox checkBoxFouierTransform;
 
     public static DataAnalysisFragment newInstance(String param1, String param2) {
         DataAnalysisFragment fragment = new DataAnalysisFragment();
@@ -53,6 +58,7 @@ public class DataAnalysisFragment extends Fragment {
         spinnerCurveFit = (Spinner) v.findViewById(R.id.spinner_curve_fit_da);
         spinnerChannelSelect1 = (Spinner) v.findViewById(R.id.spinner_channel_select_da1);
         spinnerChannelSelect2 = (Spinner) v.findViewById(R.id.spinner_channel_select_da2);
+        checkBoxFouierTransform = (CheckBox) v.findViewById(R.id.checkBox_fourier_da);
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         ArrayAdapter<String> curvefitAdapter;
         ArrayAdapter<String> adapter;
@@ -76,6 +82,55 @@ public class DataAnalysisFragment extends Fragment {
         spinnerCurveFit.setSelection(curvefitAdapter.getPosition("Sine Fit"),true);
         spinnerChannelSelect1.setSelection(adapter.getPosition("None"), true);
         spinnerChannelSelect2.setSelection(adapter.getPosition("None"), true);
+        spinnerCurveFit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0){
+                    ((OscilloscopeActivity)getActivity()).sineFit = true;
+                    ((OscilloscopeActivity)getActivity()).squareFit = false;
+                }
+                else {
+                    ((OscilloscopeActivity)getActivity()).sineFit = false;
+                    ((OscilloscopeActivity)getActivity()).squareFit = true;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerChannelSelect1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((OscilloscopeActivity)getActivity()).curveFittingChannel1 = spinnerChannelSelect1.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerChannelSelect2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((OscilloscopeActivity)getActivity()).curveFittingChannel2 = spinnerChannelSelect2.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        checkBoxFouierTransform.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ((OscilloscopeActivity)getActivity()).isFourierTransformSelected = isChecked;
+            }
+        });
 
         return v;
     }

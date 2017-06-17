@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -13,7 +14,144 @@
             android:id="@+id/chart_os"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#000"/>
+            android:background="#000"
+            android:layout_toEndOf="@+id/chart_yaxis_layout1"
+            android:layout_toStartOf="@+id/chart_yaxis_layout2"
+            android:layout_below="@+id/chart_xaxis_layout" />
+        <RelativeLayout
+            android:id="@+id/chart_xaxis_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:background="#000">
+
+            <TextView
+                android:text="Time "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_graph_label_xaxis_os"
+                android:textColor="#ffff"
+                android:layout_gravity="center_vertical|center_horizontal|center"
+                android:gravity="center_vertical|center_horizontal|center"
+                android:textStyle="normal|bold"
+                android:textSize="12sp"
+                tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="288dp"
+                android:foregroundGravity="center_vertical"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:text="(μs)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_unit_xaxis_os"
+                android:textColor="#ffff"
+                android:textStyle="normal|bold"
+                android:textSize="12sp"
+                tools:layout_editor_absoluteY="0dp"
+                app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_os"
+                android:layout_marginStart="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/tv_graph_label_xaxis_os" />
+        </RelativeLayout>
+
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/chart_yaxis_layout1"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:foregroundGravity="center_vertical"
+            android:background="#000"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_label_left_yaxis_os"
+                android:textColor="#ffff"
+                android:textStyle="normal|bold"
+                android:textSize="12sp"
+                android:foregroundGravity="center_horizontal"
+                android:gravity="top|center_horizontal"
+                android:rotation="-90"
+                android:layout_gravity="center"
+                android:text="CH1"
+                android:includeFontPadding="false"
+                android:layout_width="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <TextView
+                android:text="(V)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_unit_left_yaxis_os"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                android:rotation="-90"
+                android:layout_above="@+id/tv_label_left_yaxis_os"
+                android:textStyle="normal|bold"
+                app:layout_constraintBottom_toTopOf="@+id/tv_label_left_yaxis_os"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/chart_yaxis_layout2"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:foregroundGravity="right"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:background="#000">
+            <TextView
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_label_right_yaxis_os"
+                android:textColor="#ffff"
+                android:textStyle="normal|bold"
+                android:textSize="12sp"
+                android:foregroundGravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:rotation="-90"
+                android:layout_gravity="center"
+                android:text="CH2"
+                android:includeFontPadding="false"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <TextView
+                android:text="(V)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_unit_right_yaxis_os"
+                android:textColor="#fff"
+                android:rotation="-90"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_label_right_yaxis_os"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
 
     </RelativeLayout>
 
@@ -40,7 +178,7 @@
             android:text="Channel Parameters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_channel_os"
+            android:id="@+id/tv_channel_parameters_os"
             android:textAlignment="center"
             android:textColor="#000"
             android:textStyle="normal|bold"

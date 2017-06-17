@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/waveform_generator"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
         </LinearLayout>
 
@@ -47,7 +47,7 @@
                     android:layout_weight="1.5"
                     android:layout_height="wrap_content"
                     android:text="@string/w1"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -56,7 +56,7 @@
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
                     android:text="@string/freq_range"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -103,7 +103,7 @@
                     android:layout_weight="1.5"
                     android:layout_height="wrap_content"
                     android:text="@string/w2"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -112,7 +112,7 @@
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
                     android:text="@string/freq_range"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -160,7 +160,7 @@
                     android:layout_weight="4"
                     android:layout_height="wrap_content"
                     android:text="@string/phase"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -203,7 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:text="@string/set"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:background="@color/colorPrimaryDark"/>
@@ -245,7 +245,7 @@
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
                     android:text="@string/output"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/tv_control_advanced9"
@@ -253,7 +253,7 @@
                     android:layout_weight="3.5"
                     android:layout_height="wrap_content"
                     android:text="@string/phase"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/tv_control_advanced10"
@@ -261,7 +261,7 @@
                     android:layout_weight="4"
                     android:layout_height="wrap_content"
                     android:text="@string/dutycycle"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -280,7 +280,7 @@
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr1"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -289,7 +289,7 @@
                     android:layout_weight="3.5"
                     android:layout_height="wrap_content"
                     android:text="@string/zero"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -330,7 +330,7 @@
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr2"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -392,7 +392,7 @@
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr3"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -453,9 +453,8 @@
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr4"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
-
                 <Button
                     android:id="@+id/button_control_advanced18"
                     android:layout_width="0dp"
@@ -515,7 +514,7 @@
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
                     android:text="@string/frequency"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -558,7 +557,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:text="@string/set"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:background="@color/colorPrimaryDark"/>
@@ -579,7 +578,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/digital_outputs"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
         </LinearLayout>
 
@@ -618,7 +617,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr2"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginStart="12dp"/>
 
@@ -634,7 +633,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr3"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginStart="12dp"/>
 
@@ -650,7 +649,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr4"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginStart="12dp"/>
 

@@ -9,8 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.OscilloscopeActivity;
 
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 public class XYPlotFragment extends Fragment {
@@ -24,6 +27,7 @@ public class XYPlotFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private Spinner spinnerChannelSelect1;
     private Spinner spinnerChannelSelect2;
+    private CheckBox checkBoxXYPlot;
 
     public static XYPlotFragment newInstance(String param1, String param2) {
         XYPlotFragment fragment = new XYPlotFragment();
@@ -50,6 +54,7 @@ public class XYPlotFragment extends Fragment {
         String [] channels = {"CH1", "CH2", "CH3", "MIC"};
         spinnerChannelSelect1 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy1);
         spinnerChannelSelect2 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy2);
+        checkBoxXYPlot = (CheckBox) v.findViewById(R.id.checkBox_enable_xy_xy);
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         ArrayAdapter<String> channelsAdapter;
 
@@ -67,6 +72,13 @@ public class XYPlotFragment extends Fragment {
 
         spinnerChannelSelect1.setSelection(channelsAdapter.getPosition("CH1"),true);
         spinnerChannelSelect2.setSelection(channelsAdapter.getPosition("CH2"),true);
+
+        checkBoxXYPlot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ((OscilloscopeActivity)getActivity()).isXYPlotSelected = isChecked;
+            }
+        });
 
         return v;
     }
@@ -98,4 +110,3 @@ public class XYPlotFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 }
-
