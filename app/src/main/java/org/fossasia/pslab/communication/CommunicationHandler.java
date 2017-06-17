@@ -6,6 +6,7 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -140,6 +141,9 @@ public class CommunicationHandler {
     }
 
     public int write(byte[] src, int timeoutMillis) throws IOException {
+        if (Build.VERSION.SDK_INT < 18) {
+            return writeSupportAPI(src, timeoutMillis);
+        }
         int written = 0;
         while (written < src.length) {
             int writeLength, amtWritten;
@@ -156,6 +160,35 @@ public class CommunicationHandler {
         }
         return written;
     }
+
+
+    // For supporting devices with API version < 18
+    public int writeSupportAPI(byte[] src, int timeoutMillis) throws IOException {
+        int written = 0;
+        while (written < src.length) {
+            final int writeLength;
+            final int amtWritten;
+            synchronized (mWriteBufferLock) {
+                final byte[] writeBuffer;
+                writeLength = Math.min(src.length - written, mWriteBuffer.length);
+                if (written == 0) {
+                    writeBuffer = src;
+                } else {
+                    // bulkTransfer does not support offsets for API level < 18, so make a copy.
+                    System.arraycopy(src, written, mWriteBuffer, 0, writeLength);
+                    writeBuffer = mWriteBuffer;
+                }
+                amtWritten = mConnection.bulkTransfer(mWriteEndpoint, writeBuffer, writeLength, timeoutMillis);
+            }
+            if (amtWritten <= 0) {
+                throw new IOException("Error writing " + writeLength
+                        + " bytes at offset " + written + " length=" + src.length);
+            }
+            written += amtWritten;
+        }
+        return written;
+    }
+
 
     public void clear() {
         mConnection.bulkTransfer(mReadEndpoint, mReadBuffer, 100, 50);
