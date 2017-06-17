@@ -154,7 +154,10 @@ public class PacketHandler {
     }
 
     public int read(byte[] dest, int bytesToRead) throws IOException {
-        int numBytesRead = mCommunicationHandler.read(dest, bytesToRead, timeout);
+        int numBytesRead = mCommunicationHandler.read(buffer, bytesToRead, timeout);
+        for (int i = 0; i < bytesToRead; i++) {
+            dest[i] = buffer[i];
+        }
         if (numBytesRead == bytesToRead) {
             return numBytesRead;
         } else {
