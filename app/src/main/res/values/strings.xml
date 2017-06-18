@@ -84,4 +84,11 @@
     <string name="digital_outputs">Digital Outputs</string>
     <string name="configure_PWM">Configure PWM</string>
     <string name="waveform_generator">Arbitrary Waveform Generator</string>
+    <string name="autoscan">Autoscan</string>
+    <string name="select_sensor">Select Sensor</string>
+    <string name="get_raw">Get Raw</string>
+    <string-array name="sensors">
+
+    </string-array>
+
 </resources>
