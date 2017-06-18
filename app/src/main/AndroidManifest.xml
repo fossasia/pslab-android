@@ -30,11 +30,13 @@
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ReportUs" />
         <activity android:name=".activity.ControlActivity" />
-        <activity android:name=".activity.OscilloscopeActivity" android:screenOrientation="landscape"/>
+        <activity
+            android:name=".activity.OscilloscopeActivity"
+            android:screenOrientation="landscape" />
         <activity android:name=".activity.AdvancedControlActivity" />
         <activity
             android:name=".activity.LogicalAnalyzerActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="screenSize|orientation" />
     </application>
 
 </manifest>
