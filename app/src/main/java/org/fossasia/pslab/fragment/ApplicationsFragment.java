@@ -19,6 +19,7 @@ import org.fossasia.pslab.activity.AdvancedControlActivity;
 import org.fossasia.pslab.activity.ControlActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
+import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.items.ApplicationItem;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.ApplicationAdapter;
@@ -72,6 +73,10 @@ public class ApplicationsFragment extends Fragment {
                                 break;
                             case "Logical Analyzer":
                                 intent = new Intent(context, LogicalAnalyzerActivity.class);
+                                startActivity(intent);
+                                break;
+                            case "Sensor QuickView":
+                                intent = new Intent(context, SensorActivity.class);
                                 startActivity(intent);
                                 break;
                         }
