@@ -5,11 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -284,12 +286,25 @@ public class MainActivity extends AppCompatActivity {
                         //permission granted
                     }
                     else {
-                        Log.d(TAG, "permission denied for PSLab");
-                        Toast.makeText(getApplicationContext(), "Please grant permissions to access PSLab", Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "Permission denied for PSLab");
+                        Snackbar mySnackbar = Snackbar.make(findViewById(R.id.parent_layout_home), "Permission denied for PSLab", Snackbar.LENGTH_INDEFINITE);
+                        mySnackbar.setAction("Grant Permission", new GrantPermissionListener());
+                        mySnackbar.setActionTextColor(Color.RED);
+                        TextView tv = (TextView) mySnackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                        tv.setTextColor(Color.WHITE);
+                        mySnackbar.show();
                     }
                 }
             }
         }
     };
+
+    public class GrantPermissionListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            usbManager.requestPermission(accessory, mPermissionIntent);
+        }
+    }
 
 }
