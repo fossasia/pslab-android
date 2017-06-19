@@ -12,6 +12,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:textStyle="normal|bold"
         android:textSize="18sp" />
@@ -24,6 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:textStyle="normal|bold"
         android:textSize="18sp" />
@@ -36,6 +38,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         android:textStyle="normal|bold"
         android:textSize="18sp" />
@@ -59,6 +62,7 @@
         android:layout_height="32dp"
         android:id="@+id/tv_range1_cp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toRightOf="@+id/checkBox_ch1_cp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -72,6 +76,7 @@
         android:layout_height="32dp"
         android:id="@+id/tv_range2_cp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toRightOf="@+id/checkBox_ch2_cp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="16dp"
@@ -83,6 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toRightOf="@+id/tv_range2_cp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/spinner_range_ch2_cp"
@@ -93,6 +99,7 @@
         android:layout_height="48dp"
         android:id="@+id/spinner_channel_select_cp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toRightOf="@+id/spinner_range_ch1_cp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp" />
@@ -104,6 +111,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/tv_range1_cp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp" />
 
     <TextView
@@ -114,6 +122,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toRightOf="@+id/spinner_range_ch2_cp"
         android:clickable="true"
         android:textColor="@android:color/background_dark"
