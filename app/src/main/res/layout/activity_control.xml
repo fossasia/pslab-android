@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        app:theme="@style/AppTheme.Bottomnavigationbar"
         app:menu="@menu/activity_control_bottom_navigationbar"/>
 </RelativeLayout>
