@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,16 +16,16 @@
             android:id="@+id/linearlayout_control_advanced1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/control_margin"
             android:orientation="horizontal"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
+            android:layout_marginStart="@dimen/control_margin"
+            android:layout_marginEnd="@dimen/control_margin">
             <TextView
                 android:id="@+id/tv_control_advanced1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/waveform_generator"
-                android:textSize="20sp"
+                android:textSize="@dimen/control_textsize_large"
                 android:textStyle="bold"/>
         </LinearLayout>
 
@@ -37,54 +38,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginTop="@dimen/control_margin_large"
+                android:layout_marginStart="@dimen/control_margin"
+                android:layout_marginEnd="@dimen/control_margin"
+                tools:context="org.fossasia.pslab.activity.ControlActivity">
 
                 <TextView
                     android:id="@+id/tv_control_advanced2"
                     android:layout_width="0dp"
-                    android:layout_weight="1.5"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/w1"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_control_advanced3"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
+                    android:layout_weight="2.3"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
                     android:text="@string/freq_range"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/button_control_advanced1"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced1"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
-
-                <EditText
-                    android:id="@+id/edittext_control_advanced1"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced2"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
+                    android:layout_weight="2.25"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    />
 
                 <Spinner
                     android:id="@+id/spinner_control_advanced1"
                     android:layout_width="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="2.4"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
                     android:entries="@array/wave_type">
                 </Spinner>
             </TableRow>
@@ -94,53 +88,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp" >
+                android:layout_marginTop="@dimen/control_margin_large"
+                android:layout_marginStart="@dimen/control_margin"
+                android:layout_marginEnd="@dimen/control_margin" >
+
                 <TextView
                     android:id="@+id/tv_control_advanced4"
                     android:layout_width="0dp"
-                    android:layout_weight="1.5"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/w2"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_control_advanced5"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
+                    android:layout_weight="2.3"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
                     android:text="@string/freq_range"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/button_control_advanced3"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced2"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
-
-                <EditText
-                    android:id="@+id/edittext_control_advanced2"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced4"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
+                    android:layout_weight="2.25"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    />
 
                 <Spinner
                     android:id="@+id/spinner_control_advanced2"
                     android:layout_width="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="2.4"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
                     android:entries="@array/wave_type">
                 </Spinner>
 
@@ -151,42 +138,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp" >
+                android:layout_marginTop="@dimen/control_margin_large"
+                android:layout_marginStart="@dimen/control_margin"
+                android:layout_marginEnd="@dimen/control_margin" >
                 <TextView
                     android:id="@+id/tv_control_advanced6"
                     android:layout_width="0dp"
-                    android:layout_weight="4"
+                    android:layout_weight="3.3"
                     android:layout_height="wrap_content"
                     android:text="@string/phase"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/button_control_advanced5"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced3"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
-
-                <EditText
-                    android:id="@+id/edittext_control_advanced3"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced6"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
+                    android:layout_weight="2.25"
+                    android:layout_marginLeft="@dimen/control_margin"
+                    android:layout_marginStart="@dimen/control_margin"
+                    />
 
                 <Space
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2.45"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"/>
 
             </TableRow>
         </TableLayout>
@@ -195,15 +172,15 @@
             android:id="@+id/linearlayout_control_advanced2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginStart="@dimen/control_margin_medium"
+            android:layout_marginEnd="@dimen/control_margin_medium"
+            android:layout_marginTop="@dimen/control_margin_medium" >
                 <Button
-                    android:id="@+id/button_control_advanced7"
+                    android:id="@+id/button_control_advanced1"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:text="@string/set"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:background="@color/colorPrimaryDark"/>
@@ -214,15 +191,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
+            android:layout_marginTop="@dimen/control_margin_large"
+            android:layout_marginStart="@dimen/control_margin"
+            android:layout_marginEnd="@dimen/control_margin">
             <TextView
                 android:id="@+id/tv_control_advanced7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/configure_PWM"
-                android:textSize="20dp"
+                android:textSize="@dimen/control_textsize_large"
                 android:textStyle="bold"/>
         </LinearLayout>
 
@@ -235,9 +212,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginTop="@dimen/control_margin_large"
+                android:layout_marginStart="@dimen/control_margin"
+                android:layout_marginEnd="@dimen/control_margin">
 
                 <TextView
                     android:id="@+id/tv_control_advanced8"
@@ -245,23 +222,29 @@
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
                     android:text="@string/output"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/control_textsize_medium"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/tv_control_advanced9"
                     android:layout_width="0dp"
                     android:layout_weight="3.5"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/control_margin"
+                    android:layout_marginStart="@dimen/control_margin"
+                    android:gravity="center_horizontal"
                     android:text="@string/phase"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/control_textsize_medium"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/tv_control_advanced10"
                     android:layout_width="0dp"
                     android:layout_weight="4"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/control_margin"
+                    android:layout_marginStart="@dimen/control_margin"
+                    android:gravity="center_horizontal"
                     android:text="@string/dutycycle"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/control_textsize_medium"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -270,17 +253,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginTop="@dimen/control_margin_medium"
+                android:layout_marginStart="@dimen/control_margin_small"
+                android:layout_marginLeft="@dimen/control_margin_small"
+                android:layout_marginEnd="@dimen/control_margin_small"
+                android:layout_marginRight="@dimen/control_margin_small">
 
                 <TextView
                     android:id="@+id/tv_control_advanced11"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/control_margin_small"
                     android:text="@string/sqr1"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
@@ -288,30 +274,22 @@
                     android:layout_width="0dp"
                     android:layout_weight="3.5"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    android:layout_marginTop="@dimen/control_margin_small"
+                    android:gravity="center_horizontal"
                     android:text="@string/zero"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/button_control_advanced8"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced4"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
-
-                <EditText
-                    android:id="@+id/edittext_control_advanced4"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced9"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
+                    android:layout_weight="3.5"
+                    android:layout_marginLeft="@dimen/control_margin"
+                    android:layout_marginStart="@dimen/control_margin"
+                    />
 
             </TableRow>
 
@@ -320,60 +298,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginTop="@dimen/control_margin_medium"
+                android:layout_marginStart="@dimen/control_margin_small"
+                android:layout_marginLeft="@dimen/control_margin_small"
+                android:layout_marginEnd="@dimen/control_margin_small"
+                android:layout_marginRight="@dimen/control_margin_small">
 
                 <TextView
                     android:id="@+id/tv_control_advanced13"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/control_margin_small"
                     android:text="@string/sqr2"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/button_control_advanced10"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced5"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
+                    android:layout_weight="3.5"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    />
 
-                <EditText
-                    android:id="@+id/edittext_control_advanced5"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced6"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced11"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
-
-                <Button
-                    android:id="@+id/button_control_advanced12"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
-
-                <EditText
-                    android:id="@+id/edittext_control_advanced6"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced13"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
+                    android:layout_weight="3.5"
+                    android:layout_marginLeft="@dimen/control_margin"
+                    android:layout_marginStart="@dimen/control_margin"
+                    />
 
             </TableRow>
 
@@ -382,59 +339,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp" >
+                android:layout_marginTop="@dimen/control_margin_medium"
+                android:layout_marginStart="@dimen/control_margin_small"
+                android:layout_marginLeft="@dimen/control_margin_small"
+                android:layout_marginEnd="@dimen/control_margin_small"
+                android:layout_marginRight="@dimen/control_margin_small" >
 
                 <TextView
                     android:id="@+id/tv_control_advanced14"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/control_margin_small"
                     android:text="@string/sqr3"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/button_control_advanced14"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced7"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
-
-                <EditText
-                    android:id="@+id/edittext_control_advanced7"
+                    android:layout_weight="3.5"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    />
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced8"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced15"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
-                <Button
-                    android:id="@+id/button_control_advanced16"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
-
-                <EditText
-                    android:id="@+id/edittext_control_advanced8"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced17"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
+                    android:layout_weight="3.5"
+                    android:layout_marginLeft="@dimen/control_margin"
+                    android:layout_marginStart="@dimen/control_margin"
+                    />
 
             </TableRow>
 
@@ -443,59 +379,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginTop="@dimen/control_margin_medium"
+                android:layout_marginStart="@dimen/control_margin_small"
+                android:layout_marginLeft="@dimen/control_margin_small"
+                android:layout_marginEnd="@dimen/control_margin_small"
+                android:layout_marginRight="@dimen/control_margin_small">
 
                 <TextView
                     android:id="@+id/tv_control_advanced15"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/control_margin_small"
                     android:text="@string/sqr4"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
-                <Button
-                    android:id="@+id/button_control_advanced18"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced9"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
+                    android:layout_weight="3.5"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    />
 
-                <EditText
-                    android:id="@+id/edittext_control_advanced9"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced10"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="2.5"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced19"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
-
-                <Button
-                    android:id="@+id/button_control_advanced20"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
-
-                <EditText
-                    android:id="@+id/edittext_control_advanced10"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced21"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
+                    android:layout_weight="3.5"
+                    android:layout_marginLeft="@dimen/control_margin"
+                    android:layout_marginStart="@dimen/control_margin"
+                    />
 
             </TableRow>
 
@@ -504,43 +419,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginTop="@dimen/control_margin_medium"
+                android:layout_marginStart="@dimen/control_margin_small"
+                android:layout_marginLeft="@dimen/control_margin_small"
+                android:layout_marginEnd="@dimen/control_margin_small"
+                android:layout_marginRight="@dimen/control_margin_small">
 
                 <TextView
                     android:id="@+id/tv_control_advanced16"
                     android:layout_width="0dp"
                     android:layout_weight="2.5"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/control_margin_small"
                     android:text="@string/frequency"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/button_control_advanced22"
+                <org.fossasia.pslab.others.Edittextwidget
+                    android:id="@+id/etwidget_control_advanced11"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_minus" />
-
-                <EditText
-                    android:id="@+id/edittext_control_advanced11"
-                    android:layout_width="0dp"
-                    android:layout_weight="2.5"
-                    android:layout_height="24dp"
-                    android:background="@drawable/control_edittext" />
-
-                <Button
-                    android:id="@+id/button_control_advanced23"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="22dp"
-                    android:background="@drawable/button_plus" />
+                    android:layout_weight="3.5"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    />
 
                 <Space
                     android:layout_width="0dp"
-                    android:layout_weight="4"/>
+                    android:layout_weight="3.5"
+                    android:layout_marginLeft="@dimen/control_margin"
+                    android:layout_marginStart="@dimen/control_margin"/>
 
             </TableRow>
         </TableLayout>
@@ -549,15 +457,15 @@
             android:id="@+id/linearlayout_control_advanced4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginStart="@dimen/control_margin_medium"
+            android:layout_marginEnd="@dimen/control_margin_medium"
+            android:layout_marginTop="@dimen/control_margin_medium">
                 <Button
-                    android:id="@+id/button_control_advanced24"
+                    android:id="@+id/button_control_advanced2"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:text="@string/set"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:background="@color/colorPrimaryDark"/>
@@ -569,16 +477,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
+            android:layout_marginTop="@dimen/control_margin_large"
+            android:layout_marginStart="@dimen/control_margin"
+            android:layout_marginEnd="@dimen/control_margin">
 
             <TextView
                 android:id="@+id/tv_control_advanced17"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/digital_outputs"
-                android:textSize="20sp"
+                android:textSize="@dimen/control_textsize_large"
                 android:textStyle="bold"/>
         </LinearLayout>
 
@@ -591,9 +499,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginTop="@dimen/control_margin_large"
+                android:layout_marginStart="@dimen/control_margin"
+                android:layout_marginEnd="@dimen/control_margin">
 
                 <TextView
                     android:id="@+id/tv_control_advanced18"
@@ -601,14 +509,13 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr1"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="12dp"/>
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
                 <CheckBox
                     android:id="@+id/checkbox_control_advanced1"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.6"
                     android:layout_height="wrap_content" />
 
                 <TextView
@@ -617,14 +524,15 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr2"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold"
-                    android:layout_marginStart="12dp"/>
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    android:layout_marginLeft="@dimen/control_margin_small"/>
 
                 <CheckBox
                     android:id="@+id/checkbox_control_advanced2"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.6"
                     android:layout_height="wrap_content" />
 
                 <TextView
@@ -633,14 +541,15 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr3"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold"
-                    android:layout_marginStart="12dp"/>
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    android:layout_marginLeft="@dimen/control_margin_small"/>
 
                 <CheckBox
                     android:id="@+id/checkbox_control_advanced3"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.6"
                     android:layout_height="wrap_content" />
 
                 <TextView
@@ -649,14 +558,15 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/sqr4"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold"
-                    android:layout_marginStart="12dp"/>
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    android:layout_marginLeft="@dimen/control_margin_small"/>
 
                 <CheckBox
                     android:id="@+id/checkbox_control_advanced4"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.6"
                     android:layout_height="wrap_content" />
 
             </TableRow>

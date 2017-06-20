@@ -6,4 +6,10 @@
         <attr name="floatMin" format="float" />
     </declare-styleable>
 
+    <declare-styleable name="Edittextwidget">
+        <attr name="leastcount" format="float" />
+        <attr name="maxima" format="float" />
+        <attr name="minima" format="float" />
+    </declare-styleable>
+
 </resources>
