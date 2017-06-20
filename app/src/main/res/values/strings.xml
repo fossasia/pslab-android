@@ -90,5 +90,10 @@
     <string-array name="sensors">
 
     </string-array>
+    <string name="not_connected">Not Connected</string>
+    <string name="initialisation_completed">Initialisation Completed</string>
+    <string name="initialising_wait">Initialising Wait…</string>
+    <string name="device_connected_successfully">Device Connected Successfully</string>
+    <string name="device_not_found">Device Not Found</string>
 
 </resources>

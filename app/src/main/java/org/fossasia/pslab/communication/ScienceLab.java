@@ -1,7 +1,8 @@
 package org.fossasia.pslab.communication;
 
 import android.os.Handler;
-import android.os.SystemClock;
+import android.os.Looper;
+import java.lang.Thread;
 import android.util.Log;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -83,7 +84,7 @@ public class ScienceLab {
         if (isDeviceFound()) {
             try {
                 mCommunicationHandler.open();
-                //SystemClock.sleep(200);
+                //Thread.sleep(200);
                 mPacketHandler = new PacketHandler(500, mCommunicationHandler);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -94,13 +95,23 @@ public class ScienceLab {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        runInitSequence(true);
-                        calibrated = true;
-                        HomeFragment.booleanVariable.setVariable(true);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                runInitSequence(true);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            calibrated = true;
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    HomeFragment.booleanVariable.setVariable(true);
+                                }
+                            });
+                        }
+                    }).start();
                 }
             }, 1000);
         }
@@ -506,7 +517,11 @@ public class ScienceLab {
     public Map<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap) {
         if (traceOneRemap == null) traceOneRemap = "CH1";
         this.captureTraces(2, samples, timeGap, traceOneRemap, null, null);
-        SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
+        try {
+            Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         while (this.oscilloscopeProgress()[0] == 0) ;
         this.fetchChannel(1);
         this.fetchChannel(2);
@@ -520,7 +535,11 @@ public class ScienceLab {
     public Map<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap) {
         if (traceOneRemap == null) traceOneRemap = "CH1";
         this.captureTraces(4, samples, timeGap, traceOneRemap, null, null);
-        SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
+        try {
+            Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         while (this.oscilloscopeProgress()[0] == 0) ;
         Map<String, double[]> retData = new HashMap<>();
         Map<String, double[]> tempMap = this.fetchTrace(1);
@@ -559,7 +578,7 @@ public class ScienceLab {
             mPacketHandler.sendInt((int) this.timebase * 8);
             mPacketHandler.getAcknowledgement();
             Log.v(TAG, "Wait");
-            SystemClock.sleep((long) (1e-6 * totalSamples * timeGap + .01) * 1000);
+            Thread.sleep((long) (1e-6 * totalSamples * timeGap + .01) * 1000);
             Log.v(TAG, "Done");
             ArrayList<Byte> listData = new ArrayList<>();
             for (int i = 0; i < totalSamples / this.dataSplitting; i++) {
@@ -603,7 +622,7 @@ public class ScienceLab {
                 retData.put("CH" + String.valueOf(i + 1), yValues);
             }
             return retData;
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
@@ -639,10 +658,10 @@ public class ScienceLab {
             mPacketHandler.sendInt((int) timeGap * 8);
             if (args.contains("FIRE_PULSES")) {
                 mPacketHandler.sendInt(interval);
-                SystemClock.sleep((long) (interval * 1e-6));
+                Thread.sleep((long) (interval * 1e-6));
             }
             mPacketHandler.getAcknowledgement();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -653,7 +672,11 @@ public class ScienceLab {
         */
 
         this.captureFullSpeedInitialize(channel, samples, timeGap, args, interval);
-        SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1 + ((interval != null) ? interval : 0) * 1e-6));
+        try {
+            Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1 + ((interval != null) ? interval : 0) * 1e-6));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.fetchChannel(1);
         Map<String, double[]> retData = new HashMap<>();
         retData.put("x", this.aChannels.get(0).getXAxis());
@@ -693,7 +716,11 @@ public class ScienceLab {
 
     public Map<String, double[]> captureFullSpeedHr(String channel, int samples, double timeGap, List<String> args) {
         this.captureFullSpeedHrInitialize(channel, samples, timeGap, args);
-        SystemClock.sleep((long) (1e-6 * this.samples * this.timebase + 0.1));
+        try {
+            Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Map<String, double[]> axisData = retrieveBufferData(channel, this.samples, this.timebase);
         if (axisData == null) {
             Log.v(TAG, "Retrieved Buffer Data as null");
@@ -1296,7 +1323,11 @@ public class ScienceLab {
                 this.dChannels.get(0).loadData(tempMap, doubleData);
                 return 1e-6 * (this.dChannels.get(0).timestamps[skipCycle + 1] - this.dChannels.get(0).timestamps[0]);
             }
-            SystemClock.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -1329,7 +1360,11 @@ public class ScienceLab {
                 this.dChannels.get(0).loadData(tempMap, doubleData);
                 return 1e-6 * (this.dChannels.get(0).timestamps[skipCycle + 1] - this.dChannels.get(0).timestamps[0]);
             }
-            SystemClock.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -1537,7 +1572,11 @@ public class ScienceLab {
         if (aquireMode == null) aquireMode = 3;
         if (triggerMode == null) triggerMode = 3;
         this.startOneChannelLA(aquireChannel, aquireMode, triggerChannel, triggerMode);
-        SystemClock.sleep(waitingTime * 1000);
+        try {
+            Thread.sleep(waitingTime * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         LinkedHashMap<String, Integer> data = this.getLAInitialStates();
         long[] temp = this.fetchLongDataFromLA(data.get("A"), 1);
         double[] retData = new double[temp.length];
@@ -2196,7 +2235,7 @@ public class ScienceLab {
             else
                 mPacketHandler.sendByte((int) trim / 2);
             mPacketHandler.sendInt(chargeTime);
-            SystemClock.sleep((long) (chargeTime * 1e-6 + .02));
+            Thread.sleep((long) (chargeTime * 1e-6 + .02));
             int VCode = mPacketHandler.getInt();
             double v = 3.3 * VCode / 4095;
             mPacketHandler.getAcknowledgement();
@@ -2206,7 +2245,7 @@ public class ScienceLab {
                 c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE) / this.currentScalars[currentRange];
 
             return new double[]{v, c};
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
@@ -2332,9 +2371,9 @@ public class ScienceLab {
             mPacketHandler.sendByte(page);
             mPacketHandler.sendByte(location);
             mCommunicationHandler.write(data.getBytes(), 500);
-            SystemClock.sleep(100);
+            Thread.sleep(100);
             mPacketHandler.getAcknowledgement();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -2957,8 +2996,8 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.STEPPER_MOTOR);
             mPacketHandler.sendInt((steps << 1) | direction);
             mPacketHandler.sendInt(delay);
-            SystemClock.sleep((long) (steps * delay * 1e-3 * 1000));
-        } catch (IOException e) {
+            Thread.sleep((long) (steps * delay * 1e-3 * 1000));
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
