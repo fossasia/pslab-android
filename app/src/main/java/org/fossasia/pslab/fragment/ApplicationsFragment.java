@@ -158,4 +158,9 @@ public class ApplicationsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commit();
+    }
 }
