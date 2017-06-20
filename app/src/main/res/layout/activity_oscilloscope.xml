@@ -17,7 +17,9 @@
             android:layout_height="match_parent"
             android:background="#000"
             android:layout_toEndOf="@+id/chart_yaxis_layout1"
+            android:layout_toRightOf="@+id/chart_yaxis_layout1"
             android:layout_toStartOf="@+id/chart_yaxis_layout2"
+            android:layout_toLeftOf="@+id/chart_yaxis_layout2"
             android:layout_below="@+id/chart_xaxis_layout" />
         <RelativeLayout
             android:id="@+id/chart_xaxis_layout"
@@ -26,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:background="#000">
 
             <TextView
@@ -55,8 +58,10 @@
                 tools:layout_editor_absoluteY="0dp"
                 app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_os"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/tv_graph_label_xaxis_os" />
+                android:layout_toEndOf="@+id/tv_graph_label_xaxis_os"
+                android:layout_toRightOf="@+id/tv_graph_label_xaxis_os"/>
         </RelativeLayout>
 
 
@@ -70,7 +75,8 @@
             android:background="#000"
             android:gravity="center_vertical"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true">
 
             <TextView
                 android:layout_height="9dp"
@@ -117,6 +123,7 @@
             android:foregroundGravity="right"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:background="#000">
             <TextView
                 android:layout_height="wrap_content"
@@ -161,6 +168,7 @@
         android:layout_height="match_parent"
         android:id="@+id/layout_dock_os1"
         android:layout_toEndOf="@+id/layout_chart_os"
+        android:layout_toRightOf="@+id/layout_chart_os"
         android:background="@drawable/rounded_custom_border_2">
 
         <ImageButton
@@ -181,7 +189,8 @@
             android:textAlignment="center"
             android:textColor="#000"
             android:textStyle="normal|bold"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:gravity="center"/>
 
         <ImageButton
             android:layout_width="match_parent"
@@ -200,7 +209,8 @@
             android:textAlignment="center"
             android:textColor="#000"
             android:textStyle="normal|bold"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:gravity="center" />
 
         <ImageButton
             android:layout_width="match_parent"
@@ -221,7 +231,8 @@
             android:textColor="#000"
             android:maxLines="1"
             android:textStyle="normal|bold"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:gravity="center" />
 
         <ImageButton
             android:layout_width="match_parent"
@@ -244,7 +255,8 @@
             android:textStyle="normal|bold"
             android:textSize="12sp"
             android:elevation="24dp"
-            android:layout_marginBottom="2dp" />
+            android:layout_marginBottom="2dp"
+            android:gravity="center" />
 
     </LinearLayout>
 
@@ -253,9 +265,12 @@
         android:layout_height="match_parent"
         android:id="@+id/layout_dock_os2"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
         android:layout_below="@+id/layout_chart_os"
-        android:layout_toStartOf="@+id/layout_dock_os1">
+        android:layout_toStartOf="@+id/layout_dock_os1"
+        android:layout_toLeftOf="@+id/layout_dock_os1">
 
     </FrameLayout>
 
