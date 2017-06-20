@@ -28,7 +28,7 @@ public class TimebaseTiggerFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private Spinner spinnerTiggerChannelSelect;
-    private SeekBar seekBarTimebase;
+    private FloatSeekBar seekBarTimebase;
     private FloatSeekBar seekBarTigger;
     private TextView textViewTimeBase;
     private TextView textViewTigger;
@@ -58,7 +58,8 @@ public class TimebaseTiggerFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_timebase_tigger, container, false);
 
-        seekBarTimebase = (SeekBar) v.findViewById(R.id.seekBar_timebase_tt);
+        //seekBarTimebase = (SeekBar) v.findViewById(R.id.seekBar_timebase_tt);
+        seekBarTimebase = (FloatSeekBar) v.findViewById(R.id.seekBar_timebase_tt);
         seekBarTigger = (FloatSeekBar) v.findViewById(R.id.seekBar_tigger);
         textViewTimeBase = (TextView) v.findViewById(R.id.tv_timebase_values_tt);
         textViewTigger = (TextView) v.findViewById(R.id.tv_tigger_values_tt);
