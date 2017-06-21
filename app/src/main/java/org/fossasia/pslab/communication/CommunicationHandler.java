@@ -40,7 +40,7 @@ public class CommunicationHandler {
     public static final int DEFAULT_READ_BUFFER_SIZE = 16 * 1024;
     public static final int DEFAULT_WRITE_BUFFER_SIZE = 16 * 1024;
 
-    public UsbDevice mUsbDevice;
+    public UsbDevice mUsbDevice = null;
 
     protected final Object mReadBufferLock = new Object();
     protected final Object mWriteBufferLock = new Object();
