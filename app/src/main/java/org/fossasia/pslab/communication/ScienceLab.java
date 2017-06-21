@@ -7,6 +7,7 @@ import android.util.Log;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.fossasia.pslab.activity.MainActivity;
 import org.fossasia.pslab.communication.analogChannel.AnalogAquisitionChannel;
 import org.fossasia.pslab.communication.analogChannel.AnalogConstants;
 import org.fossasia.pslab.communication.analogChannel.AnalogInputSource;
@@ -81,7 +82,7 @@ public class ScienceLab {
         mCommandsProto = new CommandsProto();
         mAnalogConstants = new AnalogConstants();
         mCommunicationHandler = communicationHandler;
-        if (isDeviceFound()) {
+        if (isDeviceFound() && MainActivity.hasPermission) {
             try {
                 mCommunicationHandler.open();
                 //Thread.sleep(200);
