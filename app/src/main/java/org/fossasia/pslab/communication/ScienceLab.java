@@ -516,8 +516,8 @@ public class ScienceLab {
         }
     }
 
-    public Map<String, double[]> captureOne(String channel, int samples, double timeGap) {
-        return this.captureFullSpeed(channel, samples, timeGap, null, null);
+    public HashMap<String, double[]> captureOne(String channel, int samples, double timeGap) {
+        return this.captureFullSpeed(channel, samples, timeGap, new ArrayList<String>(), null);
     }
 
     public Map<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap) {
@@ -672,19 +672,23 @@ public class ScienceLab {
         }
     }
 
-    public Map<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
+    private HashMap<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
         /*
         * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
         */
 
+
         this.captureFullSpeedInitialize(channel, samples, timeGap, args, interval);
+        /*
+        `
         try {
             Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1 + ((interval != null) ? interval : 0) * 1e-6));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        */
         this.fetchChannel(1);
-        Map<String, double[]> retData = new HashMap<>();
+        HashMap<String, double[]> retData = new HashMap<>();
         retData.put("x", this.aChannels.get(0).getXAxis());
         retData.put("y", this.aChannels.get(0).getYAxis());
         return retData;
@@ -929,7 +933,7 @@ public class ScienceLab {
             return false;
         }
 
-        for (int i = 0; i < samples; i++) {
+        for (int i = 0; i < listData.size() / 2; i++) {
             this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
         }
         this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
