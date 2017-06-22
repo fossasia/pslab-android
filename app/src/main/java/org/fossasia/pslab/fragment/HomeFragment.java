@@ -86,6 +86,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void run() {
                     try {
+
                         String version;
                         PreferenceManager preferenceManager = new PreferenceManager(getActivity());
                         if ("none".equals(preferenceManager.getVersion())) {
@@ -104,20 +105,22 @@ public class HomeFragment extends Fragment {
                 }
             }, 100);
 
+            booleanVariable.setValueChangeListener(new InitializationVariable.onValueChangeListener() {
+                @Override
+                public void onChange() {
+                    if (tvInitializationStatus != null)
+                        if (booleanVariable.isInitialised())
+                            tvInitializationStatus.setText(getString(R.string.initialisation_completed));
+                        else
+                            tvInitializationStatus.setText(getString(R.string.initialising_wait));
+                }
+            });
+
         } else {
             tvVersion.setText(getString(R.string.not_connected));
         }
 
-        booleanVariable.setValueChangeListener(new InitializationVariable.onValueChangeListener() {
-            @Override
-            public void onChange() {
-                if (tvInitializationStatus != null)
-                    if (booleanVariable.isInitialised())
-                        tvInitializationStatus.setText(getString(R.string.initialisation_completed));
-                    else
-                        tvInitializationStatus.setText(getString(R.string.initialising_wait));
-            }
-        });
+
 
         /*  DEBUGGING CODE FOR REFERENCE
 

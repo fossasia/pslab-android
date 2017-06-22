@@ -2,10 +2,9 @@ package org.fossasia.pslab.communication;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.lang.Thread;
-
-import android.util.Log;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
@@ -100,6 +99,7 @@ public class ScienceLab {
                 @Override
                 public void run() {
                     initialisationThread = new Thread(new Runnable() {
+
                         @Override
                         public void run() {
                             try {
@@ -117,6 +117,7 @@ public class ScienceLab {
                         }
                     });
                     initialisationThread.start();
+
                 }
             }, 1000);
         }
