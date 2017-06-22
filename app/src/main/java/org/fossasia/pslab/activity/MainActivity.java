@@ -36,6 +36,7 @@ import java.io.IOException;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.others.ScienceLabCommon;
+import org.fossasia.pslab.receivers.USBDetachReceiver;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private UsbManager usbManager;
     private PendingIntent mPermissionIntent;
     private CommunicationHandler communicationHandler;
+    private USBDetachReceiver usbDetachReceiver;
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
     @Override
@@ -102,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mScienceLabCommon.openDevice(communicationHandler);
+
+        IntentFilter usbDetachFilter = new IntentFilter();
+        usbDetachFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        usbDetachReceiver = new USBDetachReceiver(this);
+        registerReceiver(usbDetachReceiver, usbDetachFilter);
 
         setSupportActionBar(toolbar);
         mHandler = new Handler();
@@ -266,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        unregisterReceiver(usbDetachReceiver);
         if (receiverRegister)
             unregisterReceiver(mUsbReceiver);
     }
