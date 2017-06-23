@@ -677,7 +677,6 @@ public class ScienceLab {
         * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
         */
 
-
         this.captureFullSpeedInitialize(channel, samples, timeGap, args, interval);
         /*
         `
@@ -864,9 +863,9 @@ public class ScienceLab {
         }
     }
 
-    public Map<String, double[]> fetchTrace(int channelNumber) {
+    public HashMap<String, double[]> fetchTrace(int channelNumber) {
         this.fetchChannel(channelNumber);
-        Map<String, double[]> retData = new HashMap<>();
+        HashMap<String, double[]> retData = new HashMap<>();
         retData.put("x", this.aChannels.get(channelNumber - 1).getXAxis());
         retData.put("y", this.aChannels.get(channelNumber - 1).getYAxis());
         return retData;

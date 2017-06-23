@@ -419,7 +419,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         protected Void doInBackground(String... params) {
             analogInput = params[0];
             //no. of samples and timegap still need to be determined
-            HashMap<String,double[]> data = scienceLab.captureOne(analogInput, 1000, 10);  //fetching data
+            scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+            HashMap<String,double[]> data = scienceLab.fetchTrace(1); //fetching data
             double[] xData = data.get("x");
             double[] yData = data.get("y");
             entries = new ArrayList<Entry>();
