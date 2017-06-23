@@ -595,7 +595,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2];
                 mPacketHandler.read(data, this.dataSplitting * 2);
-                for (int j = 0; j < data.length - 1; j++)
+                for (int j = 0; j < data.length; j++)
                     listData.add(data[j]);
                 mPacketHandler.getAcknowledgement();
             }
@@ -608,7 +608,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(totalSamples - totalSamples % this.dataSplitting);
                 byte[] data = new byte[2 * (totalSamples % this.dataSplitting)];
                 mPacketHandler.read(data, 2 * (totalSamples % this.dataSplitting));
-                for (int j = 0; j < data.length - 1; j++)
+                for (int j = 0; j < data.length; j++)
                     listData.add(data[j]);
                 mPacketHandler.getAcknowledgement();
             }
@@ -749,7 +749,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2];
                 mPacketHandler.read(data, this.dataSplitting * 2);
-                for (int j = 0; j < data.length - 1; j++)
+                for (int j = 0; j < data.length; j++)
                     listData.add(data[j]);
                 mPacketHandler.getAcknowledgement();
             }
@@ -762,7 +762,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(samples - samples % this.dataSplitting);
                 byte[] data = new byte[2 * (samples % this.dataSplitting)];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
-                for (int j = 0; j < data.length - 1; j++)
+                for (int j = 0; j < data.length; j++)
                     listData.add(data[j]);
                 mPacketHandler.getAcknowledgement();
             }
@@ -906,7 +906,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2];
                 mPacketHandler.read(data, this.dataSplitting * 2);
-                for (int j = 0; j < data.length - 1; j++)
+                for (int j = 0; j < data.length; j++)
                     listData.add(data[j]);
                 mPacketHandler.getAcknowledgement();
             }
@@ -919,7 +919,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(samples - samples % this.dataSplitting);
                 byte[] data = new byte[2 * (samples % this.dataSplitting)];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
-                for (int j = 0; j < data.length - 1; j++)
+                for (int j = 0; j < data.length; j++)
                     listData.add(data[j]);
                 mPacketHandler.getAcknowledgement();
             }
@@ -1028,8 +1028,8 @@ public class ScienceLab {
 
     public Double selectRange(String channel, double voltageRange) {
         double[] ranges = new double[]{16, 8, 4, 3, 2, 1.5, 1, .5, 160};
-        if (Arrays.asList(ranges).contains(voltageRange)) {
-            return this.setGain(channel, Arrays.asList(ranges).indexOf(voltageRange), null);
+        if (Arrays.asList(ArrayUtils.toObject(ranges)).contains(voltageRange)) {
+            return this.setGain(channel, Arrays.asList(ArrayUtils.toObject(ranges)).indexOf(voltageRange), null);
         } else
             Log.e(TAG, "Not a valid Range");
         return null;
