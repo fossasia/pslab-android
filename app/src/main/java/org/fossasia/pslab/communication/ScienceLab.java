@@ -2,8 +2,9 @@ package org.fossasia.pslab.communication;
 
 import android.os.Handler;
 import android.os.Looper;
-import java.lang.Thread;
 import android.util.Log;
+
+import java.lang.Thread;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
@@ -41,18 +42,19 @@ import static org.apache.commons.lang3.math.NumberUtils.max;
 public class ScienceLab {
 
     private static final String TAG = "ScienceLab";
+    public static Thread initialisationThread;
 
-    public int CAP_AND_PCS = 0;
-    public int ADC_SHIFTS_LOCATION1 = 1;
-    public int ADC_SHIFTS_LOCATION2 = 2;
-    public int ADC_POLYNOMIALS_LOCATION = 3;
+    private int CAP_AND_PCS = 0;
+    private int ADC_SHIFTS_LOCATION1 = 1;
+    private int ADC_SHIFTS_LOCATION2 = 2;
+    private int ADC_POLYNOMIALS_LOCATION = 3;
 
-    public int DAC_SHIFTS_PV1A = 4;
-    public int DAC_SHIFTS_PV1B = 5;
-    public int DAC_SHIFTS_PV2A = 6;
-    public int DAC_SHIFTS_PV2B = 7;
-    public int DAC_SHIFTS_PV3A = 8;
-    public int DAC_SHIFTS_PV3B = 9;
+    private int DAC_SHIFTS_PV1A = 4;
+    private int DAC_SHIFTS_PV1B = 5;
+    private int DAC_SHIFTS_PV2A = 6;
+    private int DAC_SHIFTS_PV2B = 7;
+    private int DAC_SHIFTS_PV3A = 8;
+    private int DAC_SHIFTS_PV3B = 9;
 
     public int BAUD = 1000000;
     public int DDS_CLOCK, MAX_SAMPLES, samples, triggerLevel, triggerChannel, errorCount,
@@ -96,7 +98,8 @@ public class ScienceLab {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new Thread(new Runnable() {
+                    initialisationThread = new Thread(new Runnable() {
+
                         @Override
                         public void run() {
                             try {
@@ -112,7 +115,9 @@ public class ScienceLab {
                                 }
                             });
                         }
-                    }).start();
+                    });
+                    initialisationThread.start();
+
                 }
             }, 1000);
         }
