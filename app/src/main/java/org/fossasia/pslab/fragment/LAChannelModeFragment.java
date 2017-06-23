@@ -58,6 +58,7 @@ public class LAChannelModeFragment extends Fragment {
                         llChannel2.setVisibility(View.GONE);
                         llChannel3.setVisibility(View.GONE);
                         llChannel4.setVisibility(View.GONE);
+                        channelSelectSpinner1.setEnabled(true);
                         break;
                     case 1:
                         channelMode = 2;
@@ -65,6 +66,8 @@ public class LAChannelModeFragment extends Fragment {
                         llChannel2.setVisibility(View.VISIBLE);
                         llChannel3.setVisibility(View.GONE);
                         llChannel4.setVisibility(View.GONE);
+                        channelSelectSpinner1.setEnabled(true);
+                        channelSelectSpinner2.setEnabled(true);
                         break;
                     case 2:
                         channelMode = 3;
