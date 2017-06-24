@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.fossasia.pslab.activity.AdvancedControlActivity;
 import org.fossasia.pslab.activity.ControlActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
@@ -26,8 +25,6 @@ import org.fossasia.pslab.adapters.ApplicationAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
 
 
 /**
@@ -65,10 +62,6 @@ public class ApplicationsFragment extends Fragment {
                                 break;
                             case "Control":
                                 intent = new Intent(context, ControlActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Advance Control":
-                                intent = new Intent(context, AdvancedControlActivity.class);
                                 startActivity(intent);
                                 break;
                             case "Logical Analyzer":
@@ -116,7 +109,6 @@ public class ApplicationsFragment extends Fragment {
             int[] applications = new int[]{
                     R.drawable.osciloscope_icon,
                     R.drawable.control_icon,
-                    R.drawable.advance_icon,
                     R.drawable.logic_analzers_icon,
                     R.drawable.sensor_icon,
                     R.drawable.wireless_sensor_icon,
@@ -130,22 +122,19 @@ public class ApplicationsFragment extends Fragment {
                     getResources().getString(R.string.control), applications[1])
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.advance_control), applications[2])
+                    getResources().getString(R.string.logical_analyzer), applications[2])
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.logical_analyzer), applications[3])
+                    getResources().getString(R.string.data_sensor_logger), applications[3])
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.data_sensor_logger), applications[4])
+                    getResources().getString(R.string.w_sensor_logger), applications[4])
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.w_sensor_logger), applications[5])
+                    getResources().getString(R.string.sensor_quick_view), applications[5])
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.sensor_quick_view), applications[6])
-            );
-            applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.w_sensor_quick_view), applications[7])
+                    getResources().getString(R.string.w_sensor_quick_view), applications[6])
             );
             return null;
         }
