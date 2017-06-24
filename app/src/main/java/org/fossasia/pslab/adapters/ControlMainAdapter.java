@@ -3,6 +3,8 @@ package org.fossasia.pslab.adapters;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,12 +62,31 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
         holder.setIsRecyclable(true);
         holder.tvControlMain1.setText(mDataset[position]);
 
-        Button buttonControlMain1 = holder.buttonControlMain1;
-        Button buttonControlMain2 = holder.buttonControlMain2;
+        final Button buttonControlMain1 = holder.buttonControlMain1;
+        final Button buttonControlMain2 = holder.buttonControlMain2;
         Button buttonControlMain3 = holder.buttonControlMain2;
 
         final SeekBar seekbarControlMain = holder.seekbarControlMain;
         final EditText edittextControlMain = holder.edittextControlMain;
+
+        buttonControlMain1.setEnabled(false);
+        buttonControlMain2.setEnabled(false);
+
+        edittextControlMain.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!s.toString().equals("")){
+                    buttonControlMain1.setEnabled(true);
+                    buttonControlMain2.setEnabled(true);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         switch (position) {
             case 0:

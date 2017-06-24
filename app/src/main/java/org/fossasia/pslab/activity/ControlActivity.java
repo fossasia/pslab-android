@@ -30,7 +30,7 @@ public class ControlActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control);
-        scienceLab = ScienceLabCommon.getInstance().scienceLab;
+        scienceLab = ScienceLabCommon.scienceLab;
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
