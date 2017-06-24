@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
 
-            <SeekBar
+            <org.fossasia.pslab.others.FloatSeekBar
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar_timebase_tt"
@@ -50,7 +50,8 @@
                 android:layout_marginEnd="0dp"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_alignParentRight="true" />
 
             <TextView
                 android:text="875.00 μs"

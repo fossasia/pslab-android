@@ -18,7 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
@@ -33,11 +35,12 @@
         <activity
             android:name=".activity.OscilloscopeActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".activity.AdvancedControlActivity" />
         <activity android:name=".activity.SensorActivity" />
         <activity
             android:name=".activity.LogicalAnalyzerActivity"
             android:configChanges="screenSize|orientation" />
+
+        <receiver android:name=".receivers.USBDetachReceiver" />
     </application>
 
 </manifest>

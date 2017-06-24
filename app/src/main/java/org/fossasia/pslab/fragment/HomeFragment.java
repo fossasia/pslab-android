@@ -13,6 +13,7 @@ import android.widget.TextView;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.InitializationVariable;
+import org.fossasia.pslab.others.PreferenceManager;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
@@ -68,10 +69,10 @@ public class HomeFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         if (deviceFound & deviceConnected) {
             imgViewDeviceStatus.setImageResource(org.fossasia.pslab.R.drawable.usb_connected);
-            tvDeviceStatus.setText("Device Connected Successfully");
+            tvDeviceStatus.setText(getString(R.string.device_connected_successfully));
         } else {
             imgViewDeviceStatus.setImageResource(org.fossasia.pslab.R.drawable.usb_disconnected);
-            tvDeviceStatus.setText("PSLab Device not found");
+            tvDeviceStatus.setText(getString(R.string.device_not_found));
         }
         return view;
     }
@@ -85,10 +86,18 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void run() {
                     try {
-                        tvVersion.setText(scienceLab.getVersion());
-                        tvInitializationStatus.setText("Initialising Wait ...");
+
+                        String version;
+                        PreferenceManager preferenceManager = new PreferenceManager(getActivity());
+                        if ("none".equals(preferenceManager.getVersion())) {
+                            version = scienceLab.getVersion();
+                        } else {
+                            version = preferenceManager.getVersion();
+                        }
+                        tvVersion.setText(version);
+                        tvInitializationStatus.setText(getString(R.string.initialising_wait));
                         if (booleanVariable.isInitialised())
-                            tvInitializationStatus.setText("Initialsation Completed");
+                            tvInitializationStatus.setText(getString(R.string.initialisation_completed));
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -96,19 +105,22 @@ public class HomeFragment extends Fragment {
                 }
             }, 100);
 
+            booleanVariable.setValueChangeListener(new InitializationVariable.onValueChangeListener() {
+                @Override
+                public void onChange() {
+                    if (tvInitializationStatus != null)
+                        if (booleanVariable.isInitialised())
+                            tvInitializationStatus.setText(getString(R.string.initialisation_completed));
+                        else
+                            tvInitializationStatus.setText(getString(R.string.initialising_wait));
+                }
+            });
+
         } else {
-            tvVersion.setText("Not Connected");
+            tvVersion.setText(getString(R.string.not_connected));
         }
 
-        booleanVariable.setValueChangeListener(new InitializationVariable.onValueChangeListener() {
-            @Override
-            public void onChange() {
-                if (booleanVariable.isInitialised())
-                    tvInitializationStatus.setText("Initialsation Completed");
-                else
-                    tvInitializationStatus.setText("Initialising Wait ...");
-            }
-        });
+
 
         /*  DEBUGGING CODE FOR REFERENCE
 

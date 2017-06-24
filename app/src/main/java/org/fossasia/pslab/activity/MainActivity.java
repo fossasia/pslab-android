@@ -1,6 +1,11 @@
 package org.fossasia.pslab.activity;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -19,14 +24,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.communication.CommunicationHandler;
-import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ApplicationsFragment;
 import org.fossasia.pslab.fragment.DesignExperiments;
 import org.fossasia.pslab.fragment.HomeFragment;
@@ -34,11 +33,10 @@ import org.fossasia.pslab.fragment.SavedExperiments;
 import org.fossasia.pslab.fragment.SettingsFragment;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.others.ScienceLabCommon;
+import org.fossasia.pslab.receivers.USBDetachReceiver;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,19 +71,44 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     private ScienceLabCommon mScienceLabCommon;
 
+    public static boolean hasPermission = false;
+    private boolean receiverRegister = false;
+    private UsbManager usbManager;
+    private PendingIntent mPermissionIntent;
+    private CommunicationHandler communicationHandler;
+    private USBDetachReceiver usbDetachReceiver;
+    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        UsbManager usbManager = (UsbManager) getSystemService(USB_SERVICE);
+        usbManager = (UsbManager) getSystemService(USB_SERVICE);
         mScienceLabCommon = ScienceLabCommon.getInstance();
-        mScienceLabCommon.openDevice(new CommunicationHandler(usbManager));
-        if (ScienceLabCommon.scienceLab.isDeviceFound()) {
-            Log.d(TAG, "PSLab device found");
-        } else {
-            Log.d(TAG, "PSLab device not found");
+        communicationHandler = new CommunicationHandler(usbManager);
+        if (!("android.hardware.usb.action.USB_DEVICE_ATTACHED".equals(getIntent().getAction()))) {
+            if (communicationHandler.isDeviceFound() && !usbManager.hasPermission(communicationHandler.mUsbDevice)) {
+                mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+                IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+                registerReceiver(mUsbReceiver, filter);
+                receiverRegister = true;
+                usbManager.requestPermission(communicationHandler.mUsbDevice, mPermissionIntent);
+            }
+            if (communicationHandler.mUsbDevice != null) {
+                if (usbManager.hasPermission(communicationHandler.mUsbDevice))
+                    hasPermission = true;
+            }
+        } else if (usbManager.hasPermission(communicationHandler.mUsbDevice)) {
+            hasPermission = true;
         }
+
+        mScienceLabCommon.openDevice(communicationHandler);
+
+        IntentFilter usbDetachFilter = new IntentFilter();
+        usbDetachFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        usbDetachReceiver = new USBDetachReceiver(this);
+        registerReceiver(usbDetachReceiver, usbDetachFilter);
 
         setSupportActionBar(toolbar);
         mHandler = new Handler();
@@ -250,5 +273,31 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        unregisterReceiver(usbDetachReceiver);
+        if (receiverRegister)
+            unregisterReceiver(mUsbReceiver);
     }
+
+    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_USB_PERMISSION.equals(action)) {
+                synchronized (this) {
+                    UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+
+                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                        if (device != null) {
+                            hasPermission = true;
+                            mScienceLabCommon.openDevice(communicationHandler);
+                            getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound())).commit();
+                        }
+                    } else {
+                        Log.d(TAG, "permission denied for device " + device);
+                    }
+                }
+            }
+        }
+    };
+
 }

@@ -58,6 +58,7 @@ public class LAChannelModeFragment extends Fragment {
                         llChannel2.setVisibility(View.GONE);
                         llChannel3.setVisibility(View.GONE);
                         llChannel4.setVisibility(View.GONE);
+                        channelSelectSpinner1.setEnabled(true);
                         break;
                     case 1:
                         channelMode = 2;
@@ -65,6 +66,8 @@ public class LAChannelModeFragment extends Fragment {
                         llChannel2.setVisibility(View.VISIBLE);
                         llChannel3.setVisibility(View.GONE);
                         llChannel4.setVisibility(View.GONE);
+                        channelSelectSpinner1.setEnabled(true);
+                        channelSelectSpinner2.setEnabled(true);
                         break;
                     case 2:
                         channelMode = 3;
@@ -112,9 +115,13 @@ public class LAChannelModeFragment extends Fragment {
         LinearLayout llChannelSelectMode = (LinearLayout) v.findViewById(R.id.channel_select_mode_ll);
         View selectView = createSingleChannelMode(inflater);
         llChannel1 = (LinearLayout) selectView.findViewById(R.id.ll_channel1);
+        llChannel1.setVisibility(View.VISIBLE);
         llChannel2 = (LinearLayout) selectView.findViewById(R.id.ll_channel2);
+        llChannel2.setVisibility(View.GONE);
         llChannel3 = (LinearLayout) selectView.findViewById(R.id.ll_channel3);
+        llChannel3.setVisibility(View.GONE);
         llChannel4 = (LinearLayout) selectView.findViewById(R.id.ll_channel4);
+        llChannel4.setVisibility(View.GONE);
         llChannelSelectMode.addView(selectView);
         return v;
     }
