@@ -125,6 +125,7 @@ public class CommunicationHandler {
         int numBytesRead = 0;
         synchronized (mReadBufferLock) {
             int readNow;
+            Log.v(TAG, "TO read : " + bytesToBeRead);
             while (numBytesRead < bytesToBeRead) {
                 readNow = mConnection.bulkTransfer(mReadEndpoint, mReadBuffer, bytesToBeRead, timeoutMillis);
                 if (readNow < 0) {
@@ -134,6 +135,9 @@ public class CommunicationHandler {
                     //Log.v(TAG, "Read something" + mReadBuffer);
                     System.arraycopy(mReadBuffer, 0, dest, numBytesRead, readNow);
                     numBytesRead += readNow;
+                    bytesToBeRead -= readNow;
+                    Log.v(TAG, "READ : " + numBytesRead);
+                    Log.v(TAG, "REMAINING: " + bytesToBeRead);
                 }
             }
         }

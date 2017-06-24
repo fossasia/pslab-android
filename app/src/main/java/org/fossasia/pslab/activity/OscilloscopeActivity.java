@@ -2,15 +2,19 @@ package org.fossasia.pslab.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 
 import android.view.View;
@@ -24,7 +28,9 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
@@ -33,6 +39,11 @@ import org.fossasia.pslab.fragment.TimebaseTiggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by viveksb007 on 10/5/17.
@@ -45,6 +56,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         XYPlotFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
+    private String TAG = "Oscilloscope Activity";
     private ScienceLab scienceLab;
     private LineChart mChart;
     private LinearLayout linearLayout;
@@ -84,13 +96,16 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     Fragment timebasetiggerFragment;
     Fragment dataAnalysisFragment;
     Fragment xyPlotFragment;
+    private final Object lock = new Object();
+    private Task task;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oscilloscope);
 
-        scienceLab = ScienceLabCommon.getInstance().scienceLab;
+        scienceLab = ScienceLabCommon.scienceLab;
         linearLayout = (LinearLayout) findViewById(R.id.layout_dock_os1);
         mChart = (LineChart) findViewById(R.id.chart_os);
         mChartLayout = (RelativeLayout) findViewById(R.id.layout_chart_os);
@@ -137,7 +152,76 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         xyPlotTextView.setOnClickListener(this);
 
         chartInit();
-        
+
+        final Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                //Thread to check which checkbox is enabled
+                while (true) {
+                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected){
+                        task = new Task();
+                        task.execute("CH1");
+                        synchronized (lock){
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+
+                    if (isCH2Selected && !isCH1Selected && !isCH2Selected && !isMICSelected){
+                        task = new Task();
+                        task.execute("CH2");
+                        synchronized (lock){
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected){
+                        {
+                            task = new Task();
+                            task.execute("CH3");
+                            synchronized (lock){
+                                try {
+                                    lock.wait();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected){
+                        task = new Task();
+                        task.execute("MIC");
+                        synchronized (lock){
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+
+                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected){
+                        //captureTwo Method
+                    }
+
+                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected){
+                        //captureFour Method
+                    }
+                }
+            }
+        };
+        new Thread(runnable).start();
+
     }
 
     @Override
@@ -181,7 +265,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public void onWindowFocusChanged() {
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
-        if(tabletSize){
+        if (tabletSize) {
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 3 / 4;
             lineChartParams.width = width * 7 / 8;
@@ -190,8 +274,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             frameLayoutParams.height = height / 4;
             frameLayoutParams.width = width * 7 / 8;
             frameLayout.setLayoutParams(frameLayoutParams);
-        }
-        else{
+        } else {
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 2 / 3;
             lineChartParams.width = width * 5 / 6;
@@ -232,8 +315,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Closing Oscilloscope")
                 .setMessage("Are you sure you want to close the Oscilloscope?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
@@ -244,7 +326,16 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 .show();
     }
 
-    public void chartInit(){
+    @Override
+    protected void onDestroy() {
+        if (task != null) {
+            task.cancel(true);
+        }
+
+        super.onDestroy();
+    }
+
+    public void chartInit() {
         mChart.setTouchEnabled(true);
         mChart.setHighlightPerDragEnabled(true);
         mChart.setDragEnabled(true);
@@ -258,7 +349,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         data.setValueTextColor(Color.WHITE);
         mChart.setData(data);
 
-        Legend l = new Legend();
+        Legend l = mChart.getLegend();
         l.setForm(Legend.LegendForm.LINE);
         l.setTextColor(Color.WHITE);
 
@@ -279,10 +370,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         y2.setEnabled(true);
     }
 
-    public void setXAxisScale(double timebase){
+    public void setXAxisScale(double timebase) {
         x1.setAxisMinimum(0);
         x1.setAxisMaximum((float) timebase);
-        if(timebase == 875f)
+        if (timebase == 875f)
             xAxisLabelUnit.setText("(μs)");
         else
             xAxisLabelUnit.setText("(ms)");
@@ -292,10 +383,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         mChart.invalidate();
     }
 
-    public void setLeftYAxisScale(double upperLimit, double lowerLimit){
+    public void setLeftYAxisScale(double upperLimit, double lowerLimit) {
         y1.setAxisMaximum((float) upperLimit);
         y1.setAxisMinimum((float) lowerLimit);
-        if(upperLimit == 500f)
+        if (upperLimit == 500f)
             leftYAxisLabelUnit.setText("(mV)");
         else
             leftYAxisLabelUnit.setText("(V)");
@@ -303,10 +394,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         mChart.invalidate();
     }
 
-    public void setRightYAxisScale(double upperLimit, double lowerLimit){
+    public void setRightYAxisScale(double upperLimit, double lowerLimit) {
         y2.setAxisMaximum((float) upperLimit);
         y2.setAxisMinimum((float) lowerLimit);
-        if(upperLimit == 500f)
+        if (upperLimit == 500f)
             rightYAxisLabelUnit.setText("(mV)");
         else
             rightYAxisLabelUnit.setText("(V)");
@@ -314,8 +405,43 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         mChart.invalidate();
     }
 
-    public void setLeftYAxisLabel(String leftYAxisInput){
+    public void setLeftYAxisLabel(String leftYAxisInput) {
         this.leftYAxisInput = leftYAxisInput;
         leftYAxisLabel.setText(leftYAxisInput);
+    }
+
+
+    public class Task extends AsyncTask<String, Void, Void> {
+        ArrayList<Entry> entries;
+        String analogInput;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            analogInput = params[0];
+            //no. of samples and timegap still need to be determined
+            scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+            HashMap<String,double[]> data = scienceLab.fetchTrace(1); //fetching data
+            double[] xData = data.get("x");
+            double[] yData = data.get("y");
+            entries = new ArrayList<Entry>();
+            for (int i = 0; i < xData.length; i++) {
+                entries.add(new Entry((float) xData[i], (float) yData[i]));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            LineDataSet dataset = new LineDataSet(entries, analogInput);
+            LineData lineData = new LineData(dataset);
+            dataset.setCircleColor(Color.BLUE);
+            dataset.setDrawCircles(false);
+            mChart.setData(lineData);
+            mChart.invalidate();    //refresh the chart
+            synchronized (lock){
+                lock.notify();
+            }
+        }
     }
 }
