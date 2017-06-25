@@ -5,11 +5,18 @@
     android:layout_height="match_parent"
     android:layout_marginTop="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp">
 
         <Button
+            android:id="@+id/button_sensor_autoscan"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/autoscan"
@@ -23,11 +30,16 @@
             />
 
         <TextView
+            android:id="@+id/tv_sensor_scan"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:text=""
             android:layout_marginTop="20dp"
-            android:background="@drawable/control_custom_border"/>
+            android:background="@drawable/control_custom_border"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,6 +53,7 @@
             android:layout_gravity="center_horizontal"/>
 
         <Spinner
+            android:id="@+id/spinner_sensor_select"
             android:layout_width="200dp"
             android:layout_height="35dp"
             android:layout_gravity="center_horizontal"
@@ -49,6 +62,7 @@
         </Spinner>
 
         <Button
+            android:id="@+id/button_sensor_getraw"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/get_raw"
@@ -63,8 +77,13 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp">
             <TextView
+                android:id="@+id/tv_sensor_getraw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""

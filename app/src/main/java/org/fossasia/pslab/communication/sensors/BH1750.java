@@ -25,7 +25,8 @@ public class BH1750{
     private int ADDRESS = 0x23;
     private String name = "Luminosity";
 
-    public void BH1750(I2C i2c) throws IOException, InterruptedException {
+
+    public BH1750(I2C i2c) throws IOException, InterruptedException {
         this.i2c = i2c;
         init();
     }

@@ -31,6 +31,7 @@ public class MPU6050 {
     private ArrayList<KalmanFilter> K = new ArrayList<>();          //K is the list of KalmanFilter object
     private I2C i2c;
     private HashMap<String,ArrayList> params = new HashMap<>();
+
     public MPU6050(I2C i2c) throws IOException {
         this.i2c = i2c;
         params.put("powerUp", new ArrayList(Arrays.asList("Go")));

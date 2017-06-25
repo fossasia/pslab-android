@@ -442,7 +442,7 @@ public class Sx1276 {
         return XFER;
     }
 
-    private ArrayList<Byte> getRaw() throws IOException {
+    public ArrayList<Byte> getRaw() throws IOException {
         return SPIRead(0x02, 1);
     }
 
