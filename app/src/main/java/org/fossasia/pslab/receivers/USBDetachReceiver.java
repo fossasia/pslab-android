@@ -30,25 +30,29 @@ public class USBDetachReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(intent.getAction())) {
-            UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-            if (device != null) {
-                ScienceLabCommon.scienceLab.close();
-                Toast.makeText(context, "USB Device Disconnected", Toast.LENGTH_SHORT).show();
+        try {
+            if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(intent.getAction())) {
+                UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+                if (device != null) {
+                    ScienceLabCommon.scienceLab.close();
+                    Toast.makeText(context, "USB Device Disconnected", Toast.LENGTH_SHORT).show();
 
-                new PreferenceManager(context).setVersion("none"); // writing version as "none" so that its read againg when PSLab is connected
+                    new PreferenceManager(context).setVersion("none"); // writing version as "none" so that its read againg when PSLab is connected
 
-                if (activityContext != null) {
-                    MainActivity mainActivity = (MainActivity) activityContext;
-                    Fragment currentFragment = mainActivity.getSupportFragmentManager().findFragmentById(R.id.frame);
-                    if (currentFragment instanceof HomeFragment) {
-                        mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(false, false)).commit();
+                    if (activityContext != null) {
+                        MainActivity mainActivity = (MainActivity) activityContext;
+                        Fragment currentFragment = mainActivity.getSupportFragmentManager().findFragmentById(R.id.frame);
+                        if (currentFragment instanceof HomeFragment) {
+                            mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(false, false)).commitAllowingStateLoss();
+                        }
                     }
+                } else {
+                    Log.v(TAG, "USB Device is null");
                 }
-            } else {
-                Log.v(TAG, "USB Device is null");
             }
-        }
-    }
+        } catch (IllegalStateException ignored){
 
+        }
+
+    }
 }
