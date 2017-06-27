@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/card_margin"
+    android:layout_marginStart="@dimen/card_margin"
+    android:layout_marginTop="@dimen/card_margin"
+    android:orientation="vertical"
+    android:visibility="visible">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview_control_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        card_view:cardCornerRadius="@dimen/control_card_radius">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearlayout_control_main1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/control_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_control_main1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/control_margin_small"
+                    android:layout_marginStart="@dimen/control_margin_small"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_control_main1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/button_minus" />
+
+                <EditText
+                    android:id="@+id/edittext_control_main"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@drawable/control_edittext"
+                    android:gravity="center_horizontal"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:padding="@dimen/control_edittext_padding"
+                    android:textSize="@dimen/textsize_edittext" />
+
+                <Button
+                    android:id="@+id/button_control_main2"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/button_plus" />
+
+                <Button
+                    android:id="@+id/button_control_main3"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="@dimen/control_margin"
+                    android:layout_marginStart="@dimen/control_margin"
+                    android:layout_weight="1.5"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="@string/set"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_control_main2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="3" />
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/seekbar_control_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
