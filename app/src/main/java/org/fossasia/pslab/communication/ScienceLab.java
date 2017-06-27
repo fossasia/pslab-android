@@ -2864,19 +2864,19 @@ public class ScienceLab {
 
     /*  ANALOG OUTPUTS  */
 
-    public void setPV1(int value) {
+    public void setPV1(float value) {
         this.dac.setVoltage("PV1", value);
     }
 
-    public void setPV2(int value) {
+    public void setPV2(float value) {
         this.dac.setVoltage("PV2", value);
     }
 
-    public void setPV3(int value) {
+    public void setPV3(float value) {
         this.dac.setVoltage("PV3", value);
     }
 
-    public void setPCS(int value) {
+    public void setPCS(float value) {
         this.dac.setCurrent(value);
     }
 

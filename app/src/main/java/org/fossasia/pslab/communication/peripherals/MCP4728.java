@@ -63,9 +63,9 @@ public class MCP4728 {
         chans.get(name).calibrationEnabled = "false";
     }
 
-    public double setVoltage(String name, int v) {
+    public double setVoltage(String name, double val) {
         DACChannel dacChannel = chans.get(name);
-        v = (int) (Math.round(dacChannel.VToCode.value(v)));
+        int v = (int) (Math.round(dacChannel.VToCode.value(val)));
         return setRawVoltage("name", v);
     }
 
@@ -73,9 +73,9 @@ public class MCP4728 {
         return this.values.get(name);
     }
 
-    public double setCurrent(int v) {
+    public double setCurrent(float val) {
         DACChannel dacChannel = chans.get("PCS");
-        v = (int) (Math.round(dacChannel.VToCode.value(v)));
+        int v = (int) (Math.round(dacChannel.VToCode.value(val)));
         return setRawVoltage("PCS", v);
     }
 
