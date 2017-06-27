@@ -177,7 +177,7 @@ public class ScienceLab {
             for (String temp : new String[]{"W1", "W2"}) {
                 loadEquation(temp, "sine");
             }
-            spi.setParameters(1, 7, 1, 0, -1);
+            spi.setParameters(1, 7, 1, 0, null);
         }
         nrf = new NRF24L01(mPacketHandler);
         if (nrf.ready) {
@@ -191,15 +191,22 @@ public class ScienceLab {
         if (loadCalibrationData && isConnected()) {
 
             /* CAPS AND PCS CALIBRATION */
-            //byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5); // 5 for READY and 32 (8 float numbers) for data
+            byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5); // 5 for READY and 32 (8 float numbers) for data
 
             ArrayList<Byte> capsAndPCSByteData = new ArrayList<>();
+
+            for (byte temp : capAndPCS) {
+                capsAndPCSByteData.add(temp);
+            }
+
+            /*
             for (int i = 0; i <= 37 / 16; i++) {
                 byte[] temp = readFlash(CAP_AND_PCS, i);
                 for (byte a : temp) {
                     capsAndPCSByteData.add(a);
                 }
             }
+            */
 
             String isReady = "";
             for (int i = 0; i < 5; i++) {
@@ -678,14 +685,13 @@ public class ScienceLab {
         */
 
         this.captureFullSpeedInitialize(channel, samples, timeGap, args, interval);
-        /*
-        `
+
         try {
-            Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1 + ((interval != null) ? interval : 0) * 1e-6));
+            Thread.sleep((long) (1000 * (1e-6 * this.samples * this.timebase + 0.1 + ((interval != null) ? interval : 0) * 1e-6)));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        */
+
         this.fetchChannel(1);
         HashMap<String, double[]> retData = new HashMap<>();
         retData.put("x", this.aChannels.get(0).getXAxis());
@@ -899,6 +905,8 @@ public class ScienceLab {
             Log.v(TAG, "Channel Unavailable");
             return false;
         }
+        //Log.v("fetchChannel", "samples" + samples);
+        //Log.v("fetchCHannel", "dataSplitting" + this.dataSplitting);
         ArrayList<Byte> listData = new ArrayList<>();
         try {
             for (int i = 0; i < samples / this.dataSplitting; i++) {

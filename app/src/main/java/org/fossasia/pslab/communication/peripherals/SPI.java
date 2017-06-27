@@ -25,14 +25,14 @@ public class SPI {
         this.commandsProto = new CommandsProto();
     }
 
-    public void setParameters(int primaryPreScalar, int secondaryPreScalar, int CKE, int CKP, int SMP) throws IOException {
-        if (CKE != -1) this.CKE = CKE;
-        if (CKP != -1) this.CKP = CKP;
-        if (SMP != -1) this.SMP = SMP;
+    public void setParameters(int primaryPreScalar, int secondaryPreScalar, Integer CKE, Integer CKP, Integer SMP) throws IOException {
+        if (CKE != null) this.CKE = CKE;
+        if (CKP != null) this.CKP = CKP;
+        if (SMP != null) this.SMP = SMP;
 
         packetHandler.sendByte(commandsProto.SPI_HEADER);
         packetHandler.sendByte(commandsProto.SET_SPI_PARAMETERS);
-        packetHandler.sendByte(secondaryPreScalar | (primaryPreScalar << 3) | (CKE << 5) | (CKP << 6) | (SMP << 7));
+        packetHandler.sendByte(secondaryPreScalar | (primaryPreScalar << 3) | (this.CKE << 5) | (this.CKP << 6) | (this.SMP << 7));
         packetHandler.getAcknowledgement();
     }
 
