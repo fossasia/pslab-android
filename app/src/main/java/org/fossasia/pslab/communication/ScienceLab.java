@@ -75,8 +75,8 @@ public class ScienceLab {
     private PacketHandler mPacketHandler;
     private CommandsProto mCommandsProto;
     private AnalogConstants mAnalogConstants;
-    private I2C i2c;
-    private SPI spi;
+    public I2C i2c;
+    public SPI spi;
     private NRF24L01 nrf;
     private MCP4728 dac;
 
