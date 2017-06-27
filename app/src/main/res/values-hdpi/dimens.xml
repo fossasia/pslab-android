@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="control_textsize_small">15sp</dimen>
+    <dimen name="control_margin">3dp</dimen>
+    <dimen name="card_margin">5dp</dimen>
+
+</resources>
