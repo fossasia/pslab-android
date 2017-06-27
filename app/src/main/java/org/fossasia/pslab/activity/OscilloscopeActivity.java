@@ -1,14 +1,19 @@
 package org.fossasia.pslab.activity;
 
+
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -43,6 +48,7 @@ import org.fossasia.pslab.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -331,7 +337,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         if (task != null) {
             task.cancel(true);
         }
-
         super.onDestroy();
     }
 
@@ -417,15 +422,20 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
         @Override
         protected Void doInBackground(String... params) {
-            analogInput = params[0];
-            //no. of samples and timegap still need to be determined
-            scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
-            HashMap<String,double[]> data = scienceLab.fetchTrace(1); //fetching data
-            double[] xData = data.get("x");
-            double[] yData = data.get("y");
-            entries = new ArrayList<Entry>();
-            for (int i = 0; i < xData.length; i++) {
-                entries.add(new Entry((float) xData[i], (float) yData[i]));
+            try {
+                analogInput = params[0];
+                //no. of samples and timegap still need to be determined
+                scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+                HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
+                double[] xData = data.get("x");
+                double[] yData = data.get("y");
+                entries = new ArrayList<Entry>();
+                for (int i = 0; i < xData.length; i++) {
+                    entries.add(new Entry((float) xData[i], (float) yData[i]));
+                }
+            }
+            catch (NullPointerException e){
+                cancel(true);
             }
             return null;
         }
