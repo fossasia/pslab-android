@@ -51,7 +51,7 @@
                 android:gravity="center_horizontal"
                 android:textSize="@dimen/textsize_edittext"
                 android:padding="@dimen/control_edittext_padding"
-                android:inputType="numberDecimal"
+                android:inputType="numberDecimal|numberSigned"
                 android:background="@drawable/control_edittext" />
 
             <Button
