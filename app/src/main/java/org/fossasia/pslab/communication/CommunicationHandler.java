@@ -98,7 +98,7 @@ public class CommunicationHandler {
         Log.d(TAG, "Write endpoint direction: " + mWriteEndpoint.getDirection());
         connected = true;
         setBaudRate(1000000);
-        //SystemClock.sleep(1000);
+        //Thread.sleep(1000);
         clear();
     }
 
@@ -123,24 +123,26 @@ public class CommunicationHandler {
 
     public int read(byte[] dest, int bytesToBeRead, int timeoutMillis) throws IOException {
         int numBytesRead = 0;
-        synchronized (mReadBufferLock) {
-            int readNow;
-            Log.v(TAG, "TO read : " + bytesToBeRead);
-            while (numBytesRead < bytesToBeRead) {
-                readNow = mConnection.bulkTransfer(mReadEndpoint, mReadBuffer, bytesToBeRead, timeoutMillis);
-                if (readNow < 0) {
-                    Log.e(TAG, "Read Error: " + numBytesRead);
-                    return numBytesRead;
-                } else {
-                    //Log.v(TAG, "Read something" + mReadBuffer);
-                    System.arraycopy(mReadBuffer, 0, dest, numBytesRead, readNow);
-                    numBytesRead += readNow;
-                    bytesToBeRead -= readNow;
-                    Log.v(TAG, "READ : " + numBytesRead);
-                    Log.v(TAG, "REMAINING: " + bytesToBeRead);
-                }
+        //synchronized (mReadBufferLock) {
+        int readNow;
+        Log.v(TAG, "TO read : " + bytesToBeRead);
+        int bytesToBeReadTemp = bytesToBeRead;
+        while (numBytesRead < bytesToBeRead) {
+            readNow = mConnection.bulkTransfer(mReadEndpoint, mReadBuffer, bytesToBeReadTemp, timeoutMillis);
+            if (readNow < 0) {
+                Log.e(TAG, "Read Error: " + bytesToBeReadTemp);
+                return numBytesRead;
+            } else {
+                //Log.v(TAG, "Read something" + mReadBuffer);
+                System.arraycopy(mReadBuffer, 0, dest, numBytesRead, readNow);
+                numBytesRead += readNow;
+                bytesToBeReadTemp -= readNow;
+                //Log.v(TAG, "READ : " + numBytesRead);
+                //Log.v(TAG, "REMAINING: " + bytesToBeRead);
             }
         }
+        //}
+        Log.v("Bytes Read", "" + numBytesRead);
         return numBytesRead;
     }
 
@@ -151,11 +153,11 @@ public class CommunicationHandler {
         int written = 0;
         while (written < src.length) {
             int writeLength, amtWritten;
-            synchronized (mWriteBufferLock) {
-                writeLength = Math.min(mWriteBuffer.length, src.length - written);
-                // bulk transfer supports offset from API 18
-                amtWritten = mConnection.bulkTransfer(mWriteEndpoint, src, written, writeLength, timeoutMillis);
-            }
+            //synchronized (mWriteBufferLock) {
+            writeLength = Math.min(mWriteBuffer.length, src.length - written);
+            // bulk transfer supports offset from API 18
+            amtWritten = mConnection.bulkTransfer(mWriteEndpoint, src, written, writeLength, timeoutMillis);
+            //}
             if (amtWritten < 0) {
                 throw new IOException("Error writing " + writeLength
                         + " bytes at offset " + written + " length=" + src.length);
@@ -172,18 +174,18 @@ public class CommunicationHandler {
         while (written < src.length) {
             final int writeLength;
             final int amtWritten;
-            synchronized (mWriteBufferLock) {
-                final byte[] writeBuffer;
-                writeLength = Math.min(src.length - written, mWriteBuffer.length);
-                if (written == 0) {
-                    writeBuffer = src;
-                } else {
-                    // bulkTransfer does not support offsets for API level < 18, so make a copy.
-                    System.arraycopy(src, written, mWriteBuffer, 0, writeLength);
-                    writeBuffer = mWriteBuffer;
-                }
-                amtWritten = mConnection.bulkTransfer(mWriteEndpoint, writeBuffer, writeLength, timeoutMillis);
+            //synchronized (mWriteBufferLock) {
+            final byte[] writeBuffer;
+            writeLength = Math.min(src.length - written, mWriteBuffer.length);
+            if (written == 0) {
+                writeBuffer = src;
+            } else {
+                // bulkTransfer does not support offsets for API level < 18, so make a copy.
+                System.arraycopy(src, written, mWriteBuffer, 0, writeLength);
+                writeBuffer = mWriteBuffer;
             }
+            amtWritten = mConnection.bulkTransfer(mWriteEndpoint, writeBuffer, writeLength, timeoutMillis);
+            //}
             if (amtWritten <= 0) {
                 throw new IOException("Error writing " + writeLength
                         + " bytes at offset " + written + " length=" + src.length);

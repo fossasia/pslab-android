@@ -165,10 +165,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             public void run() {
                 //Thread to check which checkbox is enabled
                 while (true) {
-                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected){
+                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected) {
                         task = new Task();
                         task.execute("CH1");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -178,10 +178,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH2Selected && !isCH1Selected && !isCH2Selected && !isMICSelected){
+                    if (isCH2Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
                         task = new Task();
                         task.execute("CH2");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -190,11 +190,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
 
                     }
-                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected){
+                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
                         {
                             task = new Task();
                             task.execute("CH3");
-                            synchronized (lock){
+                            synchronized (lock) {
                                 try {
                                     lock.wait();
                                 } catch (InterruptedException e) {
@@ -203,10 +203,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                             }
                         }
                     }
-                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected){
+                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected) {
                         task = new Task();
                         task.execute("MIC");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -216,11 +216,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected){
+                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected) {
                         //captureTwo Method
                     }
 
-                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected){
+                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected) {
                         //captureFour Method
                     }
                 }
@@ -426,6 +426,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 analogInput = params[0];
                 //no. of samples and timegap still need to be determined
                 scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+                try {
+                    Thread.sleep((long) (1000 * 1000 * 10 * 1e-6));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
                 double[] xData = data.get("x");
                 double[] yData = data.get("y");
@@ -433,8 +438,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 for (int i = 0; i < xData.length; i++) {
                     entries.add(new Entry((float) xData[i], (float) yData[i]));
                 }
-            }
-            catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 cancel(true);
             }
             return null;
@@ -449,7 +453,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             dataset.setDrawCircles(false);
             mChart.setData(lineData);
             mChart.invalidate();    //refresh the chart
-            synchronized (lock){
+            synchronized (lock) {
                 lock.notify();
             }
         }
