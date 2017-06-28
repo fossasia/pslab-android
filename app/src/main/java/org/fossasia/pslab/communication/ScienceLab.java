@@ -527,9 +527,9 @@ public class ScienceLab {
         return this.captureFullSpeed(channel, samples, timeGap, new ArrayList<String>(), null);
     }
 
-    public Map<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap) {
+    public HashMap<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap) {
         if (traceOneRemap == null) traceOneRemap = "CH1";
-        this.captureTraces(2, samples, timeGap, traceOneRemap, null, null);
+        this.captureTraces(2, samples, timeGap, traceOneRemap, false, null);
         try {
             Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
         } catch (InterruptedException e) {
@@ -538,24 +538,24 @@ public class ScienceLab {
         while (this.oscilloscopeProgress()[0] == 0) ;
         this.fetchChannel(1);
         this.fetchChannel(2);
-        Map<String, double[]> retData = new HashMap<>();
+        HashMap<String, double[]> retData = new HashMap<>();
         retData.put("x", this.aChannels.get(0).getXAxis());
         retData.put("y1", this.aChannels.get(0).getYAxis());
         retData.put("y2", this.aChannels.get(1).getYAxis());
         return retData;
     }
 
-    public Map<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap) {
+    public HashMap<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap) {
         if (traceOneRemap == null) traceOneRemap = "CH1";
-        this.captureTraces(4, samples, timeGap, traceOneRemap, null, null);
+        this.captureTraces(4, samples, timeGap, traceOneRemap, false, null);
         try {
             Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         while (this.oscilloscopeProgress()[0] == 0) ;
-        Map<String, double[]> retData = new HashMap<>();
-        Map<String, double[]> tempMap = this.fetchTrace(1);
+        HashMap<String, double[]> retData = new HashMap<>();
+        HashMap<String, double[]> tempMap = this.fetchTrace(1);
         retData.put("x", tempMap.get("x"));
         retData.put("y", tempMap.get("y"));
         retData.put("y2", this.fetchTrace(2).get("y"));
@@ -822,7 +822,7 @@ public class ScienceLab {
                     this.timebase = (int) (1.75 * 8) / 8;
                 if (samples > this.MAX_SAMPLES / 2) samples = this.MAX_SAMPLES / 2;
                 this.aChannels.get(0).setParams(channelOneInput, samples, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
-                this.aChannels.get(0).setParams("CH2", samples, this.timebase, 10, this.analogInputSources.get("CH2"), null);
+                this.aChannels.get(1).setParams("CH2", samples, this.timebase, 10, this.analogInputSources.get("CH2"), null);
                 mPacketHandler.sendByte(mCommandsProto.CAPTURE_TWO);
                 mPacketHandler.sendByte(CHOSA | triggerOrNot);
             } else if (number == 3 | number == 4) {
@@ -830,8 +830,10 @@ public class ScienceLab {
                     this.timebase = (int) (1.75 * 8) / 8;
                 if (samples > this.MAX_SAMPLES / 4) samples = this.MAX_SAMPLES / 4;
                 this.aChannels.get(0).setParams(channelOneInput, samples, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
+                int i = 1;
                 for (String temp : new String[]{"CH2", "CH3", "MIC"}) {
-                    this.aChannels.get(0).setParams(temp, samples, this.timebase, 10, this.analogInputSources.get(temp), null);
+                    this.aChannels.get(i).setParams(temp, samples, this.timebase, 10, this.analogInputSources.get(temp), null);
+                    i++;
                 }
                 mPacketHandler.sendByte(mCommandsProto.CAPTURE_FOUR);
                 mPacketHandler.sendByte(CHOSA | (CH123SA << 4) | triggerOrNot);
