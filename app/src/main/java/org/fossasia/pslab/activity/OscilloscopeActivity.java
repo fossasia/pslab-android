@@ -1,3 +1,4 @@
+
 package org.fossasia.pslab.activity;
 
 
@@ -36,6 +37,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
@@ -103,7 +105,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     Fragment dataAnalysisFragment;
     Fragment xyPlotFragment;
     private final Object lock = new Object();
-    private Task task;
+    private CaptureTask captureTask;
+    private CaptureTaskTwo captureTask2;
+    private CaptureTaskThree captureTask3;
 
 
     @Override
@@ -131,6 +135,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
         y2 = mChart.getAxisRight();
+        //scienceLab.setW1(1100, "sine");
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -165,10 +170,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             public void run() {
                 //Thread to check which checkbox is enabled
                 while (true) {
-                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected) {
-                        task = new Task();
-                        task.execute("CH1");
-                        synchronized (lock) {
+                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected){
+                        captureTask = new CaptureTask();
+                        captureTask.execute("CH1");
+                        synchronized (lock){
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -178,10 +183,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH2Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
-                        task = new Task();
-                        task.execute("CH2");
-                        synchronized (lock) {
+                    if (isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected){
+                        captureTask = new CaptureTask();
+                        captureTask.execute("CH2");
+                        synchronized (lock){
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -190,11 +195,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
 
                     }
-                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
+
+                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected){
                         {
-                            task = new Task();
-                            task.execute("CH3");
-                            synchronized (lock) {
+                            captureTask = new CaptureTask();
+                            captureTask.execute("CH3");
+                            synchronized (lock){
                                 try {
                                     lock.wait();
                                 } catch (InterruptedException e) {
@@ -203,10 +209,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                             }
                         }
                     }
-                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected) {
-                        task = new Task();
-                        task.execute("MIC");
-                        synchronized (lock) {
+
+                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected){
+                        captureTask = new CaptureTask();
+                        captureTask.execute("MIC");
+                        synchronized (lock){
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -216,12 +223,52 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected) {
-                        //captureTwo Method
+                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected){
+                        captureTask2 = new CaptureTaskTwo();
+                        captureTask2.execute("CH1");
+                        synchronized (lock){
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
 
-                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected) {
-                        //captureFour Method
+                    if (isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected){
+                        captureTask2 = new CaptureTaskTwo();
+                        captureTask2.execute("CH3");
+                        synchronized (lock){
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    if (isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected){
+                        captureTask2 = new CaptureTaskTwo();
+                        captureTask2.execute("MIC");
+                        synchronized (lock){
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected){
+                        captureTask3 = new CaptureTaskThree();
+                        captureTask3.execute("CH1");
+                        synchronized (lock){
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
             }
@@ -334,8 +381,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        if (task != null) {
-            task.cancel(true);
+        if (captureTask != null) {
+            captureTask.cancel(true);
+        }
+        if (captureTask2 != null) {
+            captureTask2.cancel(true);
+        }
+        if (captureTask3 != null) {
+            captureTask3.cancel(true);
         }
         super.onDestroy();
     }
@@ -416,7 +469,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     }
 
 
-    public class Task extends AsyncTask<String, Void, Void> {
+    public class CaptureTask extends AsyncTask<String, Void, Void> {
         ArrayList<Entry> entries;
         String analogInput;
 
@@ -425,12 +478,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             try {
                 analogInput = params[0];
                 //no. of samples and timegap still need to be determined
-                scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
-                try {
-                    Thread.sleep((long) (1000 * 1000 * 10 * 1e-6));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                scienceLab.captureTraces(1, 800, 10, analogInput, false, null);
+                Log.v("Sleep Time", "" + (800 * 10 * 1e-3));
+                Thread.sleep((long) (800 * 10 * 1e-3));
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
                 double[] xData = data.get("x");
                 double[] yData = data.get("y");
@@ -438,8 +488,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 for (int i = 0; i < xData.length; i++) {
                     entries.add(new Entry((float) xData[i], (float) yData[i]));
                 }
-            } catch (NullPointerException e) {
+            }
+            catch (NullPointerException e){
                 cancel(true);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             return null;
         }
@@ -449,11 +502,131 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             super.onPostExecute(aVoid);
             LineDataSet dataset = new LineDataSet(entries, analogInput);
             LineData lineData = new LineData(dataset);
-            dataset.setCircleColor(Color.BLUE);
             dataset.setDrawCircles(false);
             mChart.setData(lineData);
             mChart.invalidate();    //refresh the chart
-            synchronized (lock) {
+            synchronized (lock){
+                lock.notify();
+            }
+        }
+    }
+
+    public class CaptureTaskTwo extends AsyncTask<String, Void, Void> {
+        ArrayList<Entry> entries1;
+        ArrayList<Entry> entries2;
+        String analogInput;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                analogInput = params[0];
+                //no. of samples and timegap still need to be determined
+                HashMap<String,double[]> data = scienceLab.captureTwo(800,10,analogInput);
+                double[] xData = data.get("x");
+                double[] y1Data = data.get("y1");
+                double[] y2Data = data.get("y2");
+
+                entries1 = new ArrayList<Entry>();
+                entries2 = new ArrayList<Entry>();
+
+                for (int i = 0; i < xData.length; i++) {
+                    entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                    entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                }
+            } catch (NullPointerException e) {
+                cancel(true);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid){
+            super.onPostExecute(aVoid);
+            LineDataSet dataset1 = new LineDataSet(entries1, analogInput);
+            LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
+
+            dataSet2.setColor(Color.GREEN);
+
+            dataset1.setDrawCircles(false);
+            dataSet2.setDrawCircles(false);
+
+            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            dataSets.add(dataset1);
+            dataSets.add(dataSet2);
+
+            LineData data = new LineData(dataSets);
+            mChart.setData(data);
+            mChart.invalidate();
+            synchronized (lock){
+                lock.notify();
+            }
+        }
+    }
+
+    public class CaptureTaskThree extends AsyncTask<String, Void, Void> {
+        ArrayList<Entry> entries1;
+        ArrayList<Entry> entries2;
+        ArrayList<Entry> entries3;
+        ArrayList<Entry> entries4;
+        String analogInput;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                //no. of samples and timegap still need to be determined
+                analogInput = params[0];
+                HashMap<String,double[]> data = scienceLab.captureFour(800, 10, analogInput);
+                double[] xData = data.get("x");
+                double[] y1Data = data.get("y");
+                double[] y2Data = data.get("y2");
+                double[] y3Data = data.get("y3");
+                double[] y4Data = data.get("y4");
+
+                entries1 = new ArrayList<Entry>();
+                entries2 = new ArrayList<Entry>();
+                entries3 = new ArrayList<Entry>();
+                entries4 = new ArrayList<Entry>();
+
+                for (int i = 0; i < xData.length; i++) {
+                    entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                    entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                    entries3.add(new Entry((float) xData[i], (float) y3Data[i]));
+                    entries4.add(new Entry((float) xData[i], (float) y4Data[i]));
+
+                }
+            } catch (NullPointerException e) {
+                cancel(true);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid){
+            super.onPostExecute(aVoid);
+            LineDataSet dataset1 = new LineDataSet(entries1, "CH1");
+            LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
+            LineDataSet dataSet3 = new LineDataSet(entries3, "CH3");
+            LineDataSet dataSet4 = new LineDataSet(entries4, "MIC");
+
+            dataset1.setColor(Color.BLUE);
+            dataSet2.setColor(Color.GREEN);
+            dataSet3.setColor(Color.RED);
+            dataSet4.setColor(Color.YELLOW);
+            dataset1.setDrawCircles(false);
+            dataSet2.setDrawCircles(false);
+            dataSet3.setDrawCircles(false);
+            dataSet4.setDrawCircles(false);
+
+            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            dataSets.add(dataset1);
+            dataSets.add(dataSet2);
+            dataSets.add(dataSet3);
+            dataSets.add(dataSet4);
+
+            LineData data = new LineData(dataSets);
+            mChart.setData(data);
+            mChart.invalidate();
+            synchronized (lock){
                 lock.notify();
             }
         }
