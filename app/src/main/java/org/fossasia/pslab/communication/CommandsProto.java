@@ -8,7 +8,7 @@ public class CommandsProto {
 
     public int ACKNOWLEDGE = 254;
     public int MAX_SAMPLES = 10000;
-    public int DATA_SPLITTING = 200;
+    public int DATA_SPLITTING = 500;
 
     public int FLASH = 1;
     public int READ_FLASH = 1;
