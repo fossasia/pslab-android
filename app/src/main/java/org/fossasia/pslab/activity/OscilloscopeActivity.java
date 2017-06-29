@@ -482,6 +482,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 Log.v("Sleep Time", "" + (800 * 10 * 1e-3));
                 Thread.sleep((long) (800 * 10 * 1e-3));
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
+                if (data == null) {
+                    cancel(true);
+                    return null;
+                }
                 double[] xData = data.get("x");
                 double[] yData = data.get("y");
                 entries = new ArrayList<Entry>();
