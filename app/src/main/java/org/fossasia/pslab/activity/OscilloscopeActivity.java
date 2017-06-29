@@ -108,6 +108,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
     private CaptureTaskThree captureTask3;
+    private static Context context;
 
 
     @Override
@@ -135,6 +136,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
         y2 = mChart.getAxisRight();
+        context = this;
         //scienceLab.setW1(1100, "sine");
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -170,7 +172,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             public void run() {
                 //Thread to check which checkbox is enabled
                 while (true) {
-                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected){
+                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH1");
                         synchronized (lock){
@@ -183,7 +185,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected){
+                    if (isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH2");
                         synchronized (lock){
@@ -196,7 +198,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected){
+                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
                         {
                             captureTask = new CaptureTask();
                             captureTask.execute("CH3");
@@ -210,7 +212,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected){
+                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("MIC");
                         synchronized (lock){
@@ -223,7 +225,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected){
+                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH1");
                         synchronized (lock){
@@ -235,7 +237,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected){
+                    if (isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH3");
                         synchronized (lock){
@@ -247,7 +249,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected){
+                    if (isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("MIC");
                         synchronized (lock){
@@ -259,7 +261,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected){
+                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected) {
                         captureTask3 = new CaptureTaskThree();
                         captureTask3.execute("CH1");
                         synchronized (lock){
@@ -360,6 +362,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
     @Override
@@ -540,7 +546,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         }
 
         @Override
-        protected void onPostExecute(Void aVoid){
+        protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             LineDataSet dataset1 = new LineDataSet(entries1, analogInput);
             LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
