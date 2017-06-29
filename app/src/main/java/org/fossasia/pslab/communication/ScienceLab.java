@@ -58,14 +58,15 @@ public class ScienceLab {
 
     public int BAUD = 1000000;
     public int DDS_CLOCK, MAX_SAMPLES, samples, triggerLevel, triggerChannel, errorCount,
-            channelsInBuffer, digitalChannelsInBuffer, dataSplitting, sin1Frequency, sin2Frequency;
+            channelsInBuffer, digitalChannelsInBuffer, dataSplitting;
+    public double sin1Frequency, sin2Frequency;
     double[] currents, currentScalars, gainValues, buffer;
     double SOCKET_CAPACITANCE, resistanceScaling, timebase;
     public boolean streaming, calibrated = false;
 
     String[] allAnalogChannels, allDigitalChannels;
     HashMap<String, AnalogInputSource> analogInputSources = new HashMap<>();
-    HashMap<String, Integer> squareWaveFrequency = new HashMap<>();
+    HashMap<String, Double> squareWaveFrequency = new HashMap<>();
     HashMap<String, Integer> gains = new HashMap<>();
     HashMap<String, String> waveType = new HashMap<>();
     ArrayList<AnalogAquisitionChannel> aChannels = new ArrayList<>();
@@ -142,10 +143,10 @@ public class ScienceLab {
         }
         sin1Frequency = 0;
         sin2Frequency = 0;
-        squareWaveFrequency.put("SQR1", 0);
-        squareWaveFrequency.put("SQR2", 0);
-        squareWaveFrequency.put("SQR3", 0);
-        squareWaveFrequency.put("SQR4", 0);
+        squareWaveFrequency.put("SQR1", 0.0);
+        squareWaveFrequency.put("SQR2", 0.0);
+        squareWaveFrequency.put("SQR3", 0.0);
+        squareWaveFrequency.put("SQR4", 0.0);
     }
 
     private void runInitSequence(Boolean loadCalibrationData) throws IOException {
@@ -1064,7 +1065,7 @@ public class ScienceLab {
         return source.CHOSA;
     }
 
-    private double getVoltage(String channelName, Integer sample) {
+    public double getVoltage(String channelName, Integer sample) {
         this.voltmeterAutoRange(channelName);
         return this.getAverageVoltage(channelName, sample);
     }
@@ -2431,22 +2432,22 @@ public class ScienceLab {
 
     /* WAVEGEN SECTION */
 
-    public void setWave(String channel, int frequency) {
+    public void setWave(String channel, double frequency) {
         if ("W1".equals(channel))
             this.setW1(frequency, null);
         else if ("W2".equals(channel))
             this.setW2(frequency, null);
     }
 
-    public int setSine1(int frequency) {
+    public double setSine1(double frequency) {
         return this.setW1(frequency, "sine");
     }
 
-    public int setSine2(int frequency) {
+    public double setSine2(double frequency) {
         return this.setW2(frequency, "sine");
     }
 
-    public int setW1(double frequency, String waveType) {
+    public double setW1(double frequency, String waveType) {
         int HIGHRES, tableSize;
         if (frequency < 0.1) {
             Log.v(TAG, "frequency too low");
@@ -2471,7 +2472,7 @@ public class ScienceLab {
         int prescalar = 0, wavelength = 0;
         while (prescalar <= 3) {
             wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
-            frequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
+            frequency = 64e6 / wavelength / p[prescalar] / tableSize;
             if (wavelength < 65525) break;
             prescalar++;
         }
@@ -2485,7 +2486,7 @@ public class ScienceLab {
             mPacketHandler.sendByte(HIGHRES | (prescalar << 1));
             mPacketHandler.sendInt(wavelength - 1);
             mPacketHandler.getAcknowledgement();
-            this.sin1Frequency = (int) frequency;
+            this.sin1Frequency = frequency;
             return this.sin1Frequency;
         } catch (IOException e) {
             e.printStackTrace();
@@ -2493,7 +2494,7 @@ public class ScienceLab {
         return -1;
     }
 
-    public int setW2(double frequency, String waveType) {
+    public double setW2(double frequency, String waveType) {
         int HIGHRES;
         int tableSize;
         if (frequency < 0.1) {
@@ -2519,7 +2520,7 @@ public class ScienceLab {
         int prescalar = 0, wavelength = 0;
         while (prescalar <= 3) {
             wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
-            frequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
+            frequency = 64e6 / wavelength / p[prescalar] / tableSize;
             if (wavelength < 65525) break;
             prescalar++;
         }
@@ -2533,7 +2534,7 @@ public class ScienceLab {
             mPacketHandler.sendByte(HIGHRES | (prescalar << 1));
             mPacketHandler.sendInt(wavelength - 1);
             mPacketHandler.getAcknowledgement();
-            this.sin2Frequency = (int) frequency;
+            this.sin2Frequency = frequency;
             return this.sin2Frequency;
         } catch (IOException e) {
             e.printStackTrace();
@@ -2541,7 +2542,7 @@ public class ScienceLab {
         return -1;
     }
 
-    public int readBackWaveform(String channel) {
+    public double readBackWaveform(String channel) {
         if ("W1".equals(channel))
             return this.sin1Frequency;
         else if ("W2".equals(channel))
@@ -2551,7 +2552,7 @@ public class ScienceLab {
         return -1;
     }
 
-    public int setWaves(double frequency, double phase, double frequency2) {
+    public double setWaves(double frequency, double phase, double frequency2) {
         // used frequency as double ( python code demanded ), maybe its taken in KHz or something ( Clarify )
         int HIGHRES, tableSize, HIGHRES2, tableSize2, wavelength = 0, wavelength2 = 0;
         if (frequency2 == -1) frequency2 = frequency;
@@ -2580,10 +2581,10 @@ public class ScienceLab {
 
         int[] p = new int[]{1, 8, 64, 256};
         int prescalar = 0;
-        int retFrequency = 0;
+        double retFrequency = 0;
         while (prescalar <= 3) {
             wavelength = (int) (64e6 / frequency / p[prescalar] / tableSize);
-            retFrequency = (int) ((64e6 / wavelength / p[prescalar] / tableSize));
+            retFrequency = 64e6 / wavelength / p[prescalar] / tableSize;
             if (wavelength < 65525) break;
             prescalar++;
         }
@@ -2592,10 +2593,10 @@ public class ScienceLab {
             return -1;
         }
         int prescalar2 = 0;
-        int retFrequency2 = 0;
+        double retFrequency2 = 0;
         while (prescalar2 <= 3) {
             wavelength2 = (int) (64e6 / frequency2 / p[prescalar2] / tableSize2);
-            retFrequency2 = (int) ((64e6 / wavelength2 / p[prescalar2] / tableSize2));
+            retFrequency2 = 64e6 / wavelength2 / p[prescalar2] / tableSize2;
             if (wavelength2 < 65525) break;
             prescalar2++;
         }
@@ -2722,7 +2723,7 @@ public class ScienceLab {
     }
 
 
-    public int setSqr1(int frequency, double dutyCycle, boolean onlyPrepare) {
+    public double setSqr1(double frequency, double dutyCycle, boolean onlyPrepare) {
         if (dutyCycle == -1) dutyCycle = 50;
         if (frequency == 0 || dutyCycle == 0) return -1;
         if (frequency > 10e6) {
@@ -2758,11 +2759,11 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.squareWaveFrequency.put("SQR1", (int) (64e6 / wavelength / p[prescalar & 0x3]));
+        this.squareWaveFrequency.put("SQR1", 64e6 / wavelength / p[prescalar & 0x3]);
         return this.squareWaveFrequency.get("SQR1");
     }
 
-    public int setSqr2(int frequency, double dutyCycle) {
+    public double setSqr2(double frequency, double dutyCycle) {
         int[] p = new int[]{1, 8, 64, 256};
         int prescalar = 0;
         int wavelength = 0;
@@ -2786,7 +2787,7 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.squareWaveFrequency.put("SQR2", (int) (64e6 / wavelength / p[prescalar & 0x3]));
+        this.squareWaveFrequency.put("SQR2", 64e6 / wavelength / p[prescalar & 0x3]);
         return this.squareWaveFrequency.get("SQR2");
     }
 
@@ -2806,7 +2807,7 @@ public class ScienceLab {
         }
     }
 
-    public int sqrPWM(int frequency, double h0, double p1, double h1, double p2, double h2, double p3, double h3, boolean pulse) {
+    public double sqrPWM(double frequency, double h0, double p1, double h1, double p2, double h2, double p3, double h3, boolean pulse) {
         if (frequency == 0 || h0 == 0 || h1 == 0 || h2 == 0 || h3 == 0) return -1;
         if (frequency > 10e6) {
             Log.v(TAG, "Frequency is greater than 10MHz. Please use map_reference_clock for 16 & 32MHz outputs");
@@ -2844,7 +2845,7 @@ public class ScienceLab {
             e.printStackTrace();
         }
         for (String channel : new String[]{"SQR1", "SQR2", "SQR3", "SQR4"}) {
-            this.squareWaveFrequency.put(channel, (int) (64e6 / wavelength / p[prescalar & 0x3]));
+            this.squareWaveFrequency.put(channel, 64e6 / wavelength / p[prescalar & 0x3]);
         }
         return (int) (64e6 / wavelength / p[prescalar & 0x3]);
     }

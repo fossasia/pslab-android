@@ -97,7 +97,7 @@ public class AnalogInputSource {
         double A, B, intercept, slope;
         B = range[1];
         A = range[0];
-        if (gain != -1) {
+        if (gain >= 0 && gain<=8) {
             gain = gainValues[(int) gain];
             B /= gain;
             A /= gain;

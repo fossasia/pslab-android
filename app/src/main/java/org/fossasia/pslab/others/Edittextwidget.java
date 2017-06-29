@@ -43,6 +43,7 @@ public class Edittextwidget extends LinearLayout{
     public void init(Context context, final double leastCount, final double minima, final double maxima) {
         View.inflate(context, R.layout.edittext_control, this);
         editText = (EditText) findViewById(R.id.edittext_control);
+        editText.setText("0");
         button1 = (Button) findViewById(R.id.button_control_plus);
         button2 = (Button) findViewById(R.id.button_control_minus);
 
@@ -105,5 +106,13 @@ public class Edittextwidget extends LinearLayout{
             }
         }
         a.recycle();
+    }
+
+    public String getText() {
+        return  editText.getText().toString();
+    }
+
+    public void setText(String text) {
+        editText.setText(text);
     }
 }
