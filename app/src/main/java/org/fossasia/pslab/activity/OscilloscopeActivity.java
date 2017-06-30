@@ -488,7 +488,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 double[] yData = data.get("y");
                 entries = new ArrayList<Entry>();
                 for (int i = 0; i < xData.length; i++) {
-                    entries.add(new Entry((float) xData[i], (float) yData[i] / 10));
+                    entries.add(new Entry((float) xData[i], (float) yData[i]));
                 }
             } catch (NullPointerException e) {
                 cancel(true);
@@ -505,6 +505,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             LineData lineData = new LineData(dataset);
             dataset.setDrawCircles(false);
             mChart.setData(lineData);
+            mChart.notifyDataSetChanged();
             mChart.invalidate();    //refresh the chart
             synchronized (lock) {
                 lock.notify();

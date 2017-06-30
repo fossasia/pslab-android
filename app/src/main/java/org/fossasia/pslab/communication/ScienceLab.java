@@ -88,7 +88,7 @@ public class ScienceLab {
             try {
                 mCommunicationHandler.open();
                 //Thread.sleep(200);
-                mPacketHandler = new PacketHandler(500, mCommunicationHandler);
+                mPacketHandler = new PacketHandler(200, mCommunicationHandler);
             } catch (IOException e) {
                 e.printStackTrace();
             }
