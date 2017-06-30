@@ -137,8 +137,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         y1 = mChart.getAxisLeft();
         y2 = mChart.getAxisRight();
 
-        int freq = scienceLab.setSine1(3000);
-        Log.v("SIN Fre", "" + freq);
+        //int freq = scienceLab.setSine1(3000);
+        //Log.v("SIN Fre", "" + freq);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -486,6 +486,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
                 double[] xData = data.get("x");
                 double[] yData = data.get("y");
+                //Log.v("XDATA", Arrays.toString(xData));
+                //Log.v("YDATA", Arrays.toString(yData));
                 entries = new ArrayList<Entry>();
                 for (int i = 0; i < xData.length; i++) {
                     entries.add(new Entry((float) xData[i], (float) yData[i]));

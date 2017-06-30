@@ -88,7 +88,7 @@ public class ScienceLab {
             try {
                 mCommunicationHandler.open();
                 //Thread.sleep(200);
-                mPacketHandler = new PacketHandler(200, mCommunicationHandler);
+                mPacketHandler = new PacketHandler(50, mCommunicationHandler);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -907,8 +907,8 @@ public class ScienceLab {
             Log.v(TAG, "Channel Unavailable");
             return false;
         }
-        //Log.v("fetchChannel", "samples" + samples);
-        //Log.v("fetchCHannel", "dataSplitting" + this.dataSplitting);
+        Log.v("fetchChannel", "samples" + samples);
+        Log.v("fetchCHannel", "dataSplitting" + this.dataSplitting);
         ArrayList<Byte> listData = new ArrayList<>();
         try {
             for (int i = 0; i < samples / this.dataSplitting; i++) {
@@ -917,11 +917,11 @@ public class ScienceLab {
                 mPacketHandler.sendByte(channelNumber - 1);
                 mPacketHandler.sendInt(this.dataSplitting);
                 mPacketHandler.sendInt(i * this.dataSplitting);
-                byte[] data = new byte[this.dataSplitting * 2];
-                mPacketHandler.read(data, this.dataSplitting * 2);
+                byte[] data = new byte[this.dataSplitting * 2 + 1];
+                mPacketHandler.read(data, this.dataSplitting * 2 + 1);
                 for (int j = 0; j < data.length; j++)
                     listData.add(data[j]);
-                mPacketHandler.getAcknowledgement();
+                //mPacketHandler.getAcknowledgement();
             }
 
             if ((samples % this.dataSplitting) != 0) {
@@ -930,11 +930,11 @@ public class ScienceLab {
                 mPacketHandler.sendByte(channelNumber - 1);
                 mPacketHandler.sendInt(samples * this.dataSplitting);
                 mPacketHandler.sendInt(samples - samples % this.dataSplitting);
-                byte[] data = new byte[2 * (samples % this.dataSplitting)];
-                mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
+                byte[] data = new byte[2 * (samples % this.dataSplitting) + 1];
+                mPacketHandler.read(data, 2 * (samples % this.dataSplitting) + 1);
                 for (int j = 0; j < data.length; j++)
                     listData.add(data[j]);
-                mPacketHandler.getAcknowledgement();
+                //mPacketHandler.getAcknowledgement();
             }
 
         } catch (IOException e) {
