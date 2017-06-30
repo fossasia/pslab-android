@@ -170,7 +170,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             public void run() {
                 //Thread to check which checkbox is enabled
                 while (true) {
-                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected){
+                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected && scienceLab.isConnected()){
                         captureTask = new CaptureTask();
                         captureTask.execute("CH1");
                         synchronized (lock){
@@ -183,7 +183,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected){
+                    if (isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected && scienceLab.isConnected()){
                         captureTask = new CaptureTask();
                         captureTask.execute("CH2");
                         synchronized (lock){
@@ -196,7 +196,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected){
+                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected && scienceLab.isConnected()){
                         {
                             captureTask = new CaptureTask();
                             captureTask.execute("CH3");
@@ -210,7 +210,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected){
+                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected && scienceLab.isConnected()){
                         captureTask = new CaptureTask();
                         captureTask.execute("MIC");
                         synchronized (lock){
@@ -223,7 +223,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected){
+                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected && scienceLab.isConnected()){
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH1");
                         synchronized (lock){
@@ -235,7 +235,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected){
+                    if (isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected && scienceLab.isConnected()){
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH3");
                         synchronized (lock){
@@ -247,7 +247,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected){
+                    if (isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected && scienceLab.isConnected()){
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("MIC");
                         synchronized (lock){
@@ -259,7 +259,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected){
+                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected && scienceLab.isConnected()){
                         captureTask3 = new CaptureTaskThree();
                         captureTask3.execute("CH1");
                         synchronized (lock){
@@ -482,10 +482,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 Log.v("Sleep Time", "" + (800 * 10 * 1e-3));
                 Thread.sleep((long) (800 * 10 * 1e-3));
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
-                if (data == null) {
-                    cancel(true);
-                    return null;
-                }
                 double[] xData = data.get("x");
                 double[] yData = data.get("y");
                 entries = new ArrayList<Entry>();

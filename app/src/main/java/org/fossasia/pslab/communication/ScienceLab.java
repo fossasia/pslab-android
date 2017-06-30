@@ -872,15 +872,11 @@ public class ScienceLab {
     }
 
     public HashMap<String, double[]> fetchTrace(int channelNumber) {
-        try {
-            this.fetchChannel(channelNumber);
-            HashMap<String, double[]> retData = new HashMap<>();
-            retData.put("x", this.aChannels.get(channelNumber - 1).getXAxis());
-            retData.put("y", this.aChannels.get(channelNumber - 1).getYAxis());
-            return retData;
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
+        this.fetchChannel(channelNumber);
+        HashMap<String, double[]> retData = new HashMap<>();
+        retData.put("x", this.aChannels.get(channelNumber - 1).getXAxis());
+        retData.put("y", this.aChannels.get(channelNumber - 1).getYAxis());
+        return retData;
     }
 
     public int[] oscilloscopeProgress() {
