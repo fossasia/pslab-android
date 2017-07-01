@@ -3171,5 +3171,6 @@ public class ScienceLab {
 
     public void disconnect() throws IOException {
         mCommunicationHandler.close();
+        PacketHandler.version = "";
     }
 }
