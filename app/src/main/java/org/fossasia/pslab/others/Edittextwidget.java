@@ -68,22 +68,30 @@ public class Edittextwidget extends LinearLayout{
         button1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Double data = Double.valueOf(editText.getText().toString());
-                data = data - leastCount;
-                data = data > maxima ? maxima : data;
-                data = data < minima ? minima : data;
-                editText.setText(String.valueOf(data));
+                try {
+                    Double data = Double.valueOf(editText.getText().toString());
+                    data = data - leastCount;
+                    data = data > maxima ? maxima : data;
+                    data = data < minima ? minima : data;
+                    editText.setText(String.valueOf(data));
+                } catch (Exception e) {
+                    editText.setText("0");
+                }
             }
         });
 
         button2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Double data = Double.valueOf(editText.getText().toString());
-                data = data + leastCount;
-                data = data > maxima ? maxima : data;
-                data = data < minima ? minima : data;
-                editText.setText(String.valueOf(data));
+                try {
+                    Double data = Double.valueOf(editText.getText().toString());
+                    data = data + leastCount;
+                    data = data > maxima ? maxima : data;
+                    data = data < minima ? minima : data;
+                    editText.setText(String.valueOf(data));
+                } catch (Exception e) {
+                    editText.setText("0");
+                }
             }
         });
     }
