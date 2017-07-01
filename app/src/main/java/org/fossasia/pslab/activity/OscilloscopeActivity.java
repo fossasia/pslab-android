@@ -3,19 +3,12 @@ package org.fossasia.pslab.activity;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.SystemClock;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,10 +42,8 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by viveksb007 on 10/5/17.
@@ -173,7 +164,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             public void run() {
                 //Thread to check which checkbox is enabled
                 while (true) {
-                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH1");
                         synchronized (lock) {
@@ -186,7 +177,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH2");
                         synchronized (lock) {
@@ -199,7 +190,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() & isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
                         {
                             captureTask = new CaptureTask();
                             captureTask.execute("CH3");
@@ -213,7 +204,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected) {
+                    if (scienceLab.isConnected() && isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("MIC");
                         synchronized (lock) {
@@ -226,7 +217,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH1");
                         synchronized (lock) {
@@ -238,7 +229,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH3");
                         synchronized (lock) {
@@ -250,7 +241,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected) {
+                    if (scienceLab.isConnected() && isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("MIC");
                         synchronized (lock) {
@@ -262,7 +253,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected) {
+                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected) {
                         captureTask3 = new CaptureTaskThree();
                         captureTask3.execute("CH1");
                         synchronized (lock) {
@@ -508,7 +499,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             dataset.setDrawCircles(false);
             mChart.setData(lineData);
             mChart.notifyDataSetChanged();
-            mChart.invalidate();    //refresh the chart
+            mChart.invalidate();
             synchronized (lock) {
                 lock.notify();
             }
@@ -560,6 +551,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
             LineData data = new LineData(dataSets);
             mChart.setData(data);
+            mChart.notifyDataSetChanged();
             mChart.invalidate();
             synchronized (lock) {
                 lock.notify();
@@ -629,6 +621,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
             LineData data = new LineData(dataSets);
             mChart.setData(data);
+            mChart.notifyDataSetChanged();
             mChart.invalidate();
             synchronized (lock) {
                 lock.notify();
