@@ -11,9 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.communication.PacketHandler;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.InitializationVariable;
-import org.fossasia.pslab.others.PreferenceManager;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
@@ -87,12 +87,10 @@ public class HomeFragment extends Fragment {
                 public void run() {
                     try {
 
-                        String version;
-                        PreferenceManager preferenceManager = new PreferenceManager(getActivity());
-                        if ("none".equals(preferenceManager.getVersion())) {
+                        String version = PacketHandler.version;
+                        if ("".equals(version)) {
                             version = scienceLab.getVersion();
-                        } else {
-                            version = preferenceManager.getVersion();
+                            PacketHandler.version = version;
                         }
                         tvVersion.setText(version);
                         tvInitializationStatus.setText(getString(R.string.initialising_wait));

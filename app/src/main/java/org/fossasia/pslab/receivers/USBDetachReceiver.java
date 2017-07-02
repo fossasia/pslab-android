@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.MainActivity;
+import org.fossasia.pslab.communication.PacketHandler;
 import org.fossasia.pslab.fragment.HomeFragment;
-import org.fossasia.pslab.others.PreferenceManager;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 /**
@@ -37,7 +37,7 @@ public class USBDetachReceiver extends BroadcastReceiver {
                     ScienceLabCommon.scienceLab.close();
                     Toast.makeText(context, "USB Device Disconnected", Toast.LENGTH_SHORT).show();
 
-                    new PreferenceManager(context).setVersion("none"); // writing version as "none" so that its read againg when PSLab is connected
+                    PacketHandler.version = "";
 
                     if (activityContext != null) {
                         MainActivity mainActivity = (MainActivity) activityContext;
