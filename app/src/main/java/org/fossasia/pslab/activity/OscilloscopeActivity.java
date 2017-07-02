@@ -1,14 +1,19 @@
-
 package org.fossasia.pslab.activity;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,8 +47,11 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by viveksb007 on 10/5/17.
@@ -100,6 +108,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
     private CaptureTaskThree captureTask3;
+    private CaptureTaskFour captureTask4;
 
 
     @Override
@@ -130,6 +139,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
+        scienceLab.setW1(1100, "sine");
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -264,6 +274,32 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                             }
                         }
                     }
+
+                    if((isCH1Selected && isCH3Selected && !isCH2Selected && !isMICSelected) ||
+                            (isCH1Selected && isMICSelected && !isCH2Selected && !isCH3Selected) ||
+                            (isCH3Selected && isMICSelected && !isCH1Selected && !isCH2Selected) ||
+                            (isCH1Selected && isCH2Selected && isCH3Selected && !isMICSelected) ||
+                            (!isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected) ||
+                            (isCH1Selected && !isCH2Selected && isCH3Selected && isMICSelected) ||
+                            (isCH1Selected && isCH2Selected && !isCH3Selected && isMICSelected)) {
+
+                        ArrayList<String> channelsSelected = new ArrayList<>();
+                        if(isCH1Selected)   channelsSelected.add("CH1");
+                        if(isCH2Selected)   channelsSelected.add("CH2");
+                        if(isCH3Selected)   channelsSelected.add("CH3");
+                        if(isMICSelected)   channelsSelected.add("MIC");
+                        if(!channelsSelected.isEmpty()) {
+                            captureTask4 = new CaptureTaskFour();
+                            captureTask4.execute(channelsSelected);
+                            synchronized (lock) {
+                                try {
+                                    lock.wait();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
                 }
             }
         };
@@ -377,12 +413,19 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         if (captureTask != null) {
             captureTask.cancel(true);
         }
+
         if (captureTask2 != null) {
             captureTask2.cancel(true);
         }
+
         if (captureTask3 != null) {
             captureTask3.cancel(true);
         }
+
+        if (captureTask4 != null) {
+            captureTask4.cancel(true);
+        }
+
         super.onDestroy();
     }
 
@@ -477,8 +520,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
                 double[] xData = data.get("x");
                 double[] yData = data.get("y");
-                //Log.v("XDATA", Arrays.toString(xData));
-                //Log.v("YDATA", Arrays.toString(yData));
                 entries = new ArrayList<Entry>();
                 for (int i = 0; i < xData.length; i++) {
                     entries.add(new Entry((float) xData[i], (float) yData[i]));
@@ -535,7 +576,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(Void aVoid){
             super.onPostExecute(aVoid);
             LineDataSet dataset1 = new LineDataSet(entries1, analogInput);
             LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
@@ -597,7 +638,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(Void aVoid){
             super.onPostExecute(aVoid);
             LineDataSet dataset1 = new LineDataSet(entries1, "CH1");
             LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
@@ -623,9 +664,94 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             mChart.setData(data);
             mChart.notifyDataSetChanged();
             mChart.invalidate();
+            synchronized (lock){
+                lock.notify();
+            }
+        }
+    }
+
+    public class CaptureTaskFour extends AsyncTask<ArrayList<String>, Void, Void> {
+        ArrayList<String> analogInputs;
+        ArrayList<Entry> entries1;
+        ArrayList<Entry> entries2;
+        ArrayList<Entry> entries3;
+
+        @Override
+        protected Void doInBackground(ArrayList<String>... params) {
+            try {
+                analogInputs = params[0];
+                LinkedHashMap<String, ArrayList<Double>> data = scienceLab.captureMultiple(800, 10, analogInputs);
+                ArrayList<Double> xData = data.get("time");
+                ArrayList<ArrayList<Double>> dataFromSelectedChannels = new ArrayList<>();
+                for (int i = 0; i < analogInputs.size(); i++) {
+                    Log.v("Oscilloscope",  data.get(analogInputs.get(i)).toString());
+                    dataFromSelectedChannels.add(data.get(analogInputs.get(i)));
+                }
+
+                entries1 = new ArrayList<Entry>();
+                entries2 = new ArrayList<Entry>();
+                entries3 = new ArrayList<Entry>();
+
+                if (dataFromSelectedChannels.size() == 2) {
+                    for (int i = 0; i < xData.size(); i++) {
+                        entries1.add(new Entry((float) ((double) xData.get(i)), (float) ((double) dataFromSelectedChannels.get(0).get(i))));
+                        entries2.add(new Entry((float) ((double) xData.get(i)), (float) ((double) dataFromSelectedChannels.get(1).get(i))));
+                    }
+                } else {
+                    for (int i = 0; i < xData.size(); i++) {
+                        entries1.add(new Entry((float) ((double) xData.get(i)), (float) ((double) dataFromSelectedChannels.get(0).get(i))));
+                        entries2.add(new Entry((float) ((double) xData.get(i)), (float) ((double) dataFromSelectedChannels.get(1).get(i))));
+                        entries3.add(new Entry((float) ((double) xData.get(i)), (float) ((double) dataFromSelectedChannels.get(2).get(i))));
+                    }
+                }
+
+                return null;
+            } catch (NullPointerException e) {
+                cancel(true);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            if (entries3.isEmpty()){
+                LineDataSet dataset1 = new LineDataSet(entries1, analogInputs.get(0));
+                LineDataSet dataSet2 = new LineDataSet(entries2, analogInputs.get(1));
+
+                dataSet2.setColor(Color.GREEN);
+                dataset1.setDrawCircles(false);
+                dataSet2.setDrawCircles(false);
+
+                dataSets.add(dataset1);
+                dataSets.add(dataSet2);
+            }
+
+            else {
+                LineDataSet dataset1 = new LineDataSet(entries1, analogInputs.get(0));
+                LineDataSet dataSet2 = new LineDataSet(entries2, analogInputs.get(1));
+                LineDataSet dataSet3 = new LineDataSet(entries3, analogInputs.get(2));
+
+                dataSet2.setColor(Color.GREEN);
+                dataSet3.setColor(Color.RED);
+                dataset1.setDrawCircles(false);
+                dataSet2.setDrawCircles(false);
+                dataSet3.setDrawCircles(false);
+
+                dataSets.add(dataset1);
+                dataSets.add(dataSet2);
+                dataSets.add(dataSet3);
+            }
+
+            LineData data = new LineData(dataSets);
+            mChart.setData(data);
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
             synchronized (lock) {
                 lock.notify();
             }
         }
+
     }
 }
