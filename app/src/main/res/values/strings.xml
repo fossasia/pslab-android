@@ -66,8 +66,8 @@
     <string name="cap">CAP</string>
     <string name="sen">SEN</string>
     <string name="an8">AN8</string>
-    <string name="w1">W1</string>
-    <string name="w2">W2</string>
+    <string name="w1">Wave 1</string>
+    <string name="w2">Wave 2</string>
     <string name="phase">Phase</string>
     <string name="output">Output</string>
     <string name="dutycycle">Duty cycle</string>
