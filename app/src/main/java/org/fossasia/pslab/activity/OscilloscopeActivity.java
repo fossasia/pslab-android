@@ -3,18 +3,12 @@ package org.fossasia.pslab.activity;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,10 +42,8 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by viveksb007 on 10/5/17.
@@ -135,7 +127,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
         y2 = mChart.getAxisRight();
-        //scienceLab.setW1(1100, "sine");
+
+        //int freq = scienceLab.setSine1(3000);
+        //Log.v("SIN Fre", "" + freq);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -170,10 +164,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             public void run() {
                 //Thread to check which checkbox is enabled
                 while (true) {
-                    if (isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected && scienceLab.isConnected()){
+                    if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH1");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -183,10 +177,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected && scienceLab.isConnected()){
+                    if (scienceLab.isConnected() && isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH2");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -196,11 +190,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected && scienceLab.isConnected()){
+                    if (scienceLab.isConnected() & isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
                         {
                             captureTask = new CaptureTask();
                             captureTask.execute("CH3");
-                            synchronized (lock){
+                            synchronized (lock) {
                                 try {
                                     lock.wait();
                                 } catch (InterruptedException e) {
@@ -210,10 +204,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected && scienceLab.isConnected()){
+                    if (scienceLab.isConnected() && isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("MIC");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -223,10 +217,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected && scienceLab.isConnected()){
+                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH1");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -235,10 +229,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected && scienceLab.isConnected()){
+                    if (scienceLab.isConnected() && isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH3");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -247,10 +241,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected && scienceLab.isConnected()){
+                    if (scienceLab.isConnected() && isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("MIC");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -259,10 +253,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected && scienceLab.isConnected()){
+                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected) {
                         captureTask3 = new CaptureTaskThree();
                         captureTask3.execute("CH1");
-                        synchronized (lock){
+                        synchronized (lock) {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
@@ -274,7 +268,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             }
         };
         new Thread(runnable).start();
-
     }
 
     @Override
@@ -478,18 +471,19 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             try {
                 analogInput = params[0];
                 //no. of samples and timegap still need to be determined
-                scienceLab.captureTraces(1, 800, 10, analogInput, false, null);
-                Log.v("Sleep Time", "" + (800 * 10 * 1e-3));
-                Thread.sleep((long) (800 * 10 * 1e-3));
+                scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+                Log.v("Sleep Time", "" + (1000 * 10 * 1e-3));
+                Thread.sleep((long) (1000 * 10 * 1e-3));
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
                 double[] xData = data.get("x");
                 double[] yData = data.get("y");
+                //Log.v("XDATA", Arrays.toString(xData));
+                //Log.v("YDATA", Arrays.toString(yData));
                 entries = new ArrayList<Entry>();
                 for (int i = 0; i < xData.length; i++) {
                     entries.add(new Entry((float) xData[i], (float) yData[i]));
                 }
-            }
-            catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 cancel(true);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -504,8 +498,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             LineData lineData = new LineData(dataset);
             dataset.setDrawCircles(false);
             mChart.setData(lineData);
-            mChart.invalidate();    //refresh the chart
-            synchronized (lock){
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+            synchronized (lock) {
                 lock.notify();
             }
         }
@@ -521,7 +516,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             try {
                 analogInput = params[0];
                 //no. of samples and timegap still need to be determined
-                HashMap<String,double[]> data = scienceLab.captureTwo(800,10,analogInput);
+                HashMap<String, double[]> data = scienceLab.captureTwo(800, 10, analogInput);
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y1");
                 double[] y2Data = data.get("y2");
@@ -540,7 +535,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         }
 
         @Override
-        protected void onPostExecute(Void aVoid){
+        protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             LineDataSet dataset1 = new LineDataSet(entries1, analogInput);
             LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
@@ -556,8 +551,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
             LineData data = new LineData(dataSets);
             mChart.setData(data);
+            mChart.notifyDataSetChanged();
             mChart.invalidate();
-            synchronized (lock){
+            synchronized (lock) {
                 lock.notify();
             }
         }
@@ -575,7 +571,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             try {
                 //no. of samples and timegap still need to be determined
                 analogInput = params[0];
-                HashMap<String,double[]> data = scienceLab.captureFour(800, 10, analogInput);
+                HashMap<String, double[]> data = scienceLab.captureFour(800, 10, analogInput);
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y");
                 double[] y2Data = data.get("y2");
@@ -601,7 +597,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         }
 
         @Override
-        protected void onPostExecute(Void aVoid){
+        protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             LineDataSet dataset1 = new LineDataSet(entries1, "CH1");
             LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
@@ -625,8 +621,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
             LineData data = new LineData(dataSets);
             mChart.setData(data);
+            mChart.notifyDataSetChanged();
             mChart.invalidate();
-            synchronized (lock){
+            synchronized (lock) {
                 lock.notify();
             }
         }
