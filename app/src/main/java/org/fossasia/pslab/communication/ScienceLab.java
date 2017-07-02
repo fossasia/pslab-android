@@ -23,6 +23,7 @@ import org.fossasia.pslab.fragment.HomeFragment;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -88,7 +89,7 @@ public class ScienceLab {
             try {
                 mCommunicationHandler.open();
                 //Thread.sleep(200);
-                mPacketHandler = new PacketHandler(500, mCommunicationHandler);
+                mPacketHandler = new PacketHandler(50, mCommunicationHandler);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -306,17 +307,17 @@ public class ScienceLab {
                     for (int j = 0; j < cals.length() / 16; j++) {
                         Double[] poly = new Double[4];
                         for (int k = 0; k < 4; k++) {
-                            Float f = ByteBuffer.wrap(cals.substring((16 * j) + (k * 4), (16 * j) + (k * 4) + 4).getBytes()).getFloat();
+                            Float f = ByteBuffer.wrap(cals.substring((16 * j) + (k * 4), (16 * j) + (k * 4) + 4).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat();
                             poly[k] = (double) f;
                         }
                         polyDict.get(adcSlopeOffsetsSplit[i].substring(0, 3)).add(poly);
                     }
                 }
 
-                double[] inlSlopeInterceptD = new double[]{ByteBuffer.wrap(inlSlopeIntercept.substring(0, 4).getBytes()).getFloat(), ByteBuffer.wrap(inlSlopeIntercept.substring(4, 8).getBytes()).getFloat()};
+                double[] inlSlopeInterceptD = new double[]{ByteBuffer.wrap(inlSlopeIntercept.substring(0, 4).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat(), ByteBuffer.wrap(inlSlopeIntercept.substring(4, 8).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat()};
                 double[] adcShiftsDouble = new double[adcShifts.size()];
                 for (int i = 0; i < adcShifts.size(); i++) {
-                    adcShiftsDouble[i] = ByteBuffer.wrap(new byte[]{0, adcShifts.get(i)}).getShort();
+                    adcShiftsDouble[i] = ByteBuffer.wrap(new byte[]{0, adcShifts.get(i)}).order(ByteOrder.LITTLE_ENDIAN).getShort();
                 }
                 for (Map.Entry<String, AnalogInputSource> entry : this.analogInputSources.entrySet()) {
                     this.analogInputSources.get(entry.getKey()).loadCalibrationTable(adcShiftsDouble, inlSlopeInterceptD[0], inlSlopeInterceptD[1]);
@@ -334,7 +335,7 @@ public class ScienceLab {
                     double[] fits = new double[6];
                     try {
                         for (int j = 0; j < 6; j++) {
-                            fits[j] = ByteBuffer.wrap(dacSlopeInterceptSplit[i].substring(5 + j * 4, 5 + (j + 1) * 4).getBytes()).getFloat();
+                            fits[j] = ByteBuffer.wrap(dacSlopeInterceptSplit[i].substring(5 + j * 4, 5 + (j + 1) * 4).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat();
                         }
                     } catch (StringIndexOutOfBoundsException e) {
                         e.printStackTrace();
@@ -593,18 +594,18 @@ public class ScienceLab {
             Log.v(TAG, "Wait");
             Thread.sleep((long) (1e-6 * totalSamples * timeGap + .01) * 1000);
             Log.v(TAG, "Done");
-            ArrayList<Byte> listData = new ArrayList<>();
+            ArrayList<Integer> listData = new ArrayList<>();
             for (int i = 0; i < totalSamples / this.dataSplitting; i++) {
                 mPacketHandler.sendByte(mCommandsProto.ADC);
                 mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
                 mPacketHandler.sendByte(0);
                 mPacketHandler.sendInt(this.dataSplitting);
                 mPacketHandler.sendInt(i * this.dataSplitting);
-                byte[] data = new byte[this.dataSplitting * 2];
-                mPacketHandler.read(data, this.dataSplitting * 2);
+                byte[] data = new byte[this.dataSplitting * 2 + 1];
+                mPacketHandler.read(data, this.dataSplitting * 2 + 1);
                 for (int j = 0; j < data.length; j++)
-                    listData.add(data[j]);
-                mPacketHandler.getAcknowledgement();
+                    listData.add((int) data[j] & 0xff);
+                //mPacketHandler.getAcknowledgement();
             }
 
             if ((totalSamples % this.dataSplitting) != 0) {
@@ -613,14 +614,14 @@ public class ScienceLab {
                 mPacketHandler.sendByte(0);
                 mPacketHandler.sendInt(totalSamples % this.dataSplitting);
                 mPacketHandler.sendInt(totalSamples - totalSamples % this.dataSplitting);
-                byte[] data = new byte[2 * (totalSamples % this.dataSplitting)];
-                mPacketHandler.read(data, 2 * (totalSamples % this.dataSplitting));
+                byte[] data = new byte[2 * (totalSamples % this.dataSplitting) + 1];
+                mPacketHandler.read(data, 2 * (totalSamples % this.dataSplitting) + 1);
                 for (int j = 0; j < data.length; j++)
-                    listData.add(data[j]);
-                mPacketHandler.getAcknowledgement();
+                    listData.add((int) data[j] & 0xff);
+                //mPacketHandler.getAcknowledgement();
             }
             for (int i = 0; i < totalSamples; i++) {
-                this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
+                this.buffer[i] = (listData.get(i * 2) | (listData.get(i * 2 + 1) << 8));
             }
             Map<String, ArrayList<Double>> retData = new LinkedHashMap<>();
             ArrayList<Double> timeBase = new ArrayList<>();
@@ -748,7 +749,7 @@ public class ScienceLab {
     }
 
     private Map<String, double[]> retrieveBufferData(String channel, int samples, double timeGap) {
-        ArrayList<Byte> listData = new ArrayList<>();
+        ArrayList<Integer> listData = new ArrayList<>();
         try {
             for (int i = 0; i < samples / this.dataSplitting; i++) {
                 mPacketHandler.sendByte(mCommandsProto.ADC);
@@ -756,11 +757,11 @@ public class ScienceLab {
                 mPacketHandler.sendByte(0);
                 mPacketHandler.sendInt(this.dataSplitting);
                 mPacketHandler.sendInt(i * this.dataSplitting);
-                byte[] data = new byte[this.dataSplitting * 2];
-                mPacketHandler.read(data, this.dataSplitting * 2);
+                byte[] data = new byte[this.dataSplitting * 2 + 1];
+                mPacketHandler.read(data, this.dataSplitting * 2 + 1);
                 for (int j = 0; j < data.length; j++)
-                    listData.add(data[j]);
-                mPacketHandler.getAcknowledgement();
+                    listData.add((int) data[j] & 0xff);
+                //mPacketHandler.getAcknowledgement();
             }
 
             if ((samples % this.dataSplitting) != 0) {
@@ -772,12 +773,12 @@ public class ScienceLab {
                 byte[] data = new byte[2 * (samples % this.dataSplitting)];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
                 for (int j = 0; j < data.length; j++)
-                    listData.add(data[j]);
-                mPacketHandler.getAcknowledgement();
+                    listData.add((int) data[j] & 0xff);
+                //mPacketHandler.getAcknowledgement();
             }
 
             for (int i = 0; i < samples; i++) {
-                this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
+                this.buffer[i] = (listData.get(i * 2) | (listData.get(i * 2 + 1) << 8));
             }
             ArrayList<Double> timeBase = new ArrayList<>();
             double factor = timeGap * (samples - 1) / samples;
@@ -841,7 +842,7 @@ public class ScienceLab {
             this.samples = samples;
             mPacketHandler.sendInt(samples);
             mPacketHandler.sendInt((int) this.timebase * 8);
-            //mPacketHandler.getAcknowledgement();
+            mPacketHandler.getAcknowledgement();
             this.channelsInBuffer = number;
         } catch (IOException e) {
             e.printStackTrace();
@@ -891,7 +892,7 @@ public class ScienceLab {
         try {
             mPacketHandler.sendByte(mCommandsProto.ADC);
             mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_STATUS);
-            conversionDone = mPacketHandler.getByte();
+            conversionDone = (int) mPacketHandler.getByte() & 0xff;
             samples = mPacketHandler.getInt();
             mPacketHandler.getAcknowledgement();
         } catch (IOException e) {
@@ -907,9 +908,9 @@ public class ScienceLab {
             Log.v(TAG, "Channel Unavailable");
             return false;
         }
-        //Log.v("fetchChannel", "samples" + samples);
-        //Log.v("fetchCHannel", "dataSplitting" + this.dataSplitting);
-        ArrayList<Byte> listData = new ArrayList<>();
+        Log.v("fetchChannel", "samples" + samples);
+        Log.v("fetchCHannel", "dataSplitting" + this.dataSplitting);
+        ArrayList<Integer> listData = new ArrayList<>();
         try {
             for (int i = 0; i < samples / this.dataSplitting; i++) {
                 mPacketHandler.sendByte(mCommandsProto.ADC);
@@ -920,7 +921,7 @@ public class ScienceLab {
                 byte[] data = new byte[this.dataSplitting * 2 + 1];
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
                 for (int j = 0; j < data.length; j++)
-                    listData.add(data[j]);
+                    listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
 
@@ -933,7 +934,7 @@ public class ScienceLab {
                 byte[] data = new byte[2 * (samples % this.dataSplitting) + 1];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting) + 1);
                 for (int j = 0; j < data.length; j++)
-                    listData.add(data[j]);
+                    listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
 
@@ -943,8 +944,18 @@ public class ScienceLab {
         }
 
         for (int i = 0; i < listData.size() / 2; i++) {
-            this.buffer[i] = (listData.get(i * 2) << 8) | (listData.get(i * 2 + 1));
+            this.buffer[i] = (listData.get(i * 2)) | (listData.get(i * 2 + 1) << 8);
+
+            // Hack for now
+            while (this.buffer[i] > 1023) this.buffer[i] -= 1023;
+
+            //(listData.get(i * 2)) | ((listData.get(i * 2 + 1) & 0xff) << 8);
+            //ByteBuffer.wrap(new byte[]{listData.get(i * 2), listData.get(i * 2 + 1)}).order(ByteOrder.LITTLE_ENDIAN).getShort();
+            //(listData.get(i * 2)) | (listData.get(i * 2 + 1) << 8);
         }
+
+        Log.v("RAW DATA:", Arrays.toString(Arrays.copyOfRange(buffer, 0, samples)));
+
         this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
         return true;
     }
@@ -963,11 +974,11 @@ public class ScienceLab {
             mPacketHandler.sendByte(channelNumber - 1);
             mPacketHandler.sendInt(samples);
             mPacketHandler.sendInt(offset);
-            byte[] data = new byte[samples * 2];
-            mPacketHandler.read(data, samples * 2);
-            mPacketHandler.getAcknowledgement();
+            byte[] data = new byte[samples * 2 + 1];
+            mPacketHandler.read(data, samples * 2 + 1);
+            //mPacketHandler.getAcknowledgement();
             for (int i = 0; i < samples; i++) {
-                this.buffer[i] = ((data[i * 2] << 8) | data[i * 2 + 1]);
+                this.buffer[i] = (((int) data[i * 2] & 0xff) | (((int) data[i * 2 + 1] & 0xff) << 8));
             }
             this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
         } catch (IOException e) {
@@ -1019,7 +1030,6 @@ public class ScienceLab {
         if (this.gains.get(channel) != gain) {
             this.gains.put(channel, gain);
             refresh = true;
-
         }
         if (refresh || force) {
             analogInputSources.get(channel).setGain(gain); // giving index of gainValues
@@ -1031,7 +1041,6 @@ public class ScienceLab {
                 mPacketHandler.sendByte(gain);
                 mPacketHandler.getAcknowledgement();
                 return this.gainValues[gain];
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -1915,7 +1924,7 @@ public class ScienceLab {
             int[] t = new int[bytes * 2];
             Arrays.fill(t, 0);
             for (int i = 0; i < bytes; i++) {
-                t[i] = ByteBuffer.wrap(Arrays.copyOfRange(readData, 2 * i, 2 * i + 2)).getInt();
+                t[i] = ByteBuffer.wrap(Arrays.copyOfRange(readData, 2 * i, 2 * i + 2)).order(ByteOrder.LITTLE_ENDIAN).getInt();
             }
             mPacketHandler.getAcknowledgement();
             // Trimming array t
@@ -1965,7 +1974,7 @@ public class ScienceLab {
             mPacketHandler.getAcknowledgement();
             long[] data = new long[bytes];
             for (int i = 0; i < bytes; i++) {
-                data[i] = ByteBuffer.wrap(Arrays.copyOfRange(readData, 4 * i, 4 * i + 4)).getLong();
+                data[i] = ByteBuffer.wrap(Arrays.copyOfRange(readData, 4 * i, 4 * i + 4)).order(ByteOrder.LITTLE_ENDIAN).getLong();
             }
             // Trimming array data
             int markerA = 0;
