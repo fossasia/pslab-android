@@ -12,9 +12,8 @@ import java.util.HashMap;
 /**
  * Created by akarshan on 4/21/17.
  * <p>
- *    ScienceLab instance of I2C need to be passed to the MPU6050 constructor.
+ * ScienceLab instance of I2C need to be passed to the MPU6050 constructor.
  * </p>
- *
  */
 
 public class MPU6050 {
@@ -30,11 +29,11 @@ public class MPU6050 {
     private String name = "Accel/gyro";
     private ArrayList<KalmanFilter> K = new ArrayList<>();          //K is the list of KalmanFilter object
     private I2C i2c;
-    private HashMap<String,ArrayList> params = new HashMap<>();
+    private HashMap<String, ArrayList> params = new HashMap<>();
 
     public MPU6050(I2C i2c) throws IOException {
         this.i2c = i2c;
-        params.put("powerUp", new ArrayList(Arrays.asList("Go")));
+        params.put("powerUp", null);
         params.put("setGyroRange", new ArrayList(Arrays.asList(250, 500, 1000, 2000)));
         params.put("setAccelRange", new ArrayList(Arrays.asList(2, 4, 8, 16)));
         params.put("KalmanFilter", new ArrayList(Arrays.asList(.01, .1, 1, 10, 100, 1000, 10000, null)));       //Replaced "OFF" with null.
@@ -48,39 +47,39 @@ public class MPU6050 {
         double[] innerNoiseArray = new double[NUMPLOTS];
         ArrayList<Double> vals;
         double standardDeviation;
-        if (opt == null){        //Replaced "OFF" with null.
+        if (opt == null) {        //Replaced "OFF" with null.
             K = null;
         }
-        for (int a = 0; a < 500; a++){
+        for (int a = 0; a < 500; a++) {
             vals = getRaw();
-            for (int b = 0; b < NUMPLOTS; b++){
+            for (int b = 0; b < NUMPLOTS; b++) {
                 innerNoiseArray[b] = vals.get(b);
                 noise.set(b, innerNoiseArray);
             }
         }
 
-        for (int a = 0; a < NUMPLOTS; a++){
+        for (int a = 0; a < NUMPLOTS; a++) {
             standardDeviation = FastMath.sqrt(StatUtils.variance(noise.get(a)));        //Apachae Commons Maths used to calculate standard deviation
-            K.set(a, new KalmanFilter(1. / opt, Math.pow(standardDeviation,2)));
+            K.set(a, new KalmanFilter(1. / opt, Math.pow(standardDeviation, 2)));
         }
 
     }
 
     public ArrayList<Character> getVals(int addr, int bytestoread) throws IOException {
-       return i2c.readBulk(ADDRESS, addr, bytestoread);
+        return i2c.readBulk(ADDRESS, addr, bytestoread);
     }
 
     public void powerUp() throws IOException {
-        i2c.writeBulk(ADDRESS, new int[]{0x6B,0});
+        i2c.writeBulk(ADDRESS, new int[]{0x6B, 0});
     }
 
     public void setGyroRange(int rs) throws IOException {
-        GR = (int)params.get("setGyroRange").get(rs);
+        GR = params.get("setGyroRange").indexOf(rs);
         i2c.writeBulk(ADDRESS, new int[]{GYRO_CONFIG, GR << 3});
     }
 
     public void setAccelRange(int rs) throws IOException {
-        AR = (int)params.get("setAccelRange").get(rs);
+        AR = params.get("setAccelRange").indexOf(rs);
         i2c.writeBulk(ADDRESS, new int[]{ACCEL_CONFIG, AR << 3});
     }
 
@@ -89,16 +88,16 @@ public class MPU6050 {
         ArrayList<Double> raw = new ArrayList<>();
         if (vals.size() == 14) {
             for (int a = 0; a < 3; a++)
-                raw.set(a, 1. * (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / ACCEL_SCALING[AR]);
+                raw.add(a, 1. * (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / ACCEL_SCALING[AR]);
+            raw.add(3, 1. * (vals.get(6) << 8 | vals.get(7)) / 340. + 36.53);
             for (int a = 4; a < 7; a++)
-                raw.set(a, (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / GYRO_SCALING[GR]);
-            raw.set(3, 1. * (vals.get(6) << 8 | vals.get(7)) / 340. + 36.53);
+                raw.add(a, (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / GYRO_SCALING[GR]);
             if (K.isEmpty())
                 return raw;
             else {
                 for (int b = 0; b < NUMPLOTS; b++) {
-                        K.get(b).inputLatestNoisyMeasurement(raw.get(b));
-                        raw.set(b, K.get(b).getLatestEstimatedMeasurement());
+                    K.get(b).inputLatestNoisyMeasurement(raw.get(b));
+                    raw.set(b, K.get(b).getLatestEstimatedMeasurement());
                 }
                 return raw;
             }
@@ -107,22 +106,22 @@ public class MPU6050 {
     }
 
     public double[] getAcceleration() throws IOException {
-        ArrayList<Character> vals = getVals(0x3B,6);
+        ArrayList<Character> vals = getVals(0x3B, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
-        int az = vals.get(4) << 8  | vals.get(5);
+        int az = vals.get(4) << 8 | vals.get(5);
         return new double[]{ax / 65535., ay / 65535., az / 65535.};
 
     }
 
     public double getTemperature() throws IOException {
-        ArrayList<Character> vals = getVals(0x41,6);
-        int t = vals.get(0) << 8| vals.get(1);
+        ArrayList<Character> vals = getVals(0x41, 6);
+        int t = vals.get(0) << 8 | vals.get(1);
         return t / 65535.;
     }
 
     public double[] getGyroscope() throws IOException {
-        ArrayList<Character> vals = getVals(0x43,6);
+        ArrayList<Character> vals = getVals(0x43, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);
