@@ -18,8 +18,7 @@ public class AnalogAquisitionChannel {
     private double[] xAxis = new double[10000];
     public double[] yAxis = new double[10000];
 
-    public AnalogAquisitionChannel(String channel) //initialize
-    {
+    public AnalogAquisitionChannel(String channel) {
         gain = 0;
         this.channel = channel;
         calibration_ref196 = 1.;
@@ -36,7 +35,7 @@ public class AnalogAquisitionChannel {
         if (resolution == 12)
             for (int i = 0; i < val.length; i++)
                 calcData[i] = calibration_ref196 * (analogInputSource.calPoly12.value(val[i]));
-         else
+        else
             for (int i = 0; i < val.length; i++)
                 calcData[i] = calibration_ref196 * (analogInputSource.calPoly10.value(val[i]));
         return calcData;
@@ -67,11 +66,11 @@ public class AnalogAquisitionChannel {
     }
 
     public double[] getXAxis() {
-        return Arrays.copyOfRange(xAxis,0,length);
+        return Arrays.copyOfRange(xAxis, 0, length);
     }
 
     public double[] getYAxis() {
-        return Arrays.copyOfRange(yAxis,0,length);
+        return Arrays.copyOfRange(yAxis, 0, length);
     }
 
 }

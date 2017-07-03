@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +90,9 @@ public class AnalogInputSource {
 
     public void loadPolynomials(ArrayList<Double[]> polys) {
         for (int i = 0; i < polys.size(); i++) {
-            polynomials.add(new PolynomialFunction(ArrayUtils.toPrimitive(polys.get(i))));
+            double[] temp = ArrayUtils.toPrimitive(polys.get(i));
+            ArrayUtils.reverse(temp);
+            polynomials.add(new PolynomialFunction(temp));
         }
     }
 
@@ -104,13 +107,13 @@ public class AnalogInputSource {
         }
         slope = B - A;
         intercept = A;
-        if (!calibrationReady && gain == 8) {
-            calPoly10 = new PolynomialFunction(new double[]{0., slope / 1023, intercept});
-            calPoly12 = new PolynomialFunction(new double[]{0., slope / 4095, intercept});
+        if (!calibrationReady || gain == 8) {
+            calPoly10 = new PolynomialFunction(new double[]{intercept, slope / 1023, 0.});
+            calPoly12 = new PolynomialFunction(new double[]{intercept, slope / 4095, 0.});
         }//else cases need to be worked on!!!
 
-        voltToCode10 = new PolynomialFunction(new double[]{0., 1023. / slope, -1023 * intercept / slope});
-        voltToCode12 = new PolynomialFunction(new double[]{0., 4095., -4095 * intercept / slope});
+        voltToCode10 = new PolynomialFunction(new double[]{-1023 * intercept / slope, 1023. / slope, 0.});
+        voltToCode12 = new PolynomialFunction(new double[]{-4095 * intercept / slope, 4095., 0.});
     }
 
     public double[] cal12(double[] RAW) {

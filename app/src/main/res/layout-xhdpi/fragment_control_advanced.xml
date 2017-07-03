@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Arbitrary Waveform Generator -->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorAccent"
+                    android:gravity="center_horizontal"
+                    android:text="@string/waveform_generator"
+                    android:textColor="@color/cardview_light_background"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/control_margin_medium">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_control_advanced1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/w1"
+                            android:textSize="@dimen/control_textsize_large"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/freq_range"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="2"
+                        android:gravity="center" />
+
+                    <Spinner
+                        android:id="@+id/spinner_control_advanced1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:entries="@array/wave_type" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/control_margin_medium">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_control_advanced2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/w2"
+                            android:textSize="@dimen/control_textsize_large"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/freq_range"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:gravity="center" />
+
+                    <Spinner
+                        android:id="@+id/spinner_control_advanced2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="2"
+                        android:entries="@array/wave_type" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/control_margin_medium">
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="@string/phase"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+                <!-- Button -->
+                <Button
+                    android:id="@+id/button_control_advanced1"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="@string/set"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/control_textsize_medium"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <!-- Configure PWM -->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorAccent"
+                    android:gravity="center_horizontal"
+                    android:text="@string/configure_PWM"
+                    android:textColor="@color/cardview_light_background"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+                <!-- Header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/control_margin_small">
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/output"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal"
+                        android:text="@string/phase"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal"
+                        android:text="@string/dutycycle"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+                <!-- SQR1 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/control_margin_medium">
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced11"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sqr1"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced12"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal"
+                        android:text="@string/zero"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                </LinearLayout>
+                <!-- SQR2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/control_margin_medium">
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced13"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sqr2"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                </LinearLayout>
+                <!-- SQR3 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/control_margin_medium">
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced14"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sqr3"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced7"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                </LinearLayout>
+                <!-- SQR4 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/control_margin_medium">
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced15"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:text="@string/sqr4"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                </LinearLayout>
+                <!-- Frequency -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/control_margin_medium">
+
+                    <TextView
+                        android:id="@+id/tv_control_advanced16"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="@string/frequency"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <org.fossasia.pslab.others.Edittextwidget
+                        android:id="@+id/etwidget_control_advanced11"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                </LinearLayout>
+                <!-- Button -->
+                <Button
+                    android:id="@+id/button_control_advanced2"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="@string/set"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/control_textsize_medium"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <!-- Digital Outputs -->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorAccent"
+                    android:gravity="center_horizontal"
+                    android:text="@string/digital_outputs"
+                    android:textColor="@color/cardview_light_background"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <CheckBox
+                        android:id="@+id/checkbox_control_advanced1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sqr1"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_control_advanced2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sqr2"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_control_advanced3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sqr3"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_control_advanced4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sqr4"
+                        android:textSize="@dimen/control_textsize_large"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView>
