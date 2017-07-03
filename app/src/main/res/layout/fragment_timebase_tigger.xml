@@ -26,12 +26,15 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 tools:layout_editor_absoluteX="311dp"
-                android:textColor="@color/cardview_dark_background"
                 app:layout_constraintTop_toTopOf="parent"
-                android:gravity="center_vertical"
+                android:gravity="center_vertical|center_horizontal"
                 android:layout_gravity="center_vertical"
                 android:textStyle="normal|bold"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -41,7 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar_timebase_tt"
-                android:layout_below="@+id/tv_tigger_label_tt"
+                android:layout_below="@+id/checkbox_trigger_tt"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="0dp"
                 app:layout_constraintTop_toBottomOf="@+id/tv_timebase_label_tt"
@@ -67,26 +70,33 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <TextView
-                android:text="Tigger"
+            <CheckBox
+                android:text="Trigger"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_tigger_label_tt"
+                android:id="@+id/checkbox_trigger_tt"
                 android:layout_alignStart="@+id/tv_timebase_label_tt"
                 android:layout_below="@+id/seekBar2"
                 tools:layout_editor_absoluteX="318dp"
                 app:layout_constraintTop_toBottomOf="@+id/seekBar_timebase_tt"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center_vertical|center_horizontal"
                 android:textStyle="normal|bold"
-                android:textSize="18sp"
-                android:textColor="@android:color/background_dark" />
+                android:textSize="14sp"
+                android:textColor="@android:color/background_dark"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner_tigger_channel_tt"
-                android:layout_alignTop="@+id/tv_tigger_label_tt"
+                android:id="@+id/spinner_trigger_channel_tt"
+                android:layout_alignTop="@+id/checkbox_trigger_tt"
                 android:layout_toEndOf="@+id/tv_timebase_label_tt"
+                android:layout_toRightOf="@+id/tv_timebase_label_tt"
                 tools:layout_editor_absoluteY="121dp"
                 tools:layout_editor_absoluteX="52dp"
                 android:layout_gravity="center_vertical" />
@@ -94,9 +104,10 @@
             <org.fossasia.pslab.others.FloatSeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekBar_tigger"
-                android:layout_below="@+id/tv_tigger_label_tt"
+                android:id="@+id/seekBar_trigger"
+                android:layout_below="@+id/checkbox_trigger_tt"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 app:layout_constraintTop_toBottomOf="@+id/tv_timebase_label_tt"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -109,7 +120,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:id="@+id/tv_tigger_values_tt"
+                android:layout_alignParentRight="true"
+                android:id="@+id/tv_trigger_values_tt"
                 android:layout_gravity="center_vertical" />
         </TableRow>
 
