@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -12,6 +14,7 @@ import org.fossasia.pslab.fragment.LALogicLinesFragment;
 
 import org.fossasia.pslab.others.ScienceLabCommon;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -22,6 +25,8 @@ public class LogicalAnalyzerActivity extends AppCompatActivity
         implements LAChannelModeFragment.OnChannelSelectedListener {
 
     private ScienceLab scienceLab;
+    @BindView(R.id.logical_analyzer_toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +35,10 @@ public class LogicalAnalyzerActivity extends AppCompatActivity
         scienceLab = ScienceLabCommon.getInstance().scienceLab;
         ButterKnife.bind(this);
         getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, LAChannelModeFragment.newInstance(this)).commit();
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -37,6 +46,17 @@ public class LogicalAnalyzerActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         ft.replace(R.id.la_frame_layout, LALogicLinesFragment.newInstance(params, this)).commit();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            // finish the activity
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
