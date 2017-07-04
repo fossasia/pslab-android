@@ -13,8 +13,7 @@
         <TableLayout
             android:id="@+id/tablelayout_control_read1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_height="wrap_content">
 
             <!-- Resistance -->
             <TableRow
@@ -29,7 +28,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_button"
                     android:text="@string/resistance"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -57,7 +56,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_button"
                     android:text="@string/capacitance"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -79,16 +78,14 @@
                 android:layout_margin="@dimen/control_read_border_hdpi"
                 android:orientation="horizontal">
 
-                <Button
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
-                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:text="@string/frequency"
                     android:textAllCaps="true"
                     android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"
                     android:textSize="14sp" />
 
                 <Spinner
@@ -104,7 +101,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="2"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_button"
                     android:text="@string/read"
                     android:textStyle="bold"
                     android:textColor="@color/white" />
@@ -126,17 +123,15 @@
                 android:layout_margin="@dimen/control_read_border_hdpi"
                 android:orientation="horizontal">
 
-                <Button
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:text="@string/count_pulses"
                     android:textAllCaps="true"
                     android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"
                     android:textSize="@dimen/control_textsize_tiny" />
 
                 <Spinner
@@ -151,7 +146,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="2"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_button"
                     android:text="@string/read"
                     android:textStyle="bold"
                     android:textColor="@color/white" />
@@ -177,7 +172,7 @@
                     android:layout_width="80dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_button"
                     android:text="@string/reset"
                     android:textStyle="bold"
                     android:textColor="@color/white" />
@@ -206,7 +201,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="2"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_button"
                     android:text="@string/read"
                     android:textStyle="bold"
                     android:textColor="@color/white" />
@@ -221,16 +216,14 @@
                 android:layout_margin="@dimen/control_read_border_hdpi"
                 android:orientation="horizontal">
 
-                <Button
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:text="@string/ch1"
                     android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"
                     android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
@@ -243,16 +236,14 @@
                     android:gravity="center"
                     android:layout_gravity="center" />
 
-                <Button
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:text="@string/cap"
                     android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"
                     android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
@@ -274,16 +265,14 @@
                 android:layout_margin="@dimen/control_read_border_hdpi"
                 android:orientation="horizontal">
 
-                <Button
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:text="@string/ch2"
                     android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"
                     android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
@@ -296,16 +285,14 @@
                     android:gravity="center"
                     android:layout_gravity="center" />
 
-                <Button
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:text="@string/sen"
                     android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"
                     android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
@@ -327,16 +314,14 @@
                 android:layout_margin="@dimen/control_read_border_hdpi"
                 android:orientation="horizontal">
 
-                <Button
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:text="@string/ch3"
                     android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"
                     android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
@@ -349,16 +334,14 @@
                     android:gravity="center"
                     android:layout_gravity="center"/>
 
-                <Button
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:text="@string/an8"
                     android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"
                     android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
