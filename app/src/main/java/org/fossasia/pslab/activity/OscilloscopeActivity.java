@@ -134,7 +134,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
-        scienceLab.setW1(3000, "sine");
+        //scienceLab.setW1(3000, "sine");
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -476,11 +476,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             try {
                 analogInput = params[0];
                 //no. of samples and timegap still need to be determined
-                if(isTriggerSelected) {
+                if (isTriggerSelected) {
                     scienceLab.configureTrigger(0, analogInput, trigger, null, null);
                     scienceLab.captureTraces(1, 1000, 10, analogInput, true, null);
-                }
-                else {
+                } else {
                     scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
                 }
                 Log.v("Sleep Time", "" + (1000 * 10 * 1e-3));
@@ -529,14 +528,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 analogInput = params[0];
                 //no. of samples and timegap still need to be determined
                 HashMap<String, double[]> data;
-                if(isTriggerSelected && (triggerChannel.equals("CH1") || triggerChannel.equals("CH2"))) {
-                    if(triggerChannel.equals("CH1"))
+                if (isTriggerSelected && (triggerChannel.equals("CH1") || triggerChannel.equals("CH2"))) {
+                    if (triggerChannel.equals("CH1"))
                         scienceLab.configureTrigger(0, analogInput, trigger, null, null);
-                    else if(triggerChannel.equals("CH2"))
+                    else if (triggerChannel.equals("CH2"))
                         scienceLab.configureTrigger(1, "CH2", trigger, null, null);
                     data = scienceLab.captureTwo(1000, 10, analogInput, true);
-                }
-                else {
+                } else {
                     data = scienceLab.captureTwo(1000, 10, analogInput, false);
                 }
                 double[] xData = data.get("x");
@@ -595,19 +593,18 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 analogInput = params[0];
                 HashMap<String, double[]> data;
 
-                if(isTriggerSelected) {
-                    if(triggerChannel.equals("CH1"))
+                if (isTriggerSelected) {
+                    if (triggerChannel.equals("CH1"))
                         scienceLab.configureTrigger(0, analogInput, trigger, null, null);
-                    else if(triggerChannel.equals("CH2"))
+                    else if (triggerChannel.equals("CH2"))
                         scienceLab.configureTrigger(1, analogInput, trigger, null, null);
-                    else if(triggerChannel.equals("CH3"))
+                    else if (triggerChannel.equals("CH3"))
                         scienceLab.configureTrigger(2, analogInput, trigger, null, null);
-                    else if(triggerChannel.equals("MIC"))
+                    else if (triggerChannel.equals("MIC"))
                         scienceLab.configureTrigger(3, analogInput, trigger, null, null);
 
                     data = scienceLab.captureFour(1000, 10, analogInput, true);
-                }
-                else {
+                } else {
                     data = scienceLab.captureFour(1000, 10, analogInput, false);
                 }
                 double[] xData = data.get("x");

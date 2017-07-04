@@ -71,7 +71,7 @@ public class TimebaseTriggerFragment extends Fragment {
 
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
-        if(tabletSize){
+        if (tabletSize) {
             textViewTrigger.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             textViewTimeBase.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         }
@@ -81,42 +81,42 @@ public class TimebaseTriggerFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                switch (progress){
+                switch (progress) {
                     case 0:
                         textViewTimeBase.setText("875.00 μs");
-                        ((OscilloscopeActivity)getActivity()).setXAxisScale(875);
+                        ((OscilloscopeActivity) getActivity()).setXAxisScale(875);
                         break;
                     case 1:
                         textViewTimeBase.setText("1.00 ms");
-                        ((OscilloscopeActivity)getActivity()).setXAxisScale(1);
+                        ((OscilloscopeActivity) getActivity()).setXAxisScale(1);
                         break;
                     case 2:
                         textViewTimeBase.setText("2.00 ms");
-                        ((OscilloscopeActivity)getActivity()).setXAxisScale(2);
+                        ((OscilloscopeActivity) getActivity()).setXAxisScale(2);
                         break;
                     case 3:
                         textViewTimeBase.setText("4.00 ms");
-                        ((OscilloscopeActivity)getActivity()).setXAxisScale(4);
+                        ((OscilloscopeActivity) getActivity()).setXAxisScale(4);
                         break;
                     case 4:
                         textViewTimeBase.setText("8.00 ms");
-                        ((OscilloscopeActivity)getActivity()).setXAxisScale(8);
+                        ((OscilloscopeActivity) getActivity()).setXAxisScale(8);
                         break;
                     case 5:
                         textViewTimeBase.setText("25.60 ms");
-                        ((OscilloscopeActivity)getActivity()).setXAxisScale(25.60);
+                        ((OscilloscopeActivity) getActivity()).setXAxisScale(25.60);
                         break;
                     case 6:
                         textViewTimeBase.setText("38.40 ms");
-                        ((OscilloscopeActivity)getActivity()).setXAxisScale(38.40);
+                        ((OscilloscopeActivity) getActivity()).setXAxisScale(38.40);
                         break;
                     case 7:
                         textViewTimeBase.setText("51.20 ms");
-                        ((OscilloscopeActivity)getActivity()).setXAxisScale(51.20);
+                        ((OscilloscopeActivity) getActivity()).setXAxisScale(51.20);
                         break;
                     case 8:
                         textViewTimeBase.setText("102.40 ms");
-                        ((OscilloscopeActivity)getActivity()).setXAxisScale(102.40);
+                        ((OscilloscopeActivity) getActivity()).setXAxisScale(102.40);
                         break;
                 }
             }
@@ -138,7 +138,7 @@ public class TimebaseTriggerFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 textViewTrigger.setText(seekBarTrigger.getValue() + " V");
-                ((OscilloscopeActivity)getActivity()).trigger = seekBarTrigger.getValue();
+                ((OscilloscopeActivity) getActivity()).trigger = seekBarTrigger.getValue();
             }
 
             @Override
@@ -153,23 +153,22 @@ public class TimebaseTriggerFragment extends Fragment {
         });
         seekBarTrigger.setProgress(50);
 
-        String [] channels = {"CH1", "CH2", "CH3", "MIC"};
+        String[] channels = {"CH1", "CH2", "CH3", "MIC"};
         ArrayAdapter<String> channelsAdapter;
-        if(tabletSize){
+        if (tabletSize) {
             channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
-        }
-        else {
+        } else {
             channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
         }
 
         channelsAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         spinnerTiggerChannelSelect.setAdapter(channelsAdapter);
-        spinnerTiggerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"),true);
+        spinnerTiggerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"), true);
         spinnerTiggerChannelSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((OscilloscopeActivity)getActivity()).triggerChannel = spinnerTiggerChannelSelect.getItemAtPosition(position).toString();
+                ((OscilloscopeActivity) getActivity()).triggerChannel = spinnerTiggerChannelSelect.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -181,7 +180,7 @@ public class TimebaseTriggerFragment extends Fragment {
         checkBoxTrigger.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ((OscilloscopeActivity)getActivity()).isTriggerSelected = isChecked;
+                ((OscilloscopeActivity) getActivity()).isTriggerSelected = isChecked;
             }
         });
 
