@@ -14,7 +14,24 @@ Please join us on the following channels:
 * [Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia)
 
 ## Roadmap
- - First we need to get communication between Android App and PSLab working.
+ - ~~First we need to get communication between Android App and PSLab working.~~
+ - Implement Applications and expose PSLab Hardware functionality to user.
+
+## Screenshots
+
+  <table>
+    <tr>
+     <td><img src="/docs/screenshots/screenshot_1.png"></td>
+     <td><img src="/docs/screenshots/screenshot_2.png"></td>
+     <td><img src="/docs/screenshots/screenshot_4.png"></td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+     <td><img src="/docs/screenshots/screenshot_3.png"></td>
+     <td><img src="/docs/screenshots/screenshot_5.png"></td>
+    </tr>
+  </table>
 
 ## Features
 **Feature**|**Description**|**Status**
@@ -25,9 +42,8 @@ Application|Exposes PSLab application like Oscilloscope,etc |Established
  |Control |Generate waveforms and PWM signals. Control voltage and current sources and read results from a variety of electric components | Working
  |Logical Analyzer |Captures and displays signals from digital system | Working
  |Data Sensor Logger |Captures and displays data from various sensors |
- |Wireless Sensor |Captures and displays data from various wireless sensors |
- |Sensor Quick View |Scans all the sensors connected to PSLab Device | Working
- |Wireless Sensor Quick View | |
+ |Wireless Sensor |Scans, captures and displays data from various wireless sensors |
+ |Sensor Quick View |Scans all the sensors connected to PSLab Device and provides interface to Log data| Working
  |Settings |Enable Auto-Start |
  |Saved Experiments |Access Pre-defined and Designed Experiments |
  |Design Experiments |To Design our own experiments |
