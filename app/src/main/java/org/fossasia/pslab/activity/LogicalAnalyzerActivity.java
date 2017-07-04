@@ -32,7 +32,6 @@ public class LogicalAnalyzerActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logic_analyzer);
-        ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.getInstance().scienceLab;
         ButterKnife.bind(this);
         getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, LAChannelModeFragment.newInstance(this)).commit();
