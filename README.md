@@ -25,6 +25,8 @@ Please join us on the following channels:
      <td><img src="/docs/screenshots/screenshot_2.png"></td>
      <td><img src="/docs/screenshots/screenshot_4.png"></td>
     </tr>
+  </table>
+  <table>
     <tr>
      <td><img src="/docs/screenshots/screenshot_3.png"></td>
      <td><img src="/docs/screenshots/screenshot_5.png"></td>
