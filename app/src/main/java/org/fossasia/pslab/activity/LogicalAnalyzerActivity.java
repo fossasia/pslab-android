@@ -14,6 +14,7 @@ import org.fossasia.pslab.fragment.LALogicLinesFragment;
 
 import org.fossasia.pslab.others.ScienceLabCommon;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -24,15 +25,17 @@ public class LogicalAnalyzerActivity extends AppCompatActivity
         implements LAChannelModeFragment.OnChannelSelectedListener {
 
     private ScienceLab scienceLab;
+    @BindView(R.id.logical_analyzer_toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logic_analyzer);
+        ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.getInstance().scienceLab;
         ButterKnife.bind(this);
         getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, LAChannelModeFragment.newInstance(this)).commit();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.LogicalAnalyzerToolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
