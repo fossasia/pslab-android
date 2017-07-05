@@ -89,7 +89,7 @@ public class LALogicLinesFragment extends Fragment {
         logicLinesChart.setBorderWidth(2);
         llLogicLines.addView(logicLinesChart);
         tvTimeUnit = (TextView) v.findViewById(R.id.la_tv_time_unit);
-        tvTimeUnit.setText("Time -> (ms)");
+        tvTimeUnit.setText(getString(R.string.time_unit_la));
         return v;
     }
 
@@ -103,8 +103,10 @@ public class LALogicLinesFragment extends Fragment {
         left.setTextColor(Color.BLACK);
         left.setTextSize(12f);
         logicLinesChart.getAxisRight().setDrawLabels(false);
+        logicLinesChart.getDescription().setEnabled(false);
+        logicLinesChart.setScaleYEnabled(false);
 
-        /*  For HIGHI
+        /*  For HIDING GRID LINES
         logicLinesChart.getAxisLeft().setDrawGridLines(false);
         logicLinesChart.getAxisRight().setDrawGridLines(false);
         logicLinesChart.getXAxis().setDrawGridLines(false);
@@ -129,7 +131,7 @@ public class LALogicLinesFragment extends Fragment {
                 }
                 high = !high;
             }
-            LineDataSet lineDataSet = new LineDataSet(tempInput, "Input " + (j + 1));
+            LineDataSet lineDataSet = new LineDataSet(tempInput, channelNames.get(j));
             lineDataSet.setCircleRadius(1);
             lineDataSet.setColor(Color.RED);
             lineDataSet.setCircleColor(Color.GREEN);
@@ -163,14 +165,18 @@ public class LALogicLinesFragment extends Fragment {
         }
         return data;
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
+
     @Override
     public void onStop() {
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
+            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         super.onStop();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 }
