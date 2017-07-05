@@ -566,7 +566,7 @@ public class ScienceLab {
         return retData;
     }
 
-    public Map<String, ArrayList<Double>> captureMultiple(int samples, double timeGap, List<String> args) {
+    public LinkedHashMap<String, ArrayList<Double>> captureMultiple(int samples, double timeGap, ArrayList<String> args) {
         if (args.size() == 0) {
             Log.v(TAG, "Please specify channels to record");
             return null;
@@ -624,7 +624,7 @@ public class ScienceLab {
             for (int i = 0; i < totalSamples; i++) {
                 this.buffer[i] = (listData.get(i * 2) | (listData.get(i * 2 + 1) << 8));
             }
-            Map<String, ArrayList<Double>> retData = new LinkedHashMap<>();
+            LinkedHashMap<String, ArrayList<Double>> retData = new LinkedHashMap<>();
             ArrayList<Double> timeBase = new ArrayList<>();
             double factor = timeGap * (samples - 1) / samples;
             for (double i = 0; i < timeGap * (samples - 1); i += factor) timeBase.add(i);
@@ -634,7 +634,7 @@ public class ScienceLab {
                 for (int j = i; j < totalSamples; j += totalChannels) {
                     yValues.add(buffer[j]);
                 }
-                retData.put("CH" + String.valueOf(i + 1), yValues);
+                retData.put(args.get(i), yValues);
             }
             return retData;
         } catch (IOException | InterruptedException e) {
