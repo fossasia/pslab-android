@@ -400,6 +400,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         mChart.setPinchZoom(true);
         mChart.setScaleYEnabled(false);
         mChart.setBackgroundColor(Color.BLACK);
+        mChart.getDescription().setEnabled(false);
 
         LineData data = new LineData();
         data.setValueTextColor(Color.WHITE);

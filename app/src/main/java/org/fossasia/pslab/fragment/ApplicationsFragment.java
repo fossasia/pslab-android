@@ -52,8 +52,6 @@ public class ApplicationsFragment extends Fragment {
                 new ApplicationAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(ApplicationItem item) {
-                        Toast.makeText(context, item.getApplicationName(),
-                                Toast.LENGTH_LONG).show();
                         Intent intent;
                         switch (item.getApplicationName()) {
                             case "Oscilloscope":
@@ -76,13 +74,10 @@ public class ApplicationsFragment extends Fragment {
 
                     }
                 });
-        // Initiate Views
         int rows = context.getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_PORTRAIT ? 2 : 3;
         initiateViews(view, rows);
-        // Generate Applications
         new loadList().execute();
-        // Return created view
         return view;
     }
 
@@ -90,12 +85,10 @@ public class ApplicationsFragment extends Fragment {
      * Initiate Recycler view
      */
     private void initiateViews(View view, int rows) {
-        // Initiate Recycler View with a Grid
         RecyclerView listView = (RecyclerView) view.findViewById(R.id.applications_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, rows);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
-        // Set adapter
         listView.setAdapter(applicationAdapter);
     }
 
@@ -112,8 +105,7 @@ public class ApplicationsFragment extends Fragment {
                     R.drawable.logic_analzers_icon,
                     R.drawable.sensor_icon,
                     R.drawable.wireless_sensor_icon,
-                    R.drawable.sensor_qv_icon,
-                    R.drawable.wireless_sensor_qv_icon};
+                    R.drawable.sensor_qv_icon};
 
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.oscilloscope), applications[0])
@@ -132,9 +124,6 @@ public class ApplicationsFragment extends Fragment {
             );
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.sensor_quick_view), applications[5])
-            );
-            applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.w_sensor_quick_view), applications[6])
             );
             return null;
         }
