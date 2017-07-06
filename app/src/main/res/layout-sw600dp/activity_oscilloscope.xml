@@ -204,7 +204,7 @@
             android:layout_weight="2" />
 
         <TextView
-            android:text="Timebase and Tigger"
+            android:text="Timebase and Trigger"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tv_timebase_tigger_os"

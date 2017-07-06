@@ -529,9 +529,9 @@ public class ScienceLab {
         return this.captureFullSpeed(channel, samples, timeGap, new ArrayList<String>(), null);
     }
 
-    public HashMap<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap) {
+    public HashMap<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap, boolean trigger) {
         if (traceOneRemap == null) traceOneRemap = "CH1";
-        this.captureTraces(2, samples, timeGap, traceOneRemap, false, null);
+        this.captureTraces(2, samples, timeGap, traceOneRemap, trigger, null);
         try {
             Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
         } catch (InterruptedException e) {
@@ -547,9 +547,9 @@ public class ScienceLab {
         return retData;
     }
 
-    public HashMap<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap) {
+    public HashMap<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap, boolean trigger) {
         if (traceOneRemap == null) traceOneRemap = "CH1";
-        this.captureTraces(4, samples, timeGap, traceOneRemap, false, null);
+        this.captureTraces(4, samples, timeGap, traceOneRemap, trigger, null);
         try {
             Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
         } catch (InterruptedException e) {
@@ -1113,7 +1113,7 @@ public class ScienceLab {
     }
 
     private void autoRangeScope(double tg) {
-        Map<String, double[]> tmp = this.captureTwo(1000, tg, null);
+        Map<String, double[]> tmp = this.captureTwo(1000, tg, null, false);
         double[] x = tmp.get("x");
         double[] y1 = tmp.get("y1");
         double[] y2 = tmp.get("y2");
