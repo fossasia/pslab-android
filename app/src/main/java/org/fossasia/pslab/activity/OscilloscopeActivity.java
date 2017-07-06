@@ -72,6 +72,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private TextView xyPlotTextView;
     private TextView leftYAxisLabel;
     private TextView leftYAxisLabelUnit;
+    private TextView rightYAxisLabel;
     private TextView rightYAxisLabelUnit;
     private TextView xAxisLabelUnit;
     private int height;
@@ -120,6 +121,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         xyPlotButton = (ImageButton) findViewById(R.id.button_xy_plot_os);
         leftYAxisLabel = (TextView) findViewById(R.id.tv_label_left_yaxis_os);
         leftYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_left_yaxis_os);
+        rightYAxisLabel = (TextView) findViewById(R.id.tv_label_right_yaxis_os);
         rightYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_right_yaxis_os);
         xAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_xaxis_os);
         channelParametersTextView = (TextView) findViewById(R.id.tv_channel_parameters_os);
@@ -463,10 +465,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     }
 
     public void setLeftYAxisLabel(String leftYAxisInput) {
-        this.leftYAxisInput = leftYAxisInput;
         leftYAxisLabel.setText(leftYAxisInput);
     }
 
+    public void setRightYAxisLabel(String rightYAxisInput) {
+        rightYAxisLabel.setText(rightYAxisInput);
+    }
 
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         ArrayList<Entry> entries;
