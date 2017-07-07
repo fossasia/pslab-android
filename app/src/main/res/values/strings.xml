@@ -87,9 +87,7 @@
     <string name="autoscan">Autoscan</string>
     <string name="select_sensor">Select Sensor</string>
     <string name="get_raw">Get Raw</string>
-    <string-array name="sensors">
 
-    </string-array>
     <string name="not_connected">Not Connected</string>
     <string name="initialisation_completed">Initialisation Completed</string>
     <string name="initialising_wait">Initialising Wait…</string>
