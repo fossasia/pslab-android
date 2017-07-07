@@ -31,19 +31,19 @@
                     android:background="@drawable/selector_button"
                     android:text="@string/resistance"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_control_read1"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="2"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
+                    android:layout_weight="2"
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -62,19 +62,19 @@
                     android:background="@drawable/selector_button"
                     android:text="@string/capacitance"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/control_textsize_tiny"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
                     android:id="@+id/tv_control_read2"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="2"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
             </TableRow>
 
             <TableRow
@@ -91,8 +91,8 @@
                     android:gravity="center"
                     android:text="@string/frequency"
                     android:textAllCaps="true"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
 
                 <Spinner
                     android:id="@+id/spinner_control_read1"
@@ -109,19 +109,19 @@
                     android:layout_weight="2"
                     android:background="@drawable/selector_button"
                     android:text="@string/read"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tv_control_read3"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="2.5"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -140,8 +140,8 @@
                     android:gravity="center"
                     android:text="@string/count_pulses"
                     android:textAllCaps="true"
-                    android:textSize="@dimen/control_textsize_tiny"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_tiny" />
 
                 <Spinner
                     android:id="@+id/spinner_control_read2"
@@ -157,18 +157,18 @@
                     android:layout_weight="2"
                     android:background="@drawable/selector_button"
                     android:text="@string/read"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tv_control_read4"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="2.5"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -186,8 +186,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/selector_button"
                     android:text="@string/reset"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
             </TableRow>
 
             <TableRow
@@ -205,8 +205,8 @@
                     android:gravity="center"
                     android:text="@string/voltage"
                     android:textAllCaps="true"
-                    android:textSize="@dimen/control_textsize_tiny"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_tiny" />
 
                 <Button
                     android:id="@+id/button_control_read6"
@@ -215,8 +215,8 @@
                     android:layout_weight="2"
                     android:background="@drawable/selector_button"
                     android:text="@string/read"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
 
 
             </TableRow>
@@ -235,20 +235,20 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/ch1"
-                    android:textSize="@dimen/control_textsize_tiny"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
                     android:id="@+id/tv_control_read5"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
                     android:textSize="@dimen/control_textsize_small"
-                    android:textStyle="bold" />
+                    android:gravity="center"
+                    android:layout_gravity="center" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -257,20 +257,20 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/cap"
-                    android:textSize="@dimen/control_textsize_tiny"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
                     android:id="@+id/tv_control_read6"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
                     android:textSize="@dimen/control_textsize_small"
-                    android:textStyle="bold" />
+                    android:gravity="center"
+                    android:layout_gravity="center" />
 
             </TableRow>
 
@@ -284,24 +284,24 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:text="@string/ch2"
-                    android:textSize="@dimen/control_textsize_tiny"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
                     android:id="@+id/tv_control_read7"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
                     android:textSize="@dimen/control_textsize_small"
-                    android:textStyle="bold" />
+                    android:gravity="center"
+                    android:layout_gravity="center" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -310,20 +310,20 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/sen"
-                    android:textSize="@dimen/control_textsize_tiny"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
                     android:id="@+id/tv_control_read8"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
                     android:textSize="@dimen/control_textsize_small"
-                    android:textStyle="bold" />
+                    android:gravity="center"
+                    android:layout_gravity="center" />
 
             </TableRow>
 
@@ -341,20 +341,20 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/ch3"
-                    android:textSize="@dimen/control_textsize_tiny"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
                     android:id="@+id/tv_control_read9"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
                     android:textSize="@dimen/control_textsize_small"
-                    android:textStyle="bold" />
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -363,20 +363,20 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/an8"
-                    android:textSize="@dimen/control_textsize_tiny"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_tiny" />
 
                 <TextView
                     android:id="@+id/tv_control_read10"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/tv_border"
-                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
                     android:textSize="@dimen/control_textsize_small"
-                    android:textStyle="bold" />
+                    android:gravity="center"
+                    android:layout_gravity="center" />
 
             </TableRow>
 

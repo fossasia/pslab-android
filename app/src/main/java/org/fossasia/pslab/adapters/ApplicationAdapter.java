@@ -40,12 +40,11 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         }
 
         public void setup(final ApplicationItem applicationItem, final OnItemClickListener listener) {
-            // Set application name
             applicationName.setText(applicationItem.getApplicationName());
-            // Set application Icon
             Picasso.with(mContext).load(applicationItem.getApplicationIcon()).into(applicationIcon);
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     listener.onItemClick(applicationItem);
                 }
             });
