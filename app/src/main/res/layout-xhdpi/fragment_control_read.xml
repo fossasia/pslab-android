@@ -39,10 +39,12 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="2"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
             </TableRow>
 
@@ -69,10 +71,12 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="2"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
             </TableRow>
 
             <TableRow
@@ -116,10 +120,12 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="2.5"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
             </TableRow>
 
@@ -163,10 +169,12 @@
                     android:id="@+id/tv_control_read4"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/control_read_height"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="2.5"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
             </TableRow>
 
@@ -179,7 +187,7 @@
 
                 <Button
                     android:id="@+id/button_control_read5"
-                    android:layout_width="80dp"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/control_read_height"
                     android:layout_weight="1"
                     android:background="@drawable/selector_button"
@@ -243,10 +251,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -263,10 +273,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
             </TableRow>
 
@@ -292,10 +304,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -312,10 +326,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
             </TableRow>
 
@@ -341,10 +357,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -361,10 +379,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/tv_border"
                     android:gravity="center"
-                    android:text="0"
-                    android:textSize="@dimen/control_textsize_small" />
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
 
             </TableRow>
 

@@ -19,11 +19,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:orientation="vertical">
+            android:paddingTop="15dp">
 
             <LinearLayout
                 android:id="@+id/linearlayout_control_main1"
@@ -36,10 +36,10 @@
                     android:id="@+id/tv_control_main1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/control_margin_small"
                     android:layout_marginStart="@dimen/control_margin_small"
                     android:layout_weight="2"
-                    android:layout_gravity="center_vertical"
                     android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
@@ -80,16 +80,20 @@
                 <TextView
                     android:id="@+id/tv_control_main2"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="3" />
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="3"
+                    android:background="@drawable/tv_border"
+                    android:textSize="@dimen/control_textsize_small"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <SeekBar
                 android:id="@+id/seekbar_control_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
 
