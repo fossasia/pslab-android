@@ -1,6 +1,8 @@
 package org.fossasia.pslab.communication.peripherals;
 
 import org.fossasia.pslab.communication.PacketHandler;
+import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,13 +39,13 @@ public class MCP4728 {
     private Map<String, Double> values = new LinkedHashMap<>();
     private int addr;
 
-    public MCP4728(PacketHandler packetHandler) {
+    public MCP4728(PacketHandler packetHandler, I2C i2c) {
         this.packetHandler = packetHandler;
         this.vref = 3.3;
         this.devid = 0;
         switchedOff = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
         vRefs = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
-        i2c = new I2C(packetHandler);
+        this.i2c = i2c;
         addr = 0x60 | devid;
         chans.put("PCS", new DACChannel("PCS", new double[]{0, 3.3e-3}, 0));
         chans.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1));
@@ -66,7 +68,7 @@ public class MCP4728 {
     public double setVoltage(String name, double val) {
         DACChannel dacChannel = chans.get(name);
         int v = (int) (Math.round(dacChannel.VToCode.value(val)));
-        return setRawVoltage("name", v);
+        return setRawVoltage(name, v);
     }
 
     public Double getVoltage(String name) {

@@ -187,7 +187,7 @@ public class ScienceLab {
         } else {
             aboutArray.add("Radio Transceiver is : Not Installed");
         }
-        dac = new MCP4728(mPacketHandler);
+        dac = new MCP4728(mPacketHandler,i2c);
         this.calibrated = false;
         // Check for calibration data if connected. And process them if found
         if (loadCalibrationData && isConnected()) {

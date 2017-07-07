@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by asitava on 6/6/17.
  */
 
-public class ControlFragmentAdvanced extends Fragment{
+public class ControlFragmentAdvanced extends Fragment {
 
     private ScienceLab scienceLab;
     Map<String, Integer> state = new HashMap<>();
@@ -108,7 +108,7 @@ public class ControlFragmentAdvanced extends Fragment{
                 } catch (NumberFormatException e) {
                     etwidgetControlAdvanced1.setText("0");
                     etwidgetControlAdvanced2.setText("0");
-                    etwidgetControlAdvanced1.setText("0");
+                    etwidgetControlAdvanced3.setText("0");
                 }
             }
         });
@@ -157,7 +157,7 @@ public class ControlFragmentAdvanced extends Fragment{
         checkBoxControlAdvanced2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) state.put("SQR2", 1);
+                if (isChecked) state.put("SQR2", 1);
                 else state.put("SQR2", 0);
                 if (scienceLab.isConnected())
                     scienceLab.setState(state);
@@ -177,7 +177,7 @@ public class ControlFragmentAdvanced extends Fragment{
         checkBoxControlAdvanced4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) state.put("SQR4", 1);
+                if (isChecked) state.put("SQR4", 1);
                 else state.put("SQR4", 0);
                 if (scienceLab.isConnected())
                     scienceLab.setState(state);
