@@ -1,8 +1,6 @@
 package org.fossasia.pslab.communication.peripherals;
 
 import org.fossasia.pslab.communication.PacketHandler;
-import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
 import java.util.ArrayList;
