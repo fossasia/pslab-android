@@ -52,7 +52,7 @@ public class ControlFragmentRead extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        scienceLab = ScienceLabCommon.getInstance().scienceLab;
+        scienceLab = ScienceLabCommon.scienceLab;
     }
 
     @Override
@@ -81,52 +81,62 @@ public class ControlFragmentRead extends Fragment implements View.OnClickListene
         buttonControlRead1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*double resistance = scienceLab.getResistance();
-                tvControlRead1.setText(String.valueOf(resistance));*/
+                if (scienceLab.isConnected()) {
+                    Double resistance = scienceLab.getResistance();
+                    tvControlRead1.setText(String.valueOf(resistance));
+                }
             }
         });
         buttonControlRead2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* double capacitance = scienceLab.getCapacitance();
-                tvControlRead2.setText(String.valueOf(capacitance));*/
+                if (scienceLab.isConnected()) {
+                    Double capacitance = scienceLab.getCapacitance();
+                    tvControlRead2.setText(String.valueOf(capacitance));
+                }
             }
         });
         buttonControlRead3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* String channel = spinnerControlRead1.getSelectedItem().toString();
-                scienceLab.countPulses(channel);
-                double pulseCount = scienceLab.readPulseCount();
-                tvControlRead3.setText(String.valueOf(pulseCount));*/
+                String channel = spinnerControlRead1.getSelectedItem().toString();
+                if (scienceLab.isConnected()) {
+                    Double frequency = scienceLab.getFrequency(channel, null);
+                    tvControlRead3.setText(String.valueOf(frequency));
+                }
             }
         });
         buttonControlRead4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*String channel = spinnerControlRead2.getSelectedItem().toString();
-                double frequency = scienceLab.getFrequency(channel, null);
-                tvControlRead4.setText(String.valueOf(frequency));*/
+                String channel = spinnerControlRead2.getSelectedItem().toString();
+                if (scienceLab.isConnected()) {
+                    scienceLab.countPulses(channel);
+                    double pulseCount = scienceLab.readPulseCount();
+                    tvControlRead4.setText(String.valueOf(pulseCount));
+                }
             }
         });
         buttonControlRead5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvControlRead1.setText(null);
-                tvControlRead2.setText(null);
-                tvControlRead3.setText(null);
-                tvControlRead4.setText(null);
+                tvControlRead1.setText("");
+                tvControlRead2.setText("");
+                tvControlRead3.setText("");
+                tvControlRead4.setText("");
             }
         });
         buttonControlRead6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*tvControlRead5.setText(String.valueOf(scienceLab.getVoltage("CH1", null)));
-                tvControlRead6.setText(String.valueOf(scienceLab.getVoltage("CAP", null)));
-                tvControlRead7.setText(String.valueOf(scienceLab.getVoltage("CH2", null)));
-                tvControlRead8.setText(String.valueOf(scienceLab.getVoltage("SEN", null)));
-                tvControlRead9.setText(String.valueOf(scienceLab.getVoltage("CH3", null)));
-                tvControlRead10.setText(String.valueOf(scienceLab.getVoltage("AN8", null)));*/
+                if (scienceLab.isConnected()) {
+                    tvControlRead5.setText(String.valueOf(scienceLab.getVoltage("CH1", 1)));
+                    tvControlRead6.setText(String.valueOf(scienceLab.getVoltage("CAP", 1)));
+                    tvControlRead7.setText(String.valueOf(scienceLab.getVoltage("CH2", 1)));
+                    tvControlRead8.setText(String.valueOf(scienceLab.getVoltage("SEN", 1)));
+                    tvControlRead9.setText(String.valueOf(scienceLab.getVoltage("CH3", 1)));
+                    tvControlRead10.setText(String.valueOf(scienceLab.getVoltage("AN8", 1)));
+                }
 
             }
         });

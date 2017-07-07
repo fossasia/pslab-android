@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -51,9 +52,31 @@ public class XYPlotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_xyplot, container, false);
-        String [] channels = {"CH1", "CH2", "CH3", "MIC"};
+        final String [] channels = {"CH1", "CH2", "CH3", "MIC"};
         spinnerChannelSelect1 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy1);
         spinnerChannelSelect2 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy2);
+        spinnerChannelSelect1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                ((OscilloscopeActivity) getActivity()).setLeftYAxisLabel(channels[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinnerChannelSelect2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                ((OscilloscopeActivity) getActivity()).setRightYAxisLabel(channels[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         checkBoxXYPlot = (CheckBox) v.findViewById(R.id.checkBox_enable_xy_xy);
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         ArrayAdapter<String> channelsAdapter;

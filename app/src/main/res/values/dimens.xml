@@ -25,10 +25,13 @@
     <dimen name="control_card_height">110dp</dimen>
     <dimen name="control_card_radius">18dp</dimen>
     <dimen name="control_text_padding">5dp</dimen>
+    <dimen name="control_textsize_tiny">14sp</dimen>
     <dimen name="control_textsize_small">16sp</dimen>
     <dimen name="control_textsize_medium">18sp</dimen>
     <dimen name="textsize_edittext">12sp</dimen>
     <dimen name="control_textsize_large">20sp</dimen>
     <dimen name="control_edittext_padding">2dp</dimen>
+    <dimen name="control_read_border_hdpi">5dp</dimen>
+    <dimen name="control_read_height">60dp</dimen>
 
 </resources>

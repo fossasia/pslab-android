@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -123,8 +124,8 @@ public class PacketHandler {
         try {
             int numByteRead = mCommunicationHandler.read(buffer, 2, timeout);
             if (numByteRead == 2) {
-                // Assuming MSB is read first
-                return ((buffer[0] << 8) & 0xff00) | ((buffer[1] << 8) & 0xff);
+                // LSB is read first
+                return (buffer[0] & 0xff) | ((buffer[1] << 8) & 0xff00);
             } else {
                 Log.e(TAG, "Error in reading byte");
             }
@@ -139,7 +140,8 @@ public class PacketHandler {
             int numByteRead = mCommunicationHandler.read(buffer, 4, timeout);
             if (numByteRead == 4) {
                 // C++ has long of 4-bytes but in Java int has 4-bytes
-                return ByteBuffer.wrap(Arrays.copyOfRange(buffer, 0, 4)).getInt();
+                // refer "https://stackoverflow.com/questions/7619058/convert-a-byte-array-to-integer-in-java-and-vice-versa" for Endian
+                return ByteBuffer.wrap(Arrays.copyOfRange(buffer, 0, 4)).order(ByteOrder.LITTLE_ENDIAN).getInt();
             } else {
                 Log.e(TAG, "Error in reading byte");
             }

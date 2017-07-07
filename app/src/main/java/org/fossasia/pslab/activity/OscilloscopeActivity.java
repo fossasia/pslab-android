@@ -36,7 +36,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
-import org.fossasia.pslab.fragment.TimebaseTiggerFragment;
+import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
@@ -51,7 +51,7 @@ import java.util.List;
 
 public class OscilloscopeActivity extends AppCompatActivity implements
         ChannelParametersFragment.OnFragmentInteractionListener,
-        TimebaseTiggerFragment.OnFragmentInteractionListener,
+        TimebaseTriggerFragment.OnFragmentInteractionListener,
         DataAnalysisFragment.OnFragmentInteractionListener,
         XYPlotFragment.OnFragmentInteractionListener,
         View.OnClickListener {
@@ -72,6 +72,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private TextView xyPlotTextView;
     private TextView leftYAxisLabel;
     private TextView leftYAxisLabelUnit;
+    private TextView rightYAxisLabel;
     private TextView rightYAxisLabelUnit;
     private TextView xAxisLabelUnit;
     private int height;
@@ -84,16 +85,18 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean isCH2Selected;
     public boolean isCH3Selected;
     public boolean isMICSelected;
+    public boolean isTriggerSelected;
     public boolean isFourierTransformSelected;
     public boolean isXYPlotSelected;
     public boolean sineFit;
     public boolean squareFit;
     private String leftYAxisInput;
-    public String tiggerChannel;
+    public String triggerChannel;
     public String curveFittingChannel1;
     public String curveFittingChannel2;
+    public double trigger;
     Fragment channelParametersFragment;
-    Fragment timebasetiggerFragment;
+    Fragment timebasetriggerFragment;
     Fragment dataAnalysisFragment;
     Fragment xyPlotFragment;
     private final Object lock = new Object();
@@ -118,6 +121,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         xyPlotButton = (ImageButton) findViewById(R.id.button_xy_plot_os);
         leftYAxisLabel = (TextView) findViewById(R.id.tv_label_left_yaxis_os);
         leftYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_left_yaxis_os);
+        rightYAxisLabel = (TextView) findViewById(R.id.tv_label_right_yaxis_os);
         rightYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_right_yaxis_os);
         xAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_xaxis_os);
         channelParametersTextView = (TextView) findViewById(R.id.tv_channel_parameters_os);
@@ -127,9 +131,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
         y2 = mChart.getAxisRight();
+        triggerChannel = "CH1";
+        trigger = 0;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
+        //scienceLab.setW1(3000, "sine");
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -140,7 +147,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         onWindowFocusChanged();
 
         channelParametersFragment = new ChannelParametersFragment();
-        timebasetiggerFragment = new TimebaseTiggerFragment();
+        timebasetriggerFragment = new TimebaseTriggerFragment();
         dataAnalysisFragment = new DataAnalysisFragment();
         xyPlotFragment = new XYPlotFragment();
 
@@ -283,11 +290,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 break;
 
             case R.id.button_timebase_os:
-                replaceFragment(R.id.layout_dock_os2, timebasetiggerFragment, "TimebaseTiggerFragment");
+                replaceFragment(R.id.layout_dock_os2, timebasetriggerFragment, "TimebaseTiggerFragment");
                 break;
 
             case R.id.tv_timebase_tigger_os:
-                replaceFragment(R.id.layout_dock_os2, timebasetiggerFragment, "TimebaseTiggerFragment");
+                replaceFragment(R.id.layout_dock_os2, timebasetriggerFragment, "TimebaseTiggerFragment");
                 break;
 
             case R.id.button_data_analysis_os:
@@ -395,6 +402,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         mChart.setPinchZoom(true);
         mChart.setScaleYEnabled(false);
         mChart.setBackgroundColor(Color.BLACK);
+        mChart.getDescription().setEnabled(false);
 
         LineData data = new LineData();
         data.setValueTextColor(Color.WHITE);
@@ -457,10 +465,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     }
 
     public void setLeftYAxisLabel(String leftYAxisInput) {
-        this.leftYAxisInput = leftYAxisInput;
         leftYAxisLabel.setText(leftYAxisInput);
     }
 
+    public void setRightYAxisLabel(String rightYAxisInput) {
+        rightYAxisLabel.setText(rightYAxisInput);
+    }
 
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         ArrayList<Entry> entries;
@@ -471,10 +481,16 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             try {
                 analogInput = params[0];
                 //no. of samples and timegap still need to be determined
-                scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+                if (isTriggerSelected) {
+                    scienceLab.configureTrigger(0, analogInput, trigger, null, null);
+                    scienceLab.captureTraces(1, 1000, 10, analogInput, true, null);
+                } else {
+                    scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+                }
                 Log.v("Sleep Time", "" + (1000 * 10 * 1e-3));
                 Thread.sleep((long) (1000 * 10 * 1e-3));
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
+
                 double[] xData = data.get("x");
                 double[] yData = data.get("y");
                 //Log.v("XDATA", Arrays.toString(xData));
@@ -516,7 +532,16 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             try {
                 analogInput = params[0];
                 //no. of samples and timegap still need to be determined
-                HashMap<String, double[]> data = scienceLab.captureTwo(800, 10, analogInput);
+                HashMap<String, double[]> data;
+                if (isTriggerSelected && (triggerChannel.equals("CH1") || triggerChannel.equals("CH2"))) {
+                    if (triggerChannel.equals("CH1"))
+                        scienceLab.configureTrigger(0, analogInput, trigger, null, null);
+                    else if (triggerChannel.equals("CH2"))
+                        scienceLab.configureTrigger(1, "CH2", trigger, null, null);
+                    data = scienceLab.captureTwo(1000, 10, analogInput, true);
+                } else {
+                    data = scienceLab.captureTwo(1000, 10, analogInput, false);
+                }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y1");
                 double[] y2Data = data.get("y2");
@@ -571,7 +596,22 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             try {
                 //no. of samples and timegap still need to be determined
                 analogInput = params[0];
-                HashMap<String, double[]> data = scienceLab.captureFour(800, 10, analogInput);
+                HashMap<String, double[]> data;
+
+                if (isTriggerSelected) {
+                    if (triggerChannel.equals("CH1"))
+                        scienceLab.configureTrigger(0, analogInput, trigger, null, null);
+                    else if (triggerChannel.equals("CH2"))
+                        scienceLab.configureTrigger(1, analogInput, trigger, null, null);
+                    else if (triggerChannel.equals("CH3"))
+                        scienceLab.configureTrigger(2, analogInput, trigger, null, null);
+                    else if (triggerChannel.equals("MIC"))
+                        scienceLab.configureTrigger(3, analogInput, trigger, null, null);
+
+                    data = scienceLab.captureFour(1000, 10, analogInput, true);
+                } else {
+                    data = scienceLab.captureFour(1000, 10, analogInput, false);
+                }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y");
                 double[] y2Data = data.get("y2");
