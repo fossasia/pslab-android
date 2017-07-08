@@ -89,7 +89,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                                 dataDecrement = -5.0;
                             else if (dataDecrement > 5.0)
                                 dataDecrement = 5.0;
-                            seekBarControlMain.setProgress((int)((dataDecrement+5)*10));
+                            seekBarControlMain.setProgress((int) ((dataDecrement + 5) * 10));
                             DecimalFormat df = new DecimalFormat("#.####");
                             editTextControlMain.setText(df.format(dataDecrement));
                         } catch (NumberFormatException e) {
@@ -140,7 +140,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        double text = progress/10.0 - 5.0;
+                        double text = progress / 10.0 - 5.0;
                         DecimalFormat df = new DecimalFormat("#.####");
                         editTextControlMain.setText(df.format(text));
                     }
@@ -218,7 +218,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        double text = progress/15.15 - 3.3;
+                        double text = progress / 15.15 - 3.3;
                         DecimalFormat df = new DecimalFormat("#.####");
                         editTextControlMain.setText(df.format(text));
                     }
@@ -299,7 +299,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        double text = progress/30.30;
+                        double text = progress / 30.30;
                         DecimalFormat df = new DecimalFormat("#.####");
                         editTextControlMain.setText(df.format(text));
                     }
@@ -378,7 +378,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        double text = progress/30.30;
+                        double text = progress / 30.30;
                         DecimalFormat df = new DecimalFormat("#.####");
                         editTextControlMain.setText(df.format(text));
                     }
@@ -447,7 +447,9 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             editTextControlMain.setText(String.valueOf(value));
                             //seekBarControlMain.setProgress((int) ((value - 10) / 49.9));
 
-                            // call to scienceLab for setting
+                            if (scienceLab.isConnected())
+                                scienceLab.setSine1(value);
+
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
@@ -458,7 +460,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        int text = (int)(progress*49.9+10);
+                        int text = (int) (progress * 49.9 + 10);
                         DecimalFormat df = new DecimalFormat("####");
                         editTextControlMain.setText(df.format(text));
                     }
@@ -525,7 +527,9 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             editTextControlMain.setText(String.valueOf(value));
                             seekBarControlMain.setProgress((int) ((value - 10) / 49.9));
 
-                            // call to scienceLab for setting
+                            if (scienceLab.isConnected())
+                                scienceLab.setSine2(value);
+
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
@@ -535,7 +539,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        int text = (int)(progress*49.9+10);
+                        int text = (int) (progress * 49.9 + 10);
                         DecimalFormat df = new DecimalFormat("####");
                         editTextControlMain.setText(df.format(text));
                     }
@@ -566,7 +570,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             seekBarControlMain.setProgress((int) ((dataDecrement - 10) / 49.9));
                             DecimalFormat df = new DecimalFormat("####");
                             editTextControlMain.setText(df.format(dataDecrement));
-                        }  catch (NumberFormatException e) {
+                        } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
                     }
@@ -603,7 +607,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             editTextControlMain.setText(String.valueOf(value));
                             seekBarControlMain.setProgress((int) ((value - 10) / 49.9));
 
-                            // call to scienceLab for setting
+                            // Setting a SQUARE Wave in SQR1 by default
+                            if (scienceLab.isConnected())
+                                scienceLab.setSqr1(value, -1, false);
+
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
@@ -613,7 +620,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        int text = (int)(progress*49.9+10);
+                        int text = (int) (progress * 49.9 + 10);
                         DecimalFormat df = new DecimalFormat("####");
                         editTextControlMain.setText(df.format(text));
                     }
