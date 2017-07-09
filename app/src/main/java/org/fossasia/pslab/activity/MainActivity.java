@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 return ApplicationsFragment.newInstance();
             case 2:
-                return SavedExperiments.newInstance();
+                return SavedExperiments.newInstance(this);
             case 3:
                 return DesignExperiments.newInstance();
             case 4:
