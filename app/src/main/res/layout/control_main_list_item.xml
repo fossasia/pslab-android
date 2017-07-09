@@ -69,7 +69,7 @@
                 android:layout_marginLeft="@dimen/control_margin"
                 android:text="@string/set"
                 android:textColor="@color/white"
-                android:background="@color/colorPrimaryDark"/>
+                android:background="@drawable/selector_button" />
             <TextView
                 android:id="@+id/tv_control_main2"
                 android:textStyle="bold"

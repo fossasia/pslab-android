@@ -73,7 +73,7 @@
                     android:layout_marginLeft="@dimen/control_margin"
                     android:layout_marginStart="@dimen/control_margin"
                     android:layout_weight="1.5"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_button"
                     android:text="@string/set"
                     android:textColor="@color/white" />
 
