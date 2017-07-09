@@ -21,12 +21,17 @@ public class SavedExperimentAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> experimentHeader;
+    private List<String> experimentDescription;
     private HashMap<String, List<String>> experimentList;
 
-    public SavedExperimentAdapter(Context context, List<String> experimentGroupHeader, HashMap<String, List<String>> experimentList) {
+    public SavedExperimentAdapter(Context context,
+                                  List<String> experimentGroupHeader,
+                                  HashMap<String, List<String>> experimentList,
+                                  List<String> experimentDescription) {
         this.context = context;
         this.experimentHeader = experimentGroupHeader;
         this.experimentList = experimentList;
+        this.experimentDescription = experimentDescription;
     }
 
     @Override
@@ -75,7 +80,7 @@ public class SavedExperimentAdapter extends BaseExpandableListAdapter {
         tvExperimentListHeader.setTypeface(null, Typeface.BOLD);
         tvExperimentListHeader.setText(headerTitle);
         TextView tvTemp = (TextView) convertView.findViewById(android.R.id.text2);
-        tvTemp.setText("Some Description");
+        tvTemp.setText(experimentDescription.get(groupPosition));
         return convertView;
     }
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.SavedExperimentAdapter;
@@ -34,6 +35,7 @@ public class SavedExperiments extends Fragment {
 
     private SavedExperimentAdapter experimentAdapter;
     private List<String> experimentGroupHeaders;
+    private List<String> experimentDescription;
     private HashMap<String, List<String>> experimentList;
 
     public static SavedExperiments newInstance(Context context) {
@@ -53,8 +55,16 @@ public class SavedExperiments extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.saved_experiments_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
-        experimentAdapter = new SavedExperimentAdapter(context, experimentGroupHeaders, experimentList);
+        experimentAdapter = new SavedExperimentAdapter(context, experimentGroupHeaders, experimentList,experimentDescription);
         experimentExpandableList.setAdapter(experimentAdapter);
+        experimentExpandableList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Toast.makeText(context, experimentList.get(experimentGroupHeaders.get(groupPosition)).get(childPosition) + " Clicked", Toast.LENGTH_SHORT).show();
+                // Open Fragment/Activity to perform corresponding experiment or to see experiment description like Help-Files
+                return true;
+            }
+        });
         return view;
     }
 
@@ -67,20 +77,37 @@ public class SavedExperiments extends Fragment {
     private void prepareExperimentList() {
         experimentGroupHeaders = new ArrayList<>();
         experimentList = new HashMap<>();
+        experimentDescription = new ArrayList<>();
 
         experimentGroupHeaders.add("Electronics");
+        experimentDescription.add("Experiments related to Diodes, BJT, FET, OpAmps, Oscillators, etc.");
+
         experimentGroupHeaders.add("Electrical");
+        experimentDescription.add("Experiments related to Resistance, Capacitance, Inductance, RLC Circuits, etc.");
+
         experimentGroupHeaders.add("Physics");
+        experimentDescription.add("Experiments related to Sound, Pendulum Time Period, Simple Pendulum, etc.");
+
         experimentGroupHeaders.add("School Level");
+        experimentDescription.add("Experiments related to AC/DC, Sound Basics, Water Resistance, etc.");
+
         experimentGroupHeaders.add("Miscellaneous");
+        experimentDescription.add("Experiments related to Sensors like Dust Sensor, Temperature Sensor, etc.");
+
         experimentGroupHeaders.add("My Experiments");
+        experimentDescription.add("My Designed Experiments");
 
         List<String> electronicsExperiments = new ArrayList<>();
-        electronicsExperiments.add("BJT and FET");
-        electronicsExperiments.add("Diodes");
-        electronicsExperiments.add("OpAmps");
-        electronicsExperiments.add("Oscillators");
-        electronicsExperiments.add("Communication");
+        electronicsExperiments.add("Diode I-V");
+        electronicsExperiments.add("Zener I-V");
+        electronicsExperiments.add("Diode Clamping");
+        electronicsExperiments.add("Half Wave");
+        electronicsExperiments.add("Transistor CB");
+        electronicsExperiments.add("Transistor CE");
+        electronicsExperiments.add("Transistor Amplifier");
+        electronicsExperiments.add("Inverting Op-Amp");
+        electronicsExperiments.add("Astable Multi-vibrator");
+        electronicsExperiments.add("Phase Shift Oscillator");
 
         List<String> electricalExperiments = new ArrayList<>();
         electricalExperiments.add("Transients RLC");
