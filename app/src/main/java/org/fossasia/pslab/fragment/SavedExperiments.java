@@ -1,6 +1,7 @@
 package org.fossasia.pslab.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.PerformExperimentActivity;
 import org.fossasia.pslab.adapters.SavedExperimentAdapter;
 
 import java.util.ArrayList;
@@ -55,13 +57,16 @@ public class SavedExperiments extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.saved_experiments_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
-        experimentAdapter = new SavedExperimentAdapter(context, experimentGroupHeaders, experimentList,experimentDescription);
+        experimentAdapter = new SavedExperimentAdapter(context, experimentGroupHeaders, experimentList, experimentDescription);
         experimentExpandableList.setAdapter(experimentAdapter);
         experimentExpandableList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Toast.makeText(context, experimentList.get(experimentGroupHeaders.get(groupPosition)).get(childPosition) + " Clicked", Toast.LENGTH_SHORT).show();
                 // Open Fragment/Activity to perform corresponding experiment or to see experiment description like Help-Files
+                Intent intent = new Intent(context, PerformExperimentActivity.class);
+                intent.putExtra("toolbar_title", experimentGroupHeaders.get(groupPosition));
+                startActivity(intent);
                 return true;
             }
         });
