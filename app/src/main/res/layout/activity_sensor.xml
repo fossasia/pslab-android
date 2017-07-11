@@ -29,17 +29,21 @@
             android:background="@color/colorPrimaryDark"
             />
 
-        <TextView
-            android:id="@+id/tv_sensor_scan"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:text=""
             android:layout_marginTop="20dp"
-            android:background="@drawable/control_custom_border"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp" >
+            <TextView
+                  android:id="@+id/tv_sensor_scan"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:text=""
+                  android:background="@drawable/control_custom_border" />
+        </android.support.v4.widget.NestedScrollView>
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,7 +54,8 @@
             android:textStyle="bold"
             android:textAllCaps="true"
             android:layout_marginTop="20dp"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            />
 
         <Spinner
             android:id="@+id/spinner_sensor_select"
@@ -58,7 +63,8 @@
             android:layout_height="35dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:entries="@array/sensors">
+            android:gravity="center_horizontal"
+            android:background="@color/colorPrimary">
         </Spinner>
 
         <Button
@@ -85,7 +91,7 @@
             <TextView
                 android:id="@+id/tv_sensor_getraw"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text=""
                 android:background="@drawable/control_custom_border"/>
         </android.support.v4.widget.NestedScrollView>

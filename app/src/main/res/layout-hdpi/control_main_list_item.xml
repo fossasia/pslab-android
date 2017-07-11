@@ -70,15 +70,17 @@
                     android:layout_marginLeft="@dimen/control_margin"
                     android:layout_marginStart="@dimen/control_margin"
                     android:layout_weight="1.5"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_button"
                     android:text="@string/set"
                     android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tv_control_main2"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/control_textsize_small"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
                     android:layout_weight="3" />
             </LinearLayout>
 

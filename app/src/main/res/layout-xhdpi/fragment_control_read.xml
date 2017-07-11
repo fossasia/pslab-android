@@ -26,23 +26,24 @@
                 <Button
                     android:id="@+id/button_control_read1"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_weight="1"
                     android:background="@drawable/selector_button"
                     android:text="@string/resistance"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_control_read1"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="2"
                     android:background="@drawable/tv_border"
                     android:gravity="center"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
             </TableRow>
@@ -57,23 +58,24 @@
                 <Button
                     android:id="@+id/button_control_read2"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_weight="1"
                     android:background="@drawable/selector_button"
                     android:text="@string/capacitance"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/control_textsize_tiny"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_control_read2"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="2"
                     android:background="@drawable/tv_border"
                     android:gravity="center"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -86,18 +88,18 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_weight="4"
                     android:gravity="center"
                     android:text="@string/frequency"
                     android:textAllCaps="true"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/spinner_control_read1"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_weight="3.5"
                     android:entries="@array/ID"
                     android:gravity="center_vertical" />
@@ -105,22 +107,24 @@
                 <Button
                     android:id="@+id/button_control_read3"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_weight="2"
                     android:background="@drawable/selector_button"
                     android:text="@string/read"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_control_read3"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="2.5"
                     android:background="@drawable/tv_border"
                     android:gravity="center"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
             </TableRow>
@@ -134,40 +138,42 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:gravity="center"
                     android:text="@string/count_pulses"
                     android:textAllCaps="true"
-                    android:textSize="@dimen/control_textsize_tiny"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/spinner_control_read2"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_weight="3.5"
                     android:entries="@array/ID" />
 
                 <Button
                     android:id="@+id/button_control_read4"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_weight="2"
                     android:background="@drawable/selector_button"
                     android:text="@string/read"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_control_read4"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="2.5"
                     android:background="@drawable/tv_border"
                     android:gravity="center"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
             </TableRow>
@@ -181,12 +187,13 @@
 
                 <Button
                     android:id="@+id/button_control_read5"
-                    android:layout_width="80dp"
-                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_weight="1"
                     android:background="@drawable/selector_button"
                     android:text="@string/reset"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -199,23 +206,24 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
-                    android:layout_weight="4"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/voltage"
                     android:textAllCaps="true"
-                    android:textSize="@dimen/control_textsize_tiny"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/button_control_read6"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="2"
+                    android:layout_height="@dimen/control_read_height"
+                    android:layout_weight="1"
                     android:background="@drawable/selector_button"
                     android:text="@string/read"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
 
@@ -230,12 +238,12 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/ch1"
-                    android:textSize="@dimen/control_textsize_tiny"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
@@ -252,12 +260,12 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/cap"
-                    android:textSize="@dimen/control_textsize_tiny"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
@@ -283,12 +291,12 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/ch2"
-                    android:textSize="@dimen/control_textsize_tiny"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
@@ -305,12 +313,12 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/sen"
-                    android:textSize="@dimen/control_textsize_tiny"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
@@ -336,12 +344,12 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/ch3"
-                    android:textSize="@dimen/control_textsize_tiny"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
@@ -358,12 +366,12 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/control_read_height"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/an8"
-                    android:textSize="@dimen/control_textsize_tiny"
+                    android:textSize="@dimen/control_textsize_small"
                     android:textStyle="bold" />
 
                 <TextView
