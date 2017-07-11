@@ -95,5 +95,7 @@
     <string name="device_not_found">Device Not Found</string>
 
     <string name="time_unit_la">Time -> (ms)</string>
+    <string name="analyze">Analyze</string>
+    <string name="view">VIEW</string>
 
 </resources>

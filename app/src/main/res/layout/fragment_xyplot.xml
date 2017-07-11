@@ -59,7 +59,10 @@
         android:layout_toEndOf="@+id/spinner_channel_select_xy2"
         android:layout_toRightOf="@+id/spinner_channel_select_xy2"
         android:layout_weight="1"
-        android:text="VIEW"
+        android:background="@drawable/selector_button"
+        android:text="@string/view"
+        android:textColor="@color/white"
+        android:textSize="@dimen/control_textsize_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
