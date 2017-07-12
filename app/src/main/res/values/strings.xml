@@ -98,4 +98,9 @@
     <string name="analyze">Analyze</string>
     <string name="view">VIEW</string>
 
+    <string-array name="tab_titles">
+        <item>Experiment Doc</item>
+        <item>Experiment Setup</item>
+    </string-array>
+
 </resources>
