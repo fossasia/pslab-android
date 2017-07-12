@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="5dp"
@@ -7,19 +8,26 @@
     android:orientation="vertical"
     android:padding="5dp">
 
-    <TextView
+    <com.gigamole.navigationtabstrip.NavigationTabStrip
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="AIM : To study Diode I-V charateristics"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:layout_height="50dp"
+        app:nts_active_color="#000"
+        app:nts_animation_duration="300"
+        app:nts_color="#000"
+        app:nts_corners_radius="1.5dp"
+        app:nts_factor="2.5"
+        app:nts_gravity="top"
+        app:nts_inactive_color="#c4c4c4"
+        app:nts_size="15sp"
+        app:nts_titles="@array/tab_titles"
+        app:nts_type="point"
+        app:nts_typeface="fonts/typeface.otf"
+        app:nts_weight="3dp" />
 
-    <TextView
+    <android.support.v4.view.ViewPager
+        android:id="@+id/saved_experiment_vpager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:padding="2dp"
-        android:text="Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source."
-        android:textSize="18sp" />
+        android:layout_height="wrap_content" />
+
 
 </LinearLayout>

@@ -22,17 +22,14 @@ public class SavedExperimentAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> experimentHeader;
-    private List<String> experimentDescription;
     private HashMap<String, List<String>> experimentList;
 
     public SavedExperimentAdapter(Context context,
                                   List<String> experimentGroupHeader,
-                                  HashMap<String, List<String>> experimentList,
-                                  List<String> experimentDescription) {
+                                  HashMap<String, List<String>> experimentList) {
         this.context = context;
         this.experimentHeader = experimentGroupHeader;
         this.experimentList = experimentList;
-        this.experimentDescription = experimentDescription;
     }
 
     @Override

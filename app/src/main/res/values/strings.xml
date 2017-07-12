@@ -96,4 +96,9 @@
 
     <string name="time_unit_la">Time -> (ms)</string>
 
+    <string-array name="tab_titles">
+        <item>Experiment Doc</item>
+        <item>Experiment Setup</item>
+    </string-array>
+
 </resources>
