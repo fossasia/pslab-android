@@ -1,6 +1,5 @@
 package org.fossasia.pslab.others;
 
-import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
@@ -27,19 +26,16 @@ public class AudioJack {
     private AudioTrack audioTrack = null;
     private int minRecorderBufferSize;
     private int minTrackBufferSize;
-    private Context context;
     private String io;
+
+    public boolean configurationStatus;
 
     /*
     * Context to obtain AudioManager Instance and string io to classify if requested input or output.
     * */
-    public AudioJack(Context context, String io) {
-        this.context = context;
+    public AudioJack(String io) {
         this.io = io;
-        boolean configurationStatus = configure();
-        if (configurationStatus) {
-
-        }
+        configurationStatus = configure();
     }
 
     private boolean configure() {
