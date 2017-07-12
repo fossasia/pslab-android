@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.fossasia.pslab">
 
-    <uses-feature android:name="android.hardware.usb.host" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <uses-feature android:name="android.hardware.usb.host" />
 
     <application
         android:allowBackup="true"
