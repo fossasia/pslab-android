@@ -18,15 +18,12 @@ import org.fossasia.pslab.adapters.PerformExperimentAdapter;
 
 public class PerformExperimentActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private String toolbarTitle;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        toolbarTitle = getIntent().getStringExtra("toolbar_title");
+        String toolbarTitle = getIntent().getStringExtra("toolbar_title");
         setContentView(R.layout.activity_perform_experiment);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(toolbarTitle);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
