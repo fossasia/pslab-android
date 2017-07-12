@@ -1,4 +1,3 @@
-
 package org.fossasia.pslab.activity;
 
 
@@ -20,6 +19,7 @@ import android.view.Display;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -77,7 +77,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private TextView xAxisLabelUnit;
     private int height;
     private int width;
-    private double timebase;
+    public double timebase;
     private XAxis x1;
     private YAxis y1;
     private YAxis y2;
@@ -103,6 +103,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
     private CaptureTaskThree captureTask3;
+    private ImageView ledImageView;
 
 
     @Override
@@ -128,11 +129,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         timebaseTiggerTextView = (TextView) findViewById(R.id.tv_timebase_tigger_os);
         dataAnalysisTextView = (TextView) findViewById(R.id.tv_data_analysis_os);
         xyPlotTextView = (TextView) findViewById(R.id.tv_xy_plot_os);
+        ledImageView = (ImageView) findViewById(R.id.imageView_led_os);
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
         y2 = mChart.getAxisRight();
         triggerChannel = "CH1";
         trigger = 0;
+        timebase = 875;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -197,7 +200,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (scienceLab.isConnected() & isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
                         {
                             captureTask = new CaptureTask();
                             captureTask.execute("CH3");
@@ -269,6 +272,18 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                        }
+                    }
+
+                    if (!scienceLab.isConnected() || (!isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected)) {
+                        if (!String.valueOf(ledImageView.getTag()).equals("red")) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ledImageView.setImageResource(R.drawable.red_led);
+                                    ledImageView.setTag("red");
+                                }
+                            });
                         }
                     }
                 }
@@ -496,8 +511,15 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 //Log.v("XDATA", Arrays.toString(xData));
                 //Log.v("YDATA", Arrays.toString(yData));
                 entries = new ArrayList<Entry>();
-                for (int i = 0; i < xData.length; i++) {
-                    entries.add(new Entry((float) xData[i], (float) yData[i]));
+                if(timebase == 875) {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries.add(new Entry((float) xData[i], (float) yData[i]));
+                    }
+                }
+                else {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries.add(new Entry((float) xData[i] / 1000, (float) yData[i]));
+                    }
                 }
             } catch (NullPointerException e) {
                 cancel(true);
@@ -510,15 +532,22 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (!String.valueOf(ledImageView.getTag()).equals("green")) {
+                ledImageView.setImageResource(R.drawable.green_led);
+                ledImageView.setTag("green");
+            }
+
             LineDataSet dataset = new LineDataSet(entries, analogInput);
             LineData lineData = new LineData(dataset);
             dataset.setDrawCircles(false);
             mChart.setData(lineData);
             mChart.notifyDataSetChanged();
             mChart.invalidate();
+
             synchronized (lock) {
                 lock.notify();
             }
+
         }
     }
 
@@ -548,10 +577,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                 entries1 = new ArrayList<Entry>();
                 entries2 = new ArrayList<Entry>();
-
-                for (int i = 0; i < xData.length; i++) {
-                    entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
-                    entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                if(timebase == 875) {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                    }
+                }
+                else {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i] / 1000, (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i] / 1000, (float) y2Data[i]));
+                    }
                 }
             } catch (NullPointerException e) {
                 cancel(true);
@@ -562,6 +598,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (!String.valueOf(ledImageView.getTag()).equals("green")) {
+                ledImageView.setImageResource(R.drawable.green_led);
+                ledImageView.setTag("green");
+            }
+
             LineDataSet dataset1 = new LineDataSet(entries1, analogInput);
             LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
 
@@ -622,13 +663,21 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 entries2 = new ArrayList<Entry>();
                 entries3 = new ArrayList<Entry>();
                 entries4 = new ArrayList<Entry>();
-
-                for (int i = 0; i < xData.length; i++) {
-                    entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
-                    entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
-                    entries3.add(new Entry((float) xData[i], (float) y3Data[i]));
-                    entries4.add(new Entry((float) xData[i], (float) y4Data[i]));
-
+                if(timebase == 875) {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                        entries3.add(new Entry((float) xData[i], (float) y3Data[i]));
+                        entries4.add(new Entry((float) xData[i], (float) y4Data[i]));
+                    }
+                }
+                else {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i] / 1000, (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i] / 1000, (float) y2Data[i]));
+                        entries3.add(new Entry((float) xData[i] / 1000, (float) y3Data[i]));
+                        entries4.add(new Entry((float) xData[i] / 1000, (float) y4Data[i]));
+                    }
                 }
             } catch (NullPointerException e) {
                 cancel(true);
@@ -639,6 +688,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (!String.valueOf(ledImageView.getTag()).equals("green")) {
+                ledImageView.setImageResource(R.drawable.green_led);
+                ledImageView.setTag("green");
+            }
+
             LineDataSet dataset1 = new LineDataSet(entries1, "CH1");
             LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
             LineDataSet dataSet3 = new LineDataSet(entries3, "CH3");

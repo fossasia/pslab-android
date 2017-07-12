@@ -104,7 +104,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Analyze" />
+            android:background="@drawable/selector_button"
+            android:text="@string/analyze"
+            android:textColor="@color/white"
+            android:textSize="@dimen/control_textsize_small" />
     </LinearLayout>
 
 </ScrollView>
