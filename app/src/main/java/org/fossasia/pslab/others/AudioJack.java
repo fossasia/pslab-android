@@ -15,6 +15,7 @@ import android.util.Log;
 public class AudioJack {
 
     /* TODO : Add runtime permission for Recording Audio */
+    /* TODO : Output value in buffer would be between -2^16 and 2^16, need to map it too or show its FFT  */
 
     private static final String TAG = "AudioJack";
 
