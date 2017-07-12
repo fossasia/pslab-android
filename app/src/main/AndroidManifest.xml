@@ -32,7 +32,9 @@
         <activity android:name=".activity.AboutUs" />
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ReportUs" />
-        <activity android:name=".activity.ControlActivity" />
+        <activity
+            android:name=".activity.ControlActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".activity.OscilloscopeActivity"
             android:screenOrientation="landscape" />
