@@ -77,7 +77,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private TextView xAxisLabelUnit;
     private int height;
     private int width;
-    private double timebase;
+    public double timebase;
     private XAxis x1;
     private YAxis y1;
     private YAxis y2;
@@ -135,6 +135,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         y2 = mChart.getAxisRight();
         triggerChannel = "CH1";
         trigger = 0;
+        timebase = 875;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -510,8 +511,15 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 //Log.v("XDATA", Arrays.toString(xData));
                 //Log.v("YDATA", Arrays.toString(yData));
                 entries = new ArrayList<Entry>();
-                for (int i = 0; i < xData.length; i++) {
-                    entries.add(new Entry((float) xData[i], (float) yData[i]));
+                if(timebase == 875) {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries.add(new Entry((float) xData[i], (float) yData[i]));
+                    }
+                }
+                else {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries.add(new Entry((float) xData[i] / 1000, (float) yData[i]));
+                    }
                 }
             } catch (NullPointerException e) {
                 cancel(true);
@@ -569,10 +577,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                 entries1 = new ArrayList<Entry>();
                 entries2 = new ArrayList<Entry>();
-
-                for (int i = 0; i < xData.length; i++) {
-                    entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
-                    entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                if(timebase == 875) {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                    }
+                }
+                else {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i] / 1000, (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i] / 1000, (float) y2Data[i]));
+                    }
                 }
             } catch (NullPointerException e) {
                 cancel(true);
@@ -648,13 +663,21 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 entries2 = new ArrayList<Entry>();
                 entries3 = new ArrayList<Entry>();
                 entries4 = new ArrayList<Entry>();
-
-                for (int i = 0; i < xData.length; i++) {
-                    entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
-                    entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
-                    entries3.add(new Entry((float) xData[i], (float) y3Data[i]));
-                    entries4.add(new Entry((float) xData[i], (float) y4Data[i]));
-
+                if(timebase == 875) {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                        entries3.add(new Entry((float) xData[i], (float) y3Data[i]));
+                        entries4.add(new Entry((float) xData[i], (float) y4Data[i]));
+                    }
+                }
+                else {
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i] / 1000, (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i] / 1000, (float) y2Data[i]));
+                        entries3.add(new Entry((float) xData[i] / 1000, (float) y3Data[i]));
+                        entries4.add(new Entry((float) xData[i] / 1000, (float) y4Data[i]));
+                    }
                 }
             } catch (NullPointerException e) {
                 cancel(true);
