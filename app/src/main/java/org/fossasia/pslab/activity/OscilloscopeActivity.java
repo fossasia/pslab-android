@@ -136,6 +136,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         triggerChannel = "CH1";
         trigger = 0;
         timebase = 875;
+        isCH1Selected = true;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -511,12 +512,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 //Log.v("XDATA", Arrays.toString(xData));
                 //Log.v("YDATA", Arrays.toString(yData));
                 entries = new ArrayList<Entry>();
-                if(timebase == 875) {
+                if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries.add(new Entry((float) xData[i], (float) yData[i]));
                     }
-                }
-                else {
+                } else {
                     for (int i = 0; i < xData.length; i++) {
                         entries.add(new Entry((float) xData[i] / 1000, (float) yData[i]));
                     }
@@ -577,13 +577,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                 entries1 = new ArrayList<Entry>();
                 entries2 = new ArrayList<Entry>();
-                if(timebase == 875) {
+                if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
                         entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
                     }
-                }
-                else {
+                } else {
                     for (int i = 0; i < xData.length; i++) {
                         entries1.add(new Entry((float) xData[i] / 1000, (float) y1Data[i]));
                         entries2.add(new Entry((float) xData[i] / 1000, (float) y2Data[i]));
@@ -663,15 +662,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 entries2 = new ArrayList<Entry>();
                 entries3 = new ArrayList<Entry>();
                 entries4 = new ArrayList<Entry>();
-                if(timebase == 875) {
+                if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
                         entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
                         entries3.add(new Entry((float) xData[i], (float) y3Data[i]));
                         entries4.add(new Entry((float) xData[i], (float) y4Data[i]));
                     }
-                }
-                else {
+                } else {
                     for (int i = 0; i < xData.length; i++) {
                         entries1.add(new Entry((float) xData[i] / 1000, (float) y1Data[i]));
                         entries2.add(new Entry((float) xData[i] / 1000, (float) y2Data[i]));

@@ -12,6 +12,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:checked="true"
         android:text="CH1"
         android:textSize="18sp"
         android:textStyle="normal|bold"
