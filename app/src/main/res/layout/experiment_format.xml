@@ -22,7 +22,6 @@
         app:nts_size="15sp"
         app:nts_titles="@array/tab_titles"
         app:nts_type="point"
-        app:nts_typeface="fonts/typeface.otf"
         app:nts_weight="3dp" />
 
     <android.support.v4.view.ViewPager

@@ -24,11 +24,11 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return ExperimentDocFragment.newInstance();
+                return ExperimentDocFragment.newInstance("astable-multivibrator.html");
             case 1:
                 return ExperimentSetupFragment.newInstance();
             default:
-                return ExperimentDocFragment.newInstance();
+                return ExperimentDocFragment.newInstance("astable-multivibrator.html");
 
         }
     }
