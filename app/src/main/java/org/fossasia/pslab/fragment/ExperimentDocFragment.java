@@ -1,7 +1,6 @@
 package org.fossasia.pslab.fragment;
 
 import android.annotation.TargetApi;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +20,6 @@ import org.fossasia.pslab.R;
  */
 
 public class ExperimentDocFragment extends Fragment {
-
 
     private WebView webView;
     private String htmlFile;
@@ -47,14 +45,16 @@ public class ExperimentDocFragment extends Fragment {
         webView.loadUrl("file:///android_asset/DOC_HTML/apps/" + htmlFile);
     }
 
+    @SuppressWarnings("setJavaScriptEnabled")
     private void configureWebView() {
         webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new MyWebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setVerticalScrollBarEnabled(true);
-        webView.setHorizontalScrollBarEnabled(true);
+        //webView.setVerticalScrollBarEnabled(true);
+        //webView.setHorizontalScrollBarEnabled(true);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
     }
 
     private class MyWebViewClient extends WebViewClient {
