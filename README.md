@@ -14,8 +14,8 @@ Please join us on the following channels:
 * [Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia)
 
 ## Roadmap
- - ~~First we need to get communication between Android App and PSLab working.~~
- - Implement Applications and expose PSLab Hardware functionality to user.
+ - [x] First we need to get communication between Android App and PSLab working.
+ - [ ] Implement Applications and expose PSLab Hardware functionality to user.
 
 ## Screenshots
 

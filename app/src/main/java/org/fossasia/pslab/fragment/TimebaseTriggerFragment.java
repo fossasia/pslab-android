@@ -85,38 +85,47 @@ public class TimebaseTriggerFragment extends Fragment {
                     case 0:
                         textViewTimeBase.setText("875.00 μs");
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(875);
+                        ((OscilloscopeActivity) getActivity()).timebase = 875;
                         break;
                     case 1:
                         textViewTimeBase.setText("1.00 ms");
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(1);
+                        ((OscilloscopeActivity) getActivity()).timebase = 1000;
                         break;
                     case 2:
                         textViewTimeBase.setText("2.00 ms");
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(2);
+                        ((OscilloscopeActivity) getActivity()).timebase = 2000;
                         break;
                     case 3:
                         textViewTimeBase.setText("4.00 ms");
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(4);
+                        ((OscilloscopeActivity) getActivity()).timebase = 4000;
                         break;
                     case 4:
                         textViewTimeBase.setText("8.00 ms");
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(8);
+                        ((OscilloscopeActivity) getActivity()).timebase = 8000;
                         break;
                     case 5:
                         textViewTimeBase.setText("25.60 ms");
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(25.60);
+                        ((OscilloscopeActivity) getActivity()).timebase = 25600;
                         break;
                     case 6:
                         textViewTimeBase.setText("38.40 ms");
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(38.40);
+                        ((OscilloscopeActivity) getActivity()).timebase = 38400;
                         break;
                     case 7:
                         textViewTimeBase.setText("51.20 ms");
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(51.20);
+                        ((OscilloscopeActivity) getActivity()).timebase = 51200;
                         break;
                     case 8:
                         textViewTimeBase.setText("102.40 ms");
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(102.40);
+                        ((OscilloscopeActivity) getActivity()).timebase = 102400;
                         break;
                 }
             }

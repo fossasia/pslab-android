@@ -4,9 +4,9 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature android:name="android.hardware.usb.host" />
-
 
     <application
         android:allowBackup="true"
@@ -34,8 +34,10 @@
         <activity android:name=".activity.AboutUs" />
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ReportUs" />
-        <activity android:name=".activity.ControlActivity" />
-        <activity android:name=".activity.PerformExperimentActivity"/>
+        <activity android:name=".activity.PerformExperimentActivity" />
+        <activity
+            android:name=".activity.ControlActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".activity.OscilloscopeActivity"
             android:screenOrientation="landscape" />

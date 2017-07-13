@@ -9,8 +9,8 @@
     android:padding="5dp">
 
     <com.gigamole.navigationtabstrip.NavigationTabStrip
-        android:layout_width="match_parent"
         android:id="@+id/perform_experiment_tab_strip"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         app:nts_active_color="#000"
         app:nts_animation_duration="300"

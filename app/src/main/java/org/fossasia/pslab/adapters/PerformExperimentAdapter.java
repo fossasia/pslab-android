@@ -29,7 +29,6 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
-
         }
     }
 
