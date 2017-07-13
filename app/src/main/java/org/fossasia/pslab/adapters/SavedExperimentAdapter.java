@@ -1,7 +1,7 @@
 package org.fossasia.pslab.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +21,14 @@ public class SavedExperimentAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> experimentHeader;
-    private List<String> experimentDescription;
     private HashMap<String, List<String>> experimentList;
 
     public SavedExperimentAdapter(Context context,
                                   List<String> experimentGroupHeader,
-                                  HashMap<String, List<String>> experimentList,
-                                  List<String> experimentDescription) {
+                                  HashMap<String, List<String>> experimentList) {
         this.context = context;
         this.experimentHeader = experimentGroupHeader;
         this.experimentList = experimentList;
-        this.experimentDescription = experimentDescription;
     }
 
     @Override
@@ -74,13 +71,12 @@ public class SavedExperimentAdapter extends BaseExpandableListAdapter {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(android.R.layout.simple_expandable_list_item_2, null);
+            convertView = inflater.inflate(android.R.layout.simple_expandable_list_item_1, null);
         }
+        convertView.setPadding(convertView.getPaddingLeft(), 10, convertView.getPaddingRight(), 10);
         TextView tvExperimentListHeader = (TextView) convertView.findViewById(android.R.id.text1);
-        tvExperimentListHeader.setTypeface(null, Typeface.BOLD);
         tvExperimentListHeader.setText(headerTitle);
-        TextView tvTemp = (TextView) convertView.findViewById(android.R.id.text2);
-        tvTemp.setText(experimentDescription.get(groupPosition));
+        tvExperimentListHeader.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         return convertView;
     }
 
