@@ -7,7 +7,6 @@ import org.fossasia.pslab.communication.peripherals.I2C;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,7 +48,8 @@ public class TSL2561 {
     private I2C i2c;
     private int full, infra;
     private ArrayList<Character> infraList, fullList;
-    private HashMap<String, ArrayList<java.io.Serializable>> params = new HashMap<String, ArrayList<java.io.Serializable>>();
+    private ArrayList<java.io.Serializable> setGain = new ArrayList<java.io.Serializable>(Arrays.asList("1x", "16x"));
+    private ArrayList<java.io.Serializable> setTiming = new ArrayList<java.io.Serializable>(Arrays.asList(0, 1, 2));
 
     public TSL2561(I2C i2c) throws IOException, InterruptedException {
         this.i2c = i2c;
@@ -62,10 +62,6 @@ public class TSL2561 {
         fullList = i2c.readBulk(ADDRESS, 0x80 | 0x20 | 0x0C, 2);
         full = (fullList.get(1) << 8) | fullList.get(0);
         infra = (infraList.get(1) << 8) | infraList.get(0);
-
-        //parameters
-        params.put("setGain", new ArrayList<java.io.Serializable>(Arrays.asList("1x", "16x")));
-        params.put("setTiming", new ArrayList<java.io.Serializable>(Arrays.asList(0, 1, 2)));
 
         Log.v(TAG, "Full - " + Integer.toString(full));
         Log.v(TAG, "Infrared - " + Integer.toString(infra));

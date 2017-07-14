@@ -6,12 +6,11 @@ import org.fossasia.pslab.communication.peripherals.I2C;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by akarshan on 5/7/17.
  * <p>
- *     ScienceLab instance of i2c is needed to be passed to MPU95x constructor.
+ * ScienceLab instance of i2c is needed to be passed to MPU95x constructor.
  * </p>
  */
 
@@ -26,7 +25,7 @@ public class MPU925x {
     private int AR = 3;
     private int GR = 3;
     public int NUMPLOTS = 7;
-    public String[] PLOTNAMES = new String[]{"Ax","Ay","Az","Temp","Gx","Gy","Gz"};
+    public String[] PLOTNAMES = new String[]{"Ax", "Ay", "Az", "Temp", "Gx", "Gy", "Gz"};
     public int ADDRESS = 0x68;
     private int AK8963_ADDRESS = 0x0C;
     private int AK8963_CNTL = 0x0A;
@@ -34,17 +33,12 @@ public class MPU925x {
 
     private I2C i2c;
     private ArrayList<KalmanFilter> kalman = new ArrayList<>();
-    private HashMap<String,Object> params = new HashMap<>();
     private int[] gyroRange = new int[]{250, 500, 1000, 2000};
     private int[] accelRange = new int[]{2, 4, 8, 16};
     private double[] kalmanFilter = new double[]{.01, .1, 1, 10, 100, 1000, 10000, 0};       //Replaced "OFF" with 0.
 
     public MPU925x(I2C i2c) throws IOException {
         this.i2c = i2c;
-        params.put("powerUp",null);
-        params.put("setGyroRange", gyroRange);
-        params.put("setAccelRange", accelRange);
-        params.put("KalmanFilter", kalmanFilter);
         setGyroRange(2000);
         setAccelRange(16);
         powerUp();
@@ -56,19 +50,19 @@ public class MPU925x {
         double[] innerNoiseArray = new double[NUMPLOTS];
         ArrayList<Double> vals;
         double standardDeviation;
-        if (opt == 0){        //Replaced "OFF" with 0.
+        if (opt == 0) {        //Replaced "OFF" with 0.
             kalman = null;
         }
-        for (int a = 0; a < 500; a++){
+        for (int a = 0; a < 500; a++) {
             vals = getRaw();
-            for (int b = 0; b < NUMPLOTS; b++){
+            for (int b = 0; b < NUMPLOTS; b++) {
                 innerNoiseArray[b] = vals.get(b);
                 noise.set(b, innerNoiseArray);
             }
         }
-        for (int a = 0; a < NUMPLOTS; a++){
+        for (int a = 0; a < NUMPLOTS; a++) {
             standardDeviation = FastMath.sqrt(StatUtils.variance(noise.get(a)));
-            kalman.set(a, new KalmanFilter(1. / opt, Math.pow(standardDeviation,2)));
+            kalman.set(a, new KalmanFilter(1. / opt, Math.pow(standardDeviation, 2)));
         }
     }
 
@@ -77,7 +71,7 @@ public class MPU925x {
     }
 
     public void powerUp() throws IOException {
-        i2c.writeBulk(ADDRESS,new int[]{0x6B, 0});
+        i2c.writeBulk(ADDRESS, new int[]{0x6B, 0});
     }
 
     public void setGyroRange(int rs) throws IOException {
@@ -89,23 +83,23 @@ public class MPU925x {
         AR = accelRange[rs];
         i2c.writeBulk(ADDRESS, new int[]{ACCEL_CONFIG, AR << 3});
     }
-    
+
     public ArrayList<Double> getRaw() throws IOException, NullPointerException {
         ArrayList<Character> vals = getVals(0x3B, 14);
         ArrayList<Double> raw = new ArrayList<>();
         if (vals.size() == 14) {
             for (int a = 0; a < 3; a++)
-                    raw.set(a, 1. * (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / ACCEL_SCALING[AR]);
+                raw.set(a, 1. * (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / ACCEL_SCALING[AR]);
             for (int a = 4; a < 7; a++)
                 raw.set(a, (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / GYRO_SCALING[GR]);
             raw.set(3, 1. * (vals.get(6) << 8 | vals.get(7)) / 340. + 36.53);
             if (kalman.isEmpty())
                 return raw;
             else {
-                    for (int b = 0; b < NUMPLOTS; b++) {
-                        kalman.get(b).inputLatestNoisyMeasurement(raw.get(b));
-                        raw.set(b, kalman.get(b).getLatestEstimatedMeasurement());
-                    }
+                for (int b = 0; b < NUMPLOTS; b++) {
+                    kalman.get(b).inputLatestNoisyMeasurement(raw.get(b));
+                    raw.set(b, kalman.get(b).getLatestEstimatedMeasurement());
+                }
                 return raw;
             }
         }
@@ -124,7 +118,7 @@ public class MPU925x {
     public double getTemperature() throws IOException {
         //Return temperature
         ArrayList<Character> vals = getVals(0x41, 6);
-        int t = vals.get(0) << 8| vals.get(1);
+        int t = vals.get(0) << 8 | vals.get(1);
         return t / 65535.;
     }
 
@@ -146,8 +140,7 @@ public class MPU925x {
         int az = vals.get(4) << 8 | vals.get(5);
         if ((vals.get(6) & 0x08) != 0) {
             return new double[]{ax / 65535., ay / 65535., az / 65535.};
-        }
-        else
+        } else
             return null;
     }
 
@@ -157,12 +150,12 @@ public class MPU925x {
             It is 71 for MPU9250 .
         */
         int v = i2c.readBulk(ADDRESS, 0x75, 1).get(0);
-        if(v != 0x71 && v != 0x73)
-            return  "Error " + Integer.toHexString(v);
-        if(v == 0x73)
-            return  "MPU9255 " + Integer.toHexString(v);
-        else if(v == 0x71)
-            return  "MPU9250 " + Integer.toHexString(v);
+        if (v != 0x71 && v != 0x73)
+            return "Error " + Integer.toHexString(v);
+        if (v == 0x73)
+            return "MPU9255 " + Integer.toHexString(v);
+        else if (v == 0x71)
+            return "MPU9250 " + Integer.toHexString(v);
         else
             return null;
     }
@@ -191,7 +184,7 @@ public class MPU925x {
             the passthrough must first be enabled on IC#1 (Accel,gyro,temp)
         */
         i2c.writeBulk(ADDRESS, new int[]{INT_PIN_CFG, 0x22});                   //I2C passthrough
-        i2c.writeBulk(AK8963_ADDRESS, new int[]{AK8963_CNTL,0});                //power down mag
+        i2c.writeBulk(AK8963_ADDRESS, new int[]{AK8963_CNTL, 0});                //power down mag
         i2c.writeBulk(AK8963_ADDRESS, new int[]{AK8963_CNTL, (1 << 4) | 6});    //mode  (0 = 14bits, 1 = 16bits) << 4 | (2 = 8Hz, 6 = 100Hz)
     }
 

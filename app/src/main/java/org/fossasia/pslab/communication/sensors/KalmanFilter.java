@@ -12,21 +12,23 @@ public class KalmanFilter {
     private double prioriEstimate;
     private double prioriErrorEstimate;
     private double blendingFactor;
-    public KalmanFilter(double processVariance, double estimatedMeasurementVariance){
+
+    public KalmanFilter(double processVariance, double estimatedMeasurementVariance) {
         this.processVariance = processVariance;
         this.estimatedMeasurementVariance = estimatedMeasurementVariance;
         posteriEstimate = 0.0;
         posteriErrorEstimate = 1.0;
     }
 
-    void inputLatestNoisyMeasurement(double measurement){
+    void inputLatestNoisyMeasurement(double measurement) {
         prioriEstimate = posteriEstimate;
         prioriErrorEstimate = posteriErrorEstimate + processVariance;
         blendingFactor = prioriErrorEstimate / (prioriErrorEstimate + estimatedMeasurementVariance);
         posteriEstimate = prioriEstimate + blendingFactor * (measurement - prioriEstimate);
         posteriErrorEstimate = (1 - blendingFactor) * prioriErrorEstimate;
     }
-    double getLatestEstimatedMeasurement(){
+
+    double getLatestEstimatedMeasurement() {
         return posteriEstimate;
     }
 }
