@@ -8,7 +8,6 @@ import org.fossasia.pslab.communication.peripherals.I2C;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Created by akarshan on 4/17/17.
@@ -24,7 +23,6 @@ public class MLX90614 {
 
     private I2C i2c;
     private int source, OBJADDR = 0x07, AMBADDR = 0x06;
-    private HashMap<String, ArrayList> params = new HashMap<>();
 
     public MLX90614(I2C i2c) throws IOException {
         this.i2c = i2c;
@@ -39,9 +37,7 @@ public class MLX90614 {
         ArrayList<Integer> readReg = new ArrayList<>();
         for (int i = 0; i < 0x20; i++)
             readReg.add(i);
-
-        params.put("readReg", readReg);
-        params.put("selectSource", new ArrayList<>(Arrays.asList("object temperature", "ambient temperature")));
+        ArrayList<String> selectSource = new ArrayList<>(Arrays.asList("object temperature", "ambient temperature"));
     }
 
     public void selectSource(String source) {

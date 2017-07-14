@@ -222,7 +222,7 @@ public class AD7718 {
         gn <<= 16;
         gn |= send16(0x0000);
         stop();
-        return Arrays.asList(new int[] {off, gn});
+        return Arrays.asList(new int[]{off, gn});
     }
 
 
@@ -261,7 +261,7 @@ public class AD7718 {
             configADC(CON_RANGE7 | CON_UNIPOLAR | channelID << 4);
             writeRegister(MODE, MODE_SINGLE | MODE_CHCON | MODE_REFSEL);
             return true;
-        } else  {
+        } else {
             Log.d(TAG, "Invalid Channel Name. try AIN1AINCOM");
             return false;
         }
