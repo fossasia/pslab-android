@@ -22,6 +22,7 @@ public class PerformExperimentActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String toolbarTitle = getIntent().getStringExtra("toolbar_title");
+        String experimentTitle = getIntent().getStringExtra("experiment_title");
         setContentView(R.layout.activity_perform_experiment);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(toolbarTitle);
@@ -31,7 +32,7 @@ public class PerformExperimentActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ViewPager viewPager = (ViewPager) findViewById(R.id.saved_experiment_vpager);
-        viewPager.setAdapter(new PerformExperimentAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new PerformExperimentAdapter(getSupportFragmentManager(),experimentTitle,this));
         NavigationTabStrip tabStrip = (NavigationTabStrip) findViewById(R.id.perform_experiment_tab_strip);
         tabStrip.setViewPager(viewPager);
     }

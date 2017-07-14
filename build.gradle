@@ -2,7 +2,7 @@
 
 buildscript {
 
-    ext.support_lib_version = '25.3.1'
+    ext.support_lib_version = '25.2.0'
 
     repositories {
         jcenter()
