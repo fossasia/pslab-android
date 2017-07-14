@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
@@ -25,7 +24,8 @@ import static java.lang.Math.abs;
 
 public class SSD1306 {
     public int ADDRESS = 0x3C;
-    public HashMap<String, ArrayList> params = new HashMap<>();
+    private ArrayList<String> load = new ArrayList<>(Collections.singletonList("logo"));
+    private ArrayList<String> scroll = new ArrayList<>(Arrays.asList("left", "right, ", "topright", "topleft", "bottomleft", "bottomright", "stop"));
     public int NUMPLOTS = 0;
     public String[] PLOTNAMES = {""};
     public String name = "OLED Display";
@@ -207,8 +207,6 @@ public class SSD1306 {
         SSD1306_command(SSD1306_NORMALDISPLAY);                 // 0xA6
         SSD1306_command(SSD1306_DISPLAYON);                     //--turn on oled panel
 
-        params.put("load", new ArrayList<>(Collections.singletonList("logo")));
-        params.put("scroll", new ArrayList<>(Arrays.asList("left", "right, ", "topright", "topleft", "bottomleft", "bottomright", "stop")));
     }
 
     public void load(String arg) throws IOException {

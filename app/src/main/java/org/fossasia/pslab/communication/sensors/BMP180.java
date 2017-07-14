@@ -7,7 +7,6 @@ import org.fossasia.pslab.communication.peripherals.I2C;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.pow;
@@ -35,8 +34,7 @@ public class BMP180 {
     private I2C i2c;
     private int MB;
     private double c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, y2, p0, p1, p2, temperature, pressure, baseline;
-    public HashMap<String, ArrayList<Integer>> params = new HashMap<>();
-
+    private ArrayList<Integer> setOverSampling = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
 
     public BMP180(I2C i2c) throws IOException, InterruptedException {
         this.i2c = i2c;
@@ -60,7 +58,6 @@ public class BMP180 {
         temperature = 25;
 
         Log.v("calib", Arrays.toString((new double[]{c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, p0, p1, p2})));
-        params.put("setOversampling", new ArrayList<>(Arrays.asList(0, 1, 2, 3)));
         initTemperature();
         readTemperature();
         initPressure();
