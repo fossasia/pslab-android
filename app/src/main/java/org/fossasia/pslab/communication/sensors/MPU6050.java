@@ -7,7 +7,6 @@ import org.fossasia.pslab.communication.peripherals.I2C;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Created by akarshan on 4/21/17.
@@ -29,14 +28,12 @@ public class MPU6050 {
     private String name = "Accel/gyro";
     private ArrayList<KalmanFilter> K = new ArrayList<>();          //K is the list of KalmanFilter object
     private I2C i2c;
-    private HashMap<String, ArrayList> params = new HashMap<>();
+    private ArrayList<Integer> setGyroRange = new ArrayList<>(Arrays.asList(250, 500, 1000, 2000));
+    private ArrayList<Integer> setAccelRange = new ArrayList<>(Arrays.asList(2, 4, 8, 16));
+    private ArrayList<Double> kalmanFilter = new ArrayList<>(Arrays.asList(0.01, 0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0, 0.0));
 
     public MPU6050(I2C i2c) throws IOException {
         this.i2c = i2c;
-        params.put("powerUp", null);
-        params.put("setGyroRange", new ArrayList(Arrays.asList(250, 500, 1000, 2000)));
-        params.put("setAccelRange", new ArrayList(Arrays.asList(2, 4, 8, 16)));
-        params.put("KalmanFilter", new ArrayList(Arrays.asList(.01, .1, 1, 10, 100, 1000, 10000, null)));       //Replaced "OFF" with null.
         setGyroRange(2000);
         setAccelRange(16);
         powerUp();
@@ -74,12 +71,12 @@ public class MPU6050 {
     }
 
     public void setGyroRange(int rs) throws IOException {
-        GR = params.get("setGyroRange").indexOf(rs);
+        GR = setGyroRange.indexOf(rs);
         i2c.writeBulk(ADDRESS, new int[]{GYRO_CONFIG, GR << 3});
     }
 
     public void setAccelRange(int rs) throws IOException {
-        AR = params.get("setAccelRange").indexOf(rs);
+        AR = setAccelRange.indexOf(rs);
         i2c.writeBulk(ADDRESS, new int[]{ACCEL_CONFIG, AR << 3});
     }
 

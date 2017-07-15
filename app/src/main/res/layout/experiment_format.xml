@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="5dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <com.gigamole.navigationtabstrip.NavigationTabStrip
+        android:id="@+id/perform_experiment_tab_strip"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:nts_active_color="#000"
+        app:nts_animation_duration="300"
+        app:nts_color="#000"
+        app:nts_corners_radius="1.5dp"
+        app:nts_factor="2.5"
+        app:nts_gravity="top"
+        app:nts_inactive_color="#c4c4c4"
+        app:nts_size="15sp"
+        app:nts_titles="@array/tab_titles"
+        app:nts_type="point"
+        app:nts_weight="3dp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/saved_experiment_vpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -95,6 +95,16 @@
     <string name="device_not_found">Device Not Found</string>
 
     <string name="time_unit_la">Time -> (ms)</string>
+    <string name="analyze">Analyze</string>
+    <string name="view">VIEW</string>
+
+    <string-array name="tab_titles">
+        <item>Experiment Doc</item>
+        <item>Experiment Setup</item>
+    </string-array>
+
+    <string name="diode_iv">Diode I-V</string>
+    <string name="zener_iv">Zener I-V</string>
 
     <string name="hmc5883l">hmc5883l</string>
     <string name="mpu6050">mpu6050</string>

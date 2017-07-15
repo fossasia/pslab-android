@@ -2,7 +2,6 @@ package org.fossasia.pslab.communication.sensors;
 
 import android.util.Log;
 
-
 import org.fossasia.pslab.communication.peripherals.SPI;
 
 import java.io.IOException;
@@ -12,11 +11,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by akarshan on 4/22/17.
- *<p>
- *      ScienceLab instance of SPI need to be passed to the MF522 constructor.
- *      refer https://github.com/fossasia/pslab-python/blob/development/PSL/SENSORS/MF522.py#L465
- *      to port the code in sciencelab.java
- *</p>
+ * <p>
+ * ScienceLab instance of SPI need to be passed to the MF522 constructor.
+ * refer https://github.com/fossasia/pslab-python/blob/development/PSL/SENSORS/MF522.py#L465
+ * to port the code in sciencelab.java
+ * </p>
  */
 
 public class MF522 {
@@ -161,7 +160,7 @@ public class MF522 {
         this.cs = cs;
         this.spi = spi;
         spi.setParameters(2, 1, 1, 0, 1);
-        if (!reset()){
+        if (!reset()) {
             connected = false;
         }
         write(TModeReg, 0x80);
@@ -223,11 +222,11 @@ public class MF522 {
 
     public int getVersion() throws IOException {
         int version = read(VersionReg);
-        if (version == 0x88)        Log.v(TAG, "Cloned version: Fudan Semiconductors");
-        else if (version == 0x90)   Log.v(TAG, "version 1.0");
-        else if (version == 0x91)   Log.v(TAG, "version 1.0");
-        else if (version == 0x92)   Log.v(TAG, "version 2.0");
-        else                        Log.v(TAG, "Unknown version " + version);
+        if (version == 0x88) Log.v(TAG, "Cloned version: Fudan Semiconductors");
+        else if (version == 0x90) Log.v(TAG, "version 1.0");
+        else if (version == 0x91) Log.v(TAG, "version 1.0");
+        else if (version == 0x92) Log.v(TAG, "version 2.0");
+        else Log.v(TAG, "Unknown version " + version);
         return version;
     }
 
@@ -238,7 +237,7 @@ public class MF522 {
 
     public void clearBitMask(int register, int mask) throws IOException {
         int tmp = read(register);
-        write(register, tmp & (~ mask));
+        write(register, tmp & (~mask));
     }
 
     public ArrayList<Object> MFRC522ToCard(int command, ArrayList<Integer> sendData) throws IOException {
@@ -276,38 +275,37 @@ public class MF522 {
         while (true) {
             n = read(ComIrqReg);
             i = i - 1;
-           if (!(i != 0 && ~(n & 0x01) != 0 && ~(n & waitIRq) != 0))         //needs to be checked
-               break;
+            if (!(i != 0 && ~(n & 0x01) != 0 && ~(n & waitIRq) != 0))         //needs to be checked
+                break;
         }
 
         clearBitMask(BitFramingReg, 0x80);
 
-        if (i != 0){
-                if ((read(ErrorReg) & 0x1B) == 0x00){
-                    status = MI_OK;
-                    if ((n & irqEn & 0x01) != 0)
-                        status = MI_NOTAGERR;
-                    if (command == PCD_Transceive){
-                        n = read(FIFOLevelReg);
-                        lastBits = read(ControlReg) & 0x07;
-                        if (lastBits != 0)
-                            backLen = (n - 1) * 8 + lastBits;
-                        else
-                            backLen = n * 8;
-                        if (n == 0)
-                            n = 1;
-                        if (n > MAX_LEN)
-                            n = MAX_LEN;
+        if (i != 0) {
+            if ((read(ErrorReg) & 0x1B) == 0x00) {
+                status = MI_OK;
+                if ((n & irqEn & 0x01) != 0)
+                    status = MI_NOTAGERR;
+                if (command == PCD_Transceive) {
+                    n = read(FIFOLevelReg);
+                    lastBits = read(ControlReg) & 0x07;
+                    if (lastBits != 0)
+                        backLen = (n - 1) * 8 + lastBits;
+                    else
+                        backLen = n * 8;
+                    if (n == 0)
+                        n = 1;
+                    if (n > MAX_LEN)
+                        n = MAX_LEN;
 
-                        i = 0;
-                        while (i < n){
-                            returnedData.add(read(FIFODataReg));
-                            i = i + 1;
-                        }
+                    i = 0;
+                    while (i < n) {
+                        returnedData.add(read(FIFODataReg));
+                        i = i + 1;
                     }
                 }
-                else
-                    status = MI_ERR;
+            } else
+                status = MI_ERR;
         }
         return new ArrayList<Object>(Arrays.asList(status, returnedData, backLen));
     }
@@ -323,9 +321,9 @@ public class MF522 {
 
         TagType.add(reqMode);
         mfrc522ToCard = MFRC522ToCard(PCD_Transceive, TagType);
-        status = (int)mfrc522ToCard.get(0);
+        status = (int) mfrc522ToCard.get(0);
         returnedData = (ArrayList<Integer>) mfrc522ToCard.get(1);
-        backBits = (int)mfrc522ToCard.get(2);
+        backBits = (int) mfrc522ToCard.get(2);
 
         if (status != MI_OK | backBits != 0x10)
             status = MI_ERR;
@@ -338,28 +336,27 @@ public class MF522 {
         int status;
         int backLen;
         int serNumCheck = 0;
-        ArrayList<Integer>serNum = new ArrayList<>();
+        ArrayList<Integer> serNum = new ArrayList<>();
 
         write(BitFramingReg, 0x00);
 
         serNum.add(PICC_ANTICOLL);
         serNum.add(0x20);
 
-        ArrayList<Object> mfrc522ToCard = MFRC522ToCard(PCD_Transceive,serNum);
-        status = (int)mfrc522ToCard.get(0);
-        returnedData = (ArrayList<Integer>)mfrc522ToCard.get(1);
-        backLen = (int)mfrc522ToCard.get(2);
-        if (status == MI_OK){
+        ArrayList<Object> mfrc522ToCard = MFRC522ToCard(PCD_Transceive, serNum);
+        status = (int) mfrc522ToCard.get(0);
+        returnedData = (ArrayList<Integer>) mfrc522ToCard.get(1);
+        backLen = (int) mfrc522ToCard.get(2);
+        if (status == MI_OK) {
             int i = 0;
-            if (returnedData.size() == 5){
-                while (i < 4){
+            if (returnedData.size() == 5) {
+                while (i < 4) {
                     serNumCheck = serNumCheck ^ returnedData.get(i);
                     i = i + 1;
                 }
                 if (serNumCheck != returnedData.get(i))
                     status = MI_ERR;
-            }
-            else status = MI_ERR;
+            } else status = MI_ERR;
         }
         return new ArrayList<Object>(Arrays.asList(status, returnedData));
 
@@ -373,7 +370,7 @@ public class MF522 {
         for (int a = 0; a < pIndata.size(); a++)
             write(FIFODataReg, a);
         write(CommandReg, PCD_CALCCRC);
-        for (int i = 0; i < 0xFF; i++){
+        for (int i = 0; i < 0xFF; i++) {
             n = read(DivIrqReg);
             if ((n & 0x040) != 0)
                 break;
@@ -392,7 +389,7 @@ public class MF522 {
         buf.add(PICC_SElECTTAG);
         buf.add(0x70);
         int i = 0;
-        while (i < 5){
+        while (i < 5) {
             buf.add(serNum.get(i));
             i = i + 1;
         }
@@ -400,13 +397,12 @@ public class MF522 {
         buf.add(pOut.get(0));
         buf.add(pOut.get(1));
         ArrayList mfrc522ToCard = MFRC522ToCard(PCD_Transceive, buf);
-        status = (int)mfrc522ToCard.get(0);
-        returnedData = (ArrayList<Integer>)mfrc522ToCard.get(1);
-        backLen = (int)mfrc522ToCard.get(2);
-        if ((status == MI_OK) && (backLen == 0x18)){
+        status = (int) mfrc522ToCard.get(0);
+        returnedData = (ArrayList<Integer>) mfrc522ToCard.get(1);
+        backLen = (int) mfrc522ToCard.get(2);
+        if ((status == MI_OK) && (backLen == 0x18)) {
             return returnedData.get(0);
-        }
-        else
+        } else
             return 0;
     }
 
@@ -429,19 +425,19 @@ public class MF522 {
         // Next we append the first 4 bytes of the UID
         while (i < 4) {
             buff.add(serNum[i]);
-            i = i +1;
+            i = i + 1;
         }
         // Now we start the authentication itself
-        ArrayList<Object> mfrc522ToCard = MFRC522ToCard(PCD_MFAuthent,buff);
-        status = (int)mfrc522ToCard.get(0);
-        returnedData = (ArrayList<Integer>)mfrc522ToCard.get(1);
-        backLen = (int)mfrc522ToCard.get(2);
+        ArrayList<Object> mfrc522ToCard = MFRC522ToCard(PCD_MFAuthent, buff);
+        status = (int) mfrc522ToCard.get(0);
+        returnedData = (ArrayList<Integer>) mfrc522ToCard.get(1);
+        backLen = (int) mfrc522ToCard.get(2);
 
         // Check if an error occurred
         if (status != MI_OK)
             Log.v(TAG, "AUTH ERROR !!");
         if ((read(Status2Reg) & 0x08) == 0)
-            Log.v(TAG,"AUTH ERROR(status2reg & 0x08) != 0");
+            Log.v(TAG, "AUTH ERROR(status2reg & 0x08) != 0");
 
         // Return the status
         return status;
@@ -465,12 +461,12 @@ public class MF522 {
         recvData.add(pOut.get(1));
         ArrayList<Object> mfrc522ToCard = MFRC522ToCard(PCD_Transceive, recvData);
 
-        status = (int)mfrc522ToCard.get(0);
-        returnedData = (ArrayList<Integer>)mfrc522ToCard.get(1);
-        backLen = (int)mfrc522ToCard.get(2);
+        status = (int) mfrc522ToCard.get(0);
+        returnedData = (ArrayList<Integer>) mfrc522ToCard.get(1);
+        backLen = (int) mfrc522ToCard.get(2);
 
-        if (status != MI_OK){
-            Log.v(TAG,"Error while reading!");
+        if (status != MI_OK) {
+            Log.v(TAG, "Error while reading!");
         }
         return returnedData;
     }
@@ -488,19 +484,19 @@ public class MF522 {
         buff.add(crc.get(1));
 
         ArrayList<Object> mfrc522ToCard = MFRC522ToCard(PCD_Transceive, buff);
-        status = (int)mfrc522ToCard.get(0);
-        returnedData = (ArrayList<Integer>)mfrc522ToCard.get(1);
-        backLen = (int)mfrc522ToCard.get(2);
+        status = (int) mfrc522ToCard.get(0);
+        returnedData = (ArrayList<Integer>) mfrc522ToCard.get(1);
+        backLen = (int) mfrc522ToCard.get(2);
 
         if ((status != MI_OK) || (backLen != 4) || ((returnedData.get(0) & 0x0F) != 0x0A))
             status = MI_ERR;
 
-        Log.v(TAG, backLen + " returnedData &0x0F == 0x0A "+ (returnedData.get(0) & 0x0F));
-        if (status == MI_OK){
+        Log.v(TAG, backLen + " returnedData &0x0F == 0x0A " + (returnedData.get(0) & 0x0F));
+        if (status == MI_OK) {
             int i = 0;
             ArrayList<Integer> buf = new ArrayList<>();
 
-            while (i < 16){
+            while (i < 16) {
                 buf.add(writeData[i]);
                 i = i + 1;
             }
@@ -510,9 +506,9 @@ public class MF522 {
             buf.add(bufCRC.get(1));
 
             mfrc522ToCard = MFRC522ToCard(PCD_Transceive, buff);
-            status = (int)mfrc522ToCard.get(0);
-            returnedData = (ArrayList<Integer>)mfrc522ToCard.get(1);
-            backLen = (int)mfrc522ToCard.get(2);
+            status = (int) mfrc522ToCard.get(0);
+            returnedData = (ArrayList<Integer>) mfrc522ToCard.get(1);
+            backLen = (int) mfrc522ToCard.get(2);
             if ((status != MI_OK) || (backLen != 4) || ((returnedData.get(0) & 0x0F) != 0x0A))
                 Log.v(TAG, "Error while writing");
             if (status == MI_OK)
@@ -523,12 +519,12 @@ public class MF522 {
 
     public void MFRC522DumpClassic1K(int key[], int uid[]) throws IOException {
         int i = 0;
-        while (i < 64){
+        while (i < 64) {
             int status = MFRC522Auth(PICC_AUTHENT1A, i, key, uid);
             // Check if authenticated
             if (status == MI_OK)
                 MFRC522Read(i);
-            else{
+            else {
                 Log.v(TAG, "Authentication error");
                 i = i + 1;
             }

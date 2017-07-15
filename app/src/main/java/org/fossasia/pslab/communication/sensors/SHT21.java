@@ -7,7 +7,6 @@ import org.fossasia.pslab.communication.peripherals.I2C;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,12 +25,11 @@ public class SHT21 {
     public String[] PLOTNAMES = {"Data"};
     public String name = "Humidity/Temperature";
 
-    public HashMap<String, ArrayList<String>> params = new HashMap<>();
+    public ArrayList<String> selectParameter = new ArrayList<>(Arrays.asList("temperature", "humidity"));
     private I2C i2c;
 
     public SHT21(I2C i2c) throws IOException, InterruptedException {
         this.i2c = i2c;
-        params.put("selectParameter", new ArrayList<>(Arrays.asList("temperature", "humidity")));
         init();
     }
 

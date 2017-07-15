@@ -24,6 +24,7 @@ public class USBDetachReceiver extends BroadcastReceiver {
     private final String TAG = this.getClass().getSimpleName();
     private Context activityContext;
 
+    public USBDetachReceiver(){}
     public USBDetachReceiver(Context context) {
         this.activityContext = context;
     }
