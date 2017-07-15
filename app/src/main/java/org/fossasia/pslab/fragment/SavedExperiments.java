@@ -65,6 +65,7 @@ public class SavedExperiments extends Fragment {
                 // Open Fragment/Activity to perform corresponding experiment or to see experiment description like Help-Files
                 Intent intent = new Intent(context, PerformExperimentActivity.class);
                 intent.putExtra("toolbar_title", experimentGroupHeaders.get(groupPosition));
+                intent.putExtra("experiment_title", experimentList.get(experimentGroupHeaders.get(groupPosition)).get(childPosition));
                 startActivity(intent);
                 return true;
             }
@@ -90,8 +91,8 @@ public class SavedExperiments extends Fragment {
         experimentGroupHeaders.add("My Experiments");
 
         List<String> electronicsExperiments = new ArrayList<>();
-        electronicsExperiments.add("Diode I-V");
-        electronicsExperiments.add("Zener I-V");
+        electronicsExperiments.add(getResources().getString(R.string.diode_iv));
+        electronicsExperiments.add(getResources().getString(R.string.zener_iv));
         electronicsExperiments.add("Diode Clamping");
         electronicsExperiments.add("Half Wave");
         electronicsExperiments.add("Transistor CB");

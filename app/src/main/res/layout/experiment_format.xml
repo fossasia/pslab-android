@@ -9,8 +9,8 @@
     android:padding="5dp">
 
     <com.gigamole.navigationtabstrip.NavigationTabStrip
-        android:layout_width="match_parent"
         android:id="@+id/perform_experiment_tab_strip"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         app:nts_active_color="#000"
         app:nts_animation_duration="300"
@@ -22,7 +22,6 @@
         app:nts_size="15sp"
         app:nts_titles="@array/tab_titles"
         app:nts_type="point"
-        app:nts_typeface="fonts/typeface.otf"
         app:nts_weight="3dp" />
 
     <android.support.v4.view.ViewPager
