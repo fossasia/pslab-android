@@ -148,7 +148,6 @@ public class Plot2D extends View {
 
         }
         canvas.restore();
-
     }
 
     private int[] toPixel(float pixels, float min, float max, float[] value) {
@@ -159,7 +158,6 @@ public class Plot2D extends View {
             p[i] = .1 * pixels + ((value[i] - min) / (max - min)) * .8 * pixels;
             pInt[i] = (int) p[i];
         }
-
         return (pInt);
     }
 
@@ -183,7 +181,6 @@ public class Plot2D extends View {
             locxAxis = 0;
         else
             locxAxis = maxY;
-
     }
 
     private int toPixelInt(float pixels, float min, float max, float value) {
@@ -211,6 +208,5 @@ public class Plot2D extends View {
             return true;
         }
     }
-
 }
 
