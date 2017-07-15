@@ -52,9 +52,10 @@ public class XYPlotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_xyplot, container, false);
-        final String [] channels = {"CH1", "CH2", "CH3", "MIC"};
+        final String[] channels = {"CH1", "CH2", "CH3", "MIC"};
         spinnerChannelSelect1 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy1);
         spinnerChannelSelect2 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy2);
+        checkBoxXYPlot = (CheckBox) v.findViewById(R.id.checkBox_enable_xy_xy);
         spinnerChannelSelect1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -69,7 +70,8 @@ public class XYPlotFragment extends Fragment {
         spinnerChannelSelect2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                ((OscilloscopeActivity) getActivity()).setRightYAxisLabel(channels[position]);
+                ((OscilloscopeActivity) getActivity()).setXAxisLabel(channels[position]);
+                ((OscilloscopeActivity) getActivity()).xAxisLabelUnit.setText("(V)");
             }
 
             @Override
@@ -77,14 +79,12 @@ public class XYPlotFragment extends Fragment {
 
             }
         });
-        checkBoxXYPlot = (CheckBox) v.findViewById(R.id.checkBox_enable_xy_xy);
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         ArrayAdapter<String> channelsAdapter;
 
-        if(tabletSize){
+        if (tabletSize) {
             channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
-        }
-        else {
+        } else {
             channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
         }
 
@@ -93,13 +93,15 @@ public class XYPlotFragment extends Fragment {
         spinnerChannelSelect1.setAdapter(channelsAdapter);
         spinnerChannelSelect2.setAdapter(channelsAdapter);
 
-        spinnerChannelSelect1.setSelection(channelsAdapter.getPosition("CH1"),true);
-        spinnerChannelSelect2.setSelection(channelsAdapter.getPosition("CH2"),true);
+        spinnerChannelSelect1.setSelection(channelsAdapter.getPosition("CH1"), true);
+        spinnerChannelSelect2.setSelection(channelsAdapter.getPosition("CH2"), true);
 
         checkBoxXYPlot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ((OscilloscopeActivity)getActivity()).isXYPlotSelected = isChecked;
+                ((OscilloscopeActivity) getActivity()).isXYPlotSelected = isChecked;
+                ((OscilloscopeActivity) getActivity()).function();
+
             }
         });
 

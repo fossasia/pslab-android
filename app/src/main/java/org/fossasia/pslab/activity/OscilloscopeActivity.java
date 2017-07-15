@@ -38,8 +38,10 @@ import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
+import org.fossasia.pslab.others.Plot2D;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.others.ViewGroupUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,11 +63,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private LineChart mChart;
     private LinearLayout linearLayout;
     private FrameLayout frameLayout;
+    public RelativeLayout mChartLayout;
     private ImageButton channelParametersButton;
     private ImageButton timebaseButton;
     private ImageButton dataAnalysisButton;
     private ImageButton xyPlotButton;
-    private RelativeLayout mChartLayout;
     private TextView channelParametersTextView;
     private TextView timebaseTiggerTextView;
     private TextView dataAnalysisTextView;
@@ -74,7 +76,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private TextView leftYAxisLabelUnit;
     private TextView rightYAxisLabel;
     private TextView rightYAxisLabelUnit;
-    private TextView xAxisLabelUnit;
+    private TextView xAxisLabel;
+    public TextView xAxisLabelUnit;
     private int height;
     private int width;
     public double timebase;
@@ -104,6 +107,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private CaptureTaskTwo captureTask2;
     private CaptureTaskThree captureTask3;
     private ImageView ledImageView;
+    private RelativeLayout.LayoutParams lineChartParams;
+    private Plot2D graph;
 
 
     @Override
@@ -124,6 +129,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         leftYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_left_yaxis_os);
         rightYAxisLabel = (TextView) findViewById(R.id.tv_label_right_yaxis_os);
         rightYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_right_yaxis_os);
+        xAxisLabel = (TextView) findViewById(R.id.tv_graph_label_xaxis_os);
         xAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_xaxis_os);
         channelParametersTextView = (TextView) findViewById(R.id.tv_channel_parameters_os);
         timebaseTiggerTextView = (TextView) findViewById(R.id.tv_timebase_tigger_os);
@@ -335,7 +341,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
         if (tabletSize) {
-            RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+            lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 3 / 4;
             lineChartParams.width = width * 7 / 8;
             mChartLayout.setLayoutParams(lineChartParams);
@@ -344,7 +350,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             frameLayoutParams.width = width * 7 / 8;
             frameLayout.setLayoutParams(frameLayoutParams);
         } else {
-            RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+            lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 2 / 3;
             lineChartParams.width = width * 5 / 6;
             mChartLayout.setLayoutParams(lineChartParams);
@@ -487,6 +493,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public void setRightYAxisLabel(String rightYAxisInput) {
         rightYAxisLabel.setText(rightYAxisInput);
     }
+
+    public void setXAxisLabel(String xAxisInput) {
+        xAxisLabel.setText(xAxisInput);
+    }
+
 
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         ArrayList<Entry> entries;
@@ -719,5 +730,19 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 lock.notify();
             }
         }
+    }
+
+    public void function() {
+        if (isXYPlotSelected) {
+            float[] xvalues = new float[]{8, -8, 8, -8};
+            float[] yvalues = new float[]{8, 8, -8, -8};
+            graph = new Plot2D(this, xvalues, yvalues, 1);
+            ViewGroupUtils.replaceView(mChart, graph);
+            rightYAxisLabel.setVisibility(View.INVISIBLE);
+            rightYAxisLabelUnit.setVisibility(View.INVISIBLE);
+        } else {
+            ViewGroupUtils.replaceView(graph, mChart);
+        }
+
     }
 }
