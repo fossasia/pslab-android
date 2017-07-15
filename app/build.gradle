@@ -42,6 +42,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.4'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.jakewharton:butterknife:8.6.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
