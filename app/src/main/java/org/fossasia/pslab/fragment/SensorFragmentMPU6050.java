@@ -57,7 +57,7 @@ public class SensorFragmentMPU6050 extends Fragment {
                 while (true) {
                     if (scienceLab.isConnected()) {
                         try {
-                            sensorDataFetch = new SensorDataFetch(MPU6050);
+                            sensorDataFetch = new SensorDataFetch();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -109,7 +109,7 @@ public class SensorFragmentMPU6050 extends Fragment {
         MPU6050 MPU6050 = new MPU6050(i2c);
         ArrayList<Double> dataMPU6050 = new ArrayList<Double>();
 
-        private SensorDataFetch(MPU6050 MPU6050) throws IOException {
+        private SensorDataFetch() throws IOException {
         }
 
         @Override

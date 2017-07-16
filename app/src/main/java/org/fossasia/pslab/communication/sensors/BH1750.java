@@ -45,11 +45,11 @@ public class BH1750 {
         return vals;
     }
 
-    public boolean getRaw() throws IOException {
+    public Double getRaw() throws IOException {
         ArrayList<Byte> vals = getVals(2);
         if (vals.size() == 3)
-            return ((vals.get(0) << 8 | vals.get(1)) / 1.2) != 0;
+            return (vals.get(0) << 8 | vals.get(1)) / 1.2;
         else
-            return false;
+            return 0.0;
     }
 }

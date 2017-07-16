@@ -12,28 +12,27 @@ import android.widget.TextView;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
-import org.fossasia.pslab.communication.sensors.HMC5883L;
+import org.fossasia.pslab.communication.sensors.BMP180;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by asitava on 10/7/17.
  */
 
-public class SensorFragmentHMC5883L extends Fragment {
+public class SensorFragmentBMP180 extends Fragment {
     private ScienceLab scienceLab;
     private I2C i2c;
     private SensorDataFetch sensorDataFetch;
-    private TextView tvSensorHMC5883Lbx;
-    private TextView tvSensorHMC5883Lby;
-    private TextView tvSensorHMC5883Lbz;
-    private HMC5883L HMC5883L;
+    private TextView tvSensorBMP180Temp;
+    private TextView tvSensorBMP180Altitude;
+    private TextView tvSensorBMP180Pressure;
+    private BMP180 BMP180;
 
-    public static SensorFragmentHMC5883L newInstance() {
-        SensorFragmentHMC5883L sensorFragmentHMC5883L = new SensorFragmentHMC5883L();
-        return sensorFragmentHMC5883L;
+    public static SensorFragmentBMP180 newInstance() {
+        SensorFragmentBMP180 sensorFragmentBMP180 = new SensorFragmentBMP180();
+        return sensorFragmentBMP180;
     }
 
     @Override
@@ -42,8 +41,8 @@ public class SensorFragmentHMC5883L extends Fragment {
         scienceLab = ScienceLabCommon.scienceLab;
         i2c = scienceLab.i2c;
         try {
-            HMC5883L = new HMC5883L(i2c);
-        } catch (IOException e) {
+            BMP180 = new BMP180(i2c);
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         Runnable runnable = new Runnable() {
@@ -53,7 +52,7 @@ public class SensorFragmentHMC5883L extends Fragment {
                     if (scienceLab.isConnected()) {
                         try {
                             sensorDataFetch = new SensorDataFetch();
-                        } catch (IOException e) {
+                        } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                         sensorDataFetch.execute();
@@ -66,30 +65,30 @@ public class SensorFragmentHMC5883L extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.sensor_hmc5883l, container, false);
+        View view = inflater.inflate(R.layout.sensor_bmp180, container, false);
 
-        tvSensorHMC5883Lbx = (TextView) view.findViewById(R.id.tv_sensor_hmc5883l_bx);
-        tvSensorHMC5883Lby = (TextView) view.findViewById(R.id.tv_sensor_hmc5883l_by);
-        tvSensorHMC5883Lbz = (TextView) view.findViewById(R.id.tv_sensor_hmc5883l_bz);
+        tvSensorBMP180Temp = (TextView) view.findViewById(R.id.tv_sensor_bmp180_temp);
+        tvSensorBMP180Altitude = (TextView) view.findViewById(R.id.tv_sensor_bmp180_altitude);
+        tvSensorBMP180Pressure = (TextView) view.findViewById(R.id.tv_sensor_bmp180_pressure);
 
         return view;
     }
 
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        HMC5883L HMC5883L = new HMC5883L(i2c);
-        ArrayList<Double> dataHMC5883L = new ArrayList<Double>();
+        BMP180 BMP180 = new BMP180(i2c);
+        double[] dataBMP180 = new double[3];
 
-        private SensorDataFetch() throws IOException {
+        private SensorDataFetch() throws IOException, InterruptedException {
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (HMC5883L != null) {
-                    dataHMC5883L = HMC5883L.getRaw();
+                if (BMP180 != null) {
+                    dataBMP180 = BMP180.getRaw();
                 }
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
             return null;
@@ -97,9 +96,9 @@ public class SensorFragmentHMC5883L extends Fragment {
 
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            tvSensorHMC5883Lbx.setText(String.valueOf(dataHMC5883L.get(0)));
-            tvSensorHMC5883Lby.setText(String.valueOf(dataHMC5883L.get(1)));
-            tvSensorHMC5883Lbz.setText(String.valueOf(dataHMC5883L.get(2)));
+            tvSensorBMP180Temp.setText(String.valueOf(dataBMP180[0]));
+            tvSensorBMP180Altitude.setText(String.valueOf(dataBMP180[1]));
+            tvSensorBMP180Pressure.setText(String.valueOf(dataBMP180[2]));
         }
     }
 }
