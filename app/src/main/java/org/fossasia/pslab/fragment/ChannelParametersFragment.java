@@ -31,10 +31,11 @@ public class ChannelParametersFragment extends Fragment {
     private CheckBox checkBoxCH1;
     private CheckBox checkBoxCH2;
     private CheckBox checkBoxCH3;
-    private CheckBox checkBoxMIC;
     private Spinner spinnerRangeCh1;
     private Spinner spinnerRangeCh2;
     private Spinner spinnerChannelSelect;
+    private Spinner spinnerMICSelect;
+
 
     public static ChannelParametersFragment newInstance(String param1, String param2) {
         ChannelParametersFragment fragment = new ChannelParametersFragment();
@@ -60,30 +61,36 @@ public class ChannelParametersFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_channel_parameters, container, false);
 
-        String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
-        String[] channels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
+        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
+        final String[] channels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
+        final String[] mics = {"SELECT MIC", "MICROPHONE", "IN-BUILT MIC"};
 
         spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_ch1_cp);
         spinnerRangeCh2 = (Spinner) v.findViewById(R.id.spinner_range_ch2_cp);
         spinnerChannelSelect = (Spinner) v.findViewById(R.id.spinner_channel_select_cp);
+        spinnerMICSelect = (Spinner) v.findViewById(R.id.spinner_mic_select_cp);
+
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         checkBoxCH1 = (CheckBox) v.findViewById(R.id.checkBox_ch1_cp);
         checkBoxCH2 = (CheckBox) v.findViewById(R.id.checkBox_ch2_cp);
         checkBoxCH3 = (CheckBox) v.findViewById(R.id.checkBox_ch3_cp);
-        checkBoxMIC = (CheckBox) v.findViewById(R.id.checkBox_mic_cp);
-
 
         ArrayAdapter<String> rangesAdapter;
         ArrayAdapter<String> channelsAdapter;
+        ArrayAdapter<String> micsAdapter;
         if (tabletSize) {
             rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, ranges);
             channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
+            micsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_mic_tablet, mics);
         } else {
             rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, ranges);
             channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+            micsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_mic, mics);
+
         }
         rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         channelsAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        micsAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         spinnerRangeCh1.setAdapter(rangesAdapter);
         spinnerRangeCh1.setSelection(rangesAdapter.getPosition("+/-16V"), true);
@@ -91,6 +98,7 @@ public class ChannelParametersFragment extends Fragment {
         spinnerRangeCh2.setSelection(rangesAdapter.getPosition("+/-16V"), true);
         spinnerChannelSelect.setAdapter(channelsAdapter);
         spinnerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"), true);
+        spinnerMICSelect.setAdapter(micsAdapter);
 
         spinnerRangeCh1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -221,6 +229,7 @@ public class ChannelParametersFragment extends Fragment {
             }
         });
 
+
         checkBoxCH1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -242,12 +251,6 @@ public class ChannelParametersFragment extends Fragment {
             }
         });
 
-        checkBoxMIC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ((OscilloscopeActivity) getActivity()).isMICSelected = isChecked;
-            }
-        });
 
         return v;
     }
