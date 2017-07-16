@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <Button
+        android:id="@+id/btn_configure_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Configure Experiment" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/zener_chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000" />
+
+</LinearLayout>

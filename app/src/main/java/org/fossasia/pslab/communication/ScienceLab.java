@@ -2237,7 +2237,11 @@ public class ScienceLab {
                 return C;
             else if (V < GOOD_VOLTS[0] && V > 0.01 && CT < 40000) {
                 if (GOOD_VOLTS[0] / V > 1.1 && iterations < 10) {
-                    CT = CT * (int) GOOD_VOLTS[0] / (int) V;
+                    try {
+                        CT = CT * (int) GOOD_VOLTS[0] / (int) V;
+                    } catch (ArithmeticException e) {
+                        Log.e(TAG, "No capacitor connected or a short circuit!");
+                    }
                     iterations += 1;
                     Log.v(TAG, "Increased CT " + CT);
                 } else if (iterations == 10)

@@ -103,4 +103,58 @@
         <item>Experiment Setup</item>
     </string-array>
 
+    <string name="diode_iv">Diode I-V</string>
+    <string name="zener_iv">Zener I-V</string>
+
+    <string name="hmc5883l">hmc5883l</string>
+    <string name="mpu6050">mpu6050</string>
+    <string name="raw_data">Raw Data</string>
+    <string name="configure">Configure</string>
+    <string name="plot">Plot</string>
+
+    <string name="bx">Bx</string>
+    <string name="by">By</string>
+    <string name="bz">Bz</string>
+    <string name="ax">Ax</string>
+    <string name="ay">Ay</string>
+    <string name="az">Az</string>
+    <string name="gx">Gx</string>
+    <string name="gy">Gy</string>
+    <string name="gz">Gz</string>
+    <string name="temp">Temp</string>
+
+    <string name="gyro_range">Set Gyro Range</string>
+    <string name="accel_range">Set Accel Range</string>
+    <string name="kalman">Kalman filter</string>
+    <string name="power_up">Power Up</string>
+
+    <string-array name="gyro_range_spinner">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+
+    <string-array name="accel_range_spinner">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="kalman_spinner">
+        <item>0.01</item>
+        <item>0.1</item>
+        <item>1</item>
+        <item>10</item>
+        <item>100</item>
+        <item>1000</item>
+        <item>10000</item>
+        <item>null</item>
+    </string-array>
+
+    <string-array name="power_up_spinner">
+        <item></item>
+        <item></item>
+    </string-array>
 </resources>

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/activity_control"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_control"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.fossasia.pslab.activity.ControlActivity">
@@ -23,6 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
-        app:theme="@style/AppTheme.Bottomnavigationbar"
-        app:menu="@menu/activity_control_bottom_navigationbar"/>
+        app:menu="@menu/activity_control_bottom_navigationbar"
+        app:theme="@style/AppTheme.Bottomnavigationbar" />
 </RelativeLayout>
