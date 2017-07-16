@@ -39,7 +39,6 @@ public class Plot2D extends View {
     public Plot2D(Context context, AttributeSet attrs, int id) {
         super(context, attrs);
         detector = new ScaleGestureDetector(getContext(), new ScaleListener());
-        ;
         paint = new Paint();
     }
 

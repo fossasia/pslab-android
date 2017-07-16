@@ -41,7 +41,6 @@ import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.Plot2D;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
-import org.fossasia.pslab.others.ViewGroupUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -301,7 +300,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (scienceLab.isConnected() && isXYPlotSelected && viewIsClicked) {
+                    if (scienceLab.isConnected() && viewIsClicked && isXYPlotSelected) {
                         xyPlotTask = new XYPlotTask();
                         if (xyPlotXAxisChannel.equals("CH2"))
                             xyPlotTask.execute(xyPlotYAxisChannel);
@@ -762,12 +761,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         @Override
         protected Void doInBackground(String... params) {
             HashMap<String, double[]> data;
-            if (xyPlotXAxisChannel.equals("CH2") || xyPlotYAxisChannel.equals("CH2")) {
+            if ("CH2".equals(xyPlotXAxisChannel) || "CH2".equals(xyPlotYAxisChannel)) {
                 analogInput = params[0];
                 data = scienceLab.captureTwo(1000, 10, analogInput, false);
                 double y1Data[] = data.get("y1");
                 double y2Data[] = data.get("y2");
-                if (xyPlotYAxisChannel.equals("CH2")) {
+                if ("CH2".equals(xyPlotYAxisChannel)) {
                     for (int i = 0; i < y1Data.length; i++) {
                         xFloatData[i] = (float) y1Data[i];
                         yFloatData[i] = (float) y2Data[i];
