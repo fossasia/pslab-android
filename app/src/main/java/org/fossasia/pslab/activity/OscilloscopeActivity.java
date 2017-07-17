@@ -317,7 +317,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 }
             }
         };
-        new Thread(runnable).start();
+
+        if (scienceLab.isConnected())
+            new Thread(runnable).start();
+        
     }
 
     @Override
