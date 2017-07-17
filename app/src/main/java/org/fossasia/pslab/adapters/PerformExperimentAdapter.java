@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
 import org.fossasia.pslab.fragment.ExperimentSetupFragment;
@@ -36,6 +37,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("D_ZenerIV.html");
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
             case 1:
+                if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
+                    return ZenerSetupFragment.newInstance();
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
