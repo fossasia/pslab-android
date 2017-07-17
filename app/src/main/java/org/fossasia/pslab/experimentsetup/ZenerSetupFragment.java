@@ -46,8 +46,8 @@ public class ZenerSetupFragment extends Fragment {
     private float stepVoltage = 0;
     private final Object lock = new Object();
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
-    ArrayList<Float> x1 = new ArrayList<>();
-    ArrayList<Float> y1 = new ArrayList<>();
+    private ArrayList<Float> x1 = new ArrayList<>();
+    private ArrayList<Float> y1 = new ArrayList<>();
 
     public static ZenerSetupFragment newInstance() {
         ZenerSetupFragment zenerSetup = new ZenerSetupFragment();
@@ -125,7 +125,7 @@ public class ZenerSetupFragment extends Fragment {
     }
 
     private void startExperiment() {
-        // ToDo : code for changing voltage from IV to FV and read current value for each sample
+        // code for changing voltage from IV to FV and read current value for each sample
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -161,7 +161,7 @@ public class ZenerSetupFragment extends Fragment {
         outputChart.setData(data);
     }
 
-    void updateChart() {
+    private void updateChart() {
         List<ILineDataSet> dataSets = new ArrayList<>();
         List<Entry> temp = new ArrayList<>();
         for (int i = 0; i < x1.size(); i++) {
