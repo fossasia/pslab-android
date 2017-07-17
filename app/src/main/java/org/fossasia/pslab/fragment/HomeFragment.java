@@ -89,7 +89,6 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (deviceConnected) {
-            progressDialog.show();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -97,6 +96,7 @@ public class HomeFragment extends Fragment {
 
                         String version = PacketHandler.version;
                         if ("".equals(version)) {
+                            progressDialog.show();
                             version = scienceLab.getVersion();
                             PacketHandler.version = version;
                         }
