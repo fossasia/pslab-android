@@ -1,5 +1,6 @@
 package org.fossasia.pslab.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -41,6 +42,8 @@ public class HomeFragment extends Fragment {
     TextView tvInitializationStatus;
     public static InitializationVariable booleanVariable;
 
+    private ProgressDialog progressDialog;
+
     private ScienceLab scienceLab;
 
     public static HomeFragment newInstance(boolean deviceConnected, boolean deviceFound) {
@@ -56,6 +59,7 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
         booleanVariable = new InitializationVariable();
+        progressDialog = new ProgressDialog(getActivity());
         if (scienceLab.calibrated)
             booleanVariable.setVariable(true);
         else
@@ -67,6 +71,9 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
+        progressDialog.setMessage(getString(R.string.initialising_wait));
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
         if (deviceFound & deviceConnected) {
             imgViewDeviceStatus.setImageResource(org.fossasia.pslab.R.drawable.usb_connected);
             tvDeviceStatus.setText(getString(R.string.device_connected_successfully));
@@ -82,6 +89,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (deviceConnected) {
+            progressDialog.show();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -93,9 +101,10 @@ public class HomeFragment extends Fragment {
                             PacketHandler.version = version;
                         }
                         tvVersion.setText(version);
-                        tvInitializationStatus.setText(getString(R.string.initialising_wait));
-                        if (booleanVariable.isInitialised())
+                        if (booleanVariable.isInitialised()) {
+                            progressDialog.dismiss();
                             tvInitializationStatus.setText(getString(R.string.initialisation_completed));
+                        }
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -107,10 +116,10 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onChange() {
                     if (tvInitializationStatus != null)
-                        if (booleanVariable.isInitialised())
+                        if (booleanVariable.isInitialised()) {
+                            progressDialog.dismiss();
                             tvInitializationStatus.setText(getString(R.string.initialisation_completed));
-                        else
-                            tvInitializationStatus.setText(getString(R.string.initialising_wait));
+                        }
                 }
             });
 
