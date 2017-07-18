@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +33,12 @@ public class ChannelParametersFragment extends Fragment {
     private CheckBox checkBoxCH1;
     private CheckBox checkBoxCH2;
     private CheckBox checkBoxCH3;
+    private CheckBox checkBoxMIC;
     private Spinner spinnerRangeCh1;
     private Spinner spinnerRangeCh2;
     private Spinner spinnerChannelSelect;
     private Spinner spinnerMICSelect;
+    private int micSelectedPosition;
 
 
     public static ChannelParametersFragment newInstance(String param1, String param2) {
@@ -75,6 +78,7 @@ public class ChannelParametersFragment extends Fragment {
         checkBoxCH1 = (CheckBox) v.findViewById(R.id.checkBox_ch1_cp);
         checkBoxCH2 = (CheckBox) v.findViewById(R.id.checkBox_ch2_cp);
         checkBoxCH3 = (CheckBox) v.findViewById(R.id.checkBox_ch3_cp);
+        checkBoxMIC = (CheckBox) v.findViewById(R.id.checkBox_mic_cp);
 
         ArrayAdapter<String> rangesAdapter;
         ArrayAdapter<String> channelsAdapter;
@@ -235,16 +239,14 @@ public class ChannelParametersFragment extends Fragment {
         spinnerMICSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                micSelectedPosition = position;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-
             }
         });
-
 
         checkBoxCH1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -266,7 +268,15 @@ public class ChannelParametersFragment extends Fragment {
                 ((OscilloscopeActivity) getActivity()).isCH3Selected = isChecked;
             }
         });
-
+        checkBoxMIC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (micSelectedPosition == 1)
+                    ((OscilloscopeActivity) getActivity()).isMICSelected = isChecked;
+                else if (micSelectedPosition == 2)
+                    ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = isChecked;
+            }
+        });
 
         return v;
     }

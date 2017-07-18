@@ -121,7 +121,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox"
+        android:id="@+id/checkBox_mic_cp"
         app:layout_constraintLeft_toLeftOf="@+id/checkBox_ch3_cp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="16dp" />
@@ -130,7 +130,7 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:id="@+id/spinner_mic_select_cp"
-        app:layout_constraintLeft_toRightOf="@+id/checkBox"
+        app:layout_constraintLeft_toRightOf="@+id/checkBox_mic_cp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp" />
 
