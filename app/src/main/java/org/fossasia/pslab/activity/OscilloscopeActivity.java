@@ -38,6 +38,7 @@ import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
+import org.fossasia.pslab.others.Plot2D;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
 
@@ -58,23 +59,24 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
     private String TAG = "Oscilloscope Activity";
     private ScienceLab scienceLab;
-    private LineChart mChart;
+    public LineChart mChart;
     private LinearLayout linearLayout;
     private FrameLayout frameLayout;
+    private RelativeLayout mChartLayout;
     private ImageButton channelParametersButton;
     private ImageButton timebaseButton;
     private ImageButton dataAnalysisButton;
     private ImageButton xyPlotButton;
-    private RelativeLayout mChartLayout;
     private TextView channelParametersTextView;
     private TextView timebaseTiggerTextView;
     private TextView dataAnalysisTextView;
     private TextView xyPlotTextView;
-    private TextView leftYAxisLabel;
-    private TextView leftYAxisLabelUnit;
-    private TextView rightYAxisLabel;
-    private TextView rightYAxisLabelUnit;
-    private TextView xAxisLabelUnit;
+    public TextView leftYAxisLabel;
+    public TextView leftYAxisLabelUnit;
+    public TextView rightYAxisLabel;
+    public TextView rightYAxisLabelUnit;
+    public TextView xAxisLabel;
+    public TextView xAxisLabelUnit;
     private int height;
     private int width;
     public double timebase;
@@ -90,10 +92,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean isXYPlotSelected;
     public boolean sineFit;
     public boolean squareFit;
+    public boolean viewIsClicked;
     private String leftYAxisInput;
     public String triggerChannel;
     public String curveFittingChannel1;
     public String curveFittingChannel2;
+    public String xyPlotXAxisChannel;
+    public String xyPlotYAxisChannel;
     public double trigger;
     Fragment channelParametersFragment;
     Fragment timebasetriggerFragment;
@@ -103,7 +108,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
     private CaptureTaskThree captureTask3;
+    private XYPlotTask xyPlotTask;
     private ImageView ledImageView;
+    public Plot2D graph;
 
 
     @Override
@@ -124,6 +131,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         leftYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_left_yaxis_os);
         rightYAxisLabel = (TextView) findViewById(R.id.tv_label_right_yaxis_os);
         rightYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_right_yaxis_os);
+        xAxisLabel = (TextView) findViewById(R.id.tv_graph_label_xaxis_os);
         xAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_xaxis_os);
         channelParametersTextView = (TextView) findViewById(R.id.tv_channel_parameters_os);
         timebaseTiggerTextView = (TextView) findViewById(R.id.tv_timebase_tigger_os);
@@ -137,6 +145,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         trigger = 0;
         timebase = 875;
         isCH1Selected = true;
+        graph = new Plot2D(this, new float[]{}, new float[]{}, 1);
+        xyPlotXAxisChannel = "CH1";
+        xyPlotYAxisChannel = "CH2";
+        viewIsClicked = false;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -175,7 +187,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             public void run() {
                 //Thread to check which checkbox is enabled
                 while (true) {
-                    if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH1");
                         synchronized (lock) {
@@ -188,7 +200,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (scienceLab.isConnected() && isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH2");
                         synchronized (lock) {
@@ -201,7 +213,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (scienceLab.isConnected() && isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected && !isXYPlotSelected) {
                         {
                             captureTask = new CaptureTask();
                             captureTask.execute("CH3");
@@ -215,7 +227,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (scienceLab.isConnected() && isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected) {
+                    if (scienceLab.isConnected() && isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected && !isXYPlotSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("MIC");
                         synchronized (lock) {
@@ -228,7 +240,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                     }
 
-                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH1");
                         synchronized (lock) {
@@ -240,7 +252,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (scienceLab.isConnected() && isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected) {
+                    if (scienceLab.isConnected() && isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected && !isXYPlotSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH3");
                         synchronized (lock) {
@@ -252,7 +264,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (scienceLab.isConnected() && isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected) {
+                    if (scienceLab.isConnected() && isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected && !isXYPlotSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("MIC");
                         synchronized (lock) {
@@ -264,7 +276,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected) {
+                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected && !isXYPlotSelected) {
                         captureTask3 = new CaptureTaskThree();
                         captureTask3.execute("CH1");
                         synchronized (lock) {
@@ -287,10 +299,28 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                             });
                         }
                     }
+
+                    if (scienceLab.isConnected() && viewIsClicked && isXYPlotSelected) {
+                        xyPlotTask = new XYPlotTask();
+                        if (xyPlotXAxisChannel.equals("CH2"))
+                            xyPlotTask.execute(xyPlotYAxisChannel);
+                        else
+                            xyPlotTask.execute(xyPlotXAxisChannel);
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 }
             }
         };
-        new Thread(runnable).start();
+
+        if (scienceLab.isConnected())
+            new Thread(runnable).start();
+        
     }
 
     @Override
@@ -487,6 +517,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public void setRightYAxisLabel(String rightYAxisInput) {
         rightYAxisLabel.setText(rightYAxisInput);
     }
+
+    public void setXAxisLabel(String xAxisInput) {
+        xAxisLabel.setText(xAxisInput);
+    }
+
 
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         ArrayList<Entry> entries;
@@ -718,6 +753,81 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             synchronized (lock) {
                 lock.notify();
             }
+        }
+    }
+
+    public class XYPlotTask extends AsyncTask<String, Void, Void> {
+        String analogInput;
+        float[] xFloatData = new float[1000];
+        float[] yFloatData = new float[1000];
+
+        @Override
+        protected Void doInBackground(String... params) {
+            HashMap<String, double[]> data;
+            if ("CH2".equals(xyPlotXAxisChannel) || "CH2".equals(xyPlotYAxisChannel)) {
+                analogInput = params[0];
+                data = scienceLab.captureTwo(1000, 10, analogInput, false);
+                double y1Data[] = data.get("y1");
+                double y2Data[] = data.get("y2");
+                if ("CH2".equals(xyPlotYAxisChannel)) {
+                    for (int i = 0; i < y1Data.length; i++) {
+                        xFloatData[i] = (float) y1Data[i];
+                        yFloatData[i] = (float) y2Data[i];
+                    }
+                } else {
+                    for (int i = 0; i < y1Data.length; i++) {
+                        xFloatData[i] = (float) y2Data[i];
+                        yFloatData[i] = (float) y1Data[i];
+                    }
+                }
+            } else {
+                data = scienceLab.captureFour(1000, 10, analogInput, false);
+                double[] y1Data = data.get("y");
+                double[] y3Data = data.get("y3");
+                double[] y4Data = data.get("y4");
+                switch (xyPlotXAxisChannel) {
+                    case "CH1":
+                        for (int i = 0; i < y1Data.length; i++) {
+                            xFloatData[i] = (float) y1Data[i];
+                        }
+                        break;
+                    case "CH3":
+                        for (int i = 0; i < y3Data.length; i++) {
+                            xFloatData[i] = (float) y3Data[i];
+                        }
+                        break;
+                    case "MIC":
+                        for (int i = 0; i < y4Data.length; i++) {
+                            xFloatData[i] = (float) y4Data[i];
+                        }
+                        break;
+                }
+
+                switch (xyPlotYAxisChannel) {
+                    case "CH1":
+                        for (int i = 0; i < y1Data.length; i++) {
+                            yFloatData[i] = (float) y1Data[i];
+                        }
+                        break;
+                    case "CH3":
+                        for (int i = 0; i < y3Data.length; i++) {
+                            yFloatData[i] = (float) y3Data[i];
+                        }
+                        break;
+                    case "MIC":
+                        for (int i = 0; i < y4Data.length; i++) {
+                            yFloatData[i] = (float) y4Data[i];
+                        }
+                        break;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            graph.plotData(xFloatData, yFloatData, 1);
         }
     }
 }
