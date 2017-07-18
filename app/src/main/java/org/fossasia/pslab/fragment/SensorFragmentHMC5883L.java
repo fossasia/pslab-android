@@ -46,6 +46,7 @@ public class SensorFragmentHMC5883L extends Fragment {
     private int flag;
     private XAxis x;
     private YAxis y;
+    private YAxis y2;
     private ArrayList<Entry> entriesbx;
     private ArrayList<Entry> entriesby;
     private ArrayList<Entry> entriesbz;
@@ -111,6 +112,7 @@ public class SensorFragmentHMC5883L extends Fragment {
         mChart = (LineChart) view.findViewById(R.id.chart_hmc5883l);
         x = mChart.getXAxis();
         y = mChart.getAxisLeft();
+        y2 = mChart.getAxisRight();
 
         mChart.setTouchEnabled(true);
         mChart.setHighlightPerDragEnabled(true);
@@ -138,6 +140,9 @@ public class SensorFragmentHMC5883L extends Fragment {
         y.setAxisMaximum(10f);
         y.setAxisMinimum(-10f);
         y.setDrawGridLines(true);
+        y.setLabelCount(10);
+
+        y2.setDrawGridLines(false);
         return view;
     }
 
@@ -180,9 +185,9 @@ public class SensorFragmentHMC5883L extends Fragment {
             dataSet2.setColor(Color.GREEN);
             dataSet3.setColor(Color.RED);
 
-            dataset1.setDrawCircles(false);
-            dataSet2.setDrawCircles(false);
-            dataSet3.setDrawCircles(false);
+            dataset1.setDrawCircles(true);
+            dataSet2.setDrawCircles(true);
+            dataSet3.setDrawCircles(true);
 
             List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(dataset1);
