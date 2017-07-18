@@ -94,18 +94,18 @@ public class SavedExperiments extends Fragment {
         electronicsExperiments.add(getResources().getString(R.string.diode_iv));
         electronicsExperiments.add(getResources().getString(R.string.zener_iv));
         electronicsExperiments.add("Diode Clamping");
-        electronicsExperiments.add("Half Wave");
-        electronicsExperiments.add("Transistor CB");
-        electronicsExperiments.add("Transistor CE");
-        electronicsExperiments.add("Transistor Amplifier");
+        electronicsExperiments.add(getResources().getString(R.string.half_wave_rectifier));
+        electronicsExperiments.add(getResources().getString(R.string.full_wave_rectifier));
+        electronicsExperiments.add(getResources().getString(R.string.transistor_cb));
+        electronicsExperiments.add(getResources().getString(R.string.transistor_ce));
         electronicsExperiments.add("Inverting Op-Amp");
-        electronicsExperiments.add("Astable Multi-vibrator");
+        electronicsExperiments.add(getResources().getString(R.string.astable_multivibrator));
         electronicsExperiments.add("Phase Shift Oscillator");
 
         List<String> electricalExperiments = new ArrayList<>();
-        electricalExperiments.add("Transients RLC");
-        electricalExperiments.add("Bode Plots");
-        electricalExperiments.add("Ohms Law");
+        electricalExperiments.add(getResources().getString(R.string.transient_rlc));
+        electricalExperiments.add(getResources().getString(R.string.bode_plots));
+        electricalExperiments.add(getResources().getString(R.string.ohms_law));
         electricalExperiments.add("Capacitive Phase Shift");
         electricalExperiments.add("Inductive Phase Shift");
 
@@ -113,23 +113,23 @@ public class SavedExperiments extends Fragment {
         physicsExperiments.add("Speed of Sound");
         physicsExperiments.add("Piezo Frequency Response");
         physicsExperiments.add("Sensor Pendulum");
-        physicsExperiments.add("M Random Sampling");
+        physicsExperiments.add(getResources().getString(R.string.m_random_sampling));
 
         List<String> miscellaneousExperiments = new ArrayList<>();
-        miscellaneousExperiments.add("Dust Sensor");
+        miscellaneousExperiments.add(getResources().getString(R.string.dust_sensor));
         miscellaneousExperiments.add("Temperature Sensor");
         miscellaneousExperiments.add("Servo Motor");
         miscellaneousExperiments.add("Stepper Motor");
         miscellaneousExperiments.add("RGB LEDs");
 
         List<String> schoolExperiments = new ArrayList<>();
-        schoolExperiments.add("AC and DC");
-        schoolExperiments.add("AC Generator");
-        schoolExperiments.add("Resistance");
-        schoolExperiments.add("EM Induction");
-        schoolExperiments.add("Sound Basics");
-        schoolExperiments.add("Sound Beats");
-        schoolExperiments.add("Capacitance");
+        schoolExperiments.add(getResources().getString(R.string.ac_and_dc));
+        schoolExperiments.add(getResources().getString(R.string.ac_generator));
+        schoolExperiments.add(getResources().getString(R.string.resistance));
+        schoolExperiments.add(getResources().getString(R.string.em_induction));
+        schoolExperiments.add(getResources().getString(R.string.lemon_cell));
+        schoolExperiments.add(getResources().getString(R.string.sound_beats));
+        schoolExperiments.add(getResources().getString(R.string.capacitance));
         schoolExperiments.add("Light Dependent Resistor");
 
         List<String> myExperiments = new ArrayList<>();
