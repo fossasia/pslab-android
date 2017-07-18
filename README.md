@@ -40,7 +40,7 @@ Home Screen|Show status and version of PSLab device|Established
 Application|Exposes PSLab application like Oscilloscope,etc |Established
  |Oscilloscope |Shows variation of analog signals | Working
  |Control |Generate waveforms and PWM signals. Control voltage and current sources and read results from a variety of electric components | Working
- |Logical Analyzer |Captures and displays signals from digital system | Working
+ |Logical Analyzer |Captures and displays signals from digital system | 
  |Data Sensor Logger |Captures and displays data from various sensors |
  |Wireless Sensor |Scans, captures and displays data from various wireless sensors |
  |Sensor Quick View |Scans all the sensors connected to PSLab Device and provides interface to Log data| Working
