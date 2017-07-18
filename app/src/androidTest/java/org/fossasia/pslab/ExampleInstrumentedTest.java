@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.viveksb007.pslab", appContext.getPackageName());
+        assertEquals("org.fossasia.pslab", appContext.getPackageName());
     }
 }
