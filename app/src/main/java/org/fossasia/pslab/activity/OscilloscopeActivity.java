@@ -87,6 +87,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean isCH2Selected;
     public boolean isCH3Selected;
     public boolean isMICSelected;
+    public boolean isInBuiltMicSelected;
     public boolean isTriggerSelected;
     public boolean isFourierTransformSelected;
     public boolean isXYPlotSelected;
@@ -144,7 +145,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         triggerChannel = "CH1";
         trigger = 0;
         timebase = 875;
-        isCH1Selected = true;
+        //isCH1Selected = true;
         graph = new Plot2D(this, new float[]{}, new float[]{}, 1);
         xyPlotXAxisChannel = "CH1";
         xyPlotYAxisChannel = "CH2";
