@@ -18,6 +18,7 @@ import android.widget.Spinner;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
+import org.fossasia.pslab.others.NothingSelectedSpinnerAdapter;
 
 public class ChannelParametersFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,7 +64,7 @@ public class ChannelParametersFragment extends Fragment {
 
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
         final String[] channels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
-        final String[] mics = {"SELECT MIC", "MICROPHONE", "IN-BUILT MIC"};
+        final String[] mics = {"MICROPHONE", "IN-BUILT MIC"};
 
         spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_ch1_cp);
         spinnerRangeCh2 = (Spinner) v.findViewById(R.id.spinner_range_ch2_cp);
@@ -98,7 +99,9 @@ public class ChannelParametersFragment extends Fragment {
         spinnerRangeCh2.setSelection(rangesAdapter.getPosition("+/-16V"), true);
         spinnerChannelSelect.setAdapter(channelsAdapter);
         spinnerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"), true);
-        spinnerMICSelect.setAdapter(micsAdapter);
+        spinnerMICSelect.setAdapter(new NothingSelectedSpinnerAdapter(micsAdapter,
+                R.layout.nothing_selected_spinner_row,
+                getActivity()));
 
         spinnerRangeCh1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -225,6 +228,19 @@ public class ChannelParametersFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerMICSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
 
             }
         });
