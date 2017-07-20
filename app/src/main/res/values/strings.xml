@@ -108,10 +108,14 @@
 
     <string name="hmc5883l">hmc5883l</string>
     <string name="mpu6050">mpu6050</string>
+    <string name="ads1115">ads1115</string>
+    <string name="mlx90614">mlx90614</string>
+
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
     <string name="plot">Plot</string>
 
+    <string name="data">Data</string>
     <string name="bx">Bx</string>
     <string name="by">By</string>
     <string name="bz">Bz</string>
@@ -122,11 +126,16 @@
     <string name="gy">Gy</string>
     <string name="gz">Gz</string>
     <string name="temp">Temp</string>
+    <string name="object_temp">Object Temp</string>
+    <string name="ambient_temp">Ambient Temp</string>
 
     <string name="gyro_range">Set Gyro Range</string>
     <string name="accel_range">Set Accel Range</string>
     <string name="kalman">Kalman filter</string>
     <string name="power_up">Power Up</string>
+    <string name="set_gain">Set Gain</string>
+    <string name="set_channel">Set Channel</string>
+    <string name="set_rate">Set Rate</string>
 
     <string-array name="gyro_range_spinner">
         <item>250</item>
@@ -156,5 +165,34 @@
     <string-array name="power_up_spinner">
         <item></item>
         <item></item>
+    </string-array>
+
+    <string-array name="ads1115_gain_spinner">
+        <item>GAIN_TWOTHIRDS</item>
+        <item>GAIN_ONE</item>
+        <item>GAIN_TWO</item>
+        <item>GAIN_FOUR</item>
+        <item>GAIN_EIGHT</item>
+        <item>GAIN_SIXTEEN</item>
+    </string-array>
+
+    <string-array name="ads1115_channel_spinner">
+        <item>UNI_0</item>
+        <item>UNI_1</item>
+        <item>UNI_2</item>
+        <item>UNI_3</item>
+        <item>DIFF_01</item>
+        <item>DIFF_23</item>
+    </string-array>
+
+    <string-array name="ads1115_rate_spinner">
+        <item>8</item>
+        <item>16</item>
+        <item>32</item>
+        <item>64</item>
+        <item>128</item>
+        <item>250</item>
+        <item>475</item>
+        <item>860</item>
     </string-array>
 </resources>
