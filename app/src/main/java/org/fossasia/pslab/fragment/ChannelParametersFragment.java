@@ -1,12 +1,15 @@
 package org.fossasia.pslab.fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 import org.fossasia.pslab.R;
@@ -25,6 +29,7 @@ public class ChannelParametersFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int RECORD_AUDIO_REQUEST_CODE = 1;
 
     private String mParam1;
     private String mParam2;
@@ -240,6 +245,10 @@ public class ChannelParametersFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 micSelectedPosition = position;
+                if (position == 1)
+                    ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
+                else
+                    ((OscilloscopeActivity) getActivity()).isMICSelected = false;
             }
 
             @Override
@@ -271,14 +280,36 @@ public class ChannelParametersFragment extends Fragment {
         checkBoxMIC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (micSelectedPosition == 1)
+                if (micSelectedPosition == 1) {
                     ((OscilloscopeActivity) getActivity()).isMICSelected = isChecked;
-                else if (micSelectedPosition == 2)
-                    ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = isChecked;
+                } else if (micSelectedPosition == 2) {
+                    // check for RECORD_AUDIO permission if has then change boolean
+                    if (isChecked)
+                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
+                        } else {
+                            ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
+                        }
+                    else
+                        ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
+                }
             }
         });
 
         return v;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == RECORD_AUDIO_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
+            } else {
+                Toast.makeText(getActivity(), "This feature won't work.", Toast.LENGTH_SHORT).show();
+                if (checkBoxMIC.isChecked())
+                    checkBoxMIC.toggle();
+            }
+        }
     }
 
     private void openAlertDialogBox(String inputSource) {
