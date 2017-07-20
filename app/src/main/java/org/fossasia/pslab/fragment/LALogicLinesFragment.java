@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -21,7 +24,9 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ChannelAxisFormatter;
+import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,9 +42,12 @@ public class LALogicLinesFragment extends Fragment {
     private Bundle params;
     private int channelMode;
     private Context context;
+    private ScienceLab scienceLab;
     private LineChart logicLinesChart;
     private ArrayList<String> channelNames = new ArrayList<>();
     private TextView tvTimeUnit;
+    private ImageView ledImageView;
+    private Runnable logicAnalysis;
 
     public static LALogicLinesFragment newInstance(Bundle params, Context context) {
         LALogicLinesFragment laLogicLinesFragment = new LALogicLinesFragment();
@@ -51,6 +59,7 @@ public class LALogicLinesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        scienceLab = ScienceLabCommon.scienceLab;
         this.channelMode = params.getInt("channelMode");
         switch (channelMode) {
             case 1:
@@ -74,20 +83,50 @@ public class LALogicLinesFragment extends Fragment {
             default:
                 channelNames.add(params.getString("inputChannel1"));
         }
+
+        logicAnalysis = new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (scienceLab.isConnected()) {
+                        if (!String.valueOf(ledImageView.getTag()).equals("green")) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ledImageView.setImageResource(R.drawable.green_led);
+                                    ledImageView.setTag("green");
+                                }
+                            });
+                        }
+                        // TODO : Perform Logic Analyzer related functions
+                    } else {
+                        if (!String.valueOf(ledImageView.getTag()).equals("red")) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ledImageView.setImageResource(R.drawable.red_led);
+                                    ledImageView.setTag("red");
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        };
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
-
-        LinearLayout llLogicLines = (LinearLayout) v.findViewById(R.id.ll_la_logic_lines);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        logicLinesChart = new LineChart(context);
-        logicLinesChart.setLayoutParams(params);
-        logicLinesChart.setDrawBorders(true);
+        logicLinesChart = (LineChart) v.findViewById(R.id.chart_la);
+        Legend legend = logicLinesChart.getLegend();
+        legend.setTextColor(Color.WHITE);
         logicLinesChart.setBorderWidth(2);
-        llLogicLines.addView(logicLinesChart);
+        XAxis xAxis = logicLinesChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.TOP);
+        xAxis.setTextColor(Color.WHITE);
+        ledImageView = (ImageView) v.findViewById(R.id.imageView_led_la);
         tvTimeUnit = (TextView) v.findViewById(R.id.la_tv_time_unit);
         tvTimeUnit.setText(getString(R.string.time_unit_la));
         return v;
@@ -105,6 +144,10 @@ public class LALogicLinesFragment extends Fragment {
         logicLinesChart.getAxisRight().setDrawLabels(false);
         logicLinesChart.getDescription().setEnabled(false);
         logicLinesChart.setScaleYEnabled(false);
+
+        if (scienceLab.isConnected()) {
+            new Thread(logicAnalysis).start();
+        }
 
         /*  For HIDING GRID LINES
         logicLinesChart.getAxisLeft().setDrawGridLines(false);
@@ -133,7 +176,7 @@ public class LALogicLinesFragment extends Fragment {
             }
             LineDataSet lineDataSet = new LineDataSet(tempInput, channelNames.get(j));
             lineDataSet.setCircleRadius(1);
-            lineDataSet.setColor(Color.RED);
+            lineDataSet.setColor(Color.WHITE);
             lineDataSet.setCircleColor(Color.GREEN);
             lineDataSet.setDrawValues(false);
             lineDataSet.setDrawCircles(false);
