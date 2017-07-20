@@ -245,10 +245,15 @@ public class ChannelParametersFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 micSelectedPosition = position;
-                if (position == 1)
+                if (position == 1) {
                     ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
-                else
+                    if (checkBoxMIC.isChecked())
+                        ((OscilloscopeActivity) getActivity()).isMICSelected = true;
+                } else {
                     ((OscilloscopeActivity) getActivity()).isMICSelected = false;
+                    if (checkBoxMIC.isChecked())
+                        ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
+                }
             }
 
             @Override
