@@ -1,11 +1,15 @@
 package org.fossasia.pslab.fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +18,18 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
+import org.fossasia.pslab.others.NothingSelectedSpinnerAdapter;
 
 public class ChannelParametersFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int RECORD_AUDIO_REQUEST_CODE = 1;
 
     private String mParam1;
     private String mParam2;
@@ -35,6 +42,9 @@ public class ChannelParametersFragment extends Fragment {
     private Spinner spinnerRangeCh1;
     private Spinner spinnerRangeCh2;
     private Spinner spinnerChannelSelect;
+    private Spinner spinnerMICSelect;
+    private int micSelectedPosition;
+
 
     public static ChannelParametersFragment newInstance(String param1, String param2) {
         ChannelParametersFragment fragment = new ChannelParametersFragment();
@@ -60,30 +70,37 @@ public class ChannelParametersFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_channel_parameters, container, false);
 
-        String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
-        String[] channels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
+        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
+        final String[] channels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
+        final String[] mics = {"MICROPHONE", "IN-BUILT MIC"};
 
         spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_ch1_cp);
         spinnerRangeCh2 = (Spinner) v.findViewById(R.id.spinner_range_ch2_cp);
         spinnerChannelSelect = (Spinner) v.findViewById(R.id.spinner_channel_select_cp);
+        spinnerMICSelect = (Spinner) v.findViewById(R.id.spinner_mic_select_cp);
+
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         checkBoxCH1 = (CheckBox) v.findViewById(R.id.checkBox_ch1_cp);
         checkBoxCH2 = (CheckBox) v.findViewById(R.id.checkBox_ch2_cp);
         checkBoxCH3 = (CheckBox) v.findViewById(R.id.checkBox_ch3_cp);
         checkBoxMIC = (CheckBox) v.findViewById(R.id.checkBox_mic_cp);
 
-
         ArrayAdapter<String> rangesAdapter;
         ArrayAdapter<String> channelsAdapter;
+        ArrayAdapter<String> micsAdapter;
         if (tabletSize) {
             rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, ranges);
             channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
+            micsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_mic_tablet, mics);
         } else {
             rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, ranges);
             channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+            micsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_mic, mics);
+
         }
         rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         channelsAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        micsAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         spinnerRangeCh1.setAdapter(rangesAdapter);
         spinnerRangeCh1.setSelection(rangesAdapter.getPosition("+/-16V"), true);
@@ -91,6 +108,9 @@ public class ChannelParametersFragment extends Fragment {
         spinnerRangeCh2.setSelection(rangesAdapter.getPosition("+/-16V"), true);
         spinnerChannelSelect.setAdapter(channelsAdapter);
         spinnerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"), true);
+        spinnerMICSelect.setAdapter(new NothingSelectedSpinnerAdapter(micsAdapter,
+                R.layout.nothing_selected_spinner_row,
+                getActivity()));
 
         spinnerRangeCh1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -221,6 +241,27 @@ public class ChannelParametersFragment extends Fragment {
             }
         });
 
+        spinnerMICSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                micSelectedPosition = position;
+                if (position == 1) {
+                    ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
+                    if (checkBoxMIC.isChecked())
+                        ((OscilloscopeActivity) getActivity()).isMICSelected = true;
+                } else {
+                    ((OscilloscopeActivity) getActivity()).isMICSelected = false;
+                    if (checkBoxMIC.isChecked())
+                        ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         checkBoxCH1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -241,15 +282,39 @@ public class ChannelParametersFragment extends Fragment {
                 ((OscilloscopeActivity) getActivity()).isCH3Selected = isChecked;
             }
         });
-
         checkBoxMIC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ((OscilloscopeActivity) getActivity()).isMICSelected = isChecked;
+                if (micSelectedPosition == 1) {
+                    ((OscilloscopeActivity) getActivity()).isMICSelected = isChecked;
+                } else if (micSelectedPosition == 2) {
+                    // check for RECORD_AUDIO permission if has then change boolean
+                    if (isChecked)
+                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
+                        } else {
+                            ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
+                        }
+                    else
+                        ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
+                }
             }
         });
 
         return v;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == RECORD_AUDIO_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
+            } else {
+                Toast.makeText(getActivity(), "This feature won't work.", Toast.LENGTH_SHORT).show();
+                if (checkBoxMIC.isChecked())
+                    checkBoxMIC.toggle();
+            }
+        }
     }
 
     private void openAlertDialogBox(String inputSource) {

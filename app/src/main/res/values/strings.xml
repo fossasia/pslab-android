@@ -94,7 +94,7 @@
     <string name="device_connected_successfully">Device Connected Successfully</string>
     <string name="device_not_found">Device Not Found</string>
 
-    <string name="time_unit_la">Time -> (ms)</string>
+    <string name="time_unit_la">Time (ms)</string>
     <string name="analyze">Analyze</string>
     <string name="view">VIEW</string>
 
@@ -105,6 +105,21 @@
 
     <string name="diode_iv">Diode I-V</string>
     <string name="zener_iv">Zener I-V</string>
+    <string name="half_wave_rectifier">Half Wave Rectifier</string>
+    <string name="full_wave_rectifier">Full Wave Rectifier</string>
+    <string name="transistor_cb">Transistor CB Characteristics</string>
+    <string name="transistor_ce">Transistor CE Characteristics</string>
+    <string name="astable_multivibrator">Astable Multivibrator</string>
+    <string name="transient_rlc">Transients RLC</string>
+    <string name="bode_plots">Bode Plots</string>
+    <string name="ohms_law">Ohms Law</string>
+    <string name="m_random_sampling">M Random Sampling</string>
+    <string name="ac_and_dc">AC and DC</string>
+    <string name="lemon_cell">Lemon Cell</string>
+    <string name="ac_generator">AC Generator</string>
+    <string name="em_induction">EM Induction</string>
+    <string name="sound_beats">Sound Beats</string>
+    <string name="dust_sensor">Dust Sensor</string>
 
     <string name="hmc5883l">hmc5883l</string>
     <string name="mpu6050">mpu6050</string>

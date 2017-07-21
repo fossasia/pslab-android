@@ -38,11 +38,13 @@ import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
+import org.fossasia.pslab.others.AudioJack;
 import org.fossasia.pslab.others.Plot2D;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -87,6 +89,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean isCH2Selected;
     public boolean isCH3Selected;
     public boolean isMICSelected;
+    public boolean isInBuiltMicSelected;
     public boolean isTriggerSelected;
     public boolean isFourierTransformSelected;
     public boolean isXYPlotSelected;
@@ -111,6 +114,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private XYPlotTask xyPlotTask;
     private ImageView ledImageView;
     public Plot2D graph;
+    private AudioJack audioJack = null;
 
 
     @Override
@@ -144,7 +148,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         triggerChannel = "CH1";
         trigger = 0;
         timebase = 875;
-        isCH1Selected = true;
         graph = new Plot2D(this, new float[]{}, new float[]{}, 1);
         xyPlotXAxisChannel = "CH1";
         xyPlotYAxisChannel = "CH2";
@@ -314,13 +317,33 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                             }
                         }
                     }
+
+                    if (isInBuiltMicSelected) {
+                        if (audioJack == null)
+                            audioJack = new AudioJack("input");
+                        captureAudioBuffer audioBuffer = new captureAudioBuffer(audioJack);
+                        audioBuffer.execute();
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } else {
+                        if (audioJack != null) {
+                            audioJack.release();
+                            audioJack = null;
+                        }
+                    }
+
                 }
             }
         };
 
-        if (scienceLab.isConnected())
-            new Thread(runnable).start();
-        
+        // if (scienceLab.isConnected())
+        new Thread(runnable).start();
+
     }
 
     @Override
@@ -830,4 +853,32 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             graph.plotData(xFloatData, yFloatData, 1);
         }
     }
+
+    public class captureAudioBuffer extends AsyncTask<Void, Void, Void> {
+
+        private AudioJack audioJack;
+        private short[] buffer;
+
+        public captureAudioBuffer(AudioJack audioJack) {
+            this.audioJack = audioJack;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            buffer = audioJack.read();
+            Log.v("AudioBuffer", Arrays.toString(buffer));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            // Update chart
+            Log.v("Execution Done", "Completed");
+            synchronized (lock) {
+                lock.notify();
+            }
+        }
+    }
+
 }
