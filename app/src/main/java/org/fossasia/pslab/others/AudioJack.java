@@ -92,6 +92,7 @@ public class AudioJack {
     }
 
     public void release() {
+        Log.v(TAG, "AudioJack object released");
         if (audioRecord != null) {
             if (audioRecord.getState() == AudioRecord.RECORDSTATE_RECORDING)
                 audioRecord.stop();
