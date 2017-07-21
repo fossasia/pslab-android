@@ -144,9 +144,9 @@ public class SensorFragmentMPU6050 extends Fragment {
         yAccelerometer = mChartAcceleration.getAxisLeft();
         yAccelerometer2 = mChartAcceleration.getAxisRight();
 
-        xGyroscope = mChartAcceleration.getXAxis();
-        yGyroscope = mChartAcceleration.getAxisLeft();
-        yGyroscope2 = mChartAcceleration.getAxisRight();
+        xGyroscope = mChartGyroscope.getXAxis();
+        yGyroscope = mChartGyroscope.getAxisLeft();
+        yGyroscope2 = mChartGyroscope.getAxisRight();
 
         mChartAcceleration.setTouchEnabled(true);
         mChartAcceleration.setHighlightPerDragEnabled(true);
@@ -192,7 +192,7 @@ public class SensorFragmentMPU6050 extends Fragment {
         data.setValueTextColor(Color.WHITE);
         mChartGyroscope.setData(data2);
 
-        Legend l2 = mChartAcceleration.getLegend();
+        Legend l2 = mChartGyroscope.getLegend();
         l2.setForm(Legend.LegendForm.LINE);
         l2.setTextColor(Color.WHITE);
 
@@ -210,7 +210,7 @@ public class SensorFragmentMPU6050 extends Fragment {
 
         try {
             if (MPU6050 != null) {
-                MPU6050.setAccelRange(spinnerSensorMPU60502.getSelectedItemPosition() - 1);
+                MPU6050.setAccelRange(Integer.parseInt(spinnerSensorMPU60502.getSelectedItem().toString()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -218,7 +218,7 @@ public class SensorFragmentMPU6050 extends Fragment {
 
         try {
             if (MPU6050 != null) {
-                MPU6050.setGyroRange(spinnerSensorMPU60501.getSelectedItemPosition() - 1);
+                MPU6050.setGyroRange(Integer.parseInt(spinnerSensorMPU60501.getSelectedItem().toString()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -294,9 +294,9 @@ public class SensorFragmentMPU6050 extends Fragment {
             dataSets.add(dataSet3);
 
             List<ILineDataSet> dataSets2 = new ArrayList<ILineDataSet>();
-            dataSets.add(dataset4);
-            dataSets.add(dataSet5);
-            dataSets.add(dataSet6);
+            dataSets2.add(dataset4);
+            dataSets2.add(dataSet5);
+            dataSets2.add(dataSet6);
 
             LineData data = new LineData(dataSets);
             mChartAcceleration.setData(data);
