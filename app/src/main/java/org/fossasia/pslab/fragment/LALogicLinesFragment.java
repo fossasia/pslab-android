@@ -99,6 +99,11 @@ public class LALogicLinesFragment extends Fragment {
                             });
                         }
                         // TODO : Perform Logic Analyzer related functions
+                        // Colors for Data sets
+                        // - CH1 - (Color.BLUE);
+                        // - CH2 - (Color.GREEN);
+                        // - CH3 - (Color.RED);
+                        // - CH4 - (Color.YELLOW);
                     } else {
                         if (!String.valueOf(ledImageView.getTag()).equals("red")) {
                             getActivity().runOnUiThread(new Runnable() {
@@ -176,7 +181,7 @@ public class LALogicLinesFragment extends Fragment {
             }
             LineDataSet lineDataSet = new LineDataSet(tempInput, channelNames.get(j));
             lineDataSet.setCircleRadius(1);
-            lineDataSet.setColor(Color.WHITE);
+            lineDataSet.setColor(Color.GREEN);
             lineDataSet.setCircleColor(Color.GREEN);
             lineDataSet.setDrawValues(false);
             lineDataSet.setDrawCircles(false);

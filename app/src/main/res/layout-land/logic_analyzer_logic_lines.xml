@@ -17,7 +17,7 @@
         android:textColor="@color/white"
         android:textStyle="bold" />
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -32,14 +32,11 @@
             android:id="@+id/imageView_led_la"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_above="@id/chart_la"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+            android:layout_gravity="end|bottom"
             android:layout_margin="2dp"
             android:tag="red"
             app:srcCompat="@drawable/red_led" />
 
-    </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>
