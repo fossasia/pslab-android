@@ -33,6 +33,11 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
+import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
@@ -93,8 +98,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean isTriggerSelected;
     public boolean isFourierTransformSelected;
     public boolean isXYPlotSelected;
-    public boolean sineFit;
-    public boolean squareFit;
+    public boolean isSineFitSelected;
+    public boolean isSquareFitSelected;
     public boolean viewIsClicked;
     private String leftYAxisInput;
     public String triggerChannel;
@@ -113,6 +118,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     private CaptureTaskThree captureTask3;
     private XYPlotTask xyPlotTask;
     private ImageView ledImageView;
+    private AnalyticsClass analyticsClass;
     public Plot2D graph;
     private AudioJack audioJack = null;
 
@@ -149,6 +155,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         trigger = 0;
         timebase = 875;
         //isCH1Selected = true;
+
+        isSineFitSelected = true;
+        isSquareFitSelected = false;
+        isFourierTransformSelected = false;
+        curveFittingChannel1 = "None";
+        curveFittingChannel2 = "None";
+        analyticsClass = new AnalyticsClass();
+
         graph = new Plot2D(this, new float[]{}, new float[]{}, 1);
         xyPlotXAxisChannel = "CH1";
         xyPlotYAxisChannel = "CH2";
@@ -174,6 +188,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         if (findViewById(R.id.layout_dock_os2) != null) {
             addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
         }
+
         channelParametersButton.setOnClickListener(this);
         timebaseButton.setOnClickListener(this);
         dataAnalysisButton.setOnClickListener(this);
@@ -547,6 +562,34 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     }
 
 
+    private double[] fitData(double[] xData, double[] yData) {
+        if (isSineFitSelected) {
+            double[] fittedParams = analyticsClass.sineFit(xData, yData);
+            for (int i = 0; i < xData.length; i++) {
+                //offset + amp * sin(abs(freq * (2 * Math.PI)) * x + phase);
+                yData[i] = fittedParams[0] * Math.sin(Math.abs(fittedParams[1] * (2 * Math.PI)) * xData[i] + fittedParams[3]) + fittedParams[2];
+            }
+
+        } else {
+            double[] fittedParams = analyticsClass.squareFit(xData, yData);
+            for (int i = 0; i < xData.length; i++) {
+                //offset + amp * signalSquare(2 * Math.PI * freq * (x - phase), freq, dc);
+                yData[i] = fittedParams[4] + fittedParams[0] * analyticsClass.signalSquare(fittedParams[1] * 2 * Math.PI * (xData[i] - fittedParams[2]), fittedParams[1], fittedParams[3]);
+            }
+        }
+        return yData;
+    }
+
+    private double[] fourierTrasform(double[] xData, double[] yData) {
+        Complex[] complex;
+        FastFourierTransformer fastFourierTransformer = new FastFourierTransformer(DftNormalization.STANDARD);
+        complex = fastFourierTransformer.transform(yData, TransformType.FORWARD);
+        for (int i = 0; i < xData.length; i++) {
+            yData[i] = complex[i].abs();
+        }
+        return yData;
+    }
+
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         ArrayList<Entry> entries;
         String analogInput;
@@ -558,12 +601,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 //no. of samples and timegap still need to be determined
                 if (isTriggerSelected) {
                     scienceLab.configureTrigger(0, analogInput, trigger, null, null);
-                    scienceLab.captureTraces(1, 1000, 10, analogInput, true, null);
+                    scienceLab.captureTraces(1, 1024, 10, analogInput, true, null);
                 } else {
-                    scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+                    scienceLab.captureTraces(1, 1024, 10, analogInput, false, null);
                 }
-                Log.v("Sleep Time", "" + (1000 * 10 * 1e-3));
-                Thread.sleep((long) (1000 * 10 * 1e-3));
+                Log.v("Sleep Time", "" + (1024 * 10 * 1e-3));
+                Thread.sleep((long) (1024 * 10 * 1e-3));
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
 
                 double[] xData = data.get("x");
@@ -571,6 +614,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 //Log.v("XDATA", Arrays.toString(xData));
                 //Log.v("YDATA", Arrays.toString(yData));
                 entries = new ArrayList<Entry>();
+
+                if (analogInput.equals(curveFittingChannel1) || analogInput.equals(curveFittingChannel2)) {
+                    yData = fitData(xData, yData);
+                }
+                if (isFourierTransformSelected) {
+                    yData = fourierTrasform(xData, yData);
+                }
                 if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries.add(new Entry((float) xData[i], (float) yData[i]));
@@ -626,9 +676,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         scienceLab.configureTrigger(0, analogInput, trigger, null, null);
                     else if (triggerChannel.equals("CH2"))
                         scienceLab.configureTrigger(1, "CH2", trigger, null, null);
-                    data = scienceLab.captureTwo(1000, 10, analogInput, true);
+                    data = scienceLab.captureTwo(1024, 10, analogInput, true);
                 } else {
-                    data = scienceLab.captureTwo(1000, 10, analogInput, false);
+                    data = scienceLab.captureTwo(1024, 10, analogInput, false);
                 }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y1");
@@ -636,17 +686,32 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
                 entries1 = new ArrayList<Entry>();
                 entries2 = new ArrayList<Entry>();
+
+                if (curveFittingChannel1.equals(analogInput) || curveFittingChannel2.equals(analogInput))
+                    y1Data = fitData(xData, y1Data);
+                if (isFourierTransformSelected)
+                    y1Data = fourierTrasform(xData, y1Data);
                 if (timebase == 875) {
-                    for (int i = 0; i < xData.length; i++) {
-                        entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
-                        entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
-                    }
+                    for (int j = 0; j < xData.length; j++)
+                        entries1.add(new Entry((float) xData[j], (float) y1Data[j]));
                 } else {
-                    for (int i = 0; i < xData.length; i++) {
-                        entries1.add(new Entry((float) xData[i] / 1000, (float) y1Data[i]));
-                        entries2.add(new Entry((float) xData[i] / 1000, (float) y2Data[i]));
-                    }
+                    for (int j = 0; j < xData.length; j++)
+                        entries1.add(new Entry((float) xData[j] / 1000, (float) y1Data[j]));
+
                 }
+
+                if (curveFittingChannel1.equals("CH2") || curveFittingChannel2.equals("CH2"))
+                    y2Data = fitData(xData, y2Data);
+                if (isFourierTransformSelected)
+                    y2Data = fourierTrasform(xData, y2Data);
+                if (timebase == 875) {
+                    for (int j = 0; j < xData.length; j++)
+                        entries2.add(new Entry((float) xData[j], (float) y2Data[j]));
+                } else {
+                    for (int j = 0; j < xData.length; j++)
+                        entries2.add(new Entry((float) xData[j] / 1000, (float) y2Data[j]));
+                }
+
             } catch (NullPointerException e) {
                 cancel(true);
             }
@@ -707,9 +772,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                     else if (triggerChannel.equals("MIC"))
                         scienceLab.configureTrigger(3, analogInput, trigger, null, null);
 
-                    data = scienceLab.captureFour(1000, 10, analogInput, true);
+                    data = scienceLab.captureFour(1024, 10, analogInput, true);
                 } else {
-                    data = scienceLab.captureFour(1000, 10, analogInput, false);
+                    data = scienceLab.captureFour(1024, 10, analogInput, false);
                 }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y");
@@ -721,20 +786,53 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 entries2 = new ArrayList<Entry>();
                 entries3 = new ArrayList<Entry>();
                 entries4 = new ArrayList<Entry>();
+
+                if ("CH1".equals(curveFittingChannel1) || "CH1".equals(curveFittingChannel2))
+                    y1Data = fitData(xData, y1Data);
+                if (isFourierTransformSelected)
+                    y1Data = fourierTrasform(xData, y1Data);
                 if (timebase == 875) {
-                    for (int i = 0; i < xData.length; i++) {
+                    for (int i = 0; i < xData.length; i++)
                         entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
-                        entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
-                        entries3.add(new Entry((float) xData[i], (float) y3Data[i]));
-                        entries4.add(new Entry((float) xData[i], (float) y4Data[i]));
-                    }
                 } else {
-                    for (int i = 0; i < xData.length; i++) {
+                    for (int i = 0; i < xData.length; i++)
                         entries1.add(new Entry((float) xData[i] / 1000, (float) y1Data[i]));
+                }
+
+                if ("CH2".equals(curveFittingChannel1) || "CH2".equals(curveFittingChannel2))
+                    y2Data = fitData(xData, y2Data);
+                if (isFourierTransformSelected)
+                    y2Data = fourierTrasform(xData, y2Data);
+                if (timebase == 875) {
+                    for (int i = 0; i < xData.length; i++)
+                        entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                } else {
+                    for (int i = 0; i < xData.length; i++)
                         entries2.add(new Entry((float) xData[i] / 1000, (float) y2Data[i]));
+                }
+
+                if ("CH3".equals(curveFittingChannel1) || "CH3".equals(curveFittingChannel2))
+                    y3Data = fitData(xData, y3Data);
+                if (isFourierTransformSelected)
+                    y3Data = fourierTrasform(xData, y3Data);
+                if (timebase == 875) {
+                    for (int i = 0; i < xData.length; i++)
+                        entries3.add(new Entry((float) xData[i], (float) y3Data[i]));
+                } else {
+                    for (int i = 0; i < xData.length; i++)
                         entries3.add(new Entry((float) xData[i] / 1000, (float) y3Data[i]));
+                }
+
+                if ("MIC".equals(curveFittingChannel1) || "MIC".equals(curveFittingChannel2))
+                    y4Data = fitData(xData, y4Data);
+                if (isFourierTransformSelected)
+                    y4Data = fourierTrasform(xData, y4Data);
+                if (timebase == 875) {
+                    for (int i = 0; i < xData.length; i++)
+                        entries4.add(new Entry((float) xData[i], (float) y4Data[i]));
+                } else {
+                    for (int i = 0; i < xData.length; i++)
                         entries4.add(new Entry((float) xData[i] / 1000, (float) y4Data[i]));
-                    }
                 }
             } catch (NullPointerException e) {
                 cancel(true);
