@@ -13,7 +13,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:checked="true"
         android:text="CH1"
         android:textStyle="normal|bold"
         app:layout_constraintLeft_toLeftOf="parent"
