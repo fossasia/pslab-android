@@ -866,7 +866,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         @Override
         protected Void doInBackground(Void... params) {
             buffer = audioJack.read();
-            Log.v("AudioBuffer", Arrays.toString(buffer));
+            //Log.v("AudioBuffer", Arrays.toString(buffer));
             return null;
         }
 
@@ -874,7 +874,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             // Update chart
-            Log.v("Execution Done", "Completed");
+            List<Entry> entries = new ArrayList<>();
+            for (int i = 0; i < buffer.length; i++) {
+                entries.add(new Entry(i, (float) AudioJack.map(buffer[i], -32768, 32767, -3, 3)));
+            }
+            LineDataSet lineDataSet = new LineDataSet(entries, "Audio Data");
+            lineDataSet.setColor(Color.WHITE);
+            lineDataSet.setDrawCircles(false);
+            mChart.setData(new LineData(lineDataSet));
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+            //Log.v("Execution Done", "Completed");
             synchronized (lock) {
                 lock.notify();
             }
