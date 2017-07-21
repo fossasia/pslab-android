@@ -72,6 +72,11 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
+                if (experimentTitle.equals(context.getResources().getString(R.string.diode_iv))) {
+                    // Normal diode and zener experiments are identical
+                    return ZenerSetupFragment.newInstance();
+                }
+                
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");

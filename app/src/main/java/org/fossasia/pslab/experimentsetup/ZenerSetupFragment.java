@@ -57,7 +57,7 @@ public class ZenerSetupFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.zener_setup, container, false);
+        View view = inflater.inflate(R.layout.diode_setup, container, false);
         outputChart = (LineChart) view.findViewById(R.id.zener_chart);
 
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
@@ -67,7 +67,7 @@ public class ZenerSetupFragment extends Fragment {
                 // open Material Dialog
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title("Configure Experiment")
-                        .customView(R.layout.zener_configure_dialog, true)
+                        .customView(R.layout.diode_configure_dialog, true)
                         .positiveText("Start Experiment")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
