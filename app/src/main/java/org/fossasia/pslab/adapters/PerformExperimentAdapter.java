@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
@@ -76,7 +77,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     // Normal diode and zener experiments are identical
                     return ZenerSetupFragment.newInstance();
                 }
-                
+                if (experimentTitle.equals(context.getResources().getString(R.string.ohms_law)))
+                    return OhmsLawSetupExperiment.newInstance();
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
