@@ -105,8 +105,10 @@ public class SensorFragmentMain extends Fragment {
                     case "ADS1115":
                         break;
                     case "BH1750":
+                        selectedFragment = SensorFragmentBH1750.newInstance();
                         break;
                     case "BMP180":
+                        selectedFragment = SensorFragmentBMP180.newInstance();
                         break;
                     case "MLX90614":
                         break;
