@@ -103,6 +103,8 @@
         <item>Experiment Setup</item>
     </string-array>
 
+    <string name="configure_experiment">Configure Experiment</string>
+
     <string name="diode_iv">Diode I-V</string>
     <string name="zener_iv">Zener I-V</string>
     <string name="half_wave_rectifier">Half Wave Rectifier</string>
