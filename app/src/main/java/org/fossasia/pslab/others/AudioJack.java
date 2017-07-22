@@ -92,6 +92,7 @@ public class AudioJack {
     }
 
     public void release() {
+        Log.v(TAG, "AudioJack object released");
         if (audioRecord != null) {
             if (audioRecord.getState() == AudioRecord.RECORDSTATE_RECORDING)
                 audioRecord.stop();
@@ -102,6 +103,10 @@ public class AudioJack {
                 audioTrack.stop();
             audioTrack.release();
         }
+    }
+
+    public static double map(double x, double inMin, double inMax, double outMin, double outMax) {
+        return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
 
 }

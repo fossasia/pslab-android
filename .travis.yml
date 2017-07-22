@@ -29,7 +29,7 @@ android:
     - extra-android-m2repository
 
     # Specify at least one system image
-    #- sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
+    - sys-img-armeabi-v7a-$ANDROID_TARGET
     
     
 licenses:
@@ -65,4 +65,4 @@ after_success:
   - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./upload-apk.sh; fi'
 
 notifications:
-  slack:
+  slack: fossasia:bqOzo4C9y6oI6dTF8kO8zdxp

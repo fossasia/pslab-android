@@ -94,7 +94,7 @@
     <string name="device_connected_successfully">Device Connected Successfully</string>
     <string name="device_not_found">Device Not Found</string>
 
-    <string name="time_unit_la">Time -> (ms)</string>
+    <string name="time_unit_la">Time (ms)</string>
     <string name="analyze">Analyze</string>
     <string name="view">VIEW</string>
 
@@ -105,11 +105,28 @@
 
     <string name="diode_iv">Diode I-V</string>
     <string name="zener_iv">Zener I-V</string>
+    <string name="half_wave_rectifier">Half Wave Rectifier</string>
+    <string name="full_wave_rectifier">Full Wave Rectifier</string>
+    <string name="transistor_cb">Transistor CB Characteristics</string>
+    <string name="transistor_ce">Transistor CE Characteristics</string>
+    <string name="astable_multivibrator">Astable Multivibrator</string>
+    <string name="transient_rlc">Transients RLC</string>
+    <string name="bode_plots">Bode Plots</string>
+    <string name="ohms_law">Ohms Law</string>
+    <string name="m_random_sampling">M Random Sampling</string>
+    <string name="ac_and_dc">AC and DC</string>
+    <string name="lemon_cell">Lemon Cell</string>
+    <string name="ac_generator">AC Generator</string>
+    <string name="em_induction">EM Induction</string>
+    <string name="sound_beats">Sound Beats</string>
+    <string name="dust_sensor">Dust Sensor</string>
 
     <string name="hmc5883l">hmc5883l</string>
     <string name="mpu6050">mpu6050</string>
     <string name="ads1115">ads1115</string>
     <string name="mlx90614">mlx90614</string>
+    <string name="bmp180">bmp180</string>
+    <string name="bh1750">bh1750</string>
 
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
@@ -128,14 +145,28 @@
     <string name="temp">Temp</string>
     <string name="object_temp">Object Temp</string>
     <string name="ambient_temp">Ambient Temp</string>
+    <string name="temperature">Temperature</string>
+    <string name="altitude">Altitude</string>
+    <string name="pressure">Pressure</string>
+    <string name="luminosity">Luminosity</string>
 
     <string name="gyro_range">Set Gyro Range</string>
     <string name="accel_range">Set Accel Range</string>
     <string name="kalman">Kalman filter</string>
     <string name="power_up">Power Up</string>
+
     <string name="set_gain">Set Gain</string>
     <string name="set_channel">Set Channel</string>
     <string name="set_rate">Set Rate</string>
+
+    <string name="gain_range">Gain Range</string>
+
+    <string name="plot_accelerometer">Plot - Accelerometer</string>
+    <string name="plot_gyroscope">Plot - Gyroscope</string>
+    <string name="rad">(rad)</string>
+    <string name="angle">Angle</string>
+    <string name="time">Time</string>
+    <string name="s">(s)</string>
 
     <string-array name="gyro_range_spinner">
         <item>250</item>
@@ -194,5 +225,11 @@
         <item>250</item>
         <item>475</item>
         <item>860</item>
+    </string-array>  
+
+    <string-array name="gain_range_spinner">
+        <item>500mLx</item>
+        <item>1000mLx</item>
+        <item>4000mLx</item>
     </string-array>
 </resources>
