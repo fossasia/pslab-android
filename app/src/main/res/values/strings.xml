@@ -123,6 +123,9 @@
 
     <string name="hmc5883l">hmc5883l</string>
     <string name="mpu6050">mpu6050</string>
+    <string name="bmp180">bmp180</string>
+    <string name="bh1750">bh1750</string>
+
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
     <string name="plot">Plot</string>
@@ -137,11 +140,16 @@
     <string name="gy">Gy</string>
     <string name="gz">Gz</string>
     <string name="temp">Temp</string>
-
+    <string name="temperature">Temperature</string>
+    <string name="altitude">Altitude</string>
+    <string name="pressure">Pressure</string>
+    <string name="luminosity">Luminosity</string>
     <string name="gyro_range">Set Gyro Range</string>
     <string name="accel_range">Set Accel Range</string>
     <string name="kalman">Kalman filter</string>
     <string name="power_up">Power Up</string>
+    <string name="gain_range">Gain Range</string>
+
     <string name="plot_accelerometer">Plot - Accelerometer</string>
     <string name="plot_gyroscope">Plot - Gyroscope</string>
     <string name="rad">(rad)</string>
@@ -177,5 +185,11 @@
     <string-array name="power_up_spinner">
         <item></item>
         <item></item>
+    </string-array>
+
+    <string-array name="gain_range_spinner">
+        <item>500mLx</item>
+        <item>1000mLx</item>
+        <item>4000mLx</item>
     </string-array>
 </resources>
