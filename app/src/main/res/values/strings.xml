@@ -150,6 +150,13 @@
     <string name="power_up">Power Up</string>
     <string name="gain_range">Gain Range</string>
 
+    <string name="plot_accelerometer">Plot - Accelerometer</string>
+    <string name="plot_gyroscope">Plot - Gyroscope</string>
+    <string name="rad">(rad)</string>
+    <string name="angle">Angle</string>
+    <string name="time">Time</string>
+    <string name="s">(s)</string>
+
     <string-array name="gyro_range_spinner">
         <item>250</item>
         <item>500</item>
