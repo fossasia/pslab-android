@@ -224,13 +224,13 @@ public class ADS1115 {
         return (short) (readRegister(REG_POINTER_CONVERT) * gainScaling.get(gain));
     }
 
-    public int[] getRaw() throws IOException, InterruptedException {
+    public int getRaw() throws IOException, InterruptedException {
         //return values in mV
         String chan = typeSelection.get(channel);
         if (channel.contains("UNI"))
-            return new int[]{(int) readADCSingleEnded(Integer.parseInt(chan))};
+            return (int) readADCSingleEnded(Integer.parseInt(chan));
         else if (channel.contains("DIF"))
-            return new int[]{readADCDifferential(chan)};
-        return new int[0];
+            return readADCDifferential(chan);
+        return 0;
     }
 }
