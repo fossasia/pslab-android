@@ -57,8 +57,8 @@ public class ZenerSetupFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.zener_setup, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.zener_chart);
+        View view = inflater.inflate(R.layout.diode_setup, container, false);
+        outputChart = (LineChart) view.findViewById(R.id.line_chart);
 
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
@@ -67,12 +67,11 @@ public class ZenerSetupFragment extends Fragment {
                 // open Material Dialog
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title("Configure Experiment")
-                        .customView(R.layout.zener_configure_dialog, true)
+                        .customView(R.layout.diode_configure_dialog, true)
                         .positiveText("Start Experiment")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                Toast.makeText(getActivity(), "Positive", Toast.LENGTH_SHORT).show();
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
                                 TextInputEditText etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.et_initial_voltage);
