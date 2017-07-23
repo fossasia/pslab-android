@@ -103,6 +103,7 @@ public class SensorFragmentMain extends Fragment {
                 String itemValue = (String) lvSensor.getItemAtPosition(position);
                 switch (itemValue) {
                     case "ADS1115":
+                        selectedFragment = SensorFragmentADS1115.newInstance();
                         break;
                     case "BH1750":
                         selectedFragment = SensorFragmentBH1750.newInstance();
@@ -111,6 +112,7 @@ public class SensorFragmentMain extends Fragment {
                         selectedFragment = SensorFragmentBMP180.newInstance();
                         break;
                     case "MLX90614":
+                        selectedFragment = SensorFragmentMLX90614.newInstance();
                         break;
                     case "HMC5883L":
                         selectedFragment = SensorFragmentHMC5883L.newInstance();

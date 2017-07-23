@@ -57,30 +57,26 @@ public class MLX90614 {
         return vals;
     }
 
-    public Double[] getRaw() throws IOException {
+    public Double getRaw() throws IOException {
         ArrayList<Character> vals = getVals(source, 3);
         if (vals.size() == 3)
-            return new Double[]{((((vals.get(1) & 0x007f) << 8) + vals.get(0)) * 0.02) - 0.01 - 273.15};
+            return ((((vals.get(1) & 0x007f) << 8) + vals.get(0)) * 0.02) - 0.01 - 273.15;
         else
             return null;
     }
 
     public Double getObjectTemperature() throws IOException {
         source = OBJADDR;
-        Double[] val = getRaw();
-        if (val.length != 0)
-            return val[0];
-        else
-            return null;
+        Double val = getRaw();
+        return val;
+
     }
 
     public Double getAmbientTemperature() throws IOException {
         source = AMBADDR;
-        Double[] val = getRaw();
-        if (val.length != 0)
-            return val[0];
-        else
-            return null;
+        Double val = getRaw();
+        return val;
+
     }
 
 }

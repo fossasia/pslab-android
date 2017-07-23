@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            android:layout_marginStart="@dimen/card_margin"
+            android:background="@color/colorPrimary">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/title_padding"
+                android:text="@string/mlx90614"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title_font_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/title_padding"
+                android:text="@string/raw_data"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title_font_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/object_temp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/textsize_edittext"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/ambient_temp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/textsize_edittext"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_sensor_mlx90614_object_temp"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/textsize_edittext"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_sensor_mlx90614_ambient_temp"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/textsize_edittext"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="90dp"
+                    android:src="@drawable/mlx90614" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/title_padding"
+                android:text="@string/plot"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title_font_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="40dp">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_hmc5883l"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#000" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</ScrollView>
