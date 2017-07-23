@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.fossasia.pslab">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -45,6 +46,7 @@
         <activity
             android:name=".activity.LogicalAnalyzerActivity"
             android:configChanges="screenSize|orientation" />
+        <activity android:name=".activity.SensorDataLoggerActivity"/>
 
         <receiver android:name=".receivers.USBDetachReceiver" />
     </application>

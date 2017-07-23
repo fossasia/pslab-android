@@ -13,9 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.fossasia.pslab.activity.ControlActivity;
+import org.fossasia.pslab.activity.SensorDataLoggerActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.activity.SensorActivity;
@@ -43,7 +43,7 @@ public class ApplicationsFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.applications_fragment, container, false);
         context = getActivity().getApplicationContext();
@@ -68,6 +68,10 @@ public class ApplicationsFragment extends Fragment {
                                 break;
                             case "Sensor QuickView":
                                 intent = new Intent(context, SensorActivity.class);
+                                startActivity(intent);
+                                break;
+                            case "Data Sensor Logger":
+                                intent = new Intent(context, SensorDataLoggerActivity.class);
                                 startActivity(intent);
                                 break;
                         }
