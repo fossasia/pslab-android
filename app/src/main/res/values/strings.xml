@@ -125,6 +125,8 @@
 
     <string name="hmc5883l">hmc5883l</string>
     <string name="mpu6050">mpu6050</string>
+    <string name="sht21">sht21</string>
+    <string name="tsl2561">tsl2561</string>
     <string name="ads1115">ads1115</string>
     <string name="mlx90614">mlx90614</string>
     <string name="bmp180">bmp180</string>
@@ -145,24 +147,25 @@
     <string name="gy">Gy</string>
     <string name="gz">Gz</string>
     <string name="temp">Temp</string>
+    <string name="luminosity">Luminosity</string>
+    <string name="humidity">Humidity</string>
     <string name="object_temp">Object Temp</string>
     <string name="ambient_temp">Ambient Temp</string>
     <string name="temperature">Temperature</string>
     <string name="altitude">Altitude</string>
     <string name="pressure">Pressure</string>
-    <string name="luminosity">Luminosity</string>
-
     <string name="gyro_range">Set Gyro Range</string>
     <string name="accel_range">Set Accel Range</string>
     <string name="kalman">Kalman filter</string>
     <string name="power_up">Power Up</string>
-
+    <string name="full_spectrum">Full spectrum</string>
+    <string name="infrared">Infrared</string>
+    <string name="visible">Visible</string>
     <string name="set_gain">Set Gain</string>
+    <string name="set_timing">Set Timing</string>
     <string name="set_channel">Set Channel</string>
     <string name="set_rate">Set Rate</string>
-
     <string name="gain_range">Gain Range</string>
-
     <string name="plot_accelerometer">Plot - Accelerometer</string>
     <string name="plot_gyroscope">Plot - Gyroscope</string>
     <string name="rad">(rad)</string>
@@ -170,6 +173,11 @@
     <string name="time">Time</string>
     <string name="s">(s)</string>
 
+    <string-array name="set_gain_spinner">
+        <item>No gain</item>
+        <item>1x</item>
+        <item>16x</item>
+    </string-array>
     <string-array name="gyro_range_spinner">
         <item>250</item>
         <item>500</item>
