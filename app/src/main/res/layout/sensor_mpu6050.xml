@@ -572,7 +572,7 @@
                         android:layout_height="30dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:entries="@array/gyro_range_spinner" />
+                        android:entries="@array/mpu6050_gyro_spinner" />
 
                     <Spinner
                         android:id="@+id/spinner_sensor_mpu6050_2"
@@ -580,7 +580,7 @@
                         android:layout_height="30dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:entries="@array/accel_range_spinner" />
+                        android:entries="@array/mpu6050_accel_spinner" />
 
                     <Spinner
                         android:id="@+id/spinner_sensor_mpu6050_3"
@@ -588,7 +588,7 @@
                         android:layout_height="30dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:entries="@array/kalman_spinner" />
+                        android:entries="@array/mpu6050_kalman_spinner" />
 
                     <Spinner
                         android:id="@+id/spinner_sensor_mpu6050_4"
@@ -596,7 +596,7 @@
                         android:layout_height="30dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:entries="@array/power_up_spinner" />
+                        android:entries="@array/mpu6050_power_spinner" />
 
                 </LinearLayout>
             </LinearLayout>

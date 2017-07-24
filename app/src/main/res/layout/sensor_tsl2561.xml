@@ -239,7 +239,7 @@
                         android:layout_height="40dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:entries="@array/set_gain_spinner" />
+                        android:entries="@array/tsl2561_gain_spinner" />
 
                     <LinearLayout
                         android:layout_width="160dp"

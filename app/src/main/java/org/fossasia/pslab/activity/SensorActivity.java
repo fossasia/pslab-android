@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.fossasia.pslab.R;
 
-import org.fossasia.pslab.fragment.SensorFragmentMain;
+import org.fossasia.pslab.sensorfragment.SensorFragmentMain;
 
 /**
  * Created by asitava on 18/6/17.

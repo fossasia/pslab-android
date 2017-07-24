@@ -1,4 +1,4 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.sensorfragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
-import org.fossasia.pslab.communication.sensors.BMP180;
+import org.fossasia.pslab.communication.sensors.MLX90614;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
@@ -21,18 +21,17 @@ import java.io.IOException;
  * Created by asitava on 10/7/17.
  */
 
-public class SensorFragmentBMP180 extends Fragment {
+public class SensorFragmentMLX90614 extends Fragment {
     private ScienceLab scienceLab;
     private I2C i2c;
-    private SensorDataFetch sensorDataFetch;
-    private TextView tvSensorBMP180Temp;
-    private TextView tvSensorBMP180Altitude;
-    private TextView tvSensorBMP180Pressure;
-    private BMP180 BMP180;
+    private SensorFragmentMLX90614.SensorDataFetch sensorDataFetch;
+    private TextView tvSensorMLX90614ObjectTemp;
+    private TextView tvSensorMLX90614AmbientTemp;
+    private MLX90614 sensorMLX90614;
 
-    public static SensorFragmentBMP180 newInstance() {
-        SensorFragmentBMP180 sensorFragmentBMP180 = new SensorFragmentBMP180();
-        return sensorFragmentBMP180;
+    public static SensorFragmentMLX90614 newInstance() {
+        SensorFragmentMLX90614 sensorFragmentMLX90614 = new SensorFragmentMLX90614();
+        return sensorFragmentMLX90614;
     }
 
     @Override
@@ -41,8 +40,8 @@ public class SensorFragmentBMP180 extends Fragment {
         scienceLab = ScienceLabCommon.scienceLab;
         i2c = scienceLab.i2c;
         try {
-            BMP180 = new BMP180(i2c);
-        } catch (IOException | InterruptedException e) {
+            sensorMLX90614 = new MLX90614(i2c);
+        } catch (IOException e) {
             e.printStackTrace();
         }
         Runnable runnable = new Runnable() {
@@ -51,8 +50,8 @@ public class SensorFragmentBMP180 extends Fragment {
                 while (true) {
                     if (scienceLab.isConnected()) {
                         try {
-                            sensorDataFetch = new SensorDataFetch();
-                        } catch (IOException | InterruptedException e) {
+                            sensorDataFetch = new SensorFragmentMLX90614.SensorDataFetch();
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                         sensorDataFetch.execute();
@@ -65,30 +64,30 @@ public class SensorFragmentBMP180 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.sensor_bmp180, container, false);
+        View view = inflater.inflate(R.layout.sensor_mlx90614, container, false);
 
-        tvSensorBMP180Temp = (TextView) view.findViewById(R.id.tv_sensor_bmp180_temp);
-        tvSensorBMP180Altitude = (TextView) view.findViewById(R.id.tv_sensor_bmp180_altitude);
-        tvSensorBMP180Pressure = (TextView) view.findViewById(R.id.tv_sensor_bmp180_pressure);
+        tvSensorMLX90614ObjectTemp = (TextView) view.findViewById(R.id.tv_sensor_mlx90614_object_temp);
+        tvSensorMLX90614AmbientTemp = (TextView) view.findViewById(R.id.tv_sensor_mlx90614_ambient_temp);
 
         return view;
     }
 
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        BMP180 BMP180 = new BMP180(i2c);
-        double[] dataBMP180 = new double[3];
+        Double dataMLX90614ObjectTemp;
+        Double dataMLX90614AmbientTemp;
 
-        private SensorDataFetch() throws IOException, InterruptedException {
+        private SensorDataFetch() throws IOException {
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (BMP180 != null) {
-                    dataBMP180 = BMP180.getRaw();
+                if (sensorMLX90614 != null) {
+                    dataMLX90614ObjectTemp = sensorMLX90614.getObjectTemperature();
+                    dataMLX90614AmbientTemp = sensorMLX90614.getAmbientTemperature();
                 }
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
@@ -96,9 +95,8 @@ public class SensorFragmentBMP180 extends Fragment {
 
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            tvSensorBMP180Temp.setText(String.valueOf(dataBMP180[0]));
-            tvSensorBMP180Altitude.setText(String.valueOf(dataBMP180[1]));
-            tvSensorBMP180Pressure.setText(String.valueOf(dataBMP180[2]));
+            tvSensorMLX90614ObjectTemp.setText(String.valueOf(dataMLX90614ObjectTemp));
+            tvSensorMLX90614AmbientTemp.setText(String.valueOf(dataMLX90614AmbientTemp));
         }
     }
 }

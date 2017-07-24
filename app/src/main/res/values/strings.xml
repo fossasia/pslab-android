@@ -172,26 +172,26 @@
     <string name="time">Time</string>
     <string name="s">(s)</string>
 
-    <string-array name="set_gain_spinner">
+    <string-array name="tsl2561_gain_spinner">
         <item>No gain</item>
         <item>1x</item>
         <item>16x</item>
     </string-array>
-    <string-array name="gyro_range_spinner">
+    <string-array name="mpu6050_gyro_spinner">
         <item>250</item>
         <item>500</item>
         <item>1000</item>
         <item>2000</item>
     </string-array>
 
-    <string-array name="accel_range_spinner">
+    <string-array name="mpu6050_accel_spinner">
         <item>2</item>
         <item>4</item>
         <item>8</item>
         <item>16</item>
     </string-array>
 
-    <string-array name="kalman_spinner">
+    <string-array name="mpu6050_kalman_spinner">
         <item>0.01</item>
         <item>0.1</item>
         <item>1</item>
@@ -202,7 +202,7 @@
         <item>null</item>
     </string-array>
 
-    <string-array name="power_up_spinner">
+    <string-array name="mpu6050_power_spinner">
         <item></item>
         <item></item>
     </string-array>
@@ -236,7 +236,7 @@
         <item>860</item>
     </string-array>  
 
-    <string-array name="gain_range_spinner">
+    <string-array name="bh1750_gain_spinner">
         <item>500mLx</item>
         <item>1000mLx</item>
         <item>4000mLx</item>
