@@ -5,10 +5,12 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 
 import org.fossasia.pslab.R;
@@ -26,6 +28,8 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     private static boolean hasPermission = false;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.fab)
+    FloatingActionButton scanFab;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,9 +42,15 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
             hasPermission = true;
         }
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Sensor Data Logger");
         }
+        scanFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // scan for sensors and display a list of sensors connected
+            }
+        });
     }
 
     @Override
