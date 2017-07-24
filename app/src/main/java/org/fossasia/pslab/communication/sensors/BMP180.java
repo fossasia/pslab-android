@@ -126,9 +126,9 @@ public class BMP180 {
 
     public double[] getRaw() throws IOException, InterruptedException {
         initTemperature();
-        readTemperature();
+        temperature = readTemperature();
         initPressure();
-        readPressure();
+        pressure = readPressure();
         return (new double[]{temperature, pressure, altitude()});
     }
 

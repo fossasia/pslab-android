@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/title_padding"
-                android:text="@string/hmc5883l"
+                android:text="@string/bmp180"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
@@ -67,7 +65,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
-                        android:text="@string/bx"
+                        android:text="@string/temperature"
                         android:textColor="@color/black"
                         android:textSize="@dimen/textsize_edittext"
                         android:textStyle="bold" />
@@ -76,7 +74,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
-                        android:text="@string/by"
+                        android:text="@string/altitude"
                         android:textColor="@color/black"
                         android:textSize="@dimen/textsize_edittext"
                         android:textStyle="bold" />
@@ -85,7 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
-                        android:text="@string/bz"
+                        android:text="@string/pressure"
                         android:textColor="@color/black"
                         android:textSize="@dimen/textsize_edittext"
                         android:textStyle="bold" />
@@ -99,7 +97,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_sensor_hmc5883l_bx"
+                        android:id="@+id/tv_sensor_bmp180_temp"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
@@ -109,7 +107,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_sensor_hmc5883l_by"
+                        android:id="@+id/tv_sensor_bmp180_altitude"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
@@ -119,7 +117,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_sensor_hmc5883l_bz"
+                        android:id="@+id/tv_sensor_bmp180_pressure"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
@@ -132,7 +130,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="90dp"
-                    android:src="@drawable/hmc5883l" />
+                    android:src="@drawable/bmp180" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -155,108 +153,17 @@
                 android:textSize="@dimen/title_font_size"
                 android:textStyle="bold" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginTop="40dp">
 
-                <RelativeLayout
-                    android:id="@+id/chart_xaxis_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:background="#000"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_graph_label_xaxis_hmc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center_vertical|center_horizontal|center"
-                        android:foregroundGravity="center_vertical"
-                        android:gravity="center_vertical|center_horizontal|center"
-                        android:text="Time "
-                        android:textColor="#ffff"
-                        android:textSize="9sp"
-                        android:textStyle="normal|bold"
-                        tools:layout_editor_absoluteX="288dp"
-                        tools:layout_editor_absoluteY="0dp" />
-
-                    <TextView
-                        android:id="@+id/tv_unit_xaxis_hmc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_toEndOf="@+id/tv_graph_label_xaxis_hmc"
-                        android:layout_toRightOf="@+id/tv_graph_label_xaxis_hmc"
-                        android:text="(s)"
-                        android:textColor="#ffff"
-                        android:textSize="9sp"
-                        android:textStyle="normal|bold"
-                        app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_hmc"
-                        tools:layout_editor_absoluteY="0dp" />
-                </RelativeLayout>
-
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/chart_yaxis_layout_hmc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:background="#000"
-                    android:foregroundGravity="center_vertical"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_label_left_yaxis_hmc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="10dp"
-                        android:layout_gravity="center"
-                        android:foregroundGravity="center_horizontal"
-                        android:gravity="top|center_horizontal"
-                        android:includeFontPadding="false"
-                        android:rotation="-90"
-                        android:text="Guass"
-                        android:textColor="#ffff"
-                        android:textSize="8sp"
-                        android:textStyle="normal|bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_unit_left_yaxis_os"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/tv_label_left_yaxis_hmc"
-                        android:layout_marginBottom="12dp"
-                        android:rotation="-90"
-                        android:text="(Ga)"
-                        android:textColor="#fff"
-                        android:textSize="8sp"
-                        android:textStyle="normal|bold"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_label_left_yaxis_hmc"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
-
-                </android.support.constraint.ConstraintLayout>
-
                 <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/chart_hmc5883l"
+                    android:id="@+id/chart_bmp180"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/chart_xaxis_layout"
-                    android:layout_toEndOf="@+id/chart_yaxis_layout_hmc"
-                    android:layout_toRightOf="@+id/chart_yaxis_layout_hmc"
                     android:background="#000" />
-            </RelativeLayout>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>
