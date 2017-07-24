@@ -21,7 +21,6 @@
     <string name="data_sensor_logger">Data Sensor Logger</string>
     <string name="w_sensor_logger">Wireless Sensor</string>
     <string name="sensor_quick_view">Sensor QuickView</string>
-    <string name="w_sensor_quick_view">Data Sensor Logger</string>
 
     <string name="control_item_1">Control</string>
     <string name="control_item_2">Read</string>
