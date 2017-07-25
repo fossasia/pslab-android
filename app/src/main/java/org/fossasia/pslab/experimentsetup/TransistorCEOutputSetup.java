@@ -23,18 +23,18 @@ import org.fossasia.pslab.R;
  * Created by viveksb007 on 22/7/17.
  */
 
-public class TransistorCBSetup extends Fragment {
+public class TransistorCEOutputSetup extends Fragment {
 
     private static final String ERROR_MESSAGE = "Invalid Value";
     private LineChart outputChart;
     private float initialVoltage = 0;
     private float finalVoltage = 0;
-    private float emitterVoltage = 0;
+    private float baseVoltage = 0;
     private int totalSteps = 0;
 
-    public static TransistorCBSetup newInstance() {
-        TransistorCBSetup transistorCBSetup = new TransistorCBSetup();
-        return transistorCBSetup;
+    public static TransistorCEOutputSetup newInstance() {
+        TransistorCEOutputSetup transistorCEOutputSetup = new TransistorCEOutputSetup();
+        return transistorCEOutputSetup;
     }
 
     @Nullable
@@ -49,7 +49,7 @@ public class TransistorCBSetup extends Fragment {
             public void onClick(View v) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title("Configure Experiment")
-                        .customView(R.layout.transistor_cb_configure_dialog, true)
+                        .customView(R.layout.transistor_ce_output_configure_dialog, true)
                         .positiveText("Start Experiment")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -59,11 +59,11 @@ public class TransistorCBSetup extends Fragment {
                                 TextInputEditText etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.et_initial_voltage);
                                 TextInputEditText etFinalVoltage = (TextInputEditText) customView.findViewById(R.id.et_final_voltage);
                                 TextInputEditText etTotalSteps = (TextInputEditText) customView.findViewById(R.id.et_total_steps);
-                                TextInputEditText etEmitterVoltage = (TextInputEditText) customView.findViewById(R.id.et_emitter_voltage);
+                                TextInputEditText etBaseVoltage = (TextInputEditText) customView.findViewById(R.id.et_base_voltage);
                                 TextInputLayout tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_iv);
                                 TextInputLayout tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_fv);
                                 TextInputLayout tilTotalSteps = (TextInputLayout) customView.findViewById(R.id.text_input_layout_total_steps);
-                                TextInputLayout tilEmitterVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_voltage);
+                                TextInputLayout tilBaseVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_voltage);
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
                                     tilInitialVoltage.setError(ERROR_MESSAGE);
                                     return;
@@ -79,15 +79,15 @@ public class TransistorCBSetup extends Fragment {
                                     return;
                                 } else
                                     tilTotalSteps.setError(null);
-                                if (TextUtils.isEmpty(etEmitterVoltage.getText().toString())) {
-                                    tilEmitterVoltage.setError(ERROR_MESSAGE);
+                                if (TextUtils.isEmpty(etBaseVoltage.getText().toString())) {
+                                    tilBaseVoltage.setError(ERROR_MESSAGE);
                                     return;
                                 } else
-                                    tilEmitterVoltage.setError(null);
+                                    tilBaseVoltage.setError(null);
                                 initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
                                 finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
                                 totalSteps = Integer.parseInt(etTotalSteps.getText().toString());
-                                emitterVoltage = Float.parseFloat(etEmitterVoltage.getText().toString());
+                                baseVoltage = Float.parseFloat(etBaseVoltage.getText().toString());
 
                             }
                         })

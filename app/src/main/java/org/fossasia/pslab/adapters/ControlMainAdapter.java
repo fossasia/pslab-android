@@ -2,8 +2,6 @@ package org.fossasia.pslab.adapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -61,12 +58,11 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
     @Override
     public ControlMainAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.control_main_list_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.setIsRecyclable(true);
         holder.tvControlMain1.setText(mDataset[position]);
 
@@ -89,11 +85,12 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                                 dataDecrement = -5.0;
                             else if (dataDecrement > 5.0)
                                 dataDecrement = 5.0;
-                            seekBarControlMain.setProgress((int) ((dataDecrement + 5) * 10));
-                            DecimalFormat df = new DecimalFormat("#.####");
+                            int setProgress = (int) ((dataDecrement + 5) * 100);
+                            seekBarControlMain.setProgress(setProgress);
+                            DecimalFormat df = new DecimalFormat("0.0000");
                             editTextControlMain.setText(df.format(dataDecrement));
                         } catch (NumberFormatException e) {
-                            editTextControlMain.setText("0");
+                            editTextControlMain.setText("0.0000");
                         }
                     }
                 });
@@ -108,11 +105,12 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                                 dataIncrement = -5.0;
                             else if (dataIncrement > 5.0)
                                 dataIncrement = 5.0;
-                            seekBarControlMain.setProgress((int) ((dataIncrement + 5) * 10));
-                            DecimalFormat df = new DecimalFormat("#.####");
+                            int setProgress = (int) ((dataIncrement + 5) * 100);
+                            seekBarControlMain.setProgress(setProgress);
+                            DecimalFormat df = new DecimalFormat("0.0000");
                             editTextControlMain.setText(df.format(dataIncrement));
                         } catch (NumberFormatException e) {
-                            editTextControlMain.setText("0");
+                            editTextControlMain.setText("0.0000");
                         }
                     }
                 });
@@ -131,17 +129,19 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             if (scienceLab.isConnected())
                                 scienceLab.setPV1(value);
                         } catch (NumberFormatException e) {
-                            editTextControlMain.setText("0");
+                            editTextControlMain.setText("0.0000");
                         }
                     }
                 });
 
+                editTextControlMain.setText("-5.0000");
+                seekBarControlMain.setMax(1000);
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        double text = progress / 10.0 - 5.0;
-                        DecimalFormat df = new DecimalFormat("#.####");
+                        double text = map(progress, 0, 1000, -5.0, 5.0);
+                        DecimalFormat df = new DecimalFormat("0.0000");
                         editTextControlMain.setText(df.format(text));
                     }
 
@@ -156,6 +156,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     }
                 });
                 break;
+
             case 1:
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -167,8 +168,8 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                                 dataDecrement = -3.3;
                             else if (dataDecrement > 3.3)
                                 dataDecrement = 3.3;
-                            seekBarControlMain.setProgress((int) ((dataDecrement + 3.3) * 15.15));
-                            DecimalFormat df = new DecimalFormat("#.####");
+                            seekBarControlMain.setProgress((int) ((dataDecrement + 3.3) * 100));
+                            DecimalFormat df = new DecimalFormat("0.0000");
                             editTextControlMain.setText(df.format(dataDecrement));
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
@@ -186,8 +187,9 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                                 dataIncrement = -3.3;
                             else if (dataIncrement > 3.3)
                                 dataIncrement = 3.3;
-                            seekBarControlMain.setProgress((int) ((dataIncrement + 3.3) * 15.15));
-                            DecimalFormat df = new DecimalFormat("#.####");
+                            int setProgress = (int) ((dataIncrement + 3.3) * 100);
+                            seekBarControlMain.setProgress(setProgress);
+                            DecimalFormat df = new DecimalFormat("0.0000");
                             editTextControlMain.setText(df.format(dataIncrement));
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
@@ -205,7 +207,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             else if (value < -3.3)
                                 value = -3.3f;
                             editTextControlMain.setText(String.valueOf(value));
-                            seekBarControlMain.setProgress((int) ((value + 3.3) * 15.15));
+                            seekBarControlMain.setProgress((int) ((value + 3.3) * 100));
                             if (scienceLab.isConnected())
                                 scienceLab.setPV2(value);
                         } catch (NumberFormatException e) {
@@ -214,12 +216,14 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     }
                 });
 
+                editTextControlMain.setText("-3.3000");
+                seekBarControlMain.setMax(660);
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        double text = progress / 15.15 - 3.3;
-                        DecimalFormat df = new DecimalFormat("#.####");
+                        double text = map(progress, 0, 660, -3.3, 3.3);
+                        DecimalFormat df = new DecimalFormat("0.0000");
                         editTextControlMain.setText(df.format(text));
                     }
 
@@ -235,7 +239,6 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 });
                 break;
 
-
             case 2:
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -247,11 +250,11 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                                 dataDecrement = 0.0;
                             else if (dataDecrement > 3.3)
                                 dataDecrement = 3.3;
-                            seekBarControlMain.setProgress((int) (dataDecrement * 30.30));
-                            DecimalFormat df = new DecimalFormat("#.####");
+                            seekBarControlMain.setProgress((int) (dataDecrement * 100));
+                            DecimalFormat df = new DecimalFormat("0.0000");
                             editTextControlMain.setText(df.format(dataDecrement));
                         } catch (NumberFormatException e) {
-                            editTextControlMain.setText("0");
+                            editTextControlMain.setText("0.0000");
                         }
                     }
                 });
@@ -266,11 +269,11 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                                 dataIncrement = 0.0;
                             else if (dataIncrement > 3.3)
                                 dataIncrement = 3.3;
-                            seekBarControlMain.setProgress((int) (dataIncrement * 30.30));
-                            DecimalFormat df = new DecimalFormat("#.####");
+                            seekBarControlMain.setProgress((int) (dataIncrement * 100));
+                            DecimalFormat df = new DecimalFormat("0.0000");
                             editTextControlMain.setText(df.format(dataIncrement));
                         } catch (NumberFormatException e) {
-                            editTextControlMain.setText("0");
+                            editTextControlMain.setText("0.0000");
                         }
                     }
                 });
@@ -285,22 +288,24 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             else if (value < 0)
                                 value = 0f;
                             editTextControlMain.setText(String.valueOf(value));
-                            //seekBarControlMain.setProgress((int) (value * 30.30));
+                            seekBarControlMain.setProgress((int) (value * 100 / 3.3));
                             if (scienceLab.isConnected())
                                 scienceLab.setPV3(value);
                         } catch (NumberFormatException e) {
-                            editTextControlMain.setText("0");
+                            editTextControlMain.setText("0.0000");
                         }
 
                     }
                 });
 
+                editTextControlMain.setText("0.0000");
+                seekBarControlMain.setMax(330);
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        double text = progress / 30.30;
-                        DecimalFormat df = new DecimalFormat("#.####");
+                        double text = map(progress, 0, 330, 0, 3.3);
+                        DecimalFormat df = new DecimalFormat("0.0000");
                         editTextControlMain.setText(df.format(text));
                     }
 
@@ -328,10 +333,11 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                                 dataDecrement = 0.0;
                             else if (dataDecrement > 3.3)
                                 dataDecrement = 3.3;
-                            DecimalFormat df = new DecimalFormat("#.####");
+                            DecimalFormat df = new DecimalFormat("0.0000");
+                            seekBarControlMain.setProgress((int) (dataDecrement * 100));
                             editTextControlMain.setText(df.format(dataDecrement));
                         } catch (NumberFormatException e) {
-                            editTextControlMain.setText("0");
+                            editTextControlMain.setText("0.0000");
                         }
                     }
                 });
@@ -346,10 +352,11 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                                 dataIncrement = 0.0;
                             else if (dataIncrement > 3.3)
                                 dataIncrement = 3.3;
-                            DecimalFormat df = new DecimalFormat("#.####");
+                            DecimalFormat df = new DecimalFormat("0.0000");
+                            seekBarControlMain.setProgress((int) (dataIncrement * 100));
                             editTextControlMain.setText(df.format(dataIncrement));
                         } catch (NumberFormatException e) {
-                            editTextControlMain.setText("0");
+                            editTextControlMain.setText("0.0000");
                         }
                     }
                 });
@@ -364,22 +371,24 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             else if (value < 0)
                                 value = 0f;
                             editTextControlMain.setText(String.valueOf(value));
-                            //seekBarControlMain.setProgress((int) (value * 30.30));
+                            seekBarControlMain.setProgress((int) (value * 100));
 
                             if (scienceLab.isConnected())
                                 scienceLab.setPCS(value);
                         } catch (NumberFormatException e) {
-                            editTextControlMain.setText("0");
+                            editTextControlMain.setText("0.0000");
                         }
                     }
                 });
 
+                editTextControlMain.setText("0.0000");
+                seekBarControlMain.setMax(330);
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        double text = progress / 30.30;
-                        DecimalFormat df = new DecimalFormat("#.####");
+                        double text = map(progress, 0, 330, 0.0, 3.3);
+                        DecimalFormat df = new DecimalFormat("0.0000");
                         editTextControlMain.setText(df.format(text));
                     }
 
@@ -642,5 +651,9 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
     @Override
     public int getItemCount() {
         return mDataset.length;
+    }
+
+    private double map(int x, int in_min, int in_max, double out_min, double out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 }

@@ -61,7 +61,6 @@ public class SavedExperiments extends Fragment {
         experimentExpandableList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Toast.makeText(context, experimentList.get(experimentGroupHeaders.get(groupPosition)).get(childPosition) + " Clicked", Toast.LENGTH_SHORT).show();
                 // Open Fragment/Activity to perform corresponding experiment or to see experiment description like Help-Files
                 Intent intent = new Intent(context, PerformExperimentActivity.class);
                 intent.putExtra("toolbar_title", experimentGroupHeaders.get(groupPosition));
