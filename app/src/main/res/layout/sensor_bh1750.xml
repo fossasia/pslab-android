@@ -179,7 +179,7 @@
                         android:layout_height="30dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:entries="@array/gain_range_spinner" />
+                        android:entries="@array/bh1750_gain_spinner" />
 
 
                 </LinearLayout>

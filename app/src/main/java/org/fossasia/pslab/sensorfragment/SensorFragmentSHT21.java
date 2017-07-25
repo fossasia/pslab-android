@@ -1,4 +1,4 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.sensorfragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +28,7 @@ public class SensorFragmentSHT21 extends Fragment {
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorSHT21Temp;
     private TextView tvSensorSHT21Humidity;
+    private SHT21 sensorSHT21;
 
     public static SensorFragmentSHT21 newInstance() {
         SensorFragmentSHT21 sensorFragmentSHT21 = new SensorFragmentSHT21();
@@ -39,6 +40,11 @@ public class SensorFragmentSHT21 extends Fragment {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
         i2c = scienceLab.i2c;
+        try {
+            sensorSHT21 = new SHT21(i2c);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -69,7 +75,6 @@ public class SensorFragmentSHT21 extends Fragment {
 
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        SHT21 SHT21 = new SHT21(i2c);
         private ArrayList<Double> dataSHT21Temp = new ArrayList<>();
         private ArrayList<Double> dataSHT21Humidity = new ArrayList<>();
 
@@ -79,11 +84,11 @@ public class SensorFragmentSHT21 extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (SHT21 != null) {
-                    SHT21.selectParameter("temperature");
-                    dataSHT21Temp = SHT21.getRaw();
-                    SHT21.selectParameter("humidity");
-                    dataSHT21Humidity = SHT21.getRaw();
+                if (sensorSHT21 != null) {
+                    sensorSHT21.selectParameter("temperature");
+                    dataSHT21Temp = sensorSHT21.getRaw();
+                    sensorSHT21.selectParameter("humidity");
+                    dataSHT21Humidity = sensorSHT21.getRaw();
                 }
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
