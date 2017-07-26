@@ -405,14 +405,15 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 break;
 
             case 4:
+                editTextControlMain.setText("10");
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         try {
                             int data = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataDecrement = data - 1;
-                            if (dataDecrement < 0)
-                                dataDecrement = 0;
+                            if (dataDecrement < 10)
+                                dataDecrement = 10;
                             else if (dataDecrement > 5000)
                                 dataDecrement = 5000;
 
@@ -431,8 +432,8 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                         try {
                             int data1 = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataIncrement = data1 + 1;
-                            if (dataIncrement < 0)
-                                dataIncrement = 0;
+                            if (dataIncrement < 10)
+                                dataIncrement = 10;
                             else if (dataIncrement > 5000)
                                 dataIncrement = 5000;
                             seekBarControlMain.setProgress(dataIncrement);
@@ -448,11 +449,11 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
-                            Float value = Float.parseFloat(editTextControlMain.getText().toString());
-                            if (value < 0)
-                                value = 0f;
+                            int value = Integer.parseInt(editTextControlMain.getText().toString());
+                            if (value < 10)
+                                value = 10;
                             else if (value > 5000)
-                                value = 5000f;
+                                value = 5000;
                             editTextControlMain.setText(String.valueOf(value));
                             //seekBarControlMain.setProgress((int) ((value - 10) / 49.9));
 
@@ -470,8 +471,9 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        int frequency = (int) map(progress, 0, 5000, 10, 5000);
                         DecimalFormat df = new DecimalFormat("####");
-                        editTextControlMain.setText(df.format(progress));
+                        editTextControlMain.setText(df.format(frequency));
                     }
 
                     @Override
@@ -486,14 +488,15 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 });
                 break;
             case 5:
+                editTextControlMain.setText("10");
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         try {
                             int data = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataDecrement = data - 1;
-                            if (dataDecrement < 0)
-                                dataDecrement = 0;
+                            if (dataDecrement < 10)
+                                dataDecrement = 10;
                             else if (dataDecrement > 5000)
                                 dataDecrement = 5000;
                             seekBarControlMain.setProgress(dataDecrement);
@@ -511,8 +514,8 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                         try {
                             int data1 = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataIncrement = data1 + 1;
-                            if (dataIncrement < 0)
-                                dataIncrement = 0;
+                            if (dataIncrement < 10)
+                                dataIncrement = 10;
                             else if (dataIncrement > 5000)
                                 dataIncrement = 5000;
                             seekBarControlMain.setProgress(dataIncrement);
@@ -529,8 +532,8 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     public void onClick(View view) {
                         try {
                             int value = Integer.parseInt(editTextControlMain.getText().toString());
-                            if (value < 0)
-                                value = 0;
+                            if (value < 10)
+                                value = 10;
                             else if (value > 5000)
                                 value = 5000;
                             editTextControlMain.setText(String.valueOf(value));
@@ -550,8 +553,9 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        int frequency = (int) map(progress, 0, 5000, 10, 5000);
                         DecimalFormat df = new DecimalFormat("####");
-                        editTextControlMain.setText(df.format(progress));
+                        editTextControlMain.setText(df.format(frequency));
                     }
 
                     @Override
@@ -567,14 +571,15 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 break;
 
             case 6:
+                editTextControlMain.setText("10");
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         try {
                             int data = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataDecrement = data - 1;
-                            if (dataDecrement < 0)
-                                dataDecrement = 0;
+                            if (dataDecrement < 10)
+                                dataDecrement = 10;
                             else if (dataDecrement > 5000)
                                 dataDecrement = 5000;
                             seekBarControlMain.setProgress(dataDecrement);
@@ -592,8 +597,8 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                         try {
                             int data1 = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataIncrement = data1 + 1;
-                            if (dataIncrement < 0)
-                                dataIncrement = 0;
+                            if (dataIncrement < 10)
+                                dataIncrement = 10;
                             else if (dataIncrement > 5000)
                                 dataIncrement = 5000;
                             seekBarControlMain.setProgress(dataIncrement);
@@ -610,8 +615,8 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     public void onClick(View view) {
                         try {
                             int value = Integer.parseInt(editTextControlMain.getText().toString());
-                            if (value < 0)
-                                value = 0;
+                            if (value < 10)
+                                value = 10;
                             else if (value > 5000)
                                 value = 5000;
                             editTextControlMain.setText(String.valueOf(value));
@@ -631,8 +636,9 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        int frequency = (int) map(progress, 0, 5000, 10, 5000);
                         DecimalFormat df = new DecimalFormat("####");
-                        editTextControlMain.setText(df.format(progress));
+                        editTextControlMain.setText(df.format(frequency));
                     }
 
                     @Override
