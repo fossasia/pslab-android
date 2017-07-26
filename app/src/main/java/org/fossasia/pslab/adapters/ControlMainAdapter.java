@@ -416,7 +416,6 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             else if (dataDecrement > 5000)
                                 dataDecrement = 5000;
 
-                            //seekBarControlMain.setProgress((int) ((dataDecrement - 1) / 49.9));
                             seekBarControlMain.setProgress(dataDecrement);
                             DecimalFormat df = new DecimalFormat("####");
                             editTextControlMain.setText(df.format(dataDecrement));
