@@ -171,6 +171,9 @@
     <string name="angle">Angle</string>
     <string name="time">Time</string>
     <string name="s">(s)</string>
+    <string name="infinite_symbol">∞</string>
+    <string name="timegap">Timegap</string>
+    <string name="no_of_samples">No. of samples</string>
 
     <string-array name="tsl2561_gain_spinner">
         <item>No gain</item>
