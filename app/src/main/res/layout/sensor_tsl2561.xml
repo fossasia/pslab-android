@@ -45,7 +45,7 @@
                 android:padding="@dimen/title_padding"
                 android:text="@string/luminosity"
                 android:textColor="@color/white"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -67,7 +67,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/full_spectrum"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                     <TextView
@@ -76,7 +76,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/infrared"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                     <TextView
@@ -85,7 +85,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/visible"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -100,30 +100,33 @@
                         android:id="@+id/tv_sensor_tsl2561_full"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
+                        android:background="@drawable/tv_border"
                         android:gravity="center_vertical"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_sensor_tsl2561_infrared"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
+                        android:background="@drawable/tv_border"
                         android:gravity="center_vertical"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_sensor_tsl2561_visible"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
+                        android:background="@drawable/tv_border"
                         android:gravity="center_vertical"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -150,7 +153,7 @@
                 android:padding="@dimen/title_padding"
                 android:text="@string/plot"
                 android:textColor="@color/white"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -184,7 +187,7 @@
                 android:text="@string/configure"
                 android:textAlignment="textStart"
                 android:textColor="@color/white"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="@dimen/sensor_body_font"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -209,7 +212,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/set_gain"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                     <TextView
@@ -220,7 +223,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/set_timing"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -252,19 +255,19 @@
                             android:id="@+id/et_sensor_tsl2561_timing"
                             android:layout_width="100dp"
                             android:layout_height="40dp"
-                            android:textSize="@dimen/textsize_edittext"
-                            android:inputType="numberDecimal"
                             android:background="@drawable/tv_border"
-                            />
+                            android:inputType="numberDecimal"
+                            android:textSize="@dimen/sensor_body_font" />
 
                         <Button
                             android:layout_width="60dp"
                             android:layout_height="40dp"
+                            android:background="@color/colorPrimaryDark"
+                            android:gravity="center"
                             android:text="@string/set"
                             android:textAllCaps="true"
-                            android:textSize="14sp"
-                            android:gravity="center_horizontal"
-                            />
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>

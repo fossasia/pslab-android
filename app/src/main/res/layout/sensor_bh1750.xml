@@ -45,7 +45,7 @@
                 android:padding="@dimen/title_padding"
                 android:text="@string/raw_data"
                 android:textColor="@color/white"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -63,11 +63,11 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
+                        android:layout_height="90dp"
                         android:gravity="center_vertical"
                         android:text="@string/luminosity"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -82,11 +82,13 @@
                     <TextView
                         android:id="@+id/tv_sensor_bh1750_luminosity"
                         android:layout_width="80dp"
-                        android:layout_height="30dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/tv_border"
                         android:gravity="center_vertical"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -113,7 +115,7 @@
                 android:padding="@dimen/title_padding"
                 android:text="@string/plot"
                 android:textColor="@color/white"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -131,7 +133,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="150dp"
             android:layout_marginEnd="@dimen/card_margin"
             android:layout_marginLeft="@dimen/card_margin"
             android:layout_marginRight="@dimen/card_margin"
@@ -147,7 +149,7 @@
                 android:text="@string/configure"
                 android:textAlignment="textStart"
                 android:textColor="@color/white"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -162,7 +164,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -170,17 +172,16 @@
                         android:gravity="center_vertical"
                         android:text="@string/gain_range"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                     <Spinner
                         android:id="@+id/spinner_sensor_bh1750"
-                        android:layout_width="120dp"
+                        android:layout_width="150dp"
                         android:layout_height="30dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:entries="@array/bh1750_gain_spinner" />
-
 
                 </LinearLayout>
             </LinearLayout>

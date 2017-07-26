@@ -45,7 +45,7 @@
                 android:padding="@dimen/title_padding"
                 android:text="@string/raw_data"
                 android:textColor="@color/white"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -59,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -67,7 +68,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/object_temp"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                     <TextView
@@ -76,7 +77,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/ambient_temp"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -86,26 +87,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:layout_marginStart="30dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_sensor_mlx90614_object_temp"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
+                        android:background="@drawable/tv_border"
                         android:gravity="center_vertical"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_sensor_mlx90614_ambient_temp"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
+                        android:background="@drawable/tv_border"
                         android:gravity="center_vertical"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -133,7 +137,7 @@
                 android:padding="@dimen/title_padding"
                 android:text="@string/plot"
                 android:textColor="@color/white"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
 
             <LinearLayout
