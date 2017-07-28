@@ -25,8 +25,11 @@ import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.fossasia.pslab.others.MathUtils.map;
 
 /**
  * Created by viveksb007 on 20/7/17.
@@ -58,6 +61,7 @@ public class OhmsLawSetupExperiment extends Fragment {
         View view = inflater.inflate(R.layout.ohms_law_setup, container, false);
         outputChart = (LineChart) view.findViewById(R.id.ohm_chart);
         tvCurrentValue = (TextView) view.findViewById(R.id.tv_current_value);
+        tvCurrentValue.setText("0");
         tvVoltageValue = (TextView) view.findViewById(R.id.tv_voltage_value);
         seekBar = (SeekBar) view.findViewById(R.id.current_seekbar);
         Button btnReadVoltage = (Button) view.findViewById(R.id.btn_read_voltage);
@@ -67,7 +71,9 @@ public class OhmsLawSetupExperiment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                double value = map(progress, 0, 330, 0, 3.3);
+                DecimalFormat df = new DecimalFormat("0.0000");
+                tvCurrentValue.setText(df.format(value));
             }
 
             @Override
@@ -86,6 +92,8 @@ public class OhmsLawSetupExperiment extends Fragment {
             public void onClick(View v) {
                 selectedChannel = channelSelectSpinner.getSelectedItem().toString();
                 currentValue = Double.parseDouble(tvCurrentValue.getText().toString());
+                CalcDataPoint calcDataPoint = new CalcDataPoint();
+                calcDataPoint.execute();
             }
         });
         chartInit();
