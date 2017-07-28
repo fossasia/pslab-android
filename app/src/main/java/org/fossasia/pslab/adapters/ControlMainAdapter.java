@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.others.MathUtils;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.text.DecimalFormat;

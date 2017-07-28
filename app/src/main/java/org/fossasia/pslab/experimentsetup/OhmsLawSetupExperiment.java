@@ -20,7 +20,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Line;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ScienceLabCommon;
@@ -78,12 +77,12 @@ public class OhmsLawSetupExperiment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                //
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                //
             }
         });
 
@@ -138,6 +137,9 @@ public class OhmsLawSetupExperiment extends Fragment {
                     break;
                 case "CH3":
                     voltageValue = scienceLab.getVoltage("CH3", 5);
+                    break;
+                default:
+                    voltageValue = scienceLab.getVoltage("CH1", 5);
             }
             x.add((float) currentValue);
             y.add((float) voltageValue);
