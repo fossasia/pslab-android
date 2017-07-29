@@ -1,4 +1,4 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.sensorfragment;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -40,7 +40,7 @@ public class SensorFragmentHMC5883L extends Fragment {
     private TextView tvSensorHMC5883Lbx;
     private TextView tvSensorHMC5883Lby;
     private TextView tvSensorHMC5883Lbz;
-    private HMC5883L HMC5883L;
+    private HMC5883L sensorHMC5883L;
     private LineChart mChart;
     private long startTime;
     private int flag;
@@ -68,7 +68,7 @@ public class SensorFragmentHMC5883L extends Fragment {
         entriesby = new ArrayList<Entry>();
         entriesbz = new ArrayList<Entry>();
         try {
-            HMC5883L = new HMC5883L(i2c);
+            sensorHMC5883L = new HMC5883L(i2c);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -154,8 +154,8 @@ public class SensorFragmentHMC5883L extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (HMC5883L != null) {
-                    dataHMC5883L = HMC5883L.getRaw();
+                if (sensorHMC5883L != null) {
+                    dataHMC5883L = sensorHMC5883L.getRaw();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

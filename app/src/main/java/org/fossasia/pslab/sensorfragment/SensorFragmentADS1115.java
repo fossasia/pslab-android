@@ -1,4 +1,4 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.sensorfragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,7 +28,7 @@ public class SensorFragmentADS1115 extends Fragment {
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorADS1115;
 
-    private ADS1115 ADS1115;
+    private ADS1115 sensorADS1115;
 
     public static SensorFragmentADS1115 newInstance() {
         SensorFragmentADS1115 sensorFragmentADS1115 = new SensorFragmentADS1115();
@@ -41,7 +41,7 @@ public class SensorFragmentADS1115 extends Fragment {
         scienceLab = ScienceLabCommon.scienceLab;
         i2c = scienceLab.i2c;
         try {
-            ADS1115 = new ADS1115(i2c);
+            sensorADS1115 = new ADS1115(i2c);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -73,22 +73,21 @@ public class SensorFragmentADS1115 extends Fragment {
         Spinner spinnerSensorADS1115Channel = (Spinner) view.findViewById(R.id.spinner_sensor_ads1115_channel);
         Spinner spinnerSensorADS1115Rate = (Spinner) view.findViewById(R.id.spinner_sensor_ads1115_rate);
 
-        if (ADS1115 != null) {
-            ADS1115.setGain(spinnerSensorADS1115Gain.getSelectedItem().toString());
+        if (sensorADS1115 != null) {
+            sensorADS1115.setGain(spinnerSensorADS1115Gain.getSelectedItem().toString());
         }
 
-        if (ADS1115 != null) {
-            ADS1115.setChannel(spinnerSensorADS1115Channel.getSelectedItem().toString());
+        if (sensorADS1115 != null) {
+            sensorADS1115.setChannel(spinnerSensorADS1115Channel.getSelectedItem().toString());
         }
-        if (ADS1115 != null) {
-            ADS1115.setDataRate(Integer.parseInt(spinnerSensorADS1115Rate.getSelectedItem().toString()));
+        if (sensorADS1115 != null) {
+            sensorADS1115.setDataRate(Integer.parseInt(spinnerSensorADS1115Rate.getSelectedItem().toString()));
         }
 
         return view;
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        ADS1115 ADS1115 = new ADS1115(i2c);
         private int dataADS1115;
 
         private SensorDataFetch() throws IOException, InterruptedException {
@@ -97,8 +96,8 @@ public class SensorFragmentADS1115 extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (ADS1115 != null) {
-                    dataADS1115 = ADS1115.getRaw();
+                if (sensorADS1115 != null) {
+                    dataADS1115 = sensorADS1115.getRaw();
                 }
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();

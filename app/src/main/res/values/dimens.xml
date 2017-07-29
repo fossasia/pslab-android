@@ -34,4 +34,7 @@
     <dimen name="control_read_border_hdpi">5dp</dimen>
     <dimen name="control_read_height">60dp</dimen>
 
+    <dimen name="sensor_title_font">16sp</dimen>
+    <dimen name="sensor_body_font">14sp</dimen>
+
 </resources>

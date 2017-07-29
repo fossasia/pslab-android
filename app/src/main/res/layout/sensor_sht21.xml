@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/title_padding"
-                android:text="@string/bmp180"
+                android:text="@string/sht21"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
@@ -59,13 +59,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
-                        android:text="@string/temperature"
+                        android:text="@string/temp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
@@ -74,19 +75,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
-                        android:text="@string/altitude"
+                        android:text="@string/humidity"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/pressure"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/sensor_body_font"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -94,10 +87,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:layout_marginStart="30dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_sensor_bmp180_temp"
+                        android:id="@+id/tv_sensor_sht21_temp"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:background="@drawable/tv_border"
@@ -108,7 +102,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_sensor_bmp180_altitude"
+                        android:id="@+id/tv_sensor_sht21_humidity"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:background="@drawable/tv_border"
@@ -118,22 +112,12 @@
                         android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tv_sensor_bmp180_pressure"
-                        android:layout_width="80dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/tv_border"
-                        android:gravity="center_vertical"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/sensor_body_font"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="90dp"
-                    android:src="@drawable/bmp180" />
+                    android:src="@drawable/hmc5883l" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -162,7 +146,7 @@
                 android:layout_marginTop="40dp">
 
                 <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/chart_bmp180"
+                    android:id="@+id/chart_sht21"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#000" />

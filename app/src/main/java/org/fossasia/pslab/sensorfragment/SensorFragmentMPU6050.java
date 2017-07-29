@@ -1,4 +1,4 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.sensorfragment;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -45,7 +45,7 @@ public class SensorFragmentMPU6050 extends Fragment {
     private TextView tvSensorMPU6050gy;
     private TextView tvSensorMPU6050gz;
     private TextView tvSensorMPU6050temp;
-    private MPU6050 MPU6050;
+    private MPU6050 sensorMPU6050;
     private LineChart mChartAcceleration;
     private LineChart mChartGyroscope;
     private XAxis xAccelerometer;
@@ -75,7 +75,7 @@ public class SensorFragmentMPU6050 extends Fragment {
         scienceLab = ScienceLabCommon.scienceLab;
         i2c = scienceLab.i2c;
         try {
-            MPU6050 = new MPU6050(i2c);
+            sensorMPU6050 = new MPU6050(i2c);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -209,16 +209,16 @@ public class SensorFragmentMPU6050 extends Fragment {
         yGyroscope2.setDrawGridLines(false);
 
         try {
-            if (MPU6050 != null) {
-                MPU6050.setAccelRange(Integer.parseInt(spinnerSensorMPU60502.getSelectedItem().toString()));
+            if (sensorMPU6050 != null) {
+                sensorMPU6050.setAccelRange(Integer.parseInt(spinnerSensorMPU60502.getSelectedItem().toString()));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            if (MPU6050 != null) {
-                MPU6050.setGyroRange(Integer.parseInt(spinnerSensorMPU60501.getSelectedItem().toString()));
+            if (sensorMPU6050 != null) {
+                sensorMPU6050.setGyroRange(Integer.parseInt(spinnerSensorMPU60501.getSelectedItem().toString()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -235,7 +235,7 @@ public class SensorFragmentMPU6050 extends Fragment {
         protected Void doInBackground(Void... params) {
 
             try {
-                dataMPU6050 = MPU6050.getRaw();
+                dataMPU6050 = sensorMPU6050.getRaw();
             } catch (IOException e) {
                 e.printStackTrace();
             }

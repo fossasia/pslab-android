@@ -10,7 +10,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginEnd="@dimen/card_margin"
             android:layout_marginLeft="@dimen/card_margin"
             android:layout_marginRight="@dimen/card_margin"
@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/title_padding"
-                android:text="@string/ads1115"
+                android:text="@string/tsl2561"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
@@ -31,7 +31,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="180dp"
             android:layout_marginEnd="@dimen/card_margin"
             android:layout_marginLeft="@dimen/card_margin"
             android:layout_marginRight="@dimen/card_margin"
@@ -41,11 +41,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_gravity="start"
                 android:background="@color/colorPrimary"
                 android:padding="@dimen/title_padding"
-                android:text="@string/raw_data"
-                android:textAlignment="textStart"
+                android:text="@string/luminosity"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
@@ -53,39 +51,89 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
-                android:layout_marginStart="@dimen/card_margin"
                 android:layout_marginTop="60dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="90dp"
-                    android:layout_marginLeft="@dimen/card_margin"
-                    android:layout_marginStart="@dimen/card_margin"
-                    android:gravity="center_vertical"
-                    android:text="@string/data"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sensor_body_font"
-                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_sensor_ads1115"
-                    android:layout_width="120dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/tv_border"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sensor_body_font"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/full_spectrum"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sensor_body_font"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/infrared"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sensor_body_font"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/visible"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sensor_body_font"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_sensor_tsl2561_full"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/tv_border"
+                        android:gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sensor_body_font"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_sensor_tsl2561_infrared"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/tv_border"
+                        android:gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sensor_body_font"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_sensor_tsl2561_visible"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/tv_border"
+                        android:gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sensor_body_font"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="90dp"
-                    android:src="@drawable/ads1115" />
-
+                    android:src="@drawable/hmc5883l" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -101,11 +149,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_gravity="start"
                 android:background="@color/colorPrimary"
                 android:padding="@dimen/title_padding"
                 android:text="@string/plot"
-                android:textAlignment="textStart"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
@@ -116,7 +162,7 @@
                 android:layout_marginTop="40dp">
 
                 <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/chart_sensor_mpu6050"
+                    android:id="@+id/chart_tsl2561"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#000" />
@@ -141,7 +187,7 @@
                 android:text="@string/configure"
                 android:textAlignment="textStart"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sensor_title_font"
+                android:textSize="@dimen/sensor_body_font"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -153,14 +199,16 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
                         android:gravity="center_vertical"
                         android:text="@string/set_gain"
                         android:textColor="@color/black"
@@ -170,17 +218,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
                         android:gravity="center_vertical"
-                        android:text="@string/set_channel"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/sensor_body_font"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/set_rate"
+                        android:text="@string/set_timing"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sensor_body_font"
                         android:textStyle="bold" />
@@ -190,34 +231,44 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginStart="60dp"
                     android:layout_marginTop="20dp"
                     android:orientation="vertical">
 
                     <Spinner
-                        android:id="@+id/spinner_sensor_ads1115_gain"
-                        android:layout_width="200dp"
-                        android:layout_height="30dp"
+                        android:id="@+id/spinner_sensor_tsl2561_gain"
+                        android:layout_width="160dp"
+                        android:layout_height="40dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:entries="@array/ads1115_gain_spinner" />
+                        android:entries="@array/tsl2561_gain_spinner" />
 
-                    <Spinner
-                        android:id="@+id/spinner_sensor_ads1115_channel"
-                        android:layout_width="200dp"
-                        android:layout_height="30dp"
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="40dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:entries="@array/ads1115_channel_spinner" />
+                        android:orientation="horizontal">
 
-                    <Spinner
-                        android:id="@+id/spinner_sensor_ads1115_rate"
-                        android:layout_width="200dp"
-                        android:layout_height="30dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:entries="@array/ads1115_rate_spinner" />
+                        <EditText
+                            android:id="@+id/et_sensor_tsl2561_timing"
+                            android:layout_width="100dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/tv_border"
+                            android:inputType="numberDecimal"
+                            android:textSize="@dimen/sensor_body_font" />
+
+                        <Button
+                            android:layout_width="60dp"
+                            android:layout_height="40dp"
+                            android:background="@color/colorPrimaryDark"
+                            android:gravity="center"
+                            android:text="@string/set"
+                            android:textAllCaps="true"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
                 </LinearLayout>
             </LinearLayout>

@@ -1,4 +1,4 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.sensorfragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -121,8 +121,10 @@ public class SensorFragmentMain extends Fragment {
                         selectedFragment = SensorFragmentMPU6050.newInstance();
                         break;
                     case "SHT21":
+                        selectedFragment = SensorFragmentSHT21.newInstance();
                         break;
                     case "TSL2561":
+                        selectedFragment = SensorFragmentTSL2561.newInstance();
                         break;
                     default:
                         break;
