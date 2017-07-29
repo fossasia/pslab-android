@@ -48,6 +48,7 @@ public class OhmsLawSetupExperiment extends Fragment {
     private ArrayList<Float> x = new ArrayList<>();
     private ArrayList<Float> y = new ArrayList<>();
     private LineChart outputChart;
+    private DecimalFormat df = new DecimalFormat("0.0000");
 
     public static OhmsLawSetupExperiment newInstance() {
         OhmsLawSetupExperiment ohmsLawSetupExperiment = new OhmsLawSetupExperiment();
@@ -71,7 +72,6 @@ public class OhmsLawSetupExperiment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 double value = map(progress, 0, 330, 0, 3.3);
-                DecimalFormat df = new DecimalFormat("0.0000");
                 tvCurrentValue.setText(df.format(value));
             }
 
@@ -109,7 +109,7 @@ public class OhmsLawSetupExperiment extends Fragment {
     }
 
     private void updateGraph() {
-        tvVoltageValue.setText(String.valueOf(voltageValue));
+        tvVoltageValue.setText(df.format(voltageValue));
         List<ILineDataSet> dataSets = new ArrayList<>();
         List<Entry> temp = new ArrayList<>();
         for (int i = 0; i < x.size(); i++) {
