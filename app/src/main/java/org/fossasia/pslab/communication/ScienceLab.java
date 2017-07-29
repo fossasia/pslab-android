@@ -930,7 +930,7 @@ public class ScienceLab {
                 mPacketHandler.sendByte(mCommandsProto.ADC);
                 mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
                 mPacketHandler.sendByte(channelNumber - 1);
-                mPacketHandler.sendInt(samples * this.dataSplitting);
+                mPacketHandler.sendInt(samples % this.dataSplitting);
                 mPacketHandler.sendInt(samples - samples % this.dataSplitting);
                 byte[] data = new byte[2 * (samples % this.dataSplitting) + 1];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting) + 1);
