@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -96,6 +97,12 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listData);
                                         sensorList.setAdapter(adapter);
                                         container.addView(sensorList);
+                                        sensorList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                handleClick(view, position);
+                                            }
+                                        });
                                     }
                                 });
                             } catch (IOException e) {
@@ -122,6 +129,13 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
         sensorAddress.put(0x68, "MPU6050");
         sensorAddress.put(0x40, "SHT21");
         sensorAddress.put(0x39, "TSL2561");
+    }
+
+    private void handleClick(View view, int position) {
+        String itemText = ((TextView) view).getText().toString();
+        String sensor = itemText.substring(0, itemText.indexOf(" : "));
+        Toast.makeText(context, sensor, Toast.LENGTH_SHORT).show();
+        // todo : based on sensor name open sensor file and obtain raw data
     }
 
     @Override
