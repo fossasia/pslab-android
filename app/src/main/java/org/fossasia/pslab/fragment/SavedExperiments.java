@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +15,6 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.PerformExperimentActivity;
-import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
-import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
-import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
-import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
 import org.fossasia.pslab.items.ExperimentHeaderHolder;
 import org.fossasia.pslab.items.IndividualExperimentHolder;
 
@@ -110,14 +105,11 @@ public class SavedExperiments extends Fragment {
         TreeNode treeNFETOutput = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("N-FET Output Characteristics"))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
-            @Override
-            public void onClick(TreeNode node, Object value) {
-                Intent intent = new Intent(context, PerformExperimentActivity.class);
-                intent.putExtra("toolbar_title", ((IndividualExperimentHolder.IndividualExperiment) value).label);
-                intent.putExtra("experiment_title", ((IndividualExperimentHolder.IndividualExperiment) value).label);
-                startActivity(intent);
-            }
-        });
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
         TreeNode treeNFETTransfer = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("N-FET Transfer Characteristics"))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
@@ -131,7 +123,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        startExperiment(TransistorCBSetup.newInstance(), value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeBJTCEOutput = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("BJT Output Characteristics"))
@@ -139,7 +131,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        startExperiment(TransistorCEOutputSetup.newInstance(), value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeBJTCEInput = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("BJT Input Characteristics"))
@@ -184,7 +176,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        startExperiment(ZenerSetupFragment.newInstance(), value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeDiode = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("Diode IV Characteristics"))
@@ -376,12 +368,12 @@ public class SavedExperiments extends Fragment {
 
                     }
                 });
-        TreeNode treeOhm = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("Ohm's Law"))
+        TreeNode treeOhm = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("Ohms Law"))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        startExperiment(OhmsLawSetupExperiment.newInstance(), value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeRCPhase = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("RC Phase Shift"))
@@ -670,12 +662,12 @@ public class SavedExperiments extends Fragment {
 
                     }
                 });
-        TreeNode treeOhmsLaw = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("Ohm's Law"))
+        TreeNode treeOhmsLaw = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("Ohms Law"))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        startExperiment(OhmsLawSetupExperiment.newInstance(), value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeBodyResistance = new TreeNode(new IndividualExperimentHolder.IndividualExperiment("Human Body Resistance"))
@@ -772,12 +764,11 @@ public class SavedExperiments extends Fragment {
         return tree;
     }
 
-    private void startExperiment(Fragment fragment, Object value) {
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
-        fragmentTransaction.replace(viewGroup.getId(), fragment, "Experiments");
-        fragmentTransaction.commitNowAllowingStateLoss();
+    private void startExperiment(Object value) {
+        Intent intent = new Intent(context, PerformExperimentActivity.class);
+        intent.putExtra("toolbar_title", ((IndividualExperimentHolder.IndividualExperiment) value).label);
+        intent.putExtra("experiment_title", ((IndividualExperimentHolder.IndividualExperiment) value).label);
+        startActivity(intent);
     }
 
 }

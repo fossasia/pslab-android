@@ -105,11 +105,11 @@
     <string name="configure_experiment">Configure Experiment</string>
 
     <string name="diode_iv">Diode I-V</string>
-    <string name="zener_iv">Zener I-V</string>
+    <string name="zener_iv">Zener IV Characteristics</string>
     <string name="half_wave_rectifier">Half Wave Rectifier</string>
     <string name="full_wave_rectifier">Full Wave Rectifier</string>
-    <string name="transistor_cb">Transistor CB Characteristics</string>
-    <string name="transistor_ce">Transistor CE Characteristics</string>
+    <string name="transistor_cb">BJT CB Characteristics</string>
+    <string name="transistor_ce">BJT Output Characteristics</string>
     <string name="astable_multivibrator">Astable Multivibrator</string>
     <string name="transient_rlc">Transients RLC</string>
     <string name="bode_plots">Bode Plots</string>
