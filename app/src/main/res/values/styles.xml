@@ -17,4 +17,10 @@
     <style name="AppTheme.Bottomnavigationbar" parent="Theme.AppCompat.Light">
         <item name="colorControlHighlight">@color/black</item>
     </style>
+
+    <style name="TreeNodeStyleCustom">
+        <item name="android:paddingLeft">20dp</item>
+        <!--<item name="android:showDividers">middle</item>-->
+        <!--<item name="android:divider">@android:drawable/divider_horizontal_bright</item>-->
+    </style>
 </resources>

@@ -62,7 +62,7 @@ public class MainActivityTest {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_saved_experiments));
         Thread.sleep(1000);
         // checking Saved Experiment Fragment View
-        onView(withId(R.id.saved_experiments_elv)).check(matches(isDisplayed()));
+        //onView(withId(R.id.saved_experiments_elv)).check(matches(isDisplayed()));
 
 
         // Shifting to Design Experiments Fragment

@@ -244,4 +244,7 @@
         <item>1000mLx</item>
         <item>4000mLx</item>
     </string-array>
+
+    <string name="experiment_icon">Experiment Icon</string>
+    <string name="drop_down_arrow">Drop down arrow</string>
 </resources>

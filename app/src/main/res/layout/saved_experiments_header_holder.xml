@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="48dp">
+
+    <Space
+        android:id="@+id/experiment_holder_separator"
+        android:layout_width="10dp"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/experiment_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_arrow_drop_down_black_24dp"
+        android:contentDescription="@string/drop_down_arrow" />
+
+    <TextView
+        android:id="@+id/experiment_header_title"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+</LinearLayout>
