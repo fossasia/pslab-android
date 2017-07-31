@@ -143,8 +143,8 @@ public class LALogicLinesFragment extends Fragment {
         updateLogicLines();
         YAxis left = logicLinesChart.getAxisLeft();
         left.setValueFormatter(new ChannelAxisFormatter(channelNames));
+        left.setTextColor(Color.WHITE);
         left.setGranularity(1f);
-        left.setTextColor(Color.BLACK);
         left.setTextSize(12f);
         logicLinesChart.getAxisRight().setDrawLabels(false);
         logicLinesChart.getDescription().setEnabled(false);
