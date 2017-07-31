@@ -17,4 +17,5 @@
     <style name="AppTheme.Bottomnavigationbar" parent="Theme.AppCompat.Light">
         <item name="colorControlHighlight">@color/black</item>
     </style>
+
 </resources>
