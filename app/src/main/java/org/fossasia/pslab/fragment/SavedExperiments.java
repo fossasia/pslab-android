@@ -8,16 +8,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+
+import com.unnamed.b.atv.model.TreeNode;
+import com.unnamed.b.atv.view.AndroidTreeView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.PerformExperimentActivity;
-import org.fossasia.pslab.adapters.SavedExperimentAdapter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import org.fossasia.pslab.items.ExperimentHeaderHolder;
+import org.fossasia.pslab.items.IndividualExperimentHolder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +24,7 @@ import butterknife.Unbinder;
 
 /**
  * Created by viveksb007 on 15/3/17.
+ * Modified by Padmal on 30/7/17
  */
 
 public class SavedExperiments extends Fragment {
@@ -32,43 +32,39 @@ public class SavedExperiments extends Fragment {
     private Unbinder unbinder;
     private Context context;
 
-    @BindView(R.id.saved_experiments_elv)
-    ExpandableListView experimentExpandableList;
+    @BindView(R.id.saved_experiment_container)
+    LinearLayout experimentListContainer;
 
-    private SavedExperimentAdapter experimentAdapter;
-    private List<String> experimentGroupHeaders;
-    private HashMap<String, List<String>> experimentList;
-
-    public static SavedExperiments newInstance(Context context) {
-        SavedExperiments savedExperiments = new SavedExperiments();
-        savedExperiments.context = context;
-        return savedExperiments;
+    public static SavedExperiments newInstance() {
+        return new SavedExperiments();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prepareExperimentList();
+        context = getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.saved_experiments_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
-        experimentAdapter = new SavedExperimentAdapter(context, experimentGroupHeaders, experimentList);
-        experimentExpandableList.setAdapter(experimentAdapter);
-        experimentExpandableList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                // Open Fragment/Activity to perform corresponding experiment or to see experiment description like Help-Files
-                Intent intent = new Intent(context, PerformExperimentActivity.class);
-                intent.putExtra("toolbar_title", experimentGroupHeaders.get(groupPosition));
-                intent.putExtra("experiment_title", experimentList.get(experimentGroupHeaders.get(groupPosition)).get(childPosition));
-                startActivity(intent);
-                return true;
-            }
-        });
+        // Main Root
+        final TreeNode Root = TreeNode.root();
+        Root.addChildren(
+                loadElectronicExperiments(),
+                loadElectricalExperiments(),
+                loadPhysicsExperiments(),
+                loadAddOnModules(),
+                loadSchoolExperiments()
+        );
+        // Set up the tree view
+        AndroidTreeView experimentsListTree = new AndroidTreeView(getActivity(), Root);
+        experimentsListTree.setDefaultAnimation(true);
+        experimentListContainer.addView(experimentsListTree.getView());
+
         return view;
     }
 
@@ -78,69 +74,699 @@ public class SavedExperiments extends Fragment {
         unbinder.unbind();
     }
 
-    private void prepareExperimentList() {
-        experimentGroupHeaders = new ArrayList<>();
-        experimentList = new HashMap<>();
+    private TreeNode loadElectronicExperiments() {
+        // Electronic Tree Node
+        TreeNode treeElectronics = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.electronics_experiments), 0))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        // Sub nodes of electronics experiments
+        TreeNode treeBJT = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.bjts_and_fets), 1))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treeBJT = loadBJTTree(treeBJT);
+        TreeNode treeDiode = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.diode_circuits), 1))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treeDiode = loadDiodeTree(treeDiode);
+        TreeNode treeOpAmp = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.opamp_circuits), 1))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treeOpAmp = loadOpAmpTree(treeOpAmp);
+        TreeNode treeOsc = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.oscillators), 1))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treeOsc = loadOscTree(treeOsc);
+        TreeNode treeCom = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.communication), 1))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treeCom = loadComTree(treeCom);
+        treeElectronics.addChildren(treeBJT, treeDiode, treeOpAmp, treeOsc, treeCom);
+        // Return Electronics Experiments List
+        return treeElectronics;
+    }
 
-        experimentGroupHeaders.add("Electronics");
-        experimentGroupHeaders.add("Electrical");
-        experimentGroupHeaders.add("Physics");
-        experimentGroupHeaders.add("School Level");
-        experimentGroupHeaders.add("Miscellaneous");
-        experimentGroupHeaders.add("My Experiments");
+    private TreeNode loadBJTTree(TreeNode tree) {
+        TreeNode treeNFETOutput = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.nfet_output_characteristics)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
 
-        List<String> electronicsExperiments = new ArrayList<>();
-        electronicsExperiments.add(getResources().getString(R.string.diode_iv));
-        electronicsExperiments.add(getResources().getString(R.string.zener_iv));
-        electronicsExperiments.add("Diode Clamping");
-        electronicsExperiments.add(getResources().getString(R.string.half_wave_rectifier));
-        electronicsExperiments.add(getResources().getString(R.string.full_wave_rectifier));
-        electronicsExperiments.add(getResources().getString(R.string.transistor_cb));
-        electronicsExperiments.add(getResources().getString(R.string.transistor_ce));
-        electronicsExperiments.add("Inverting Op-Amp");
-        electronicsExperiments.add(getResources().getString(R.string.astable_multivibrator));
-        electronicsExperiments.add("Phase Shift Oscillator");
+                    }
+                });
+        TreeNode treeNFETTransfer = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.nfet_transfer_characteristics)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        // Open NFET Transfer Experiment
+                    }
+                });
+        TreeNode treeBJTCB = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.transistor_cb)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        startExperiment(value);
+                    }
+                });
+        TreeNode treeBJTCEOutput = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.transistor_ce)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        startExperiment(value);
+                    }
+                });
+        TreeNode treeBJTCEInput = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.bjt_input_characteristics)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        // Open BJT CE Input Experiment
+                    }
+                });
+        TreeNode treeBJTTransfer = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.bjt_transfer_characteristics)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        // Open BJT Transfer Experiment
+                    }
+                });
+        TreeNode treeBJTCEBackup = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.bjt_ce_backup)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        // Open BJT CE Backup experiment
+                    }
+                });
+        TreeNode treeBJTAmplifier = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.bjt_amplifer)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        // Open BJT Amplifier Experiment
+                    }
+                });
+        tree.addChildren(treeNFETOutput, treeNFETTransfer, treeBJTCB, treeBJTCEOutput, treeBJTCEInput, treeBJTTransfer, treeBJTCEBackup, treeBJTAmplifier);
+        return tree;
+    }
 
-        List<String> electricalExperiments = new ArrayList<>();
-        electricalExperiments.add(getResources().getString(R.string.transient_rlc));
-        electricalExperiments.add(getResources().getString(R.string.bode_plots));
-        electricalExperiments.add(getResources().getString(R.string.ohms_law));
-        electricalExperiments.add("Capacitive Phase Shift");
-        electricalExperiments.add("Inductive Phase Shift");
+    private TreeNode loadDiodeTree(TreeNode tree) {
+        TreeNode treeZener = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.zener_iv)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        startExperiment(value);
+                    }
+                });
+        TreeNode treeDiode = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.diode_iv)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
 
-        List<String> physicsExperiments = new ArrayList<>();
-        physicsExperiments.add("Speed of Sound");
-        physicsExperiments.add("Piezo Frequency Response");
-        physicsExperiments.add("Sensor Pendulum");
-        physicsExperiments.add(getResources().getString(R.string.m_random_sampling));
+                    }
+                });
+        TreeNode treeDiodeClamp = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.diode_clamping)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
 
-        List<String> miscellaneousExperiments = new ArrayList<>();
-        miscellaneousExperiments.add(getResources().getString(R.string.dust_sensor));
-        miscellaneousExperiments.add("Temperature Sensor");
-        miscellaneousExperiments.add("Servo Motor");
-        miscellaneousExperiments.add("Stepper Motor");
-        miscellaneousExperiments.add("RGB LEDs");
+                    }
+                });
+        TreeNode treeDiodeClip = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.diode_clipping)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
 
-        List<String> schoolExperiments = new ArrayList<>();
-        schoolExperiments.add(getResources().getString(R.string.ac_and_dc));
-        schoolExperiments.add(getResources().getString(R.string.ac_generator));
-        schoolExperiments.add(getResources().getString(R.string.resistance));
-        schoolExperiments.add(getResources().getString(R.string.em_induction));
-        schoolExperiments.add(getResources().getString(R.string.lemon_cell));
-        schoolExperiments.add(getResources().getString(R.string.sound_beats));
-        schoolExperiments.add(getResources().getString(R.string.capacitance));
-        schoolExperiments.add("Light Dependent Resistor");
+                    }
+                });
+        TreeNode treeHalfRectifier = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.half_wave_rectifier)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
 
-        List<String> myExperiments = new ArrayList<>();
-        myExperiments.add("Experiment 1");
-        myExperiments.add("Experiment 2");
+                    }
+                });
+        TreeNode treeFullWave = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.full_wave_rectifier)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
 
-        experimentList.put(experimentGroupHeaders.get(0), electronicsExperiments);
-        experimentList.put(experimentGroupHeaders.get(1), electricalExperiments);
-        experimentList.put(experimentGroupHeaders.get(2), physicsExperiments);
-        experimentList.put(experimentGroupHeaders.get(3), schoolExperiments);
-        experimentList.put(experimentGroupHeaders.get(4), miscellaneousExperiments);
-        experimentList.put(experimentGroupHeaders.get(5), myExperiments);
+                    }
+                });
+        tree.addChildren(treeZener, treeDiode, treeDiodeClamp, treeDiodeClip, treeHalfRectifier, treeFullWave);
+        return tree;
+    }
+
+    private TreeNode loadOpAmpTree(TreeNode tree) {
+        TreeNode treeInverting = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.inverting_opamp)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeRamp = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ramp_generator)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeNonInverting = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.non_inverting_opamp)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeSumming = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.summing_junction)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treePrecision = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.precision_rectifier)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        tree.addChildren(treeInverting, treeRamp, treeNonInverting, treeSumming, treePrecision);
+        return tree;
+    }
+
+    private TreeNode loadOscTree(TreeNode tree) {
+        TreeNode treeAsable = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.astable_multivibrator)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeColpitts = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.colpitts_oscillator)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treePhase = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.phase_shift_oscillator)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeWien = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.wien_bridge_oscillator)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeMono = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.monostable_multivibrator)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        tree.addChildren(treeAsable, treeColpitts, treePhase, treeWien, treeMono);
+        return tree;
+    }
+
+    private TreeNode loadComTree(TreeNode tree) {
+        TreeNode treeAM = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.amplitude_modulation)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        tree.addChild(treeAM);
+        return tree;
+    }
+
+    private TreeNode loadElectricalExperiments() {
+        // Electrical Tree Node
+        TreeNode treeElectrical = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.electrical_experiments), 0))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treeElectrical = loadElectricalTree(treeElectrical);
+        // Return Electrical Experiments List
+        return treeElectrical;
+    }
+
+    private TreeNode loadElectricalTree(TreeNode tree) {
+        TreeNode treeRLC = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.transient_rlc)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeFilter = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.filter_characteristics)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeCapReactance = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.capacitive_reactance)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeIndReactance = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.inductive_reactance)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeOhm = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ohms_law)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        startExperiment(value);
+                    }
+                });
+        TreeNode treeRCPhase = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.rc_phase_shift)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeLRPhase = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.lr_phase_shift)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeLRC = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.lcr_steady_state)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeRCIntegral = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.rc_integrals_derivatives)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeLPF = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.voltage_controlled_low_pass_filter)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        tree.addChildren(treeRLC, treeFilter, treeCapReactance, treeIndReactance, treeOhm, treeRCPhase, treeLRPhase, treeLRC, treeRCIntegral, treeLPF);
+        return tree;
+    }
+
+    private TreeNode loadPhysicsExperiments() {
+        // Physics Tree Node
+        TreeNode treePhysics = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.physics_experiments), 0))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treePhysics = loadPhysicsTree(treePhysics);
+        // Return Physics Experiments List
+        return treePhysics;
+    }
+
+    private TreeNode loadPhysicsTree(TreeNode tree) {
+        TreeNode treeSoundSpeed = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.speed_of_sound)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treePendulum = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.pendulum_time)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeRandomSample = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.random_sampling)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeSimplePendulum = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.simple_pendulum)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treePiezo = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.piezo_bandwidth_characteristics)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeMPU = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.mpu6050_imu_pendulum)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        tree.addChildren(treeSoundSpeed, treePendulum, treeRandomSample, treeSimplePendulum, treePiezo, treeMPU);
+        return tree;
+    }
+
+    private TreeNode loadAddOnModules() {
+        // Add Ons Tree Node
+        TreeNode treeAddOnModules = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.add_on_modules), 0))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        // Sub nodes of Add Ons experiments
+        TreeNode treeAddOns = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.add_on_modules), 1))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treeAddOns = loadAddOnsTree(treeAddOns);
+        TreeNode treeVaries = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.various_utilities), 1))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treeVaries = loadVariesTree(treeVaries);
+        treeAddOnModules.addChildren(treeAddOns, treeVaries);
+        // Return Add Ons Experiments List
+        return treeAddOnModules;
+    }
+
+    private TreeNode loadAddOnsTree(TreeNode tree) {
+        TreeNode treeDust = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.dust_sensor)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeOLED = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.oled_display)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeRGB = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.wireless_rgb_lights)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeTMP = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.sensor_tmp_logger)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeRFID = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.rfid_reader_mf522)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeWS2812B = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.rgb_led_ws2812b)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        tree.addChildren(treeDust, treeOLED, treeRGB, treeTMP, treeRFID, treeWS2812B);
+        return tree;
+    }
+
+    private TreeNode loadVariesTree(TreeNode tree) {
+        TreeNode treeADS1115 = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ads1115_based_calibrator)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeDeviceTest = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.device_testing)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeServo = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.servo_motors)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeStepper = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.stepper_motors)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeFlowChart = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.make_a_flow_chart)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeCalib = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.calibration_loader)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeDeviceCalib = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.device_calibrator)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeRemote = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.remote_access)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        tree.addChildren(treeADS1115, treeDeviceTest, treeServo, treeStepper, treeFlowChart, treeCalib, treeDeviceCalib, treeRemote);
+        return tree;
+    }
+
+    private TreeNode loadSchoolExperiments() {
+        // School Experiment Tree Node
+        TreeNode treeGettingStarted = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.school_level), 0))
+                .setViewHolder(new ExperimentHeaderHolder(context));
+        treeGettingStarted = loadSchoolTree(treeGettingStarted);
+        // Return School Experiments List
+        return treeGettingStarted;
+    }
+
+    private TreeNode loadSchoolTree(TreeNode tree) {
+        TreeNode treeMeasureVoltage = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.measure_voltages)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeLemonCell = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.lemon_cell)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeACGen = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ac_generator)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeResistance = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.resistance_measurement)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeOhmsLaw = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ohms_law)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+                        startExperiment(value);
+                    }
+                });
+        TreeNode treeBodyResistance = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.human_body_resistance)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeElectromagnetic = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.em_induction)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeResistanceWater = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.resistance_of_water)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeSound = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.frequency_of_sound)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treePiezo = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.piezo_buzzer)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeSoundB = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.sound_beats)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeCap = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.capacitance_measurement)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeSemiconductor = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.semiconductor_diode)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeLDR = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.light_dependent_resistor)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeCapDis = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.capacitor_discharge)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        TreeNode treeUltra = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ultrasonic_range_finder)))
+                .setViewHolder(new IndividualExperimentHolder(context))
+                .setClickListener(new TreeNode.TreeNodeClickListener() {
+                    @Override
+                    public void onClick(TreeNode node, Object value) {
+
+                    }
+                });
+        tree.addChildren(treeMeasureVoltage, treeLemonCell, treeACGen, treeResistance, treeOhmsLaw,
+                treeBodyResistance, treeElectromagnetic, treeResistanceWater, treeSound, treePiezo, treeSoundB,
+                treeCap, treeSemiconductor, treeLDR, treeCapDis, treeUltra);
+        return tree;
+    }
+
+    private void startExperiment(Object value) {
+        Intent intent = new Intent(context, PerformExperimentActivity.class);
+        intent.putExtra("toolbar_title", ((IndividualExperimentHolder.IndividualExperiment) value).label);
+        intent.putExtra("experiment_title", ((IndividualExperimentHolder.IndividualExperiment) value).label);
+        startActivity(intent);
     }
 
 }

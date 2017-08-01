@@ -44,9 +44,10 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.fossasia.pslab.others.MathUtils.map;
 
 /**
  * Created by viveksb007 on 10/5/17.
@@ -876,7 +877,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             // Update chart
             List<Entry> entries = new ArrayList<>();
             for (int i = 0; i < buffer.length; i++) {
-                entries.add(new Entry(i, (float) AudioJack.map(buffer[i], -32768, 32767, -3, 3)));
+                entries.add(new Entry(i, (float) map(buffer[i], -32768, 32767, -3, 3)));
             }
             LineDataSet lineDataSet = new LineDataSet(entries, "Audio Data");
             lineDataSet.setColor(Color.WHITE);

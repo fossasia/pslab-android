@@ -18,20 +18,34 @@ Please join us on the following channels:
 ## Roadmap
  - [x] First we need to get communication between Android App and PSLab working.
  - [ ] Implement Applications and expose PSLab Hardware functionality to user.
+ - [ ] Implement Functionality to Perform Experiment using PSLab Hardware Device. 
 
 ## Screenshots
 
   <table>
     <tr>
+     <td><img src="/docs/screenshots/screenshot_initialization.png"></td>
      <td><img src="/docs/screenshots/screenshot_1.png"></td>
      <td><img src="/docs/screenshots/screenshot_2.png"></td>
-     <td><img src="/docs/screenshots/screenshot_4.png"></td>
+     <td><img src="/docs/screenshots/screenshot_control_main.png"></td>
     </tr>
   </table>
   <table>
     <tr>
      <td><img src="/docs/screenshots/screenshot_3.png"></td>
-     <td><img src="/docs/screenshots/screenshot_5.png"></td>
+     <td><img src="/docs/screenshots/screenshot_logical_analyzer.png"></td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+     <td><img src="/docs/screenshots/screenshot_multilevel_experimentlist.png"></td>
+     <td><img src="/docs/screenshots/screenshot_experiment_doc.png"></td>
+     <td><img src="/docs/screenshots/screenshot_experiment_setup.png"></td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+     <td><img src="/docs/screenshots/screenshot_audio_jack.png"></td>
     </tr>
   </table>
 
@@ -43,11 +57,11 @@ Application|Exposes PSLab application like Oscilloscope,etc |Established
  |Oscilloscope |Shows variation of analog signals | Working
  |Control |Generate waveforms and PWM signals. Control voltage and current sources and read results from a variety of electric components | Working
  |Logical Analyzer |Captures and displays signals from digital system | Working
- |Data Sensor Logger |Captures and displays data from various sensors |
+ |Data Sensor Logger |Captures and displays data from various sensors | Working
  |Wireless Sensor |Scans, captures and displays data from various wireless sensors |
  |Sensor Quick View |Scans all the sensors connected to PSLab Device and provides interface to Log data| Working
  |Settings |Enable Auto-Start |
- |Saved Experiments |Access Pre-defined and Designed Experiments |
+ |Saved Experiments |Access Pre-defined and Designed Experiments | Working
  |Design Experiments |To Design our own experiments |
 
 ## How to set up the Android app in your development environment
@@ -81,8 +95,7 @@ You can't debug the usual way as PSLab device is connected to micro-USB port thr
 To debug over Wi-Fi : http://stackoverflow.com/questions/4893953/run-install-debug-android-applications-over-wi-fi
  
 Note : 
-1. Don't upgrade the gradle version, when Android Studio prompts to upgrade gradle version.
-2. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/org/fossasia/pslab/communication/CommunicationHandler.java) 
+1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/org/fossasia/pslab/communication/CommunicationHandler.java) 
  
 ## Setup to use PSLab with Android App
 To use PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ) and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.

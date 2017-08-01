@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -151,22 +153,360 @@
                 android:layout_height="40dp"
                 android:background="@color/colorPrimary"
                 android:padding="@dimen/title_padding"
-                android:text="@string/plot"
+                android:text="Plot - Temperature"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sensor_title_font"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginTop="40dp">
 
+                <RelativeLayout
+                    android:id="@+id/chart_xaxis_layout_temp_bmp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#000"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_graph_label_xaxis_temp_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_vertical|center_horizontal|center"
+                        android:foregroundGravity="center_vertical"
+                        android:gravity="center_vertical|center_horizontal|center"
+                        android:text="Time "
+                        android:textColor="#ffff"
+                        android:textSize="9sp"
+                        android:textStyle="normal|bold"
+                        tools:layout_editor_absoluteX="288dp"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                    <TextView
+                        android:id="@+id/tv_unit_xaxis_temp_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/tv_graph_label_xaxis_temp_bmp"
+                        android:layout_toRightOf="@+id/tv_graph_label_xaxis_temp_bmp"
+                        android:text="@string/s"
+                        android:textColor="#ffff"
+                        android:textSize="9sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_temp_bmp"
+                        tools:layout_editor_absoluteY="0dp" />
+                </RelativeLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/chart_yaxis_layout_temp_bmp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#000"
+                    android:foregroundGravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_label_left_yaxis_temp_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:foregroundGravity="center_horizontal"
+                        android:gravity="top|center_horizontal"
+                        android:includeFontPadding="false"
+                        android:rotation="-90"
+                        android:text="@string/temp2"
+                        android:textColor="#ffff"
+                        android:textSize="8sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_unit_left_yaxis_temp_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/tv_label_left_yaxis_temp_bmp"
+                        android:layout_marginBottom="12dp"
+                        android:rotation="-90"
+                        android:text="(C)"
+                        android:textColor="#fff"
+                        android:textSize="8sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_label_left_yaxis_temp_bmp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
                 <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/chart_bmp180"
+                    android:id="@+id/chart_temp_bmp180"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#000" />
-            </LinearLayout>
+                    android:background="#000"
+                    android:layout_below="@+id/chart_xaxis_layout_temp_bmp"
+                    android:layout_toEndOf="@+id/chart_yaxis_layout_temp_bmp"
+                    android:layout_toRightOf="@+id/chart_yaxis_layout_temp_bmp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/title_padding"
+                android:text="Plot - Altitude"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title_font_size"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="40dp">
+
+                <RelativeLayout
+                    android:id="@+id/chart_xaxis_layout_alt_bmp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#000"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_graph_label_xaxis_alt_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_vertical|center_horizontal|center"
+                        android:foregroundGravity="center_vertical"
+                        android:gravity="center_vertical|center_horizontal|center"
+                        android:text="@string/time"
+                        android:textColor="#ffff"
+                        android:textSize="9sp"
+                        android:textStyle="normal|bold"
+                        tools:layout_editor_absoluteX="288dp"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                    <TextView
+                        android:id="@+id/tv_unit_xaxis_alt_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/tv_graph_label_xaxis_alt_bmp"
+                        android:layout_toRightOf="@+id/tv_graph_label_xaxis_alt_bmp"
+                        android:text="@string/s"
+                        android:textColor="#ffff"
+                        android:textSize="9sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_alt_bmp"
+                        tools:layout_editor_absoluteY="0dp" />
+                </RelativeLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/chart_yaxis_layout_alt_bmp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#000"
+                    android:foregroundGravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_label_left_yaxis_alt_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:foregroundGravity="center_horizontal"
+                        android:gravity="top|center_horizontal"
+                        android:includeFontPadding="false"
+                        android:rotation="-90"
+                        android:text="@string/alt"
+                        android:textColor="#ffff"
+                        android:textSize="8sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_unit_left_yaxis_alt_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/tv_label_left_yaxis_alt_bmp"
+                        android:layout_marginBottom="8dp"
+                        android:rotation="-90"
+                        android:text="@string/meter"
+                        android:textColor="#fff"
+                        android:textSize="8sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_label_left_yaxis_alt_bmp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_alt_bmp180"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#000"
+                    android:layout_below="@+id/chart_xaxis_layout_alt_bmp"
+                    android:layout_toEndOf="@+id/chart_yaxis_layout_alt_bmp"
+                    android:layout_toRightOf="@+id/chart_yaxis_layout_alt_bmp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/title_padding"
+                android:text="Plot - Pressure"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title_font_size"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="40dp">
+
+
+                <RelativeLayout
+                    android:id="@+id/chart_xaxis_layout_pre_bmp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#000"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_graph_label_xaxis_pre_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_vertical|center_horizontal|center"
+                        android:foregroundGravity="center_vertical"
+                        android:gravity="center_vertical|center_horizontal|center"
+                        android:text="@string/time"
+                        android:textColor="#ffff"
+                        android:textSize="9sp"
+                        android:textStyle="normal|bold"
+                        tools:layout_editor_absoluteX="288dp"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                    <TextView
+                        android:id="@+id/tv_unit_xaxis_pre_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/tv_graph_label_xaxis_pre_bmp"
+                        android:layout_toRightOf="@+id/tv_graph_label_xaxis_pre_bmp"
+                        android:text="@string/s"
+                        android:textColor="#ffff"
+                        android:textSize="9sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_pre_bmp"
+                        tools:layout_editor_absoluteY="0dp" />
+                </RelativeLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/chart_yaxis_layout_pre_bmp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#000"
+                    android:foregroundGravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_label_left_yaxis_pre_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:foregroundGravity="center_horizontal"
+                        android:gravity="top|center_horizontal"
+                        android:includeFontPadding="false"
+                        android:rotation="-90"
+                        android:text="Press."
+                        android:textColor="#ffff"
+                        android:textSize="8sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_unit_left_yaxis_pre_bmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/tv_label_left_yaxis_pre_bmp"
+                        android:layout_marginBottom="12dp"
+                        android:rotation="-90"
+                        android:text="@string/pascal"
+                        android:textColor="#fff"
+                        android:textSize="8sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_label_left_yaxis_pre_bmp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_pre_bmp180"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#000"
+                    android:layout_below="@+id/chart_xaxis_layout_pre_bmp"
+                    android:layout_toEndOf="@+id/chart_yaxis_layout_pre_bmp"
+                    android:layout_toRightOf="@+id/chart_yaxis_layout_pre_bmp"/>
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>

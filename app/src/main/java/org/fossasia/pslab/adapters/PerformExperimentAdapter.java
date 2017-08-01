@@ -52,7 +52,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("K_bodePlots.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.ohms_law)))
                     return ExperimentDocFragment.newInstance("E_OhmsLaw.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.m_random_sampling)))
+                if (experimentTitle.equals(context.getResources().getString(R.string.random_sampling)))
                     return ExperimentDocFragment.newInstance("M_RANDOM_SAMPLING.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.ac_and_dc)))
                     return ExperimentDocFragment.newInstance("A_AC_AND_DC.html");
