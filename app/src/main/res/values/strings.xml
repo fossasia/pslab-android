@@ -104,23 +104,102 @@
 
     <string name="configure_experiment">Configure Experiment</string>
 
-    <string name="diode_iv">Diode I-V</string>
-    <string name="zener_iv">Zener IV Characteristics</string>
-    <string name="half_wave_rectifier">Half Wave Rectifier</string>
-    <string name="full_wave_rectifier">Full Wave Rectifier</string>
+    <!-- Experiment Headers -->
+    <string name="electronics_experiments">Electronics Experiments</string>
+    <string name="bjts_and_fets">BJTs and FETs</string>
+    <string name="diode_circuits">Diode Circuits</string>
+    <string name="opamp_circuits">OpAmp Circuits</string>
+    <string name="oscillators">Oscillators</string>
+    <string name="communication">Communication</string>
+    <!-- Experiments -->
+    <string name="nfet_output_characteristics">N-FET Output Characteristics</string>
+    <string name="nfet_transfer_characteristics">N-FET Transfer Characteristics</string>
     <string name="transistor_cb">BJT CB Characteristics</string>
     <string name="transistor_ce">BJT Output Characteristics</string>
+    <string name="bjt_input_characteristics">BJT Input Characteristics</string>
+    <string name="bjt_transfer_characteristics">BJT Transfer Characteristics</string>
+    <string name="bjt_ce_backup">BJT CE Backup</string>
+    <string name="bjt_amplifer">BJT Amplifier</string>
+
+    <string name="zener_iv">Zener IV Characteristics</string>
+    <string name="diode_iv">Diode IV Characteristics</string>
+    <string name="diode_clamping">Diode Clamping</string>
+    <string name="diode_clipping">Diode Clipping</string>
+    <string name="half_wave_rectifier">Half Wave Rectifier</string>
+    <string name="full_wave_rectifier">Full Wave Rectifier</string>
+
+    <string name="inverting_opamp">Inverting Op-Amp</string>
+    <string name="ramp_generator">Ramp Generator</string>
+    <string name="non_inverting_opamp">Non Inverting Op-Amp</string>
+    <string name="summing_junction">Summing Junction</string>
+    <string name="precision_rectifier">Precision Rectifier</string>
+
     <string name="astable_multivibrator">Astable Multivibrator</string>
-    <string name="transient_rlc">Transients RLC</string>
-    <string name="bode_plots">Bode Plots</string>
+    <string name="colpitts_oscillator">Colpitts Oscillator</string>
+    <string name="phase_shift_oscillator">Phase Shift Oscillator</string>
+    <string name="wien_bridge_oscillator">Wien Bridge Oscillator</string>
+    <string name="monostable_multivibrator">Monostable Multivibrator</string>
+
+    <string name="amplitude_modulation">Amplitude Modulation</string>
+
+    <string name="electrical_experiments">Electrical Experiments</string>
+    <string name="transient_rlc">Transients RLC Response</string>
+    <string name="filter_characteristics">Filter Characteristics</string>
+    <string name="capacitive_reactance">Capacitive Reactance</string>
+    <string name="inductive_reactance">Inductive Reactance</string>
     <string name="ohms_law">Ohms Law</string>
-    <string name="m_random_sampling">M Random Sampling</string>
-    <string name="ac_and_dc">AC and DC</string>
+    <string name="rc_phase_shift">RC Phase Shift</string>
+    <string name="lr_phase_shift">LR Phase Shift</string>
+    <string name="lcr_steady_state">LCR Steady State</string>
+    <string name="rc_integrals_derivatives">RC Integrals, Derivatives</string>
+    <string name="voltage_controlled_low_pass_filter">Voltage Controlled Low Pass Filter</string>
+
+    <string name="physics_experiments">Physics Experiments</string>
+    <string name="speed_of_sound">Speed of Sound</string>
+    <string name="pendulum_time">Pendulum Time Period</string>
+    <string name="random_sampling">Random Sampling</string>
+    <string name="simple_pendulum">Simple Pendulum</string>
+    <string name="piezo_bandwidth_characteristics">Piezo Bandwidth Characteristics</string>
+    <string name="mpu6050_imu_pendulum">MPU6050 IMU Pendulum</string>
+
+    <string name="add_on_modules">Add-On Modules</string>
+    <string name="various_utilities">Various Utilities</string>
+    <string name="dust_sensor">Dust Sensor DSM501</string>
+    <string name="oled_display">OLED Display</string>
+    <string name="wireless_rgb_lights">Wireless RGB Lights</string>
+    <string name="sensor_tmp_logger">Sensor TMP Logger</string>
+    <string name="rfid_reader_mf522">RFID Reader MF522</string>
+    <string name="rgb_led_ws2812b">RGB LED WS2812B</string>
+
+    <string name="ads1115_based_calibrator">ADS1115 Based Calibrator</string>
+    <string name="device_testing">Device Testing</string>
+    <string name="servo_motors">Servo Motors</string>
+    <string name="stepper_motors">Stepper Motors</string>
+    <string name="make_a_flow_chart">Make a Flow Chart</string>
+    <string name="calibration_loader">Calibration Loader</string>
+    <string name="device_calibrator">Device Calibrator</string>
+    <string name="remote_access">Remote Access</string>
+
+    <string name="school_level">School Level</string>
+    <string name="measure_voltages">Measure Voltages</string>
     <string name="lemon_cell">Lemon Cell</string>
     <string name="ac_generator">AC Generator</string>
-    <string name="em_induction">EM Induction</string>
-    <string name="sound_beats">Sound Beats</string>
-    <string name="dust_sensor">Dust Sensor</string>
+    <string name="resistance_measurement">Resistance Measurement</string>
+    <string name="human_body_resistance">Human Body Resistance</string>
+    <string name="em_induction">Electromagnetic Induction</string>
+    <string name="resistance_of_water">Resistance of Water</string>
+    <string name="frequency_of_sound">Frequency of Sound</string>
+    <string name="piezo_buzzer">Piezo Buzzer</string>
+    <string name="sound_beats">Sound Beats Phenomenon</string>
+    <string name="capacitance_measurement">Capacitance Measurement</string>
+    <string name="semiconductor_diode">Semiconductor Diode</string>
+    <string name="light_dependent_resistor">Light Dependent Resistor</string>
+    <string name="capacitor_discharge">Capacitor Discharge</string>
+    <string name="ultrasonic_range_finder">Ultrasonic Range Finder</string>
+
+
+    <string name="bode_plots">Bode Plots</string>
+    <string name="ac_and_dc">AC and DC</string>
 
     <string name="hmc5883l">hmc5883l</string>
     <string name="mpu6050">mpu6050</string>
