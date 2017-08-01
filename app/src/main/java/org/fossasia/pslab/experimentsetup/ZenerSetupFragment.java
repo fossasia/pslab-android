@@ -101,7 +101,10 @@ public class ZenerSetupFragment extends Fragment {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        startExperiment();
+                                        if (scienceLab.isConnected())
+                                            startExperiment();
+                                        else
+                                            Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
                                     }
                                 }, 100);
                                 dialog.dismiss();

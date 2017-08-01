@@ -253,6 +253,10 @@
     <string name="infinite_symbol">∞</string>
     <string name="timegap">Timegap</string>
     <string name="no_of_samples">No. of samples</string>
+    <string name="temp2">Temp.</string>
+    <string name="alt">Alt.</string>
+    <string name="meter">(m)</string>
+    <string name="pascal">(Pa)</string>
 
     <string-array name="tsl2561_gain_spinner">
         <item>No gain</item>
