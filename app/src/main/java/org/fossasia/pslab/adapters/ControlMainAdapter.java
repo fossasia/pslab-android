@@ -16,6 +16,8 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.text.DecimalFormat;
 
+import static org.fossasia.pslab.others.MathUtils.map;
+
 /**
  * Created by asitava on 6/6/17.
  */
@@ -653,7 +655,4 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
         return mDataset.length;
     }
 
-    private double map(int x, int in_min, int in_max, double out_min, double out_max) {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    }
 }
