@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -91,8 +92,12 @@ public class OhmsLawSetupExperiment extends Fragment {
             public void onClick(View v) {
                 selectedChannel = channelSelectSpinner.getSelectedItem().toString();
                 currentValue = Double.parseDouble(tvCurrentValue.getText().toString());
-                CalcDataPoint calcDataPoint = new CalcDataPoint();
-                calcDataPoint.execute();
+                if (scienceLab.isConnected()) {
+                    CalcDataPoint calcDataPoint = new CalcDataPoint();
+                    calcDataPoint.execute();
+                } else {
+                    Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         chartInit();

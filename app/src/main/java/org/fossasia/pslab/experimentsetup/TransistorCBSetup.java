@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -108,7 +109,10 @@ public class TransistorCBSetup extends Fragment {
                                 totalSteps = Integer.parseInt(etTotalSteps.getText().toString());
                                 emitterVoltage = Float.parseFloat(etEmitterVoltage.getText().toString());
                                 stepVoltage = (finalVoltage - initialVoltage) / totalSteps;
-                                startExperiment();
+                                if (scienceLab.isConnected())
+                                    startExperiment();
+                                else
+                                    Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .negativeText("Cancel")
