@@ -32,11 +32,13 @@ public class SensorFragmentMain extends Fragment {
     private I2C i2c;
     private ScienceLab scienceLab;
     private HashMap<Integer, String> sensorAddr = new HashMap<>();
-    private ArrayList<Integer> data = new ArrayList<Integer>();
-    private ArrayList<String> dataAddress = new ArrayList<String>();
-    private ArrayList<String> dataName = new ArrayList<String>();
+    private ArrayList<Integer> data = new ArrayList<>();
+    private ArrayList<String> dataAddress = new ArrayList<>();
+    private ArrayList<String> dataName = new ArrayList<>();
     private ArrayAdapter<String> adapter;
+    private String tvData = "";
     private ListView lvSensor;
+    private TextView tvSensorScan;
     private Fragment selectedFragment = null;
 
     public static SensorFragmentMain newInstance() {
@@ -49,11 +51,7 @@ public class SensorFragmentMain extends Fragment {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
         i2c = scienceLab.i2c;
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.sensor_main, container, false);
         sensorAddr.put(0x60, "MCP4728");
         sensorAddr.put(0x48, "ADS1115");
         sensorAddr.put(0x23, "BH1750");
@@ -64,34 +62,62 @@ public class SensorFragmentMain extends Fragment {
         sensorAddr.put(0x40, "SHT21");
         sensorAddr.put(0x39, "TSL2561");
 
+        try {
+            data = i2c.scan(null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (data != null) {
+            for (Integer myInt : data) {
+                if (sensorAddr.get(myInt) != null) {
+                    dataAddress.add(String.valueOf(myInt));
+                    dataName.add(sensorAddr.get(myInt));
+                }
+            }
+            for (String s : dataAddress) {
+                tvData += s + ":" + sensorAddr.get(Integer.parseInt(s)) + "\n";
+            }
+        }
+        String[] dataDisp = dataName.toArray(new String[dataName.size()]);
+        adapter = new ArrayAdapter<>(getContext(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataDisp);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.sensor_main, container, false);
+
         Button buttonSensorAutoscan = (Button) view.findViewById(R.id.button_sensor_autoscan);
-        final TextView tvSensorScan = (TextView) view.findViewById(R.id.tv_sensor_scan);
+        tvSensorScan = (TextView) view.findViewById(R.id.tv_sensor_scan);
+        tvSensorScan.setText(tvData);
         lvSensor = (ListView) view.findViewById(R.id.lv_sensor);
+        lvSensor.setAdapter(adapter);
 
         buttonSensorAutoscan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (scienceLab.isConnected()) {
-                    String tvData = "";
                     try {
                         data = i2c.scan(null);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
                     if (data != null) {
                         for (Integer myInt : data) {
-                            if (sensorAddr.get(myInt) != null) {
+                            if (myInt != null && sensorAddr.get(myInt) != null ) {
                                 dataAddress.add(String.valueOf(myInt));
                                 dataName.add(sensorAddr.get(myInt));
                             }
                         }
+                        tvData = "";
                         for (String s : dataAddress) {
-                            tvData += s + "\n";
+                            tvData += s + ":" + sensorAddr.get(Integer.parseInt(s)) + "\n";
                         }
-                        tvSensorScan.setText(tvData);
+
                     }
+                    tvSensorScan.setText(tvData);
                     String[] dataDisp = dataName.toArray(new String[dataName.size()]);
-                    adapter = new ArrayAdapter<String>(getContext(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataDisp);
+                    adapter = new ArrayAdapter<>(getContext(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataDisp);
                     lvSensor.setAdapter(adapter);
                 }
             }
@@ -138,8 +164,7 @@ public class SensorFragmentMain extends Fragment {
             }
 
         });
-
         return view;
-
     }
+
 }
