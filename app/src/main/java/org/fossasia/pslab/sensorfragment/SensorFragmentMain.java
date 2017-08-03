@@ -61,6 +61,7 @@ public class SensorFragmentMain extends Fragment {
         sensorAddr.put(0x68, "MPU6050");
         sensorAddr.put(0x40, "SHT21");
         sensorAddr.put(0x39, "TSL2561");
+        //sensorAddr.put(0x68, "MPU925X");
 
         try {
             data = i2c.scan(null);
@@ -152,6 +153,8 @@ public class SensorFragmentMain extends Fragment {
                     case "TSL2561":
                         selectedFragment = SensorFragmentTSL2561.newInstance();
                         break;
+                    case "MPU925x":
+                        selectedFragment = SensorFragmentMPU925X.newInstance();
                     default:
                         break;
                 }
