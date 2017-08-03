@@ -105,7 +105,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeNFETTransfer = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.nfet_transfer_characteristics)))
