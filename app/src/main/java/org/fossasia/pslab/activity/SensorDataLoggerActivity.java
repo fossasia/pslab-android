@@ -47,6 +47,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     private LinkedHashMap<Integer, String> sensorAddress = new LinkedHashMap<>();
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
     private I2C i2c = scienceLab.i2c;
+    private ArrayList<String> sensorList = new ArrayList<>();
     private Context context;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -87,6 +88,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                                     for (Integer temp : scanResult) {
                                         if (sensorAddress.get(temp) != null) {
                                             listData.add(sensorAddress.get(temp) + " : " + temp);
+                                            sensorList.add(sensorAddress.get(temp));
                                         }
                                     }
                                 }
@@ -132,8 +134,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     }
 
     private void handleClick(View view, int position) {
-        String itemText = ((TextView) view).getText().toString();
-        String sensor = itemText.substring(0, itemText.indexOf(" : "));
+        String sensor = sensorList.get(position);
         Toast.makeText(context, sensor, Toast.LENGTH_SHORT).show();
         // todo : based on sensor name open sensor file and obtain raw data
     }
