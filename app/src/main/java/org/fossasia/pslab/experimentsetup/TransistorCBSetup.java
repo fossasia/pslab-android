@@ -156,12 +156,6 @@ public class TransistorCBSetup extends Fragment {
                         }
                     }
                 }
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateChart();
-                    }
-                });
             }
         };
         new Thread(runnable).start();
@@ -204,6 +198,12 @@ public class TransistorCBSetup extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    updateChart();
+                }
+            });
             synchronized (lock) {
                 lock.notify();
             }
