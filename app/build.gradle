@@ -32,9 +32,9 @@ dependencies {
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile "com.android.support:preference-v14:$rootProject.supportLibraryVersion"
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
     compile "com.github.PhilJay:MPAndroidChart:$rootProject.mpAndroidChartVersion"
-    compile 'com.github.bmelnychuk:atv:1.2.+'
+    compile "com.github.bmelnychuk:atv:$rootProject.atvVersion"
     compile "de.hdodenhof:circleimageview:$rootProject.circleImageViewVersion"
     compile "org.apache.commons:commons-math3:$rootProject.commonMathVersion"
     compile "org.apache.commons:commons-lang3:$rootProject.commonLangVersion"

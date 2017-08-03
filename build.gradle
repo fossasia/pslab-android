@@ -43,6 +43,8 @@ ext{
     commonLangVersion = '3.5'
     materialDialogsVersion = '0.9.4.5'
     navTabStripVersion = '1.0.4'
+    constraintLayoutVersion = '1.0.2'
+    atvVersion = "1.2.+"
 
     //Test dependencies
     junitVersion = '4.12'
