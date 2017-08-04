@@ -13,7 +13,6 @@ import android.util.Log;
 
 public class AudioJack {
 
-    /* TODO : Add runtime permission for Recording Audio */
     /* TODO : Output value in buffer would be between -2^16 and 2^16, need to map it too or show its FFT  */
 
     private static final String TAG = "AudioJack";
@@ -89,6 +88,13 @@ public class AudioJack {
     public void write(short[] buffer) {
         /* write buffer to audioTrack */
         audioTrack.write(buffer, 0, buffer.length);
+    }
+
+    /*
+    * Would generate a buffer based on frequency value which would be played by AudioTrack to generate wave
+    * */
+    public void createBuffer(int frequency) {
+
     }
 
     public void release() {
