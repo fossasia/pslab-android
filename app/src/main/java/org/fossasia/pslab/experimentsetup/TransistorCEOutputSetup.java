@@ -61,7 +61,7 @@ public class TransistorCEOutputSetup extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // reusing the layout consisting Configure button and graph
         View view = inflater.inflate(R.layout.diode_setup, container, false);
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
