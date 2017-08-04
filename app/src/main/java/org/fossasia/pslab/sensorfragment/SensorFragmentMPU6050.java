@@ -258,10 +258,10 @@ public class SensorFragmentMPU6050 extends Fragment {
             tvSensorMPU6050ax.setText(String.valueOf(dataMPU6050.get(0)));
             tvSensorMPU6050ay.setText(String.valueOf(dataMPU6050.get(1)));
             tvSensorMPU6050az.setText(String.valueOf(dataMPU6050.get(2)));
-            tvSensorMPU6050gx.setText(String.valueOf(dataMPU6050.get(3)));
-            tvSensorMPU6050gy.setText(String.valueOf(dataMPU6050.get(4)));
-            tvSensorMPU6050gz.setText(String.valueOf(dataMPU6050.get(5)));
-            tvSensorMPU6050temp.setText(String.valueOf(dataMPU6050.get(6)));
+            tvSensorMPU6050gx.setText(String.valueOf(dataMPU6050.get(4)));
+            tvSensorMPU6050gy.setText(String.valueOf(dataMPU6050.get(5)));
+            tvSensorMPU6050gz.setText(String.valueOf(dataMPU6050.get(6)));
+            tvSensorMPU6050temp.setText(String.valueOf(dataMPU6050.get(3)));
 
             LineDataSet dataset1 = new LineDataSet(entriesax, "Ax");
             LineDataSet dataSet2 = new LineDataSet(entriesay, "Ay");

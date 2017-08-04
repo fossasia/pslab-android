@@ -84,10 +84,11 @@ public class MPU6050 {
         ArrayList<Character> vals = getVals(0x3B, 14);
         ArrayList<Double> raw = new ArrayList<>();
         if (vals.size() == 14) {
-            for (int a = 0; a < 3; a++)
+            int a;
+            for (a = 0; a < 3; a++)
                 raw.add(a, 1. * (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / ACCEL_SCALING[AR]);
-            raw.add(3, 1. * (vals.get(6) << 8 | vals.get(7)) / 340. + 36.53);
-            for (int a = 4; a < 7; a++)
+            raw.add(a, 1. * (vals.get(6) << 8 | vals.get(7)) / 340. + 36.53);
+            for (a = 4; a < 7; a++)
                 raw.add(a, (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / GYRO_SCALING[GR]);
             if (K.isEmpty())
                 return raw;
