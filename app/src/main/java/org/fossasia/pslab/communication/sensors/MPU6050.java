@@ -35,11 +35,11 @@ public class MPU6050 {
     public MPU6050(I2C i2c) throws IOException {
         this.i2c = i2c;
         setGyroRange(2000);
-        setAccelRange(16);
+        setAccelerationRange(16);
         powerUp();
     }
 
-    public void KalmanFilter(Double opt) throws IOException, NullPointerException {
+    public void kalmanFilter(Double opt) throws IOException, NullPointerException {
         ArrayList<double[]> noise = new ArrayList<>();
         double[] innerNoiseArray = new double[NUMPLOTS];
         ArrayList<Double> vals;
@@ -62,8 +62,8 @@ public class MPU6050 {
 
     }
 
-    public ArrayList<Character> getVals(int addr, int bytestoread) throws IOException {
-        return i2c.readBulk(ADDRESS, addr, bytestoread);
+    public ArrayList<Character> getVals(int addr, int bytesToRead) throws IOException {
+        return i2c.readBulk(ADDRESS, addr, bytesToRead);
     }
 
     public void powerUp() throws IOException {
@@ -75,7 +75,7 @@ public class MPU6050 {
         i2c.writeBulk(ADDRESS, new int[]{GYRO_CONFIG, GR << 3});
     }
 
-    public void setAccelRange(int rs) throws IOException {
+    public void setAccelerationRange(int rs) throws IOException {
         AR = setAccelRange.indexOf(rs);
         i2c.writeBulk(ADDRESS, new int[]{ACCEL_CONFIG, AR << 3});
     }
@@ -84,10 +84,11 @@ public class MPU6050 {
         ArrayList<Character> vals = getVals(0x3B, 14);
         ArrayList<Double> raw = new ArrayList<>();
         if (vals.size() == 14) {
-            for (int a = 0; a < 3; a++)
+            int a;
+            for (a = 0; a < 3; a++)
                 raw.add(a, 1. * (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / ACCEL_SCALING[AR]);
-            raw.add(3, 1. * (vals.get(6) << 8 | vals.get(7)) / 340. + 36.53);
-            for (int a = 4; a < 7; a++)
+            raw.add(a, 1. * (vals.get(6) << 8 | vals.get(7)) / 340. + 36.53);
+            for (a = 4; a < 7; a++)
                 raw.add(a, (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / GYRO_SCALING[GR]);
             if (K.isEmpty())
                 return raw;
