@@ -210,7 +210,7 @@ public class SensorFragmentMPU6050 extends Fragment {
 
         try {
             if (sensorMPU6050 != null) {
-                sensorMPU6050.setAccelRange(Integer.parseInt(spinnerSensorMPU60502.getSelectedItem().toString()));
+                sensorMPU6050.setAccelerationRange(Integer.parseInt(spinnerSensorMPU60502.getSelectedItem().toString()));
             }
         } catch (IOException e) {
             e.printStackTrace();
