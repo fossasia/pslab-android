@@ -44,6 +44,7 @@ public class NFETOutputCharacteristicsExperiment extends Fragment {
      ***********************************************************************************************/
 
     private static final String ERROR_MESSAGE = "Invalid Value";
+    private static final String INVALID_VALUE = "Voltage value too low";
     private LineChart outputChart;
     private float initialVoltage;
     private float finalVoltage;
@@ -64,7 +65,7 @@ public class NFETOutputCharacteristicsExperiment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.diode_setup, container, false);
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
@@ -97,8 +98,12 @@ public class NFETOutputCharacteristicsExperiment extends Fragment {
                                 } else {
                                     tilInitialVoltage.setError(null);
                                 }
+                                initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
                                 if (TextUtils.isEmpty(etFinalVoltage.getText().toString())) {
                                     tilFinalVoltage.setError(ERROR_MESSAGE);
+                                    return;
+                                } else if (initialVoltage >= Float.parseFloat(etFinalVoltage.getText().toString())) {
+                                    tilFinalVoltage.setError(INVALID_VALUE);
                                     return;
                                 } else {
                                     tilFinalVoltage.setError(null);
@@ -116,7 +121,6 @@ public class NFETOutputCharacteristicsExperiment extends Fragment {
                                     tilGateVoltage.setError(null);
                                 }
 
-                                initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
                                 finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
                                 totalSteps = Float.parseFloat(etStepSize.getText().toString());
                                 gateVoltage = Float.parseFloat(etGateVoltage.getText().toString());
