@@ -47,6 +47,7 @@ ext{
     atvVersion = "1.2.+"
 
     //Test dependencies
+    testRunnerRulesVersion = '0.5'
     junitVersion = '4.12'
     espressoVersion = '2.2.2'
     mockitoVersion = '2.7.1'

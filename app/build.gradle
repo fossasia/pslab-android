@@ -44,11 +44,11 @@ dependencies {
     compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test:runner:0.5') {
+    testCompile "junit:junit:$rootProject.junitVersion"
+    androidTestCompile("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile('com.android.support.test:rules:0.5') {
+    androidTestCompile("com.android.support.test:rules:$rootProject.testRunnerRulesVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion") {
