@@ -123,7 +123,6 @@ public class NFETOutputCharacteristicsExperiment extends Fragment {
                                 stepVoltage = (finalVoltage - initialVoltage) / totalSteps;
 
                                 if (scienceLab.isConnected()) {
-                                    scienceLab.setGain("CH1", 2, false);
                                     startExperiment();
                                 } else {
                                     Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
@@ -160,6 +159,7 @@ public class NFETOutputCharacteristicsExperiment extends Fragment {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                scienceLab.setGain("CH1", 2, false);
                 scienceLab.setPV2(gateVoltage);
                 for (float i = initialVoltage; i < finalVoltage; i += stepVoltage) {
                     new CalcDataPoint().execute(i);
@@ -198,9 +198,9 @@ public class NFETOutputCharacteristicsExperiment extends Fragment {
             float voltage = params[0];
             scienceLab.setPV1(voltage);
             float readVoltage = (float) scienceLab.getVoltage("CH1", 10);
-            voltageAxis.add(readVoltage);
-            float resistance = 560;
-            currentAxis.add((voltage - readVoltage) / resistance);
+            voltageAxis.add(Math.abs(readVoltage - 3));
+            float resistance = 56;
+            currentAxis.add((voltage - readVoltage + 8) / resistance);
             return null;
         }
 
