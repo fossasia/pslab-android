@@ -198,9 +198,9 @@ public class NFETOutputCharacteristicsExperiment extends Fragment {
             float voltage = params[0];
             scienceLab.setPV1(voltage);
             float readVoltage = (float) scienceLab.getVoltage("CH1", 10);
-            voltageAxis.add(Math.abs(readVoltage - 3));
-            float resistance = 56;
-            currentAxis.add((voltage - readVoltage + 8) / resistance);
+            voltageAxis.add(readVoltage);
+            float resistance = 560;
+            currentAxis.add((voltage - readVoltage) / resistance);
             return null;
         }
 
