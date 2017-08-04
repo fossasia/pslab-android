@@ -27,6 +27,7 @@ import android.widget.Toast;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
+import org.fossasia.pslab.communication.sensors.MPU6050;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
 
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST = 1;
     private static boolean hasPermission = false;
+    private static boolean isLogging = false;
     private LinkedHashMap<Integer, String> sensorAddress = new LinkedHashMap<>();
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
     private I2C i2c = scienceLab.i2c;
@@ -136,10 +138,9 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     private void handleClick(View view, int position) {
         String sensor = sensorList.get(position);
         Toast.makeText(context, sensor, Toast.LENGTH_SHORT).show();
-        // todo : based on sensor name open sensor file and obtain raw data
         switch (sensor) {
             case "MPU6050":
-                // open MPU6050 sensor communication file and getRaw values
+                // todo : open dialog and show raw values in real-time with option to start/stop logging
                 break;
         }
     }
