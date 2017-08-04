@@ -137,6 +137,11 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
         String sensor = sensorList.get(position);
         Toast.makeText(context, sensor, Toast.LENGTH_SHORT).show();
         // todo : based on sensor name open sensor file and obtain raw data
+        switch (sensor) {
+            case "MPU6050":
+                // open MPU6050 sensor communication file and getRaw values
+                break;
+        }
     }
 
     @Override
