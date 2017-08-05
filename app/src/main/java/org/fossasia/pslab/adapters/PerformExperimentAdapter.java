@@ -95,7 +95,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return NFETOutputCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_transfer_characteristics)))
                     return NFETTransferCharacteristicsExperiment.newInstance();
-                    return ExperimentSetupFragment.newInstance();
+                return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
         }
