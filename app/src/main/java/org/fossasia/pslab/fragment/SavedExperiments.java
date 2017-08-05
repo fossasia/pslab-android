@@ -113,7 +113,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        // Open NFET Transfer Experiment
+                        startExperiment(value);
                     }
                 });
         TreeNode treeBJTCB = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.transistor_cb)))
