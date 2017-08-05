@@ -52,8 +52,7 @@ public class OhmsLawSetupExperiment extends Fragment {
     private DecimalFormat df = new DecimalFormat("0.0000");
 
     public static OhmsLawSetupExperiment newInstance() {
-        OhmsLawSetupExperiment ohmsLawSetupExperiment = new OhmsLawSetupExperiment();
-        return ohmsLawSetupExperiment;
+        return new OhmsLawSetupExperiment();
     }
 
     @Nullable

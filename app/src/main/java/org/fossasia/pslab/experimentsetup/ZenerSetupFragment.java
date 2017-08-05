@@ -41,6 +41,8 @@ public class ZenerSetupFragment extends Fragment {
 
     private static final String ERROR_MESSAGE = "Invalid Value";
     private static final String INVALID_VALUE = "Voltage value too low";
+    private static final String MINIMUM_VALUE = "Voltage is beyond minimum of -5V";
+    private static final String MAXIMUM_VALUE = "Voltage is beyond maximum of 5V";
     private LineChart outputChart;
     private float initialVoltage = 0;
     private float finalVoltage = 0;
@@ -82,27 +84,44 @@ public class ZenerSetupFragment extends Fragment {
                                 tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_iv);
                                 tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_fv);
                                 tilStepSize = (TextInputLayout) customView.findViewById(R.id.text_input_layout_ss);
+                                // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
                                     tilInitialVoltage.setError(ERROR_MESSAGE);
                                     return;
-                                } else
+                                } else if (Float.parseFloat(etInitialVoltage.getText().toString()) < -5.0f) {
+                                    tilInitialVoltage.setError(MINIMUM_VALUE);
+                                    return;
+                                } else if (Float.parseFloat(etInitialVoltage.getText().toString()) > 5.0f) {
+                                    tilInitialVoltage.setError(MAXIMUM_VALUE);
+                                    return;
+                                } else {
                                     tilInitialVoltage.setError(null);
+                                }
                                 initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
+                                // Final Voltage
                                 if (TextUtils.isEmpty(etFinalVoltage.getText().toString())) {
                                     tilFinalVoltage.setError(ERROR_MESSAGE);
                                     return;
                                 } else if (initialVoltage >= Float.parseFloat(etFinalVoltage.getText().toString())) {
                                     tilFinalVoltage.setError(INVALID_VALUE);
                                     return;
-                                } else
+                                } else if (Float.parseFloat(etFinalVoltage.getText().toString()) < -5.0f) {
+                                    tilFinalVoltage.setError(MINIMUM_VALUE);
+                                    return;
+                                } else if (Float.parseFloat(etFinalVoltage.getText().toString()) > 5.0f) {
+                                    tilFinalVoltage.setError(MAXIMUM_VALUE);
+                                    return;
+                                } else {
                                     tilFinalVoltage.setError(null);
+                                }
+                                finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
+                                // Step Size
                                 if (TextUtils.isEmpty(etStepSize.getText().toString())) {
                                     tilStepSize.setError(ERROR_MESSAGE);
                                     return;
-                                } else
+                                } else {
                                     tilStepSize.setError(null);
-
-                                finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
+                                }
                                 stepVoltage = Float.parseFloat(etStepSize.getText().toString());
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
