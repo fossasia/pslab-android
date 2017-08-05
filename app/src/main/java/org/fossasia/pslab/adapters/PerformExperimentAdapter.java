@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
@@ -44,6 +45,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("D_transistorCB.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
                     return ExperimentDocFragment.newInstance("D_transistorCE.html");
+                if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
+                    return ExperimentDocFragment.newInstance("D_NFET.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.astable_multivibrator)))
                     return ExperimentDocFragment.newInstance("astable-multivibrator.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.transient_rlc)))
@@ -52,7 +55,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("K_bodePlots.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.ohms_law)))
                     return ExperimentDocFragment.newInstance("E_OhmsLaw.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.m_random_sampling)))
+                if (experimentTitle.equals(context.getResources().getString(R.string.random_sampling)))
                     return ExperimentDocFragment.newInstance("M_RANDOM_SAMPLING.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.ac_and_dc)))
                     return ExperimentDocFragment.newInstance("A_AC_AND_DC.html");
@@ -85,6 +88,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return TransistorCBSetup.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
                     return TransistorCEOutputSetup.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
+                    return NFETOutputCharacteristicsExperiment.newInstance();
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");

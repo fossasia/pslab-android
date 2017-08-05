@@ -11,7 +11,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,65 +33,77 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by viveksb007 on 15/7/17.
+ * Created by Padmal on 8/3/17.
  */
 
-public class ZenerSetupFragment extends Fragment {
+public class NFETOutputCharacteristicsExperiment extends Fragment {
+
+    /***********************************************************************************************
+     * Experiment is to provide voltages to Drain and Gate pins of FET and measure voltage difference
+     * between Drain and Source while Source is connected to ground
+     ***********************************************************************************************/
 
     private static final String ERROR_MESSAGE = "Invalid Value";
     private static final String INVALID_VALUE = "Voltage value too low";
-    private static final String MINIMUM_VALUE = "Voltage is beyond minimum of -5V";
-    private static final String MAXIMUM_VALUE = "Voltage is beyond maximum of 5V";
+    private static final String MINIMUM_VALUE_5V = "Voltage is beyond minimum of -5V";
+    private static final String MAXIMUM_VALUE_5V = "Voltage is beyond maximum of 5V";
+    private static final String MINIMUM_VALUE_3V = "Voltage is beyond minimum of -3.3V";
+    private static final String MAXIMUM_VALUE_3V = "Voltage is beyond maximum of 3.3V";
     private LineChart outputChart;
-    private float initialVoltage = 0;
-    private float finalVoltage = 0;
-    private float stepVoltage = 0;
-    private final Object lock = new Object();
+    private float initialVoltage;
+    private float finalVoltage;
+    private float gateVoltage;
+    private float stepVoltage;
+    private float totalSteps;
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
-    private ArrayList<Float> x1 = new ArrayList<>();
-    private ArrayList<Float> y1 = new ArrayList<>();
-    private TextInputEditText etInitialVoltage, etFinalVoltage, etStepSize;
-    private TextInputLayout tilInitialVoltage, tilFinalVoltage, tilStepSize;
+    private final Object lock = new Object();
+    private ArrayList<Float> voltageAxis = new ArrayList<>();
+    private ArrayList<Float> currentAxis = new ArrayList<>();
 
-    public static ZenerSetupFragment newInstance() {
-        return new ZenerSetupFragment();
+    private TextInputEditText etInitialVoltage, etFinalVoltage, etStepSize, etGateVoltage;
+    private TextInputLayout tilInitialVoltage, tilFinalVoltage, tilStepSize, tilGateVoltage;
+
+    public static NFETOutputCharacteristicsExperiment newInstance() {
+        return new NFETOutputCharacteristicsExperiment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.diode_setup, container, false);
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
-
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // open Material Dialog
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title("Configure Experiment")
-                        .customView(R.layout.diode_configure_dialog, true)
+                        .customView(R.layout.nfet_output_characteristic_dialog, true)
                         .positiveText("Start Experiment")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.et_initial_voltage);
-                                etFinalVoltage = (TextInputEditText) customView.findViewById(R.id.et_final_voltage);
-                                etStepSize = (TextInputEditText) customView.findViewById(R.id.et_step_size);
-                                tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_iv);
-                                tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_fv);
-                                tilStepSize = (TextInputLayout) customView.findViewById(R.id.text_input_layout_ss);
+                                etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.nfet_initial_voltage);
+                                etFinalVoltage = (TextInputEditText) customView.findViewById(R.id.nfet_final_voltage);
+                                etStepSize = (TextInputEditText) customView.findViewById(R.id.nfet_step_size);
+                                etGateVoltage = (TextInputEditText) customView.findViewById(R.id.nfet_gate_voltage);
+                                tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_initial_voltage_layout);
+                                tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_final_voltage_layout);
+                                tilStepSize = (TextInputLayout) customView.findViewById(R.id.nfet_step_size_layout);
+                                tilGateVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_gate_voltage_layout);
                                 // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
                                     tilInitialVoltage.setError(ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) < -5.0f) {
-                                    tilInitialVoltage.setError(MINIMUM_VALUE);
+                                    tilInitialVoltage.setError(MINIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) > 5.0f) {
-                                    tilInitialVoltage.setError(MAXIMUM_VALUE);
+                                    tilInitialVoltage.setError(MAXIMUM_VALUE_5V);
                                     return;
                                 } else {
                                     tilInitialVoltage.setError(null);
@@ -106,10 +117,10 @@ public class ZenerSetupFragment extends Fragment {
                                     tilFinalVoltage.setError(INVALID_VALUE);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) < -5.0f) {
-                                    tilFinalVoltage.setError(MINIMUM_VALUE);
+                                    tilFinalVoltage.setError(MINIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) > 5.0f) {
-                                    tilFinalVoltage.setError(MAXIMUM_VALUE);
+                                    tilFinalVoltage.setError(MAXIMUM_VALUE_5V);
                                     return;
                                 } else {
                                     tilFinalVoltage.setError(null);
@@ -122,16 +133,28 @@ public class ZenerSetupFragment extends Fragment {
                                 } else {
                                     tilStepSize.setError(null);
                                 }
-                                stepVoltage = Float.parseFloat(etStepSize.getText().toString());
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (scienceLab.isConnected())
-                                            startExperiment();
-                                        else
-                                            Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
-                                    }
-                                }, 100);
+                                totalSteps = Float.parseFloat(etStepSize.getText().toString());
+                                // Gate Voltage
+                                if (TextUtils.isEmpty(etGateVoltage.getText().toString())) {
+                                    tilGateVoltage.setError(ERROR_MESSAGE);
+                                    return;
+                                } else if (Float.parseFloat(etGateVoltage.getText().toString()) < -3.3f) {
+                                    tilGateVoltage.setError(MINIMUM_VALUE_3V);
+                                    return;
+                                } else if (Float.parseFloat(etGateVoltage.getText().toString()) > 3.3f) {
+                                    tilGateVoltage.setError(MAXIMUM_VALUE_3V);
+                                    return;
+                                } else {
+                                    tilGateVoltage.setError(null);
+                                }
+                                gateVoltage = Float.parseFloat(etGateVoltage.getText().toString());
+                                stepVoltage = (finalVoltage - initialVoltage) / totalSteps;
+
+                                if (scienceLab.isConnected()) {
+                                    startExperiment();
+                                } else {
+                                    Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
+                                }
                                 dialog.dismiss();
                             }
                         })
@@ -151,14 +174,23 @@ public class ZenerSetupFragment extends Fragment {
         return view;
     }
 
+    private void chartInit() {
+        outputChart.setTouchEnabled(true);
+        outputChart.setDragEnabled(true);
+        outputChart.setScaleEnabled(true);
+        outputChart.setPinchZoom(true);
+        LineData data = new LineData();
+        outputChart.setData(data);
+    }
+
     private void startExperiment() {
-        // code for changing voltage from IV to FV and read current value for each sample
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                scienceLab.setGain("CH1", 2, false);
+                scienceLab.setPV2(gateVoltage);
                 for (float i = initialVoltage; i < finalVoltage; i += stepVoltage) {
-                    CalcDataPoint dataPoint = new CalcDataPoint(outputChart, i);
-                    dataPoint.execute();
+                    new CalcDataPoint().execute(i);
                     synchronized (lock) {
                         try {
                             lock.wait();
@@ -167,34 +199,18 @@ public class ZenerSetupFragment extends Fragment {
                         }
                     }
                 }
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateChart();
-                    }
-                });
             }
         };
         new Thread(runnable).start();
     }
 
-    private void chartInit() {
-        outputChart.setTouchEnabled(true);
-        outputChart.setDragEnabled(true);
-        outputChart.setScaleEnabled(true);
-        //outputChart.setDrawGridBackground(false);
-        outputChart.setPinchZoom(true);
-        LineData data = new LineData();
-        outputChart.setData(data);
-    }
-
     private void updateChart() {
         List<ILineDataSet> dataSets = new ArrayList<>();
         List<Entry> temp = new ArrayList<>();
-        for (int i = 0; i < x1.size(); i++) {
-            temp.add(new Entry(x1.get(i), y1.get(i)));
+        for (int i = 0; i < voltageAxis.size(); i++) {
+            temp.add(new Entry(voltageAxis.get(i), currentAxis.get(i)));
         }
-        LineDataSet dataSet = new LineDataSet(temp, "I-V Characteristic");
+        LineDataSet dataSet = new LineDataSet(temp, "NFET Output Characteristics");
         dataSet.setColor(Color.RED);
         dataSet.setDrawValues(false);
         dataSet.setDrawCircles(false);
@@ -203,52 +219,31 @@ public class ZenerSetupFragment extends Fragment {
         outputChart.invalidate();
     }
 
-
-    private class CalcDataPoint extends AsyncTask<Void, Void, Void> {
-
-        private LineChart chart;
-        private float volti, voltf, x, y;
-
-        CalcDataPoint(LineChart chart, float volti) {
-            this.chart = chart;
-            this.volti = volti;
-        }
+    private class CalcDataPoint extends AsyncTask<Float, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... params) {
-            scienceLab.setPV1(volti);
-            voltf = (float) scienceLab.getVoltage("CH1", 10);
-            x = voltf;
-            y = (float) ((volti - voltf) / 1.e3);
-            x1.add(x);
-            y1.add(y);
-            Log.v("XY", "" + x + " , " + y);
+        protected Void doInBackground(Float... params) {
+            float voltage = params[0];
+            scienceLab.setPV1(voltage);
+            float readVoltage = (float) scienceLab.getVoltage("CH1", 10);
+            voltageAxis.add(readVoltage);
+            float resistance = 560;
+            currentAxis.add((voltage - readVoltage) / resistance);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            /*
-            LineData data = chart.getData();
-            if (data != null) {
-                ILineDataSet set = data.getDataSetByIndex(0);
-                if (set == null) {
-                    LineDataSet lSet = new LineDataSet(null, "DD");
-                    lSet.setCircleColor(Color.WHITE);
-                    set = lSet;
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    updateChart();
                 }
-                set.addEntry(new Entry(x, y));
-                data.notifyDataChanged();
-                chart.notifyDataSetChanged();
-                chart.invalidate();
-            }
-            */
+            });
             synchronized (lock) {
                 lock.notify();
             }
         }
     }
-
 }
-

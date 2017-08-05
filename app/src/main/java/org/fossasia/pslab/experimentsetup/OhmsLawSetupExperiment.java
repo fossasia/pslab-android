@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -40,7 +41,7 @@ public class OhmsLawSetupExperiment extends Fragment {
     private TextView tvVoltageValue;
     private Spinner channelSelectSpinner;
     private SeekBar seekBar;
-    private String[] channels = {"CH1", "CH2", "CH3", "CH4"};
+    private String[] channels = {"CH1", "CH2", "CH3"};
     private double currentValue = 0;
     private double voltageValue = 0;
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
@@ -51,8 +52,7 @@ public class OhmsLawSetupExperiment extends Fragment {
     private DecimalFormat df = new DecimalFormat("0.0000");
 
     public static OhmsLawSetupExperiment newInstance() {
-        OhmsLawSetupExperiment ohmsLawSetupExperiment = new OhmsLawSetupExperiment();
-        return ohmsLawSetupExperiment;
+        return new OhmsLawSetupExperiment();
     }
 
     @Nullable
@@ -91,8 +91,12 @@ public class OhmsLawSetupExperiment extends Fragment {
             public void onClick(View v) {
                 selectedChannel = channelSelectSpinner.getSelectedItem().toString();
                 currentValue = Double.parseDouble(tvCurrentValue.getText().toString());
-                CalcDataPoint calcDataPoint = new CalcDataPoint();
-                calcDataPoint.execute();
+                if (scienceLab.isConnected()) {
+                    CalcDataPoint calcDataPoint = new CalcDataPoint();
+                    calcDataPoint.execute();
+                } else {
+                    Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         chartInit();
@@ -128,6 +132,7 @@ public class OhmsLawSetupExperiment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
+            scienceLab.setPCS((float) currentValue);
             switch (selectedChannel) {
                 case "CH1":
                     voltageValue = scienceLab.getVoltage("CH1", 5);
