@@ -257,6 +257,9 @@
     <string name="meter">(m)</string>
     <string name="pascal">(Pa)</string>
 
+    <string name="voltage_label">Voltage (V)</string>
+    <string name="current_label">Current (mA)</string>
+
     <string-array name="tsl2561_gain_spinner">
         <item>No gain</item>
         <item>1x</item>
