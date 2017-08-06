@@ -108,6 +108,7 @@ public class OhmsLawSetupExperiment extends Fragment {
         outputChart.setDragEnabled(true);
         outputChart.setScaleEnabled(true);
         outputChart.setPinchZoom(true);
+        outputChart.getDescription().setEnabled(false);
         LineData data = new LineData();
         outputChart.setData(data);
     }
