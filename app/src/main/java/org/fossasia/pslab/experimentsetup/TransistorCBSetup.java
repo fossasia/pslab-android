@@ -41,6 +41,10 @@ public class TransistorCBSetup extends Fragment {
 
     private static final String ERROR_MESSAGE = "Invalid Value";
     private static final String INVALID_VALUE = "Voltage value too low";
+    private static final String MINIMUM_VALUE_5V = "Voltage is beyond minimum of -5V";
+    private static final String MAXIMUM_VALUE_5V = "Voltage is beyond maximum of 5V";
+    private static final String MINIMUM_VALUE_3V = "Voltage is beyond minimum of -3.3V";
+    private static final String MAXIMUM_VALUE_3V = "Voltage is beyond maximum of 3.3V";
     private LineChart outputChart;
     private float initialVoltage = 0;
     private float finalVoltage = 0;
@@ -86,32 +90,57 @@ public class TransistorCBSetup extends Fragment {
                                 tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_fv);
                                 tilTotalSteps = (TextInputLayout) customView.findViewById(R.id.text_input_layout_total_steps);
                                 tilEmitterVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_voltage);
+                                // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
                                     tilInitialVoltage.setError(ERROR_MESSAGE);
                                     return;
-                                } else
+                                } else if (Float.parseFloat(etInitialVoltage.getText().toString()) < -5.0f) {
+                                    tilInitialVoltage.setError(MINIMUM_VALUE_5V);
+                                    return;
+                                } else if (Float.parseFloat(etInitialVoltage.getText().toString()) > 5.0f) {
+                                    tilInitialVoltage.setError(MAXIMUM_VALUE_5V);
+                                    return;
+                                } else {
                                     tilInitialVoltage.setError(null);
+                                }
                                 initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
+                                // Final Voltage
                                 if (TextUtils.isEmpty(etFinalVoltage.getText().toString())) {
                                     tilFinalVoltage.setError(ERROR_MESSAGE);
                                     return;
                                 } else if (initialVoltage >= Float.parseFloat(etFinalVoltage.getText().toString())) {
                                     tilFinalVoltage.setError(INVALID_VALUE);
                                     return;
-                                } else
+                                } else if (Float.parseFloat(etFinalVoltage.getText().toString()) < -5.0f) {
+                                    tilFinalVoltage.setError(MINIMUM_VALUE_5V);
+                                    return;
+                                } else if (Float.parseFloat(etFinalVoltage.getText().toString()) > 5.0f) {
+                                    tilFinalVoltage.setError(MAXIMUM_VALUE_5V);
+                                    return;
+                                } else {
                                     tilFinalVoltage.setError(null);
+                                }
+                                finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
+                                // Step Size
                                 if (TextUtils.isEmpty(etTotalSteps.getText().toString())) {
                                     tilTotalSteps.setError(ERROR_MESSAGE);
                                     return;
                                 } else
                                     tilTotalSteps.setError(null);
+                                totalSteps = Integer.parseInt(etTotalSteps.getText().toString());
+                                // Emitter Voltage
                                 if (TextUtils.isEmpty(etEmitterVoltage.getText().toString())) {
                                     tilEmitterVoltage.setError(ERROR_MESSAGE);
                                     return;
-                                } else
+                                } else if (Float.parseFloat(etEmitterVoltage.getText().toString()) < -3.3f) {
+                                    tilEmitterVoltage.setError(MINIMUM_VALUE_3V);
+                                    return;
+                                } else if (Float.parseFloat(etEmitterVoltage.getText().toString()) > 3.3f) {
+                                    tilEmitterVoltage.setError(MAXIMUM_VALUE_3V);
+                                    return;
+                                } else {
                                     tilEmitterVoltage.setError(null);
-                                finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
-                                totalSteps = Integer.parseInt(etTotalSteps.getText().toString());
+                                }
                                 emitterVoltage = Float.parseFloat(etEmitterVoltage.getText().toString());
                                 stepVoltage = (finalVoltage - initialVoltage) / totalSteps;
                                 if (scienceLab.isConnected())

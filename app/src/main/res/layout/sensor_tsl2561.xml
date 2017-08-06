@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -151,22 +153,115 @@
                 android:layout_height="40dp"
                 android:background="@color/colorPrimary"
                 android:padding="@dimen/title_padding"
-                android:text="@string/plot"
+                android:text="Plot"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sensor_title_font"
+                android:textSize="@dimen/title_font_size"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginTop="40dp">
+
+                <RelativeLayout
+                    android:id="@+id/chart_xaxis_layout_tsl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#000"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_graph_label_xaxis_tsl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_vertical|center_horizontal|center"
+                        android:foregroundGravity="center_vertical"
+                        android:gravity="center_vertical|center_horizontal|center"
+                        android:text="@string/time"
+                        android:textColor="#ffff"
+                        android:textSize="9sp"
+                        android:textStyle="normal|bold"
+                        tools:layout_editor_absoluteX="288dp"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                    <TextView
+                        android:id="@+id/tv_unit_xaxis_tsl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/tv_graph_label_xaxis_tsl"
+                        android:layout_toRightOf="@+id/tv_graph_label_xaxis_tsl"
+                        android:text="@string/s"
+                        android:textColor="#ffff"
+                        android:textSize="9sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_tsl"
+                        tools:layout_editor_absoluteY="0dp" />
+                </RelativeLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/chart_yaxis_layout_tsl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#000"
+                    android:foregroundGravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_label_left_yaxis_tsl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:foregroundGravity="center_horizontal"
+                        android:gravity="top|center_horizontal"
+                        android:includeFontPadding="false"
+                        android:rotation="-90"
+                        android:text="Illum."
+                        android:textColor="#ffff"
+                        android:textSize="8sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_unit_left_yaxis_tsl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/tv_label_left_yaxis_tsl"
+                        android:layout_marginBottom="14dp"
+                        android:rotation="-90"
+                        android:text="(Lux)"
+                        android:textColor="#fff"
+                        android:textSize="8sp"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_label_left_yaxis_tsl"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart_tsl2561"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_below="@+id/chart_xaxis_layout_tsl"
+                    android:layout_toEndOf="@+id/chart_yaxis_layout_tsl"
+                    android:layout_toRightOf="@+id/chart_yaxis_layout_tsl"
                     android:background="#000" />
-            </LinearLayout>
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
