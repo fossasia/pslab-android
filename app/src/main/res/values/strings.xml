@@ -249,7 +249,6 @@
     <string name="rad">(rad)</string>
     <string name="angle">Angle</string>
     <string name="time">Time</string>
-    <string name="s">(s)</string>
     <string name="infinite_symbol">∞</string>
     <string name="timegap">Timegap</string>
     <string name="no_of_samples">No. of samples</string>
@@ -330,4 +329,21 @@
 
     <string name="experiment_icon">Experiment Icon</string>
     <string name="drop_down_arrow">Drop down arrow</string>
+    <string name="voltage_unit">(V)</string>
+    <string name="volts">volts</string>
+    <string name="seconds">(s)</string>
+    <string name="lux">LUX</string>
+    <string name="pressure2">Press.</string>
+    <string name="plot_altitude">Plot - Altitude</string>
+    <string name="celcius">(°C)</string>
+    <string name="plot_temperature">Plot - Temperature</string>
+    <string name="guass">Guass</string>
+    <string name="guass_unit">(Ga)</string>
+    <string name="humid">Humid.</string>
+    <string name="humid_unit">(RH)</string>
+    <string name="plot_humidity">Plot - Humidity</string>
+    <string name="illum">Illum.</string>
+    <string name="lux2">(Lux)</string>
+    <string name="acceleration">Acc.</string>
+    <string name="acceleration_unit">(m/s²)</string>
 </resources>
