@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
+import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
 import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
 import org.fossasia.pslab.R;
@@ -45,6 +46,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("D_transistorCB.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
                     return ExperimentDocFragment.newInstance("D_transistorCE.html");
+                if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
+                    return ExperimentDocFragment.newInstance("D_transistorCE_input.html");
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return ExperimentDocFragment.newInstance("D_NFET.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.astable_multivibrator)))
@@ -88,6 +91,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return TransistorCBSetup.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
                     return TransistorCEOutputSetup.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
+                    return TransistorCEInputCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return NFETOutputCharacteristicsExperiment.newInstance();
                 return ExperimentSetupFragment.newInstance();
