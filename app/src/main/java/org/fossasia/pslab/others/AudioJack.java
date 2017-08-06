@@ -7,6 +7,8 @@ import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.util.Log;
 
+import java.util.Random;
+
 /**
  * Created by viveksb007 on 11/7/17.
  */
@@ -26,6 +28,7 @@ public class AudioJack {
     private int minRecorderBufferSize;
     private int minTrackBufferSize;
     private String io;
+    private Random random;
 
     public boolean configurationStatus;
 
@@ -34,6 +37,7 @@ public class AudioJack {
     * */
     public AudioJack(String io) {
         this.io = io;
+        random = new Random();
         configurationStatus = configure();
     }
 
@@ -93,8 +97,13 @@ public class AudioJack {
     /*
     * Would generate a buffer based on frequency value which would be played by AudioTrack to generate wave
     * */
-    public void createBuffer(int frequency) {
-
+    public short[] createBuffer(int frequency) {
+        // generating a random buffer for now
+        short[] buffer = new short[minTrackBufferSize];
+        for (int i = 0; i < minTrackBufferSize; i++) {
+            buffer[i] = (short) (random.nextInt(32767) + (-32768));
+        }
+        return buffer;
     }
 
     public void release() {
