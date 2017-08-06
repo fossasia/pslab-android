@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
+import org.fossasia.pslab.communication.sensors.MPU6050;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
@@ -43,9 +45,11 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
 
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST = 1;
     private static boolean hasPermission = false;
+    private static boolean isLogging = false;
     private LinkedHashMap<Integer, String> sensorAddress = new LinkedHashMap<>();
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
     private I2C i2c = scienceLab.i2c;
+    private ArrayList<String> sensorList = new ArrayList<>();
     private Context context;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -86,6 +90,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                                     for (Integer temp : scanResult) {
                                         if (sensorAddress.get(temp) != null) {
                                             listData.add(sensorAddress.get(temp) + " : " + temp);
+                                            sensorList.add(sensorAddress.get(temp));
                                         }
                                     }
                                 }
@@ -96,6 +101,12 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listData);
                                         sensorList.setAdapter(adapter);
                                         container.addView(sensorList);
+                                        sensorList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                handleClick(view, position);
+                                            }
+                                        });
                                     }
                                 });
                             } catch (IOException e) {
@@ -122,6 +133,16 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
         sensorAddress.put(0x68, "MPU6050");
         sensorAddress.put(0x40, "SHT21");
         sensorAddress.put(0x39, "TSL2561");
+    }
+
+    private void handleClick(View view, int position) {
+        String sensor = sensorList.get(position);
+        Toast.makeText(context, sensor, Toast.LENGTH_SHORT).show();
+        switch (sensor) {
+            case "MPU6050":
+                // todo : open dialog and show raw values in real-time with option to start/stop logging
+                break;
+        }
     }
 
     @Override
