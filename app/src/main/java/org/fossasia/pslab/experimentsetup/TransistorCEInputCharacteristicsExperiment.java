@@ -183,7 +183,7 @@ public class TransistorCEInputCharacteristicsExperiment extends Fragment {
             @Override
             public void run() {
                 scienceLab.setGain("CH1", 2, false);
-                scienceLab.setPV2(collectorVoltage);
+                scienceLab.setPV1(collectorVoltage);
                 for (float i = initialVoltage; i < finalVoltage; i += stepVoltage) {
                     new CalcDataPoint().execute(i);
                     synchronized (lock) {
@@ -219,10 +219,10 @@ public class TransistorCEInputCharacteristicsExperiment extends Fragment {
         @Override
         protected Void doInBackground(Float... params) {
             float voltage = params[0];
-            scienceLab.setPV1(voltage);
+            scienceLab.setPV2(voltage);
             float readVoltage = (float) scienceLab.getVoltage("CH3", 10);
             voltageAxis.add(readVoltage);
-            float resistance = 560;
+            float resistance = 200 * 1000;
             currentAxis.add((voltage - readVoltage) / resistance);
             return null;
         }
