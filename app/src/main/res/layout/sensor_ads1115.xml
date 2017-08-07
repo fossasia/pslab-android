@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -136,7 +136,7 @@
                         android:layout_gravity="center_vertical|center_horizontal|center"
                         android:foregroundGravity="center_vertical"
                         android:gravity="center_vertical|center_horizontal|center"
-                        android:text="Time "
+                        android:text="@string/time"
                         android:textColor="#ffff"
                         android:textSize="9sp"
                         android:textStyle="normal|bold"
@@ -150,7 +150,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_toEndOf="@+id/tv_graph_label_xaxis_ads"
                         android:layout_toRightOf="@+id/tv_graph_label_xaxis_ads"
-                        android:text="(s)"
+                        android:text="@string/seconds"
                         android:textColor="#ffff"
                         android:textSize="9sp"
                         android:textStyle="normal|bold"
@@ -179,7 +179,7 @@
                         android:gravity="top|center_horizontal"
                         android:includeFontPadding="false"
                         android:rotation="-90"
-                        android:text="volts"
+                        android:text="@string/volts"
                         android:textColor="#ffff"
                         android:textSize="8sp"
                         android:textStyle="normal|bold"
@@ -195,7 +195,7 @@
                         android:layout_above="@+id/tv_label_left_yaxis_ads"
                         android:layout_marginBottom="12dp"
                         android:rotation="-90"
-                        android:text="(V)"
+                        android:text="@string/voltage_unit"
                         android:textColor="#fff"
                         android:textSize="8sp"
                         android:textStyle="normal|bold"
@@ -209,10 +209,10 @@
                     android:id="@+id/chart_sensor_ads"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#000"
                     android:layout_below="@+id/chart_xaxis_layout_ads"
                     android:layout_toEndOf="@+id/chart_yaxis_layout_ads"
-                    android:layout_toRightOf="@+id/chart_yaxis_layout_ads"/>
+                    android:layout_toRightOf="@+id/chart_yaxis_layout_ads"
+                    android:background="#000" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
