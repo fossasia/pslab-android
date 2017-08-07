@@ -108,7 +108,6 @@ public class ApplicationsFragment extends Fragment {
                     R.drawable.control_icon,
                     R.drawable.logic_analzers_icon,
                     R.drawable.sensor_icon,
-                    R.drawable.wireless_sensor_icon,
                     R.drawable.sensor_qv_icon};
 
             applicationItemList.add(new ApplicationItem(
@@ -124,10 +123,7 @@ public class ApplicationsFragment extends Fragment {
                     getResources().getString(R.string.data_sensor_logger), applications[3])
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.w_sensor_logger), applications[4])
-            );
-            applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.sensor_quick_view), applications[5])
+                    getResources().getString(R.string.sensor_quick_view), applications[4])
             );
             return null;
         }
