@@ -36,7 +36,9 @@
         <activity android:name=".activity.AboutUs" />
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ReportUs" />
-        <activity android:name=".activity.PerformExperimentActivity" />
+        <activity
+            android:name=".activity.PerformExperimentActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".activity.ControlActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />

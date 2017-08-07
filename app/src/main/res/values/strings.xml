@@ -19,7 +19,6 @@
     <string name="advance_control">Advance Control</string>
     <string name="logical_analyzer">Logical Analyzer</string>
     <string name="data_sensor_logger">Data Sensor Logger</string>
-    <string name="w_sensor_logger">Wireless Sensor</string>
     <string name="sensor_quick_view">Sensor QuickView</string>
 
     <string name="control_item_1">Control</string>
@@ -249,7 +248,6 @@
     <string name="rad">(rad)</string>
     <string name="angle">Angle</string>
     <string name="time">Time</string>
-    <string name="s">(s)</string>
     <string name="infinite_symbol">∞</string>
     <string name="timegap">Timegap</string>
     <string name="no_of_samples">No. of samples</string>
@@ -257,6 +255,9 @@
     <string name="alt">Alt.</string>
     <string name="meter">(m)</string>
     <string name="pascal">(Pa)</string>
+
+    <string name="voltage_label">Voltage (V)</string>
+    <string name="current_label">Current (mA)</string>
 
     <string-array name="tsl2561_gain_spinner">
         <item>No gain</item>
@@ -330,4 +331,21 @@
 
     <string name="experiment_icon">Experiment Icon</string>
     <string name="drop_down_arrow">Drop down arrow</string>
+    <string name="voltage_unit">(V)</string>
+    <string name="volts">volts</string>
+    <string name="seconds">(s)</string>
+    <string name="lux">LUX</string>
+    <string name="pressure2">Press.</string>
+    <string name="plot_altitude">Plot - Altitude</string>
+    <string name="celcius">(°C)</string>
+    <string name="plot_temperature">Plot - Temperature</string>
+    <string name="guass">Guass</string>
+    <string name="guass_unit">(Ga)</string>
+    <string name="humid">Humid.</string>
+    <string name="humid_unit">(RH)</string>
+    <string name="plot_humidity">Plot - Humidity</string>
+    <string name="illum">Illum.</string>
+    <string name="lux2">(Lux)</string>
+    <string name="acceleration">Acc.</string>
+    <string name="acceleration_unit">(m/s²)</string>
 </resources>
