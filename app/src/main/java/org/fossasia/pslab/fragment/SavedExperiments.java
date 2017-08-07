@@ -145,7 +145,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        // Open BJT Transfer Experiment
+                        startExperiment(value);
                     }
                 });
         TreeNode treeBJTCEBackup = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.bjt_ce_backup)))
