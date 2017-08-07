@@ -40,6 +40,9 @@ import java.util.List;
 public class ZenerSetupFragment extends Fragment {
 
     private static final String ERROR_MESSAGE = "Invalid Value";
+    private static final String INVALID_VALUE = "Voltage value too low";
+    private static final String MINIMUM_VALUE = "Voltage is beyond minimum of -5V";
+    private static final String MAXIMUM_VALUE = "Voltage is beyond maximum of 5V";
     private LineChart outputChart;
     private float initialVoltage = 0;
     private float finalVoltage = 0;
@@ -48,10 +51,11 @@ public class ZenerSetupFragment extends Fragment {
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
     private ArrayList<Float> x1 = new ArrayList<>();
     private ArrayList<Float> y1 = new ArrayList<>();
+    private TextInputEditText etInitialVoltage, etFinalVoltage, etStepSize;
+    private TextInputLayout tilInitialVoltage, tilFinalVoltage, tilStepSize;
 
     public static ZenerSetupFragment newInstance() {
-        ZenerSetupFragment zenerSetup = new ZenerSetupFragment();
-        return zenerSetup;
+        return new ZenerSetupFragment();
     }
 
     @Nullable
@@ -74,29 +78,50 @@ public class ZenerSetupFragment extends Fragment {
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                TextInputEditText etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.et_initial_voltage);
-                                TextInputEditText etFinalVoltage = (TextInputEditText) customView.findViewById(R.id.et_final_voltage);
-                                TextInputEditText etStepSize = (TextInputEditText) customView.findViewById(R.id.et_step_size);
-                                TextInputLayout tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_iv);
-                                TextInputLayout tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_fv);
-                                TextInputLayout tilStepSize = (TextInputLayout) customView.findViewById(R.id.text_input_layout_ss);
+                                etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.et_initial_voltage);
+                                etFinalVoltage = (TextInputEditText) customView.findViewById(R.id.et_final_voltage);
+                                etStepSize = (TextInputEditText) customView.findViewById(R.id.et_step_size);
+                                tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_iv);
+                                tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_fv);
+                                tilStepSize = (TextInputLayout) customView.findViewById(R.id.text_input_layout_ss);
+                                // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
                                     tilInitialVoltage.setError(ERROR_MESSAGE);
                                     return;
-                                } else
+                                } else if (Float.parseFloat(etInitialVoltage.getText().toString()) < -5.0f) {
+                                    tilInitialVoltage.setError(MINIMUM_VALUE);
+                                    return;
+                                } else if (Float.parseFloat(etInitialVoltage.getText().toString()) > 5.0f) {
+                                    tilInitialVoltage.setError(MAXIMUM_VALUE);
+                                    return;
+                                } else {
                                     tilInitialVoltage.setError(null);
+                                }
+                                initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
+                                // Final Voltage
                                 if (TextUtils.isEmpty(etFinalVoltage.getText().toString())) {
                                     tilFinalVoltage.setError(ERROR_MESSAGE);
                                     return;
-                                } else
+                                } else if (initialVoltage >= Float.parseFloat(etFinalVoltage.getText().toString())) {
+                                    tilFinalVoltage.setError(INVALID_VALUE);
+                                    return;
+                                } else if (Float.parseFloat(etFinalVoltage.getText().toString()) < -5.0f) {
+                                    tilFinalVoltage.setError(MINIMUM_VALUE);
+                                    return;
+                                } else if (Float.parseFloat(etFinalVoltage.getText().toString()) > 5.0f) {
+                                    tilFinalVoltage.setError(MAXIMUM_VALUE);
+                                    return;
+                                } else {
                                     tilFinalVoltage.setError(null);
+                                }
+                                finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
+                                // Step Size
                                 if (TextUtils.isEmpty(etStepSize.getText().toString())) {
                                     tilStepSize.setError(ERROR_MESSAGE);
                                     return;
-                                } else
+                                } else {
                                     tilStepSize.setError(null);
-                                initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
-                                finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
+                                }
                                 stepVoltage = Float.parseFloat(etStepSize.getText().toString());
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
@@ -157,7 +182,7 @@ public class ZenerSetupFragment extends Fragment {
         outputChart.setTouchEnabled(true);
         outputChart.setDragEnabled(true);
         outputChart.setScaleEnabled(true);
-        //outputChart.setDrawGridBackground(false);
+        outputChart.getDescription().setEnabled(false);
         outputChart.setPinchZoom(true);
         LineData data = new LineData();
         outputChart.setData(data);

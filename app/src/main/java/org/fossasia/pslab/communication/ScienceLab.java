@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 
 import static java.lang.Math.abs;
 import static org.apache.commons.lang3.math.NumberUtils.max;
+import static org.fossasia.pslab.others.MathUtils.linSpace;
 
 /**
  * Created by viveksb007 on 28/3/17.
@@ -187,7 +188,7 @@ public class ScienceLab {
         } else {
             aboutArray.add("Radio Transceiver is : Not Installed");
         }
-        dac = new MCP4728(mPacketHandler,i2c);
+        dac = new MCP4728(mPacketHandler, i2c);
         this.calibrated = false;
         // Check for calibration data if connected. And process them if found
         if (loadCalibrationData && isConnected()) {
@@ -781,13 +782,8 @@ public class ScienceLab {
             for (int i = 0; i < samples; i++) {
                 this.buffer[i] = (listData.get(i * 2) | (listData.get(i * 2 + 1) << 8));
             }
-            ArrayList<Double> timeBase = new ArrayList<>();
-            double factor = timeGap * (samples - 1) / samples;
-            for (double i = 0; i < timeGap * (samples - 1); i += factor) timeBase.add(i);
-            double[] timeAxis = new double[timeBase.size()];
-            for (int i = 0; i < timeBase.size(); i++) {
-                timeAxis[i] = timeBase.get(i);
-            }
+
+            double[] timeAxis = linSpace(0, timeGap * (samples - 1), samples);
             Map<String, double[]> retData = new HashMap<>();
             retData.put("x", timeAxis);
             retData.put("y", Arrays.copyOfRange(buffer, 0, samples));
