@@ -182,7 +182,7 @@ public class ZenerSetupFragment extends Fragment {
         outputChart.setTouchEnabled(true);
         outputChart.setDragEnabled(true);
         outputChart.setScaleEnabled(true);
-        //outputChart.setDrawGridBackground(false);
+        outputChart.getDescription().setEnabled(false);
         outputChart.setPinchZoom(true);
         LineData data = new LineData();
         outputChart.setData(data);
