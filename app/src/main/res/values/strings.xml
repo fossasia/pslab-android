@@ -25,6 +25,8 @@
     <string name="control_item_2">Read</string>
     <string name="control_item_3">Advanced</string>
 
+    <string name="about_us_description">The goal of PSLab is to create an Open Source hardware device (open on all layers) that can be used for experiments by teachers, students and citizen scientists. Our tiny pocket lab provides an array of sensors for doing science and engineering experiments. It provides functions of numerous measurement devices including an oscilloscope, a waveform generator, a frequency counter, a programmable voltage, current source and as a data logger.</string>
+
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
         <item>Applications</item>
