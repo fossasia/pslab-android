@@ -56,6 +56,7 @@ public class ApplicationsFragment extends Fragment {
                         switch (item.getApplicationName()) {
                             case "Oscilloscope":
                                 intent = new Intent(context, OscilloscopeActivity.class);
+                                intent.putExtra("who","Applications");
                                 startActivity(intent);
                                 break;
                             case "Control":
