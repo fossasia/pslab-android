@@ -56,7 +56,6 @@ public class SensorFragmentMain extends Fragment {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
 
-
         i2c = scienceLab.i2c;
         sensorAddr.put(0x60, "MCP4728");
         sensorAddr.put(0x48, "ADS1115");
@@ -84,7 +83,7 @@ public class SensorFragmentMain extends Fragment {
         buttonSensorAutoScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!scienceLab.isConnected()) {
+                if (scienceLab.isConnected()) {
                     populateSensors();
                 } else {
                     Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
@@ -95,7 +94,7 @@ public class SensorFragmentMain extends Fragment {
                 }
             }
         });
-        if (!scienceLab.isConnected()) {
+        if (scienceLab.isConnected()) {
             populateSensors();
         }
         lvSensor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
