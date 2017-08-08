@@ -19,7 +19,6 @@
     <string name="advance_control">Advance Control</string>
     <string name="logical_analyzer">Logical Analyzer</string>
     <string name="data_sensor_logger">Data Sensor Logger</string>
-    <string name="w_sensor_logger">Wireless Sensor</string>
     <string name="sensor_quick_view">Sensor QuickView</string>
 
     <string name="control_item_1">Control</string>
@@ -349,4 +348,12 @@
     <string name="lux2">(Lux)</string>
     <string name="acceleration">Acc.</string>
     <string name="acceleration_unit">(m/s²)</string>
+    <string name="initial_voltage_v">Initial Voltage (V)</string>
+    <string name="final_voltage_v">Final Voltage (V)</string>
+    <string name="step_size_v">Step Size (V)</string>
+    <string name="gate_voltage_v">Gate Voltage (V)</string>
+    <string name="collector_sweep_pv1">Collector Sweep (PV1)</string>
+    <string name="emitter_voltage_pv2">Emitter Voltage (PV2)</string>
+    <string name="total_steps">Total Steps</string>
+    <string name="base_voltage_pv2">Base Voltage (PV2)</string>
 </resources>

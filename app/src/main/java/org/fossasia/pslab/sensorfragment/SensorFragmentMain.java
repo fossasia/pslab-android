@@ -1,7 +1,10 @@
 package org.fossasia.pslab.sensorfragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,6 +25,7 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by asitava on 13/7/17.
@@ -31,7 +35,7 @@ public class SensorFragmentMain extends Fragment {
 
     private I2C i2c;
     private ScienceLab scienceLab;
-    private HashMap<Integer, String> sensorAddr = new HashMap<>();
+    private LinkedHashMap<Integer, String> sensorAddr = new LinkedHashMap<>();
     private ArrayList<Integer> data = new ArrayList<>();
     private ArrayList<String> dataAddress = new ArrayList<>();
     private ArrayList<String> dataName = new ArrayList<>();
@@ -50,49 +54,51 @@ public class SensorFragmentMain extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
 
-        sensorAddr.put(0x60, "MCP4728");
-        sensorAddr.put(0x48, "ADS1115");
-        sensorAddr.put(0x23, "BH1750");
-        sensorAddr.put(0x77, "BMP180");
-        sensorAddr.put(0x5A, "MLX90614");
-        sensorAddr.put(0x1E, "HMC5883L");
-        sensorAddr.put(0x68, "MPU6050");
-        sensorAddr.put(0x40, "SHT21");
-        sensorAddr.put(0x39, "TSL2561");
+        if (scienceLab.isConnected()) {
+            i2c = scienceLab.i2c;
+            sensorAddr.put(0x60, "MCP4728");
+            sensorAddr.put(0x48, "ADS1115");
+            sensorAddr.put(0x23, "BH1750");
+            sensorAddr.put(0x77, "BMP180");
+            sensorAddr.put(0x5A, "MLX90614");
+            sensorAddr.put(0x1E, "HMC5883L");
+            sensorAddr.put(0x68, "MPU6050");
+            sensorAddr.put(0x40, "SHT21");
+            sensorAddr.put(0x39, "TSL2561");
 
-        try {
-            data = i2c.scan(null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (data != null) {
-            for (Integer myInt : data) {
-                if (sensorAddr.get(myInt) != null) {
-                    dataAddress.add(String.valueOf(myInt));
-                    dataName.add(sensorAddr.get(myInt));
+            try {
+                data = i2c.scan(null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (data != null) {
+                for (Integer myInt : data) {
+                    if (sensorAddr.get(myInt) != null) {
+                        dataAddress.add(String.valueOf(myInt));
+                        dataName.add(sensorAddr.get(myInt));
+                    }
+                }
+                for (String s : dataAddress) {
+                    tvData += s + ":" + sensorAddr.get(Integer.parseInt(s)) + "\n";
                 }
             }
-            for (String s : dataAddress) {
-                tvData += s + ":" + sensorAddr.get(Integer.parseInt(s)) + "\n";
-            }
+            String[] dataDisp = dataName.toArray(new String[dataName.size()]);
+            adapter = new ArrayAdapter<>(getContext(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataDisp);
         }
-        String[] dataDisp = dataName.toArray(new String[dataName.size()]);
-        adapter = new ArrayAdapter<>(getContext(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataDisp);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_main, container, false);
-
-        Button buttonSensorAutoscan = (Button) view.findViewById(R.id.button_sensor_autoscan);
+        final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.layout_container);
+        Button buttonSensorAutoScan = (Button) view.findViewById(R.id.button_sensor_autoscan);
         tvSensorScan = (TextView) view.findViewById(R.id.tv_sensor_scan);
         tvSensorScan.setText(tvData);
         lvSensor = (ListView) view.findViewById(R.id.lv_sensor);
         lvSensor.setAdapter(adapter);
 
-        buttonSensorAutoscan.setOnClickListener(new View.OnClickListener() {
+        buttonSensorAutoScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (scienceLab.isConnected()) {
@@ -104,7 +110,7 @@ public class SensorFragmentMain extends Fragment {
 
                     if (data != null) {
                         for (Integer myInt : data) {
-                            if (myInt != null && sensorAddr.get(myInt) != null ) {
+                            if (myInt != null && sensorAddr.get(myInt) != null) {
                                 dataAddress.add(String.valueOf(myInt));
                                 dataName.add(sensorAddr.get(myInt));
                             }
@@ -119,6 +125,12 @@ public class SensorFragmentMain extends Fragment {
                     String[] dataDisp = dataName.toArray(new String[dataName.size()]);
                     adapter = new ArrayAdapter<>(getContext(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataDisp);
                     lvSensor.setAdapter(adapter);
+                } else {
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
+                    View snackBarView = snackbar.getView();
+                    TextView snackbarTextView = (TextView) snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+                    snackbarTextView.setTextColor(Color.YELLOW);
+                    snackbar.show();
                 }
             }
         });
