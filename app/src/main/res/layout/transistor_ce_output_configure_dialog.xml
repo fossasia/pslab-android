@@ -17,7 +17,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Collector Sweep (PV1)"
+                android:text="@string/collector_sweep_pv1"
                 android:textSize="16sp" />
 
             <android.support.design.widget.TextInputLayout
@@ -31,7 +31,7 @@
                     android:id="@+id/et_initial_voltage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Initial Voltage (V)"
+                    android:hint="@string/initial_voltage_v"
                     android:inputType="numberSigned|numberDecimal"
                     android:maxLines="1" />
 
@@ -47,7 +47,7 @@
                     android:id="@+id/et_final_voltage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Final Voltage (V)"
+                    android:hint="@string/final_voltage_v"
                     android:inputType="numberSigned|numberDecimal"
                     android:maxLines="1" />
 
@@ -63,7 +63,7 @@
                     android:id="@+id/et_total_steps"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Total Steps"
+                    android:hint="@string/total_steps"
                     android:inputType="numberSigned|numberDecimal"
                     android:maxLines="1" />
 
@@ -84,7 +84,7 @@
             android:id="@+id/et_base_voltage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Base Voltage (PV2)"
+            android:hint="@string/base_voltage_pv2"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
