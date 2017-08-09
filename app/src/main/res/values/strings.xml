@@ -19,12 +19,13 @@
     <string name="advance_control">Advance Control</string>
     <string name="logical_analyzer">Logical Analyzer</string>
     <string name="data_sensor_logger">Data Sensor Logger</string>
-    <string name="w_sensor_logger">Wireless Sensor</string>
     <string name="sensor_quick_view">Sensor QuickView</string>
 
     <string name="control_item_1">Control</string>
     <string name="control_item_2">Read</string>
     <string name="control_item_3">Advanced</string>
+
+    <string name="about_us_description">The goal of PSLab is to create an Open Source hardware device (open on all layers) that can be used for experiments by teachers, students and citizen scientists. Our tiny pocket lab provides an array of sensors for doing science and engineering experiments. It provides functions of numerous measurement devices including an oscilloscope, a waveform generator, a frequency counter, a programmable voltage, current source and as a data logger.</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
@@ -349,4 +350,12 @@
     <string name="lux2">(Lux)</string>
     <string name="acceleration">Acc.</string>
     <string name="acceleration_unit">(m/s²)</string>
+    <string name="initial_voltage_v">Initial Voltage (V)</string>
+    <string name="final_voltage_v">Final Voltage (V)</string>
+    <string name="step_size_v">Step Size (V)</string>
+    <string name="gate_voltage_v">Gate Voltage (V)</string>
+    <string name="collector_sweep_pv1">Collector Sweep (PV1)</string>
+    <string name="emitter_voltage_pv2">Emitter Voltage (PV2)</string>
+    <string name="total_steps">Total Steps</string>
+    <string name="base_voltage_pv2">Base Voltage (PV2)</string>
 </resources>
