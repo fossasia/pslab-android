@@ -358,4 +358,6 @@
     <string name="emitter_voltage_pv2">Emitter Voltage (PV2)</string>
     <string name="total_steps">Total Steps</string>
     <string name="base_voltage_pv2">Base Voltage (PV2)</string>
+    <string name="initial_frequency_hz">Initial Frequency (Hz)</string>
+    <string name="voltage_v">Voltage (V)</string>
 </resources>
