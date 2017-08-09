@@ -6,6 +6,7 @@ import org.fossasia.pslab.communication.peripherals.I2C;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by akarshan on 5/7/17.
@@ -33,8 +34,8 @@ public class MPU925x {
 
     private I2C i2c;
     private ArrayList<KalmanFilter> kalman = new ArrayList<>();
-    private int[] gyroRange = new int[]{250, 500, 1000, 2000};
-    private int[] accelRange = new int[]{2, 4, 8, 16};
+    private ArrayList<Integer> gyroRange = new ArrayList<>(Arrays.asList(250, 500, 1000, 2000));
+    private ArrayList<Integer> accelRange = new ArrayList<>(Arrays.asList(2, 4, 8, 16));
     private double[] kalmanFilter = new double[]{.01, .1, 1, 10, 100, 1000, 10000, 0};       //Replaced "OFF" with 0.
 
     public MPU925x(I2C i2c) throws IOException {
@@ -75,12 +76,12 @@ public class MPU925x {
     }
 
     public void setGyroRange(int rs) throws IOException {
-        GR = gyroRange[rs];
+        GR = gyroRange.indexOf(rs);
         i2c.writeBulk(ADDRESS, new int[]{GYRO_CONFIG, GR << 3});
     }
 
     public void setAccelRange(int rs) throws IOException {
-        AR = accelRange[rs];
+        AR = accelRange.indexOf(rs);
         i2c.writeBulk(ADDRESS, new int[]{ACCEL_CONFIG, AR << 3});
     }
 
