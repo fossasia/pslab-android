@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -216,7 +217,9 @@ public class MainActivity extends AppCompatActivity {
                         drawer.closeDrawers();
                         break;
                     case R.id.nav_report_us:
-                        startActivity(new Intent(MainActivity.this, ReportUs.class));
+                        Intent issueTrackerIntent = new Intent(Intent.ACTION_VIEW);
+                        issueTrackerIntent.setData(Uri.parse("https://github.com/fossasia/pslab-android/issues"));
+                        startActivity(issueTrackerIntent);
                         drawer.closeDrawers();
                         break;
                     default:

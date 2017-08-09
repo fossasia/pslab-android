@@ -7,13 +7,14 @@ import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.util.Log;
 
+import java.util.Random;
+
 /**
  * Created by viveksb007 on 11/7/17.
  */
 
 public class AudioJack {
 
-    /* TODO : Add runtime permission for Recording Audio */
     /* TODO : Output value in buffer would be between -2^16 and 2^16, need to map it too or show its FFT  */
 
     private static final String TAG = "AudioJack";
@@ -27,6 +28,7 @@ public class AudioJack {
     private int minRecorderBufferSize;
     private int minTrackBufferSize;
     private String io;
+    private Random random;
 
     public boolean configurationStatus;
 
@@ -35,6 +37,7 @@ public class AudioJack {
     * */
     public AudioJack(String io) {
         this.io = io;
+        random = new Random();
         configurationStatus = configure();
     }
 
@@ -89,6 +92,18 @@ public class AudioJack {
     public void write(short[] buffer) {
         /* write buffer to audioTrack */
         audioTrack.write(buffer, 0, buffer.length);
+    }
+
+    /*
+    * Would generate a buffer based on frequency value which would be played by AudioTrack to generate wave
+    * */
+    public short[] createBuffer(int frequency) {
+        // generating a random buffer for now
+        short[] buffer = new short[minTrackBufferSize];
+        for (int i = 0; i < minTrackBufferSize; i++) {
+            buffer[i] = (short) (random.nextInt(32767) + (-32768));
+        }
+        return buffer;
     }
 
     public void release() {

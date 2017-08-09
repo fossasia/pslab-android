@@ -13,7 +13,7 @@
             android:id="@+id/nfet_initial_voltage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/initial_voltage_v"
+            android:hint="Initial Voltage (V)"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
@@ -28,7 +28,7 @@
             android:id="@+id/nfet_final_voltage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/final_voltage_v"
+            android:hint="Final Voltage (V)"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
@@ -43,22 +43,22 @@
             android:id="@+id/nfet_step_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/step_size_v"
+            android:hint="Step Size (V)"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/nfet_gate_voltage_layout"
+        android:id="@+id/nfet_source_voltage_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/nfet_gate_voltage"
+            android:id="@+id/nfet_source_voltage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/gate_voltage_v"
+            android:hint="Source Voltage (V)"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
