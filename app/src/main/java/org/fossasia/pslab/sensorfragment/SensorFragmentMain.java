@@ -164,6 +164,8 @@ public class SensorFragmentMain extends Fragment {
                     case "TSL2561":
                         selectedFragment = SensorFragmentTSL2561.newInstance();
                         break;
+                    case "MPU925x":
+                        selectedFragment = SensorFragmentMPU925X.newInstance();
                     default:
                         break;
                 }
