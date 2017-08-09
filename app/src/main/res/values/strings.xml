@@ -25,6 +25,8 @@
     <string name="control_item_2">Read</string>
     <string name="control_item_3">Advanced</string>
 
+    <string name="about_us_description">The goal of PSLab is to create an Open Source hardware device (open on all layers) that can be used for experiments by teachers, students and citizen scientists. Our tiny pocket lab provides an array of sensors for doing science and engineering experiments. It provides functions of numerous measurement devices including an oscilloscope, a waveform generator, a frequency counter, a programmable voltage, current source and as a data logger.</string>
+
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
         <item>Applications</item>
@@ -208,6 +210,7 @@
     <string name="mlx90614">mlx90614</string>
     <string name="bmp180">bmp180</string>
     <string name="bh1750">bh1750</string>
+    <string name="mpu925x">mpu925x</string>
 
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
@@ -293,6 +296,37 @@
         <item></item>
         <item></item>
     </string-array>
+
+    <string-array name="mpu925x_gyro_spinner">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+
+    <string-array name="mpu925x_accel_spinner">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="mpu925x_kalman_spinner">
+        <item>0.01</item>
+        <item>0.1</item>
+        <item>1</item>
+        <item>10</item>
+        <item>100</item>
+        <item>1000</item>
+        <item>10000</item>
+        <item>null</item>
+    </string-array>
+
+    <string-array name="mpu925x_power_spinner">
+        <item></item>
+        <item></item>
+    </string-array>
+
 
     <string-array name="ads1115_gain_spinner">
         <item>GAIN_TWOTHIRDS</item>
