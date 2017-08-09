@@ -22,9 +22,6 @@ public class HalfwaveRectifierFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
-
     private ScienceLab scienceLab;
     private Spinner spinnerRangeCh1;
 
@@ -35,22 +32,13 @@ public class HalfwaveRectifierFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static HalfwaveRectifierFragment newInstance(String param1, String param2) {
-        HalfwaveRectifierFragment fragment = new HalfwaveRectifierFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static HalfwaveRectifierFragment newInstance() {
+        return new HalfwaveRectifierFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -119,12 +107,6 @@ public class HalfwaveRectifierFragment extends Fragment {
         return v;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -142,9 +124,7 @@ public class HalfwaveRectifierFragment extends Fragment {
         mListener = null;
     }
 
-
     public interface OnFragmentInteractionListener {
 
-        void onFragmentInteraction(Uri uri);
     }
 }
