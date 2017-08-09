@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginEnd="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -39,10 +42,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/control_custom_border"
-                android:textSize="@dimen/sensor_body_font"
+                android:gravity="center"
                 android:textAlignment="center"
-                android:textStyle="bold"
-                android:gravity="center"/>
+                android:textSize="@dimen/sensor_body_font"
+                android:textStyle="bold" />
         </android.support.v4.widget.NestedScrollView>
 
         <TextView
@@ -59,8 +62,7 @@
         <ListView
             android:id="@+id/lv_sensor"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="10dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="10dp" />
     </LinearLayout>
-</ScrollView>
+</android.support.design.widget.CoordinatorLayout>

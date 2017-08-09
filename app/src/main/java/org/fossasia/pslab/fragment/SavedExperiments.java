@@ -105,7 +105,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeNFETTransfer = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.nfet_transfer_characteristics)))
@@ -113,7 +113,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        // Open NFET Transfer Experiment
+                        startExperiment(value);
                     }
                 });
         TreeNode treeBJTCB = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.transistor_cb)))
@@ -137,7 +137,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        // Open BJT CE Input Experiment
+                        startExperiment(value);
                     }
                 });
         TreeNode treeBJTTransfer = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.bjt_transfer_characteristics)))

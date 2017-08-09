@@ -42,9 +42,6 @@ public class SensorActivity extends AppCompatActivity {
         timegapLabel = (TextView) findViewById(R.id.tv_timegap_label);
         playPauseButton = (ImageButton) findViewById(R.id.imageButton_play_pause_sensor);
         play = false;
-
-
-        sensorDock.setVisibility(View.INVISIBLE);
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +54,7 @@ public class SensorActivity extends AppCompatActivity {
                 }
             }
         });
+        sensorDock.setVisibility(View.GONE);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

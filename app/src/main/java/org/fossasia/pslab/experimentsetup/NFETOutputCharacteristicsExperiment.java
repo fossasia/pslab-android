@@ -11,7 +11,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +33,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by viveksb007 on 22/7/17.
+ * Created by Padmal on 8/3/17.
  */
 
-public class TransistorCEOutputSetup extends Fragment {
+public class NFETOutputCharacteristicsExperiment extends Fragment {
+
+    /***********************************************************************************************
+     * Experiment is to provide voltages to Drain and Gate pins of FET and measure voltage difference
+     * between Drain and Source while Source is connected to ground
+     ***********************************************************************************************/
 
     private static final String ERROR_MESSAGE = "Invalid Value";
     private static final String INVALID_VALUE = "Voltage value too low";
@@ -46,27 +50,27 @@ public class TransistorCEOutputSetup extends Fragment {
     private static final String MINIMUM_VALUE_3V = "Voltage is beyond minimum of -3.3V";
     private static final String MAXIMUM_VALUE_3V = "Voltage is beyond maximum of 3.3V";
     private LineChart outputChart;
-    private float initialVoltage = 0;
-    private float finalVoltage = 0;
-    private float baseVoltage = 0;
-    private float stepVoltage = 0;
-    private float resistance = 560;
-    private int totalSteps = 0;
+    private float initialVoltage;
+    private float finalVoltage;
+    private float gateVoltage;
+    private float stepVoltage;
+    private float totalSteps;
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
     private final Object lock = new Object();
-    private ArrayList<Float> x = new ArrayList<>();
-    private ArrayList<Float> y = new ArrayList<>();
-    private TextInputEditText etInitialVoltage, etFinalVoltage, etTotalSteps, etBaseVoltage;
-    private TextInputLayout tilInitialVoltage, tilFinalVoltage, tilTotalSteps, tilBaseVoltage;
+    private ArrayList<Float> voltageAxis = new ArrayList<>();
+    private ArrayList<Float> currentAxis = new ArrayList<>();
 
-    public static TransistorCEOutputSetup newInstance() {
-        return new TransistorCEOutputSetup();
+    private TextInputEditText etInitialVoltage, etFinalVoltage, etStepSize, etGateVoltage;
+    private TextInputLayout tilInitialVoltage, tilFinalVoltage, tilStepSize, tilGateVoltage;
+
+    public static NFETOutputCharacteristicsExperiment newInstance() {
+        return new NFETOutputCharacteristicsExperiment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // reusing the layout consisting Configure button and graph
+
         View view = inflater.inflate(R.layout.diode_setup, container, false);
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
@@ -75,21 +79,22 @@ public class TransistorCEOutputSetup extends Fragment {
             public void onClick(View v) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title("Configure Experiment")
-                        .customView(R.layout.transistor_ce_output_configure_dialog, true)
+                        .customView(R.layout.nfet_output_characteristic_dialog, true)
                         .positiveText("Start Experiment")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.et_initial_voltage);
-                                etFinalVoltage = (TextInputEditText) customView.findViewById(R.id.et_final_voltage);
-                                etTotalSteps = (TextInputEditText) customView.findViewById(R.id.et_total_steps);
-                                etBaseVoltage = (TextInputEditText) customView.findViewById(R.id.et_base_voltage);
-                                tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_iv);
-                                tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_fv);
-                                tilTotalSteps = (TextInputLayout) customView.findViewById(R.id.text_input_layout_total_steps);
-                                tilBaseVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_voltage);
+                                etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.nfet_initial_voltage);
+                                etFinalVoltage = (TextInputEditText) customView.findViewById(R.id.nfet_final_voltage);
+                                etStepSize = (TextInputEditText) customView.findViewById(R.id.nfet_step_size);
+                                etGateVoltage = (TextInputEditText) customView.findViewById(R.id.nfet_gate_voltage);
+                                tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_initial_voltage_layout);
+                                tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_final_voltage_layout);
+                                tilStepSize = (TextInputLayout) customView.findViewById(R.id.nfet_step_size_layout);
+                                tilGateVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_gate_voltage_layout);
                                 // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
                                     tilInitialVoltage.setError(ERROR_MESSAGE);
@@ -122,31 +127,35 @@ public class TransistorCEOutputSetup extends Fragment {
                                 }
                                 finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
                                 // Step Size
-                                if (TextUtils.isEmpty(etTotalSteps.getText().toString())) {
-                                    tilTotalSteps.setError(ERROR_MESSAGE);
-                                    return;
-                                } else
-                                    tilTotalSteps.setError(null);
-                                totalSteps = Integer.parseInt(etTotalSteps.getText().toString());
-                                // Base Voltage
-                                if (TextUtils.isEmpty(etBaseVoltage.getText().toString())) {
-                                    tilBaseVoltage.setError(ERROR_MESSAGE);
-                                    return;
-                                } else if (Float.parseFloat(etBaseVoltage.getText().toString()) < -3.3f) {
-                                    tilBaseVoltage.setError(MINIMUM_VALUE_3V);
-                                    return;
-                                } else if (Float.parseFloat(etBaseVoltage.getText().toString()) > 3.3f) {
-                                    tilBaseVoltage.setError(MAXIMUM_VALUE_3V);
+                                if (TextUtils.isEmpty(etStepSize.getText().toString())) {
+                                    tilStepSize.setError(ERROR_MESSAGE);
                                     return;
                                 } else {
-                                    tilBaseVoltage.setError(null);
+                                    tilStepSize.setError(null);
                                 }
-                                baseVoltage = Float.parseFloat(etBaseVoltage.getText().toString());
+                                totalSteps = Float.parseFloat(etStepSize.getText().toString());
+                                // Gate Voltage
+                                if (TextUtils.isEmpty(etGateVoltage.getText().toString())) {
+                                    tilGateVoltage.setError(ERROR_MESSAGE);
+                                    return;
+                                } else if (Float.parseFloat(etGateVoltage.getText().toString()) < -3.3f) {
+                                    tilGateVoltage.setError(MINIMUM_VALUE_3V);
+                                    return;
+                                } else if (Float.parseFloat(etGateVoltage.getText().toString()) > 3.3f) {
+                                    tilGateVoltage.setError(MAXIMUM_VALUE_3V);
+                                    return;
+                                } else {
+                                    tilGateVoltage.setError(null);
+                                }
+                                gateVoltage = Float.parseFloat(etGateVoltage.getText().toString());
                                 stepVoltage = (finalVoltage - initialVoltage) / totalSteps;
-                                if (scienceLab.isConnected())
+
+                                if (scienceLab.isConnected()) {
                                     startExperiment();
-                                else
+                                } else {
                                     Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
+                                }
+                                dialog.dismiss();
                             }
                         })
                         .negativeText("Cancel")
@@ -179,10 +188,10 @@ public class TransistorCEOutputSetup extends Fragment {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                scienceLab.setPV2(baseVoltage);
+                scienceLab.setGain("CH1", 2, false);
+                scienceLab.setPV2(gateVoltage);
                 for (float i = initialVoltage; i < finalVoltage; i += stepVoltage) {
-                    CalcDataPoint dataPoint = new CalcDataPoint(i);
-                    dataPoint.execute();
+                    new CalcDataPoint().execute(i);
                     synchronized (lock) {
                         try {
                             lock.wait();
@@ -197,14 +206,12 @@ public class TransistorCEOutputSetup extends Fragment {
     }
 
     private void updateChart() {
-        Log.v("X-AXIS", x.toString());
-        Log.v("Y-AXIS", y.toString());
         List<ILineDataSet> dataSets = new ArrayList<>();
         List<Entry> temp = new ArrayList<>();
-        for (int i = 0; i < x.size(); i++) {
-            temp.add(new Entry(x.get(i), y.get(i)));
+        for (int i = 0; i < voltageAxis.size(); i++) {
+            temp.add(new Entry(voltageAxis.get(i), currentAxis.get(i)));
         }
-        LineDataSet dataSet = new LineDataSet(temp, "CE Output Characteristics");
+        LineDataSet dataSet = new LineDataSet(temp, "NFET Output Characteristics");
         dataSet.setColor(Color.RED);
         dataSet.setDrawValues(false);
         dataSet.setDrawCircles(false);
@@ -213,20 +220,16 @@ public class TransistorCEOutputSetup extends Fragment {
         outputChart.invalidate();
     }
 
-    private class CalcDataPoint extends AsyncTask<Void, Void, Void> {
-
-        private float voltage;
-
-        CalcDataPoint(float volt) {
-            this.voltage = volt;
-        }
+    private class CalcDataPoint extends AsyncTask<Float, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(Float... params) {
+            float voltage = params[0];
             scienceLab.setPV1(voltage);
-            float readVoltage = (float) scienceLab.getVoltage("CH1", 5);
-            x.add(readVoltage);
-            y.add((voltage - readVoltage) / resistance);
+            float readVoltage = (float) scienceLab.getVoltage("CH1", 10);
+            voltageAxis.add(readVoltage);
+            float resistance = 560;
+            currentAxis.add((voltage - readVoltage) / resistance);
             return null;
         }
 
@@ -244,5 +247,4 @@ public class TransistorCEOutputSetup extends Fragment {
             }
         }
     }
-
 }

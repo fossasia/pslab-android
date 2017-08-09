@@ -48,9 +48,9 @@
                 android:weightSum="10">
 
                 <Spinner
+                    android:id="@+id/channel_select_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/channel_select_spinner"
                     android:layout_weight="3" />
 
                 <TextView
@@ -58,25 +58,45 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:gravity="center"
-                    android:background="@drawable/tv_border" />
+                    android:background="@drawable/tv_border"
+                    android:gravity="center" />
 
                 <Button
+                    android:id="@+id/btn_read_voltage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/btn_read_voltage"
                     android:layout_weight="4"
-                    android:text="Read" />
+                    android:text="@string/read" />
             </LinearLayout>
 
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/ohm_chart"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1.5" />
+        android:layout_weight="1.5"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/current_label" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/ohm_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
