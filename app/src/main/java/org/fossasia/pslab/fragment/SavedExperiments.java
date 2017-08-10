@@ -214,7 +214,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         tree.addChildren(treeZener, treeDiode, treeDiodeClamp, treeDiodeClip, treeHalfRectifier, treeFullWave);
