@@ -394,4 +394,6 @@
     <string name="range">Range</string>
     <string name="wave1">Wave1</string>
     <string name="start_experiment">Start Experiment</string>
+    <string name="discharge">Discharge</string>
+    <string name="charge">Charge</string>
 </resources>
