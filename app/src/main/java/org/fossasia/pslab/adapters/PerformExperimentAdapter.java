@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
@@ -84,6 +85,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return  ExperimentDocFragment.newInstance("L_halfWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
+                if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
+                    return ExperimentDocFragment.newInstance("L_Inverting.md");
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
@@ -103,6 +106,9 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return NFETOutputCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals("Half Wave Rectifier"))
                     return RectifierExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
+                    return InvertingOpAmpExperiment.newInstance();
+                
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
