@@ -210,6 +210,7 @@
     <string name="mlx90614">mlx90614</string>
     <string name="bmp180">bmp180</string>
     <string name="bh1750">bh1750</string>
+    <string name="mpu925x">mpu925x</string>
 
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
@@ -296,6 +297,37 @@
         <item></item>
     </string-array>
 
+    <string-array name="mpu925x_gyro_spinner">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+
+    <string-array name="mpu925x_accel_spinner">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="mpu925x_kalman_spinner">
+        <item>0.01</item>
+        <item>0.1</item>
+        <item>1</item>
+        <item>10</item>
+        <item>100</item>
+        <item>1000</item>
+        <item>10000</item>
+        <item>null</item>
+    </string-array>
+
+    <string-array name="mpu925x_power_spinner">
+        <item></item>
+        <item></item>
+    </string-array>
+
+
     <string-array name="ads1115_gain_spinner">
         <item>GAIN_TWOTHIRDS</item>
         <item>GAIN_ONE</item>
@@ -323,7 +355,7 @@
         <item>250</item>
         <item>475</item>
         <item>860</item>
-    </string-array>  
+    </string-array>
 
     <string-array name="bh1750_gain_spinner">
         <item>500mLx</item>
@@ -358,6 +390,15 @@
     <string name="emitter_voltage_pv2">Emitter Voltage (PV2)</string>
     <string name="total_steps">Total Steps</string>
     <string name="base_voltage_pv2">Base Voltage (PV2)</string>
+<<<<<<< HEAD
     <string name="initial_frequency_hz">Initial Frequency (Hz)</string>
     <string name="voltage_v">Voltage (V)</string>
+=======
+    <string name="range">Range</string>
+    <string name="wave1">Wave1</string>
+    <string name="start_experiment">Start Experiment</string>
+    <string name="wave2">Wave2</string>
+    <string name="label_5000hz">5000Hz</string>
+    <string name="label_180">180°</string>
+>>>>>>> c9287ef34709d88d07ab7384bed2e69a60375b2d
 </resources>

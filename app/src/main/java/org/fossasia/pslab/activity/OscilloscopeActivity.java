@@ -36,6 +36,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
+import org.fossasia.pslab.fragment.FullWaveRectifierFragment;
+import org.fossasia.pslab.fragment.HalfwaveRectifierFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.AudioJack;
@@ -58,6 +60,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         TimebaseTriggerFragment.OnFragmentInteractionListener,
         DataAnalysisFragment.OnFragmentInteractionListener,
         XYPlotFragment.OnFragmentInteractionListener,
+        HalfwaveRectifierFragment.OnFragmentInteractionListener,
+        FullWaveRectifierFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
     private String TAG = "Oscilloscope Activity";
@@ -97,6 +101,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean sineFit;
     public boolean squareFit;
     public boolean viewIsClicked;
+    public boolean isHalfWaveRectifierExperiment;
+    public boolean isFullWaveRectifierExperiment;
     private String leftYAxisInput;
     public String triggerChannel;
     public String curveFittingChannel1;
@@ -108,6 +114,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     Fragment timebasetriggerFragment;
     Fragment dataAnalysisFragment;
     Fragment xyPlotFragment;
+    Fragment halfwaveRectifierFragment;
+    Fragment fullwaveRectifierFragment;
     private final Object lock = new Object();
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
@@ -153,6 +161,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         xyPlotXAxisChannel = "CH1";
         xyPlotYAxisChannel = "CH2";
         viewIsClicked = false;
+        isHalfWaveRectifierExperiment = false;
+        isFullWaveRectifierExperiment = false;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -164,15 +174,37 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         width = size.x;
         height = size.y;
 
+        Bundle extras = getIntent().getExtras();
+        if ("Half Wave Rectifier".equals(extras.getString("who"))) {
+            isHalfWaveRectifierExperiment = true;
+            if (scienceLab.isConnected())
+                scienceLab.setSine1(5000);
+        } else if ("Full Wave Rectifier".equals(extras.getString("who"))) {
+            isFullWaveRectifierExperiment = true;
+            if (scienceLab.isConnected()) {
+                scienceLab.setWaves(5000, 180, 5000);
+            }
+        }
+
         onWindowFocusChanged();
 
         channelParametersFragment = new ChannelParametersFragment();
         timebasetriggerFragment = new TimebaseTriggerFragment();
         dataAnalysisFragment = new DataAnalysisFragment();
         xyPlotFragment = new XYPlotFragment();
+        halfwaveRectifierFragment = new HalfwaveRectifierFragment();
+        fullwaveRectifierFragment = new FullWaveRectifierFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
-            addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+            if (isHalfWaveRectifierExperiment) {
+                addFragment(R.id.layout_dock_os2, halfwaveRectifierFragment, "HalfWaveFragment");
+            } else if (isFullWaveRectifierExperiment) {
+                addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
+            }
+
+            else {
+                addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+            }
         }
         channelParametersButton.setOnClickListener(this);
         timebaseButton.setOnClickListener(this);
@@ -292,6 +324,18 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
+                    if (scienceLab.isConnected() && (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment)) {
+                        captureTask2 = new CaptureTaskTwo();
+                        captureTask2.execute("CH1");
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
                     if (!scienceLab.isConnected() || (!isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected)) {
                         if (!String.valueOf(ledImageView.getTag()).equals("red")) {
                             runOnUiThread(new Runnable() {
@@ -388,24 +432,43 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public void onWindowFocusChanged() {
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
-        if (tabletSize) {
+        if (isHalfWaveRectifierExperiment) {
+            linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 3 / 4;
-            lineChartParams.width = width * 7 / 8;
-            mChartLayout.setLayoutParams(lineChartParams);
+            lineChartParams.width = width;
             RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
             frameLayoutParams.height = height / 4;
-            frameLayoutParams.width = width * 7 / 8;
-            frameLayout.setLayoutParams(frameLayoutParams);
-        } else {
+            frameLayoutParams.width = width;
+        } else if (isFullWaveRectifierExperiment) {
+            linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
-            lineChartParams.height = height * 2 / 3;
-            lineChartParams.width = width * 5 / 6;
-            mChartLayout.setLayoutParams(lineChartParams);
+            lineChartParams.height = height * 5 / 6;
+            lineChartParams.width = width;
             RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
-            frameLayoutParams.height = height / 3;
-            frameLayoutParams.width = width * 5 / 6;
-            frameLayout.setLayoutParams(frameLayoutParams);
+            frameLayoutParams.height = height / 6;
+            frameLayoutParams.width = width;
+        } else {
+
+            if (tabletSize) {
+                RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+                lineChartParams.height = height * 3 / 4;
+                lineChartParams.width = width * 7 / 8;
+                mChartLayout.setLayoutParams(lineChartParams);
+                RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+                frameLayoutParams.height = height / 4;
+                frameLayoutParams.width = width * 7 / 8;
+                frameLayout.setLayoutParams(frameLayoutParams);
+            } else {
+                RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+                lineChartParams.height = height * 2 / 3;
+                lineChartParams.width = width * 5 / 6;
+                mChartLayout.setLayoutParams(lineChartParams);
+                RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+                frameLayoutParams.height = height / 3;
+                frameLayoutParams.width = width * 5 / 6;
+                frameLayout.setLayoutParams(frameLayoutParams);
+            }
         }
     }
 
@@ -661,10 +724,20 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 ledImageView.setTag("green");
             }
 
-            LineDataSet dataset1 = new LineDataSet(entries1, analogInput);
-            LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
+            LineDataSet dataset1;
+            LineDataSet dataSet2;
+            if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment) {
+                dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
+                dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
+                dataset1.setColor(Color.GREEN);
+                dataSet2.setColor(Color.RED);
 
-            dataSet2.setColor(Color.GREEN);
+            } else {
+                dataset1 = new LineDataSet(entries1, analogInput);
+                dataSet2 = new LineDataSet(entries2, "CH2");
+                dataSet2.setColor(Color.GREEN);
+            }
+
 
             dataset1.setDrawCircles(false);
             dataSet2.setDrawCircles(false);

@@ -9,9 +9,11 @@ import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
+import org.fossasia.pslab.experimentsetup.RectifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
+import org.fossasia.pslab.experimentsetup.TransistorTransferExperiment;
 import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
@@ -48,6 +50,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("D_transistorCB.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
                     return ExperimentDocFragment.newInstance("D_transistorCE.html");
+                if (experimentTitle.equals(context.getString(R.string.bjt_transfer_characteristics)))
+                    return ExperimentDocFragment.newInstance("D_transistorCE_transfer.html");
                 if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
                     return ExperimentDocFragment.newInstance("D_transistorCE_input.html");
                 if (experimentTitle.equals(context.getString(R.string.bjt_amplifer)))
@@ -82,6 +86,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("DUST_SENSOR.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.lemon_cell)))
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
+                if (experimentTitle.equals("Half Wave Rectifier"))
+                    return  ExperimentDocFragment.newInstance("L_halfWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
             case 1:
@@ -97,14 +103,18 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return TransistorCBSetup.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
                     return TransistorCEOutputSetup.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.bjt_transfer_characteristics)))
+                    return TransistorTransferExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
                     return TransistorCEInputCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.bjt_amplifer)))
                     return TransistorAmplifierExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return NFETOutputCharacteristicsExperiment.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.nfet_transfer_characteristics)))
-                    return NFETTransferCharacteristicsExperiment.newInstance();
+                if (experimentTitle.equals("Half Wave Rectifier"))
+                    return RectifierExperiment.newInstance("Half Wave Rectifier");
+                if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
+                    return RectifierExperiment.newInstance("Full Wave Rectifier");
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
