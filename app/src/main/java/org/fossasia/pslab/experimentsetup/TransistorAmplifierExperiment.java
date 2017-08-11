@@ -65,9 +65,9 @@ public class TransistorAmplifierExperiment extends Fragment {
             @Override
             public void onClick(View v) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title("Configure Experiment")
+                        .title(getString(R.string.configure_experiment))
                         .customView(R.layout.transistor_amplifier_characteristics_dialog, true)
-                        .positiveText("Start Experiment")
+                        .positiveText(getString(R.string.start_experiment))
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
