@@ -12,6 +12,7 @@ import org.fossasia.pslab.experimentsetup.RectifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
+import org.fossasia.pslab.experimentsetup.TransistorTransferExperiment;
 import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
@@ -48,6 +49,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("D_transistorCB.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
                     return ExperimentDocFragment.newInstance("D_transistorCE.html");
+                if (experimentTitle.equals(context.getString(R.string.bjt_transfer_characteristics)))
+                    return ExperimentDocFragment.newInstance("D_transistorCE_transfer.html");
                 if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
                     return ExperimentDocFragment.newInstance("D_transistorCE_input.html");
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
@@ -97,6 +100,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return TransistorCBSetup.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
                     return TransistorCEOutputSetup.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.bjt_transfer_characteristics)))
+                    return TransistorTransferExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
                     return TransistorCEInputCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
