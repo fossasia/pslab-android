@@ -18,7 +18,9 @@ import org.fossasia.pslab.activity.OscilloscopeActivity;
 
 public class RectifierExperiment extends Fragment {
     Button startButton;
-    public static RectifierExperiment newInstance() {
+    static String experiment;
+    public static RectifierExperiment newInstance(String param) {
+        experiment = param;
         return new RectifierExperiment();
     }
 
@@ -32,7 +34,10 @@ public class RectifierExperiment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), OscilloscopeActivity.class);
-                intent.putExtra("who","Half Rectifier");
+                if ("Half Wave Rectifier".equals(experiment))
+                    intent.putExtra("who", "Half Wave Rectifier");
+                else
+                    intent.putExtra("who", "Full Wave Rectifier");
                 startActivity(intent);
             }
         });
