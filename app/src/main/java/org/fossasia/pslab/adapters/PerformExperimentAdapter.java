@@ -7,12 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
-<<<<<<< HEAD
 import org.fossasia.pslab.experimentsetup.DiodeExperiment;
-=======
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
-import org.fossasia.pslab.experimentsetup.RectifierExperiment;
->>>>>>> fossasia/master
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
