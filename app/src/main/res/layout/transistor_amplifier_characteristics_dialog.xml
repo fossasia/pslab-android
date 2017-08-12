@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/amplifier_initial_frequency_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/amplifier_initial_frequency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/initial_frequency_hz"
+            android:inputType="numberSigned|numberDecimal"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/amplifier_pv3_voltage_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/amplifier_pv3_voltage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/voltage_v"
+            android:inputType="numberSigned|numberDecimal"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

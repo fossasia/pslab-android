@@ -418,4 +418,11 @@
     <string name="wave2">Wave2</string>
     <string name="label_5000hz">5000Hz</string>
     <string name="label_180">180°</string>
+
+    <string name="data_logger">Data Logger</string>
+    <string name="start_logging">Start Logging</string>
+    <string name="stop_logging">Stop Logging</string>
+    <string name="cancel">Cancel</string>
+    <string name="save_data">Save Data</string>
+
 </resources>
