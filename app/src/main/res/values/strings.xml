@@ -355,7 +355,7 @@
         <item>250</item>
         <item>475</item>
         <item>860</item>
-    </string-array>  
+    </string-array>
 
     <string-array name="bh1750_gain_spinner">
         <item>500mLx</item>
@@ -390,8 +390,12 @@
     <string name="emitter_voltage_pv2">Emitter Voltage (PV2)</string>
     <string name="total_steps">Total Steps</string>
     <string name="base_voltage_pv2">Base Voltage (PV2)</string>
-    <string name="label_5000_khz">5000 KHz</string>
+    <string name="initial_frequency_hz">Initial Frequency (Hz)</string>
+    <string name="voltage_v">Voltage (V)</string>
     <string name="range">Range</string>
     <string name="wave1">Wave1</string>
     <string name="start_experiment">Start Experiment</string>
+    <string name="wave2">Wave2</string>
+    <string name="label_5000hz">5000Hz</string>
+    <string name="label_180">180°</string>
 </resources>
