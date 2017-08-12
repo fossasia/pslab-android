@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
+import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.RectifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
@@ -53,6 +54,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("D_transistorCE_transfer.html");
                 if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
                     return ExperimentDocFragment.newInstance("D_transistorCE_input.html");
+                if (experimentTitle.equals(context.getString(R.string.bjt_amplifer)))
+                    return ExperimentDocFragment.newInstance("L_TransistorAmplifier.md");
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return ExperimentDocFragment.newInstance("D_NFET.html");
                 if (experimentTitle.equals(context.getString(R.string.nfet_transfer_characteristics)))
@@ -104,6 +107,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return TransistorTransferExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
                     return TransistorCEInputCharacteristicsExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.bjt_amplifer)))
+                    return TransistorAmplifierExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return NFETOutputCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals("Half Wave Rectifier"))
