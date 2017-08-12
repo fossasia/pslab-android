@@ -174,6 +174,10 @@ public class TransistorCEInputCharacteristicsExperiment extends Fragment {
         outputChart.setDragEnabled(true);
         outputChart.setScaleEnabled(true);
         outputChart.setPinchZoom(true);
+        outputChart.getAxisLeft().setTextColor(Color.WHITE);
+        outputChart.getAxisRight().setTextColor(Color.WHITE);
+        outputChart.getXAxis().setTextColor(Color.WHITE);
+        outputChart.getLegend().setTextColor(Color.WHITE);
         LineData data = new LineData();
         outputChart.setData(data);
     }

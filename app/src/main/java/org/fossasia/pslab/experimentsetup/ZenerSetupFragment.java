@@ -184,6 +184,10 @@ public class ZenerSetupFragment extends Fragment {
         outputChart.setScaleEnabled(true);
         outputChart.getDescription().setEnabled(false);
         outputChart.setPinchZoom(true);
+        outputChart.getAxisLeft().setTextColor(Color.WHITE);
+        outputChart.getAxisRight().setTextColor(Color.WHITE);
+        outputChart.getXAxis().setTextColor(Color.WHITE);
+        outputChart.getLegend().setTextColor(Color.WHITE);
         LineData data = new LineData();
         outputChart.setData(data);
     }
