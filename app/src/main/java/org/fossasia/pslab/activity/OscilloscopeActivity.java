@@ -192,7 +192,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             isDiodeClippingExperiment = true;
             if (scienceLab.isConnected()) {
                 scienceLab.setSine1(5000);
-                scienceLab.setPV3(1.5f);
             }
         }
 
@@ -443,7 +442,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public void onWindowFocusChanged() {
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
-        if (isHalfWaveRectifierExperiment) {
+        if (isHalfWaveRectifierExperiment || isDiodeClippingExperiment) {
             linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 3 / 4;
@@ -451,7 +450,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
             frameLayoutParams.height = height / 4;
             frameLayoutParams.width = width;
-        } else if (isFullWaveRectifierExperiment || isDiodeClippingExperiment) {
+        } else if (isFullWaveRectifierExperiment) {
             linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 5 / 6;

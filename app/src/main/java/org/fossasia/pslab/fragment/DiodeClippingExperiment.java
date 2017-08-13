@@ -8,10 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
+import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.FloatSeekBar;
+import org.fossasia.pslab.others.ScienceLabCommon;
 
 public class DiodeClippingExperiment extends Fragment {
     private OnFragmentInteractionListener mListener;
@@ -35,6 +40,9 @@ public class DiodeClippingExperiment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_diode_clipping_experiment, container, false);
         Spinner spinnerRange = (Spinner) v.findViewById(R.id.spinner_diode_clipping);
+        final FloatSeekBar floatSeekBarPV1 = (FloatSeekBar) v.findViewById(R.id.seekBar_pv1_diodeclipping);
+        final TextView progressTextViewPV1 = (TextView) v.findViewById(R.id.seekBar_progress_diode_clipping);
+        final ScienceLab scienceLab = ScienceLabCommon.scienceLab;
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 
         ArrayAdapter<String> rangesAdapter;
@@ -87,6 +95,27 @@ public class DiodeClippingExperiment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        floatSeekBarPV1.setters(-3.3f, 3.3f);
+        floatSeekBarPV1.setValue(0.0f);
+        floatSeekBarPV1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (scienceLab.isConnected())
+                scienceLab.setPV1(progress);
+                progressTextViewPV1.setText(floatSeekBarPV1.getValue() + "V");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
         });
