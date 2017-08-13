@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
@@ -93,6 +94,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return  ExperimentDocFragment.newInstance("L_halfWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
+                if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
+                    return ExperimentDocFragment.newInstance("L_Inverting.md");
                 if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
                     return ExperimentDocFragment.newInstance("L_NonInverting.md");
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
@@ -122,6 +125,10 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return NFETOutputCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals("Half Wave Rectifier"))
                     return RectifierExperiment.newInstance("Half Wave Rectifier");
+                if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
+                    return InvertingOpAmpExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
+                    return NonInvertingOpAmpExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
                     return LemonCellExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
