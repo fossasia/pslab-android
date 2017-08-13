@@ -120,6 +120,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return TransistorAmplifierExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return NFETOutputCharacteristicsExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.nfet_transfer_characteristics)))
+                    return NFETTransferCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals("Half Wave Rectifier"))
                     return RectifierExperiment.newInstance("Half Wave Rectifier");
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
