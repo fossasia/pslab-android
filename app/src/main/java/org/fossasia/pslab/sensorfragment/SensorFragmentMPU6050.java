@@ -246,9 +246,9 @@ public class SensorFragmentMPU6050 extends Fragment {
             entriesay.add(new Entry((float) timeElapsed, dataMPU6050.get(1).floatValue()));
             entriesaz.add(new Entry((float) timeElapsed, dataMPU6050.get(2).floatValue()));
 
-            entriesgx.add(new Entry((float) timeElapsed, dataMPU6050.get(3).floatValue()));
-            entriesgy.add(new Entry((float) timeElapsed, dataMPU6050.get(4).floatValue()));
-            entriesgz.add(new Entry((float) timeElapsed, dataMPU6050.get(5).floatValue()));
+            entriesgx.add(new Entry((float) timeElapsed, dataMPU6050.get(4).floatValue()));
+            entriesgy.add(new Entry((float) timeElapsed, dataMPU6050.get(5).floatValue()));
+            entriesgz.add(new Entry((float) timeElapsed, dataMPU6050.get(6).floatValue()));
 
             return null;
         }
