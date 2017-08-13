@@ -36,6 +36,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
+import org.fossasia.pslab.fragment.FullWaveRectifierFragment;
 import org.fossasia.pslab.fragment.HalfwaveRectifierFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
@@ -60,6 +61,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         DataAnalysisFragment.OnFragmentInteractionListener,
         XYPlotFragment.OnFragmentInteractionListener,
         HalfwaveRectifierFragment.OnFragmentInteractionListener,
+        FullWaveRectifierFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
     private String TAG = "Oscilloscope Activity";
@@ -100,6 +102,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean squareFit;
     public boolean viewIsClicked;
     public boolean isHalfWaveRectifierExperiment;
+    public boolean isFullWaveRectifierExperiment;
     private String leftYAxisInput;
     public String triggerChannel;
     public String curveFittingChannel1;
@@ -112,6 +115,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     Fragment dataAnalysisFragment;
     Fragment xyPlotFragment;
     Fragment halfwaveRectifierFragment;
+    Fragment fullwaveRectifierFragment;
     private final Object lock = new Object();
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
@@ -158,6 +162,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         xyPlotYAxisChannel = "CH2";
         viewIsClicked = false;
         isHalfWaveRectifierExperiment = false;
+        isFullWaveRectifierExperiment = false;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -170,11 +175,15 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         height = size.y;
 
         Bundle extras = getIntent().getExtras();
-        if ("Half Rectifier".equals(extras.getString("who"))) {
+        if ("Half Wave Rectifier".equals(extras.getString("who"))) {
             isHalfWaveRectifierExperiment = true;
             if (scienceLab.isConnected())
                 scienceLab.setSine1(5000);
-
+        } else if ("Full Wave Rectifier".equals(extras.getString("who"))) {
+            isFullWaveRectifierExperiment = true;
+            if (scienceLab.isConnected()) {
+                scienceLab.setWaves(5000, 180, 5000);
+            }
         }
 
         onWindowFocusChanged();
@@ -184,11 +193,16 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         dataAnalysisFragment = new DataAnalysisFragment();
         xyPlotFragment = new XYPlotFragment();
         halfwaveRectifierFragment = new HalfwaveRectifierFragment();
+        fullwaveRectifierFragment = new FullWaveRectifierFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             if (isHalfWaveRectifierExperiment) {
                 addFragment(R.id.layout_dock_os2, halfwaveRectifierFragment, "HalfWaveFragment");
-            } else {
+            } else if (isFullWaveRectifierExperiment) {
+                addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
+            }
+
+            else {
                 addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
             }
         }
@@ -310,7 +324,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (scienceLab.isConnected() && isHalfWaveRectifierExperiment) {
+                    if (scienceLab.isConnected() && (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment)) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH1");
                         synchronized (lock) {
@@ -419,6 +433,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
         if (isHalfWaveRectifierExperiment) {
+            linearLayout.setVisibility(View.INVISIBLE);
+            RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+            lineChartParams.height = height * 3 / 4;
+            lineChartParams.width = width;
+            RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+            frameLayoutParams.height = height / 4;
+            frameLayoutParams.width = width;
+        } else if (isFullWaveRectifierExperiment) {
             linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 5 / 6;
@@ -704,7 +726,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
             LineDataSet dataset1;
             LineDataSet dataSet2;
-            if (isHalfWaveRectifierExperiment) {
+            if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment) {
                 dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
                 dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
                 dataset1.setColor(Color.GREEN);
