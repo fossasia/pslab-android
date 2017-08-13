@@ -88,18 +88,16 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                 if (experimentTitle.equals(context.getResources().getString(R.string.lemon_cell)))
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
                 if (experimentTitle.equals("Half Wave Rectifier"))
-                    return  ExperimentDocFragment.newInstance("L_halfWave.html");
+                    return ExperimentDocFragment.newInstance("L_halfWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
-<<<<<<< HEAD
                 if (experimentTitle.equals("Diode Clipping"))
                     return ExperimentDocFragment.newInstance("L_DiodeClipping.md");
-=======
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
                     return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
->>>>>>> fossasia/master
+
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
@@ -122,15 +120,11 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return NFETOutputCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals("Half Wave Rectifier"))
-<<<<<<< HEAD
                     return DiodeExperiment.newInstance("Half Wave Rectifier");
-=======
-                    return RectifierExperiment.newInstance("Half Wave Rectifier");
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
                     return LemonCellExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
                     return CapacitorDischargeExperiment.newInstance();
->>>>>>> fossasia/master
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return DiodeExperiment.newInstance("Full Wave Rectifier");
                 if (experimentTitle.equals("Diode Clipping"))
