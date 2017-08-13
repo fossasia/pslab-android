@@ -109,6 +109,10 @@ public class OhmsLawSetupExperiment extends Fragment {
         outputChart.setScaleEnabled(true);
         outputChart.setPinchZoom(true);
         outputChart.getDescription().setEnabled(false);
+        outputChart.getAxisLeft().setTextColor(Color.WHITE);
+        outputChart.getAxisRight().setTextColor(Color.WHITE);
+        outputChart.getXAxis().setTextColor(Color.WHITE);
+        outputChart.getLegend().setTextColor(Color.WHITE);
         LineData data = new LineData();
         outputChart.setData(data);
     }

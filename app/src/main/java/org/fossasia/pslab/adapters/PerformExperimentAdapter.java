@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
+import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
@@ -93,6 +94,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
+                if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
+                    return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
@@ -118,6 +121,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return RectifierExperiment.newInstance("Half Wave Rectifier");
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
                     return LemonCellExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
+                    return CapacitorDischargeExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return RectifierExperiment.newInstance("Full Wave Rectifier");
                 return ExperimentSetupFragment.newInstance();

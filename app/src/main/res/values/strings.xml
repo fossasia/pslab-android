@@ -395,6 +395,8 @@
     <string name="range">Range</string>
     <string name="wave1">Wave1</string>
     <string name="start_experiment">Start Experiment</string>
+    <string name="discharge">Discharge</string>
+    <string name="charge">Charge</string>
     <string name="wave2">Wave2</string>
     <string name="label_5000hz">5000Hz</string>
     <string name="label_180">180°</string>
