@@ -406,6 +406,9 @@
     <string name="stop_logging">Stop Logging</string>
     <string name="cancel">Cancel</string>
     <string name="save_data">Save Data</string>
+    <string name="view_logged_data">View Logged Data</string>
+    <string name="export_logged_data">Export Logged Data</string>
+    <string name="sensor_logged_data">Sensor Logged Data</string>
 
 
 </resources>
