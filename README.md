@@ -100,7 +100,9 @@ Note :
 ## Setup to use PSLab with Android App
 To use PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ) and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.
 
-## Code practices
+## Contributions Best Practices
+
+### Code practices
 
 Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics. 
 
@@ -110,7 +112,22 @@ Please help us follow the best practice to make it easy for the reviewer as well
  * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
  * If the PR is related to any front end change, please attach relevant screenshots in the pull request description.
 
-## Code style
+### Branch Policy
+
+We have the following branches
+ * **development**
+	 All development goes on in this branch. If you're making a contribution,
+	 you are supposed to make a pull request to _development_.
+	 Make sure it pass a build check on Travis.
+
+ * **master**
+   This contains the stable code. After significant features/bugfixes are accumulated on development, we move it to master.
+
+ * **apk**
+   This branch contains automatically generated apk file for testing.
+
+
+### Code style
 
 Please try to follow the mentioned guidelines while writing and submitting your code as it makes easier for the reviewer and other developers to understand.
 
