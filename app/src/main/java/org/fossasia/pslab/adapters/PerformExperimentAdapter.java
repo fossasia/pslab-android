@@ -89,7 +89,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("DUST_SENSOR.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.lemon_cell)))
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
-                if (experimentTitle.equals("Half Wave Rectifier"))
+                if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
                     return  ExperimentDocFragment.newInstance("L_halfWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
