@@ -90,7 +90,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("DUST_SENSOR.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.lemon_cell)))
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
-                if (experimentTitle.equals("Half Wave Rectifier"))
+                if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
                     return  ExperimentDocFragment.newInstance("L_halfWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
@@ -123,16 +123,27 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return TransistorAmplifierExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return NFETOutputCharacteristicsExperiment.newInstance();
+<<<<<<< HEAD
                 if (experimentTitle.equals("Half Wave Rectifier"))
                     return DiodeExperiment.newInstance("Half Wave Rectifier");
+=======
+                if (experimentTitle.equals(context.getString(R.string.nfet_transfer_characteristics)))
+                    return NFETTransferCharacteristicsExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
+                    return RectifierExperiment.newInstance(context.getString(R.string.half_wave_rectifier));
+>>>>>>> fossasia/development
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
                     return LemonCellExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
                     return CapacitorDischargeExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
+<<<<<<< HEAD
                     return DiodeExperiment.newInstance("Full Wave Rectifier");
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
+=======
+                    return RectifierExperiment.newInstance(context.getString(R.string.full_wave_rectifier));
+>>>>>>> fossasia/development
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
