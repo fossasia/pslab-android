@@ -9,11 +9,11 @@ import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
+import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
+import org.fossasia.pslab.experimentsetup.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
-import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
-import org.fossasia.pslab.experimentsetup.RectifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
@@ -94,6 +94,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return  ExperimentDocFragment.newInstance("L_halfWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
+                if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
+                    return ExperimentDocFragment.newInstance("L_DiodeClipping.md");
                 if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
                     return ExperimentDocFragment.newInstance("L_Inverting.md");
                 if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
@@ -123,6 +125,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return TransistorAmplifierExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return NFETOutputCharacteristicsExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
+                    return DiodeExperiment.newInstance("Half Wave Rectifier");
                 if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
                     return InvertingOpAmpExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
@@ -130,13 +134,16 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                 if (experimentTitle.equals(context.getString(R.string.nfet_transfer_characteristics)))
                     return NFETTransferCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
-                    return RectifierExperiment.newInstance(context.getString(R.string.half_wave_rectifier));
+                    return DiodeExperiment.newInstance(context.getString(R.string.half_wave_rectifier));
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
                     return LemonCellExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
                     return CapacitorDischargeExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
-                    return RectifierExperiment.newInstance(context.getString(R.string.full_wave_rectifier));
+                    return DiodeExperiment.newInstance("Full Wave Rectifier");
+                if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
+                    return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
+
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
