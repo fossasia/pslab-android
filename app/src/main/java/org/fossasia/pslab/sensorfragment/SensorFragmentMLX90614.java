@@ -32,9 +32,9 @@ import java.util.ArrayList;
  */
 
 public class SensorFragmentMLX90614 extends Fragment {
+
     private ScienceLab scienceLab;
-    private I2C i2c;
-    private SensorFragmentMLX90614.SensorDataFetch sensorDataFetch;
+    private SensorDataFetch sensorDataFetch;
     private TextView tvSensorMLX90614ObjectTemp;
     private TextView tvSensorMLX90614AmbientTemp;
     private MLX90614 sensorMLX90614;
@@ -42,27 +42,20 @@ public class SensorFragmentMLX90614 extends Fragment {
     private LineChart mChartAmbientTemperature;
     private long startTime;
     private int flag;
-    private XAxis xObjectTemperature;
-    private YAxis yObjectTemperature;
-    private YAxis yObjectTemperature2;
-    private XAxis xAmbientTemperature;
-    private YAxis yAmbientTemperature;
-    private YAxis yAmbientTemperature2;
     private ArrayList<Entry> entriesObjectTemperature;
     private ArrayList<Entry> entriesAmbientTemperature;
     private final Object lock = new Object();
 
 
     public static SensorFragmentMLX90614 newInstance() {
-        SensorFragmentMLX90614 sensorFragmentMLX90614 = new SensorFragmentMLX90614();
-        return sensorFragmentMLX90614;
+        return new SensorFragmentMLX90614();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
+        I2C i2c = scienceLab.i2c;
         try {
             sensorMLX90614 = new MLX90614(i2c);
         } catch (IOException e) {
@@ -76,27 +69,26 @@ public class SensorFragmentMLX90614 extends Fragment {
             public void run() {
                 while (true) {
                     if (scienceLab.isConnected()) {
-                        sensorDataFetch = new SensorFragmentMLX90614.SensorDataFetch();
+                        sensorDataFetch = new SensorDataFetch();
                         sensorDataFetch.execute();
-                    }
+                        if (flag == 0) {
+                            startTime = System.currentTimeMillis();
+                            flag = 1;
+                        }
 
-                    if (flag == 0) {
-                        startTime = System.currentTimeMillis();
-                        flag = 1;
-                    }
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-                    synchronized (lock) {
                         try {
-                            lock.wait();
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    }
-
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                 }
             }
@@ -114,13 +106,13 @@ public class SensorFragmentMLX90614 extends Fragment {
         mChartObjectTemperature = (LineChart) view.findViewById(R.id.chart_obj_temp_mlx);
         mChartAmbientTemperature = (LineChart) view.findViewById(R.id.chart_amb_temp_mlx);
 
-        xObjectTemperature = mChartObjectTemperature.getXAxis();
-        yObjectTemperature = mChartObjectTemperature.getAxisLeft();
-        yObjectTemperature2 = mChartObjectTemperature.getAxisRight();
+        XAxis xObjectTemperature = mChartObjectTemperature.getXAxis();
+        YAxis yObjectTemperature = mChartObjectTemperature.getAxisLeft();
+        YAxis yObjectTemperature2 = mChartObjectTemperature.getAxisRight();
 
-        xAmbientTemperature = mChartAmbientTemperature.getXAxis();
-        yAmbientTemperature = mChartAmbientTemperature.getAxisLeft();
-        yAmbientTemperature2 = mChartAmbientTemperature.getAxisRight();
+        XAxis xAmbientTemperature = mChartAmbientTemperature.getXAxis();
+        YAxis yAmbientTemperature = mChartAmbientTemperature.getAxisLeft();
+        YAxis yAmbientTemperature2 = mChartAmbientTemperature.getAxisRight();
 
         mChartObjectTemperature.setTouchEnabled(true);
         mChartObjectTemperature.setHighlightPerDragEnabled(true);
@@ -186,8 +178,9 @@ public class SensorFragmentMLX90614 extends Fragment {
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        Double dataMLX90614ObjectTemp;
-        Double dataMLX90614AmbientTemp;
+
+        private Double dataMLX90614ObjectTemp;
+        private Double dataMLX90614AmbientTemp;
         private long timeElapsed;
 
         @Override
@@ -202,10 +195,8 @@ public class SensorFragmentMLX90614 extends Fragment {
             }
 
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-
             entriesObjectTemperature.add(new Entry((float) timeElapsed, dataMLX90614ObjectTemp.floatValue()));
             entriesAmbientTemperature.add(new Entry((float) timeElapsed, dataMLX90614AmbientTemp.floatValue()));
-
             return null;
         }
 
@@ -214,20 +205,20 @@ public class SensorFragmentMLX90614 extends Fragment {
             tvSensorMLX90614ObjectTemp.setText(String.valueOf(dataMLX90614ObjectTemp));
             tvSensorMLX90614AmbientTemp.setText(String.valueOf(dataMLX90614AmbientTemp));
 
-            LineDataSet dataset1 = new LineDataSet(entriesObjectTemperature, "Object Temperature");
-            LineDataSet dataset2 = new LineDataSet(entriesAmbientTemperature, "Ambient Temperature");
+            LineDataSet dataSet1 = new LineDataSet(entriesObjectTemperature, "Object Temperature");
+            LineDataSet dataSet2 = new LineDataSet(entriesAmbientTemperature, "Ambient Temperature");
 
-            dataset1.setDrawCircles(true);
-            dataset2.setDrawCircles(true);
+            dataSet1.setDrawCircles(true);
+            dataSet2.setDrawCircles(true);
 
-            LineData data1 = new LineData(dataset1);
+            LineData data1 = new LineData(dataSet1);
             mChartObjectTemperature.setData(data1);
             mChartObjectTemperature.notifyDataSetChanged();
             mChartObjectTemperature.setVisibleXRangeMaximum(10);
             mChartObjectTemperature.moveViewToX(data1.getEntryCount());
             mChartObjectTemperature.invalidate();
 
-            LineData data2 = new LineData(dataset2);
+            LineData data2 = new LineData(dataSet2);
             mChartAmbientTemperature.setData(data2);
             mChartAmbientTemperature.notifyDataSetChanged();
             mChartAmbientTemperature.setVisibleXRangeMaximum(10);

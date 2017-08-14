@@ -18,7 +18,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -28,39 +27,34 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by asitava on 10/7/17.
  */
 
 public class SensorFragmentADS1115 extends Fragment {
+
     private ScienceLab scienceLab;
-    private I2C i2c;
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorADS1115;
     private LineChart mChart;
     private long startTime;
     private int flag;
-    private XAxis x;
-    private YAxis y;
-    private YAxis y2;
     private ArrayList<Entry> entries;
     private final Object lock = new Object();
 
     private ADS1115 sensorADS1115;
 
     public static SensorFragmentADS1115 newInstance() {
-        SensorFragmentADS1115 sensorFragmentADS1115 = new SensorFragmentADS1115();
-        return sensorFragmentADS1115;
+        return new SensorFragmentADS1115();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
-        entries = new ArrayList<Entry>();
+        I2C i2c = scienceLab.i2c;
+        entries = new ArrayList<>();
         try {
             sensorADS1115 = new ADS1115(i2c);
         } catch (IOException | InterruptedException e) {
@@ -77,18 +71,18 @@ public class SensorFragmentADS1115 extends Fragment {
                             startTime = System.currentTimeMillis();
                             flag = 1;
                         }
-                    }
-                    synchronized (lock) {
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         try {
-                            lock.wait();
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    }
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                 }
             }
@@ -110,16 +104,15 @@ public class SensorFragmentADS1115 extends Fragment {
         if (sensorADS1115 != null) {
             sensorADS1115.setGain(spinnerSensorADS1115Gain.getSelectedItem().toString());
         }
-
         if (sensorADS1115 != null) {
             sensorADS1115.setChannel(spinnerSensorADS1115Channel.getSelectedItem().toString());
         }
         if (sensorADS1115 != null) {
             sensorADS1115.setDataRate(Integer.parseInt(spinnerSensorADS1115Rate.getSelectedItem().toString()));
         }
-        x = mChart.getXAxis();
-        y = mChart.getAxisLeft();
-        y2 = mChart.getAxisRight();
+        XAxis x = mChart.getXAxis();
+        YAxis y = mChart.getAxisLeft();
+        YAxis y2 = mChart.getAxisRight();
 
         mChart.setTouchEnabled(true);
         mChart.setHighlightPerDragEnabled(true);
@@ -155,8 +148,9 @@ public class SensorFragmentADS1115 extends Fragment {
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
+
         private int dataADS1115;
-        long timeElapsed;
+        private long timeElapsed;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -178,9 +172,9 @@ public class SensorFragmentADS1115 extends Fragment {
             super.onPostExecute(aVoid);
             tvSensorADS1115.setText(String.valueOf(dataADS1115));
 
-            LineDataSet dataset = new LineDataSet(entries, "Bx");
-            dataset.setDrawCircles(true);
-            LineData data = new LineData(dataset);
+            LineDataSet dataSet = new LineDataSet(entries, "Bx");
+            dataSet.setDrawCircles(true);
+            LineData data = new LineData(dataSet);
             mChart.setData(data);
             mChart.notifyDataSetChanged();
             mChart.setVisibleXRangeMaximum(10);

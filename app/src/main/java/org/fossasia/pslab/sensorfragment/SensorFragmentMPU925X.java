@@ -35,8 +35,8 @@ import java.util.List;
  */
 
 public class SensorFragmentMPU925X extends Fragment {
+
     private ScienceLab scienceLab;
-    private I2C i2c;
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorMPU925Xax;
     private TextView tvSensorMPU925Xay;
@@ -48,12 +48,6 @@ public class SensorFragmentMPU925X extends Fragment {
     private MPU925x sensorMPU925X;
     private LineChart mChartAcceleration;
     private LineChart mChartGyroscope;
-    private XAxis xAccelerometer;
-    private YAxis yAccelerometer;
-    private YAxis yAccelerometer2;
-    private XAxis xGyroscope;
-    private YAxis yGyroscope;
-    private YAxis yGyroscope2;
     private long startTime;
     private int flag;
     private ArrayList<Entry> entriesax;
@@ -65,15 +59,14 @@ public class SensorFragmentMPU925X extends Fragment {
     private final Object lock = new Object();
 
     public static SensorFragmentMPU925X newInstance() {
-        SensorFragmentMPU925X sensorFragmentMPU925X = new SensorFragmentMPU925X();
-        return sensorFragmentMPU925X;
+        return new SensorFragmentMPU925X();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
+        I2C i2c = scienceLab.i2c;
         try {
             sensorMPU925X = new MPU925x(i2c);
         } catch (IOException e) {
@@ -140,13 +133,13 @@ public class SensorFragmentMPU925X extends Fragment {
         mChartAcceleration = (LineChart) view.findViewById(R.id.chart_sensor_mpu925x_accelerometer);
         mChartGyroscope = (LineChart) view.findViewById(R.id.chart_sensor_mpu925x_gyroscope);
 
-        xAccelerometer = mChartAcceleration.getXAxis();
-        yAccelerometer = mChartAcceleration.getAxisLeft();
-        yAccelerometer2 = mChartAcceleration.getAxisRight();
+        XAxis xAccelerometer = mChartAcceleration.getXAxis();
+        YAxis yAccelerometer = mChartAcceleration.getAxisLeft();
+        YAxis yAccelerometer2 = mChartAcceleration.getAxisRight();
 
-        xGyroscope = mChartGyroscope.getXAxis();
-        yGyroscope = mChartGyroscope.getAxisLeft();
-        yGyroscope2 = mChartGyroscope.getAxisRight();
+        XAxis xGyroscope = mChartGyroscope.getXAxis();
+        YAxis yGyroscope = mChartGyroscope.getAxisLeft();
+        YAxis yGyroscope2 = mChartGyroscope.getAxisRight();
 
         mChartAcceleration.setTouchEnabled(true);
         mChartAcceleration.setHighlightPerDragEnabled(true);
@@ -228,9 +221,10 @@ public class SensorFragmentMPU925X extends Fragment {
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        double[] dataGyro, dataAccel;
-        double dataTemp;
-        long timeElapsed;
+
+        private double[] dataGyro, dataAccel;
+        private double dataTemp;
+        private long timeElapsed;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -245,13 +239,13 @@ public class SensorFragmentMPU925X extends Fragment {
 
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
 
-            entriesax.add(new Entry((float) timeElapsed, (float)dataAccel[0]));
-            entriesay.add(new Entry((float) timeElapsed, (float)dataAccel[1]));
-            entriesaz.add(new Entry((float) timeElapsed, (float)dataAccel[2]));
+            entriesax.add(new Entry((float) timeElapsed, (float) dataAccel[0]));
+            entriesay.add(new Entry((float) timeElapsed, (float) dataAccel[1]));
+            entriesaz.add(new Entry((float) timeElapsed, (float) dataAccel[2]));
 
-            entriesgx.add(new Entry((float) timeElapsed, (float)dataGyro[0]));
-            entriesgy.add(new Entry((float) timeElapsed, (float)dataGyro[1]));
-            entriesgz.add(new Entry((float) timeElapsed, (float)dataGyro[2]));
+            entriesgx.add(new Entry((float) timeElapsed, (float) dataGyro[0]));
+            entriesgy.add(new Entry((float) timeElapsed, (float) dataGyro[1]));
+            entriesgz.add(new Entry((float) timeElapsed, (float) dataGyro[2]));
 
             return null;
         }
@@ -283,12 +277,12 @@ public class SensorFragmentMPU925X extends Fragment {
             dataSet5.setColor(Color.GREEN);
             dataSet6.setColor(Color.RED);
 
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            List<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(dataset1);
             dataSets.add(dataSet2);
             dataSets.add(dataSet3);
 
-            List<ILineDataSet> dataSets2 = new ArrayList<ILineDataSet>();
+            List<ILineDataSet> dataSets2 = new ArrayList<>();
             dataSets2.add(dataset4);
             dataSets2.add(dataSet5);
             dataSets2.add(dataSet6);
