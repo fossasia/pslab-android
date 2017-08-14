@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
@@ -99,6 +100,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
                     return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
+                if (experimentTitle.equals(context.getString(R.string.human_body_resistance)))
+                    return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
@@ -128,6 +131,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return CapacitorDischargeExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return RectifierExperiment.newInstance("Full Wave Rectifier");
+                if (experimentTitle.equals(context.getString(R.string.human_body_resistance)))
+                    return HumanBodyResistanceExperiment.newInstance();
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
