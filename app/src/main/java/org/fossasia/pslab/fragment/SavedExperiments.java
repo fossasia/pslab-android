@@ -161,7 +161,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        // Open BJT Amplifier Experiment
+                        startExperiment(value);
                     }
                 });
         tree.addChildren(treeNFETOutput, treeNFETTransfer, treeBJTCB, treeBJTCEOutput, treeBJTCEInput, treeBJTTransfer, treeBJTCEBackup, treeBJTAmplifier);
@@ -243,7 +243,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeSumming = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.summing_junction)))
@@ -641,7 +641,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeACGen = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ac_generator)))
@@ -745,7 +745,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeUltra = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ultrasonic_range_finder)))
