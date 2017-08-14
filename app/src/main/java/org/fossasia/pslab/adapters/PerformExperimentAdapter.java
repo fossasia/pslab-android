@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
@@ -95,6 +96,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
                     return ExperimentDocFragment.newInstance("L_DiodeClipping.md");
+                if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
+                    return ExperimentDocFragment.newInstance("L_Inverting.md");
                 if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
                     return ExperimentDocFragment.newInstance("L_NonInverting.md");
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
@@ -122,8 +125,12 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return TransistorAmplifierExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return NFETOutputCharacteristicsExperiment.newInstance();
-                if (experimentTitle.equals("Half Wave Rectifier"))
+                if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
                     return DiodeExperiment.newInstance("Half Wave Rectifier");
+                if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
+                    return InvertingOpAmpExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
+                    return NonInvertingOpAmpExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.nfet_transfer_characteristics)))
                     return NFETTransferCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
