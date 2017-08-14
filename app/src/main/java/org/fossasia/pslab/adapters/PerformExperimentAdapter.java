@@ -94,7 +94,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return  ExperimentDocFragment.newInstance("L_halfWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
-                if (experimentTitle.equals("Diode Clipping"))
+                if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
                     return ExperimentDocFragment.newInstance("L_DiodeClipping.md");
                 if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
                     return ExperimentDocFragment.newInstance("L_NonInverting.md");
@@ -131,8 +131,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return CapacitorDischargeExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return DiodeExperiment.newInstance("Full Wave Rectifier");
-                if (experimentTitle.equals("Diode Clipping"))
-                    return DiodeExperiment.newInstance("Diode Clipping");
+                if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
+                    return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
