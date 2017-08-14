@@ -96,6 +96,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("M_FullWave.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
                     return ExperimentDocFragment.newInstance("L_DiodeClipping.md");
+                if (experimentTitle.equals(context.getResources().getString(R.string.diode_clamping)))
+                    return ExperimentDocFragment.newInstance("L_DiodeClamping.md");
                 if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
                     return ExperimentDocFragment.newInstance("L_Inverting.md");
                 if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
@@ -143,6 +145,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return DiodeExperiment.newInstance("Full Wave Rectifier");
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
+                if (experimentTitle.equals(context.getResources().getString(R.string.diode_clamping)))
+                    return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clamping));
 
                 return ExperimentSetupFragment.newInstance();
             default:
