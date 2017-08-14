@@ -182,7 +182,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeDiodeClamp = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.diode_clamping)))
@@ -198,7 +198,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeHalfRectifier = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.half_wave_rectifier)))
@@ -227,7 +227,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeRamp = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ramp_generator)))
