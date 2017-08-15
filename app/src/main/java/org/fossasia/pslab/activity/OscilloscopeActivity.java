@@ -33,7 +33,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.fragment.AstableMultivibratorFragment;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
 import org.fossasia.pslab.fragment.DiodeClippingExperiment;
@@ -46,6 +48,7 @@ import org.fossasia.pslab.others.Plot2D;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +67,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         HalfwaveRectifierFragment.OnFragmentInteractionListener,
         FullWaveRectifierFragment.OnFragmentInteractionListener,
         DiodeClippingExperiment.OnFragmentInteractionListener,
+        AstableMultivibratorFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
     private String TAG = "Oscilloscope Activity";
@@ -106,6 +110,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean isHalfWaveRectifierExperiment;
     public boolean isFullWaveRectifierExperiment;
     public boolean isDiodeClippingExperiment;
+    public boolean isAstableMultivibratorExperiment;
     private String leftYAxisInput;
     public String triggerChannel;
     public String curveFittingChannel1;
@@ -120,14 +125,19 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     Fragment halfwaveRectifierFragment;
     Fragment fullwaveRectifierFragment;
     Fragment diodeClippingFragment;
+    Fragment astableMultivibratorFragment;
     private final Object lock = new Object();
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
     private CaptureTaskThree captureTask3;
     private XYPlotTask xyPlotTask;
+    private AstableMultivibratorTask astableMultivibratorTask;
     private ImageView ledImageView;
     public Plot2D graph;
     private AudioJack audioJack = null;
+    private AnalyticsClass analyticsClass;
+    public boolean isCH1FrequencyRequired;
+    public boolean isCH2FrequencyRequired;
 
 
     @Override
@@ -167,6 +177,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         viewIsClicked = false;
         isHalfWaveRectifierExperiment = false;
         isFullWaveRectifierExperiment = false;
+        isAstableMultivibratorExperiment = false;
+        analyticsClass = new AnalyticsClass();
+        isCH1FrequencyRequired = false;
+        isCH2FrequencyRequired = false;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -193,6 +207,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             if (scienceLab.isConnected()) {
                 scienceLab.setSine1(5000);
             }
+        } else if ("Astable Multivibrator".equals(extras.getString("who"))) {
+            isAstableMultivibratorExperiment = true;
         }
 
         onWindowFocusChanged();
@@ -204,6 +220,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         halfwaveRectifierFragment = new HalfwaveRectifierFragment();
         fullwaveRectifierFragment = new FullWaveRectifierFragment();
         diodeClippingFragment = new DiodeClippingExperiment();
+        astableMultivibratorFragment = new AstableMultivibratorFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             if (isHalfWaveRectifierExperiment) {
@@ -212,6 +229,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
             } else if (isDiodeClippingExperiment) {
                 addFragment(R.id.layout_dock_os2, diodeClippingFragment, "DiodeClippingFragment");
+            } else if (isAstableMultivibratorExperiment) {
+                addFragment(R.id.layout_dock_os2, astableMultivibratorFragment, "DiodeClippingFragment");
             } else {
                 addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
             }
@@ -346,6 +365,18 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
+                    if (scienceLab.isConnected() && isAstableMultivibratorExperiment) {
+                        astableMultivibratorTask = new AstableMultivibratorTask();
+                        astableMultivibratorTask.execute("CH1");
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
                     if (!scienceLab.isConnected() || (!isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected)) {
                         if (!String.valueOf(ledImageView.getTag()).equals("red")) {
                             runOnUiThread(new Runnable() {
@@ -442,7 +473,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public void onWindowFocusChanged() {
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
-        if (isHalfWaveRectifierExperiment || isDiodeClippingExperiment) {
+        if (isHalfWaveRectifierExperiment || isDiodeClippingExperiment || isAstableMultivibratorExperiment) {
             linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 3 / 4;
@@ -532,6 +563,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         }
         if (captureTask3 != null) {
             captureTask3.cancel(true);
+        }
+        if (astableMultivibratorTask != null) {
+            astableMultivibratorTask.cancel(true);
         }
         super.onDestroy();
     }
@@ -736,7 +770,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
             LineDataSet dataset1;
             LineDataSet dataSet2;
-            if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment  || isDiodeClippingExperiment) {
+            if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment || isDiodeClippingExperiment) {
                 dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
                 dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
                 dataset1.setColor(Color.GREEN);
@@ -975,4 +1009,85 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         }
     }
 
+    public class AstableMultivibratorTask extends AsyncTask<String, Void, Void> {
+        ArrayList<Entry> entries1;
+        ArrayList<Entry> entries2;
+        String analogInput;
+        double[] xData;
+        double[] y1Data;
+        double[] y2Data;
+        double frequencyCH1;
+        double frequencyCH2;
+        AstableMultivibratorFragment fragment;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                analogInput = params[0];
+                //no. of samples and timegap still need to be determined
+                HashMap<String, double[]> data;
+                data = scienceLab.captureTwo(128, 10, analogInput, false);
+                xData = data.get("x");
+                y1Data = data.get("y1");
+                y2Data = data.get("y2");
+
+                entries1 = new ArrayList<Entry>();
+                entries2 = new ArrayList<Entry>();
+                for (int i = 0; i < xData.length; i++) {
+                    entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                    entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                }
+                if (isCH1FrequencyRequired)
+                    frequencyCH1 = analyticsClass.sineFit(xData, y1Data)[1];
+
+                if (isCH2FrequencyRequired)
+                    frequencyCH2 = analyticsClass.sineFit(xData, y2Data)[1];
+
+            } catch (NullPointerException e) {
+                cancel(true);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            fragment = (AstableMultivibratorFragment) getSupportFragmentManager().findFragmentById(astableMultivibratorFragment.getId());
+            if (isCH1FrequencyRequired) {
+                if (frequencyCH1 >= 0)
+                    fragment.resultCH1Frequency.setText(new DecimalFormat("#.##").format(frequencyCH1) + "Hz");
+                else
+                    fragment.resultCH1Frequency.setText("fit failed");
+                isCH1FrequencyRequired = false;
+            }
+            if (isCH2FrequencyRequired) {
+                if (frequencyCH1 >= 0)
+                    fragment.resultCH2Frequency.setText(new DecimalFormat("#.##").format(frequencyCH2));
+                else
+                    fragment.resultCH2Frequency.setText("fit failed");
+                isCH2FrequencyRequired = false;
+            }
+            LineDataSet dataset1;
+            LineDataSet dataSet2;
+            dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
+            dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
+            dataset1.setColor(Color.GREEN);
+            dataSet2.setColor(Color.RED);
+
+            dataset1.setDrawCircles(false);
+            dataSet2.setDrawCircles(false);
+
+            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            dataSets.add(dataset1);
+            dataSets.add(dataSet2);
+
+            LineData data = new LineData(dataSets);
+            mChart.setData(data);
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+            synchronized (lock) {
+                lock.notify();
+            }
+        }
+    }
 }
