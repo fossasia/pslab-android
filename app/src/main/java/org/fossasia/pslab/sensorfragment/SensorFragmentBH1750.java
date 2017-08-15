@@ -165,7 +165,7 @@ public class SensorFragmentBH1750 extends Fragment {
 
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
             entries.add(new Entry((float) timeElapsed, dataBH1750.floatValue()));
-            LineDataSet dataSet = new LineDataSet(entries, "Bx");
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.bx));
             dataSet.setDrawCircles(true);
 
             LineData data = new LineData(dataSet);

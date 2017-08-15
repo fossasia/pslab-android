@@ -172,7 +172,7 @@ public class SensorFragmentADS1115 extends Fragment {
             super.onPostExecute(aVoid);
             tvSensorADS1115.setText(String.valueOf(dataADS1115));
 
-            LineDataSet dataSet = new LineDataSet(entries, "Bx");
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.bx));
             dataSet.setDrawCircles(true);
             LineData data = new LineData(dataSet);
             mChart.setData(data);

@@ -245,9 +245,9 @@ public class SensorFragmentBMP180 extends Fragment {
             tvSensorBMP180Altitude.setText(String.valueOf(dataBMP180[1]));
             tvSensorBMP180Pressure.setText(String.valueOf(dataBMP180[2]));
 
-            LineDataSet dataSet1 = new LineDataSet(entriesTemperature, "Temperature");
-            LineDataSet dataSet2 = new LineDataSet(entriesAltitude, "Altitude");
-            LineDataSet dataSet3 = new LineDataSet(entriesPressure, "Pressure");
+            LineDataSet dataSet1 = new LineDataSet(entriesTemperature, getString(R.string.temperature));
+            LineDataSet dataSet2 = new LineDataSet(entriesAltitude, getString(R.string.altitude));
+            LineDataSet dataSet3 = new LineDataSet(entriesPressure, getString(R.string.pressure));
 
             dataSet1.setColor(Color.BLUE);
             dataSet2.setColor(Color.GREEN);

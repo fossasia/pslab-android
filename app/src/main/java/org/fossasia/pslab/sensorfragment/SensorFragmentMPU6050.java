@@ -257,13 +257,13 @@ public class SensorFragmentMPU6050 extends Fragment {
             tvSensorMPU6050gz.setText(String.valueOf(dataMPU6050.get(6)));
             tvSensorMPU6050temp.setText(String.valueOf(dataMPU6050.get(3)));
 
-            LineDataSet dataset1 = new LineDataSet(entriesAx, "Ax");
-            LineDataSet dataSet2 = new LineDataSet(entriesAy, "Ay");
-            LineDataSet dataSet3 = new LineDataSet(entriesAz, "Az");
+            LineDataSet dataset1 = new LineDataSet(entriesAx, getString(R.string.ax));
+            LineDataSet dataSet2 = new LineDataSet(entriesAy, getString(R.string.ay));
+            LineDataSet dataSet3 = new LineDataSet(entriesAz, getString(R.string.az));
 
-            LineDataSet dataset4 = new LineDataSet(entriesGx, "Gx");
-            LineDataSet dataSet5 = new LineDataSet(entriesGy, "Gy");
-            LineDataSet dataSet6 = new LineDataSet(entriesGz, "Gz");
+            LineDataSet dataset4 = new LineDataSet(entriesGx, getString(R.string.gx));
+            LineDataSet dataSet5 = new LineDataSet(entriesGy, getString(R.string.gy));
+            LineDataSet dataSet6 = new LineDataSet(entriesGz, getString(R.string.gz));
 
 
             dataset1.setColor(Color.BLUE);
@@ -274,12 +274,12 @@ public class SensorFragmentMPU6050 extends Fragment {
             dataSet5.setColor(Color.GREEN);
             dataSet6.setColor(Color.RED);
 
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            List<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(dataset1);
             dataSets.add(dataSet2);
             dataSets.add(dataSet3);
 
-            List<ILineDataSet> dataSets2 = new ArrayList<ILineDataSet>();
+            List<ILineDataSet> dataSets2 = new ArrayList<>();
             dataSets2.add(dataset4);
             dataSets2.add(dataSet5);
             dataSets2.add(dataSet6);

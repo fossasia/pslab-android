@@ -191,9 +191,9 @@ public class SensorFragmentTSL2561 extends Fragment {
             tvSensorTSL2561Infrared.setText(String.valueOf(dataTSL2561[1]));
             tvSensorTSL2561Visible.setText(String.valueOf(dataTSL2561[2]));
 
-            LineDataSet dataset1 = new LineDataSet(entriesFull, "Full");
-            LineDataSet dataSet2 = new LineDataSet(entriesInfrared, "Infrared");
-            LineDataSet dataSet3 = new LineDataSet(entriesVisible, "Visible");
+            LineDataSet dataset1 = new LineDataSet(entriesFull, getString(R.string.full));
+            LineDataSet dataSet2 = new LineDataSet(entriesInfrared, getString(R.string.infrared));
+            LineDataSet dataSet3 = new LineDataSet(entriesVisible, getString(R.string.visible));
 
             dataset1.setColor(Color.BLUE);
             dataSet2.setColor(Color.GREEN);

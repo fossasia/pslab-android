@@ -205,8 +205,8 @@ public class SensorFragmentMLX90614 extends Fragment {
             tvSensorMLX90614ObjectTemp.setText(String.valueOf(dataMLX90614ObjectTemp));
             tvSensorMLX90614AmbientTemp.setText(String.valueOf(dataMLX90614AmbientTemp));
 
-            LineDataSet dataSet1 = new LineDataSet(entriesObjectTemperature, "Object Temperature");
-            LineDataSet dataSet2 = new LineDataSet(entriesAmbientTemperature, "Ambient Temperature");
+            LineDataSet dataSet1 = new LineDataSet(entriesObjectTemperature, getString(R.string.object_temp));
+            LineDataSet dataSet2 = new LineDataSet(entriesAmbientTemperature, getString(R.string.ambient_temp));
 
             dataSet1.setDrawCircles(true);
             dataSet2.setDrawCircles(true);

@@ -207,8 +207,8 @@ public class SensorFragmentSHT21 extends Fragment {
             tvSensorSHT21Temp.setText(String.valueOf(dataSHT21Temp.get(0)));
             tvSensorSHT21Humidity.setText(String.valueOf(dataSHT21Humidity.get(0)));
 
-            LineDataSet dataSet1 = new LineDataSet(entriesTemperature, "Temperature");
-            LineDataSet dataSet2 = new LineDataSet(entriesHumidity, "Humidity");
+            LineDataSet dataSet1 = new LineDataSet(entriesTemperature, getString(R.string.temperature));
+            LineDataSet dataSet2 = new LineDataSet(entriesHumidity, getString(R.string.humidity));
 
             dataSet1.setDrawCircles(true);
             dataSet2.setDrawCircles(true);

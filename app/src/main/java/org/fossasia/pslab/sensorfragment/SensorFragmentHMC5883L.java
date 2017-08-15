@@ -172,9 +172,9 @@ public class SensorFragmentHMC5883L extends Fragment {
             tvSensorHMC5883Lby.setText(String.valueOf(dataHMC5883L.get(1)));
             tvSensorHMC5883Lbz.setText(String.valueOf(dataHMC5883L.get(2)));
 
-            LineDataSet dataset1 = new LineDataSet(entriesBx, "Bx");
-            LineDataSet dataSet2 = new LineDataSet(entriesBy, "By");
-            LineDataSet dataSet3 = new LineDataSet(entriesBz, "Bz");
+            LineDataSet dataset1 = new LineDataSet(entriesBx, getString(R.string.bx));
+            LineDataSet dataSet2 = new LineDataSet(entriesBy, getString(R.string.by));
+            LineDataSet dataSet3 = new LineDataSet(entriesBz, getString(R.string.bz));
 
             dataset1.setColor(Color.BLUE);
             dataSet2.setColor(Color.GREEN);
