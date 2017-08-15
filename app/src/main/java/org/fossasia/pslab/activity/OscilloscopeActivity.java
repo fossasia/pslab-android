@@ -36,7 +36,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
-import org.fossasia.pslab.fragment.DiodeClippingExperiment;
+import org.fossasia.pslab.fragment.DiodeClippingClampingExperiment;
 import org.fossasia.pslab.fragment.FullWaveRectifierFragment;
 import org.fossasia.pslab.fragment.HalfwaveRectifierFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
@@ -63,7 +63,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         XYPlotFragment.OnFragmentInteractionListener,
         HalfwaveRectifierFragment.OnFragmentInteractionListener,
         FullWaveRectifierFragment.OnFragmentInteractionListener,
-        DiodeClippingExperiment.OnFragmentInteractionListener,
+        DiodeClippingClampingExperiment.OnFragmentInteractionListener,
         View.OnClickListener {
 
     private String TAG = "Oscilloscope Activity";
@@ -105,7 +105,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean viewIsClicked;
     public boolean isHalfWaveRectifierExperiment;
     public boolean isFullWaveRectifierExperiment;
-    public boolean isDiodeClippingExperiment;
+    public boolean isDiodeClippingClampingExperiment;
     private String leftYAxisInput;
     public String triggerChannel;
     public String curveFittingChannel1;
@@ -119,7 +119,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     Fragment xyPlotFragment;
     Fragment halfwaveRectifierFragment;
     Fragment fullwaveRectifierFragment;
-    Fragment diodeClippingFragment;
+    Fragment diodeClippingClampingFragment;
     private final Object lock = new Object();
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
@@ -188,8 +188,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             if (scienceLab.isConnected()) {
                 scienceLab.setWaves(5000, 180, 5000);
             }
-        } else if ("Diode Clipping".equals(extras.getString("who"))) {
-            isDiodeClippingExperiment = true;
+        } else if ("Diode Clipping Clamping".equals(extras.getString("who"))) {
+            isDiodeClippingClampingExperiment = true;
             if (scienceLab.isConnected()) {
                 scienceLab.setSine1(5000);
             }
@@ -203,15 +203,15 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         xyPlotFragment = new XYPlotFragment();
         halfwaveRectifierFragment = new HalfwaveRectifierFragment();
         fullwaveRectifierFragment = new FullWaveRectifierFragment();
-        diodeClippingFragment = new DiodeClippingExperiment();
+        diodeClippingClampingFragment = new DiodeClippingClampingExperiment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             if (isHalfWaveRectifierExperiment) {
                 addFragment(R.id.layout_dock_os2, halfwaveRectifierFragment, "HalfWaveFragment");
             } else if (isFullWaveRectifierExperiment) {
                 addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
-            } else if (isDiodeClippingExperiment) {
-                addFragment(R.id.layout_dock_os2, diodeClippingFragment, "DiodeClippingFragment");
+            } else if (isDiodeClippingClampingExperiment) {
+                addFragment(R.id.layout_dock_os2, diodeClippingClampingFragment, "DiodeClippingClampingFragment");
             } else {
                 addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
             }
@@ -334,7 +334,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (scienceLab.isConnected() && (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment || isDiodeClippingExperiment)) {
+                    if (scienceLab.isConnected() && (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment || isDiodeClippingClampingExperiment)) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute("CH1");
                         synchronized (lock) {
@@ -442,7 +442,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public void onWindowFocusChanged() {
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
-        if (isHalfWaveRectifierExperiment || isDiodeClippingExperiment) {
+        if (isHalfWaveRectifierExperiment || isDiodeClippingClampingExperiment) {
             linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 3 / 4;
@@ -736,7 +736,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
             LineDataSet dataset1;
             LineDataSet dataSet2;
-            if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment  || isDiodeClippingExperiment) {
+            if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment  || isDiodeClippingClampingExperiment) {
                 dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
                 dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
                 dataset1.setColor(Color.GREEN);

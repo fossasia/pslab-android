@@ -18,15 +18,15 @@ import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.FloatSeekBar;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
-public class DiodeClippingExperiment extends Fragment {
+public class DiodeClippingClampingExperiment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
-    public DiodeClippingExperiment() {
+    public DiodeClippingClampingExperiment() {
 
     }
 
-    public static DiodeClippingExperiment newInstance() {
-        return new DiodeClippingExperiment();
+    public static DiodeClippingClampingExperiment newInstance() {
+        return new DiodeClippingClampingExperiment();
     }
 
     @Override
