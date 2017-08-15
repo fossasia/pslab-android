@@ -37,6 +37,7 @@ import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.MPU6050;
 import org.fossasia.pslab.models.DataMPU6050;
+import org.fossasia.pslab.models.SensorLogged;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
@@ -46,6 +47,7 @@ import java.util.LinkedHashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by viveksb007 on 23/7/17.
@@ -213,8 +215,23 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 realm.beginTransaction();
-                                for (DataMPU6050 tempObject : mpu6050DataList) {
+                                long trial;
+                                Number trialNumber = realm.where(DataMPU6050.class).max("trial");
+                                if (trialNumber == null) {
+                                    trial = 0;
+                                } else {
+                                    trial = (long) trialNumber + 1;
+                                }
+                                for (int i = 0; i < mpu6050DataList.size(); i++) {
+                                    DataMPU6050 tempObject = mpu6050DataList.get(i);
+                                    tempObject.setTrial(trial);
+                                    tempObject.setId(i);
                                     realm.copyToRealm(tempObject);
+                                }
+                                RealmResults<SensorLogged> results = realm.where(SensorLogged.class).equalTo("sensor", "MPU6050").findAll();
+                                if (results.size() == 0) {
+                                    SensorLogged sensorLogged = new SensorLogged("MPU6050");
+                                    realm.copyToRealm(sensorLogged);
                                 }
                                 realm.commitTransaction();
                                 Toast.makeText(SensorDataLoggerActivity.this, "Data Logged Successfully", Toast.LENGTH_SHORT).show();
