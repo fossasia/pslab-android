@@ -147,7 +147,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
                     return CapacitorDischargeExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
-                    return DiodeExperiment.newInstance("Full Wave Rectifier");
+                    return DiodeExperiment.newInstance(context.getResources().getString(R.string.full_wave_rectifier));
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clamping)))
