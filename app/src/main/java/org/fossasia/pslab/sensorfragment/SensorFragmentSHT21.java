@@ -32,8 +32,8 @@ import java.util.ArrayList;
  */
 
 public class SensorFragmentSHT21 extends Fragment {
+
     private ScienceLab scienceLab;
-    private I2C i2c;
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorSHT21Temp;
     private TextView tvSensorSHT21Humidity;
@@ -42,26 +42,19 @@ public class SensorFragmentSHT21 extends Fragment {
     private LineChart mChartHumidity;
     private long startTime;
     private int flag;
-    private XAxis xTemperature;
-    private YAxis yTemperature;
-    private YAxis yTemperature2;
-    private XAxis xHumidity;
-    private YAxis yHumidity;
-    private YAxis yHumidity2;
     private ArrayList<Entry> entriesTemperature;
     private ArrayList<Entry> entriesHumidity;
     private final Object lock = new Object();
 
     public static SensorFragmentSHT21 newInstance() {
-        SensorFragmentSHT21 sensorFragmentSHT21 = new SensorFragmentSHT21();
-        return sensorFragmentSHT21;
+        return new SensorFragmentSHT21();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
+        I2C i2c = scienceLab.i2c;
         try {
             sensorSHT21 = new SHT21(i2c);
         } catch (IOException | InterruptedException e) {
@@ -76,31 +69,27 @@ public class SensorFragmentSHT21 extends Fragment {
             public void run() {
                 while (true) {
                     if (scienceLab.isConnected()) {
-                        try {
-                            sensorDataFetch = new SensorDataFetch();
-                        } catch (IOException | InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        sensorDataFetch = new SensorDataFetch();
                         sensorDataFetch.execute();
-                    }
 
-                    if (flag == 0) {
-                        startTime = System.currentTimeMillis();
-                        flag = 1;
-                    }
+                        if (flag == 0) {
+                            startTime = System.currentTimeMillis();
+                            flag = 1;
+                        }
 
-                    synchronized (lock) {
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
                         try {
-                            lock.wait();
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    }
-
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                 }
             }
@@ -117,13 +106,13 @@ public class SensorFragmentSHT21 extends Fragment {
         mChartTemperature = (LineChart) view.findViewById(R.id.chart_temperature_sht21);
         mChartHumidity = (LineChart) view.findViewById(R.id.chart_humidity_sht21);
 
-        xTemperature = mChartTemperature.getXAxis();
-        yTemperature = mChartTemperature.getAxisLeft();
-        yTemperature2 = mChartTemperature.getAxisRight();
+        XAxis xTemperature = mChartTemperature.getXAxis();
+        YAxis yTemperature = mChartTemperature.getAxisLeft();
+        YAxis yTemperature2 = mChartTemperature.getAxisRight();
 
-        xHumidity = mChartHumidity.getXAxis();
-        yHumidity = mChartHumidity.getAxisLeft();
-        yHumidity2 = mChartHumidity.getAxisRight();
+        XAxis xHumidity = mChartHumidity.getXAxis();
+        YAxis yHumidity = mChartHumidity.getAxisLeft();
+        YAxis yHumidity2 = mChartHumidity.getAxisRight();
 
         mChartTemperature.setTouchEnabled(true);
         mChartTemperature.setHighlightPerDragEnabled(true);
@@ -190,13 +179,10 @@ public class SensorFragmentSHT21 extends Fragment {
 
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
+
         private ArrayList<Double> dataSHT21Temp = new ArrayList<>();
         private ArrayList<Double> dataSHT21Humidity = new ArrayList<>();
         private long timeElapsed;
-        ;
-
-        private SensorDataFetch() throws IOException, InterruptedException {
-        }
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -210,12 +196,9 @@ public class SensorFragmentSHT21 extends Fragment {
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-
             entriesTemperature.add(new Entry((float) timeElapsed, dataSHT21Temp.get(0).floatValue()));
             entriesTemperature.add(new Entry((float) timeElapsed, dataSHT21Humidity.get(0).floatValue()));
-
             return null;
         }
 
@@ -224,20 +207,20 @@ public class SensorFragmentSHT21 extends Fragment {
             tvSensorSHT21Temp.setText(String.valueOf(dataSHT21Temp.get(0)));
             tvSensorSHT21Humidity.setText(String.valueOf(dataSHT21Humidity.get(0)));
 
-            LineDataSet dataset1 = new LineDataSet(entriesTemperature, "Ax");
-            LineDataSet dataset2 = new LineDataSet(entriesHumidity, "Ay");
+            LineDataSet dataSet1 = new LineDataSet(entriesTemperature, getString(R.string.temperature));
+            LineDataSet dataSet2 = new LineDataSet(entriesHumidity, getString(R.string.humidity));
 
-            dataset1.setDrawCircles(true);
-            dataset2.setDrawCircles(true);
+            dataSet1.setDrawCircles(true);
+            dataSet2.setDrawCircles(true);
 
-            LineData data = new LineData(dataset1);
+            LineData data = new LineData(dataSet1);
             mChartTemperature.setData(data);
             mChartTemperature.notifyDataSetChanged();
             mChartTemperature.setVisibleXRangeMaximum(10);
             mChartTemperature.moveViewToX(data.getEntryCount());
             mChartTemperature.invalidate();
 
-            LineData data2 = new LineData(dataset2);
+            LineData data2 = new LineData(dataSet2);
             mChartHumidity.setData(data2);
             mChartHumidity.notifyDataSetChanged();
             mChartHumidity.setVisibleXRangeMaximum(10);

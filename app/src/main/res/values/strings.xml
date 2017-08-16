@@ -432,4 +432,6 @@
     <string name="begin_experiment">Begin Experiment</string>
     <string name="current">Current</string>
 
+    <string name="full">Full</string>
+
 </resources>

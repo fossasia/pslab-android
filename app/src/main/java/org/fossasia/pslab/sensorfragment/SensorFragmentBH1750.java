@@ -33,31 +33,27 @@ import java.util.ArrayList;
  */
 
 public class SensorFragmentBH1750 extends Fragment {
+
     private ScienceLab scienceLab;
-    private I2C i2c;
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorBH1750Luminosity;
     private BH1750 sensorBH1750;
     private LineChart mChart;
     private long startTime;
     private int flag;
-    private XAxis x;
-    private YAxis y;
-    private YAxis y2;
     private ArrayList<Entry> entries;
     private final Object lock = new Object();
 
     public static SensorFragmentBH1750 newInstance() {
-        SensorFragmentBH1750 sensorFragmentBH1750 = new SensorFragmentBH1750();
-        return sensorFragmentBH1750;
+        return new SensorFragmentBH1750();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
-        entries = new ArrayList<Entry>();
+        I2C i2c = scienceLab.i2c;
+        entries = new ArrayList<>();
 
         try {
             sensorBH1750 = new BH1750(i2c);
@@ -71,18 +67,24 @@ public class SensorFragmentBH1750 extends Fragment {
                     if (scienceLab.isConnected()) {
                         sensorDataFetch = new SensorDataFetch();
                         sensorDataFetch.execute();
-                    }
-                    if (flag == 0) {
-                        startTime = System.currentTimeMillis();
-                        flag = 1;
-                    }
-                    synchronized (lock) {
+                        if (flag == 0) {
+                            startTime = System.currentTimeMillis();
+                            flag = 1;
+                        }
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         try {
-                            lock.wait();
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
+
                 }
             }
         };
@@ -95,9 +97,9 @@ public class SensorFragmentBH1750 extends Fragment {
         tvSensorBH1750Luminosity = (TextView) view.findViewById(R.id.tv_sensor_bh1750_luminosity);
         Spinner spinnerSensorBH1750 = (Spinner) view.findViewById(R.id.spinner_sensor_bh1750);
         mChart = (LineChart) view.findViewById(R.id.chart_bh1750);
-        x = mChart.getXAxis();
-        y = mChart.getAxisLeft();
-        y2 = mChart.getAxisRight();
+        XAxis x = mChart.getXAxis();
+        YAxis y = mChart.getAxisLeft();
+        YAxis y2 = mChart.getAxisRight();
 
         mChart.setTouchEnabled(true);
         mChart.setHighlightPerDragEnabled(true);
@@ -141,8 +143,9 @@ public class SensorFragmentBH1750 extends Fragment {
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        Double dataBH1750;
-        long timeElapsed;
+
+        private Double dataBH1750;
+        private long timeElapsed;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -162,10 +165,10 @@ public class SensorFragmentBH1750 extends Fragment {
 
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
             entries.add(new Entry((float) timeElapsed, dataBH1750.floatValue()));
-            LineDataSet dataset = new LineDataSet(entries, "Bx");
-            dataset.setDrawCircles(true);
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.bx));
+            dataSet.setDrawCircles(true);
 
-            LineData data = new LineData(dataset);
+            LineData data = new LineData(dataSet);
             mChart.setData(data);
             mChart.notifyDataSetChanged();
             mChart.setVisibleXRangeMaximum(10);
