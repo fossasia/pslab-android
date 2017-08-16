@@ -190,7 +190,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeDiodeClip = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.diode_clipping)))
