@@ -13,6 +13,7 @@ import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
@@ -104,6 +105,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
                     return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
+                if (experimentTitle.equals(context.getString(R.string.precision_rectifier)))
+                    return ExperimentDocFragment.newInstance("Precision_Rectifier.html");
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
@@ -143,6 +146,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return DiodeExperiment.newInstance("Full Wave Rectifier");
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
+                if (experimentTitle.equals(context.getString(R.string.precision_rectifier)))
+                    return PrecisionRectifierExperiment.newInstance();
 
                 return ExperimentSetupFragment.newInstance();
             default:
