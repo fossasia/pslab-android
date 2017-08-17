@@ -8,7 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -32,6 +35,7 @@ public class ACGeneratorExperiment extends Fragment {
     private LineChart outputChart;
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
     private final Object lock = new Object();
+    private Spinner ampSpinner;
 
     public static ACGeneratorExperiment newInstance() {
         return new ACGeneratorExperiment();
@@ -40,9 +44,11 @@ public class ACGeneratorExperiment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.diode_setup, container, false);
+        View view = inflater.inflate(R.layout.ac_generator_experiment_layout, container, false);
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
+        ampSpinner = (Spinner) view.findViewById(R.id.amp_range_spinner);
         chartInit();
+        setupRangeSpinner();
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setText(getString(R.string.start_experiment));
         btnConfigure.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +62,56 @@ public class ACGeneratorExperiment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void setupRangeSpinner() {
+        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV"};
+        ArrayAdapter<String> rangesAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, ranges);
+        rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ampSpinner.setAdapter(rangesAdapter);
+        ampSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                        setAxisScale(16, -16);
+                        break;
+                    case 1:
+                        setAxisScale(8, -8);
+                        break;
+                    case 2:
+                        setAxisScale(4, -4);
+                        break;
+                    case 3:
+                        setAxisScale(3, -3);
+                        break;
+                    case 4:
+                        setAxisScale(2, -2);
+                        break;
+                    case 5:
+                        setAxisScale(1.5, -1.5);
+                        break;
+                    case 6:
+                        setAxisScale(1, -1);
+                        break;
+                    case 7:
+                        setAxisScale(0.5, -0.5);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                /**/
+            }
+        });
+    }
+
+    public void setAxisScale(double upperLimit, double lowerLimit) {
+        outputChart.getAxisLeft().setAxisMaximum((float) upperLimit);
+        outputChart.getAxisLeft().setAxisMinimum((float) lowerLimit);
+        outputChart.fitScreen();
+        outputChart.invalidate();
     }
 
     private void chartInit() {
