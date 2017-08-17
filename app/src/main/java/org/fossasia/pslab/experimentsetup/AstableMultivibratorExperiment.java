@@ -19,10 +19,6 @@ public class AstableMultivibratorExperiment extends Fragment {
 
     private Button startButton;
 
-    public AstableMultivibratorExperiment() {
-
-    }
-
     public static AstableMultivibratorExperiment newInstance() {
         return new AstableMultivibratorExperiment();
     }

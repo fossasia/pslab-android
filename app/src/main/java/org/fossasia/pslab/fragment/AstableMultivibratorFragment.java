@@ -30,7 +30,7 @@ public class AstableMultivibratorFragment extends Fragment {
 
     }
 
-    public static AstableMultivibratorFragment newInstance(String param1, String param2) {
+    public static AstableMultivibratorFragment newInstance() {
         return new AstableMultivibratorFragment();
     }
 

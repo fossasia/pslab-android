@@ -225,8 +225,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         if (findViewById(R.id.layout_dock_os2) != null) {
             if (isHalfWaveRectifierExperiment) {
                 addFragment(R.id.layout_dock_os2, halfwaveRectifierFragment, "HalfWaveFragment");
-            } else if (isFullWaveRectifierExperiment){
-            addFragment(R.id.layout_dock_os2,fullwaveRectifierFragment,"FullWaveFragment");
+            } else if (isFullWaveRectifierExperiment) {
+                addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
             } else if (isAstableMultivibratorExperiment) {
                 addFragment(R.id.layout_dock_os2, astableMultivibratorFragment, "DiodeClippingFragment");
             } else if (isDiodeClippingClampingExperiment) {
@@ -771,7 +771,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             LineDataSet dataset1;
             LineDataSet dataSet2;
 
-            if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment  || isDiodeClippingClampingExperiment) {
+            if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment || isDiodeClippingClampingExperiment) {
                 dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
                 dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
                 dataset1.setColor(Color.GREEN);
@@ -1070,8 +1070,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             }
             LineDataSet dataset1;
             LineDataSet dataSet2;
-            dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
-            dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
+            dataset1 = new LineDataSet(entries1, "CH1 INPUT");
+            dataSet2 = new LineDataSet(entries2, "CH2 OUTPUT");
             dataset1.setColor(Color.GREEN);
             dataSet2.setColor(Color.RED);
 
