@@ -24,13 +24,14 @@ public class AstableMultivibratorFragment extends Fragment {
     private Button buttonCH2Frequency;
     public TextView resultCH1Frequency;
     public TextView resultCH2Frequency;
+    public TextView analyseCH2Label;
     public double frequency;
 
     public AstableMultivibratorFragment() {
 
     }
 
-    public static AstableMultivibratorFragment newInstance() {
+    public static AstableMultivibratorFragment newInstance(String param1, String param2) {
         return new AstableMultivibratorFragment();
     }
 
@@ -48,6 +49,13 @@ public class AstableMultivibratorFragment extends Fragment {
         buttonCH2Frequency = (Button) v.findViewById(R.id.button_read_ch2_astable_multivibrator);
         resultCH1Frequency = (TextView) v.findViewById(R.id.tv_result_ch1_astable_multivibrator);
         resultCH2Frequency = (TextView) v.findViewById(R.id.tv_result_ch2_astable_multivibrator);
+        analyseCH2Label = (TextView) v.findViewById(R.id.tv_abalyse_ch2_astable_multivibrator);
+
+        if (((OscilloscopeActivity) getActivity()).isColpittsOscillatorExperiment) {
+            buttonCH2Frequency.setVisibility(View.INVISIBLE);
+            resultCH2Frequency.setVisibility(View.INVISIBLE);
+            analyseCH2Label.setVisibility(View.INVISIBLE);
+        }
 
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 

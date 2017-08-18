@@ -18,8 +18,14 @@ import org.fossasia.pslab.activity.OscilloscopeActivity;
 public class AstableMultivibratorExperiment extends Fragment {
 
     private Button startButton;
+    private static String experiment;
 
-    public static AstableMultivibratorExperiment newInstance() {
+    public AstableMultivibratorExperiment() {
+
+    }
+
+    public static AstableMultivibratorExperiment newInstance(String param) {
+        experiment = param;
         return new AstableMultivibratorExperiment();
     }
 
@@ -36,8 +42,12 @@ public class AstableMultivibratorExperiment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getActivity(), OscilloscopeActivity.class);
-                intent.putExtra("who", "Astable Multivibrator");
+                if ("Astable Multivibrator".equals(experiment))
+                    intent.putExtra("who", "Astable Multivibrator");
+                else if ("Colpitts Oscillator".equals(experiment))
+                    intent.putExtra("who", "Colpitts Oscillator");
                 startActivity(intent);
             }
         });

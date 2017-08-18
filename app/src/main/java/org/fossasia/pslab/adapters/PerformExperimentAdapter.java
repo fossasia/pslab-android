@@ -109,6 +109,10 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
                 if (experimentTitle.equals(context.getString(R.string.astable_multivibrator)))
                     return ExperimentDocFragment.newInstance("J_Astable.md");
+                if (experimentTitle.equals(context.getString(R.string.colpitts_oscillator)))
+                    return ExperimentDocFragment.newInstance("L_Colpitts.md");
+                if (experimentTitle.equals(context.getString(R.string.phase_shift_oscillator)))
+                    return ExperimentDocFragment.newInstance("L_PhaseShift.md");
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
@@ -151,7 +155,11 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clamping)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clamping));
                 if (experimentTitle.equals(context.getString(R.string.astable_multivibrator)))
-                    return AstableMultivibratorExperiment.newInstance();
+                    return AstableMultivibratorExperiment.newInstance("Astable Multivibrator");
+                if (experimentTitle.equals(context.getString(R.string.colpitts_oscillator)))
+                    return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
+                if (experimentTitle.equals(context.getString(R.string.phase_shift_oscillator)))
+                    return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
 
                 return ExperimentSetupFragment.newInstance();
             default:
