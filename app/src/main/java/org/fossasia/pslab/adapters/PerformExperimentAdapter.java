@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.AstableMultivibratorExperiment;
 import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
@@ -115,6 +116,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("Precision_Rectifier.html");
                 if (experimentTitle.equals(context.getString(R.string.light_dependent_resistor)))
                     return ExperimentDocFragment.newInstance("K_LDR.md");
+                if (experimentTitle.equals(context.getString(R.string.astable_multivibrator)))
+                    return ExperimentDocFragment.newInstance("J_Astable.md");
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
@@ -162,6 +165,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clamping));
                 if (experimentTitle.equals(context.getString(R.string.light_dependent_resistor)))
                     return LightDependentResistorExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.astable_multivibrator)))
+                    return AstableMultivibratorExperiment.newInstance();
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
