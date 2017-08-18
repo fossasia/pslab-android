@@ -39,7 +39,7 @@ public class DiodeExperiment extends Fragment {
                 else if ("Full Wave Rectifier".equals(experiment))
                     intent.putExtra("who", "Full Wave Rectifier");
                 else
-                    intent.putExtra("who", "Diode Clipping");
+                    intent.putExtra("who", "Diode Clipping Clamping");
                 startActivity(intent);
             }
         });

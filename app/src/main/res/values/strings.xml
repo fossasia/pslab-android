@@ -430,4 +430,7 @@
     <string name="export_logged_data">Export Logged Data</string>
     <string name="sensor_logged_data">Sensor Logged Data</string>
 
+    <string name="full">Full</string>
+    <string name="amplitude_range">Amplitude Range</string>
+
 </resources>
