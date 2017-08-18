@@ -6,9 +6,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import org.fossasia.pslab.experimentsetup.AstableMultivibratorExperiment;
+import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
+import org.fossasia.pslab.experimentsetup.LightDependentResistorExperiment;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.DiodeExperiment;
@@ -103,6 +105,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("L_Inverting.md");
                 if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
                     return ExperimentDocFragment.newInstance("L_NonInverting.md");
+                if (experimentTitle.equals(context.getString(R.string.ac_generator)))
+                    return ExperimentDocFragment.newInstance("C_AC_GENERATOR.html");
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
@@ -113,6 +117,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("L_Colpitts.md");
                 if (experimentTitle.equals(context.getString(R.string.phase_shift_oscillator)))
                     return ExperimentDocFragment.newInstance("L_PhaseShift.md");
+                if (experimentTitle.equals(context.getString(R.string.light_dependent_resistor)))
+                    return ExperimentDocFragment.newInstance("K_LDR.md");
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
@@ -144,12 +150,14 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return NFETTransferCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
                     return DiodeExperiment.newInstance(context.getString(R.string.half_wave_rectifier));
+                if (experimentTitle.equals(context.getString(R.string.ac_generator)))
+                    return ACGeneratorExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
                     return LemonCellExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
                     return CapacitorDischargeExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
-                    return DiodeExperiment.newInstance("Full Wave Rectifier");
+                    return DiodeExperiment.newInstance(context.getResources().getString(R.string.full_wave_rectifier));
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clamping)))
@@ -160,7 +168,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
                 if (experimentTitle.equals(context.getString(R.string.phase_shift_oscillator)))
                     return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
-
+                if (experimentTitle.equals(context.getString(R.string.light_dependent_resistor)))
+                    return LightDependentResistorExperiment.newInstance();
                 return ExperimentSetupFragment.newInstance();
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
