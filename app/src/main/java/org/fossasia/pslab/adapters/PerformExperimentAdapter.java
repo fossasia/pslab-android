@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import org.fossasia.pslab.experimentsetup.AstableMultivibratorExperiment;
 import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
+import org.fossasia.pslab.experimentsetup.DistanceMeasurementExperiment;
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
@@ -115,6 +116,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("K_LDR.md");
                 if (experimentTitle.equals(context.getString(R.string.astable_multivibrator)))
                     return ExperimentDocFragment.newInstance("J_Astable.md");
+                if (experimentTitle.equals(context.getString(R.string.ultrasonic_range_finder)))
+                    return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
             case 1:
                 if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
                     return ZenerSetupFragment.newInstance();
@@ -162,6 +165,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return LightDependentResistorExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.astable_multivibrator)))
                     return AstableMultivibratorExperiment.newInstance();
+                if (experimentTitle.equals(context.getString(R.string.ultrasonic_range_finder)))
+                    return DistanceMeasurementExperiment.newInstance();
 
                 return ExperimentSetupFragment.newInstance();
             default:
