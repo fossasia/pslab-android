@@ -228,7 +228,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             } else if (isFullWaveRectifierExperiment) {
                 addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
             } else if (isAstableMultivibratorExperiment) {
-                addFragment(R.id.layout_dock_os2, astableMultivibratorFragment, "DiodeClippingFragment");
+                addFragment(R.id.layout_dock_os2, astableMultivibratorFragment, "AstableMultivibratorFragment");
             } else if (isDiodeClippingClampingExperiment) {
                 addFragment(R.id.layout_dock_os2, diodeClippingClampingFragment, "DiodeClippingClampingFragment");
             } else {
