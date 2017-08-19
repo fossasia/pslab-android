@@ -436,6 +436,13 @@
     <string name="result">Result</string>
 
     <string name="full">Full</string>
+    <string name="ac_voltage">AC Voltage</string>
+    <string name="dc_voltage">DC Voltage</string>
     <string name="amplitude_range">Amplitude Range</string>
+
+    <string-array name="sensor_click_list">
+        <item>Export Data</item>
+        <item>Share Data</item>
+    </string-array>
 
 </resources>
