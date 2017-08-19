@@ -17,11 +17,13 @@ import org.fossasia.pslab.experimentsetup.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
+import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
 import org.fossasia.pslab.experimentsetup.TransistorTransferExperiment;
+import org.fossasia.pslab.experimentsetup.WaterResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
@@ -114,6 +116,10 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
                 if (experimentTitle.equals(context.getString(R.string.precision_rectifier)))
                     return ExperimentDocFragment.newInstance("Precision_Rectifier.html");
+                if (experimentTitle.equals(context.getString(R.string.resistance_of_water)))
+                    return ExperimentDocFragment.newInstance("F_WATER_RESISTANCE.html");
+                if (experimentTitle.equals(context.getResources().getString(R.string.ramp_generator)))
+                    return ExperimentDocFragment.newInstance("L_LinearRampGen.html");
                 if (experimentTitle.equals(context.getString(R.string.light_dependent_resistor)))
                     return ExperimentDocFragment.newInstance("K_LDR.md");
                 if (experimentTitle.equals(context.getString(R.string.astable_multivibrator)))
@@ -161,8 +167,12 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
                 if (experimentTitle.equals(context.getString(R.string.precision_rectifier)))
                     return PrecisionRectifierExperiment.newInstance();
+                if (experimentTitle.equals(context.getResources().getString(R.string.ramp_generator)))
+                    return RampGeneratorExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clamping)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clamping));
+                if (experimentTitle.equals(context.getString(R.string.resistance_of_water)))
+                    return WaterResistanceExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.light_dependent_resistor)))
                     return LightDependentResistorExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.astable_multivibrator)))
