@@ -22,6 +22,7 @@ import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
 import org.fossasia.pslab.experimentsetup.TransistorTransferExperiment;
+import org.fossasia.pslab.experimentsetup.WaterResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
@@ -112,6 +113,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
                 if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
                     return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
+                if (experimentTitle.equals(context.getString(R.string.resistance_of_water)))
+                    return ExperimentDocFragment.newInstance("F_WATER_RESISTANCE.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.ramp_generator)))
                     return ExperimentDocFragment.newInstance("L_LinearRampGen.html");
                 if (experimentTitle.equals(context.getString(R.string.light_dependent_resistor)))
@@ -163,6 +166,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return RampGeneratorExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clamping)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clamping));
+                if (experimentTitle.equals(context.getString(R.string.resistance_of_water)))
+                    return WaterResistanceExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.light_dependent_resistor)))
                     return LightDependentResistorExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.astable_multivibrator)))
