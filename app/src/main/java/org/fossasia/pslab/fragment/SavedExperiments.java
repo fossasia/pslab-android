@@ -235,7 +235,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeNonInverting = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.non_inverting_opamp)))
@@ -272,7 +272,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeColpitts = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.colpitts_oscillator)))
@@ -649,7 +649,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeResistance = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.resistance_measurement)))
@@ -737,7 +737,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeCapDis = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.capacitor_discharge)))
