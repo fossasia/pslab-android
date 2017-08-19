@@ -436,4 +436,9 @@
     <string name="full">Full</string>
     <string name="amplitude_range">Amplitude Range</string>
 
+    <string-array name="sensor_click_list">
+        <item>Export Data</item>
+        <item>Share Data</item>
+    </string-array>
+
 </resources>
