@@ -1,7 +1,6 @@
 package org.fossasia.pslab.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 
-public class AstableMultivibratorFragment extends Fragment {
+public class OscillatorExperimentFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private Spinner spinnerRangeCh1;
@@ -27,12 +26,12 @@ public class AstableMultivibratorFragment extends Fragment {
     public TextView analyseCH2Label;
     public double frequency;
 
-    public AstableMultivibratorFragment() {
+    public OscillatorExperimentFragment() {
 
     }
 
-    public static AstableMultivibratorFragment newInstance(String param1, String param2) {
-        return new AstableMultivibratorFragment();
+    public static OscillatorExperimentFragment newInstance(String param1, String param2) {
+        return new OscillatorExperimentFragment();
     }
 
     @Override

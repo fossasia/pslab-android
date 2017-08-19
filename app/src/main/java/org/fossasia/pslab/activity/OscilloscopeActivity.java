@@ -35,7 +35,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.fragment.AstableMultivibratorFragment;
+import org.fossasia.pslab.fragment.OscillatorExperimentFragment;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
 import org.fossasia.pslab.fragment.DiodeClippingClampingExperiment;
@@ -67,7 +67,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         HalfwaveRectifierFragment.OnFragmentInteractionListener,
         FullWaveRectifierFragment.OnFragmentInteractionListener,
         DiodeClippingClampingExperiment.OnFragmentInteractionListener,
-        AstableMultivibratorFragment.OnFragmentInteractionListener,
+        OscillatorExperimentFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
     private String TAG = "Oscilloscope Activity";
@@ -112,6 +112,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean isDiodeClippingClampingExperiment;
     public boolean isAstableMultivibratorExperiment;
     public boolean isColpittsOscillatorExperiment;
+    public boolean isPhaseShiftOscillatorExperiment;
     private String leftYAxisInput;
     public String triggerChannel;
     public String curveFittingChannel1;
@@ -125,7 +126,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     Fragment xyPlotFragment;
     Fragment halfwaveRectifierFragment;
     Fragment fullwaveRectifierFragment;
-    Fragment astableMultivibratorFragment;
+    Fragment oscillatorExperimentFragment;
     Fragment diodeClippingClampingFragment;
     private final Object lock = new Object();
     private CaptureTask captureTask;
@@ -182,7 +183,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         analyticsClass = new AnalyticsClass();
         isCH1FrequencyRequired = false;
         isCH2FrequencyRequired = false;
-        isColpittsOscillatorExperiment =false;
+        isColpittsOscillatorExperiment = false;
+        isPhaseShiftOscillatorExperiment = false;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -224,17 +226,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         halfwaveRectifierFragment = new HalfwaveRectifierFragment();
         fullwaveRectifierFragment = new FullWaveRectifierFragment();
         diodeClippingClampingFragment = new DiodeClippingClampingExperiment();
-        astableMultivibratorFragment = new AstableMultivibratorFragment();
+        oscillatorExperimentFragment = new OscillatorExperimentFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             if (isHalfWaveRectifierExperiment) {
                 addFragment(R.id.layout_dock_os2, halfwaveRectifierFragment, "HalfWaveFragment");
-            } else if (isFullWaveRectifierExperiment){
-                addFragment(R.id.layout_dock_os2,fullwaveRectifierFragment,"FullWaveFragment");
+            } else if (isFullWaveRectifierExperiment) {
+                addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
             } else if (isAstableMultivibratorExperiment) {
-                addFragment(R.id.layout_dock_os2, astableMultivibratorFragment, "AstableMultivibratorFragment");
+                addFragment(R.id.layout_dock_os2, oscillatorExperimentFragment, "OscillatorExperimentFragment");
             } else if (isColpittsOscillatorExperiment) {
-                addFragment(R.id.layout_dock_os2, astableMultivibratorFragment, "AstableMultivibratorFragment");
+                addFragment(R.id.layout_dock_os2, oscillatorExperimentFragment, "OscillatorExperimentFragment");
             } else if (isDiodeClippingClampingExperiment) {
                 addFragment(R.id.layout_dock_os2, diodeClippingClampingFragment, "DiodeClippingClampingFragment");
             } else {
@@ -371,7 +373,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
-                    if (scienceLab.isConnected() && isAstableMultivibratorExperiment) {
+                    if (scienceLab.isConnected() && (isAstableMultivibratorExperiment || isColpittsOscillatorExperiment)) {
                         oscillatorTask = new OscillatorTask();
                         oscillatorTask.execute("CH1");
                         synchronized (lock) {
@@ -1025,13 +1027,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         double[] y2Data;
         double frequencyCH1;
         double frequencyCH2;
-        AstableMultivibratorFragment fragment;
+        OscillatorExperimentFragment fragment;
 
         @Override
         protected Void doInBackground(String... params) {
             try {
                 analogInput = params[0];
-                //no. of samples and timegap still need to be determined
                 HashMap<String, double[]> data;
                 if (isAstableMultivibratorExperiment) {
                     data = scienceLab.captureTwo(128, 10, analogInput, false);
@@ -1069,7 +1070,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            fragment = (AstableMultivibratorFragment) getSupportFragmentManager().findFragmentById(astableMultivibratorFragment.getId());
+            fragment = (OscillatorExperimentFragment) getSupportFragmentManager().findFragmentById(oscillatorExperimentFragment.getId());
             List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             if (isCH1FrequencyRequired) {
                 if (frequencyCH1 >= 0)
