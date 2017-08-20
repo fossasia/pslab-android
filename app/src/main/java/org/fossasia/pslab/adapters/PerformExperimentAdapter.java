@@ -17,6 +17,7 @@ import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
