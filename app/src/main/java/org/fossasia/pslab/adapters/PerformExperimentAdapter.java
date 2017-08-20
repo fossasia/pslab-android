@@ -117,6 +117,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("L_LinearRampGen.html");
                     case "Light Dependent Resistor":
                         return ExperimentDocFragment.newInstance("K_LDR.md");
+                    case "Ultrasonic Range Finder":
+                        return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
                 }
             case 1:
                 switch (experimentTitle) {
@@ -166,6 +168,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return RampGeneratorExperiment.newInstance();
                     case "Light Dependent Resistor":
                         return LightDependentResistorExperiment.newInstance();
+                    case "Ultrasonic Range Finder":
+                        return DistanceMeasurementExperiment.newInstance();
                     default:
                         return ExperimentSetupFragment.newInstance();
                 }
