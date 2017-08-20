@@ -429,11 +429,29 @@
     <string name="view_logged_data">View Logged Data</string>
     <string name="export_logged_data">Export Logged Data</string>
     <string name="sensor_logged_data">Sensor Logged Data</string>
+    <string name="begin_experiment">Begin Experiment</string>
+    <string name="current">Current</string>
     <string name="analyse_ch1">Analyse CH1</string>
     <string name="analyse_ch2">Analyse CH2</string>
     <string name="result">Result</string>
 
     <string name="full">Full</string>
+    <string name="ac_voltage">AC Voltage</string>
+    <string name="dc_voltage">DC Voltage</string>
     <string name="amplitude_range">Amplitude Range</string>
+
+    <string-array name="sensor_click_list">
+        <item>Export Data</item>
+        <item>Share Data</item>
+    </string-array>
+
+    <string-array name="export_data_format_list">
+        <item>TXT Format</item>
+        <item>CSV Format</item>
+    </string-array>
+    <string-array name="export_data_format_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 
 </resources>

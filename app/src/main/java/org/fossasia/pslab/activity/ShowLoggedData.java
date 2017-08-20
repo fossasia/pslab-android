@@ -2,6 +2,7 @@ package org.fossasia.pslab.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,12 +17,19 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.MPUDataAdapter;
 import org.fossasia.pslab.models.DataMPU6050;
 import org.fossasia.pslab.models.SensorLogged;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -87,6 +95,76 @@ public class ShowLoggedData extends AppCompatActivity {
                 showSensorTrialData(sensor);
             }
         });
+
+        sensorListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final String sensor = ((TextView) view).getText().toString();
+                final MaterialDialog dialog = new MaterialDialog.Builder(context)
+                        .title(sensor)
+                        .customView(R.layout.sensor_list_long_click_dailog, false)
+                        .build();
+                dialog.show();
+                View customView = dialog.getCustomView();
+                assert customView != null;
+                ListView clickOptions = (ListView) customView.findViewById(R.id.lv_sensor_list_click);
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sensor_click_list));
+                clickOptions.setAdapter(arrayAdapter);
+
+                clickOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        switch (position) {
+                            case 0:
+                                // todo : check for permission first
+                                exportCompleteSensorData(sensor);
+                                break;
+                            case 1:
+                                break;
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                return true;
+            }
+        });
+    }
+
+    private void exportCompleteSensorData(String sensor) {
+        File folder = new File(Environment.getExternalStorageDirectory() + File.separator + "PSLab Android");
+        boolean success = true;
+        if (!folder.exists()) {
+            success = folder.mkdir();
+        }
+        if (success) {
+            FileOutputStream stream = null;
+            File file = new File(folder, "sensorData.txt");
+            switch (sensor) {
+                case "MPU6050":
+                    RealmResults<DataMPU6050> results = realm.where(DataMPU6050.class).findAll();
+                    try {
+                        stream = new FileOutputStream(file);
+                        for (DataMPU6050 temp : results) {
+                            stream.write((String.valueOf(temp.getAx()) + " " + temp.getAy() + " " + temp.getAz() + " " +
+                                    temp.getGx() + " " + temp.getGy() + " " + temp.getGz() + " " + temp.getTemperature() + "\n").getBytes());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (stream != null) {
+                                stream.close();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Toast.makeText(context, "MPU6050 data exported successfully", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        } else {
+            Toast.makeText(context, "Can't write to storage", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showSensorTrialData(final String sensor) {

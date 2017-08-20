@@ -31,4 +31,13 @@ public class MathUtils {
         return evenlySpacedArray;
     }
 
+    /*
+    * Returns RMS value of a given list of double values
+    * */
+    public static double rms(double[] list) {
+        double ms = 0;
+        for (double i : list) ms += i * i;
+        ms /= list.length;
+        return Math.sqrt(ms);
+    }
 }
