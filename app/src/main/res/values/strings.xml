@@ -429,6 +429,8 @@
     <string name="view_logged_data">View Logged Data</string>
     <string name="export_logged_data">Export Logged Data</string>
     <string name="sensor_logged_data">Sensor Logged Data</string>
+    <string name="begin_experiment">Begin Experiment</string>
+    <string name="current">Current</string>
     <string name="analyse_ch1">Analyse CH1</string>
     <string name="analyse_ch2">Analyse CH2</string>
     <string name="result">Result</string>
