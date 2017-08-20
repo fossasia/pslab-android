@@ -1057,6 +1057,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                     data = scienceLab.fetchTrace(1); //fetching data
                     xData = data.get("x");
                     y1Data = data.get("y");
+                    entries1 = new ArrayList<Entry>();
+                    for (int i = 0; i < xData.length; i++)
+                        entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
                 }
 
             } catch (NullPointerException e) {
@@ -1089,8 +1092,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             if (isAstableMultivibratorExperiment) {
                 LineDataSet dataset1;
                 LineDataSet dataSet2;
-                dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
-                dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
+                dataset1 = new LineDataSet(entries1, "CH1 INPUT");
+                dataSet2 = new LineDataSet(entries2, "CH2 OUTPUT");
                 dataset1.setColor(Color.GREEN);
                 dataSet2.setColor(Color.RED);
                 dataset1.setDrawCircles(false);
