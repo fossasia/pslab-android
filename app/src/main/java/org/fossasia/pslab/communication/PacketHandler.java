@@ -59,7 +59,7 @@ public class PacketHandler {
         if (!loadBurst) {
             try {
                 mCommunicationHandler.write(new byte[]{(byte) (val & 0xff)}, timeout);
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 Log.e("Error in sending byte", e.toString());
                 e.printStackTrace();
             }
@@ -99,7 +99,7 @@ public class PacketHandler {
             try {
                 mCommunicationHandler.read(buffer, 1, timeout);
                 return buffer[0];
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
                 return 3;
             }
