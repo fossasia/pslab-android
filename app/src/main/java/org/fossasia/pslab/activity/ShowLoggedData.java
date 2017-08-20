@@ -1,14 +1,17 @@
 package org.fossasia.pslab.activity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +33,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -55,6 +59,7 @@ public class ShowLoggedData extends AppCompatActivity {
     private ListView trialListView;
     private RecyclerView recyclerView;
     private String mSensor;
+    private String format;
     boolean isRecyclerViewOnStack = false;
     boolean isTrialListViewOnStack = false;
     boolean isSensorListViewOnStack = false;
@@ -71,6 +76,14 @@ public class ShowLoggedData extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(getResources().getString(R.string.sensor_logged_data));
         }
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String formatValue = preferences.getString("export_data_format_list", "0");
+        if ("0".equals(formatValue))
+            format = "txt";
+        else
+            format = "csv";
+
         showSensorList();
     }
 
@@ -137,30 +150,66 @@ public class ShowLoggedData extends AppCompatActivity {
             success = folder.mkdir();
         }
         if (success) {
-            FileOutputStream stream = null;
-            File file = new File(folder, "sensorData.txt");
-            switch (sensor) {
-                case "MPU6050":
-                    RealmResults<DataMPU6050> results = realm.where(DataMPU6050.class).findAll();
-                    try {
-                        stream = new FileOutputStream(file);
-                        for (DataMPU6050 temp : results) {
-                            stream.write((String.valueOf(temp.getAx()) + " " + temp.getAy() + " " + temp.getAz() + " " +
-                                    temp.getGx() + " " + temp.getGy() + " " + temp.getGz() + " " + temp.getTemperature() + "\n").getBytes());
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
+            if ("txt".equals(format)) {
+                FileOutputStream stream = null;
+                File file = new File(folder, "sensorData.txt");
+                switch (sensor) {
+                    case "MPU6050":
+                        RealmResults<DataMPU6050> results = realm.where(DataMPU6050.class).findAll();
                         try {
-                            if (stream != null) {
-                                stream.close();
+                            stream = new FileOutputStream(file);
+                            for (DataMPU6050 temp : results) {
+                                stream.write((String.valueOf(temp.getAx()) + " " + temp.getAy() + " " + temp.getAz() + " " +
+                                        temp.getGx() + " " + temp.getGy() + " " + temp.getGz() + " " + temp.getTemperature() + "\n").getBytes());
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
+                        } finally {
+                            try {
+                                if (stream != null) {
+                                    stream.close();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                    Toast.makeText(context, "MPU6050 data exported successfully", Toast.LENGTH_SHORT).show();
-                    break;
+                        Toast.makeText(context, "MPU6050 data exported successfully", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            } else {
+                File file = new File(folder, "sensorData.csv");
+                PrintWriter writer;
+                switch (sensor) {
+                    case "MPU6050":
+                        RealmResults<DataMPU6050> results = realm.where(DataMPU6050.class).findAll();
+                        try {
+                            writer = new PrintWriter(file);
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("Ax,Ay,Ax,Gx,Gy,Gz,Temperature\n");
+                            for (DataMPU6050 temp : results) {
+                                stringBuilder.append(String.valueOf(temp.getAx()));
+                                stringBuilder.append(',');
+                                stringBuilder.append(String.valueOf(temp.getAy()));
+                                stringBuilder.append(',');
+                                stringBuilder.append(String.valueOf(temp.getAz()));
+                                stringBuilder.append(',');
+                                stringBuilder.append(String.valueOf(temp.getGx()));
+                                stringBuilder.append(',');
+                                stringBuilder.append(String.valueOf(temp.getGy()));
+                                stringBuilder.append(',');
+                                stringBuilder.append(String.valueOf(temp.getGz()));
+                                stringBuilder.append(',');
+                                stringBuilder.append(String.valueOf(temp.getTemperature()));
+                                stringBuilder.append('\n');
+                            }
+                            writer.write(stringBuilder.toString());
+                            writer.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(context, "MPU6050 data exported successfully", Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
         } else {
             Toast.makeText(context, "Can't write to storage", Toast.LENGTH_SHORT).show();
