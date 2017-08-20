@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.AstableMultivibratorExperiment;
 import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
@@ -116,6 +117,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
                 if (experimentTitle.equals(context.getString(R.string.precision_rectifier)))
                     return ExperimentDocFragment.newInstance("Precision_Rectifier.html");
+                if (experimentTitle.equals(context.getString(R.string.human_body_resistance)))
+                    return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
                 if (experimentTitle.equals(context.getString(R.string.resistance_of_water)))
                     return ExperimentDocFragment.newInstance("F_WATER_RESISTANCE.html");
                 if (experimentTitle.equals(context.getResources().getString(R.string.ramp_generator)))
@@ -146,7 +149,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                 if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
                     return NFETOutputCharacteristicsExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
-                    return DiodeExperiment.newInstance("Half Wave Rectifier");
+                    return DiodeExperiment.newInstance(context.getString(R.string.half_wave_rectifier));
                 if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
                     return InvertingOpAmpExperiment.newInstance();
                 if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
@@ -163,6 +166,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     return CapacitorDischargeExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.full_wave_rectifier));
+                if (experimentTitle.equals(context.getString(R.string.human_body_resistance)))
+                    return HumanBodyResistanceExperiment.newInstance();
                 if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
                     return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
                 if (experimentTitle.equals(context.getString(R.string.precision_rectifier)))
