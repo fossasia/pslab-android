@@ -75,6 +75,10 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("D_NFET_GS_ID.md");
                     case "Astable Multivibrator":
                         return ExperimentDocFragment.newInstance("astable-multivibrator.html");
+                    case "Colpitts Oscillator":
+                        return ExperimentDocFragment.newInstance("L_Colpitts.md");
+                    case "Phase Shift Oscillator":
+                        return ExperimentDocFragment.newInstance("L_PhaseShift.md");
                     case "Transients RLC Response":
                         return ExperimentDocFragment.newInstance("E_transientRLC.html");
                     case "Bode Plots":
@@ -120,6 +124,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "Ultrasonic Range Finder":
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
                 }
+
             case 1:
                 switch (experimentTitle) {
                     case "Diode IV Characteristics":
@@ -143,7 +148,11 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "N-FET Transfer Characteristics":
                         return NFETTransferCharacteristicsExperiment.newInstance();
                     case "Astable Multivibrator":
-                        return AstableMultivibratorExperiment.newInstance();
+                        return AstableMultivibratorExperiment.newInstance("Astable Multivibrator");
+                    case "Colpitts Oscillator":
+                        return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
+                    case "Phase Shift Oscillator":
+                        return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
                     case "Ohms Law":
                         return OhmsLawSetupExperiment.newInstance();
                     case "AC Generator":

@@ -280,7 +280,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treePhase = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.phase_shift_oscillator)))
@@ -288,7 +288,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeWien = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.wien_bridge_oscillator)))
