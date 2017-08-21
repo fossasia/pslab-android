@@ -17,7 +17,7 @@ import org.fossasia.pslab.R;
  * Created by asitava on 22/6/17.
  */
 
-public class Edittextwidget extends LinearLayout{
+public class EditTextWidget extends LinearLayout{
 
     private EditText editText;
     private Button button1;
@@ -26,17 +26,17 @@ public class Edittextwidget extends LinearLayout{
     private double maxima;
     private double minima;
 
-    public Edittextwidget(Context context, AttributeSet attrs, int defStyle) {
+    public EditTextWidget(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         applyAttrs(attrs);
     }
 
-    public Edittextwidget(Context context, AttributeSet attrs) {
+    public EditTextWidget(Context context, AttributeSet attrs) {
         super(context, attrs);
         applyAttrs(attrs);
     }
 
-    public Edittextwidget(Context context) {
+    public EditTextWidget(Context context) {
         super(context);
     }
 
@@ -98,18 +98,18 @@ public class Edittextwidget extends LinearLayout{
     }
 
     private void applyAttrs(AttributeSet attrs) {
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Edittextwidget);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.EditTextWidget);
         final int N = a.getIndexCount();
         for (int i = 0; i < N; ++i) {
             int attr = a.getIndex(i);
             switch (attr) {
-                case R.styleable.Edittextwidget_leastcount:
+                case R.styleable.EditTextWidget_leastcount:
                     this.leastCount = a.getFloat(attr, 1.0f);
                     break;
-                case R.styleable.Edittextwidget_maxima:
+                case R.styleable.EditTextWidget_maxima:
                     this.maxima = a.getFloat(attr, 1.0f);
                     break;
-                case R.styleable.Edittextwidget_minima:
+                case R.styleable.EditTextWidget_minima:
                     this.minima = a.getFloat(attr, 1.0f);
             }
         }

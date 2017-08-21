@@ -1,6 +1,5 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.experimentsetup;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,10 +16,6 @@ import org.fossasia.pslab.activity.OscilloscopeActivity;
 
 public class OscillatorExperimentFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-    private Spinner spinnerRangeCh1;
-    private Button buttonCH1Frequency;
-    private Button buttonCH2Frequency;
     public TextView resultCH1Frequency;
     public TextView resultCH2Frequency;
     public TextView analyseCH2Label;
@@ -28,10 +23,6 @@ public class OscillatorExperimentFragment extends Fragment {
 
     public OscillatorExperimentFragment() {
 
-    }
-
-    public static OscillatorExperimentFragment newInstance(String param1, String param2) {
-        return new OscillatorExperimentFragment();
     }
 
     @Override
@@ -43,9 +34,9 @@ public class OscillatorExperimentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_astable_multivibrator, container, false);
-        spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_astable_multivibrator);
-        buttonCH1Frequency = (Button) v.findViewById(R.id.button_read_ch1_astable_multivibrator);
-        buttonCH2Frequency = (Button) v.findViewById(R.id.button_read_ch2_astable_multivibrator);
+        Spinner spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_astable_multivibrator);
+        Button buttonCH1Frequency = (Button) v.findViewById(R.id.button_read_ch1_astable_multivibrator);
+        Button buttonCH2Frequency = (Button) v.findViewById(R.id.button_read_ch2_astable_multivibrator);
         resultCH1Frequency = (TextView) v.findViewById(R.id.tv_result_ch1_astable_multivibrator);
         resultCH2Frequency = (TextView) v.findViewById(R.id.tv_result_ch2_astable_multivibrator);
         analyseCH2Label = (TextView) v.findViewById(R.id.tv_abalyse_ch2_astable_multivibrator);
@@ -59,7 +50,7 @@ public class OscillatorExperimentFragment extends Fragment {
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 
         ArrayAdapter<String> rangesAdapter;
-        rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, ranges);
+        rangesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, ranges);
         rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         spinnerRangeCh1.setAdapter(rangesAdapter);
@@ -128,24 +119,4 @@ public class OscillatorExperimentFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-
-    }
 }
