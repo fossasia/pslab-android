@@ -20,6 +20,7 @@ import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
+import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
@@ -123,6 +124,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("K_LDR.md");
                     case "Ultrasonic Range Finder":
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
+                    case "Semiconductor Diode":
+                        return ExperimentDocFragment.newInstance("J_DIODE.md");
                 }
 
             case 1:
@@ -179,6 +182,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return LightDependentResistorExperiment.newInstance();
                     case "Ultrasonic Range Finder":
                         return DistanceMeasurementExperiment.newInstance();
+                    case "Semiconductor Diode":
+                        return SemiConductorDiodeExperiment.newInstance();
                     default:
                         return ExperimentSetupFragment.newInstance();
                 }
