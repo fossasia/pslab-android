@@ -23,7 +23,6 @@ import org.fossasia.pslab.R;
 
 public class LAChannelModeFragment extends Fragment {
 
-
     private String[] channels = {"ID1", "ID2", "ID3", "ID4", "SEN", "EXT", "CNTR"};
     private String[] edges = {"EVERY EDGE", "EVERY FALLING EDGE", "EVERY RISING EDGE", "EVERY FOURTH RISING EDGE", "DISABLED"};
     private LinearLayout llChannel1, llChannel2, llChannel3, llChannel4;

@@ -114,6 +114,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("L_Inverting.md");
                     case "Non Inverting Op-Amp":
                         return ExperimentDocFragment.newInstance("L_NonInverting.md");
+                    case "Precision Rectifier":
+                        return ExperimentDocFragment.newInstance("Precision_Rectifier.html");
                     case "Capacitor Discharge":
                         return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
                     case "Resistance of Water":
@@ -126,6 +128,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
                     case "Semiconductor Diode":
                         return ExperimentDocFragment.newInstance("J_DIODE.md");
+                    case "Human Body Resistance":
+                        return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
                 }
 
             case 1:
@@ -172,6 +176,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return InvertingOpAmpExperiment.newInstance();
                     case "Non Inverting Op-Amp":
                         return NonInvertingOpAmpExperiment.newInstance();
+                    case "Precision Rectifier":
+                        return PrecisionRectifierExperiment.newInstance();
                     case "Capacitor Discharge":
                         return CapacitorDischargeExperiment.newInstance();
                     case "Resistance of Water":
@@ -184,6 +190,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return DistanceMeasurementExperiment.newInstance();
                     case "Semiconductor Diode":
                         return SemiConductorDiodeExperiment.newInstance();
+                    case "Human Body Resistance":
+                        return HumanBodyResistanceExperiment.newInstance();
                     default:
                         return ExperimentSetupFragment.newInstance();
                 }

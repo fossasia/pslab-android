@@ -132,7 +132,6 @@ public class ApplicationsFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            // Notify the adapter that data has been fetched
             applicationAdapter.notifyDataSetChanged();
         }
     }

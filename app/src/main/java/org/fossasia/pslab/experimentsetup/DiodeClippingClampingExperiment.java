@@ -1,6 +1,5 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.experimentsetup;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import org.fossasia.pslab.others.FloatSeekBar;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 public class DiodeClippingClampingExperiment extends Fragment {
-    private OnFragmentInteractionListener mListener;
 
     public DiodeClippingClampingExperiment() {
 
@@ -46,7 +44,7 @@ public class DiodeClippingClampingExperiment extends Fragment {
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 
         ArrayAdapter<String> rangesAdapter;
-        rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, ranges);
+        rangesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, ranges);
         rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinnerRange.setAdapter(rangesAdapter);
 
@@ -105,8 +103,8 @@ public class DiodeClippingClampingExperiment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (scienceLab.isConnected())
-                scienceLab.setPV1((float) floatSeekBarPV1.getValue());
-                progressTextViewPV1.setText(floatSeekBarPV1.getValue() + "V");
+                    scienceLab.setPV1((float) floatSeekBarPV1.getValue());
+                progressTextViewPV1.setText(floatSeekBarPV1.getValue() + " V");
             }
 
             @Override
@@ -122,26 +120,5 @@ public class DiodeClippingClampingExperiment extends Fragment {
 
 
         return v;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-
     }
 }
