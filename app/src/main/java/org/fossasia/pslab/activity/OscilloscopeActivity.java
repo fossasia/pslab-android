@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -35,12 +34,12 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.fragment.OscillatorExperimentFragment;
+import org.fossasia.pslab.experimentsetup.OscillatorExperimentFragment;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
-import org.fossasia.pslab.fragment.DiodeClippingClampingExperiment;
-import org.fossasia.pslab.fragment.FullWaveRectifierFragment;
-import org.fossasia.pslab.fragment.HalfwaveRectifierFragment;
+import org.fossasia.pslab.experimentsetup.DiodeClippingClampingExperiment;
+import org.fossasia.pslab.experimentsetup.FullWaveRectifierFragment;
+import org.fossasia.pslab.experimentsetup.HalfWaveRectifierFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.AudioJack;
@@ -59,18 +58,9 @@ import static org.fossasia.pslab.others.MathUtils.map;
  * Created by viveksb007 on 10/5/17.
  */
 
-public class OscilloscopeActivity extends AppCompatActivity implements
-        ChannelParametersFragment.OnFragmentInteractionListener,
-        TimebaseTriggerFragment.OnFragmentInteractionListener,
-        DataAnalysisFragment.OnFragmentInteractionListener,
-        XYPlotFragment.OnFragmentInteractionListener,
-        HalfwaveRectifierFragment.OnFragmentInteractionListener,
-        FullWaveRectifierFragment.OnFragmentInteractionListener,
-        DiodeClippingClampingExperiment.OnFragmentInteractionListener,
-        OscillatorExperimentFragment.OnFragmentInteractionListener,
-        View.OnClickListener {
+public class OscilloscopeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String TAG = "Oscilloscope Activity";
+    private static final String TAG = "Oscilloscope Activity";
     private ScienceLab scienceLab;
     public LineChart mChart;
     private LinearLayout linearLayout;
@@ -223,7 +213,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         timebasetriggerFragment = new TimebaseTriggerFragment();
         dataAnalysisFragment = new DataAnalysisFragment();
         xyPlotFragment = new XYPlotFragment();
-        halfwaveRectifierFragment = new HalfwaveRectifierFragment();
+        halfwaveRectifierFragment = new HalfWaveRectifierFragment();
         fullwaveRectifierFragment = new FullWaveRectifierFragment();
         diodeClippingClampingFragment = new DiodeClippingClampingExperiment();
         oscillatorExperimentFragment = new OscillatorExperimentFragment();
@@ -540,11 +530,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -670,7 +655,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         protected Void doInBackground(String... params) {
             try {
                 analogInput = params[0];
-                //no. of samples and timegap still need to be determined
+                //no. of samples and timeGap still need to be determined
                 if (isTriggerSelected) {
                     scienceLab.configureTrigger(0, analogInput, trigger, null, null);
                     scienceLab.captureTraces(1, 1000, 10, analogInput, true, null);
@@ -685,7 +670,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 double[] yData = data.get("y");
                 //Log.v("XDATA", Arrays.toString(xData));
                 //Log.v("YDATA", Arrays.toString(yData));
-                entries = new ArrayList<Entry>();
+                entries = new ArrayList<>();
                 if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries.add(new Entry((float) xData[i], (float) yData[i]));
@@ -711,9 +696,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 ledImageView.setTag("green");
             }
 
-            LineDataSet dataset = new LineDataSet(entries, analogInput);
-            LineData lineData = new LineData(dataset);
-            dataset.setDrawCircles(false);
+            LineDataSet dataSet = new LineDataSet(entries, analogInput);
+            LineData lineData = new LineData(dataSet);
+            dataSet.setDrawCircles(false);
             mChart.setData(lineData);
             mChart.notifyDataSetChanged();
             mChart.invalidate();
@@ -734,7 +719,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         protected Void doInBackground(String... params) {
             try {
                 analogInput = params[0];
-                //no. of samples and timegap still need to be determined
+                //no. of samples and timeGap still need to be determined
                 HashMap<String, double[]> data;
                 if (isTriggerSelected && (triggerChannel.equals("CH1") || triggerChannel.equals("CH2"))) {
                     if (triggerChannel.equals("CH1"))
@@ -749,8 +734,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 double[] y1Data = data.get("y1");
                 double[] y2Data = data.get("y2");
 
-                entries1 = new ArrayList<Entry>();
-                entries2 = new ArrayList<Entry>();
+                entries1 = new ArrayList<>();
+                entries2 = new ArrayList<>();
                 if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
@@ -776,27 +761,27 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 ledImageView.setTag("green");
             }
 
-            LineDataSet dataset1;
+            LineDataSet dataSet1;
             LineDataSet dataSet2;
 
             if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment || isDiodeClippingClampingExperiment) {
-                dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
+                dataSet1 = new LineDataSet(entries1, analogInput + " INPUT");
                 dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
-                dataset1.setColor(Color.GREEN);
+                dataSet1.setColor(Color.GREEN);
                 dataSet2.setColor(Color.RED);
 
             } else {
-                dataset1 = new LineDataSet(entries1, analogInput);
+                dataSet1 = new LineDataSet(entries1, analogInput);
                 dataSet2 = new LineDataSet(entries2, "CH2");
                 dataSet2.setColor(Color.GREEN);
             }
 
 
-            dataset1.setDrawCircles(false);
+            dataSet1.setDrawCircles(false);
             dataSet2.setDrawCircles(false);
 
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-            dataSets.add(dataset1);
+            List<ILineDataSet> dataSets = new ArrayList<>();
+            dataSets.add(dataSet1);
             dataSets.add(dataSet2);
 
             LineData data = new LineData(dataSets);
@@ -819,7 +804,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         @Override
         protected Void doInBackground(String... params) {
             try {
-                //no. of samples and timegap still need to be determined
+                //no. of samples and timeGap still need to be determined
                 analogInput = params[0];
                 HashMap<String, double[]> data;
 
@@ -843,10 +828,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 double[] y3Data = data.get("y3");
                 double[] y4Data = data.get("y4");
 
-                entries1 = new ArrayList<Entry>();
-                entries2 = new ArrayList<Entry>();
-                entries3 = new ArrayList<Entry>();
-                entries4 = new ArrayList<Entry>();
+                entries1 = new ArrayList<>();
+                entries2 = new ArrayList<>();
+                entries3 = new ArrayList<>();
+                entries4 = new ArrayList<>();
                 if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
@@ -876,22 +861,22 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 ledImageView.setTag("green");
             }
 
-            LineDataSet dataset1 = new LineDataSet(entries1, "CH1");
+            LineDataSet dataSet1 = new LineDataSet(entries1, "CH1");
             LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
             LineDataSet dataSet3 = new LineDataSet(entries3, "CH3");
             LineDataSet dataSet4 = new LineDataSet(entries4, "MIC");
 
-            dataset1.setColor(Color.BLUE);
+            dataSet1.setColor(Color.BLUE);
             dataSet2.setColor(Color.GREEN);
             dataSet3.setColor(Color.RED);
             dataSet4.setColor(Color.YELLOW);
-            dataset1.setDrawCircles(false);
+            dataSet1.setDrawCircles(false);
             dataSet2.setDrawCircles(false);
             dataSet3.setDrawCircles(false);
             dataSet4.setDrawCircles(false);
 
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-            dataSets.add(dataset1);
+            List<ILineDataSet> dataSets = new ArrayList<>();
+            dataSets.add(dataSet1);
             dataSets.add(dataSet2);
             dataSets.add(dataSet3);
             dataSets.add(dataSet4);
@@ -1074,10 +1059,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             fragment = (OscillatorExperimentFragment) getSupportFragmentManager().findFragmentById(oscillatorExperimentFragment.getId());
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            List<ILineDataSet> dataSets = new ArrayList<>();
             if (isCH1FrequencyRequired) {
                 if (frequencyCH1 >= 0)
-                    fragment.resultCH1Frequency.setText(new DecimalFormat("#.##").format(frequencyCH1) + "Hz");
+                    fragment.resultCH1Frequency.setText(new DecimalFormat("#.##").format(frequencyCH1) + " Hz");
                 else
                     fragment.resultCH1Frequency.setText("fit failed");
                 isCH1FrequencyRequired = false;
@@ -1090,22 +1075,22 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 isCH2FrequencyRequired = false;
             }
             if (isAstableMultivibratorExperiment) {
-                LineDataSet dataset1;
+                LineDataSet dataSet1;
                 LineDataSet dataSet2;
-                dataset1 = new LineDataSet(entries1, "CH1 INPUT");
+                dataSet1 = new LineDataSet(entries1, "CH1 INPUT");
                 dataSet2 = new LineDataSet(entries2, "CH2 OUTPUT");
-                dataset1.setColor(Color.GREEN);
+                dataSet1.setColor(Color.GREEN);
                 dataSet2.setColor(Color.RED);
-                dataset1.setDrawCircles(false);
+                dataSet1.setDrawCircles(false);
                 dataSet2.setDrawCircles(false);
-                dataSets.add(dataset1);
+                dataSets.add(dataSet1);
                 dataSets.add(dataSet2);
             } else {
-                LineDataSet dataset1;
-                dataset1 = new LineDataSet(entries1, analogInput + " INPUT");
-                dataset1.setColor(Color.GREEN);
-                dataset1.setDrawCircles(false);
-                dataSets.add(dataset1);
+                LineDataSet dataSet1;
+                dataSet1 = new LineDataSet(entries1, analogInput + " INPUT");
+                dataSet1.setColor(Color.GREEN);
+                dataSet1.setDrawCircles(false);
+                dataSets.add(dataSet1);
             }
 
             LineData data = new LineData(dataSets);

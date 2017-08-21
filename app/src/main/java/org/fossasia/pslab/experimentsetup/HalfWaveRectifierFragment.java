@@ -1,7 +1,5 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.experimentsetup;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,27 +11,14 @@ import android.widget.Spinner;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
-import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.others.ScienceLabCommon;
 
+public class HalfWaveRectifierFragment extends Fragment {
 
-public class HalfwaveRectifierFragment extends Fragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private ScienceLab scienceLab;
-    private Spinner spinnerRangeCh1;
-
-
-    private OnFragmentInteractionListener mListener;
-
-    public HalfwaveRectifierFragment() {
-        // Required empty public constructor
+    public HalfWaveRectifierFragment() {
     }
 
-    public static HalfwaveRectifierFragment newInstance() {
-        return new HalfwaveRectifierFragment();
+    public static HalfWaveRectifierFragment newInstance() {
+        return new HalfWaveRectifierFragment();
     }
 
     @Override
@@ -44,14 +29,12 @@ public class HalfwaveRectifierFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        scienceLab = ScienceLabCommon.scienceLab;
         View v = inflater.inflate(R.layout.fragment_halfwave_rectifier, container, false);
-        spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_h_wave_rectifier);
+        Spinner spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_h_wave_rectifier);
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 
         ArrayAdapter<String> rangesAdapter;
-        rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, ranges);
+        rangesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, ranges);
         rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinnerRangeCh1.setAdapter(rangesAdapter);
 
@@ -107,24 +90,4 @@ public class HalfwaveRectifierFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-
-    }
 }

@@ -20,9 +20,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         return new SettingsFragment();
     }
 
-
     public SettingsFragment() {
-
     }
 
     @Override
