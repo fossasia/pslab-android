@@ -1,6 +1,5 @@
-package org.fossasia.pslab.fragment;
+package org.fossasia.pslab.experimentsetup;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,49 +7,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
-import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.others.FloatSeekBar;
-import org.fossasia.pslab.others.ScienceLabCommon;
 
-public class DiodeClippingExperiment extends Fragment {
-    private OnFragmentInteractionListener mListener;
+public class HalfWaveRectifierFragment extends Fragment {
 
-    public DiodeClippingExperiment() {
-
+    public HalfWaveRectifierFragment() {
     }
 
-    public static DiodeClippingExperiment newInstance() {
-        return new DiodeClippingExperiment();
+    public static HalfWaveRectifierFragment newInstance() {
+        return new HalfWaveRectifierFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_diode_clipping_experiment, container, false);
-        Spinner spinnerRange = (Spinner) v.findViewById(R.id.spinner_diode_clipping);
-        final FloatSeekBar floatSeekBarPV1 = (FloatSeekBar) v.findViewById(R.id.seekBar_pv1_diodeclipping);
-        final TextView progressTextViewPV1 = (TextView) v.findViewById(R.id.seekBar_progress_diode_clipping);
-        final ScienceLab scienceLab = ScienceLabCommon.scienceLab;
+        View v = inflater.inflate(R.layout.fragment_halfwave_rectifier, container, false);
+        Spinner spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_h_wave_rectifier);
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 
         ArrayAdapter<String> rangesAdapter;
-        rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, ranges);
+        rangesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, ranges);
         rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        spinnerRange.setAdapter(rangesAdapter);
+        spinnerRangeCh1.setAdapter(rangesAdapter);
 
-        spinnerRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerRangeCh1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
@@ -99,49 +87,7 @@ public class DiodeClippingExperiment extends Fragment {
             }
         });
 
-        floatSeekBarPV1.setters(-5.0f, 5.0f);
-        floatSeekBarPV1.setValue(0.0f);
-        floatSeekBarPV1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (scienceLab.isConnected())
-                scienceLab.setPV1((float) floatSeekBarPV1.getValue());
-                progressTextViewPV1.setText(floatSeekBarPV1.getValue() + "V");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-
         return v;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-
-    }
 }

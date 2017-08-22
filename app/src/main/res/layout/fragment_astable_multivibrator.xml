@@ -1,0 +1,92 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.fossasia.pslab.experimentsetup.OscillatorExperimentFragment">
+
+    <Spinner
+        android:id="@+id/spinner_range_astable_multivibrator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_range_h_wave_rectifier"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@+id/tv_range_h_wave_rectifier"
+        android:layout_toRightOf="@+id/tv_range_h_wave_rectifier"
+        app:layout_constraintLeft_toRightOf="@+id/tv_range_astable_multivibrator"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_range_astable_multivibrator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/range"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_analyse_ch1_astable_multivibrator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/analyse_ch1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/button_read_ch1_astable_multivibrator"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:id="@+id/tv_abalyse_ch2_astable_multivibrator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/analyse_ch2"
+        app:layout_constraintRight_toLeftOf="@+id/button_read_ch2_astable_multivibrator"
+        app:layout_constraintTop_toBottomOf="@+id/tv_analyse_ch1_astable_multivibrator" />
+
+    <Button
+        android:id="@+id/button_read_ch2_astable_multivibrator"
+        android:layout_width="86dp"
+        android:layout_height="33dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/read"
+        android:textSize="10sp"
+        app:layout_constraintRight_toLeftOf="@+id/tv_result_ch2_astable_multivibrator"
+        app:layout_constraintTop_toBottomOf="@+id/button_read_ch1_astable_multivibrator" />
+
+    <Button
+        android:id="@+id/button_read_ch1_astable_multivibrator"
+        android:layout_width="86dp"
+        android:layout_height="33dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/read"
+        android:textSize="10sp"
+        app:layout_constraintRight_toLeftOf="@+id/tv_result_ch1_astable_multivibrator"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_result_ch2_astable_multivibrator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/result"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_result_ch1_astable_multivibrator" />
+
+    <TextView
+        android:id="@+id/tv_result_ch1_astable_multivibrator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/result"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

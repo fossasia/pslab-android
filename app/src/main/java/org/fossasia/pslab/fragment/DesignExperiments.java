@@ -21,8 +21,7 @@ public class DesignExperiments extends Fragment {
     private Unbinder unbinder;
 
     public static DesignExperiments newInstance() {
-        DesignExperiments designExperiments = new DesignExperiments();
-        return designExperiments;
+        return new DesignExperiments();
     }
 
     @Nullable
