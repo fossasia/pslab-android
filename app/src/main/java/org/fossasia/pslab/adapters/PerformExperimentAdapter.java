@@ -21,6 +21,7 @@ import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
+import org.fossasia.pslab.experimentsetup.StepperMotors;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
@@ -130,6 +131,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("J_DIODE.md");
                     case "Human Body Resistance":
                         return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
+                    case "Stepper Motors":
+                        return ExperimentDocFragment.newInstance("J_stepper.md");
                 }
 
             case 1:
@@ -192,6 +195,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return SemiConductorDiodeExperiment.newInstance();
                     case "Human Body Resistance":
                         return HumanBodyResistanceExperiment.newInstance();
+                    case "Stepper Motors":
+                        return StepperMotors.newInstance();
                     default:
                         return ExperimentSetupFragment.newInstance();
                 }
