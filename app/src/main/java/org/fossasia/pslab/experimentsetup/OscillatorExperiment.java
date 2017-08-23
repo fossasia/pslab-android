@@ -1,32 +1,28 @@
 package org.fossasia.pslab.experimentsetup;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.VideoView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 
-
-public class AstableMultivibratorExperiment extends Fragment {
+public class OscillatorExperiment extends Fragment {
 
     private Button startButton;
     private static String experiment;
 
-    public AstableMultivibratorExperiment() {
+    public OscillatorExperiment() {
 
     }
 
-    public static AstableMultivibratorExperiment newInstance(String param) {
+    public static OscillatorExperiment newInstance(String param) {
         experiment = param;
-        return new AstableMultivibratorExperiment();
+        return new OscillatorExperiment();
     }
 
     @Override
@@ -48,6 +44,10 @@ public class AstableMultivibratorExperiment extends Fragment {
                     intent.putExtra("who", "Astable Multivibrator");
                 else if ("Colpitts Oscillator".equals(experiment))
                     intent.putExtra("who", "Colpitts Oscillator");
+                else if ("Phase Shift Oscillator".equals(experiment))
+                    intent.putExtra("who", "Phase Shift Oscillator");
+                else if ("Wien Bridge Oscillator".equals(experiment))
+                    intent.putExtra("who", "Wien Bridge Oscillator");
                 startActivity(intent);
             }
         });

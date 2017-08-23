@@ -33,7 +33,7 @@ public class OscillatorExperimentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_astable_multivibrator, container, false);
+        View v = inflater.inflate(R.layout.fragment_oscillator_experiment, container, false);
         Spinner spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_astable_multivibrator);
         Button buttonCH1Frequency = (Button) v.findViewById(R.id.button_read_ch1_astable_multivibrator);
         Button buttonCH2Frequency = (Button) v.findViewById(R.id.button_read_ch2_astable_multivibrator);
@@ -41,7 +41,9 @@ public class OscillatorExperimentFragment extends Fragment {
         resultCH2Frequency = (TextView) v.findViewById(R.id.tv_result_ch2_astable_multivibrator);
         analyseCH2Label = (TextView) v.findViewById(R.id.tv_abalyse_ch2_astable_multivibrator);
 
-        if (((OscilloscopeActivity) getActivity()).isColpittsOscillatorExperiment) {
+        if (((OscilloscopeActivity) getActivity()).isColpittsOscillatorExperiment ||
+                ((OscilloscopeActivity) getActivity()).isPhaseShiftOscillatorExperiment ||
+                ((OscilloscopeActivity) getActivity()).isWienBridgeOscillatorExperiment) {
             buttonCH2Frequency.setVisibility(View.INVISIBLE);
             resultCH2Frequency.setVisibility(View.INVISIBLE);
             analyseCH2Label.setVisibility(View.INVISIBLE);
