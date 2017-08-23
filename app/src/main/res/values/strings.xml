@@ -383,6 +383,18 @@
         <item>+/- 0.5</item>
     </string-array>
 
+    <string-array name="wave_generator">
+        <item>W1</item>
+        <item>W2</item>
+    </string-array>
+
+    <string-array name="source_pins">
+        <item>PV1</item>
+        <item>PV2</item>
+        <item>PV3</item>
+        <item>PCS</item>
+    </string-array>
+
     <string name="experiment_icon">Experiment Icon</string>
     <string name="drop_down_arrow">Drop down arrow</string>
     <string name="voltage_unit">(V)</string>

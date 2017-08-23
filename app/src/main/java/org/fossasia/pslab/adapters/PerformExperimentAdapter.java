@@ -18,6 +18,7 @@ import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
 import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
@@ -126,6 +127,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("K_LDR.md");
                     case "Ultrasonic Range Finder":
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
+                    case "Summing Junction":
+                        return ExperimentDocFragment.newInstance("L_Summing.html");
                     case "Semiconductor Diode":
                         return ExperimentDocFragment.newInstance("J_DIODE.md");
                     case "Human Body Resistance":
@@ -176,6 +179,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return InvertingOpAmpExperiment.newInstance();
                     case "Non Inverting Op-Amp":
                         return NonInvertingOpAmpExperiment.newInstance();
+                    case "Summing Junction":
+                        return SummingJunctionExperiment.newInstance();
                     case "Precision Rectifier":
                         return PrecisionRectifierExperiment.newInstance();
                     case "Capacitor Discharge":
