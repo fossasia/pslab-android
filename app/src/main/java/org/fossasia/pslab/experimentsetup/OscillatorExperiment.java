@@ -48,6 +48,8 @@ public class OscillatorExperiment extends Fragment {
                     intent.putExtra("who", "Phase Shift Oscillator");
                 else if ("Wien Bridge Oscillator".equals(experiment))
                     intent.putExtra("who", "Wien Bridge Oscillator");
+                else if ("Monostable Multivibrator".equals(experiment))
+                    intent.putExtra("who", "Monostable Multivibrator");
                 startActivity(intent);
             }
         });

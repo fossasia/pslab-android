@@ -77,6 +77,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("D_NFET_GS_ID.md");
                     case "Astable Multivibrator":
                         return ExperimentDocFragment.newInstance("astable-multivibrator.html");
+                    case "Monostable Multivibrator":
+                        return ExperimentDocFragment.newInstance("M_Monostable.md");
                     case "Colpitts Oscillator":
                         return ExperimentDocFragment.newInstance("L_Colpitts.md");
                     case "Phase Shift Oscillator":
@@ -161,6 +163,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return NFETTransferCharacteristicsExperiment.newInstance();
                     case "Astable Multivibrator":
                         return OscillatorExperiment.newInstance("Astable Multivibrator");
+                    case "Monostable Multivibrator":
+                        return OscillatorExperiment.newInstance("Monostable Multivibrator");
                     case "Colpitts Oscillator":
                         return OscillatorExperiment.newInstance("Colpitts Oscillator");
                     case "Phase Shift Oscillator":

@@ -446,6 +446,9 @@
     <string name="analyse_ch1">Analyse CH1</string>
     <string name="analyse_ch2">Analyse CH2</string>
     <string name="result">Result</string>
+    <string name="acquire_data">Acquire Data</string>
+    <string name="done">Done</string>
+    <string name="fit_failed">fit failed</string>
 
     <string name="full">Full</string>
     <string name="ac_voltage">AC Voltage</string>
