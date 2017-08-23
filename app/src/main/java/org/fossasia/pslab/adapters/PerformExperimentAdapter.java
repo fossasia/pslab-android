@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
-import org.fossasia.pslab.experimentsetup.AstableMultivibratorExperiment;
 import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.DistanceMeasurementExperiment;
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
@@ -20,9 +19,11 @@ import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.ServoMotorsExperiment;
 import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
+import org.fossasia.pslab.experimentsetup.OscillatorExperiment;
 import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
+import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
@@ -82,6 +83,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("L_Colpitts.md");
                     case "Phase Shift Oscillator":
                         return ExperimentDocFragment.newInstance("L_PhaseShift.md");
+                    case "Wien Bridge Oscillator":
+                        return ExperimentDocFragment.newInstance("L_WIEN_BRIDGE.md");
                     case "Transients RLC Response":
                         return ExperimentDocFragment.newInstance("E_transientRLC.html");
                     case "Bode Plots":
@@ -161,11 +164,13 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "N-FET Transfer Characteristics":
                         return NFETTransferCharacteristicsExperiment.newInstance();
                     case "Astable Multivibrator":
-                        return AstableMultivibratorExperiment.newInstance("Astable Multivibrator");
+                        return OscillatorExperiment.newInstance("Astable Multivibrator");
                     case "Colpitts Oscillator":
-                        return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
+                        return OscillatorExperiment.newInstance("Colpitts Oscillator");
                     case "Phase Shift Oscillator":
-                        return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
+                        return OscillatorExperiment.newInstance("Phase Shift Oscillator");
+                    case "Wien Bridge Oscillator":
+                        return OscillatorExperiment.newInstance("Wien Bridge Oscillator");
                     case "Ohms Law":
                         return OhmsLawSetupExperiment.newInstance();
                     case "AC Generator":
