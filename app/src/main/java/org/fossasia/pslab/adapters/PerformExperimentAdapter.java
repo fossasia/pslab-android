@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.LRPhaseShiftExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
@@ -44,107 +45,130 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                if (experimentTitle.equals(context.getResources().getString(R.string.diode_iv)))
-                    return ExperimentDocFragment.newInstance("D_diodeIV.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
-                    return ExperimentDocFragment.newInstance("D_ZenerIV.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.half_wave_rectifier)))
-                    return ExperimentDocFragment.newInstance("L_halfWave.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.transistor_cb)))
-                    return ExperimentDocFragment.newInstance("D_transistorCB.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
-                    return ExperimentDocFragment.newInstance("D_transistorCE.html");
-                if (experimentTitle.equals(context.getString(R.string.bjt_transfer_characteristics)))
-                    return ExperimentDocFragment.newInstance("D_transistorCE_transfer.html");
-                if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
-                    return ExperimentDocFragment.newInstance("D_transistorCE_input.html");
-                if (experimentTitle.equals(context.getString(R.string.bjt_amplifer)))
-                    return ExperimentDocFragment.newInstance("L_TransistorAmplifier.md");
-                if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
-                    return ExperimentDocFragment.newInstance("D_NFET.html");
-                if (experimentTitle.equals(context.getString(R.string.nfet_transfer_characteristics)))
-                    return ExperimentDocFragment.newInstance("D_NFET_GS_ID.md");
-                if (experimentTitle.equals(context.getResources().getString(R.string.astable_multivibrator)))
-                    return ExperimentDocFragment.newInstance("astable-multivibrator.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.transient_rlc)))
-                    return ExperimentDocFragment.newInstance("E_transientRLC.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.bode_plots)))
-                    return ExperimentDocFragment.newInstance("K_bodePlots.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.ohms_law)))
-                    return ExperimentDocFragment.newInstance("E_OhmsLaw.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.random_sampling)))
-                    return ExperimentDocFragment.newInstance("M_RANDOM_SAMPLING.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.ac_and_dc)))
-                    return ExperimentDocFragment.newInstance("A_AC_AND_DC.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.ac_generator)))
-                    return ExperimentDocFragment.newInstance("C_AC_GENERATOR.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.capacitance)))
-                    return ExperimentDocFragment.newInstance("I_CAPACITANCE.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.resistance)))
-                    return ExperimentDocFragment.newInstance("D_RESISTANCE.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.em_induction)))
-                    return ExperimentDocFragment.newInstance("F_EM_INDUCTION.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.sound_beats)))
-                    return ExperimentDocFragment.newInstance("H_SOUND_BEATS.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.dust_sensor)))
-                    return ExperimentDocFragment.newInstance("DUST_SENSOR.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.lemon_cell)))
-                    return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
-                if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
-                    return  ExperimentDocFragment.newInstance("L_halfWave.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
-                    return ExperimentDocFragment.newInstance("M_FullWave.html");
-                if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
-                    return ExperimentDocFragment.newInstance("L_DiodeClipping.md");
-                if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
-                    return ExperimentDocFragment.newInstance("L_Inverting.md");
-                if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
-                    return ExperimentDocFragment.newInstance("L_NonInverting.md");
-                if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
-                    return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
-                if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
-                    return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
-            case 1:
-                if (experimentTitle.equals(context.getResources().getString(R.string.zener_iv)))
-                    return ZenerSetupFragment.newInstance();
-                if (experimentTitle.equals(context.getResources().getString(R.string.diode_iv))) {
-                    // Normal diode and zener experiments are identical
-                    return ZenerSetupFragment.newInstance();
+                switch (experimentTitle) {
+                    case "Diode IV Characteristics":
+                        return ExperimentDocFragment.newInstance("D_diodeIV.html");
+                    case "Zener IV Characteristics":
+                        return ExperimentDocFragment.newInstance("D_ZenerIV.html");
+                    case "Half Wave Rectifier":
+                        return ExperimentDocFragment.newInstance("L_halfWave.html");
+                    case "BJT CB Characteristics":
+                        return ExperimentDocFragment.newInstance("D_transistorCB.html");
+                    case "BJT Output Characteristics":
+                        return ExperimentDocFragment.newInstance("D_transistorCE.html");
+                    case "BJT Transfer Characteristics":
+                        return ExperimentDocFragment.newInstance("D_transistorCE_transfer.html");
+                    case "BJT Input Characteristics":
+                        return ExperimentDocFragment.newInstance("D_transistorCE_input.html");
+                    case "BJT Amplifier":
+                        return ExperimentDocFragment.newInstance("L_TransistorAmplifier.md");
+                    case "N-FET Output Characteristics":
+                        return ExperimentDocFragment.newInstance("D_NFET.html");
+                    case "N-FET Transfer Characteristics":
+                        return ExperimentDocFragment.newInstance("D_NFET_GS_ID.md");
+                    case "Astable Multivibrator":
+                        return ExperimentDocFragment.newInstance("astable-multivibrator.html");
+                    case "Colpitts Oscillator":
+                        return ExperimentDocFragment.newInstance("L_Colpitts.md");
+                    case "Phase Shift Oscillator":
+                        return ExperimentDocFragment.newInstance("L_PhaseShift.md");
+                    case "Transients RLC Response":
+                        return ExperimentDocFragment.newInstance("E_transientRLC.html");
+                    case "Bode Plots":
+                        return ExperimentDocFragment.newInstance("K_bodePlots.html");
+                    case "Ohms Law":
+                        return ExperimentDocFragment.newInstance("E_OhmsLaw.html");
+                    case "Random Sampling":
+                        return ExperimentDocFragment.newInstance("M_RANDOM_SAMPLING.html");
+                    case "AC and DC":
+                        return ExperimentDocFragment.newInstance("A_AC_AND_DC.html");
+                    case "AC Generator":
+                        return ExperimentDocFragment.newInstance("C_AC_GENERATOR.html");
+                    case "Capacitance":
+                        return ExperimentDocFragment.newInstance("I_CAPACITANCE.html");
+                    case "Resistance":
+                        return ExperimentDocFragment.newInstance("D_RESISTANCE.html");
+                    case "Electromagnetic Induction":
+                        return ExperimentDocFragment.newInstance("F_EM_INDUCTION.html");
+                    case "Sound Beats Phenomenon":
+                        return ExperimentDocFragment.newInstance("H_SOUND_BEATS.html");
+                    case "Dust Sensor DSM501":
+                        return ExperimentDocFragment.newInstance("DUST_SENSOR.html");
+                    case "Lemon Cell":
+                        return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
+                    case "Full Wave Rectifier":
+                        return ExperimentDocFragment.newInstance("M_FullWave.html");
+                    case "Diode Clipping":
+                        return ExperimentDocFragment.newInstance("L_DiodeClipping.md");
+                    case "Diode Clamping":
+                        return ExperimentDocFragment.newInstance("L_DiodeClamping.md");
+                    case "Inverting Op-Amp":
+                        return ExperimentDocFragment.newInstance("L_Inverting.md");
+                    case "Non Inverting Op-Amp":
+                        return ExperimentDocFragment.newInstance("L_NonInverting.md");
+                    case "Precision Rectifier":
+                        return ExperimentDocFragment.newInstance("Precision_Rectifier.html");
+                    case "Capacitor Discharge":
+                        return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
+                    case "Resistance of Water":
+                        return ExperimentDocFragment.newInstance("F_WATER_RESISTANCE.html");
+                    case "Ramp Generator":
+                        return ExperimentDocFragment.newInstance("L_LinearRampGen.html");
+                    case "Light Dependent Resistor":
+                        return ExperimentDocFragment.newInstance("K_LDR.md");
+                    case "Ultrasonic Range Finder":
+                        return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
+                    case "LR Phase Shift":
+                        return ExperimentDocFragment.newInstance("P_InductivePhaseShift.md");
+                    case "Semiconductor Diode":
+                        return ExperimentDocFragment.newInstance("J_DIODE.md");
+                    case "Human Body Resistance":
+                        return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
                 }
-                if (experimentTitle.equals(context.getResources().getString(R.string.ohms_law)))
-                    return OhmsLawSetupExperiment.newInstance();
-                if (experimentTitle.equals(context.getResources().getString(R.string.transistor_cb)))
-                    return TransistorCBSetup.newInstance();
-                if (experimentTitle.equals(context.getResources().getString(R.string.transistor_ce)))
-                    return TransistorCEOutputSetup.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.bjt_transfer_characteristics)))
-                    return TransistorTransferExperiment.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.bjt_input_characteristics)))
-                    return TransistorCEInputCharacteristicsExperiment.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.bjt_amplifer)))
-                    return TransistorAmplifierExperiment.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.nfet_output_characteristics)))
-                    return NFETOutputCharacteristicsExperiment.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
-                    return DiodeExperiment.newInstance("Half Wave Rectifier");
-                if (experimentTitle.equals(context.getString(R.string.inverting_opamp)))
-                    return InvertingOpAmpExperiment.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.non_inverting_opamp)))
-                    return NonInvertingOpAmpExperiment.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.nfet_transfer_characteristics)))
-                    return NFETTransferCharacteristicsExperiment.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.half_wave_rectifier)))
-                    return DiodeExperiment.newInstance(context.getString(R.string.half_wave_rectifier));
-                if (experimentTitle.equals(context.getString(R.string.lemon_cell)))
-                    return LemonCellExperiment.newInstance();
-                if (experimentTitle.equals(context.getString(R.string.capacitor_discharge)))
-                    return CapacitorDischargeExperiment.newInstance();
-                if (experimentTitle.equals(context.getResources().getString(R.string.full_wave_rectifier)))
-                    return DiodeExperiment.newInstance("Full Wave Rectifier");
-                if (experimentTitle.equals(context.getResources().getString(R.string.diode_clipping)))
-                    return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
 
-                return ExperimentSetupFragment.newInstance();
+            case 1:
+                switch (experimentTitle) {
+                    case "Diode IV Characteristics":
+                        return ZenerSetupFragment.newInstance();
+                    case "Zener IV Characteristics":
+                        return ZenerSetupFragment.newInstance();
+                    case "Half Wave Rectifier":
+                        return DiodeExperiment.newInstance(context.getString(R.string.half_wave_rectifier));
+                    case "BJT CB Characteristics":
+                        return TransistorCBSetup.newInstance();
+                    case "BJT Output Characteristics":
+                        return TransistorCEOutputSetup.newInstance();
+                    case "BJT Transfer Characteristics":
+                        return TransistorTransferExperiment.newInstance();
+                    case "BJT Input Characteristics":
+                        return TransistorCEInputCharacteristicsExperiment.newInstance();
+                    case "BJT Amplifier":
+                        return TransistorAmplifierExperiment.newInstance();
+                    case "N-FET Output Characteristics":
+                        return NFETOutputCharacteristicsExperiment.newInstance();
+                    case "N-FET Transfer Characteristics":
+                        return NFETTransferCharacteristicsExperiment.newInstance();
+                    case "Ohms Law":
+                        return OhmsLawSetupExperiment.newInstance();
+                    case "Lemon Cell":
+                        return LemonCellExperiment.newInstance();
+                    case "Full Wave Rectifier":
+                        return DiodeExperiment.newInstance(context.getResources().getString(R.string.full_wave_rectifier));
+                    case "Diode Clipping":
+                        return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clipping));
+                    case "Diode Clamping":
+                        return DiodeExperiment.newInstance(context.getResources().getString(R.string.diode_clamping));
+                    case "Inverting Op-Amp":
+                        return InvertingOpAmpExperiment.newInstance();
+                    case "Non Inverting Op-Amp":
+                        return NonInvertingOpAmpExperiment.newInstance();
+                    case "LR Phase Shift":
+                        return LRPhaseShiftExperiment.newInstance();
+                    case "Capacitor Discharge":
+                        return CapacitorDischargeExperiment.newInstance();
+                    default:
+                        return ExperimentSetupFragment.newInstance();
+                }
             default:
                 return ExperimentDocFragment.newInstance("astable-multivibrator.html");
         }
