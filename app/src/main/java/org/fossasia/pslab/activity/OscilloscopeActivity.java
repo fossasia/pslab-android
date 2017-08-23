@@ -35,6 +35,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.experimentsetup.OscillatorExperimentFragment;
+import org.fossasia.pslab.experimentsetup.SpeedOfSoundFragment;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
 import org.fossasia.pslab.experimentsetup.DiodeClippingClampingExperiment;
@@ -49,6 +50,8 @@ import org.fossasia.pslab.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -103,6 +106,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public boolean isAstableMultivibratorExperiment;
     public boolean isColpittsOscillatorExperiment;
     public boolean isPhaseShiftOscillatorExperiment;
+    public boolean isSpeedOfSoundExperiment;
     private String leftYAxisInput;
     public String triggerChannel;
     public String curveFittingChannel1;
@@ -118,18 +122,21 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     Fragment fullwaveRectifierFragment;
     Fragment oscillatorExperimentFragment;
     Fragment diodeClippingClampingFragment;
+    Fragment speedOfSoundFragment;
     private final Object lock = new Object();
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
     private CaptureTaskThree captureTask3;
     private XYPlotTask xyPlotTask;
     private OscillatorTask oscillatorTask;
+    private SpeedOfSoundTask speedOfSoundTask;
     private ImageView ledImageView;
     public Plot2D graph;
     private AudioJack audioJack = null;
     private AnalyticsClass analyticsClass;
     public boolean isCH1FrequencyRequired;
     public boolean isCH2FrequencyRequired;
+    public boolean runSpeedOfSoundExperiment;
 
 
     @Override
@@ -175,6 +182,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         isCH2FrequencyRequired = false;
         isColpittsOscillatorExperiment = false;
         isPhaseShiftOscillatorExperiment = false;
+        isSpeedOfSoundExperiment = false;
+        runSpeedOfSoundExperiment = false;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -205,6 +214,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             isAstableMultivibratorExperiment = true;
         } else if ("Colpitts Oscillator".equals(extras.getString("who"))) {
             isColpittsOscillatorExperiment = true;
+        } else if ("Speed of Sound".equals(extras.getString("who"))) {
+            isSpeedOfSoundExperiment = true;
         }
 
         onWindowFocusChanged();
@@ -217,6 +228,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         fullwaveRectifierFragment = new FullWaveRectifierFragment();
         diodeClippingClampingFragment = new DiodeClippingClampingExperiment();
         oscillatorExperimentFragment = new OscillatorExperimentFragment();
+        speedOfSoundFragment = new SpeedOfSoundFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             if (isHalfWaveRectifierExperiment) {
@@ -229,6 +241,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 addFragment(R.id.layout_dock_os2, oscillatorExperimentFragment, "OscillatorExperimentFragment");
             } else if (isDiodeClippingClampingExperiment) {
                 addFragment(R.id.layout_dock_os2, diodeClippingClampingFragment, "DiodeClippingClampingFragment");
+            } else if (isSpeedOfSoundExperiment) {
+                addFragment(R.id.layout_dock_os2, speedOfSoundFragment, "SpeedOfSoundFragment");
             } else {
                 addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
             }
@@ -421,6 +435,18 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
+                    if (scienceLab.isConnected() && isSpeedOfSoundExperiment && runSpeedOfSoundExperiment) {
+                        speedOfSoundTask = new SpeedOfSoundTask();
+                        speedOfSoundTask.execute();
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
                 }
             }
         };
@@ -471,7 +497,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public void onWindowFocusChanged() {
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
-        if (isHalfWaveRectifierExperiment || isDiodeClippingClampingExperiment || isAstableMultivibratorExperiment) {
+        if (isHalfWaveRectifierExperiment || isDiodeClippingClampingExperiment || isAstableMultivibratorExperiment || isSpeedOfSoundExperiment) {
             linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 3 / 4;
@@ -1097,6 +1123,50 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             mChart.setData(data);
             mChart.notifyDataSetChanged();
             mChart.invalidate();
+            synchronized (lock) {
+                lock.notify();
+            }
+        }
+    }
+
+    public class SpeedOfSoundTask extends AsyncTask<Void, Void, Void> {
+        ArrayList<Entry> entries;
+        SpeedOfSoundFragment fragment;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            scienceLab.captureFullSpeed("CH1", 128, 10, new ArrayList<>(Collections.singletonList("FIRE_PULSES")), 50);
+            HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
+
+            double[] xData = data.get("x");
+            double[] yData = data.get("y");
+            //Log.v("XDATA", Arrays.toString(xData));
+            //Log.v("YDATA", Arrays.toString(yData));
+            entries = new ArrayList<>();
+            for (int i = 0; i < xData.length; i++) {
+                entries.add(new Entry((float) xData[i], (float) yData[i]));
+            }
+            runSpeedOfSoundExperiment = false;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (!String.valueOf(ledImageView.getTag()).equals("green")) {
+                ledImageView.setImageResource(R.drawable.green_led);
+                ledImageView.setTag("green");
+            }
+
+            fragment = (SpeedOfSoundFragment) getSupportFragmentManager().findFragmentById(speedOfSoundFragment.getId());
+            fragment.resultTextView.setText(R.string.done);
+            LineDataSet dataSet = new LineDataSet(entries, "RAMP in CH1");
+            LineData lineData = new LineData(dataSet);
+            dataSet.setDrawCircles(false);
+            mChart.setData(lineData);
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+
             synchronized (lock) {
                 lock.notify();
             }

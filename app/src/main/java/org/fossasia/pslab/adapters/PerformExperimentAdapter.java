@@ -133,6 +133,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("J_DIODE.md");
                     case "Human Body Resistance":
                         return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
+                    case "Speed of Sound":
+                        return ExperimentDocFragment.newInstance("speedofsound.html");
                 }
 
             case 1:
@@ -197,6 +199,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return SemiConductorDiodeExperiment.newInstance();
                     case "Human Body Resistance":
                         return HumanBodyResistanceExperiment.newInstance();
+                    case "Speed of Sound":
+                        return AstableMultivibratorExperiment.newInstance("Speed of Sound");
                     default:
                         return ExperimentSetupFragment.newInstance();
                 }

@@ -453,6 +453,7 @@
     <string name="amplitude_range">Amplitude Range</string>
     <string name="fossasia_logo">Fossasia Logo</string>
     <string name="pocket_science_logo">Pocket Science Logo</string>
+    <string name="done">Done</string>
 
     <string-array name="sensor_click_list">
         <item>Export Data</item>

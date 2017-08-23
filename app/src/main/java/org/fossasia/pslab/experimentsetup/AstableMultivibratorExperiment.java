@@ -48,6 +48,8 @@ public class AstableMultivibratorExperiment extends Fragment {
                     intent.putExtra("who", "Astable Multivibrator");
                 else if ("Colpitts Oscillator".equals(experiment))
                     intent.putExtra("who", "Colpitts Oscillator");
+                else if ("Speed of Sound".equals(experiment))
+                    intent.putExtra("who", "Speed of Sound");
                 startActivity(intent);
             }
         });
