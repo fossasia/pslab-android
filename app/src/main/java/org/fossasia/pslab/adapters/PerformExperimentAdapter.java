@@ -18,6 +18,7 @@ import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.RCPhaseShiftExperiment;
 import org.fossasia.pslab.experimentsetup.ServoMotorsExperiment;
 import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
 import org.fossasia.pslab.experimentsetup.OscillatorExperiment;
@@ -133,6 +134,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("K_LDR.md");
                     case "Ultrasonic Range Finder":
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
+                    case "RC Phase Shift":
+                        return ExperimentDocFragment.newInstance("P_CapacitivePhaseShift.md");
                     case "Capacitive Reactance":
                         return ExperimentDocFragment.newInstance("O_XC.md");
                     case "Summing Junction":
@@ -193,6 +196,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return InvertingOpAmpExperiment.newInstance();
                     case "Non Inverting Op-Amp":
                         return NonInvertingOpAmpExperiment.newInstance();
+                    case "RC Phase Shift":
+                        return RCPhaseShiftExperiment.newInstance();
                     case "Capacitive Reactance":
                         return CapacitorReactanceExperiment.newInstance();
                     case "Summing Junction":
