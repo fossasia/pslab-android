@@ -2,10 +2,8 @@ package org.fossasia.pslab.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -26,15 +24,9 @@ import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.others.NothingSelectedSpinnerAdapter;
 
 public class ChannelParametersFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     private static final int RECORD_AUDIO_REQUEST_CODE = 1;
 
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
     private CheckBox checkBoxCH1;
     private CheckBox checkBoxCH2;
     private CheckBox checkBoxCH3;
@@ -46,22 +38,8 @@ public class ChannelParametersFragment extends Fragment {
     private int micSelectedPosition;
 
 
-    public static ChannelParametersFragment newInstance(String param1, String param2) {
-        ChannelParametersFragment fragment = new ChannelParametersFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public static ChannelParametersFragment newInstance() {
+        return new ChannelParametersFragment();
     }
 
     @Override
@@ -89,13 +67,13 @@ public class ChannelParametersFragment extends Fragment {
         ArrayAdapter<String> channelsAdapter;
         ArrayAdapter<String> micsAdapter;
         if (tabletSize) {
-            rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, ranges);
-            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
-            micsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_mic_tablet, mics);
+            rangesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner_tablet, ranges);
+            channelsAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
+            micsAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner_mic_tablet, mics);
         } else {
-            rangesAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, ranges);
-            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
-            micsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_mic, mics);
+            rangesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, ranges);
+            channelsAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, channels);
+            micsAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner_mic, mics);
 
         }
         rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -328,32 +306,5 @@ public class ChannelParametersFragment extends Fragment {
                     }
                 })
                 .show();
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }

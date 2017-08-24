@@ -35,8 +35,8 @@ import java.util.List;
  */
 
 public class SensorFragmentMPU6050 extends Fragment {
+
     private ScienceLab scienceLab;
-    private I2C i2c;
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorMPU6050ax;
     private TextView tvSensorMPU6050ay;
@@ -48,44 +48,37 @@ public class SensorFragmentMPU6050 extends Fragment {
     private MPU6050 sensorMPU6050;
     private LineChart mChartAcceleration;
     private LineChart mChartGyroscope;
-    private XAxis xAccelerometer;
-    private YAxis yAccelerometer;
-    private YAxis yAccelerometer2;
-    private XAxis xGyroscope;
-    private YAxis yGyroscope;
-    private YAxis yGyroscope2;
     private long startTime;
     private int flag;
-    private ArrayList<Entry> entriesax;
-    private ArrayList<Entry> entriesay;
-    private ArrayList<Entry> entriesaz;
-    private ArrayList<Entry> entriesgx;
-    private ArrayList<Entry> entriesgy;
-    private ArrayList<Entry> entriesgz;
+    private ArrayList<Entry> entriesAx;
+    private ArrayList<Entry> entriesAy;
+    private ArrayList<Entry> entriesAz;
+    private ArrayList<Entry> entriesGx;
+    private ArrayList<Entry> entriesGy;
+    private ArrayList<Entry> entriesGz;
     private final Object lock = new Object();
 
     public static SensorFragmentMPU6050 newInstance() {
-        SensorFragmentMPU6050 sensorFragmentMPU6050 = new SensorFragmentMPU6050();
-        return sensorFragmentMPU6050;
+        return new SensorFragmentMPU6050();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
+        I2C i2c = scienceLab.i2c;
         try {
             sensorMPU6050 = new MPU6050(i2c);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        entriesax = new ArrayList<>();
-        entriesay = new ArrayList<>();
-        entriesaz = new ArrayList<>();
-        entriesgx = new ArrayList<>();
-        entriesgy = new ArrayList<>();
-        entriesgz = new ArrayList<>();
+        entriesAx = new ArrayList<>();
+        entriesAy = new ArrayList<>();
+        entriesAz = new ArrayList<>();
+        entriesGx = new ArrayList<>();
+        entriesGy = new ArrayList<>();
+        entriesGz = new ArrayList<>();
 
         Runnable runnable = new Runnable() {
             @Override
@@ -140,13 +133,13 @@ public class SensorFragmentMPU6050 extends Fragment {
         mChartAcceleration = (LineChart) view.findViewById(R.id.chart_sensor_mpu6050_accelerometer);
         mChartGyroscope = (LineChart) view.findViewById(R.id.chart_sensor_mpu6050_gyroscope);
 
-        xAccelerometer = mChartAcceleration.getXAxis();
-        yAccelerometer = mChartAcceleration.getAxisLeft();
-        yAccelerometer2 = mChartAcceleration.getAxisRight();
+        XAxis xAccelerometer = mChartAcceleration.getXAxis();
+        YAxis yAccelerometer = mChartAcceleration.getAxisLeft();
+        YAxis yAccelerometer2 = mChartAcceleration.getAxisRight();
 
-        xGyroscope = mChartGyroscope.getXAxis();
-        yGyroscope = mChartGyroscope.getAxisLeft();
-        yGyroscope2 = mChartGyroscope.getAxisRight();
+        XAxis xGyroscope = mChartGyroscope.getXAxis();
+        YAxis yGyroscope = mChartGyroscope.getAxisLeft();
+        YAxis yGyroscope2 = mChartGyroscope.getAxisRight();
 
         mChartAcceleration.setTouchEnabled(true);
         mChartAcceleration.setHighlightPerDragEnabled(true);
@@ -228,8 +221,9 @@ public class SensorFragmentMPU6050 extends Fragment {
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        ArrayList<Double> dataMPU6050 = new ArrayList<Double>();
-        long timeElapsed;
+
+        private ArrayList<Double> dataMPU6050 = new ArrayList<>();
+        private long timeElapsed;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -242,13 +236,13 @@ public class SensorFragmentMPU6050 extends Fragment {
 
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
 
-            entriesax.add(new Entry((float) timeElapsed, dataMPU6050.get(0).floatValue()));
-            entriesay.add(new Entry((float) timeElapsed, dataMPU6050.get(1).floatValue()));
-            entriesaz.add(new Entry((float) timeElapsed, dataMPU6050.get(2).floatValue()));
+            entriesAx.add(new Entry((float) timeElapsed, dataMPU6050.get(0).floatValue()));
+            entriesAy.add(new Entry((float) timeElapsed, dataMPU6050.get(1).floatValue()));
+            entriesAz.add(new Entry((float) timeElapsed, dataMPU6050.get(2).floatValue()));
 
-            entriesgx.add(new Entry((float) timeElapsed, dataMPU6050.get(4).floatValue()));
-            entriesgy.add(new Entry((float) timeElapsed, dataMPU6050.get(5).floatValue()));
-            entriesgz.add(new Entry((float) timeElapsed, dataMPU6050.get(6).floatValue()));
+            entriesGx.add(new Entry((float) timeElapsed, dataMPU6050.get(4).floatValue()));
+            entriesGy.add(new Entry((float) timeElapsed, dataMPU6050.get(5).floatValue()));
+            entriesGz.add(new Entry((float) timeElapsed, dataMPU6050.get(6).floatValue()));
 
             return null;
         }
@@ -263,13 +257,13 @@ public class SensorFragmentMPU6050 extends Fragment {
             tvSensorMPU6050gz.setText(String.valueOf(dataMPU6050.get(6)));
             tvSensorMPU6050temp.setText(String.valueOf(dataMPU6050.get(3)));
 
-            LineDataSet dataset1 = new LineDataSet(entriesax, "Ax");
-            LineDataSet dataSet2 = new LineDataSet(entriesay, "Ay");
-            LineDataSet dataSet3 = new LineDataSet(entriesaz, "Az");
+            LineDataSet dataset1 = new LineDataSet(entriesAx, getString(R.string.ax));
+            LineDataSet dataSet2 = new LineDataSet(entriesAy, getString(R.string.ay));
+            LineDataSet dataSet3 = new LineDataSet(entriesAz, getString(R.string.az));
 
-            LineDataSet dataset4 = new LineDataSet(entriesgx, "Gx");
-            LineDataSet dataSet5 = new LineDataSet(entriesgy, "Gy");
-            LineDataSet dataSet6 = new LineDataSet(entriesgz, "Gz");
+            LineDataSet dataset4 = new LineDataSet(entriesGx, getString(R.string.gx));
+            LineDataSet dataSet5 = new LineDataSet(entriesGy, getString(R.string.gy));
+            LineDataSet dataSet6 = new LineDataSet(entriesGz, getString(R.string.gz));
 
 
             dataset1.setColor(Color.BLUE);
@@ -280,12 +274,12 @@ public class SensorFragmentMPU6050 extends Fragment {
             dataSet5.setColor(Color.GREEN);
             dataSet6.setColor(Color.RED);
 
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            List<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(dataset1);
             dataSets.add(dataSet2);
             dataSets.add(dataSet3);
 
-            List<ILineDataSet> dataSets2 = new ArrayList<ILineDataSet>();
+            List<ILineDataSet> dataSets2 = new ArrayList<>();
             dataSets2.add(dataset4);
             dataSets2.add(dataSet5);
             dataSets2.add(dataSet6);

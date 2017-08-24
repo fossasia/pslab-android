@@ -14,15 +14,11 @@ import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by asitava on 6/6/17.
  */
 
-public class ControlFragmentRead extends Fragment implements View.OnClickListener {
+public class ControlFragmentRead extends Fragment {
 
     private ScienceLab scienceLab;
 
@@ -36,12 +32,6 @@ public class ControlFragmentRead extends Fragment implements View.OnClickListene
     private TextView tvControlRead8;
     private TextView tvControlRead9;
     private TextView tvControlRead10;
-    private Button buttonControlRead1;
-    private Button buttonControlRead2;
-    private Button buttonControlRead3;
-    private Button buttonControlRead4;
-    private Button buttonControlRead5;
-    private Button buttonControlRead6;
     private Spinner spinnerControlRead1;
     private Spinner spinnerControlRead2;
 
@@ -69,12 +59,12 @@ public class ControlFragmentRead extends Fragment implements View.OnClickListene
         tvControlRead8 = (TextView) view.findViewById(R.id.tv_control_read8);
         tvControlRead9 = (TextView) view.findViewById(R.id.tv_control_read9);
         tvControlRead10 = (TextView) view.findViewById(R.id.tv_control_read10);
-        buttonControlRead1 = (Button) view.findViewById(R.id.button_control_read1);
-        buttonControlRead2 = (Button) view.findViewById(R.id.button_control_read2);
-        buttonControlRead3 = (Button) view.findViewById(R.id.button_control_read3);
-        buttonControlRead4 = (Button) view.findViewById(R.id.button_control_read4);
-        buttonControlRead5 = (Button) view.findViewById(R.id.button_control_read5);
-        buttonControlRead6 = (Button) view.findViewById(R.id.button_control_read6);
+        Button buttonControlRead1 = (Button) view.findViewById(R.id.button_control_read1);
+        Button buttonControlRead2 = (Button) view.findViewById(R.id.button_control_read2);
+        Button buttonControlRead3 = (Button) view.findViewById(R.id.button_control_read3);
+        Button buttonControlRead4 = (Button) view.findViewById(R.id.button_control_read4);
+        Button buttonControlRead5 = (Button) view.findViewById(R.id.button_control_read5);
+        Button buttonControlRead6 = (Button) view.findViewById(R.id.button_control_read6);
         spinnerControlRead1 = (Spinner) view.findViewById(R.id.spinner_control_read1);
         spinnerControlRead2 = (Spinner) view.findViewById(R.id.spinner_control_read2);
 
@@ -141,10 +131,5 @@ public class ControlFragmentRead extends Fragment implements View.OnClickListene
             }
         });
         return view;
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 }

@@ -92,7 +92,7 @@ public class ScienceLab {
                 mCommunicationHandler.open();
                 //Thread.sleep(200);
                 mPacketHandler = new PacketHandler(50, mCommunicationHandler);
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -1146,7 +1146,7 @@ public class ScienceLab {
             int vSum = mPacketHandler.getInt();
             mPacketHandler.getAcknowledgement();
             return vSum / 16.;
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             Log.e(TAG, "Error in getRawAverageVoltage");
         }
