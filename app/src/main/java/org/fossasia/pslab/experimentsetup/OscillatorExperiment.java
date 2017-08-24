@@ -44,17 +44,14 @@ public class OscillatorExperiment extends Fragment {
                     intent.putExtra("who", "Astable Multivibrator");
                 else if ("Colpitts Oscillator".equals(experiment))
                     intent.putExtra("who", "Colpitts Oscillator");
-<<<<<<< HEAD:app/src/main/java/org/fossasia/pslab/experimentsetup/AstableMultivibratorExperiment.java
-                else if ("Speed of Sound".equals(experiment))
-                    intent.putExtra("who", "Speed of Sound");
-=======
                 else if ("Phase Shift Oscillator".equals(experiment))
                     intent.putExtra("who", "Phase Shift Oscillator");
                 else if ("Wien Bridge Oscillator".equals(experiment))
                     intent.putExtra("who", "Wien Bridge Oscillator");
                 else if ("Monostable Multivibrator".equals(experiment))
                     intent.putExtra("who", "Monostable Multivibrator");
->>>>>>> fossasia/development:app/src/main/java/org/fossasia/pslab/experimentsetup/OscillatorExperiment.java
+                else if ("Speed of Sound".equals(experiment))
+                    intent.putExtra("who", "Speed of Sound");
                 startActivity(intent);
             }
         });
