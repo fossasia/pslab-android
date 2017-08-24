@@ -34,8 +34,8 @@ import java.util.List;
  */
 
 public class SensorFragmentHMC5883L extends Fragment {
+
     private ScienceLab scienceLab;
-    private I2C i2c;
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorHMC5883Lbx;
     private TextView tvSensorHMC5883Lby;
@@ -44,29 +44,25 @@ public class SensorFragmentHMC5883L extends Fragment {
     private LineChart mChart;
     private long startTime;
     private int flag;
-    private XAxis x;
-    private YAxis y;
-    private YAxis y2;
-    private ArrayList<Entry> entriesbx;
-    private ArrayList<Entry> entriesby;
-    private ArrayList<Entry> entriesbz;
+    private ArrayList<Entry> entriesBx;
+    private ArrayList<Entry> entriesBy;
+    private ArrayList<Entry> entriesBz;
     private final Object lock = new Object();
 
 
     public static SensorFragmentHMC5883L newInstance() {
-        SensorFragmentHMC5883L sensorFragmentHMC5883L = new SensorFragmentHMC5883L();
-        return sensorFragmentHMC5883L;
+        return new SensorFragmentHMC5883L();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
+        I2C i2c = scienceLab.i2c;
 
-        entriesbx = new ArrayList<Entry>();
-        entriesby = new ArrayList<Entry>();
-        entriesbz = new ArrayList<Entry>();
+        entriesBx = new ArrayList<>();
+        entriesBy = new ArrayList<>();
+        entriesBz = new ArrayList<>();
         try {
             sensorHMC5883L = new HMC5883L(i2c);
         } catch (IOException e) {
@@ -110,9 +106,9 @@ public class SensorFragmentHMC5883L extends Fragment {
         tvSensorHMC5883Lby = (TextView) view.findViewById(R.id.tv_sensor_hmc5883l_by);
         tvSensorHMC5883Lbz = (TextView) view.findViewById(R.id.tv_sensor_hmc5883l_bz);
         mChart = (LineChart) view.findViewById(R.id.chart_hmc5883l);
-        x = mChart.getXAxis();
-        y = mChart.getAxisLeft();
-        y2 = mChart.getAxisRight();
+        XAxis x = mChart.getXAxis();
+        YAxis y = mChart.getAxisLeft();
+        YAxis y2 = mChart.getAxisRight();
 
         mChart.setTouchEnabled(true);
         mChart.setHighlightPerDragEnabled(true);
@@ -148,8 +144,9 @@ public class SensorFragmentHMC5883L extends Fragment {
 
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        ArrayList<Double> dataHMC5883L = new ArrayList<Double>();
-        long timeElapsed;
+
+        private ArrayList<Double> dataHMC5883L = new ArrayList<>();
+        private long timeElapsed;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -162,11 +159,9 @@ public class SensorFragmentHMC5883L extends Fragment {
             }
 
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-
-            entriesbx.add(new Entry((float) timeElapsed, dataHMC5883L.get(0).floatValue()));
-            entriesby.add(new Entry((float) timeElapsed, dataHMC5883L.get(1).floatValue()));
-            entriesbz.add(new Entry((float) timeElapsed, dataHMC5883L.get(2).floatValue()));
-
+            entriesBx.add(new Entry((float) timeElapsed, dataHMC5883L.get(0).floatValue()));
+            entriesBy.add(new Entry((float) timeElapsed, dataHMC5883L.get(1).floatValue()));
+            entriesBz.add(new Entry((float) timeElapsed, dataHMC5883L.get(2).floatValue()));
             return null;
         }
 
@@ -177,9 +172,9 @@ public class SensorFragmentHMC5883L extends Fragment {
             tvSensorHMC5883Lby.setText(String.valueOf(dataHMC5883L.get(1)));
             tvSensorHMC5883Lbz.setText(String.valueOf(dataHMC5883L.get(2)));
 
-            LineDataSet dataset1 = new LineDataSet(entriesbx, "Bx");
-            LineDataSet dataSet2 = new LineDataSet(entriesby, "By");
-            LineDataSet dataSet3 = new LineDataSet(entriesbz, "Bz");
+            LineDataSet dataset1 = new LineDataSet(entriesBx, getString(R.string.bx));
+            LineDataSet dataSet2 = new LineDataSet(entriesBy, getString(R.string.by));
+            LineDataSet dataSet3 = new LineDataSet(entriesBz, getString(R.string.bz));
 
             dataset1.setColor(Color.BLUE);
             dataSet2.setColor(Color.GREEN);
@@ -189,7 +184,7 @@ public class SensorFragmentHMC5883L extends Fragment {
             dataSet2.setDrawCircles(true);
             dataSet3.setDrawCircles(true);
 
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            List<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(dataset1);
             dataSets.add(dataSet2);
             dataSets.add(dataSet3);

@@ -32,8 +32,8 @@ import java.util.ArrayList;
  */
 
 public class SensorFragmentBMP180 extends Fragment {
+
     private ScienceLab scienceLab;
-    private I2C i2c;
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorBMP180Temp;
     private TextView tvSensorBMP180Altitude;
@@ -42,15 +42,6 @@ public class SensorFragmentBMP180 extends Fragment {
     private LineChart mChartTemperature;
     private LineChart mChartAltitude;
     private LineChart mChartPressure;
-    private XAxis xTemperature;
-    private YAxis yTemperature;
-    private YAxis yTemperature2;
-    private XAxis xAltitude;
-    private YAxis yAltitude;
-    private YAxis yAltitude2;
-    private XAxis xPressure;
-    private YAxis yPressure;
-    private YAxis yPressure2;
     private long startTime;
     private int flag;
     private ArrayList<Entry> entriesTemperature;
@@ -59,15 +50,14 @@ public class SensorFragmentBMP180 extends Fragment {
     private final Object lock = new Object();
 
     public static SensorFragmentBMP180 newInstance() {
-        SensorFragmentBMP180 sensorFragmentBMP180 = new SensorFragmentBMP180();
-        return sensorFragmentBMP180;
+        return new SensorFragmentBMP180();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
+        I2C i2c = scienceLab.i2c;
         try {
             sensorBMP180 = new BMP180(i2c);
         } catch (IOException | InterruptedException e) {
@@ -80,19 +70,26 @@ public class SensorFragmentBMP180 extends Fragment {
                     if (scienceLab.isConnected()) {
                         sensorDataFetch = new SensorDataFetch();
                         sensorDataFetch.execute();
-                    }
-                    if (flag == 0) {
-                        startTime = System.currentTimeMillis();
-                        flag = 1;
-                    }
 
-                    synchronized (lock) {
+                        if (flag == 0) {
+                            startTime = System.currentTimeMillis();
+                            flag = 1;
+                        }
+
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         try {
-                            lock.wait();
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
+
                 }
             }
         };
@@ -111,17 +108,17 @@ public class SensorFragmentBMP180 extends Fragment {
         mChartAltitude = (LineChart) view.findViewById(R.id.chart_alt_bmp180);
         mChartPressure = (LineChart) view.findViewById(R.id.chart_pre_bmp180);
 
-        xTemperature = mChartTemperature.getXAxis();
-        yTemperature = mChartTemperature.getAxisLeft();
-        yTemperature2 = mChartTemperature.getAxisRight();
+        XAxis xTemperature = mChartTemperature.getXAxis();
+        YAxis yTemperature = mChartTemperature.getAxisLeft();
+        YAxis yTemperature2 = mChartTemperature.getAxisRight();
 
-        xAltitude = mChartAltitude.getXAxis();
-        yAltitude = mChartAltitude.getAxisLeft();
-        yAltitude2 = mChartAltitude.getAxisRight();
+        XAxis xAltitude = mChartAltitude.getXAxis();
+        YAxis yAltitude = mChartAltitude.getAxisLeft();
+        YAxis yAltitude2 = mChartAltitude.getAxisRight();
 
-        xPressure = mChartPressure.getXAxis();
-        yPressure = mChartPressure.getAxisLeft();
-        yPressure2 = mChartPressure.getAxisRight();
+        XAxis xPressure = mChartPressure.getXAxis();
+        YAxis yPressure = mChartPressure.getAxisLeft();
+        YAxis yPressure2 = mChartPressure.getAxisRight();
 
         entriesTemperature = new ArrayList<>();
         entriesAltitude = new ArrayList<>();
@@ -216,15 +213,14 @@ public class SensorFragmentBMP180 extends Fragment {
         yPressure.setLabelCount(10);
 
         yPressure2.setDrawGridLines(false);
-
-
         return view;
     }
 
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        double[] dataBMP180 = new double[3];
-        long timeElapsed;
+
+        private double[] dataBMP180 = new double[3];
+        private long timeElapsed;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -237,11 +233,9 @@ public class SensorFragmentBMP180 extends Fragment {
             }
 
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-
             entriesTemperature.add(new Entry((float) timeElapsed, (float) dataBMP180[0]));
             entriesAltitude.add(new Entry((float) timeElapsed, (float) dataBMP180[1]));
             entriesPressure.add(new Entry((float) timeElapsed, (float) dataBMP180[2]));
-
             return null;
         }
 
@@ -251,9 +245,9 @@ public class SensorFragmentBMP180 extends Fragment {
             tvSensorBMP180Altitude.setText(String.valueOf(dataBMP180[1]));
             tvSensorBMP180Pressure.setText(String.valueOf(dataBMP180[2]));
 
-            LineDataSet dataSet1 = new LineDataSet(entriesTemperature, "Temperature");
-            LineDataSet dataSet2 = new LineDataSet(entriesAltitude, "Altitude");
-            LineDataSet dataSet3 = new LineDataSet(entriesPressure, "Pressure");
+            LineDataSet dataSet1 = new LineDataSet(entriesTemperature, getString(R.string.temperature));
+            LineDataSet dataSet2 = new LineDataSet(entriesAltitude, getString(R.string.altitude));
+            LineDataSet dataSet3 = new LineDataSet(entriesPressure, getString(R.string.pressure));
 
             dataSet1.setColor(Color.BLUE);
             dataSet2.setColor(Color.GREEN);

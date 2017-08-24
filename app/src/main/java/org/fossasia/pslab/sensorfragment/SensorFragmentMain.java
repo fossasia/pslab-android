@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -46,8 +47,7 @@ public class SensorFragmentMain extends Fragment {
     private Fragment selectedFragment = null;
 
     public static SensorFragmentMain newInstance() {
-        SensorFragmentMain sensorFragmentMain = new SensorFragmentMain();
-        return sensorFragmentMain;
+        return new SensorFragmentMain();
     }
 
     @Override
@@ -125,7 +125,7 @@ public class SensorFragmentMain extends Fragment {
                     case "MPU925x":
                         selectedFragment = SensorFragmentMPU925X.newInstance();
                     default:
-                        break;
+                        Toast.makeText(getContext(), "Sensor Not Supported", Toast.LENGTH_SHORT).show();
                 }
                 if (selectedFragment != null) {
                     FragmentManager fragmentManager = getFragmentManager();

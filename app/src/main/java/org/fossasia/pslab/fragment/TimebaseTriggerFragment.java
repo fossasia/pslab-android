@@ -21,15 +21,8 @@ import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.others.FloatSeekBar;
 
 public class TimebaseTriggerFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-    private Spinner spinnerTiggerChannelSelect;
+    private Spinner spinnerTriggerChannelSelect;
     private FloatSeekBar seekBarTimebase;
     private FloatSeekBar seekBarTrigger;
     private TextView textViewTimeBase;
@@ -37,22 +30,8 @@ public class TimebaseTriggerFragment extends Fragment {
     private CheckBox checkBoxTrigger;
 
 
-    public static TimebaseTriggerFragment newInstance(String param1, String param2) {
-        TimebaseTriggerFragment fragment = new TimebaseTriggerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public static TimebaseTriggerFragment newInstance() {
+        return new TimebaseTriggerFragment();
     }
 
     @Override
@@ -66,7 +45,7 @@ public class TimebaseTriggerFragment extends Fragment {
         seekBarTrigger = (FloatSeekBar) v.findViewById(R.id.seekBar_trigger);
         textViewTimeBase = (TextView) v.findViewById(R.id.tv_timebase_values_tt);
         textViewTrigger = (TextView) v.findViewById(R.id.tv_trigger_values_tt);
-        spinnerTiggerChannelSelect = (Spinner) v.findViewById(R.id.spinner_trigger_channel_tt);
+        spinnerTriggerChannelSelect = (Spinner) v.findViewById(R.id.spinner_trigger_channel_tt);
         checkBoxTrigger = (CheckBox) v.findViewById(R.id.checkbox_trigger_tt);
 
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
@@ -165,19 +144,19 @@ public class TimebaseTriggerFragment extends Fragment {
         String[] channels = {"CH1", "CH2", "CH3", "MIC"};
         ArrayAdapter<String> channelsAdapter;
         if (tabletSize) {
-            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
+            channelsAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
         } else {
-            channelsAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.custom_spinner, channels);
+            channelsAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, channels);
         }
 
         channelsAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
-        spinnerTiggerChannelSelect.setAdapter(channelsAdapter);
-        spinnerTiggerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"), true);
-        spinnerTiggerChannelSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerTriggerChannelSelect.setAdapter(channelsAdapter);
+        spinnerTriggerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"), true);
+        spinnerTriggerChannelSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((OscilloscopeActivity) getActivity()).triggerChannel = spinnerTiggerChannelSelect.getItemAtPosition(position).toString();
+                ((OscilloscopeActivity) getActivity()).triggerChannel = spinnerTriggerChannelSelect.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -194,32 +173,5 @@ public class TimebaseTriggerFragment extends Fragment {
         });
 
         return v;
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }

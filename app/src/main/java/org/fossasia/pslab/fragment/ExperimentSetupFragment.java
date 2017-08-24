@@ -16,15 +16,13 @@ import org.fossasia.pslab.R;
 public class ExperimentSetupFragment extends Fragment {
 
     public static ExperimentSetupFragment newInstance() {
-        ExperimentSetupFragment experimentSetupFragment = new ExperimentSetupFragment();
-        return experimentSetupFragment;
+        return new ExperimentSetupFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.experiment_setup, container, false);
-        return view;
+        return inflater.inflate(R.layout.experiment_setup, container, false);
     }
 
 }

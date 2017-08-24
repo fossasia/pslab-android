@@ -60,7 +60,7 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                         android:textSize="@dimen/control_textsize_large"
                         android:textStyle="bold" />
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                         android:textSize="@dimen/control_textsize_large"
                         android:textStyle="bold" />
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -268,13 +268,13 @@
                         android:textSize="@dimen/control_textsize_large"
                         android:textStyle="bold" />
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced5"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2" />
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -296,13 +296,13 @@
                         android:textSize="@dimen/control_textsize_large"
                         android:textStyle="bold" />
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced7"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2" />
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced8"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -326,13 +326,13 @@
                         android:textSize="@dimen/control_textsize_large"
                         android:textStyle="bold" />
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced9"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2" />
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -356,7 +356,7 @@
                         android:textSize="@dimen/control_textsize_large"
                         android:textStyle="bold" />
 
-                    <org.fossasia.pslab.others.Edittextwidget
+                    <org.fossasia.pslab.others.EditTextWidget
                         android:id="@+id/etwidget_control_advanced11"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
