@@ -23,7 +23,6 @@ import org.fossasia.pslab.experimentsetup.OscillatorExperiment;
 import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
-import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
