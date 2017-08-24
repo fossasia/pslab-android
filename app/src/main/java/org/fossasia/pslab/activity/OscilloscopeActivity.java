@@ -104,6 +104,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public boolean isColpittsOscillatorExperiment;
     public boolean isPhaseShiftOscillatorExperiment;
     public boolean isWienBridgeOscillatorExperiment;
+    public boolean isMonostableMultivibratorExperiment;
+    public boolean runMonostableMultivibratorExperiment;
     private String leftYAxisInput;
     public String triggerChannel;
     public String curveFittingChannel1;
@@ -177,6 +179,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         isColpittsOscillatorExperiment = false;
         isPhaseShiftOscillatorExperiment = false;
         isWienBridgeOscillatorExperiment = false;
+        isMonostableMultivibratorExperiment = false;
+        runMonostableMultivibratorExperiment = false;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -211,6 +215,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             isPhaseShiftOscillatorExperiment = true;
         } else if ("Wien Bridge Oscillator".equals(extras.getString("who"))) {
             isWienBridgeOscillatorExperiment = true;
+        } else if ("Monostable Multivibrator".equals(extras.getString("who"))) {
+            isMonostableMultivibratorExperiment = true;
         }
 
         onWindowFocusChanged();
@@ -231,7 +237,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
             } else if (isDiodeClippingClampingExperiment) {
                 addFragment(R.id.layout_dock_os2, diodeClippingClampingFragment, "DiodeClippingClampingFragment");
-            } else if (isAstableMultivibratorExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment) {
+            } else if (isAstableMultivibratorExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment || isMonostableMultivibratorExperiment) {
                 addFragment(R.id.layout_dock_os2, oscillatorExperimentFragment, "OscillatorFragment");
             } else {
                 addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
@@ -379,6 +385,18 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
+                    if (scienceLab.isConnected() && isMonostableMultivibratorExperiment && runMonostableMultivibratorExperiment) {
+                        oscillatorTask = new OscillatorTask();
+                        oscillatorTask.execute("CH1");
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
                     if (!scienceLab.isConnected() || (!isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected)) {
                         if (!String.valueOf(ledImageView.getTag()).equals("red")) {
                             runOnUiThread(new Runnable() {
@@ -483,7 +501,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
             frameLayoutParams.height = height / 4;
             frameLayoutParams.width = width;
-        } else if (isFullWaveRectifierExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment) {
+        } else if (isFullWaveRectifierExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment || isMonostableMultivibratorExperiment) {
             linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 5 / 6;
@@ -1025,7 +1043,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             try {
                 analogInput = params[0];
                 HashMap<String, double[]> data;
-                if (isAstableMultivibratorExperiment) {
+                if (isAstableMultivibratorExperiment || isMonostableMultivibratorExperiment) {
                     data = scienceLab.captureTwo(128, 10, analogInput, false);
                     xData = data.get("x");
                     y1Data = data.get("y1");
@@ -1037,6 +1055,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
                         entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
                     }
+                    if (runMonostableMultivibratorExperiment)
+                        runMonostableMultivibratorExperiment = false;
+
                 } else if (isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment) {
                     scienceLab.captureTraces(1, 128, 10, analogInput, false, null);
                     Thread.sleep((long) (128 * 10 * 1e-3));
@@ -1083,23 +1104,29 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             List<ILineDataSet> dataSets = new ArrayList<>();
             if (isCH1FrequencyRequired) {
                 if (frequencyCH1 >= 0)
-                    fragment.resultCH1Frequency.setText(new DecimalFormat("#.##").format(frequencyCH1) + "Hz");
+                    fragment.resultCH1Frequency.setText(String.format("%sHz", new DecimalFormat("#.##").format(frequencyCH1)));
                 else
-                    fragment.resultCH1Frequency.setText("fit failed");
+                    fragment.resultCH1Frequency.setText(R.string.fit_failed);
                 isCH1FrequencyRequired = false;
             }
             if (isCH2FrequencyRequired) {
                 if (frequencyCH1 >= 0)
                     fragment.resultCH2Frequency.setText(new DecimalFormat("#.##").format(frequencyCH2));
                 else
-                    fragment.resultCH2Frequency.setText("fit failed");
+                    fragment.resultCH2Frequency.setText(R.string.fit_failed);
                 isCH2FrequencyRequired = false;
             }
-            if (isAstableMultivibratorExperiment) {
+            if (isAstableMultivibratorExperiment || isMonostableMultivibratorExperiment) {
                 LineDataSet dataSet1;
                 LineDataSet dataSet2;
-                dataSet1 = new LineDataSet(entries1, "CH1 INPUT");
-                dataSet2 = new LineDataSet(entries2, "CH2 OUTPUT");
+                if (isMonostableMultivibratorExperiment) {
+                    dataSet1 = new LineDataSet(entries1, "Pulse Output (CH2)");
+                    dataSet2 = new LineDataSet(entries2, "Trigger Pulse (CH1)");
+                    fragment.resultCH1Frequency.setText(R.string.done);
+                } else {
+                    dataSet1 = new LineDataSet(entries1, "CH1 INPUT");
+                    dataSet2 = new LineDataSet(entries2, "CH2 OUTPUT");
+                }
                 dataSet1.setColor(Color.GREEN);
                 dataSet2.setColor(Color.RED);
                 dataSet1.setDrawCircles(false);
