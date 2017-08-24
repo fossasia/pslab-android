@@ -19,6 +19,7 @@ public class OscillatorExperimentFragment extends Fragment {
     public TextView resultCH1Frequency;
     public TextView resultCH2Frequency;
     public TextView analyseCH2Label;
+    public TextView analyseCH1Label;
     public double frequency;
 
     public OscillatorExperimentFragment() {
@@ -40,14 +41,18 @@ public class OscillatorExperimentFragment extends Fragment {
         resultCH1Frequency = (TextView) v.findViewById(R.id.tv_result_ch1_astable_multivibrator);
         resultCH2Frequency = (TextView) v.findViewById(R.id.tv_result_ch2_astable_multivibrator);
         analyseCH2Label = (TextView) v.findViewById(R.id.tv_abalyse_ch2_astable_multivibrator);
+        analyseCH1Label = (TextView) v.findViewById(R.id.tv_analyse_ch1_astable_multivibrator);
 
         if (((OscilloscopeActivity) getActivity()).isColpittsOscillatorExperiment ||
                 ((OscilloscopeActivity) getActivity()).isPhaseShiftOscillatorExperiment ||
-                ((OscilloscopeActivity) getActivity()).isWienBridgeOscillatorExperiment) {
+                ((OscilloscopeActivity) getActivity()).isWienBridgeOscillatorExperiment ||
+                ((OscilloscopeActivity) getActivity()).isMonostableMultivibratorExperiment) {
             buttonCH2Frequency.setVisibility(View.INVISIBLE);
             resultCH2Frequency.setVisibility(View.INVISIBLE);
             analyseCH2Label.setVisibility(View.INVISIBLE);
         }
+        if (((OscilloscopeActivity) getActivity()).isMonostableMultivibratorExperiment)
+            analyseCH1Label.setText(R.string.acquire_data);
 
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 
@@ -108,7 +113,9 @@ public class OscillatorExperimentFragment extends Fragment {
         buttonCH1Frequency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((OscilloscopeActivity) getActivity()).isCH1FrequencyRequired = true;
+                ((OscilloscopeActivity) getActivity()).runMonostableMultivibratorExperiment = true;
+                if (!((OscilloscopeActivity) getActivity()).isMonostableMultivibratorExperiment)
+                    ((OscilloscopeActivity) getActivity()).isCH1FrequencyRequired = true;
             }
         });
 
