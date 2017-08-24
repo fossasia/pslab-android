@@ -1,6 +1,12 @@
 # pslab-android
 PSLab Android App
 
+<a href="https://play.google.com/store/apps/details?id=org.fossasia.pslab">
+    <img alt="Get it on Google Play"
+        height="80"
+        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+</a>
+
 [![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=master)](https://travis-ci.org/fossasia/pslab-android)
 [![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Preview app](https://img.shields.io/badge/Preview-Appetize.io-orange.svg)](https://appetize.io/app/4eqye6ea422e5np0gp2jfpemgm)
@@ -135,3 +141,15 @@ Please try to follow the mentioned guidelines while writing and submitting your 
  * Name the views and widgets defined in the layout files as (viewtype/widget) _ (fragment/activity name) _ (no. in the file) like ```spinner_channel_select_la1``` , ```button_activity_oscilloscope1``` .
  * The activity/fragment file name corresponding to the layout files should be named as                       (activity/fragment name)(activity/fragment).java like ```ChannelsParameterFragment.java``` corresponding to the layout file ```fragment_channels_parameter.xml``` .
  * The corresponding widgets for buttons, textboxes, checkboxes etc. in activity files should be named as (viewtype/widget)(fragment/activity name)(no. in the file) like ```spinnerChannelSelect1``` corresponding to ```spinner_channel_select1``` .
+
+## License
+
+This project is currently licensed under the GNU General Public License v3. A copy of [LICENSE](LICENSE.md) is to be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
+
+## Maintainers
+The project is maintained by
+- Praveen Patil ([@wavicles](https://github.com/wavicles))
+- Mario Behling ([@mariobehling](http://github.com/mariobehling))
+- Lorenz Gerber ([@lorenzgerber](https://github.com/lorenzgerber))
+- Jithin ([@jithinbp](https://github.com/jithinbp))
+- Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96)), Asitava Sarkar ([@asitava1998](https://github.com/asitava1998)), Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal)), Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))

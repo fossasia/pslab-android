@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -152,9 +153,10 @@ public class ShowLoggedData extends AppCompatActivity {
         if (success) {
             if ("txt".equals(format)) {
                 FileOutputStream stream = null;
-                File file = new File(folder, "sensorData.txt");
+                File file;
                 switch (sensor) {
                     case "MPU6050":
+                        file = new File(folder, "MPU6050_" + System.currentTimeMillis() + ".txt");
                         RealmResults<DataMPU6050> results = realm.where(DataMPU6050.class).findAll();
                         try {
                             stream = new FileOutputStream(file);
@@ -177,10 +179,11 @@ public class ShowLoggedData extends AppCompatActivity {
                         break;
                 }
             } else {
-                File file = new File(folder, "sensorData.csv");
+                File file;
                 PrintWriter writer;
                 switch (sensor) {
                     case "MPU6050":
+                        file = new File(folder, "MPU6050_" + System.currentTimeMillis() + ".csv");
                         RealmResults<DataMPU6050> results = realm.where(DataMPU6050.class).findAll();
                         try {
                             writer = new PrintWriter(file);

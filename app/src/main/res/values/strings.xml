@@ -383,6 +383,18 @@
         <item>+/- 0.5</item>
     </string-array>
 
+    <string-array name="wave_generator">
+        <item>W1</item>
+        <item>W2</item>
+    </string-array>
+
+    <string-array name="source_pins">
+        <item>PV1</item>
+        <item>PV2</item>
+        <item>PV3</item>
+        <item>PCS</item>
+    </string-array>
+
     <string name="experiment_icon">Experiment Icon</string>
     <string name="drop_down_arrow">Drop down arrow</string>
     <string name="voltage_unit">(V)</string>
@@ -434,13 +446,28 @@
     <string name="analyse_ch1">Analyse CH1</string>
     <string name="analyse_ch2">Analyse CH2</string>
     <string name="result">Result</string>
+    <string name="acquire_data">Acquire Data</string>
+    <string name="done">Done</string>
+    <string name="fit_failed">fit failed</string>
 
     <string name="full">Full</string>
     <string name="ac_voltage">AC Voltage</string>
     <string name="dc_voltage">DC Voltage</string>
     <string name="amplitude_range">Amplitude Range</string>
+  
     <string name="steps">Steps</string>
     <string name="set_steps">Set Steps</string>
+  
+    <string name="fossasia_logo">Fossasia Logo</string>
+    <string name="pocket_science_logo">Pocket Science Logo</string>
+
+    <string name="servo_4">Servo 4</string>
+    <string name="servo_3">Servo 3</string>
+    <string name="servo_2">Servo 2</string>
+    <string name="servo_1">Servo 1</string>
+    <string name="servo_angles">Servo Angles</string>
+    <string name="set_angles">Set Angles</string>
+    <string name="reset_angles">Reset Angles</string>
 
     <string-array name="sensor_click_list">
         <item>Export Data</item>
