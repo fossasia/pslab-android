@@ -1116,7 +1116,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     fragment.resultCH2Frequency.setText(R.string.fit_failed);
                 isCH2FrequencyRequired = false;
             }
-            if (isAstableMultivibratorExperiment) {
+            if (isAstableMultivibratorExperiment || isMonostableMultivibratorExperiment) {
                 LineDataSet dataSet1;
                 LineDataSet dataSet2;
                 if (isMonostableMultivibratorExperiment) {
