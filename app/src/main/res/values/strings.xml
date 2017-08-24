@@ -446,6 +446,9 @@
     <string name="analyse_ch1">Analyse CH1</string>
     <string name="analyse_ch2">Analyse CH2</string>
     <string name="result">Result</string>
+    <string name="acquire_data">Acquire Data</string>
+    <string name="done">Done</string>
+    <string name="fit_failed">fit failed</string>
 
     <string name="full">Full</string>
     <string name="ac_voltage">AC Voltage</string>
@@ -454,6 +457,14 @@
     <string name="fossasia_logo">Fossasia Logo</string>
     <string name="pocket_science_logo">Pocket Science Logo</string>
     <string name="done">Done</string>
+
+    <string name="servo_4">Servo 4</string>
+    <string name="servo_3">Servo 3</string>
+    <string name="servo_2">Servo 2</string>
+    <string name="servo_1">Servo 1</string>
+    <string name="servo_angles">Servo Angles</string>
+    <string name="set_angles">Set Angles</string>
+    <string name="reset_angles">Reset Angles</string>
 
     <string-array name="sensor_click_list">
         <item>Export Data</item>

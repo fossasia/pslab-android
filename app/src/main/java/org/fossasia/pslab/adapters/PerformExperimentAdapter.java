@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.CapacitorReactanceExperiment;
 import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
-import org.fossasia.pslab.experimentsetup.AstableMultivibratorExperiment;
 import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.DistanceMeasurementExperiment;
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
@@ -18,7 +18,9 @@ import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.ServoMotorsExperiment;
 import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
+import org.fossasia.pslab.experimentsetup.OscillatorExperiment;
 import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
@@ -77,10 +79,14 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("D_NFET_GS_ID.md");
                     case "Astable Multivibrator":
                         return ExperimentDocFragment.newInstance("astable-multivibrator.html");
+                    case "Monostable Multivibrator":
+                        return ExperimentDocFragment.newInstance("M_Monostable.md");
                     case "Colpitts Oscillator":
                         return ExperimentDocFragment.newInstance("L_Colpitts.md");
                     case "Phase Shift Oscillator":
                         return ExperimentDocFragment.newInstance("L_PhaseShift.md");
+                    case "Wien Bridge Oscillator":
+                        return ExperimentDocFragment.newInstance("L_WIEN_BRIDGE.md");
                     case "Transients RLC Response":
                         return ExperimentDocFragment.newInstance("E_transientRLC.html");
                     case "Bode Plots":
@@ -127,12 +133,16 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("K_LDR.md");
                     case "Ultrasonic Range Finder":
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
+                    case "Capacitive Reactance":
+                        return ExperimentDocFragment.newInstance("O_XC.md");
                     case "Summing Junction":
                         return ExperimentDocFragment.newInstance("L_Summing.html");
                     case "Semiconductor Diode":
                         return ExperimentDocFragment.newInstance("J_DIODE.md");
                     case "Human Body Resistance":
                         return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
+                    case "Servo Motors":
+                        return ExperimentDocFragment.newInstance("G_servo_motors.md");
                     case "Speed of Sound":
                         return ExperimentDocFragment.newInstance("speedofsound.html");
                 }
@@ -160,11 +170,15 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "N-FET Transfer Characteristics":
                         return NFETTransferCharacteristicsExperiment.newInstance();
                     case "Astable Multivibrator":
-                        return AstableMultivibratorExperiment.newInstance("Astable Multivibrator");
+                        return OscillatorExperiment.newInstance("Astable Multivibrator");
+                    case "Monostable Multivibrator":
+                        return OscillatorExperiment.newInstance("Monostable Multivibrator");
                     case "Colpitts Oscillator":
-                        return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
+                        return OscillatorExperiment.newInstance("Colpitts Oscillator");
                     case "Phase Shift Oscillator":
-                        return AstableMultivibratorExperiment.newInstance("Colpitts Oscillator");
+                        return OscillatorExperiment.newInstance("Phase Shift Oscillator");
+                    case "Wien Bridge Oscillator":
+                        return OscillatorExperiment.newInstance("Wien Bridge Oscillator");
                     case "Ohms Law":
                         return OhmsLawSetupExperiment.newInstance();
                     case "AC Generator":
@@ -181,6 +195,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return InvertingOpAmpExperiment.newInstance();
                     case "Non Inverting Op-Amp":
                         return NonInvertingOpAmpExperiment.newInstance();
+                    case "Capacitive Reactance":
+                        return CapacitorReactanceExperiment.newInstance();
                     case "Summing Junction":
                         return SummingJunctionExperiment.newInstance();
                     case "Precision Rectifier":
@@ -199,8 +215,10 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return SemiConductorDiodeExperiment.newInstance();
                     case "Human Body Resistance":
                         return HumanBodyResistanceExperiment.newInstance();
+                    case "Servo Motors":
+                        return ServoMotorsExperiment.newInstance();
                     case "Speed of Sound":
-                        return AstableMultivibratorExperiment.newInstance("Speed of Sound");
+                        return OscillatorExperiment.newInstance("Speed of Sound");
                     default:
                         return ExperimentSetupFragment.newInstance();
                 }
