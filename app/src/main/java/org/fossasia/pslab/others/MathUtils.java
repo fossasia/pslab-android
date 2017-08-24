@@ -12,7 +12,7 @@ public class MathUtils {
     /*
     *  Maps a number from one range to another.
     * */
-    public static double map(int x, int in_min, int in_max, double out_min, double out_max) {
+    public static double map(double x, double in_min, double in_max, double out_min, double out_max) {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
@@ -31,4 +31,13 @@ public class MathUtils {
         return evenlySpacedArray;
     }
 
+    /*
+    * Returns RMS value of a given list of double values
+    * */
+    public static double rms(double[] list) {
+        double ms = 0;
+        for (double i : list) ms += i * i;
+        ms /= list.length;
+        return Math.sqrt(ms);
+    }
 }

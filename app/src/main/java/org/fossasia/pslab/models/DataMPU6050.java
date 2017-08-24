@@ -8,6 +8,7 @@ import io.realm.RealmObject;
 
 public class DataMPU6050 extends RealmObject {
 
+    private long trial;
     private long id;
     private double ax, ay, az;
     private double gx, gy, gz;
@@ -81,5 +82,21 @@ public class DataMPU6050 extends RealmObject {
 
     public void setTemperature(double temperature) {
         this.temperature = temperature;
+    }
+
+    public long getTrial() {
+        return trial;
+    }
+
+    public void setTrial(long trial) {
+        this.trial = trial;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
