@@ -5,20 +5,30 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
+import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
+import org.fossasia.pslab.experimentsetup.DistanceMeasurementExperiment;
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.LRPhaseShiftExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
+import org.fossasia.pslab.experimentsetup.LightDependentResistorExperiment;
 import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
 import org.fossasia.pslab.experimentsetup.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.OscillatorExperiment;
+import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
+import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
+import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
+import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
 import org.fossasia.pslab.experimentsetup.TransistorTransferExperiment;
+import org.fossasia.pslab.experimentsetup.WaterResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
@@ -72,6 +82,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("L_Colpitts.md");
                     case "Phase Shift Oscillator":
                         return ExperimentDocFragment.newInstance("L_PhaseShift.md");
+                    case "Wien Bridge Oscillator":
+                        return ExperimentDocFragment.newInstance("L_WIEN_BRIDGE.md");
                     case "Transients RLC Response":
                         return ExperimentDocFragment.newInstance("E_transientRLC.html");
                     case "Bode Plots":
@@ -120,6 +132,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
                     case "LR Phase Shift":
                         return ExperimentDocFragment.newInstance("P_InductivePhaseShift.md");
+                    case "Summing Junction":
+                        return ExperimentDocFragment.newInstance("L_Summing.html");
                     case "Semiconductor Diode":
                         return ExperimentDocFragment.newInstance("J_DIODE.md");
                     case "Human Body Resistance":
@@ -148,8 +162,18 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return NFETOutputCharacteristicsExperiment.newInstance();
                     case "N-FET Transfer Characteristics":
                         return NFETTransferCharacteristicsExperiment.newInstance();
+                    case "Astable Multivibrator":
+                        return OscillatorExperiment.newInstance("Astable Multivibrator");
+                    case "Colpitts Oscillator":
+                        return OscillatorExperiment.newInstance("Colpitts Oscillator");
+                    case "Phase Shift Oscillator":
+                        return OscillatorExperiment.newInstance("Phase Shift Oscillator");
+                    case "Wien Bridge Oscillator":
+                        return OscillatorExperiment.newInstance("Wien Bridge Oscillator");
                     case "Ohms Law":
                         return OhmsLawSetupExperiment.newInstance();
+                    case "AC Generator":
+                        return ACGeneratorExperiment.newInstance();
                     case "Lemon Cell":
                         return LemonCellExperiment.newInstance();
                     case "Full Wave Rectifier":
@@ -164,8 +188,24 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return NonInvertingOpAmpExperiment.newInstance();
                     case "LR Phase Shift":
                         return LRPhaseShiftExperiment.newInstance();
+                    case "Summing Junction":
+                        return SummingJunctionExperiment.newInstance();
+                    case "Precision Rectifier":
+                        return PrecisionRectifierExperiment.newInstance();
                     case "Capacitor Discharge":
                         return CapacitorDischargeExperiment.newInstance();
+                    case "Resistance of Water":
+                        return WaterResistanceExperiment.newInstance();
+                    case "Ramp Generator":
+                        return RampGeneratorExperiment.newInstance();
+                    case "Light Dependent Resistor":
+                        return LightDependentResistorExperiment.newInstance();
+                    case "Ultrasonic Range Finder":
+                        return DistanceMeasurementExperiment.newInstance();
+                    case "Semiconductor Diode":
+                        return SemiConductorDiodeExperiment.newInstance();
+                    case "Human Body Resistance":
+                        return HumanBodyResistanceExperiment.newInstance();
                     default:
                         return ExperimentSetupFragment.newInstance();
                 }
