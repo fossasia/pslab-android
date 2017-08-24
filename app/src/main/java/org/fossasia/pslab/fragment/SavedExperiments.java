@@ -304,7 +304,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         tree.addChildren(treeAsable, treeColpitts, treePhase, treeWien, treeMono);
@@ -571,7 +571,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeStepper = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.stepper_motors)))

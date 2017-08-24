@@ -19,11 +19,12 @@ import org.fossasia.pslab.experimentsetup.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.RCPhaseShiftExperiment;
+import org.fossasia.pslab.experimentsetup.ServoMotorsExperiment;
+import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
 import org.fossasia.pslab.experimentsetup.OscillatorExperiment;
 import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
-import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
@@ -79,6 +80,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("D_NFET_GS_ID.md");
                     case "Astable Multivibrator":
                         return ExperimentDocFragment.newInstance("astable-multivibrator.html");
+                    case "Monostable Multivibrator":
+                        return ExperimentDocFragment.newInstance("M_Monostable.md");
                     case "Colpitts Oscillator":
                         return ExperimentDocFragment.newInstance("L_Colpitts.md");
                     case "Phase Shift Oscillator":
@@ -141,6 +144,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("J_DIODE.md");
                     case "Human Body Resistance":
                         return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
+                    case "Servo Motors":
+                        return ExperimentDocFragment.newInstance("G_servo_motors.md");
                 }
 
             case 1:
@@ -167,6 +172,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return NFETTransferCharacteristicsExperiment.newInstance();
                     case "Astable Multivibrator":
                         return OscillatorExperiment.newInstance("Astable Multivibrator");
+                    case "Monostable Multivibrator":
+                        return OscillatorExperiment.newInstance("Monostable Multivibrator");
                     case "Colpitts Oscillator":
                         return OscillatorExperiment.newInstance("Colpitts Oscillator");
                     case "Phase Shift Oscillator":
@@ -211,6 +218,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return SemiConductorDiodeExperiment.newInstance();
                     case "Human Body Resistance":
                         return HumanBodyResistanceExperiment.newInstance();
+                    case "Servo Motors":
+                        return ServoMotorsExperiment.newInstance();
                     default:
                         return ExperimentSetupFragment.newInstance();
                 }
