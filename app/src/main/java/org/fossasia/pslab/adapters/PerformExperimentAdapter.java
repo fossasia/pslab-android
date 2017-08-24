@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.CapacitorReactanceExperiment;
 import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.DistanceMeasurementExperiment;
@@ -132,6 +133,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
                     case "RC Phase Shift":
                         return ExperimentDocFragment.newInstance("P_CapacitivePhaseShift.md");
+                    case "Capacitive Reactance":
+                        return ExperimentDocFragment.newInstance("O_XC.md");
                     case "Summing Junction":
                         return ExperimentDocFragment.newInstance("L_Summing.html");
                     case "Semiconductor Diode":
@@ -188,6 +191,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return NonInvertingOpAmpExperiment.newInstance();
                     case "RC Phase Shift":
                         return RCPhaseShiftExperiment.newInstance();
+                    case "Capacitive Reactance":
+                        return CapacitorReactanceExperiment.newInstance();
                     case "Summing Junction":
                         return SummingJunctionExperiment.newInstance();
                     case "Precision Rectifier":
