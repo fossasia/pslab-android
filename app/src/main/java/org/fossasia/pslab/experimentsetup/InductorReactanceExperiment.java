@@ -60,7 +60,7 @@ public class InductorReactanceExperiment extends Fragment{
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.diode_setup, container, false); //The setup is identical to that of diode_setup, so diode_setup is reused
+        View view = inflater.inflate(R.layout.common_experiment_setup, container, false); //The setup is identical to that of common_experiment_setup, so common_experiment_setup is reused
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +68,7 @@ public class InductorReactanceExperiment extends Fragment{
             public void onClick(View v) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title("Configure Experiment")
-                        .customView(R.layout.inductor_reactance_dialog, true)
+                        .customView(R.layout.rlc_dialog, true)
                         .positiveText("Start Experiment")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -76,8 +76,8 @@ public class InductorReactanceExperiment extends Fragment{
 
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etFrequency = (TextInputEditText) customView.findViewById(R.id.inductor_frequency);
-                                tilFrequency = (TextInputLayout) customView.findViewById(R.id.inductor_frequency_layout);
+                                etFrequency = (TextInputEditText) customView.findViewById(R.id.frequency);
+                                tilFrequency = (TextInputLayout) customView.findViewById(R.id.frequency_layout);
 
                                 if (TextUtils.isEmpty(etFrequency.getText().toString())) {
                                     tilFrequency.setError(ERROR_MESSAGE);

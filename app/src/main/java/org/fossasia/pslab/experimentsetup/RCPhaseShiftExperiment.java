@@ -60,7 +60,7 @@ public class RCPhaseShiftExperiment extends Fragment{
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.diode_setup, container, false);
+        View view = inflater.inflate(R.layout.common_experiment_setup, container, false);
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +68,7 @@ public class RCPhaseShiftExperiment extends Fragment{
             public void onClick(View v) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title("Configure Experiment")
-                        .customView(R.layout.rc_phase_shift_dialog, true)
+                        .customView(R.layout.rlc_dialog, true)
                         .positiveText("Start Experiment")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
