@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.fossasia.pslab.experimentsetup.InductorReactanceExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorReactanceExperiment;
 import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
@@ -136,6 +137,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("K_LDR.md");
                     case "Ultrasonic Range Finder":
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
+                    case "Inductive Reactance":
+                        return ExperimentDocFragment.newInstance("O_XL.md");
                     case "LR Phase Shift":
                         return ExperimentDocFragment.newInstance("P_InductivePhaseShift.md");
                     case "RC Phase Shift":
@@ -202,6 +205,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return InvertingOpAmpExperiment.newInstance();
                     case "Non Inverting Op-Amp":
                         return NonInvertingOpAmpExperiment.newInstance();
+                    case "Inductive Reactance":
+                        return InductorReactanceExperiment.newInstance();
                     case "LR Phase Shift":
                         return LRPhaseShiftExperiment.newInstance();
                     case "RC Phase Shift":
