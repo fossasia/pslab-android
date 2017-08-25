@@ -10,6 +10,7 @@ import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.DistanceMeasurementExperiment;
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.LRPhaseShiftExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
 import org.fossasia.pslab.experimentsetup.LightDependentResistorExperiment;
@@ -135,6 +136,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("K_LDR.md");
                     case "Ultrasonic Range Finder":
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
+                    case "LR Phase Shift":
+                        return ExperimentDocFragment.newInstance("P_InductivePhaseShift.md");
                     case "RC Phase Shift":
                         return ExperimentDocFragment.newInstance("P_CapacitivePhaseShift.md");
                     case "Capacitive Reactance":
@@ -199,6 +202,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return InvertingOpAmpExperiment.newInstance();
                     case "Non Inverting Op-Amp":
                         return NonInvertingOpAmpExperiment.newInstance();
+                    case "LR Phase Shift":
+                        return LRPhaseShiftExperiment.newInstance();
                     case "RC Phase Shift":
                         return RCPhaseShiftExperiment.newInstance();
                     case "Capacitive Reactance":
