@@ -23,7 +23,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@drawable/la_custom_border">
+        android:background="@drawable/la_custom_border"
+        android:gravity="top">
 
         <ImageButton
             android:id="@+id/imageButton_play_pause_sensor"
@@ -89,7 +90,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignStart="@+id/checkBox_samples_sensor"
-            android:text="1000ms"
+            android:text="100ms"
             android:textSize="12sp" />
 
     </RelativeLayout>
