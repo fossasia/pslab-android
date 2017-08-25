@@ -11,6 +11,7 @@ import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.DistanceMeasurementExperiment;
 import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.LRPhaseShiftExperiment;
 import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
 import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
 import org.fossasia.pslab.experimentsetup.LightDependentResistorExperiment;
@@ -26,6 +27,7 @@ import org.fossasia.pslab.experimentsetup.OscillatorExperiment;
 import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
 import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
 import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
+import org.fossasia.pslab.experimentsetup.StepperMotors;
 import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
 import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
 import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
@@ -137,6 +139,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
                     case "Inductive Reactance":
                         return ExperimentDocFragment.newInstance("O_XL.md");
+                    case "LR Phase Shift":
+                        return ExperimentDocFragment.newInstance("P_InductivePhaseShift.md");
                     case "RC Phase Shift":
                         return ExperimentDocFragment.newInstance("P_CapacitivePhaseShift.md");
                     case "Capacitive Reactance":
@@ -147,6 +151,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("J_DIODE.md");
                     case "Human Body Resistance":
                         return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
+                    case "Stepper Motors":
+                        return ExperimentDocFragment.newInstance("J_stepper.md");
                     case "Servo Motors":
                         return ExperimentDocFragment.newInstance("G_servo_motors.md");
                 }
@@ -201,6 +207,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return NonInvertingOpAmpExperiment.newInstance();
                     case "Inductive Reactance":
                         return InductorReactanceExperiment.newInstance();
+                    case "LR Phase Shift":
+                        return LRPhaseShiftExperiment.newInstance();
                     case "RC Phase Shift":
                         return RCPhaseShiftExperiment.newInstance();
                     case "Capacitive Reactance":
@@ -223,6 +231,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return SemiConductorDiodeExperiment.newInstance();
                     case "Human Body Resistance":
                         return HumanBodyResistanceExperiment.newInstance();
+                    case "Stepper Motors":
+                        return StepperMotors.newInstance();
                     case "Servo Motors":
                         return ServoMotorsExperiment.newInstance();
                     default:

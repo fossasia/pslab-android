@@ -454,6 +454,10 @@
     <string name="ac_voltage">AC Voltage</string>
     <string name="dc_voltage">DC Voltage</string>
     <string name="amplitude_range">Amplitude Range</string>
+  
+    <string name="steps">Steps</string>
+    <string name="set_steps">Set Steps</string>
+  
     <string name="fossasia_logo">Fossasia Logo</string>
     <string name="pocket_science_logo">Pocket Science Logo</string>
 

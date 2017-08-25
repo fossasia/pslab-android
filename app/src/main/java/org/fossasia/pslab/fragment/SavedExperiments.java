@@ -387,7 +387,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeLRC = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.lcr_steady_state)))
@@ -579,7 +579,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
+                        startExperiment(value);
                     }
                 });
         TreeNode treeFlowChart = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.make_a_flow_chart)))
