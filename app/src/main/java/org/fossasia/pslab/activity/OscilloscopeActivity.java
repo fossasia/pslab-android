@@ -992,6 +992,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
         private AudioJack audioJack;
         private short[] buffer;
+        private List<Entry> entries;
 
         public captureAudioBuffer(AudioJack audioJack) {
             this.audioJack = audioJack;
@@ -1000,6 +1001,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         @Override
         protected Void doInBackground(Void... params) {
             buffer = audioJack.read();
+            entries = new ArrayList<>();
+            for (int i = 0; i < buffer.length; i++) {
+                entries.add(new Entry(i, (float) map(buffer[i], -32768, 32767, -3, 3)));
+            }
             //Log.v("AudioBuffer", Arrays.toString(buffer));
             return null;
         }
@@ -1008,17 +1013,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             // Update chart
-            List<Entry> entries = new ArrayList<>();
-            for (int i = 0; i < buffer.length; i++) {
-                entries.add(new Entry(i, (float) map(buffer[i], -32768, 32767, -3, 3)));
-            }
             LineDataSet lineDataSet = new LineDataSet(entries, "Audio Data");
             lineDataSet.setColor(Color.WHITE);
             lineDataSet.setDrawCircles(false);
             mChart.setData(new LineData(lineDataSet));
             mChart.notifyDataSetChanged();
             mChart.invalidate();
-            //Log.v("Execution Done", "Completed");
             synchronized (lock) {
                 lock.notify();
             }
