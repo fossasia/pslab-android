@@ -682,7 +682,7 @@ public class ScienceLab {
         }
     }
 
-    private HashMap<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
+    public HashMap<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
         /*
         * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
         */

@@ -155,6 +155,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("J_stepper.md");
                     case "Servo Motors":
                         return ExperimentDocFragment.newInstance("G_servo_motors.md");
+                    case "Speed of Sound":
+                        return ExperimentDocFragment.newInstance("speedofsound.html");
                 }
 
             case 1:
@@ -235,6 +237,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return StepperMotors.newInstance();
                     case "Servo Motors":
                         return ServoMotorsExperiment.newInstance();
+                    case "Speed of Sound":
+                        return OscillatorExperiment.newInstance("Speed of Sound");
                     default:
                         return ExperimentSetupFragment.newInstance();
                 }
