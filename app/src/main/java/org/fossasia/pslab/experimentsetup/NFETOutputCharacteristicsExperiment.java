@@ -71,7 +71,7 @@ public class NFETOutputCharacteristicsExperiment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.diode_setup, container, false);
+        View view = inflater.inflate(R.layout.common_experiment_setup, container, false);
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {

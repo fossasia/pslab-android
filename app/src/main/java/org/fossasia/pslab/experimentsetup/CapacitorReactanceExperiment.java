@@ -15,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -62,7 +60,7 @@ public class CapacitorReactanceExperiment extends Fragment{
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.diode_setup, container, false);
+        View view = inflater.inflate(R.layout.common_experiment_setup, container, false);
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +68,7 @@ public class CapacitorReactanceExperiment extends Fragment{
             public void onClick(View v) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title("Configure Experiment")
-                        .customView(R.layout.capacitor_reactance_dialog, true)
+                        .customView(R.layout.rlc_dialog, true)
                         .positiveText("Start Experiment")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -78,8 +76,8 @@ public class CapacitorReactanceExperiment extends Fragment{
 
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etFrequency = (TextInputEditText) customView.findViewById(R.id.capacitor_frequency);
-                                tilFrequency = (TextInputLayout) customView.findViewById(R.id.capacitor_frequency_layout);
+                                etFrequency = (TextInputEditText) customView.findViewById(R.id.frequency);
+                                tilFrequency = (TextInputLayout) customView.findViewById(R.id.frequency_layout);
 
                                 if (TextUtils.isEmpty(etFrequency.getText().toString())) {
                                     tilFrequency.setError(ERROR_MESSAGE);

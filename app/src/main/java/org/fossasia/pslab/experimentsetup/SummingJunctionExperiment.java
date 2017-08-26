@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -76,7 +75,7 @@ public class SummingJunctionExperiment extends Fragment{
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.diode_setup, container, false); //reusing the diode_setup layout file as it is identical.
+        View view = inflater.inflate(R.layout.common_experiment_setup, container, false); //reusing the common_experiment_setup layout file as it is identical.
         outputChart = (LineChart) view.findViewById(R.id.line_chart);
         Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
