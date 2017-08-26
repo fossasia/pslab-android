@@ -48,7 +48,6 @@ public class MainActivityTest {
         onView(withText("Control")).check(matches(isDisplayed()));
         onView(withText("Logical Analyzer")).check(matches(isDisplayed()));
         onView(withText("Data Sensor Logger")).check(matches(isDisplayed()));
-        onView(withText("Wireless Sensor")).check(matches(isDisplayed()));
         onView(withText("Sensor QuickView")).check(matches(isDisplayed()));
 
 
