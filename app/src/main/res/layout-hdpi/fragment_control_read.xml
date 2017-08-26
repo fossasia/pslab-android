@@ -24,15 +24,12 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:theme="@style/AppTheme.Button"
                     android:id="@+id/button_control_read1"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/selector_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/resistance"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="14sp" />
+                    />
 
                 <TextView
                     android:id="@+id/tv_control_read1"
@@ -55,15 +52,11 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:theme="@style/AppTheme.Button"
                     android:id="@+id/button_control_read2"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/selector_button"
-                    android:text="@string/capacitance"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/control_textsize_tiny" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/capacitance" />
 
                 <TextView
                     android:id="@+id/tv_control_read2"
@@ -77,6 +70,12 @@
                     android:gravity="center" />
             </TableRow>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+
             <TableRow
                 android:id="@+id/tablerow_control_read3"
                 android:layout_width="match_parent"
@@ -84,15 +83,12 @@
                 android:layout_margin="@dimen/control_read_border_hdpi"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:gravity="center"
+                <Button
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/frequency"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textSize="14sp" />
+                    android:textColor="@color/colorAccent" />
 
                 <Spinner
                     android:id="@+id/spinner_control_read1"
@@ -103,19 +99,16 @@
                     android:gravity="center_vertical" />
 
                 <Button
+                    android:theme="@style/AppTheme.Button"
                     android:id="@+id/button_control_read3"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/selector_button"
-                    android:text="@string/read"
-                    android:textStyle="bold"
-                    android:textColor="@color/white" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/read"/>
 
                 <TextView
                     android:id="@+id/tv_control_read3"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="2.5"
                     android:background="@drawable/tv_border"
@@ -132,16 +125,15 @@
                 android:layout_margin="@dimen/control_read_border_hdpi"
                 android:orientation="horizontal">
 
-                <TextView
+                <Button
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:background="?attr/selectableItemBackground"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:gravity="center"
                     android:text="@string/count_pulses"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/control_textsize_tiny" />
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"/>
 
                 <Spinner
                     android:id="@+id/spinner_control_read2"
@@ -151,19 +143,16 @@
                     android:entries="@array/ID" />
 
                 <Button
+                    android:theme="@style/AppTheme.Button"
                     android:id="@+id/button_control_read4"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/selector_button"
-                    android:text="@string/read"
-                    android:textStyle="bold"
-                    android:textColor="@color/white" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/read"/>
 
                 <TextView
                     android:id="@+id/tv_control_read4"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:layout_weight="2.5"
                     android:background="@drawable/tv_border"
                     android:layout_marginLeft="5dp"
@@ -180,15 +169,18 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:theme="@style/AppTheme.Button"
                     android:id="@+id/button_control_read5"
                     android:layout_width="80dp"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/selector_button"
-                    android:text="@string/reset"
-                    android:textStyle="bold"
-                    android:textColor="@color/white" />
+                    android:text="@string/reset" />
             </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
 
             <TableRow
                 android:id="@+id/tablerow_control_read6"
@@ -197,26 +189,23 @@
                 android:layout_margin="@dimen/control_read_border_hdpi"
                 android:orientation="horizontal">
 
-                <TextView
+                <Button
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:background="?attr/selectableItemBackground"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:gravity="center"
                     android:text="@string/voltage"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/control_textsize_tiny" />
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"/>
 
                 <Button
+                    android:theme="@style/AppTheme.Button"
                     android:id="@+id/button_control_read6"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:background="@drawable/selector_button"
-                    android:text="@string/read"
-                    android:textStyle="bold"
-                    android:textColor="@color/white" />
+                    android:text="@string/read"/>
 
 
             </TableRow>
