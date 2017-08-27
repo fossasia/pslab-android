@@ -38,12 +38,6 @@ import java.util.List;
 
 public class TransistorCEInputCharacteristicsExperiment extends Fragment {
 
-    private static final String ERROR_MESSAGE = "Invalid Value";
-    private static final String INVALID_VALUE = "Voltage value too low";
-    private static final String MINIMUM_VALUE_5V = "Voltage is beyond minimum of -5V";
-    private static final String MAXIMUM_VALUE_5V = "Voltage is beyond maximum of 5V";
-    private static final String MINIMUM_VALUE_3V = "Voltage is beyond minimum of -3.3V";
-    private static final String MAXIMUM_VALUE_3V = "Voltage is beyond maximum of 3.3V";
     private LineChart outputChart;
     private float initialVoltage;
     private float finalVoltage;
@@ -92,13 +86,13 @@ public class TransistorCEInputCharacteristicsExperiment extends Fragment {
                                 tilCollectorVoltage = (TextInputLayout) customView.findViewById(R.id.bjt_input_collector_voltage_layout);
                                 // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
-                                    tilInitialVoltage.setError(ERROR_MESSAGE);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) < -3.3f) {
-                                    tilInitialVoltage.setError(MINIMUM_VALUE_3V);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_3V);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) > 3.3f) {
-                                    tilInitialVoltage.setError(MAXIMUM_VALUE_3V);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
                                     return;
                                 } else {
                                     tilInitialVoltage.setError(null);
@@ -106,16 +100,16 @@ public class TransistorCEInputCharacteristicsExperiment extends Fragment {
                                 initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
                                 // Final Voltage
                                 if (TextUtils.isEmpty(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(ERROR_MESSAGE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (initialVoltage >= Float.parseFloat(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(INVALID_VALUE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.INVALID_VALUE);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) < -3.3f) {
-                                    tilFinalVoltage.setError(MINIMUM_VALUE_3V);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_3V);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) > 3.3f) {
-                                    tilFinalVoltage.setError(MAXIMUM_VALUE_3V);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
                                     return;
                                 } else {
                                     tilFinalVoltage.setError(null);
@@ -123,7 +117,7 @@ public class TransistorCEInputCharacteristicsExperiment extends Fragment {
                                 finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
                                 // Step Size
                                 if (TextUtils.isEmpty(etStepSize.getText().toString())) {
-                                    tilStepSize.setError(ERROR_MESSAGE);
+                                    tilStepSize.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else {
                                     tilStepSize.setError(null);
@@ -131,13 +125,13 @@ public class TransistorCEInputCharacteristicsExperiment extends Fragment {
                                 totalSteps = Float.parseFloat(etStepSize.getText().toString());
                                 // Collector Voltage
                                 if (TextUtils.isEmpty(etCollectorVoltage.getText().toString())) {
-                                    tilCollectorVoltage.setError(ERROR_MESSAGE);
+                                    tilCollectorVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etCollectorVoltage.getText().toString()) < -5.0f) {
-                                    tilCollectorVoltage.setError(MINIMUM_VALUE_5V);
+                                    tilCollectorVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etCollectorVoltage.getText().toString()) > 5.0f) {
-                                    tilCollectorVoltage.setError(MAXIMUM_VALUE_5V);
+                                    tilCollectorVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
                                     return;
                                 } else {
                                     tilCollectorVoltage.setError(null);

@@ -39,10 +39,6 @@ import java.util.List;
 
 public class ZenerSetupFragment extends Fragment {
 
-    private static final String ERROR_MESSAGE = "Invalid Value";
-    private static final String INVALID_VALUE = "Voltage value too low";
-    private static final String MINIMUM_VALUE = "Voltage is beyond minimum of -5V";
-    private static final String MAXIMUM_VALUE = "Voltage is beyond maximum of 5V";
     private LineChart outputChart;
     private float initialVoltage = 0;
     private float finalVoltage = 0;
@@ -86,13 +82,13 @@ public class ZenerSetupFragment extends Fragment {
                                 tilStepSize = (TextInputLayout) customView.findViewById(R.id.text_input_layout_ss);
                                 // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
-                                    tilInitialVoltage.setError(ERROR_MESSAGE);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) < -5.0f) {
-                                    tilInitialVoltage.setError(MINIMUM_VALUE);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) > 5.0f) {
-                                    tilInitialVoltage.setError(MAXIMUM_VALUE);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
                                     return;
                                 } else {
                                     tilInitialVoltage.setError(null);
@@ -100,16 +96,16 @@ public class ZenerSetupFragment extends Fragment {
                                 initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
                                 // Final Voltage
                                 if (TextUtils.isEmpty(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(ERROR_MESSAGE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (initialVoltage >= Float.parseFloat(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(INVALID_VALUE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.INVALID_VALUE);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) < -5.0f) {
-                                    tilFinalVoltage.setError(MINIMUM_VALUE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) > 5.0f) {
-                                    tilFinalVoltage.setError(MAXIMUM_VALUE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
                                     return;
                                 } else {
                                     tilFinalVoltage.setError(null);
@@ -117,7 +113,7 @@ public class ZenerSetupFragment extends Fragment {
                                 finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
                                 // Step Size
                                 if (TextUtils.isEmpty(etStepSize.getText().toString())) {
-                                    tilStepSize.setError(ERROR_MESSAGE);
+                                    tilStepSize.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else {
                                     tilStepSize.setError(null);

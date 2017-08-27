@@ -39,20 +39,6 @@ import java.util.List;
 
 public class SummingJunctionExperiment extends Fragment{
 
-    private static final String ERROR_MESSAGE = "Invalid Value";
-    private static final String MINIMUM_VALUE_FREQUENCY = "Frequency should be more than 10Hz";
-    private static final String MAXIMUM_VALUE_FREQUENCY = "Frequency should be less than 500Hz";
-    private static final String MINIMUM_VALUE_PV1 = "Voltage should be more than -5V";
-    private static final String MAXIMUM_VALUE_PV1 = "Voltage should be less than 5V";
-    private static final String MINIMUM_VALUE_PV2 = "Voltage should be more than -3.3V";
-    private static final String MAXIMUM_VALUE_PV2 = "Voltage should be less than 3.3V";
-    private static final String MINIMUM_VALUE_PV3 = "Voltage should be more than 0V";
-    private static final String MAXIMUM_VALUE_PV3= "Voltage should be less than 3.3V";
-    private static final String MINIMUM_VALUE_PCS = "Current should be more than 0mA";
-    private static final String MAXIMUM_VALUE_PCS= "Current should be less than 3.3mA";
-    private static final String MINIMUM_VALUE_PHASE = "Phase should be more than 0";
-    private static final String MAXIMUM_VALUE_PHASE= "Phase should be less than 180";
-
     private LineChart outputChart;
     private float frequency, voltage, phase, current;
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
@@ -105,13 +91,13 @@ public class SummingJunctionExperiment extends Fragment{
 
                                 if ("PV1".equals(voltageSource)) {
                                     if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                        tilFrequency.setError(ERROR_MESSAGE);
+                                        tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                         return;
                                     } else if (Float.parseFloat(etFrequency.getText().toString()) < -5.0f) {
-                                        tilFrequency.setError(MINIMUM_VALUE_PV1);
+                                        tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
                                         return;
                                     } else if (Float.parseFloat(etFrequency.getText().toString()) > 5.0f) {
-                                        tilFrequency.setError(MAXIMUM_VALUE_PV1);
+                                        tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
                                         return;
                                     } else {
                                         tilFrequency.setError(null);
@@ -119,13 +105,13 @@ public class SummingJunctionExperiment extends Fragment{
                                     voltage = Float.parseFloat(etVoltage.getText().toString());
                                 } else if ("PV2".equals(voltageSource)) {
                                     if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                        tilFrequency.setError(ERROR_MESSAGE);
+                                        tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                         return;
                                     } else if (Float.parseFloat(etFrequency.getText().toString()) < -3.3f) {
-                                        tilFrequency.setError(MINIMUM_VALUE_PV2);
+                                        tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_3V);
                                         return;
                                     } else if (Float.parseFloat(etFrequency.getText().toString()) > 3.3f) {
-                                        tilFrequency.setError(MAXIMUM_VALUE_PV2);
+                                        tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
                                         return;
                                     } else {
                                         tilFrequency.setError(null);
@@ -133,13 +119,13 @@ public class SummingJunctionExperiment extends Fragment{
                                     voltage = Float.parseFloat(etVoltage.getText().toString());
                                 } else if ("PV3".equals(voltageSource)) {
                                     if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                        tilFrequency.setError(ERROR_MESSAGE);
+                                        tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                         return;
                                     } else if (Float.parseFloat(etFrequency.getText().toString()) < 0.0f) {
-                                        tilFrequency.setError(MINIMUM_VALUE_PV3);
+                                        tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_0V);
                                         return;
                                     } else if (Float.parseFloat(etFrequency.getText().toString()) > 3.3f) {
-                                        tilFrequency.setError(MAXIMUM_VALUE_PV3);
+                                        tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
                                         return;
                                     } else {
                                         tilFrequency.setError(null);
@@ -147,13 +133,13 @@ public class SummingJunctionExperiment extends Fragment{
                                     voltage = Float.parseFloat(etVoltage.getText().toString());
                                 } else if ("PCS".equals(voltageSource)) {
                                     if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                        tilFrequency.setError(ERROR_MESSAGE);
+                                        tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                         return;
                                     } else if (Float.parseFloat(etFrequency.getText().toString()) < 0.0f) {
-                                        tilFrequency.setError(MINIMUM_VALUE_PCS);
+                                        tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_CURRENT);
                                         return;
                                     } else if (Float.parseFloat(etFrequency.getText().toString()) > 3.3f) {
-                                        tilFrequency.setError(MAXIMUM_VALUE_PCS);
+                                        tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_CURRENT);
                                         return;
                                     } else {
                                         tilFrequency.setError(null);
@@ -165,13 +151,13 @@ public class SummingJunctionExperiment extends Fragment{
                                 waveType = spinnerWaveType.getSelectedItem().toString();
 
                                 if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                    tilFrequency.setError(ERROR_MESSAGE);
+                                    tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etFrequency.getText().toString()) < 10.0f) {
-                                    tilFrequency.setError(MINIMUM_VALUE_FREQUENCY);
+                                    tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_FREQUENCY);
                                     return;
                                 } else if (Float.parseFloat(etFrequency.getText().toString()) > 5000.0f) {
-                                    tilFrequency.setError(MAXIMUM_VALUE_FREQUENCY);
+                                    tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_FREQUENCY);
                                     return;
                                 } else {
                                     tilFrequency.setError(null);
@@ -179,13 +165,13 @@ public class SummingJunctionExperiment extends Fragment{
                                 frequency = Float.parseFloat(etFrequency.getText().toString());
 
                                 if (TextUtils.isEmpty(etPhase.getText().toString())) {
-                                    tilPhase.setError(ERROR_MESSAGE);
+                                    tilPhase.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etPhase.getText().toString()) < 0.0f) {
-                                    tilPhase.setError(MINIMUM_VALUE_PHASE);
+                                    tilPhase.setError(ExperimentErrorStrings.MINIMUM_VALUE_PHASE);
                                     return;
                                 } else if (Float.parseFloat(etPhase.getText().toString()) > 180.0f) {
-                                    tilPhase.setError(MAXIMUM_VALUE_PHASE);
+                                    tilPhase.setError(ExperimentErrorStrings.MAXIMUM_VALUE_PHASE);
                                     return;
                                 } else {
                                     tilPhase.setError(null);

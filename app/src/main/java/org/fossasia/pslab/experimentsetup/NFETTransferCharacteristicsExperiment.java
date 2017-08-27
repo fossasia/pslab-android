@@ -43,11 +43,6 @@ public class NFETTransferCharacteristicsExperiment extends Fragment {
      * between Drain and Source while Source is connected to ground
      ***********************************************************************************************/
 
-    private static final String ERROR_MESSAGE = "Invalid Value";
-    private static final String INVALID_VALUE = "Voltage value too low";
-    private static final String MINIMUM_VALUE_5V = "Voltage is beyond minimum of -5V";
-    private static final String MAXIMUM_VALUE_5V = "Voltage is beyond maximum of 5V";
-    private static final String MINIMUM_VALUE_2V = "Voltage is beyond minimum of 2V";
     private LineChart outputChart;
     private float initialVoltage;
     private float finalVoltage;
@@ -96,13 +91,13 @@ public class NFETTransferCharacteristicsExperiment extends Fragment {
                                 tilSourceVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_source_voltage_layout);
                                 // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
-                                    tilInitialVoltage.setError(ERROR_MESSAGE);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) < -5.0f) {
-                                    tilInitialVoltage.setError(MINIMUM_VALUE_5V);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) > 5.0f) {
-                                    tilInitialVoltage.setError(MAXIMUM_VALUE_5V);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
                                     return;
                                 } else {
                                     tilInitialVoltage.setError(null);
@@ -110,16 +105,16 @@ public class NFETTransferCharacteristicsExperiment extends Fragment {
                                 initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
                                 // Final Voltage
                                 if (TextUtils.isEmpty(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(ERROR_MESSAGE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (initialVoltage >= Float.parseFloat(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(INVALID_VALUE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.INVALID_VALUE);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) < -5.0f) {
-                                    tilFinalVoltage.setError(MINIMUM_VALUE_5V);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) > 5.0f) {
-                                    tilFinalVoltage.setError(MAXIMUM_VALUE_5V);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
                                     return;
                                 } else {
                                     tilFinalVoltage.setError(null);
@@ -127,7 +122,7 @@ public class NFETTransferCharacteristicsExperiment extends Fragment {
                                 finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
                                 // Step Size
                                 if (TextUtils.isEmpty(etStepSize.getText().toString())) {
-                                    tilStepSize.setError(ERROR_MESSAGE);
+                                    tilStepSize.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else {
                                     tilStepSize.setError(null);
@@ -135,13 +130,13 @@ public class NFETTransferCharacteristicsExperiment extends Fragment {
                                 totalSteps = Float.parseFloat(etStepSize.getText().toString());
                                 // Source Voltage
                                 if (TextUtils.isEmpty(etSourceVoltage.getText().toString())) {
-                                    tilSourceVoltage.setError(ERROR_MESSAGE);
+                                    tilSourceVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etSourceVoltage.getText().toString()) > 5) {
-                                    tilSourceVoltage.setError(MAXIMUM_VALUE_5V);
+                                    tilSourceVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etSourceVoltage.getText().toString()) < 2) {
-                                    tilSourceVoltage.setError(MINIMUM_VALUE_2V);
+                                    tilSourceVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_2V);
                                     return;
                                 } else {
                                     tilSourceVoltage.setError(null);
