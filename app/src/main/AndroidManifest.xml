@@ -36,6 +36,7 @@
         <activity android:name=".activity.AboutUs" />
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ShowLoggedData" />
+        <activity android:name=".activity.WavegenActivity"/>
         <activity
             android:name=".activity.PerformExperimentActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
