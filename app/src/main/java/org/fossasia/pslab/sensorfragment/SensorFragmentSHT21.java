@@ -230,7 +230,7 @@ public class SensorFragmentSHT21 extends Fragment {
             mChartHumidity.setVisibleXRangeMaximum(10);
             mChartHumidity.moveViewToX(data2.getEntryCount());
             mChartHumidity.invalidate();
-            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(String.valueOf(counter)));
+            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(counter));
             if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
                 ((SensorActivity) getActivity()).play = false;
                 ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);

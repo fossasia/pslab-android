@@ -228,7 +228,7 @@ public class SensorFragmentMLX90614 extends Fragment {
             mChartAmbientTemperature.setVisibleXRangeMaximum(10);
             mChartAmbientTemperature.moveViewToX(data2.getEntryCount());
             mChartAmbientTemperature.invalidate();
-            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(String.valueOf(counter)));
+            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(counter));
             if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
                 ((SensorActivity) getActivity()).play = false;
                 ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);

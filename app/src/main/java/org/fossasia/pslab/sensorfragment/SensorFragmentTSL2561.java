@@ -217,7 +217,7 @@ public class SensorFragmentTSL2561 extends Fragment {
             mChart.setVisibleXRangeMaximum(10);
             mChart.moveViewToX(data.getEntryCount());
             mChart.invalidate();
-            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(String.valueOf(counter)));
+            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(counter));
             if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
                 ((SensorActivity) getActivity()).play = false;
                 ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);

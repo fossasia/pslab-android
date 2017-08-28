@@ -301,7 +301,7 @@ public class SensorFragmentMPU6050 extends Fragment {
             mChartGyroscope.setVisibleXRangeMaximum(10);
             mChartGyroscope.moveViewToX(data2.getEntryCount());
             mChartGyroscope.invalidate();
-            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(String.valueOf(counter)));
+            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(counter));
             if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
                 ((SensorActivity) getActivity()).play = false;
                 ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);
