@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.BH1750;
@@ -27,6 +28,8 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static org.fossasia.pslab.activity.SensorActivity.counter;
 
 /**
  * Created by asitava on 10/7/17.
@@ -54,7 +57,7 @@ public class SensorFragmentBH1750 extends Fragment {
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
         entries = new ArrayList<>();
-
+        ((SensorActivity) getActivity()).sensorDock.setVisibility(View.VISIBLE);
         try {
             sensorBH1750 = new BH1750(i2c);
         } catch (IOException | InterruptedException e) {
@@ -64,7 +67,7 @@ public class SensorFragmentBH1750 extends Fragment {
             @Override
             public void run() {
                 while (true) {
-                    if (scienceLab.isConnected()) {
+                    if (scienceLab.isConnected() && ((SensorActivity) getActivity()).shouldPlay()) {
                         sensorDataFetch = new SensorDataFetch();
                         sensorDataFetch.execute();
                         if (flag == 0) {
@@ -79,7 +82,7 @@ public class SensorFragmentBH1750 extends Fragment {
                             }
                         }
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(((SensorActivity) getActivity()).timeGap);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -174,7 +177,11 @@ public class SensorFragmentBH1750 extends Fragment {
             mChart.setVisibleXRangeMaximum(10);
             mChart.moveViewToX(data.getEntryCount());
             mChart.invalidate();
-
+            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(String.valueOf(counter)));
+            if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
+                ((SensorActivity) getActivity()).play = false;
+                ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);
+            }
             synchronized (lock) {
                 lock.notify();
             }

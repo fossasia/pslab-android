@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.MPU925x;
@@ -29,6 +30,8 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.fossasia.pslab.activity.SensorActivity.counter;
 
 /**
  * Created by asitava on 10/7/17.
@@ -67,6 +70,7 @@ public class SensorFragmentMPU925X extends Fragment {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
+        ((SensorActivity) getActivity()).sensorDock.setVisibility(View.VISIBLE);
         try {
             sensorMPU925X = new MPU925x(i2c);
         } catch (IOException e) {
@@ -84,7 +88,7 @@ public class SensorFragmentMPU925X extends Fragment {
             @Override
             public void run() {
                 while (true) {
-                    if (scienceLab.isConnected()) {
+                    if (scienceLab.isConnected() && ((SensorActivity) getActivity()).shouldPlay()) {
                         sensorDataFetch = new SensorDataFetch();
                         sensorDataFetch.execute();
 
@@ -102,7 +106,7 @@ public class SensorFragmentMPU925X extends Fragment {
                         }
 
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(((SensorActivity) getActivity()).timeGap);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -300,7 +304,11 @@ public class SensorFragmentMPU925X extends Fragment {
             mChartGyroscope.setVisibleXRangeMaximum(10);
             mChartGyroscope.moveViewToX(data2.getEntryCount());
             mChartGyroscope.invalidate();
-
+            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(String.valueOf(counter)));
+            if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
+                ((SensorActivity) getActivity()).play = false;
+                ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);
+            }
             synchronized (lock) {
                 lock.notify();
             }

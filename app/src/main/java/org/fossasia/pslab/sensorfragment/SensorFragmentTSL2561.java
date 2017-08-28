@@ -22,6 +22,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.TSL2561;
@@ -30,6 +31,8 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.fossasia.pslab.activity.SensorActivity.counter;
 
 /**
  * Created by asitava on 10/7/17.
@@ -65,7 +68,7 @@ public class SensorFragmentTSL2561 extends Fragment {
         entriesFull = new ArrayList<>();
         entriesInfrared = new ArrayList<>();
         entriesVisible = new ArrayList<>();
-
+        ((SensorActivity) getActivity()).sensorDock.setVisibility(View.VISIBLE);
         try {
             sensorTSL2561 = new TSL2561(i2c);
         } catch (IOException | InterruptedException e) {
@@ -75,7 +78,7 @@ public class SensorFragmentTSL2561 extends Fragment {
             @Override
             public void run() {
                 while (true) {
-                    if (scienceLab.isConnected()) {
+                    if (scienceLab.isConnected() && ((SensorActivity) getActivity()).shouldPlay()) {
                         try {
                             sensorDataFetch = new SensorDataFetch();
                         } catch (IOException | InterruptedException e) {
@@ -94,7 +97,7 @@ public class SensorFragmentTSL2561 extends Fragment {
                             }
                         }
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(((SensorActivity) getActivity()).timeGap);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -214,7 +217,11 @@ public class SensorFragmentTSL2561 extends Fragment {
             mChart.setVisibleXRangeMaximum(10);
             mChart.moveViewToX(data.getEntryCount());
             mChart.invalidate();
-
+            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(String.valueOf(counter)));
+            if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
+                ((SensorActivity) getActivity()).play = false;
+                ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);
+            }
             synchronized (lock) {
                 lock.notify();
             }
