@@ -39,12 +39,6 @@ import java.util.List;
 
 public class TransistorCEOutputSetup extends Fragment {
 
-    private static final String ERROR_MESSAGE = "Invalid Value";
-    private static final String INVALID_VALUE = "Voltage value too low";
-    private static final String MINIMUM_VALUE_5V = "Voltage is beyond minimum of -5V";
-    private static final String MAXIMUM_VALUE_5V = "Voltage is beyond maximum of 5V";
-    private static final String MINIMUM_VALUE_3V = "Voltage is beyond minimum of -3.3V";
-    private static final String MAXIMUM_VALUE_3V = "Voltage is beyond maximum of 3.3V";
     private LineChart outputChart;
     private float initialVoltage = 0;
     private float finalVoltage = 0;
@@ -92,13 +86,13 @@ public class TransistorCEOutputSetup extends Fragment {
                                 tilBaseVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_voltage);
                                 // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
-                                    tilInitialVoltage.setError(ERROR_MESSAGE);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) < -5.0f) {
-                                    tilInitialVoltage.setError(MINIMUM_VALUE_5V);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) > 5.0f) {
-                                    tilInitialVoltage.setError(MAXIMUM_VALUE_5V);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
                                     return;
                                 } else {
                                     tilInitialVoltage.setError(null);
@@ -106,16 +100,16 @@ public class TransistorCEOutputSetup extends Fragment {
                                 initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
                                 // Final Voltage
                                 if (TextUtils.isEmpty(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(ERROR_MESSAGE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (initialVoltage >= Float.parseFloat(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(INVALID_VALUE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.INVALID_VALUE);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) < -5.0f) {
-                                    tilFinalVoltage.setError(MINIMUM_VALUE_5V);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) > 5.0f) {
-                                    tilFinalVoltage.setError(MAXIMUM_VALUE_5V);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
                                     return;
                                 } else {
                                     tilFinalVoltage.setError(null);
@@ -123,20 +117,20 @@ public class TransistorCEOutputSetup extends Fragment {
                                 finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
                                 // Step Size
                                 if (TextUtils.isEmpty(etTotalSteps.getText().toString())) {
-                                    tilTotalSteps.setError(ERROR_MESSAGE);
+                                    tilTotalSteps.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else
                                     tilTotalSteps.setError(null);
                                 totalSteps = Integer.parseInt(etTotalSteps.getText().toString());
                                 // Base Voltage
                                 if (TextUtils.isEmpty(etBaseVoltage.getText().toString())) {
-                                    tilBaseVoltage.setError(ERROR_MESSAGE);
+                                    tilBaseVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etBaseVoltage.getText().toString()) < -3.3f) {
-                                    tilBaseVoltage.setError(MINIMUM_VALUE_3V);
+                                    tilBaseVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_3V);
                                     return;
                                 } else if (Float.parseFloat(etBaseVoltage.getText().toString()) > 3.3f) {
-                                    tilBaseVoltage.setError(MAXIMUM_VALUE_3V);
+                                    tilBaseVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
                                     return;
                                 } else {
                                     tilBaseVoltage.setError(null);

@@ -37,11 +37,6 @@ import java.util.List;
 
 public class TransistorAmplifierExperiment extends Fragment {
 
-    private static final String ERROR_MESSAGE = "Invalid Value";
-    private static final String MINIMUM_VALUE = "Frequency is beyond minimum of 10 Hz";
-    private static final String MAXIMUM_VALUE = "Frequency is beyond maximum of 20000 Hz";
-    private static final String MINIMUM_VOLTAGE = "Voltage is beyond minimum of 0V";
-    private static final String MAXIMUM_VOLTAGE = "Voltage is beyond maximum of 3.3V";
     private LineChart outputChart;
     private float inputFrequency, pv3Voltage;
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
@@ -80,13 +75,13 @@ public class TransistorAmplifierExperiment extends Fragment {
                                 tilVoltage = (TextInputLayout) customView.findViewById(R.id.amplifier_pv3_voltage_layout);
                                 // Initial Frequency
                                 if (TextUtils.isEmpty(etInitialFrequency.getText().toString())) {
-                                    tilInitialFrequency.setError(ERROR_MESSAGE);
+                                    tilInitialFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etInitialFrequency.getText().toString()) < 10.0f) {
-                                    tilInitialFrequency.setError(MINIMUM_VALUE);
+                                    tilInitialFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_FREQUENCY);
                                     return;
-                                } else if (Float.parseFloat(etInitialFrequency.getText().toString()) > 20000.0f) {
-                                    tilInitialFrequency.setError(MAXIMUM_VALUE);
+                                } else if (Float.parseFloat(etInitialFrequency.getText().toString()) > 5000.0f) {
+                                    tilInitialFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_FREQUENCY);
                                     return;
                                 } else {
                                     tilInitialFrequency.setError(null);
@@ -94,13 +89,13 @@ public class TransistorAmplifierExperiment extends Fragment {
                                 inputFrequency = Float.parseFloat(etInitialFrequency.getText().toString());
                                 // PV3 Voltage
                                 if (TextUtils.isEmpty(etVoltage.getText().toString())) {
-                                    tilVoltage.setError(ERROR_MESSAGE);
+                                    tilVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etVoltage.getText().toString()) < 0.0f) {
-                                    tilVoltage.setError(MINIMUM_VOLTAGE);
+                                    tilVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_0V);
                                     return;
                                 } else if (Float.parseFloat(etVoltage.getText().toString()) > 3.3f) {
-                                    tilVoltage.setError(MAXIMUM_VOLTAGE);
+                                    tilVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
                                     return;
                                 } else {
                                     tilVoltage.setError(null);

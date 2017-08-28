@@ -35,9 +35,6 @@ import java.util.HashMap;
 
 public class LightDependentResistorExperiment extends Fragment {
 
-    private static final String ERROR_MESSAGE = "Invalid Value";
-    private static final String MINIMUM_FREQUENCY = "Frequency is beyond minimum of 10 Hz";
-    private static final String MAXIMUM_FREQUENCY = "Frequency is beyond maximum of 300 Hz";
     private LineChart outputChart;
     private float frequency;
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
@@ -74,13 +71,13 @@ public class LightDependentResistorExperiment extends Fragment {
                                 tilFrequency = (TextInputLayout) customView.findViewById(R.id.ldr_frequency_layout);
                                 // Initial Frequency
                                 if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                    tilFrequency.setError(ERROR_MESSAGE);
+                                    tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etFrequency.getText().toString()) < 10.0) {
-                                    tilFrequency.setError(MINIMUM_FREQUENCY);
+                                    tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_FREQUENCY);
                                     return;
                                 } else if (Float.parseFloat(etFrequency.getText().toString()) > 300.0f) {
-                                    tilFrequency.setError(MAXIMUM_FREQUENCY);
+                                    tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_FREQUENCY_300);
                                     return;
                                 } else {
                                     tilFrequency.setError(null);

@@ -40,9 +40,6 @@ import java.util.List;
 
 public class NonInvertingOpAmpExperiment extends Fragment{
 
-    private static final String ERROR_MESSAGE = "Invalid Value";
-    private static final String MINIMUM_VALUE_FREQUENCY = "Frequency should be more than 10Hz";
-    private static final String MAXIMUM_VALUE_FREQUENCY = "Frequency should be less than 500Hz";
     private LineChart outputChart;
     private float frequency;
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
@@ -83,13 +80,13 @@ public class NonInvertingOpAmpExperiment extends Fragment{
                                 tilFrequency = (TextInputLayout) customView.findViewById(R.id.opamp_frequency_layout);
 
                                 if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                    tilFrequency.setError(ERROR_MESSAGE);
+                                    tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etFrequency.getText().toString()) < 10.0f) {
-                                    tilFrequency.setError(MINIMUM_VALUE_FREQUENCY);
+                                    tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_FREQUENCY);
                                     return;
                                 } else if (Float.parseFloat(etFrequency.getText().toString()) > 5000.0f) {
-                                    tilFrequency.setError(MAXIMUM_VALUE_FREQUENCY);
+                                    tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_FREQUENCY);
                                     return;
                                 } else {
                                     tilFrequency.setError(null);

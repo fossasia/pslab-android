@@ -47,12 +47,6 @@ public class TransistorTransferExperiment extends Fragment {
         return new TransistorTransferExperiment();
     }
 
-    private static final String ERROR_MESSAGE = "Invalid Value";
-    private static final String INVALID_VALUE = "Voltage value too low";
-    private static final String MINIMUM_VALUE_COLLECTOR = "Voltage is beyond minimum of 1V";
-    private static final String MAXIMUM_VALUE_COLLECTOR = "Voltage is beyond maximum of 5V";
-    private static final String MINIMUM_VALUE_BASE = "Voltage is beyond minimum of 0.7V";
-    private static final String MAXIMUM_VALUE_BASE = "Voltage is beyond maximum of 3.3V";
     private static final float K = 1000;
     private LineChart outputChart;
     private float initialVoltage;
@@ -98,13 +92,13 @@ public class TransistorTransferExperiment extends Fragment {
                                 tilCollectorVoltage = (TextInputLayout) customView.findViewById(R.id.bjt_transfer_collector_voltage_layout);
                                 // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
-                                    tilInitialVoltage.setError(ERROR_MESSAGE);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) < 0.7f) {
-                                    tilInitialVoltage.setError(MINIMUM_VALUE_BASE);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_BASE);
                                     return;
                                 } else if (Float.parseFloat(etInitialVoltage.getText().toString()) > 3.3f) {
-                                    tilInitialVoltage.setError(MAXIMUM_VALUE_BASE);
+                                    tilInitialVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_BASE);
                                     return;
                                 } else {
                                     tilInitialVoltage.setError(null);
@@ -112,16 +106,16 @@ public class TransistorTransferExperiment extends Fragment {
                                 initialVoltage = Float.parseFloat(etInitialVoltage.getText().toString());
                                 // Final Voltage
                                 if (TextUtils.isEmpty(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(ERROR_MESSAGE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (initialVoltage >= Float.parseFloat(etFinalVoltage.getText().toString())) {
-                                    tilFinalVoltage.setError(INVALID_VALUE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.INVALID_VALUE);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) < 0.7f) {
-                                    tilFinalVoltage.setError(MINIMUM_VALUE_BASE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_BASE);
                                     return;
                                 } else if (Float.parseFloat(etFinalVoltage.getText().toString()) > 3.3f) {
-                                    tilFinalVoltage.setError(MAXIMUM_VALUE_BASE);
+                                    tilFinalVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_BASE);
                                     return;
                                 } else {
                                     tilFinalVoltage.setError(null);
@@ -129,7 +123,7 @@ public class TransistorTransferExperiment extends Fragment {
                                 finalVoltage = Float.parseFloat(etFinalVoltage.getText().toString());
                                 // Step Size
                                 if (TextUtils.isEmpty(etStepSize.getText().toString())) {
-                                    tilStepSize.setError(ERROR_MESSAGE);
+                                    tilStepSize.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else {
                                     tilStepSize.setError(null);
@@ -137,13 +131,13 @@ public class TransistorTransferExperiment extends Fragment {
                                 totalSteps = Float.parseFloat(etStepSize.getText().toString());
                                 // Collector Voltage
                                 if (TextUtils.isEmpty(etCollectorVoltage.getText().toString())) {
-                                    tilCollectorVoltage.setError(ERROR_MESSAGE);
+                                    tilCollectorVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);
                                     return;
                                 } else if (Float.parseFloat(etCollectorVoltage.getText().toString()) < 1.0f) {
-                                    tilCollectorVoltage.setError(MINIMUM_VALUE_COLLECTOR);
+                                    tilCollectorVoltage.setError(ExperimentErrorStrings.MINIMUM_VALUE_COLLECTOR);
                                     return;
                                 } else if (Float.parseFloat(etCollectorVoltage.getText().toString()) > 5.0f) {
-                                    tilCollectorVoltage.setError(MAXIMUM_VALUE_COLLECTOR);
+                                    tilCollectorVoltage.setError(ExperimentErrorStrings.MAXIMUM_VALUE_COLLECTOR);
                                     return;
                                 } else {
                                     tilCollectorVoltage.setError(null);
