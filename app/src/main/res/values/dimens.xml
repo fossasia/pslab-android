@@ -37,6 +37,9 @@
     <dimen name="sensor_title_font">16sp</dimen>
     <dimen name="sensor_body_font">14sp</dimen>
 
+
     <dimen name="reading_box_height">40dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_title_margin">16dp</dimen>
 
 </resources>
