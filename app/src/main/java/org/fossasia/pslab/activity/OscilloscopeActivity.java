@@ -34,13 +34,13 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.experimentsetup.OscillatorExperimentFragment;
-import org.fossasia.pslab.experimentsetup.SpeedOfSoundFragment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.OscillatorExperimentFragment;
+import org.fossasia.pslab.experimentsetup.physicsexperiments.SpeedOfSoundFragment;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
-import org.fossasia.pslab.experimentsetup.DiodeClippingClampingExperiment;
-import org.fossasia.pslab.experimentsetup.FullWaveRectifierFragment;
-import org.fossasia.pslab.experimentsetup.HalfWaveRectifierFragment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.DiodeClippingClampingExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.FullWaveRectifierFragment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.HalfWaveRectifierFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.AudioJack;
@@ -50,7 +50,6 @@ import org.fossasia.pslab.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
