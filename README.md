@@ -98,7 +98,7 @@ If you want build apk only, go to Build>Build apk and apk would be build and dir
 
 You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through usb cable. 
 
-To debug over Wi-Fi : http://stackoverflow.com/questions/4893953/run-install-debug-android-applications-over-wi-fi
+To debug over Wi-Fi : http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/
  
 Note : 
 1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/org/fossasia/pslab/communication/CommunicationHandler.java) 
