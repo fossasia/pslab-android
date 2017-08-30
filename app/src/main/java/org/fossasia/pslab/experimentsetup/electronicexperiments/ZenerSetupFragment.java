@@ -154,7 +154,7 @@ public class ZenerSetupFragment extends Fragment {
             @Override
             public void run() {
                 for (float i = initialVoltage; i < finalVoltage; i += stepVoltage) {
-                    CalcDataPoint dataPoint = new CalcDataPoint(outputChart, i);
+                    CalcDataPoint dataPoint = new CalcDataPoint(i);
                     dataPoint.execute();
                     synchronized (lock) {
                         try {
@@ -164,12 +164,6 @@ public class ZenerSetupFragment extends Fragment {
                         }
                     }
                 }
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateChart();
-                    }
-                });
             }
         };
         new Thread(runnable).start();
@@ -207,11 +201,9 @@ public class ZenerSetupFragment extends Fragment {
 
     private class CalcDataPoint extends AsyncTask<Void, Void, Void> {
 
-        private LineChart chart;
         private float volti, voltf, x, y;
 
-        CalcDataPoint(LineChart chart, float volti) {
-            this.chart = chart;
+        CalcDataPoint(float volti) {
             this.volti = volti;
         }
 
@@ -223,28 +215,19 @@ public class ZenerSetupFragment extends Fragment {
             y = (float) ((volti - voltf) / 1.e3);
             x1.add(x);
             y1.add(y);
-            Log.v("XY", "" + x + " , " + y);
+            //Log.v("XY", "" + x + " , " + y);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            /*
-            LineData data = chart.getData();
-            if (data != null) {
-                ILineDataSet set = data.getDataSetByIndex(0);
-                if (set == null) {
-                    LineDataSet lSet = new LineDataSet(null, "DD");
-                    lSet.setCircleColor(Color.WHITE);
-                    set = lSet;
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    updateChart();
                 }
-                set.addEntry(new Entry(x, y));
-                data.notifyDataChanged();
-                chart.notifyDataSetChanged();
-                chart.invalidate();
-            }
-            */
+            });
             synchronized (lock) {
                 lock.notify();
             }
