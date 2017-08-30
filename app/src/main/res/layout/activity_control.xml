@@ -12,9 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/navigation"
-        android:animateLayoutChanges="true">
-
-    </FrameLayout>
+        android:animateLayoutChanges="true" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
@@ -23,5 +21,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         app:menu="@menu/activity_control_bottom_navigationbar"
-        app:theme="@style/AppTheme.Bottomnavigationbar" />
+        app:theme="@style/AppTheme.BottomNavigationBar" />
+
 </RelativeLayout>

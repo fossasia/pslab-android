@@ -14,13 +14,12 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-    <style name="AppTheme.Bottomnavigationbar" parent="Theme.AppCompat.Light">
+    <style name="AppTheme.BottomNavigationBar" parent="Theme.AppCompat.Light">
         <item name="colorControlHighlight">@color/black</item>
     </style>
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorPrimaryDark</item>
         <item name="android:textColor">@android:color/white</item>
-
     </style>
 
     <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
