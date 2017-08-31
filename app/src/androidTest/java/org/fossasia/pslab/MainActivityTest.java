@@ -49,15 +49,13 @@ public class MainActivityTest {
         onView(withText("Logical Analyzer")).check(matches(isDisplayed()));
         onView(withText("Data Sensor Logger")).check(matches(isDisplayed()));
         onView(withText("Sensor QuickView")).check(matches(isDisplayed()));
-
-
+        
         // Shifting to Saved Experiments Fragment
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_saved_experiments));
         Thread.sleep(1000);
         // checking Saved Experiment Fragment View
         onView(withId(R.id.saved_experiment_fragment)).check(matches(isDisplayed()));
-
 
         // Shifting to Design Experiments Fragment
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());

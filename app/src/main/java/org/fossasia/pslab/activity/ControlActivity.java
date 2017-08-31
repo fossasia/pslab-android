@@ -9,14 +9,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.fragment.ControlFragmentAdvanced;
 import org.fossasia.pslab.fragment.ControlFragmentMain;
 import org.fossasia.pslab.fragment.ControlFragmentRead;
-import org.fossasia.pslab.others.ScienceLabCommon;
 
 import org.fossasia.pslab.R;
-import butterknife.ButterKnife;
 
 /**
  * Created by viveksb007 on 10/5/17.
@@ -24,13 +21,10 @@ import butterknife.ButterKnife;
 
 public class ControlActivity extends AppCompatActivity {
 
-    private ScienceLab scienceLab;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control);
-        scienceLab = ScienceLabCommon.scienceLab;
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
