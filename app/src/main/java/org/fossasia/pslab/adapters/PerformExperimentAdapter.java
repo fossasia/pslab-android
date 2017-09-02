@@ -37,6 +37,7 @@ import org.fossasia.pslab.experimentsetup.schoollevel.WaterResistanceExperiment;
 import org.fossasia.pslab.experimentsetup.electronicexperiments.ZenerSetupFragment;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
+import org.fossasia.pslab.fragment.ExperimentDocMdFragment;
 import org.fossasia.pslab.fragment.ExperimentSetupFragment;
 
 /**
@@ -103,8 +104,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocFragment.newInstance("A_AC_AND_DC.html");
                     case "AC Generator":
                         return ExperimentDocFragment.newInstance("C_AC_GENERATOR.html");
-                    case "Capacitance":
-                        return ExperimentDocFragment.newInstance("I_CAPACITANCE.html");
+                    case "Capacitance Measurement":
+                        return ExperimentDocMdFragment.newInstance("I_CAPACITANCE.md");
                     case "Resistance":
                         return ExperimentDocFragment.newInstance("D_RESISTANCE.html");
                     case "Electromagnetic Induction":
