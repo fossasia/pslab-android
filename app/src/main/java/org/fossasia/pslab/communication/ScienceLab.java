@@ -605,7 +605,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2 + 1];
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -618,7 +618,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(totalSamples - totalSamples % this.dataSplitting);
                 byte[] data = new byte[2 * (totalSamples % this.dataSplitting) + 1];
                 mPacketHandler.read(data, 2 * (totalSamples % this.dataSplitting) + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -761,7 +761,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2 + 1];
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -774,7 +774,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(samples - samples % this.dataSplitting);
                 byte[] data = new byte[2 * (samples % this.dataSplitting)];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -917,7 +917,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2 + 1];
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -930,7 +930,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(samples - samples % this.dataSplitting);
                 byte[] data = new byte[2 * (samples % this.dataSplitting) + 1];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting) + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
