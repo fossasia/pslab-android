@@ -50,6 +50,7 @@ import org.fossasia.pslab.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -84,6 +85,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public TextView xAxisLabelUnit;
     private int height;
     private int width;
+    public int samples;
+    public int timeGap;
     public double timebase;
     private XAxis x1;
     private YAxis y1;
@@ -172,7 +175,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         triggerChannel = "CH1";
         trigger = 0;
         timebase = 875;
+        samples = 128;
+        timeGap = 10;
+        sineFit = true;
+        squareFit = false;
         graph = new Plot2D(this, new float[]{}, new float[]{}, 1);
+        curveFittingChannel1 = "None";
+        curveFittingChannel2 = "None";
         xyPlotXAxisChannel = "CH1";
         xyPlotYAxisChannel = "CH2";
         viewIsClicked = false;
@@ -693,7 +702,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         xAxisLabel.setText(xAxisInput);
     }
 
-
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         ArrayList<Entry> entries;
         String analogInput;
@@ -705,11 +713,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 //no. of samples and timeGap still need to be determined
                 if (isTriggerSelected) {
                     scienceLab.configureTrigger(0, analogInput, trigger, null, null);
-                    scienceLab.captureTraces(1, 1000, 10, analogInput, true, null);
+                    scienceLab.captureTraces(1, samples, timeGap, analogInput, true, null);
                 } else {
-                    scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+                    scienceLab.captureTraces(1, samples, timeGap, analogInput, false, null);
                 }
-                Log.v("Sleep Time", "" + (1000 * 10 * 1e-3));
+                Log.v("Sleep Time", "" + (1024 * 10 * 1e-3));
                 Thread.sleep((long) (1000 * 10 * 1e-3));
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
 
@@ -717,6 +725,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 double[] yData = data.get("y");
                 //Log.v("XDATA", Arrays.toString(xData));
                 //Log.v("YDATA", Arrays.toString(yData));
+
                 entries = new ArrayList<>();
                 if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
@@ -773,9 +782,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         scienceLab.configureTrigger(0, analogInput, trigger, null, null);
                     else if (triggerChannel.equals("CH2"))
                         scienceLab.configureTrigger(1, "CH2", trigger, null, null);
-                    data = scienceLab.captureTwo(1000, 10, analogInput, true);
+                    data = scienceLab.captureTwo(samples, timeGap, analogInput, true);
                 } else {
-                    data = scienceLab.captureTwo(1000, 10, analogInput, false);
+                    data = scienceLab.captureTwo(samples, timeGap, analogInput, false);
                 }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y1");
@@ -856,18 +865,24 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 HashMap<String, double[]> data;
 
                 if (isTriggerSelected) {
-                    if (triggerChannel.equals("CH1"))
-                        scienceLab.configureTrigger(0, analogInput, trigger, null, null);
-                    else if (triggerChannel.equals("CH2"))
-                        scienceLab.configureTrigger(1, analogInput, trigger, null, null);
-                    else if (triggerChannel.equals("CH3"))
-                        scienceLab.configureTrigger(2, analogInput, trigger, null, null);
-                    else if (triggerChannel.equals("MIC"))
-                        scienceLab.configureTrigger(3, analogInput, trigger, null, null);
+                    switch (triggerChannel) {
+                        case "CH1":
+                            scienceLab.configureTrigger(0, analogInput, trigger, null, null);
+                            break;
+                        case "CH2":
+                            scienceLab.configureTrigger(1, analogInput, trigger, null, null);
+                            break;
+                        case "CH3":
+                            scienceLab.configureTrigger(2, analogInput, trigger, null, null);
+                            break;
+                        case "MIC":
+                            scienceLab.configureTrigger(3, analogInput, trigger, null, null);
+                            break;
+                    }
 
-                    data = scienceLab.captureFour(1000, 10, analogInput, true);
+                    data = scienceLab.captureFour(samples, timeGap, analogInput, true);
                 } else {
-                    data = scienceLab.captureFour(1000, 10, analogInput, false);
+                    data = scienceLab.captureFour(samples, timeGap, analogInput, false);
                 }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y");
