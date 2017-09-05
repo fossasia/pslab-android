@@ -86,7 +86,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private int height;
     private int width;
     public int samples;
-    public int timeGap;
+    public double timeGap;
     public double timebase;
     private XAxis x1;
     private YAxis y1;
@@ -175,8 +175,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         triggerChannel = "CH1";
         trigger = 0;
         timebase = 875;
-        samples = 128;
-        timeGap = 10;
+        samples = 512;
+        timeGap = 2;
         sineFit = true;
         squareFit = false;
         graph = new Plot2D(this, new float[]{}, new float[]{}, 1);
