@@ -60,12 +60,11 @@ Please join us on the following channels:
 -----|-----|-----
 Home Screen|Show status and version of PSLab device|Established
 Application|Exposes PSLab application like Oscilloscope,etc |Established
- |Oscilloscope |Shows variation of analog signals | Working
- |Control |Generate waveforms and PWM signals. Control voltage and current sources and read results from a variety of electric components | Working
+ |Oscilloscope |Shows variation of analog signals | Established
+ |Control |Generate waveforms and PWM signals. Control voltage and current sources and read results from a variety of electric components | Established
  |Logical Analyzer |Captures and displays signals from digital system | Working
- |Data Sensor Logger |Captures and displays data from various sensors | Working
- |Wireless Sensor |Scans, captures and displays data from various wireless sensors |
- |Sensor Quick View |Scans all the sensors connected to PSLab Device and provides interface to Log data| Working
+ |Data Sensor Logger |Scans sensors connected to PSLab Device and provides interface to see and log real-time data | Working
+ |Sensor Quick View |Scans all the sensors connected to PSLab Device and visualise real-time data | Established
  |Settings |Enable Auto-Start |
  |Saved Experiments |Access Pre-defined and Designed Experiments | Working
  |Design Experiments |To Design our own experiments |
