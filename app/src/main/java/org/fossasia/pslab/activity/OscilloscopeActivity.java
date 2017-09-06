@@ -120,11 +120,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public String xyPlotYAxisChannel;
     public double trigger;
     Fragment channelParametersFragment;
-    Fragment timebasetriggerFragment;
+    Fragment timebaseTriggerFragment;
     Fragment dataAnalysisFragment;
     Fragment xyPlotFragment;
-    Fragment halfwaveRectifierFragment;
-    Fragment fullwaveRectifierFragment;
+    Fragment halfWaveRectifierFragment;
+    Fragment fullWaveRectifierFragment;
     Fragment oscillatorExperimentFragment;
     Fragment diodeClippingClampingFragment;
     Fragment speedOfSoundFragment;
@@ -139,6 +139,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public Plot2D graph;
     private AudioJack audioJack = null;
     private AnalyticsClass analyticsClass;
+    private CaptureAudioBuffer captureAudioBuffer;
+    private Thread monitorThread;
+    private volatile boolean monitor = true;
 
 
     @Override
@@ -232,20 +235,20 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         onWindowFocusChanged();
 
         channelParametersFragment = new ChannelParametersFragment();
-        timebasetriggerFragment = new TimebaseTriggerFragment();
+        timebaseTriggerFragment = new TimebaseTriggerFragment();
         dataAnalysisFragment = new DataAnalysisFragment();
         xyPlotFragment = new XYPlotFragment();
-        halfwaveRectifierFragment = new HalfWaveRectifierFragment();
-        fullwaveRectifierFragment = new FullWaveRectifierFragment();
+        halfWaveRectifierFragment = new HalfWaveRectifierFragment();
+        fullWaveRectifierFragment = new FullWaveRectifierFragment();
         diodeClippingClampingFragment = new DiodeClippingClampingExperiment();
         oscillatorExperimentFragment = new OscillatorExperimentFragment();
         speedOfSoundFragment = new SpeedOfSoundFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             if (isHalfWaveRectifierExperiment) {
-                addFragment(R.id.layout_dock_os2, halfwaveRectifierFragment, "HalfWaveFragment");
+                addFragment(R.id.layout_dock_os2, halfWaveRectifierFragment, "HalfWaveFragment");
             } else if (isFullWaveRectifierExperiment) {
-                addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
+                addFragment(R.id.layout_dock_os2, fullWaveRectifierFragment, "FullWaveFragment");
             } else if (isDiodeClippingClampingExperiment) {
                 addFragment(R.id.layout_dock_os2, diodeClippingClampingFragment, "DiodeClippingClampingFragment");
             } else if (isAstableMultivibratorExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment || isMonostableMultivibratorExperiment) {
@@ -272,7 +275,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void run() {
                 //Thread to check which checkbox is enabled
-                while (true) {
+                while (monitor) {
                     if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH1");
@@ -440,8 +443,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     if (isInBuiltMicSelected) {
                         if (audioJack == null)
                             audioJack = new AudioJack("input");
-                        captureAudioBuffer audioBuffer = new captureAudioBuffer(audioJack);
-                        audioBuffer.execute();
+                        captureAudioBuffer = new CaptureAudioBuffer(audioJack);
+                        captureAudioBuffer.execute();
                         synchronized (lock) {
                             try {
                                 lock.wait();
@@ -473,8 +476,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         };
 
         // if (scienceLab.isConnected())
-        new Thread(runnable).start();
-
+        monitorThread = new Thread(runnable);
+        monitorThread.start();
     }
 
     @Override
@@ -490,11 +493,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 break;
 
             case R.id.button_timebase_os:
-                replaceFragment(R.id.layout_dock_os2, timebasetriggerFragment, "TimebaseTiggerFragment");
+                replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 break;
 
             case R.id.tv_timebase_tigger_os:
-                replaceFragment(R.id.layout_dock_os2, timebasetriggerFragment, "TimebaseTiggerFragment");
+                replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 break;
 
             case R.id.button_data_analysis_os:
@@ -595,6 +598,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected void onDestroy() {
+        monitor = false;
         if (captureTask != null) {
             captureTask.cancel(true);
         }
@@ -606,6 +610,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         }
         if (oscillatorTask != null) {
             oscillatorTask.cancel(true);
+        }
+        if (captureAudioBuffer != null) {
+            captureAudioBuffer.cancel(true);
+            if (audioJack != null) {
+                audioJack.release();
+            }
         }
         super.onDestroy();
     }
@@ -1013,13 +1023,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    public class captureAudioBuffer extends AsyncTask<Void, Void, Void> {
+    public class CaptureAudioBuffer extends AsyncTask<Void, Void, Void> {
 
         private AudioJack audioJack;
         private short[] buffer;
         private List<Entry> entries;
 
-        public captureAudioBuffer(AudioJack audioJack) {
+        public CaptureAudioBuffer(AudioJack audioJack) {
             this.audioJack = audioJack;
         }
 
