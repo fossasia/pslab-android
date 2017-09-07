@@ -59,52 +59,70 @@ public class TimebaseTriggerFragment extends Fragment {
         seekBarTimebase.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                //samples are in the power of 2 so that sinefit can be applied
                 switch (progress) {
                     case 0:
-                        textViewTimeBase.setText("875.00 μs");
+                        textViewTimeBase.setText(R.string.timebase_label_875);
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(875);
                         ((OscilloscopeActivity) getActivity()).timebase = 875;
+                        ((OscilloscopeActivity) getActivity()).samples = 512;
+                        ((OscilloscopeActivity) getActivity()).timeGap = 2;
                         break;
                     case 1:
-                        textViewTimeBase.setText("1.00 ms");
+                        textViewTimeBase.setText(R.string.timebase_label_1);
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(1);
                         ((OscilloscopeActivity) getActivity()).timebase = 1000;
+                        ((OscilloscopeActivity) getActivity()).samples = 512;
+                        ((OscilloscopeActivity) getActivity()).timeGap = 2;
                         break;
                     case 2:
-                        textViewTimeBase.setText("2.00 ms");
+                        textViewTimeBase.setText(R.string.timebase_label_2);
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(2);
                         ((OscilloscopeActivity) getActivity()).timebase = 2000;
+                        ((OscilloscopeActivity) getActivity()).samples = 512;
+                        ((OscilloscopeActivity) getActivity()).timeGap = 4;
                         break;
                     case 3:
-                        textViewTimeBase.setText("4.00 ms");
+                        textViewTimeBase.setText(R.string.timebase_label_4);
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(4);
                         ((OscilloscopeActivity) getActivity()).timebase = 4000;
+                        ((OscilloscopeActivity) getActivity()).samples = 512;
+                        ((OscilloscopeActivity) getActivity()).timeGap = 8;
                         break;
                     case 4:
-                        textViewTimeBase.setText("8.00 ms");
+                        textViewTimeBase.setText(R.string.timebase_label_8);
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(8);
                         ((OscilloscopeActivity) getActivity()).timebase = 8000;
+                        ((OscilloscopeActivity) getActivity()).samples = 1024;
+                        ((OscilloscopeActivity) getActivity()).timeGap = 8;
                         break;
                     case 5:
-                        textViewTimeBase.setText("25.60 ms");
+                        textViewTimeBase.setText(R.string.timebase_label_25_60);
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(25.60);
                         ((OscilloscopeActivity) getActivity()).timebase = 25600;
+                        ((OscilloscopeActivity) getActivity()).samples = 1024;
+                        ((OscilloscopeActivity) getActivity()).timeGap = 25;
                         break;
                     case 6:
-                        textViewTimeBase.setText("38.40 ms");
+                        textViewTimeBase.setText(R.string.timebase_label_38_40);
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(38.40);
                         ((OscilloscopeActivity) getActivity()).timebase = 38400;
+                        ((OscilloscopeActivity) getActivity()).timebase = 1024;
+                        ((OscilloscopeActivity) getActivity()).timeGap = 38;
                         break;
                     case 7:
-                        textViewTimeBase.setText("51.20 ms");
+                        textViewTimeBase.setText(R.string.timebase_label_51_20);
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(51.20);
                         ((OscilloscopeActivity) getActivity()).timebase = 51200;
+                        ((OscilloscopeActivity) getActivity()).samples = 1024;
+                        ((OscilloscopeActivity) getActivity()).timeGap = 50;
                         break;
                     case 8:
-                        textViewTimeBase.setText("102.40 ms");
+                        textViewTimeBase.setText(R.string.timebase_label_102_40);
                         ((OscilloscopeActivity) getActivity()).setXAxisScale(102.40);
                         ((OscilloscopeActivity) getActivity()).timebase = 102400;
+                        ((OscilloscopeActivity) getActivity()).samples = 1024;
+                        ((OscilloscopeActivity) getActivity()).timeGap = 100;
                         break;
                 }
             }
@@ -125,7 +143,7 @@ public class TimebaseTriggerFragment extends Fragment {
         seekBarTrigger.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textViewTrigger.setText(seekBarTrigger.getValue() + " V");
+                textViewTrigger.setText(String.format("%s V", seekBarTrigger.getValue()));
                 ((OscilloscopeActivity) getActivity()).trigger = seekBarTrigger.getValue();
             }
 
