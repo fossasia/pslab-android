@@ -1,17 +1,13 @@
-<html>
-  <head>
-    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
-    <title>index</title>
-  </head>
-  <body style = "background-color:#fff">Transistors : Monostable Multivibrator<br>
-	<img src="images/monostable-trans.svg" style="width:100%;max-width:500px;"><br>
+Transistors : Monostable Multivibrator
+---
 
-	Make the Connections as shown in the figure.<br>
-	SQR1 provides the trigger pulse which is also simultaneously monitored via CH1<br>
-	Try different resistors and observe how they affect the time period<br>
+![](file:///android_asset/DOC_HTML/apps/images/schematics/monostable-trans.svg@100%|auto)
 
-	<h3>Screenshot</h3>
-	<img src="screenshots/monostable_transistor.png" width="100%"><br>
+* Make the Connections as shown in the figure.
+* SQR1 provides the trigger pulse which is also simultaneously monitored via CH1.
+* Try different resistors and observe how they affect the time period.
 
-  </body>
-</html>
+## Screenshot
+
+![](file:///android_asset/DOC_HTML/apps/images/screenshots/monostable_transistor.png@100%|auto)
+

@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.MPU925x;
@@ -30,13 +31,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.fossasia.pslab.activity.SensorActivity.counter;
+
 /**
  * Created by asitava on 10/7/17.
  */
 
 public class SensorFragmentMPU925X extends Fragment {
+
     private ScienceLab scienceLab;
-    private I2C i2c;
     private SensorDataFetch sensorDataFetch;
     private TextView tvSensorMPU925Xax;
     private TextView tvSensorMPU925Xay;
@@ -48,12 +51,6 @@ public class SensorFragmentMPU925X extends Fragment {
     private MPU925x sensorMPU925X;
     private LineChart mChartAcceleration;
     private LineChart mChartGyroscope;
-    private XAxis xAccelerometer;
-    private YAxis yAccelerometer;
-    private YAxis yAccelerometer2;
-    private XAxis xGyroscope;
-    private YAxis yGyroscope;
-    private YAxis yGyroscope2;
     private long startTime;
     private int flag;
     private ArrayList<Entry> entriesax;
@@ -65,15 +62,15 @@ public class SensorFragmentMPU925X extends Fragment {
     private final Object lock = new Object();
 
     public static SensorFragmentMPU925X newInstance() {
-        SensorFragmentMPU925X sensorFragmentMPU925X = new SensorFragmentMPU925X();
-        return sensorFragmentMPU925X;
+        return new SensorFragmentMPU925X();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        i2c = scienceLab.i2c;
+        I2C i2c = scienceLab.i2c;
+        ((SensorActivity) getActivity()).sensorDock.setVisibility(View.VISIBLE);
         try {
             sensorMPU925X = new MPU925x(i2c);
         } catch (IOException e) {
@@ -91,7 +88,7 @@ public class SensorFragmentMPU925X extends Fragment {
             @Override
             public void run() {
                 while (true) {
-                    if (scienceLab.isConnected()) {
+                    if (scienceLab.isConnected() && ((SensorActivity) getActivity()).shouldPlay()) {
                         sensorDataFetch = new SensorDataFetch();
                         sensorDataFetch.execute();
 
@@ -109,7 +106,7 @@ public class SensorFragmentMPU925X extends Fragment {
                         }
 
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(((SensorActivity) getActivity()).timeGap);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -140,13 +137,13 @@ public class SensorFragmentMPU925X extends Fragment {
         mChartAcceleration = (LineChart) view.findViewById(R.id.chart_sensor_mpu925x_accelerometer);
         mChartGyroscope = (LineChart) view.findViewById(R.id.chart_sensor_mpu925x_gyroscope);
 
-        xAccelerometer = mChartAcceleration.getXAxis();
-        yAccelerometer = mChartAcceleration.getAxisLeft();
-        yAccelerometer2 = mChartAcceleration.getAxisRight();
+        XAxis xAccelerometer = mChartAcceleration.getXAxis();
+        YAxis yAccelerometer = mChartAcceleration.getAxisLeft();
+        YAxis yAccelerometer2 = mChartAcceleration.getAxisRight();
 
-        xGyroscope = mChartGyroscope.getXAxis();
-        yGyroscope = mChartGyroscope.getAxisLeft();
-        yGyroscope2 = mChartGyroscope.getAxisRight();
+        XAxis xGyroscope = mChartGyroscope.getXAxis();
+        YAxis yGyroscope = mChartGyroscope.getAxisLeft();
+        YAxis yGyroscope2 = mChartGyroscope.getAxisRight();
 
         mChartAcceleration.setTouchEnabled(true);
         mChartAcceleration.setHighlightPerDragEnabled(true);
@@ -228,9 +225,10 @@ public class SensorFragmentMPU925X extends Fragment {
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-        double[] dataGyro, dataAccel;
-        double dataTemp;
-        long timeElapsed;
+
+        private double[] dataGyro, dataAccel;
+        private double dataTemp;
+        private long timeElapsed;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -245,13 +243,13 @@ public class SensorFragmentMPU925X extends Fragment {
 
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
 
-            entriesax.add(new Entry((float) timeElapsed, (float)dataAccel[0]));
-            entriesay.add(new Entry((float) timeElapsed, (float)dataAccel[1]));
-            entriesaz.add(new Entry((float) timeElapsed, (float)dataAccel[2]));
+            entriesax.add(new Entry((float) timeElapsed, (float) dataAccel[0]));
+            entriesay.add(new Entry((float) timeElapsed, (float) dataAccel[1]));
+            entriesaz.add(new Entry((float) timeElapsed, (float) dataAccel[2]));
 
-            entriesgx.add(new Entry((float) timeElapsed, (float)dataGyro[0]));
-            entriesgy.add(new Entry((float) timeElapsed, (float)dataGyro[1]));
-            entriesgz.add(new Entry((float) timeElapsed, (float)dataGyro[2]));
+            entriesgx.add(new Entry((float) timeElapsed, (float) dataGyro[0]));
+            entriesgy.add(new Entry((float) timeElapsed, (float) dataGyro[1]));
+            entriesgz.add(new Entry((float) timeElapsed, (float) dataGyro[2]));
 
             return null;
         }
@@ -266,30 +264,30 @@ public class SensorFragmentMPU925X extends Fragment {
             tvSensorMPU925Xgz.setText(String.valueOf(dataGyro[2]));
             tvSensorMPU925Xtemp.setText(String.valueOf(dataTemp));
 
-            LineDataSet dataset1 = new LineDataSet(entriesax, "Ax");
-            LineDataSet dataSet2 = new LineDataSet(entriesay, "Ay");
-            LineDataSet dataSet3 = new LineDataSet(entriesaz, "Az");
+            LineDataSet dataSet1 = new LineDataSet(entriesax, getString(R.string.ax));
+            LineDataSet dataSet2 = new LineDataSet(entriesay, getString(R.string.ay));
+            LineDataSet dataSet3 = new LineDataSet(entriesaz, getString(R.string.az));
 
-            LineDataSet dataset4 = new LineDataSet(entriesgx, "Gx");
-            LineDataSet dataSet5 = new LineDataSet(entriesgy, "Gy");
-            LineDataSet dataSet6 = new LineDataSet(entriesgz, "Gz");
+            LineDataSet dataSet4 = new LineDataSet(entriesgx, getString(R.string.gx));
+            LineDataSet dataSet5 = new LineDataSet(entriesgy, getString(R.string.gy));
+            LineDataSet dataSet6 = new LineDataSet(entriesgz, getString(R.string.gz));
 
 
-            dataset1.setColor(Color.BLUE);
+            dataSet1.setColor(Color.BLUE);
             dataSet2.setColor(Color.GREEN);
             dataSet3.setColor(Color.RED);
 
-            dataset4.setColor(Color.BLUE);
+            dataSet4.setColor(Color.BLUE);
             dataSet5.setColor(Color.GREEN);
             dataSet6.setColor(Color.RED);
 
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-            dataSets.add(dataset1);
+            List<ILineDataSet> dataSets = new ArrayList<>();
+            dataSets.add(dataSet1);
             dataSets.add(dataSet2);
             dataSets.add(dataSet3);
 
-            List<ILineDataSet> dataSets2 = new ArrayList<ILineDataSet>();
-            dataSets2.add(dataset4);
+            List<ILineDataSet> dataSets2 = new ArrayList<>();
+            dataSets2.add(dataSet4);
             dataSets2.add(dataSet5);
             dataSets2.add(dataSet6);
 
@@ -306,7 +304,11 @@ public class SensorFragmentMPU925X extends Fragment {
             mChartGyroscope.setVisibleXRangeMaximum(10);
             mChartGyroscope.moveViewToX(data2.getEntryCount());
             mChartGyroscope.invalidate();
-
+            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(counter));
+            if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
+                ((SensorActivity) getActivity()).play = false;
+                ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);
+            }
             synchronized (lock) {
                 lock.notify();
             }

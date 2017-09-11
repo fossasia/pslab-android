@@ -1,0 +1,96 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.fossasia.pslab.experimentsetup.physicsexperiments.SpeedOfSoundFragment">
+
+
+    <TextView
+        android:id="@+id/tv_acquire_data_label_sos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Acquire Data"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_sqr1_label_sos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/sqr1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_acquire_data_label_sos" />
+
+    <Button
+        android:id="@+id/button_read_sos"
+        android:layout_width="87dp"
+        android:layout_height="34dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:text="READ"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toRightOf="@+id/tv_acquire_data_label_sos"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_result_sos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Result"
+        app:layout_constraintLeft_toRightOf="@+id/button_read_sos"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_range_sos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Range"
+        app:layout_constraintRight_toLeftOf="@+id/spinner_range_sos"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner_range_sos"
+        android:layout_width="0dp"
+        android:layout_height="18dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <org.fossasia.pslab.others.FloatSeekBar
+        android:id="@+id/seekBar_sqr1_sos"
+        android:layout_width="0dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintLeft_toRightOf="@+id/tv_sqr1_label_sos"
+        app:layout_constraintRight_toLeftOf="@+id/tv_sqr1_sos"
+        app:layout_constraintTop_toBottomOf="@+id/button_read_sos" />
+
+    <TextView
+        android:id="@+id/tv_sqr1_sos"
+        android:layout_width="121dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="7dp"
+        android:text="10Hz"
+        app:layout_constraintHorizontal_bias="0.652"
+        app:layout_constraintLeft_toRightOf="@+id/tv_range_sos"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_range_sos" />
+
+</android.support.constraint.ConstraintLayout>

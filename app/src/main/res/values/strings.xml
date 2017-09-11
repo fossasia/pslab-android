@@ -20,6 +20,7 @@
     <string name="logical_analyzer">Logical Analyzer</string>
     <string name="data_sensor_logger">Data Sensor Logger</string>
     <string name="sensor_quick_view">Sensor QuickView</string>
+    <string name="wavegen">Wave Generator</string>
 
     <string name="control_item_1">Control</string>
     <string name="control_item_2">Read</string>
@@ -383,6 +384,18 @@
         <item>+/- 0.5</item>
     </string-array>
 
+    <string-array name="wave_generator">
+        <item>W1</item>
+        <item>W2</item>
+    </string-array>
+
+    <string-array name="source_pins">
+        <item>PV1</item>
+        <item>PV2</item>
+        <item>PV3</item>
+        <item>PCS</item>
+    </string-array>
+
     <string name="experiment_icon">Experiment Icon</string>
     <string name="drop_down_arrow">Drop down arrow</string>
     <string name="voltage_unit">(V)</string>
@@ -429,5 +442,55 @@
     <string name="view_logged_data">View Logged Data</string>
     <string name="export_logged_data">Export Logged Data</string>
     <string name="sensor_logged_data">Sensor Logged Data</string>
+    <string name="begin_experiment">Begin Experiment</string>
+    <string name="current">Current</string>
+    <string name="analyse_ch1">Analyse CH1</string>
+    <string name="analyse_ch2">Analyse CH2</string>
+    <string name="result">Result</string>
+    <string name="acquire_data">Acquire Data</string>
+    <string name="done">Done</string>
+    <string name="fit_failed">fit failed</string>
+
+    <string name="full">Full</string>
+    <string name="ac_voltage">AC Voltage</string>
+    <string name="dc_voltage">DC Voltage</string>
+    <string name="amplitude_range">Amplitude Range</string>
+
+    <string name="steps">Steps</string>
+    <string name="set_steps">Set Steps</string>
+
+    <string name="fossasia_logo">Fossasia Logo</string>
+    <string name="pocket_science_logo">Pocket Science Logo</string>
+
+    <string name="servo_4">Servo 4</string>
+    <string name="servo_3">Servo 3</string>
+    <string name="servo_2">Servo 2</string>
+    <string name="servo_1">Servo 1</string>
+    <string name="servo_angles">Servo Angles</string>
+    <string name="set_angles">Set Angles</string>
+    <string name="reset_angles">Reset Angles</string>
+    <string name="timebase_label_875">875.00 μs</string>
+    <string name="timebase_label_1">1.00 ms</string>
+    <string name="timebase_label_2">2.00 ms</string>
+    <string name="timebase_label_4">4.00 ms</string>
+    <string name="timebase_label_8">8.00 ms</string>
+    <string name="timebase_label_25_60">25.60 ms</string>
+    <string name="timebase_label_38_40">38.40 ms</string>
+    <string name="timebase_label_51_20">51.20 ms</string>
+    <string name="timebase_label_102_40">102.40 ms</string>
+
+    <string-array name="sensor_click_list">
+        <item>Export Data</item>
+        <item>Share Data</item>
+    </string-array>
+
+    <string-array name="export_data_format_list">
+        <item>TXT Format</item>
+        <item>CSV Format</item>
+    </string-array>
+    <string-array name="export_data_format_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 
 </resources>

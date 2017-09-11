@@ -1,19 +1,11 @@
-<html>
-  <head>
-    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
-    <title>index</title>
-  </head>
-  <body style = "background-color:#fff"><br>
-  <h3>Op-Amps : Phase Shift Oscillator</h3>
+Op-Amps : Phase Shift Oscillator
 
-	<img src="images/phase-shift-oscillator.svg" style="width:100%;max-width:500px;"><br>
+![](file:///android_asset/DOC_HTML/apps/images/schematics/phase-shift-oscillator.svg@100%|auto)
 
-	Make the Connections as shown in the figure.<br>
-	CH1 monitors the oscillator's output.<br>
+* Make the Connections as shown in the figure.
+* CH1 monitors the oscillator's output.
 
-	<h3>Screenshot</h3>
-	<img src="screenshots/phaseShiftOscillator.png" width="100%"><br>
+## Screenshot
 
+![](file:///android_asset/DOC_HTML/apps/images/screenshots/phaseShiftOscillator.png@100%|auto)
 
-  </body>
-</html>
