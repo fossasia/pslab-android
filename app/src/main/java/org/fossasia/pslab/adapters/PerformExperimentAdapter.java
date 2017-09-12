@@ -5,38 +5,39 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.fossasia.pslab.experimentsetup.InductorReactanceExperiment;
-import org.fossasia.pslab.experimentsetup.CapacitorReactanceExperiment;
-import org.fossasia.pslab.experimentsetup.HumanBodyResistanceExperiment;
-import org.fossasia.pslab.experimentsetup.ACGeneratorExperiment;
-import org.fossasia.pslab.experimentsetup.DistanceMeasurementExperiment;
-import org.fossasia.pslab.experimentsetup.InvertingOpAmpExperiment;
-import org.fossasia.pslab.experimentsetup.LRPhaseShiftExperiment;
-import org.fossasia.pslab.experimentsetup.LemonCellExperiment;
-import org.fossasia.pslab.experimentsetup.CapacitorDischargeExperiment;
-import org.fossasia.pslab.experimentsetup.LightDependentResistorExperiment;
-import org.fossasia.pslab.experimentsetup.NFETOutputCharacteristicsExperiment;
-import org.fossasia.pslab.experimentsetup.OhmsLawSetupExperiment;
-import org.fossasia.pslab.experimentsetup.DiodeExperiment;
-import org.fossasia.pslab.experimentsetup.NFETTransferCharacteristicsExperiment;
-import org.fossasia.pslab.experimentsetup.NonInvertingOpAmpExperiment;
-import org.fossasia.pslab.experimentsetup.RCPhaseShiftExperiment;
-import org.fossasia.pslab.experimentsetup.ServoMotorsExperiment;
-import org.fossasia.pslab.experimentsetup.SummingJunctionExperiment;
-import org.fossasia.pslab.experimentsetup.OscillatorExperiment;
-import org.fossasia.pslab.experimentsetup.PrecisionRectifierExperiment;
-import org.fossasia.pslab.experimentsetup.RampGeneratorExperiment;
-import org.fossasia.pslab.experimentsetup.SemiConductorDiodeExperiment;
-import org.fossasia.pslab.experimentsetup.StepperMotors;
-import org.fossasia.pslab.experimentsetup.TransistorAmplifierExperiment;
-import org.fossasia.pslab.experimentsetup.TransistorCBSetup;
-import org.fossasia.pslab.experimentsetup.TransistorCEInputCharacteristicsExperiment;
-import org.fossasia.pslab.experimentsetup.TransistorCEOutputSetup;
-import org.fossasia.pslab.experimentsetup.TransistorTransferExperiment;
-import org.fossasia.pslab.experimentsetup.WaterResistanceExperiment;
-import org.fossasia.pslab.experimentsetup.ZenerSetupFragment;
+import org.fossasia.pslab.experimentsetup.electricalexperiments.InductorReactanceExperiment;
+import org.fossasia.pslab.experimentsetup.electricalexperiments.CapacitorReactanceExperiment;
+import org.fossasia.pslab.experimentsetup.schoollevel.HumanBodyResistanceExperiment;
+import org.fossasia.pslab.experimentsetup.schoollevel.ACGeneratorExperiment;
+import org.fossasia.pslab.experimentsetup.schoollevel.DistanceMeasurementExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.InvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.electricalexperiments.LRPhaseShiftExperiment;
+import org.fossasia.pslab.experimentsetup.schoollevel.LemonCellExperiment;
+import org.fossasia.pslab.experimentsetup.schoollevel.CapacitorDischargeExperiment;
+import org.fossasia.pslab.experimentsetup.schoollevel.LightDependentResistorExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.NFETOutputCharacteristicsExperiment;
+import org.fossasia.pslab.experimentsetup.schoollevel.OhmsLawSetupExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.DiodeExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.NFETTransferCharacteristicsExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.NonInvertingOpAmpExperiment;
+import org.fossasia.pslab.experimentsetup.electricalexperiments.RCPhaseShiftExperiment;
+import org.fossasia.pslab.experimentsetup.addonmodules.ServoMotorsExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.SummingJunctionExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.OscillatorExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.PrecisionRectifierExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.RampGeneratorExperiment;
+import org.fossasia.pslab.experimentsetup.schoollevel.SemiConductorDiodeExperiment;
+import org.fossasia.pslab.experimentsetup.addonmodules.StepperMotors;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.TransistorAmplifierExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.TransistorCBSetup;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.TransistorCEInputCharacteristicsExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.TransistorCEOutputSetup;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.TransistorTransferExperiment;
+import org.fossasia.pslab.experimentsetup.schoollevel.WaterResistanceExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.ZenerSetupFragment;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
+import org.fossasia.pslab.fragment.ExperimentDocMdFragment;
 import org.fossasia.pslab.fragment.ExperimentSetupFragment;
 
 /**
@@ -64,95 +65,95 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "Diode IV Characteristics":
                         return ExperimentDocFragment.newInstance("D_diodeIV.html");
                     case "Zener IV Characteristics":
-                        return ExperimentDocFragment.newInstance("D_ZenerIV.html");
+                        return ExperimentDocMdFragment.newInstance("D_ZenerIV.md");
                     case "Half Wave Rectifier":
-                        return ExperimentDocFragment.newInstance("L_halfWave.html");
+                        return ExperimentDocMdFragment.newInstance("L_halfWave.md");
                     case "BJT CB Characteristics":
-                        return ExperimentDocFragment.newInstance("D_transistorCB.html");
+                        return ExperimentDocMdFragment.newInstance("D_transistorCB.md");
                     case "BJT Output Characteristics":
-                        return ExperimentDocFragment.newInstance("D_transistorCE.html");
+                        return ExperimentDocMdFragment.newInstance("D_transistorCE.md");
                     case "BJT Transfer Characteristics":
-                        return ExperimentDocFragment.newInstance("D_transistorCE_transfer.html");
+                        return ExperimentDocMdFragment.newInstance("D_transistorCE_transfer.md");
                     case "BJT Input Characteristics":
-                        return ExperimentDocFragment.newInstance("D_transistorCE_input.html");
+                        return ExperimentDocMdFragment.newInstance("D_transistorCE_input.md");
                     case "BJT Amplifier":
-                        return ExperimentDocFragment.newInstance("L_TransistorAmplifier.md");
+                        return ExperimentDocMdFragment.newInstance("L_TransistorAmplifier.md");
                     case "N-FET Output Characteristics":
-                        return ExperimentDocFragment.newInstance("D_NFET.html");
+                        return ExperimentDocMdFragment.newInstance("D_NFET.md");
                     case "N-FET Transfer Characteristics":
-                        return ExperimentDocFragment.newInstance("D_NFET_GS_ID.md");
+                        return ExperimentDocMdFragment.newInstance("D_NFET_GS_ID.md");
                     case "Astable Multivibrator":
-                        return ExperimentDocFragment.newInstance("astable-multivibrator.html");
+                        return ExperimentDocMdFragment.newInstance("astable-multivibrator.md");
                     case "Monostable Multivibrator":
-                        return ExperimentDocFragment.newInstance("M_Monostable.md");
+                        return ExperimentDocMdFragment.newInstance("M_Monostable.md");
                     case "Colpitts Oscillator":
-                        return ExperimentDocFragment.newInstance("L_Colpitts.md");
+                        return ExperimentDocMdFragment.newInstance("L_Colpitts.md");
                     case "Phase Shift Oscillator":
-                        return ExperimentDocFragment.newInstance("L_PhaseShift.md");
+                        return ExperimentDocMdFragment.newInstance("L_PhaseShift.md");
                     case "Wien Bridge Oscillator":
-                        return ExperimentDocFragment.newInstance("L_WIEN_BRIDGE.md");
+                        return ExperimentDocMdFragment.newInstance("L_WIEN_BRIDGE.md");
                     case "Transients RLC Response":
-                        return ExperimentDocFragment.newInstance("E_transientRLC.html");
+                        return ExperimentDocMdFragment.newInstance("E_transientRLC.md");
                     case "Bode Plots":
                         return ExperimentDocFragment.newInstance("K_bodePlots.html");
                     case "Ohms Law":
-                        return ExperimentDocFragment.newInstance("E_OhmsLaw.html");
+                        return ExperimentDocMdFragment.newInstance("E_OhmsLaw.md");
                     case "Random Sampling":
-                        return ExperimentDocFragment.newInstance("M_RANDOM_SAMPLING.html");
+                        return ExperimentDocMdFragment.newInstance("M_RANDOM_SAMPLING.md");
                     case "AC and DC":
-                        return ExperimentDocFragment.newInstance("A_AC_AND_DC.html");
+                        return ExperimentDocMdFragment.newInstance("A_AC_AND_DC.md");
                     case "AC Generator":
-                        return ExperimentDocFragment.newInstance("C_AC_GENERATOR.html");
-                    case "Capacitance":
-                        return ExperimentDocFragment.newInstance("I_CAPACITANCE.html");
+                        return ExperimentDocMdFragment.newInstance("C_AC_GENERATOR.md");
+                    case "Capacitance Measurement":
+                        return ExperimentDocMdFragment.newInstance("I_CAPACITANCE.md");
                     case "Resistance":
-                        return ExperimentDocFragment.newInstance("D_RESISTANCE.html");
+                        return ExperimentDocMdFragment.newInstance("D_RESISTANCE.md");
                     case "Electromagnetic Induction":
-                        return ExperimentDocFragment.newInstance("F_EM_INDUCTION.html");
+                        return ExperimentDocMdFragment.newInstance("F_EM_INDUCTION.md");
                     case "Sound Beats Phenomenon":
-                        return ExperimentDocFragment.newInstance("H_SOUND_BEATS.html");
+                        return ExperimentDocMdFragment.newInstance("H_SOUND_BEATS.md");
                     case "Dust Sensor DSM501":
-                        return ExperimentDocFragment.newInstance("DUST_SENSOR.html");
+                        return ExperimentDocMdFragment.newInstance("DUST_SENSOR.md");
                     case "Lemon Cell":
-                        return ExperimentDocFragment.newInstance("B_LEMON_CELL.html");
+                        return ExperimentDocMdFragment.newInstance("B_LEMON_CELL.md");
                     case "Full Wave Rectifier":
-                        return ExperimentDocFragment.newInstance("M_FullWave.html");
+                        return ExperimentDocMdFragment.newInstance("M_FullWave.md");
                     case "Diode Clipping":
-                        return ExperimentDocFragment.newInstance("L_DiodeClipping.md");
+                        return ExperimentDocMdFragment.newInstance("L_DiodeClipping.md");
                     case "Diode Clamping":
-                        return ExperimentDocFragment.newInstance("L_DiodeClamping.md");
+                        return ExperimentDocMdFragment.newInstance("L_DiodeClamping.md");
                     case "Inverting Op-Amp":
-                        return ExperimentDocFragment.newInstance("L_Inverting.md");
+                        return ExperimentDocFragment.newInstance("L_Inverting.html");
                     case "Non Inverting Op-Amp":
-                        return ExperimentDocFragment.newInstance("L_NonInverting.md");
+                        return ExperimentDocFragment.newInstance("L_NonInverting.html");
                     case "Precision Rectifier":
-                        return ExperimentDocFragment.newInstance("Precision_Rectifier.html");
+                        return ExperimentDocMdFragment.newInstance("Precision_Rectifier.md");
                     case "Capacitor Discharge":
-                        return ExperimentDocFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
+                        return ExperimentDocMdFragment.newInstance("L_CAPACITOR_DISCHARGE.md");
                     case "Resistance of Water":
-                        return ExperimentDocFragment.newInstance("F_WATER_RESISTANCE.html");
+                        return ExperimentDocMdFragment.newInstance("F_WATER_RESISTANCE.md");
                     case "Ramp Generator":
-                        return ExperimentDocFragment.newInstance("L_LinearRampGen.html");
+                        return ExperimentDocMdFragment.newInstance("L_LinearRampGen.md");
                     case "Light Dependent Resistor":
-                        return ExperimentDocFragment.newInstance("K_LDR.md");
+                        return ExperimentDocMdFragment.newInstance("K_LDR.md");
                     case "Ultrasonic Range Finder":
-                        return ExperimentDocFragment.newInstance("Z_DISTANCE.md");
+                        return ExperimentDocMdFragment.newInstance("Z_DISTANCE.md");
                     case "Inductive Reactance":
-                        return ExperimentDocFragment.newInstance("O_XL.md");
+                        return ExperimentDocMdFragment.newInstance("O_XL.md");
                     case "LR Phase Shift":
-                        return ExperimentDocFragment.newInstance("P_InductivePhaseShift.md");
+                        return ExperimentDocMdFragment.newInstance("P_InductivePhaseShift.md");
                     case "RC Phase Shift":
-                        return ExperimentDocFragment.newInstance("P_CapacitivePhaseShift.md");
+                        return ExperimentDocMdFragment.newInstance("P_CapacitivePhaseShift.md");
                     case "Capacitive Reactance":
-                        return ExperimentDocFragment.newInstance("O_XC.md");
+                        return ExperimentDocMdFragment.newInstance("O_XC.md");
                     case "Summing Junction":
-                        return ExperimentDocFragment.newInstance("L_Summing.html");
+                        return ExperimentDocMdFragment.newInstance("L_Summing.md");
                     case "Semiconductor Diode":
-                        return ExperimentDocFragment.newInstance("J_DIODE.md");
+                        return ExperimentDocMdFragment.newInstance("J_DIODE.md");
                     case "Human Body Resistance":
-                        return ExperimentDocFragment.newInstance("E_RESISTANCE_BODY.html");
+                        return ExperimentDocMdFragment.newInstance("E_RESISTANCE_BODY.md");
                     case "Stepper Motors":
-                        return ExperimentDocFragment.newInstance("J_stepper.md");
+                        return ExperimentDocMdFragment.newInstance("J_stepper.md");
                     case "Servo Motors":
                         return ExperimentDocFragment.newInstance("G_servo_motors.md");
                     case "Speed of Sound":

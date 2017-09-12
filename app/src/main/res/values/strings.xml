@@ -20,6 +20,7 @@
     <string name="logical_analyzer">Logical Analyzer</string>
     <string name="data_sensor_logger">Data Sensor Logger</string>
     <string name="sensor_quick_view">Sensor QuickView</string>
+    <string name="wavegen">Wave Generator</string>
 
     <string name="control_item_1">Control</string>
     <string name="control_item_2">Read</string>
@@ -454,10 +455,10 @@
     <string name="ac_voltage">AC Voltage</string>
     <string name="dc_voltage">DC Voltage</string>
     <string name="amplitude_range">Amplitude Range</string>
-  
+
     <string name="steps">Steps</string>
     <string name="set_steps">Set Steps</string>
-  
+
     <string name="fossasia_logo">Fossasia Logo</string>
     <string name="pocket_science_logo">Pocket Science Logo</string>
 
@@ -468,6 +469,15 @@
     <string name="servo_angles">Servo Angles</string>
     <string name="set_angles">Set Angles</string>
     <string name="reset_angles">Reset Angles</string>
+    <string name="timebase_label_875">875.00 μs</string>
+    <string name="timebase_label_1">1.00 ms</string>
+    <string name="timebase_label_2">2.00 ms</string>
+    <string name="timebase_label_4">4.00 ms</string>
+    <string name="timebase_label_8">8.00 ms</string>
+    <string name="timebase_label_25_60">25.60 ms</string>
+    <string name="timebase_label_38_40">38.40 ms</string>
+    <string name="timebase_label_51_20">51.20 ms</string>
+    <string name="timebase_label_102_40">102.40 ms</string>
 
     <string-array name="sensor_click_list">
         <item>Export Data</item>

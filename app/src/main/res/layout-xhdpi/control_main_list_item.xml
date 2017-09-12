@@ -1,102 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview_control_main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="10dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginTop="15dp"
-    android:orientation="vertical"
-    android:visibility="visible">
+    android:layout_height="140dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:foreground="?attr/selectableItemBackground"
+    card_view:cardCornerRadius="@dimen/card_radius"
+    card_view:cardElevation="@dimen/card_elevation">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardview_control_main"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        card_view:cardCornerRadius="@dimen/control_card_radius">
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_control_main1"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/card_title_margin"
+            android:layout_marginEnd="@dimen/card_title_margin"
+            android:layout_marginTop="@dimen/card_title_margin"
+            android:textColor="@color/black"
+            tools:text="PV1"/>
+
 
         <LinearLayout
+            android:id="@+id/linearlayout_control_main1"
+            android:layout_below="@id/tv_control_main1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="15dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="15dp">
+            android:orientation="horizontal"
+            android:layout_marginStart="@dimen/control_margin"
+            android:layout_marginEnd="@dimen/control_margin"
+            android:layout_marginTop="@dimen/control_margin">
 
-            <LinearLayout
-                android:id="@+id/linearlayout_control_main1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/control_margin"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_control_main1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/control_margin_small"
-                    android:layout_marginStart="@dimen/control_margin_small"
-                    android:layout_weight="2"
-                    android:textSize="@dimen/control_textsize_small"
-                    android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/button_control_main1"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/button_minus" />
+            <Button
+                android:id="@+id/button_control_main1"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/control_textsize_large"
+                android:text="-"/>
 
-                <EditText
-                    android:id="@+id/edittext_control_main"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:background="@drawable/control_edittext"
-                    android:gravity="center_horizontal"
-                    android:inputType="numberDecimal|numberSigned"
-                    android:padding="@dimen/control_edittext_padding"
-                    android:textSize="18sp" />
+            <EditText
+                android:id="@+id/edittext_control_main"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textSize="@dimen/textsize_edittext"
+                android:padding="@dimen/control_edittext_padding"
+                android:layout_marginTop="@dimen/control_edittext_padding"
+                android:layout_marginBottom="@dimen/control_edittext_padding"
+                android:inputType="numberDecimal|numberSigned"
+                android:background="@drawable/control_edittext"
+                tools:text="Value"/>
 
-                <Button
-                    android:id="@+id/button_control_main2"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/button_plus" />
 
-                <Button
-                    android:id="@+id/button_control_main3"
-                    android:layout_width="0dp"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/control_margin"
-                    android:layout_marginStart="@dimen/control_margin"
-                    android:layout_weight="1.5"
-                    android:background="@drawable/selector_button"
-                    android:text="@string/set"
-                    android:textColor="@color/white" />
+            <Button
+                android:id="@+id/button_control_main2"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/control_textsize_large"
+                android:text="+"/>
 
-                <TextView
-                    android:id="@+id/tv_control_main2"
-                    android:layout_width="0dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="3"
-                    android:background="@drawable/tv_border"
-                    android:textSize="@dimen/control_textsize_small"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/button_control_main3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:text="@string/set"
+                android:theme="@style/AppTheme.Button" />
 
-            <SeekBar
-                android:id="@+id/seekbar_control_main"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+            <TextView
+                android:id="@+id/tv_control_main2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5"
+                android:background="@drawable/tv_border"
+                android:textStyle="bold"
+                android:textSize="@dimen/control_textsize_small"
+                android:layout_margin="5dp"
+                tools:text="Value"
+                android:gravity="center"
+                android:layout_gravity="center" />
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+        <SeekBar
+            android:id="@+id/seekbar_control_main"
+            android:layout_below="@id/linearlayout_control_main1"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-</LinearLayout>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

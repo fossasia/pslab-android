@@ -34,13 +34,13 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.experimentsetup.OscillatorExperimentFragment;
-import org.fossasia.pslab.experimentsetup.SpeedOfSoundFragment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.OscillatorExperimentFragment;
+import org.fossasia.pslab.experimentsetup.physicsexperiments.SpeedOfSoundFragment;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
-import org.fossasia.pslab.experimentsetup.DiodeClippingClampingExperiment;
-import org.fossasia.pslab.experimentsetup.FullWaveRectifierFragment;
-import org.fossasia.pslab.experimentsetup.HalfWaveRectifierFragment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.DiodeClippingClampingExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.FullWaveRectifierFragment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.HalfWaveRectifierFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.AudioJack;
@@ -85,6 +85,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public TextView xAxisLabelUnit;
     private int height;
     private int width;
+    public int samples;
+    public double timeGap;
     public double timebase;
     private XAxis x1;
     private YAxis y1;
@@ -121,11 +123,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public String xyPlotYAxisChannel;
     public double trigger;
     Fragment channelParametersFragment;
-    Fragment timebasetriggerFragment;
+    Fragment timebaseTriggerFragment;
     Fragment dataAnalysisFragment;
     Fragment xyPlotFragment;
-    Fragment halfwaveRectifierFragment;
-    Fragment fullwaveRectifierFragment;
+    Fragment halfWaveRectifierFragment;
+    Fragment fullWaveRectifierFragment;
     Fragment oscillatorExperimentFragment;
     Fragment diodeClippingClampingFragment;
     Fragment speedOfSoundFragment;
@@ -140,6 +142,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public Plot2D graph;
     private AudioJack audioJack = null;
     private AnalyticsClass analyticsClass;
+    private CaptureAudioBuffer captureAudioBuffer;
+    private Thread monitorThread;
+    private volatile boolean monitor = true;
 
 
     @Override
@@ -173,7 +178,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         triggerChannel = "CH1";
         trigger = 0;
         timebase = 875;
+        samples = 512;
+        timeGap = 2;
+        sineFit = true;
+        squareFit = false;
         graph = new Plot2D(this, new float[]{}, new float[]{}, 1);
+        curveFittingChannel1 = "None";
+        curveFittingChannel2 = "None";
         xyPlotXAxisChannel = "CH1";
         xyPlotYAxisChannel = "CH2";
         viewIsClicked = false;
@@ -233,20 +244,20 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         onWindowFocusChanged();
 
         channelParametersFragment = new ChannelParametersFragment();
-        timebasetriggerFragment = new TimebaseTriggerFragment();
+        timebaseTriggerFragment = new TimebaseTriggerFragment();
         dataAnalysisFragment = new DataAnalysisFragment();
         xyPlotFragment = new XYPlotFragment();
-        halfwaveRectifierFragment = new HalfWaveRectifierFragment();
-        fullwaveRectifierFragment = new FullWaveRectifierFragment();
+        halfWaveRectifierFragment = new HalfWaveRectifierFragment();
+        fullWaveRectifierFragment = new FullWaveRectifierFragment();
         diodeClippingClampingFragment = new DiodeClippingClampingExperiment();
         oscillatorExperimentFragment = new OscillatorExperimentFragment();
         speedOfSoundFragment = new SpeedOfSoundFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             if (isHalfWaveRectifierExperiment) {
-                addFragment(R.id.layout_dock_os2, halfwaveRectifierFragment, "HalfWaveFragment");
+                addFragment(R.id.layout_dock_os2, halfWaveRectifierFragment, "HalfWaveFragment");
             } else if (isFullWaveRectifierExperiment) {
-                addFragment(R.id.layout_dock_os2, fullwaveRectifierFragment, "FullWaveFragment");
+                addFragment(R.id.layout_dock_os2, fullWaveRectifierFragment, "FullWaveFragment");
             } else if (isDiodeClippingClampingExperiment) {
                 addFragment(R.id.layout_dock_os2, diodeClippingClampingFragment, "DiodeClippingClampingFragment");
             } else if (isAstableMultivibratorExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment || isMonostableMultivibratorExperiment) {
@@ -273,7 +284,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void run() {
                 //Thread to check which checkbox is enabled
-                while (true) {
+                while (monitor) {
                     if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH1");
@@ -441,8 +452,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     if (isInBuiltMicSelected) {
                         if (audioJack == null)
                             audioJack = new AudioJack("input");
-                        captureAudioBuffer audioBuffer = new captureAudioBuffer(audioJack);
-                        audioBuffer.execute();
+                        captureAudioBuffer = new CaptureAudioBuffer(audioJack);
+                        captureAudioBuffer.execute();
                         synchronized (lock) {
                             try {
                                 lock.wait();
@@ -474,8 +485,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         };
 
         // if (scienceLab.isConnected())
-        new Thread(runnable).start();
-
+        monitorThread = new Thread(runnable);
+        monitorThread.start();
     }
 
     @Override
@@ -491,11 +502,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 break;
 
             case R.id.button_timebase_os:
-                replaceFragment(R.id.layout_dock_os2, timebasetriggerFragment, "TimebaseTiggerFragment");
+                replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 break;
 
             case R.id.tv_timebase_tigger_os:
-                replaceFragment(R.id.layout_dock_os2, timebasetriggerFragment, "TimebaseTiggerFragment");
+                replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 break;
 
             case R.id.button_data_analysis_os:
@@ -596,6 +607,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected void onDestroy() {
+        monitor = false;
         if (captureTask != null) {
             captureTask.cancel(true);
         }
@@ -607,6 +619,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         }
         if (oscillatorTask != null) {
             oscillatorTask.cancel(true);
+        }
+        if (captureAudioBuffer != null) {
+            captureAudioBuffer.cancel(true);
+            if (audioJack != null) {
+                audioJack.release();
+            }
         }
         super.onDestroy();
     }
@@ -694,7 +712,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         xAxisLabel.setText(xAxisInput);
     }
 
-
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         ArrayList<Entry> entries;
         String analogInput;
@@ -706,11 +723,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 //no. of samples and timeGap still need to be determined
                 if (isTriggerSelected) {
                     scienceLab.configureTrigger(0, analogInput, trigger, null, null);
-                    scienceLab.captureTraces(1, 1000, 10, analogInput, true, null);
+                    scienceLab.captureTraces(1, samples, timeGap, analogInput, true, null);
                 } else {
-                    scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+                    scienceLab.captureTraces(1, samples, timeGap, analogInput, false, null);
                 }
-                Log.v("Sleep Time", "" + (1000 * 10 * 1e-3));
+                Log.v("Sleep Time", "" + (1024 * 10 * 1e-3));
                 Thread.sleep((long) (1000 * 10 * 1e-3));
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
 
@@ -718,6 +735,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 double[] yData = data.get("y");
                 //Log.v("XDATA", Arrays.toString(xData));
                 //Log.v("YDATA", Arrays.toString(yData));
+
                 entries = new ArrayList<>();
                 if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
@@ -774,9 +792,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         scienceLab.configureTrigger(0, analogInput, trigger, null, null);
                     else if (triggerChannel.equals("CH2"))
                         scienceLab.configureTrigger(1, "CH2", trigger, null, null);
-                    data = scienceLab.captureTwo(1000, 10, analogInput, true);
+                    data = scienceLab.captureTwo(samples, timeGap, analogInput, true);
                 } else {
-                    data = scienceLab.captureTwo(1000, 10, analogInput, false);
+                    data = scienceLab.captureTwo(samples, timeGap, analogInput, false);
                 }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y1");
@@ -857,18 +875,24 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 HashMap<String, double[]> data;
 
                 if (isTriggerSelected) {
-                    if (triggerChannel.equals("CH1"))
-                        scienceLab.configureTrigger(0, analogInput, trigger, null, null);
-                    else if (triggerChannel.equals("CH2"))
-                        scienceLab.configureTrigger(1, analogInput, trigger, null, null);
-                    else if (triggerChannel.equals("CH3"))
-                        scienceLab.configureTrigger(2, analogInput, trigger, null, null);
-                    else if (triggerChannel.equals("MIC"))
-                        scienceLab.configureTrigger(3, analogInput, trigger, null, null);
+                    switch (triggerChannel) {
+                        case "CH1":
+                            scienceLab.configureTrigger(0, analogInput, trigger, null, null);
+                            break;
+                        case "CH2":
+                            scienceLab.configureTrigger(1, analogInput, trigger, null, null);
+                            break;
+                        case "CH3":
+                            scienceLab.configureTrigger(2, analogInput, trigger, null, null);
+                            break;
+                        case "MIC":
+                            scienceLab.configureTrigger(3, analogInput, trigger, null, null);
+                            break;
+                    }
 
-                    data = scienceLab.captureFour(1000, 10, analogInput, true);
+                    data = scienceLab.captureFour(samples, timeGap, analogInput, true);
                 } else {
-                    data = scienceLab.captureFour(1000, 10, analogInput, false);
+                    data = scienceLab.captureFour(samples, timeGap, analogInput, false);
                 }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y");
@@ -1014,13 +1038,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    public class captureAudioBuffer extends AsyncTask<Void, Void, Void> {
+    public class CaptureAudioBuffer extends AsyncTask<Void, Void, Void> {
 
         private AudioJack audioJack;
         private short[] buffer;
         private List<Entry> entries;
 
-        public captureAudioBuffer(AudioJack audioJack) {
+        public CaptureAudioBuffer(AudioJack audioJack) {
             this.audioJack = audioJack;
         }
 

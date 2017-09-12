@@ -31,8 +31,8 @@ public class DataAnalysisFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_data_analysis, container, false);
-        String [] curveFits = {"Sine Fit", "Square Fit"};
-        String[] channels ={"None", "CH1", "CH2", "CH3", "MIC"};
+        String[] curveFits = {"Sine Fit", "Square Fit"};
+        String[] channels = {"None", "CH1", "CH2", "CH3", "MIC"};
 
         spinnerCurveFit = (Spinner) v.findViewById(R.id.spinner_curve_fit_da);
         spinnerChannelSelect1 = (Spinner) v.findViewById(R.id.spinner_channel_select_da1);
@@ -42,11 +42,10 @@ public class DataAnalysisFragment extends Fragment {
         ArrayAdapter<String> curveFitAdapter;
         ArrayAdapter<String> adapter;
 
-        if(tabletSize){
+        if (tabletSize) {
             curveFitAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner_tablet, curveFits);
             adapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner_tablet, channels);
-        }
-        else {
+        } else {
             curveFitAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, curveFits);
             adapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, channels);
         }
@@ -58,19 +57,18 @@ public class DataAnalysisFragment extends Fragment {
         spinnerChannelSelect1.setAdapter(adapter);
         spinnerChannelSelect2.setAdapter(adapter);
 
-        spinnerCurveFit.setSelection(curveFitAdapter.getPosition("Sine Fit"),true);
+        spinnerCurveFit.setSelection(curveFitAdapter.getPosition("Sine Fit"), true);
         spinnerChannelSelect1.setSelection(adapter.getPosition("None"), true);
         spinnerChannelSelect2.setSelection(adapter.getPosition("None"), true);
         spinnerCurveFit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0){
-                    ((OscilloscopeActivity)getActivity()).sineFit = true;
-                    ((OscilloscopeActivity)getActivity()).squareFit = false;
-                }
-                else {
-                    ((OscilloscopeActivity)getActivity()).sineFit = false;
-                    ((OscilloscopeActivity)getActivity()).squareFit = true;
+                if (position == 0) {
+                    ((OscilloscopeActivity) getActivity()).sineFit = true;
+                    ((OscilloscopeActivity) getActivity()).squareFit = false;
+                } else {
+                    ((OscilloscopeActivity) getActivity()).sineFit = false;
+                    ((OscilloscopeActivity) getActivity()).squareFit = true;
                 }
             }
 
@@ -83,7 +81,7 @@ public class DataAnalysisFragment extends Fragment {
         spinnerChannelSelect1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((OscilloscopeActivity)getActivity()).curveFittingChannel1 = spinnerChannelSelect1.getItemAtPosition(position).toString();
+                ((OscilloscopeActivity) getActivity()).curveFittingChannel1 = spinnerChannelSelect1.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -95,7 +93,7 @@ public class DataAnalysisFragment extends Fragment {
         spinnerChannelSelect2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((OscilloscopeActivity)getActivity()).curveFittingChannel2 = spinnerChannelSelect2.getItemAtPosition(position).toString();
+                ((OscilloscopeActivity) getActivity()).curveFittingChannel2 = spinnerChannelSelect2.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -107,7 +105,7 @@ public class DataAnalysisFragment extends Fragment {
         checkBoxFouierTransform.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ((OscilloscopeActivity)getActivity()).isFourierTransformSelected = isChecked;
+                ((OscilloscopeActivity) getActivity()).isFourierTransformSelected = isChecked;
             }
         });
 

@@ -1,14 +1,8 @@
-<html>
-  <head>
-    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
-    <title>index</title>
-  </head>
-  <body style = "background-color:#fff">Op-Amps : Colpitts Oscillator<br>
+Op-Amps : Colpitts Oscillator
+---
 
-	<img src="images/colpitts.svg" width="100%"><br>
+![](file:///android_asset/DOC_HTML/apps/images/schematics/colpitts.svg@100%|auto)
 
-	Make the Connections as shown in the figure.<br>
-	CH1 monitors the oscillator output.<br>
+* Make the Connections as shown in the figure.
+* CH1 monitors the oscillator output.
 
-  </body>
-</html>

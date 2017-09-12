@@ -36,12 +36,13 @@
         <activity android:name=".activity.AboutUs" />
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ShowLoggedData" />
+        <activity android:name=".activity.WavegenActivity" />
         <activity
             android:name=".activity.PerformExperimentActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".activity.ControlActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activity.OscilloscopeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

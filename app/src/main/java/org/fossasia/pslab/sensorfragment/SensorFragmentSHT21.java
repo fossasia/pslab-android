@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.SHT21;
@@ -26,6 +27,8 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static org.fossasia.pslab.activity.SensorActivity.counter;
 
 /**
  * Created by asitava on 10/7/17.
@@ -55,6 +58,7 @@ public class SensorFragmentSHT21 extends Fragment {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
+        ((SensorActivity) getActivity()).sensorDock.setVisibility(View.VISIBLE);
         try {
             sensorSHT21 = new SHT21(i2c);
         } catch (IOException | InterruptedException e) {
@@ -68,7 +72,7 @@ public class SensorFragmentSHT21 extends Fragment {
             @Override
             public void run() {
                 while (true) {
-                    if (scienceLab.isConnected()) {
+                    if (scienceLab.isConnected() && ((SensorActivity) getActivity()).shouldPlay()) {
                         sensorDataFetch = new SensorDataFetch();
                         sensorDataFetch.execute();
 
@@ -86,7 +90,7 @@ public class SensorFragmentSHT21 extends Fragment {
                         }
 
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(((SensorActivity) getActivity()).timeGap);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -226,7 +230,11 @@ public class SensorFragmentSHT21 extends Fragment {
             mChartHumidity.setVisibleXRangeMaximum(10);
             mChartHumidity.moveViewToX(data2.getEntryCount());
             mChartHumidity.invalidate();
-
+            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(counter));
+            if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
+                ((SensorActivity) getActivity()).play = false;
+                ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);
+            }
             synchronized (lock) {
                 lock.notify();
             }
