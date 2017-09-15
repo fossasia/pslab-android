@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean hasPermission = false;
     private boolean receiverRegister = false;
+    private boolean onBackPressed ;
     private UsbManager usbManager;
     private PendingIntent mPermissionIntent;
     private CommunicationHandler communicationHandler;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        onBackPressed = false;
         ButterKnife.bind(this);
         usbManager = (UsbManager) getSystemService(USB_SERVICE);
         mScienceLabCommon = ScienceLabCommon.getInstance();
@@ -151,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                         android.R.anim.fade_out);
                 fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
                 fragmentTransaction.commitAllowingStateLoss();
+                onBackPressed = false;
             }
         };
         if (mPendingRunnable != null) {
@@ -254,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
+            onBackPressed = false;
             return;
         }
         if (shouldLoadHomeFragOnBackPress) {
@@ -264,7 +268,11 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-        super.onBackPressed();
+        Toast.makeText(this,"Press back again to exit",Toast.LENGTH_SHORT).show();
+        if(onBackPressed){
+            super.onBackPressed();
+        }
+        onBackPressed = true;
     }
 
     @Override
