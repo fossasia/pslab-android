@@ -5,6 +5,8 @@
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
 
+    <string name="Toast_double_tap">Press again to close PSLab</string>
+
     <string name="nav_home">Home</string>
     <string name="nav_saved_experiments">Saved Experiments</string>
     <string name="nav_design_experiment">Design Experiments</string>
