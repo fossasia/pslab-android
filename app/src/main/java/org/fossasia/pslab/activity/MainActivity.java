@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import org.fossasia.pslab.communication.CommunicationHandler;
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     private CommunicationHandler communicationHandler;
     private USBDetachReceiver usbDetachReceiver;
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
+    private static final int TIME_INTERVAL = 2000;
+    private long mBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -252,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             return;
@@ -264,7 +268,17 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-        super.onBackPressed();
+        if (fragment instanceof HomeFragment) {
+            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
+                super.onBackPressed();
+                return;
+            } else {
+                Toast.makeText(getBaseContext(), getString(R.string.Toast_double_tap), Toast.LENGTH_SHORT).show();
+            }
+
+            mBackPressed = System.currentTimeMillis();
+        }
+
     }
 
     @Override
