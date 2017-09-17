@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:card_view="http://schemas.android.com/tools"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -35,8 +35,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="@dimen/card_margin"/>
+                    android:layout_margin="@dimen/card_margin"
+                    android:background="@android:color/darker_gray" />
 
 
                 <LinearLayout
@@ -47,26 +47,26 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
-                            style="@style/TextAppearance.AppCompat.Medium"
                             android:id="@+id/tv_control_advanced1"
+                            style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@android:color/primary_text_light"
                             android:gravity="center"
-                            android:text="@string/w1" />
+                            android:text="@string/w1"
+                            android:textColor="@android:color/primary_text_light" />
 
                         <TextView
                             style="@style/TextAppearance.AppCompat.Small"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:textSize="11sp"
-                            android:text="@string/freq_range" />
+                            android:text="@string/freq_range"
+                            android:textSize="11sp" />
                     </LinearLayout>
 
                     <EditText
@@ -74,14 +74,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_margin="5dp"
                         android:layout_marginTop="4dp"
                         android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:layout_margin="5dp"
                         android:padding="@dimen/control_edittext_padding"
-                        android:text="1.0"
-                        android:background="@drawable/control_edittext" />
+                        android:text="1.0" />
 
                     <Spinner
                         android:id="@+id/spinner_control_advanced1"
@@ -101,26 +101,26 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
-                            style="@style/TextAppearance.AppCompat.Medium"
                             android:id="@+id/tv_control_advanced2"
+                            style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@android:color/primary_text_light"
                             android:gravity="center"
-                            android:text="@string/w2" />
+                            android:text="@string/w2"
+                            android:textColor="@android:color/primary_text_light" />
 
                         <TextView
                             style="@style/TextAppearance.AppCompat.Small"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:textSize="11sp"
-                            android:text="@string/freq_range" />
+                            android:text="@string/freq_range"
+                            android:textSize="11sp" />
                     </LinearLayout>
 
                     <EditText
@@ -128,21 +128,21 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_margin="5dp"
                         android:layout_marginTop="4dp"
                         android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:layout_margin="5dp"
                         android:padding="@dimen/control_edittext_padding"
-                        android:text="1.0"
-                        android:background="@drawable/control_edittext" />
+                        android:text="1.0" />
 
                     <Spinner
                         android:id="@+id/spinner_control_advanced2"
-                        android:layout_marginTop="4dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginTop="4dp"
                         android:layout_weight="2"
                         android:entries="@array/wave_type" />
 
@@ -154,41 +154,41 @@
                     android:padding="@dimen/control_margin_small">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/tv_control_advanced6"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.50"
                         android:layout_gravity="center"
+                        android:layout_weight="0.50"
                         android:gravity="center"
                         android:text="@string/phase"
-                        android:textColor="@android:color/primary_text_light"/>
+                        android:textColor="@android:color/primary_text_light" />
 
                     <EditText
                         android:id="@+id/etwidget_control_advanced3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_margin="5dp"
                         android:layout_marginTop="4dp"
                         android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:layout_margin="5dp"
                         android:padding="@dimen/control_edittext_padding"
-                        android:text="1.0"
-                        android:background="@drawable/control_edittext" />
+                        android:text="1.0" />
 
                 </LinearLayout>
 
                 <!-- Button -->
                 <Button
-                    android:theme="@style/AppTheme.Button"
                     android:id="@+id/button_control_advanced1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="@string/set"
-                    android:textSize="@dimen/control_textsize_medium" />
+                    android:textSize="@dimen/control_textsize_medium"
+                    android:theme="@style/AppTheme.Button" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -216,8 +216,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="@dimen/card_margin"/>
+                    android:layout_margin="@dimen/card_margin"
+                    android:background="@android:color/darker_gray" />
                 <!-- Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -226,8 +226,8 @@
                     android:padding="@dimen/control_margin_small">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/tv_control_advanced8"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -236,8 +236,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/tv_control_advanced9"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
@@ -247,8 +247,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/tv_control_advanced10"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
@@ -265,13 +265,13 @@
                     android:padding="@dimen/title_padding">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/tv_control_advanced11"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@android:color/primary_text_light"
-                        android:text="@string/sqr1" />
+                        android:text="@string/sqr1"
+                        android:textColor="@android:color/primary_text_light" />
 
                     <TextView
                         android:id="@+id/tv_control_advanced12"
@@ -288,12 +288,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:gravity="center"
                         android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:padding="@dimen/control_edittext_padding"
-                        android:background="@drawable/control_edittext" />
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
                 <!-- SQR2 -->
@@ -303,37 +303,37 @@
                     android:padding="@dimen/title_padding">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/tv_control_advanced13"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@android:color/primary_text_light"
-                        android:text="@string/sqr2" />
+                        android:text="@string/sqr2"
+                        android:textColor="@android:color/primary_text_light" />
 
                     <EditText
                         android:id="@+id/etwidget_control_advanced5"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="2"
                         android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:padding="@dimen/control_edittext_padding"
-                        android:background="@drawable/control_edittext" />
+                        android:padding="@dimen/control_edittext_padding" />
 
                     <EditText
                         android:id="@+id/etwidget_control_advanced6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="2"
                         android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:padding="@dimen/control_edittext_padding"
-                        android:background="@drawable/control_edittext" />
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
                 <!-- SQR3 -->
@@ -343,37 +343,37 @@
                     android:padding="@dimen/title_padding">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/tv_control_advanced14"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@android:color/primary_text_light"
-                        android:text="@string/sqr3" />
+                        android:text="@string/sqr3"
+                        android:textColor="@android:color/primary_text_light" />
 
                     <EditText
                         android:id="@+id/etwidget_control_advanced7"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:gravity="center"
                         android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:padding="@dimen/control_edittext_padding"
-                        android:background="@drawable/control_edittext" />
+                        android:padding="@dimen/control_edittext_padding" />
 
                     <EditText
                         android:id="@+id/etwidget_control_advanced8"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:gravity="center"
                         android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:padding="@dimen/control_edittext_padding"
-                        android:background="@drawable/control_edittext" />
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
                 <!-- SQR4 -->
@@ -384,38 +384,38 @@
                     android:padding="@dimen/title_padding">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/tv_control_advanced15"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
-                        android:textColor="@android:color/primary_text_light"
-                        android:text="@string/sqr4" />
+                        android:text="@string/sqr4"
+                        android:textColor="@android:color/primary_text_light" />
 
                     <EditText
                         android:id="@+id/etwidget_control_advanced9"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="2"
                         android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:padding="@dimen/control_edittext_padding"
-                        android:background="@drawable/control_edittext" />
+                        android:padding="@dimen/control_edittext_padding" />
 
                     <EditText
                         android:id="@+id/etwidget_control_advanced10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="2"
                         android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:padding="@dimen/control_edittext_padding"
-                        android:background="@drawable/control_edittext" />
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
                 <!-- Frequency -->
@@ -426,40 +426,39 @@
                     android:padding="@dimen/control_margin_small">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/tv_control_advanced16"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:text="@string/frequency"
-                        android:textColor="@android:color/primary_text_light"/>
+                        android:textColor="@android:color/primary_text_light" />
 
                     <EditText
                         android:id="@+id/etwidget_control_advanced11"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_margin="5dp"
                         android:layout_marginTop="4dp"
                         android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
                         android:gravity="center"
                         android:inputType="numberDecimal"
-                        android:layout_margin="5dp"
-                        android:padding="@dimen/control_edittext_padding"
-                        android:background="@drawable/control_edittext" />
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
 
                 <!-- Button -->
                 <Button
-                    android:theme="@style/AppTheme.Button"
                     android:id="@+id/button_control_advanced2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="@string/set"
-                    android:textSize="@dimen/control_textsize_medium"/>
-
+                    android:textSize="@dimen/control_textsize_medium"
+                    android:theme="@style/AppTheme.Button" />
 
 
             </LinearLayout>
@@ -489,8 +488,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="@dimen/card_margin"/>
+                    android:layout_margin="@dimen/card_margin"
+                    android:background="@android:color/darker_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -523,7 +522,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/sqr4"/>
+                        android:text="@string/sqr4" />
 
                 </LinearLayout>
 

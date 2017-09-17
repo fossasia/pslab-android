@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -403,7 +404,7 @@ public class ControlFragmentAdvanced extends Fragment {
     }
 
 
-    private  void showInputDialog(final EditText et, final double leastCount, final double minima, final double maxima ){
+    private void showInputDialog(final EditText et, final double leastCount, final double minima, final double maxima) {
         LayoutInflater li = LayoutInflater.from(getContext());
         View promptsView = li.inflate(R.layout.dialog_input_edit_text_widget, null);
 
@@ -424,15 +425,27 @@ public class ControlFragmentAdvanced extends Fragment {
                 .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 // get user input and set it to result
                                 // edit text
-                                et.setText(userInput.getText());
+                                String input = userInput.getText();
+
+                                if (Double.valueOf(input) > maxima) {
+                                    input = String.valueOf(maxima);
+                                    Toast.makeText(getContext(), "The Maximum value for this field is " + maxima, Toast.LENGTH_SHORT).show();
+                                }
+                                if (Double.valueOf(input) < minima) {
+                                    input = String.valueOf(minima);
+                                    Toast.makeText(getContext(), "The Minimum value for this field is " + minima, Toast.LENGTH_SHORT).show();
+                                }
+
+
+                                et.setText(input);
                             }
                         })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
