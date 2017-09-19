@@ -1,31 +1,30 @@
 package org.fossasia.pslab.experimentsetup.schoollevel;
 
-        import android.graphics.Color;
-        import android.os.AsyncTask;
-        import android.os.Bundle;
-        import android.os.Handler;
-        import android.os.Looper;
-        import android.support.annotation.Nullable;
-        import android.support.v4.app.Fragment;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.Button;
-        import android.widget.Toast;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
-        import com.github.mikephil.charting.charts.LineChart;
-        import com.github.mikephil.charting.data.Entry;
-        import com.github.mikephil.charting.data.LineData;
-        import com.github.mikephil.charting.data.LineDataSet;
-        import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
-        import org.fossasia.pslab.R;
-        import org.fossasia.pslab.communication.ScienceLab;
-        import org.fossasia.pslab.others.ScienceLabCommon;
+import org.fossasia.pslab.R;
+import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.ScienceLabCommon;
 
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by dell pc on 16/09/2017.
