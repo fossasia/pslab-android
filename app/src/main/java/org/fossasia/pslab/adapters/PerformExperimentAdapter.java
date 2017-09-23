@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
+import org.fossasia.pslab.experimentsetup.schoollevel.MeasureVoltage;
 import org.fossasia.pslab.experimentsetup.electricalexperiments.InductorReactanceExperiment;
 import org.fossasia.pslab.experimentsetup.electricalexperiments.CapacitorReactanceExperiment;
 import org.fossasia.pslab.experimentsetup.schoollevel.HumanBodyResistanceExperiment;
@@ -43,6 +43,7 @@ import org.fossasia.pslab.fragment.ExperimentSetupFragment;
 /**
  * Created by viveksb007 on 12/7/17.
  */
+
 
 public class PerformExperimentAdapter extends FragmentPagerAdapter {
 
@@ -100,14 +101,16 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocMdFragment.newInstance("E_OhmsLaw.md");
                     case "Random Sampling":
                         return ExperimentDocMdFragment.newInstance("M_RANDOM_SAMPLING.md");
-                    case "AC and DC":
-                        return ExperimentDocMdFragment.newInstance("A_AC_AND_DC.md");
+                   // case "AC and DC":
+                     //   return ExperimentDocMdFragment.newInstance("A_AC_AND_DC.md");
                     case "AC Generator":
                         return ExperimentDocMdFragment.newInstance("C_AC_GENERATOR.md");
                     case "Capacitance Measurement":
                         return ExperimentDocMdFragment.newInstance("I_CAPACITANCE.md");
                     case "Resistance":
                         return ExperimentDocMdFragment.newInstance("D_RESISTANCE.md");
+                    case "Measure Voltages":
+                        return ExperimentDocMdFragment.newInstance("A_AC_AND_DC.md");
                     case "Electromagnetic Induction":
                         return ExperimentDocMdFragment.newInstance("F_EM_INDUCTION.md");
                     case "Sound Beats Phenomenon":
@@ -214,6 +217,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return LRPhaseShiftExperiment.newInstance();
                     case "RC Phase Shift":
                         return RCPhaseShiftExperiment.newInstance();
+                    case "Measure Voltages":
+                        return MeasureVoltage.newInstance();
                     case "Capacitive Reactance":
                         return CapacitorReactanceExperiment.newInstance();
                     case "Summing Junction":
