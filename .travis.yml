@@ -68,6 +68,7 @@ script:
  - ./gradlew build connectedAndroidTest --stacktrace
 
 after_success:
+  - bash scripts/prep-key.sh
   - chmod +x upload-apk.sh
   - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./upload-apk.sh; fi'
 
