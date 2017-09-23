@@ -121,7 +121,6 @@
                             android:text="@string/freq_range" />
                     </LinearLayout>
 
-
                     <EditText
                         android:id="@+id/etwidget_control_advanced2"
                         android:layout_width="0dp"

@@ -65,7 +65,6 @@ public class ControlFragmentAdvanced extends Fragment {
         final EditText etWidgetControlAdvanced9 = (EditText) view.findViewById(R.id.etwidget_control_advanced9);
         final EditText etWidgetControlAdvanced10 = (EditText) view.findViewById(R.id.etwidget_control_advanced10);
         final EditText etWidgetControlAdvanced11 = (EditText) view.findViewById(R.id.etwidget_control_advanced11);
-
         final Spinner spinnerControlAdvanced1 = (Spinner) view.findViewById(R.id.spinner_control_advanced1);
         final Spinner spinnerControlAdvanced2 = (Spinner) view.findViewById(R.id.spinner_control_advanced2);
 
@@ -97,7 +96,6 @@ public class ControlFragmentAdvanced extends Fragment {
         etWidgetControlAdvanced9.setText("0.0");
         etWidgetControlAdvanced10.setText("0.0");
         etWidgetControlAdvanced11.setText("0.0");
-
 
         etWidgetControlAdvanced1.setOnClickListener(new View.OnClickListener() {
 
@@ -403,22 +401,17 @@ public class ControlFragmentAdvanced extends Fragment {
         return view;
     }
 
-
     private void showInputDialog(final EditText et, final double leastCount, final double minima, final double maxima) {
         LayoutInflater li = LayoutInflater.from(getContext());
         View promptsView = li.inflate(R.layout.dialog_input_edit_text_widget, null);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getContext());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
 
         alertDialogBuilder.setView(promptsView);
-
-
         final EditTextWidget userInput =
                 (EditTextWidget) promptsView.findViewById(R.id.editTextDialogUserInput);
 
         userInput.init(getContext(), leastCount, minima, maxima);
-
         userInput.setText(et.getText().toString());
 
         alertDialogBuilder
@@ -449,7 +442,6 @@ public class ControlFragmentAdvanced extends Fragment {
                                 dialog.cancel();
                             }
                         });
-
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
