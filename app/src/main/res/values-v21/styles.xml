@@ -9,7 +9,9 @@
         <item name="windowActionBar">false</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
-
+    <style name="AppThemeSplash" parent="AppTheme">
+        <item name="colorPrimaryDark">@color/darkWhite</item>
+    </style>
     <style name="AppTheme.Bottomnavigationbar" parent="Theme.AppCompat.Light">
         <item name="colorControlHighlight">@color/black</item>
     </style>
