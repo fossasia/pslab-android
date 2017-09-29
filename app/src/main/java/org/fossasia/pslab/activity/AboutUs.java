@@ -7,6 +7,8 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -25,7 +27,10 @@ public class AboutUs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         simulateDayNight(0);
         setContentView(R.layout.about_toolbar);
+        Toolbar toolbar1 = (Toolbar) findViewById(R.id.toolbar1);
+        setSupportActionBar(toolbar1);
         AppBarLayout appBarLayout=(AppBarLayout)findViewById(R.id.appBarAnim);
+
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
                 .setImage(R.drawable.logo200x200)
@@ -40,6 +45,22 @@ public class AboutUs extends AppCompatActivity {
                 .create();
 
         appBarLayout.addView(aboutPage,-1);
+
+        getSupportActionBar().setTitle("PSLab");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void simulateDayNight(int currentSetting) {
