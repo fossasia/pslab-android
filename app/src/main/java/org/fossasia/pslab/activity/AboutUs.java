@@ -49,7 +49,7 @@ public class AboutUs extends AppCompatActivity {
         getSupportActionBar().setTitle("PSLab");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        toolbar1.setTitleTextColor(getResources().getColor(R.color.white));
 
     }
 
