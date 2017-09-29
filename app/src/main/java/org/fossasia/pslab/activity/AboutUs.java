@@ -45,7 +45,6 @@ public class AboutUs extends AppCompatActivity {
                 .create();
 
         appBarLayout.addView(aboutPage,-1);
-
         getSupportActionBar().setTitle("PSLab");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
