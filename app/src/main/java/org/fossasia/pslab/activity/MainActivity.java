@@ -37,6 +37,7 @@ import org.fossasia.pslab.fragment.SettingsFragment;
 import java.io.IOException;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.others.CustomTabService;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.receivers.USBDetachReceiver;
 
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     View navHeader;
     private ImageView imgProfile;
     private TextView txtName;
+    /**** CustomTabService*/
+    private CustomTabService customTabService;
 
     public static int navItemIndex = 0;
 
@@ -89,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         usbManager = (UsbManager) getSystemService(USB_SERVICE);
+        customTabService = new CustomTabService(MainActivity.this);
         mScienceLabCommon = ScienceLabCommon.getInstance();
         communicationHandler = new CommunicationHandler(usbManager);
         if (!("android.hardware.usb.action.USB_DEVICE_ATTACHED".equals(getIntent().getAction()))) {
@@ -220,9 +224,7 @@ public class MainActivity extends AppCompatActivity {
                         drawer.closeDrawers();
                         break;
                     case R.id.nav_report_us:
-                        Intent issueTrackerIntent = new Intent(Intent.ACTION_VIEW);
-                        issueTrackerIntent.setData(Uri.parse("https://github.com/fossasia/pslab-android/issues"));
-                        startActivity(issueTrackerIntent);
+                        customTabService.launchUrl("https://github.com/fossasia/pslab-android/issues");
                         drawer.closeDrawers();
                         break;
                     default:

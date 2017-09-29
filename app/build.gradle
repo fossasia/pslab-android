@@ -32,6 +32,7 @@ dependencies {
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile "com.android.support:preference-v14:$rootProject.supportLibraryVersion"
+    compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
 
     compile "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
     compile "com.github.PhilJay:MPAndroidChart:$rootProject.mpAndroidChartVersion"
