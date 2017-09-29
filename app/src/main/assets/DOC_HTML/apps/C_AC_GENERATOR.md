@@ -1,7 +1,7 @@
 AC Generator
 ---
 
-## Make an AC generator using a magnet and a coil
+### Make an AC generator using a magnet and a coil
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/acgen.png@100%|auto)
 

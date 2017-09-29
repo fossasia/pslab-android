@@ -1,8 +1,8 @@
 Body Resistance
 ---
-## Measure the resistance of the human body
+### Measure the resistance of the human body
 
-## Measure the internal resistance of the human body
+#### Measure the internal resistance of the human body
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/bodyResistance.png@100%|auto)
 
@@ -14,12 +14,12 @@ Body Resistance
 
 * CH3 measures the voltage drop across the 1MOhm resistor, and therefore, we can calculate the voltage drop across your body (PV3-CH3) . 
 
-## Calculations
+#### Calculations
 
 * The current flowing through the circuit , according to Ohm's law, is I = V/R = V(CH3)/1,000,000
 * The voltage drop across your body = ( V(PV3)(3.0) - V(CH3)(measured))  
 * Body's resistance = voltage drop/current(I)
 	
-## Screenshot
+#### Screenshot
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/HumanBodyResistance.png@100%|auto)
 
