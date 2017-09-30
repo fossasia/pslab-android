@@ -137,7 +137,7 @@ public class ControlFragmentAdvanced extends Fragment {
 
             @Override
             public void onClick(View arg0) {
-                showInputDialog(etWidgetControlAdvanced3, 1.0, 10.0, 5000.0);
+                showInputDialog(etWidgetControlAdvanced3, 1.0, 0.0, 360.0);
 
             }
         });
@@ -146,7 +146,7 @@ public class ControlFragmentAdvanced extends Fragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced3, 1.0, 10.0, 5000.0);
+                    showInputDialog(etWidgetControlAdvanced3, 1.0, 0.0, 360.0);
                 }
             }
         });
@@ -285,7 +285,7 @@ public class ControlFragmentAdvanced extends Fragment {
             @Override
             public void onClick(View arg0) {
 
-                showInputDialog(etWidgetControlAdvanced11, 1.0, 0.0, 360.0);
+                showInputDialog(etWidgetControlAdvanced11, 1.0, 10.0, 5000.0);
 
             }
         });
@@ -294,7 +294,7 @@ public class ControlFragmentAdvanced extends Fragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced11, 1.0, 0.0, 360.0);
+                    showInputDialog(etWidgetControlAdvanced11, 1.0, 10.0, 5000.0);
                 }
             }
         });
