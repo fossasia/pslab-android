@@ -3,9 +3,14 @@ package org.fossasia.pslab.activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import org.fossasia.pslab.R;
 
@@ -21,6 +26,11 @@ public class AboutUs extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         simulateDayNight(0);
+        setContentView(R.layout.about_toolbar);
+        Toolbar toolbar1 = (Toolbar) findViewById(R.id.toolbar1);
+        setSupportActionBar(toolbar1);
+        AppBarLayout appBarLayout=(AppBarLayout)findViewById(R.id.appBarAnim);
+
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
                 .setImage(R.drawable.logo200x200)
@@ -34,7 +44,22 @@ public class AboutUs extends AppCompatActivity {
                 .addYoutube("UCQprMsG-raCIMlBudm20iLQ")
                 .create();
 
-        setContentView(aboutPage);
+        appBarLayout.addView(aboutPage,-1);
+        getSupportActionBar().setTitle("PSLab");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar1.setTitleTextColor(getResources().getColor(R.color.white));
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void simulateDayNight(int currentSetting) {
