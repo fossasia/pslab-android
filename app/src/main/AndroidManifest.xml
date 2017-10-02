@@ -46,8 +46,8 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activity.OscilloscopeActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="landscape" />
+            android:configChanges="screenSize|keyboardHidden"
+            android:screenOrientation="sensorLandscape" />
         <activity android:name=".activity.SensorActivity" />
         <activity
             android:name=".activity.LogicalAnalyzerActivity"
