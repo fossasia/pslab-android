@@ -15,9 +15,9 @@ To plot Vc vs Ic, we need to:
 Step 1: Select PV2 for manual control and PV1 for sweep as shown below.
 Add a derived parameter for Ic using the format I = (PV1() - CH1())/1000, the empty parantheses are necessary in the equation.        
 
-## Screenshots
+### Screenshots
 
-### Help file for the diode IV experiment shown alongside the designer
+#### Help file for the diode IV experiment shown alongside the designer
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/design1.png@100%|auto)
 
 #### Set up the experiment

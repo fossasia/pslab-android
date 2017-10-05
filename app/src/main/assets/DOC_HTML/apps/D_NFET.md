@@ -13,7 +13,7 @@ N-channel FET
 
 * Acquired plots can be selectively displayed or deleted.
 
-### screenshot
+#### screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/njfet.png@100%|auto)
 

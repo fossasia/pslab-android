@@ -7,7 +7,7 @@ Self testing
 * Make the Following connections for group 2.
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/test2.svg@100%|auto)
 
-## Screenshot
+#### Screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/screenshots/testing.png@100%|auto)
 

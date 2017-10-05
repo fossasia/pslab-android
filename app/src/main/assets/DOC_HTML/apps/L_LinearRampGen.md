@@ -1,8 +1,8 @@
 Ramp Generator
 ---
-## Create a linear ramp-generator
+### Create a linear ramp-generator
 
-## Introduction
+#### Introduction
 
 This ramp generator creates a linearly rising voltage output when triggered with a rising edge input pulse
 
