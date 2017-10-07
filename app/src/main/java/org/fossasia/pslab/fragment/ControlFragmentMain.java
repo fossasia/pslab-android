@@ -3,6 +3,7 @@ package org.fossasia.pslab.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ import org.fossasia.pslab.adapters.ControlMainAdapter;
  * Created by asitava on 6/6/17.
  */
 
-public class ControlFragmentMain extends Fragment{
+public class ControlFragmentMain extends Fragment {
 
     public static ControlFragmentMain newInstance() {
         return new ControlFragmentMain();
@@ -25,6 +26,17 @@ public class ControlFragmentMain extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
     }
 
     @Override
