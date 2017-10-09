@@ -7,7 +7,7 @@ R-C Integration
 * CH1 monitors the original square wave output from SQR1.
 * CH2 monitors the integrated output .
 
-## C-R Derivates
+### C-R Derivates
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/RC.svg@100%|auto)
 

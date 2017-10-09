@@ -1,11 +1,11 @@
 Diode
 ---
 
-## One way traffic for current: The semiconductor Diode
+### One way traffic for current: The semiconductor Diode
 
 * CH1 is used to measure the input to the diode, and CH2 will measure the output from it.
 	
-##	Testing with a DC voltage
+####	Testing with a DC voltage
 	
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/diodeDC.svg@100%|auto)
 		
@@ -15,7 +15,7 @@ Diode
 	
 * Try different values of PV1, and observe that diodes only allow current flow in one direction. If PV1 is less than GND (0 VOlts), the output voltage is zero. In case of the LED, It will only light up for positive voltages
 	
-## Testing with an AC voltage
+#### Testing with an AC voltage
 	
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/diodeAC.svg@100%|auto)
 	
@@ -23,7 +23,7 @@ Diode
 	
 * Set a very low frequency for W1, such as 10Hz so that you are able to see the LED actually blinking
 
-## Screenshot
+#### Screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/diodeSimple.png@100%|auto)
 

@@ -1,7 +1,7 @@
 Full-Wave Rectifier
 ---
 
-## Study a fullwave rectifier using the sine wave generators
+### Study a fullwave rectifier using the sine wave generators
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/fullwave.svg@100%|auto)
 
