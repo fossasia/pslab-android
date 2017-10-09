@@ -1,13 +1,13 @@
 Bode Plots
 ---
 
-## Frequency and phase response of filter circuits
+### Frequency and phase response of filter circuits
 
-## Multiple Feedback Band-Pass Filter: 1.6 Khz 
+#### Multiple Feedback Band-Pass Filter: 1.6 Khz 
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/multiple-feedback1.svg@100%|auto)
 
-## Multiple Feedback Band-Pass Filter: 600 Hz 
+#### Multiple Feedback Band-Pass Filter: 600 Hz 
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/multiple-feedback2.svg@100%|auto)
 
@@ -23,7 +23,7 @@ Bode Plots
 
 * The amplitudes and phases of the input and output waveforms are recorded for each frequency in order to obtain the bode plots.
 
-## Screenshot
+#### Screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/filter.png@100%|auto)
 

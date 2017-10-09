@@ -1,11 +1,11 @@
 Summing Junction
 ---
 
-## Op-Amps: AC and DC Summing Junctions
+### Op-Amps: AC and DC Summing Junctions
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/summing.svg@100%|auto)
 
-## DC Summing junction
+#### DC Summing junction
 
 * Make the Connections as shown in the figure.
 
@@ -18,7 +18,7 @@ rf = input resistor
 v1 = V(PV2)
 v2 = V(PV3)
 
-## AC Summing
+#### AC Summing
 
 * Make the Connections as shown in the figure.
 * Use W1, and W2 as inputs. Connect them to CH2, CH3 to also simultaneously monitor them.
@@ -27,7 +27,7 @@ v2 = V(PV3)
 
 * Observe various summing ratios by changing the input resistor values.
 
-## Screenshot
+#### Screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/summing_junction.png@100%|auto)
 

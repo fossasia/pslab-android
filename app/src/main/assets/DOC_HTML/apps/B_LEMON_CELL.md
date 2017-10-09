@@ -1,16 +1,16 @@
 Lemon cell
 ---
 
-## Experiments with a lemon cell
+### Experiments with a lemon cell
 
-## Measure the voltage of a lemon cell
+#### Measure the voltage of a lemon cell
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/lemon_cell.png@100%|auto)
 
 * Make the connections as shown in the figure. Use a copper wire, and a galvanized(coated with zinc) nail as the two electrodes. 
 * Observe the voltmeter for CH1 ,and note the values . Also observe, that the graph for CH1 is a straight line. This is because the voltage is constant.
 
-## Measure the internal resistance of a lemon cell
+#### Measure the internal resistance of a lemon cell
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/lemon_cell_ir.png@100%|auto)
 
@@ -26,6 +26,6 @@ Lemon cell
 
 * Connect three lemon cells in series, and note the voltage. Try connecting an LED to this battery.
 	
-### Screenshot
+#### Screenshot
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/lemoncell.png@100%|auto)
 

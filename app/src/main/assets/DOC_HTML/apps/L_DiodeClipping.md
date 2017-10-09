@@ -1,7 +1,7 @@
 Clipping circuit using a diode
 ---
 
-## Shunt Clipping
+### Shunt Clipping
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/diode_clipping.svg@100%|auto)
 
@@ -10,6 +10,6 @@ Clipping circuit using a diode
 * CH2 monitors the clipped waveform .
 * Change the value of PV3, and observe its effect on the output.
 
-## Series Clipping
+### Series Clipping
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/diode_clipping_series.svg@100%|auto)

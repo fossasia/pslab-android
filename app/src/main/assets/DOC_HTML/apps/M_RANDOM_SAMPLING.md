@@ -1,9 +1,9 @@
 Random Sampling
 ---
 
-## Study the probability distributions of waveforms
+### Study the probability distributions of waveforms
 
-## Introduction
+#### Introduction
 
 * In this experiment, we will measure voltages of an input signal at random intervals, and plot a histogram that shows the time spent in each amplitude range.
 
@@ -13,13 +13,13 @@ Random Sampling
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/PlotAC.svg@100%|auto)
 
-## Sinusoidal Wave : Screenshot
+#### Sinusoidal Wave : Screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/random_sine.png@100%|auto)
 
-## Triangular Wave : Screenshot
+#### Triangular Wave : Screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/random_triangle.png@100%|auto)
 
-## Square Wave Wave : Screenshot
+#### Square Wave Wave : Screenshot
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/random_square.png@100%|auto)
