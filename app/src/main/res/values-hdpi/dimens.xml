@@ -3,6 +3,6 @@
 
     <dimen name="control_textsize_small">15sp</dimen>
     <dimen name="control_margin">3dp</dimen>
-    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_margin">8dp</dimen>
 
 </resources>
