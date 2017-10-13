@@ -47,6 +47,9 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     compile 'com.github.medyo:android-about-page:1.2.1'
     compile 'com.github.tiagohm.MarkdownView:library:0.17.0'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
     testCompile "junit:junit:$rootProject.junitVersion"
     androidTestCompile("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {

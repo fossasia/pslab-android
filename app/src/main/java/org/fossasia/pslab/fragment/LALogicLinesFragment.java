@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ChannelAxisFormatter;
@@ -226,5 +227,12 @@ public class LALogicLinesFragment extends Fragment {
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
             ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, LALogicLinesFragment.class.getSimpleName());
     }
 }

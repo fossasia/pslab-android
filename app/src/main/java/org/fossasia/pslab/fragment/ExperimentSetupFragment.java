@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 
 /**
@@ -23,6 +24,12 @@ public class ExperimentSetupFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.experiment_setup, container, false);
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, ExperimentSetupFragment.class.getSimpleName());
     }
 
 }

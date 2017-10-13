@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.PerformExperimentActivity;
 import org.fossasia.pslab.items.ExperimentHeaderHolder;
@@ -72,6 +73,8 @@ public class SavedExperiments extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, SavedExperiments.class.getSimpleName());
     }
 
     private TreeNode loadElectronicExperiments() {
