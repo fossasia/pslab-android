@@ -1,13 +1,13 @@
 language: android
+
 jdk: 
  - oraclejdk8
-# Use the Travis Container-Based Infrastructure
 
 env:
   global:
     - ANDROID_API_LEVEL=25
     - ANDROID_API_LEVEL_22=22
-    - ANDROID_BUILD_TOOLS_VERSION=25.0.2
+    - ANDROID_BUILD_TOOLS_VERSION=26.0.0
     - ANDROID_ABI=armeabi-v7a
     - ANDROID_TAG=google_apis
     - ANDROID_TARGET=android-25
@@ -18,6 +18,7 @@ android:
   components:
     - tools
     - platform-tools
+    - tools
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
     - android-$ANDROID_API_LEVEL
     - android-$ANDROID_API_LEVEL_22
@@ -34,6 +35,8 @@ android:
     # Specify at least one system image
     - sys-img-armeabi-v7a-android-$ANDROID_API_LEVEL_22
     
+install:
+    - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
     
 licenses:
     - 'android-sdk-preview-license-.+'
@@ -56,6 +59,7 @@ before_install:
  - mkdir "$ANDROID_HOME/licenses" || true
  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+ - echo 'count=0' > /home/travis/.android/repositories.cfg
 
 before_script:
   - android list targets
@@ -65,7 +69,7 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
- - ./gradlew build connectedAndroidTest --stacktrace
+  - ./gradlew build connectedAndroidTest --stacktrace
 
 after_success:
   - bash scripts/prep-key.sh
