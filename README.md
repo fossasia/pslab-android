@@ -7,7 +7,7 @@ PSLab Android App
         src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
-[![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=master)](https://travis-ci.org/fossasia/pslab-android)
+[![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=development)](https://travis-ci.org/fossasia/pslab-android)
 [![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Preview app](https://img.shields.io/badge/Preview-Appetize.io-orange.svg)](https://appetize.io/app/4eqye6ea422e5np0gp2jfpemgm)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
