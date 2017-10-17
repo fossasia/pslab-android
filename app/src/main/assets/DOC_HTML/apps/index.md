@@ -1,20 +1,20 @@
 Index
 ---
 
-## Introduction to experiment related apps
+### Introduction to experiment related apps
 
 The goal of PSLab is to create an Open Source hardware device (open on all layers) that can be used for experiments by teachers, students and citizen scientists. Our tiny pocket lab provides an array of sensors for doing science and engineering experiments. It provides functions of numerous measurement devices including an oscilloscope, a waveform generator, a frequency counter, a programmable voltage, current source and as a data logger.
 
 We are developing the experiments starting on the hardware to libraries and user interfaces for desktop PCs and Android apps for smartphones. The PSLab project is inspired by the work of the Open Science Hardware community and the ExpEYES project. Our website is at: http://pslab.fossasia.org
 
-## Communication
+### Communication
 
 Please join us on the following channels:
 * [Pocket Science Channel](https://gitter.im/fossasia/pslab)
 * [Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia)
 
 
-# Communicating with Pocket Science Lab via USB and understanding the various read/write functions
+### Communicating with Pocket Science Lab via USB and understanding the various read/write functions
 
 Design of PSLab combines the flexibility of Python programming language and the real-time measurement capability of micro-controllers.
 
@@ -24,9 +24,9 @@ It is interfaced and powered by USB port of the computer. For connecting externa
 
 ![](file:///android_asset/DOC_HTML/apps/images/pslabdesign.png)
 
-## Interfacing with the real world. One small Python script at a time
+### Interfacing with the real world. One small Python script at a time
 
-## Example1.py : Connecting to the device , and read a voltage value from one of the analog inputs
+#### Example1.py : Connecting to the device , and read a voltage value from one of the analog inputs
 
 ```python
 from PSL import sciencelab
@@ -52,7 +52,7 @@ M = HMC5883L.connect(I.I2C)    #Specify that the I2C bridge is to be used
 Gx,Gy,Gz = M.getRaw()           #Returns three decimal numbers that indicate magnetic fields along orthogonal axes
 ```
 
-## Example 3 : Capturing a sine wave, and plotting it using matplotlib
+#### Example 3 : Capturing a sine wave, and plotting it using matplotlib
 
 The function call that is used for acquisition 
 `capture1(channel name,number of samples,time gap (uS) between samples, *optional keyword arguments)`
@@ -75,7 +75,7 @@ The following image displays the plot output
 
 ![](file:///android_asset/DOC_HTML/apps/images/sine1.png)
 
-## Example 4 : Capturing two sine waves, and plotting them
+#### Example 4 : Capturing two sine waves, and plotting them
 The function call that is used for acquisition 
 `capture2(number of samples,time gap (uS) between samples, TraceOneRemap)`
 + Number of samples : total voltage samples to read (Maximum 5000 samples)
@@ -104,7 +104,7 @@ Resultant plot :
 ![](file:///android_asset/DOC_HTML/apps/images/sine2.png)
 
 
-## Example 5 : Capturing four oscilloscope traces simultaneously from various analog inputs
+#### Example 5 : Capturing four oscilloscope traces simultaneously from various analog inputs
 
 The function call that is used for acquisition 
 

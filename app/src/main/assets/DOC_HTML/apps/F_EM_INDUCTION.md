@@ -1,9 +1,9 @@
 Mutual Inductance
 ---
 
-## Study Electromagnetic induction using two solenoids and the waveform generators
+### Study Electromagnetic induction using two solenoids and the waveform generators
 
-## Schematic 
+#### Schematic 
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/mutual-inductance.svg@100%|auto)
 

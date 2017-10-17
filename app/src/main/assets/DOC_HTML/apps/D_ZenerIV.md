@@ -1,7 +1,7 @@
 Zener Diode IV
 ---
 
-## Zener Diode's I-V Characteristics. Reverse as well as forward biased
+### Zener Diode's I-V Characteristics. Reverse as well as forward biased
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/zener.svg@100%|auto)
 
@@ -11,7 +11,7 @@ Zener Diode IV
 * PV1 is varied in steps, and for each step the current is calculated from the difference between voltages at PV1 and CH1, and the known value of the resistor.
 * Acquired plots can be selectively displayed or deleted.
 
-## screenshot
+#### screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/zenerIV.png@100%|auto)
 

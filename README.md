@@ -7,7 +7,7 @@ PSLab Android App
         src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
-[![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=master)](https://travis-ci.org/fossasia/pslab-android)
+[![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=development)](https://travis-ci.org/fossasia/pslab-android)
 [![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Preview app](https://img.shields.io/badge/Preview-Appetize.io-orange.svg)](https://appetize.io/app/4eqye6ea422e5np0gp2jfpemgm)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
@@ -54,6 +54,12 @@ Please join us on the following channels:
      <td><img src="/docs/screenshots/screenshot_audio_jack.png"></td>
     </tr>
   </table>
+
+## Video Demo
+- [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k)
+- [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ)
+- [Realtime Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo)
+- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y) 
 
 ## Features
 **Feature**|**Description**|**Status**

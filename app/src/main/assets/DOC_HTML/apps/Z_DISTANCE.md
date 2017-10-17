@@ -7,10 +7,10 @@ Ultrasonic Range Finder
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/HCSR04.png@100%|auto)
 
-## Measuring time period of a pendulum
+### Measuring time period of a pendulum
 * Place an oscillating flat object in front of this sensor, such as a blackboard duster suspended by a string, and measure its time period from the plot.
 
-## Screenshot
+#### Screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/HCSR04.png@100%|auto)
 

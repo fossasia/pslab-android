@@ -1,9 +1,9 @@
 Transistor CB
 ---
 
-## Common base characteristics of transistors
+### Common base characteristics of transistors
 
-## Circuit Diagram
+#### Circuit Diagram
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/tranCB.svg@100%|auto)
 
