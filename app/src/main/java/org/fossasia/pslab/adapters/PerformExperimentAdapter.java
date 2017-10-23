@@ -21,6 +21,7 @@ import org.fossasia.pslab.experimentsetup.electronicexperiments.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.electronicexperiments.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.electronicexperiments.NonInvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.electricalexperiments.RCPhaseShiftExperiment;
+import org.fossasia.pslab.experimentsetup.electricalexperiments.RCIntegralandderivativeexperiment;
 import org.fossasia.pslab.experimentsetup.addonmodules.ServoMotorsExperiment;
 import org.fossasia.pslab.experimentsetup.electronicexperiments.SummingJunctionExperiment;
 import org.fossasia.pslab.experimentsetup.electronicexperiments.OscillatorExperiment;
@@ -149,6 +150,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocMdFragment.newInstance("P_CapacitivePhaseShift.md");
                     case "Capacitive Reactance":
                         return ExperimentDocMdFragment.newInstance("O_XC.md");
+                    case "RC Integral":
+                        return ExperimentDocMdFragment.newInstance("Q_RC_integ_deriv");
                     case "Summing Junction":
                         return ExperimentDocMdFragment.newInstance("L_Summing.md");
                     case "Semiconductor Diode":
@@ -221,6 +224,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return MeasureVoltage.newInstance();
                     case "Capacitive Reactance":
                         return CapacitorReactanceExperiment.newInstance();
+                    case "RC Integral":
+                        return RCIntegralandderivativeexperiment.newInstance();
                     case "Summing Junction":
                         return SummingJunctionExperiment.newInstance();
                     case "Precision Rectifier":
