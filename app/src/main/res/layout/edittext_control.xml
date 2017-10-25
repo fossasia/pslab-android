@@ -11,7 +11,7 @@
         android:layout_weight="0.3"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:text="-"/>
+        android:text="@string/hyphen"/>
 
     <EditText
         android:id="@+id/edittext_control"
@@ -31,6 +31,6 @@
         android:layout_width="0dp"
         android:layout_weight="0.3"
         android:layout_height="wrap_content"
-        android:text="+"
+        android:text="@string/plus"
         android:textStyle="bold"/>
 </LinearLayout>

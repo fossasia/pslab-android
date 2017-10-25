@@ -7,5 +7,5 @@
     android:ellipsize="marquee"
     android:textSize="14sp"
     android:textColor="#808080"
-    android:text="[SELECT MIC]"
+    android:text="@string/select_mic"
     android:textStyle="normal|bold" />

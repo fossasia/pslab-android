@@ -65,7 +65,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
-        android:text="PV1"
+        android:text="@string/pv1"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_wave1_diode_clipping" />
@@ -89,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:layout_marginTop="10dp"
-        android:text="0.00 V"
+        android:text="@string/zero_volts"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_range_diode_clipping" />
 

@@ -24,7 +24,7 @@
             android:layout_height="80dp"
             android:gravity="center"
             android:padding="10dp"
-            android:text="PSLAB Device not found"
+            android:text="@string/pslab_device_not_found"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>

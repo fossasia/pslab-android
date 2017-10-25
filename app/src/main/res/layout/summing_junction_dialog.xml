@@ -19,7 +19,7 @@
             android:id="@+id/voltage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Voltage"
+            android:hint="@string/voltage"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
@@ -46,7 +46,7 @@
             android:id="@+id/frequency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Frequency"
+            android:hint="@string/frequency"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
@@ -61,7 +61,7 @@
             android:id="@+id/phase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Phase"
+            android:hint="@string/phase"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
