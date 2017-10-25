@@ -26,7 +26,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="Timebase"
+                android:text="@string/timebase"
                 android:textSize="14sp"
                 android:textStyle="normal|bold"
                 app:layout_constraintTop_toTopOf="parent"
@@ -61,7 +61,7 @@
                 android:layout_width="85dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="875.00 μs" />
+                android:text="@string/timebase_trigger_value" />
 
         </TableRow>
 
@@ -84,7 +84,10 @@
                 android:textSize="14sp"
                 android:textStyle="normal|bold"
                 app:layout_constraintTop_toBottomOf="@+id/seekBar_timebase_tt"
-                tools:layout_editor_absoluteX="318dp" />
+                tools:layout_editor_absoluteX="318dp"
+                android:layout_alignLeft="@+id/tv_timebase_label_tt"
+                android:paddingRight="10dp"
+                android:paddingLeft="0dp" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -122,7 +125,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
-                android:text="TextView" />
+                android:text="@string/text_view" />
         </TableRow>
 
     </TableLayout>

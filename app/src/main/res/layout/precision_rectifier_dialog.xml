@@ -13,7 +13,7 @@
             android:id="@+id/rectifier_frequency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Frequency"
+            android:hint="@string/frequency"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 

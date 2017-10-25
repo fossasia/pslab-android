@@ -10,7 +10,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select a Value "
+        android:text="@string/select_a_value"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <org.fossasia.pslab.others.EditTextWidget

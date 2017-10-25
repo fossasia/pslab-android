@@ -13,7 +13,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Acquire Data"
+        android:text="@string/aquire_data"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +34,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="2dp"
-        android:text="READ"
+        android:text="@string/read"
         android:textSize="13sp"
         app:layout_constraintLeft_toRightOf="@+id/tv_acquire_data_label_sos"
         app:layout_constraintTop_toTopOf="parent" />
@@ -46,7 +46,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Result"
+        android:text="@string/result"
         app:layout_constraintLeft_toRightOf="@+id/button_read_sos"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:text="Range"
+        android:text="@string/range"
         app:layout_constraintRight_toLeftOf="@+id/spinner_range_sos"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,7 +87,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="7dp"
-        android:text="10Hz"
+        android:text="@string/ten_hz"
         app:layout_constraintHorizontal_bias="0.652"
         app:layout_constraintLeft_toRightOf="@+id/tv_range_sos"
         app:layout_constraintRight_toRightOf="parent"
