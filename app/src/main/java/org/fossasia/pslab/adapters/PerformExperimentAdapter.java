@@ -151,7 +151,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "Capacitive Reactance":
                         return ExperimentDocMdFragment.newInstance("O_XC.md");
                     case "RC Integral":
-                        return ExperimentDocMdFragment.newInstance("Q_RC_integ_deriv");
+                        return ExperimentDocMdFragment.newInstance("Z_designer.md");
                     case "Summing Junction":
                         return ExperimentDocMdFragment.newInstance("L_Summing.md");
                     case "Semiconductor Diode":
