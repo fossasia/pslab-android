@@ -19,12 +19,14 @@
     <string name="advance_control">Advance Control</string>
     <string name="logical_analyzer">Logical Analyzer</string>
     <string name="data_sensor_logger">Data Sensor Logger</string>
-    <string name="w_sensor_logger">Wireless Sensor</string>
     <string name="sensor_quick_view">Sensor QuickView</string>
+    <string name="wavegen">Wave Generator</string>
 
     <string name="control_item_1">Control</string>
     <string name="control_item_2">Read</string>
     <string name="control_item_3">Advanced</string>
+
+    <string name="about_us_description">The goal of PSLab is to create an Open Source hardware device (open on all layers) that can be used for experiments by teachers, students and citizen scientists. Our tiny pocket lab provides an array of sensors for doing science and engineering experiments. It provides functions of numerous measurement devices including an oscilloscope, a waveform generator, a frequency counter, a programmable voltage, current source and as a data logger.</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
@@ -76,6 +78,7 @@
     <string name="sqr4">SQR4</string>
     <string name="freq_range">10Hz-5kHz</string>
     <string name="zero">0</string>
+    <string name="gain">Gain</string>
     <string-array name="wave_type">
         <item>SINE</item>
         <item>SQUARE</item>
@@ -209,6 +212,7 @@
     <string name="mlx90614">mlx90614</string>
     <string name="bmp180">bmp180</string>
     <string name="bh1750">bh1750</string>
+    <string name="mpu925x">mpu925x</string>
 
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
@@ -249,7 +253,6 @@
     <string name="rad">(rad)</string>
     <string name="angle">Angle</string>
     <string name="time">Time</string>
-    <string name="s">(s)</string>
     <string name="infinite_symbol">∞</string>
     <string name="timegap">Timegap</string>
     <string name="no_of_samples">No. of samples</string>
@@ -257,6 +260,9 @@
     <string name="alt">Alt.</string>
     <string name="meter">(m)</string>
     <string name="pascal">(Pa)</string>
+
+    <string name="voltage_label">Voltage (V)</string>
+    <string name="current_label">Current (mA)</string>
 
     <string-array name="tsl2561_gain_spinner">
         <item>No gain</item>
@@ -293,6 +299,37 @@
         <item></item>
     </string-array>
 
+    <string-array name="mpu925x_gyro_spinner">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+
+    <string-array name="mpu925x_accel_spinner">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="mpu925x_kalman_spinner">
+        <item>0.01</item>
+        <item>0.1</item>
+        <item>1</item>
+        <item>10</item>
+        <item>100</item>
+        <item>1000</item>
+        <item>10000</item>
+        <item>null</item>
+    </string-array>
+
+    <string-array name="mpu925x_power_spinner">
+        <item></item>
+        <item></item>
+    </string-array>
+
+
     <string-array name="ads1115_gain_spinner">
         <item>GAIN_TWOTHIRDS</item>
         <item>GAIN_ONE</item>
@@ -320,7 +357,7 @@
         <item>250</item>
         <item>475</item>
         <item>860</item>
-    </string-array>  
+    </string-array>
 
     <string-array name="bh1750_gain_spinner">
         <item>500mLx</item>
@@ -328,6 +365,132 @@
         <item>4000mLx</item>
     </string-array>
 
+    <string-array name="opamp_timebase">
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+        <item>32</item>
+        <item>102.4</item>
+        <item>204.8</item>
+        <item>409.6</item>
+    </string-array>
+
+    <string-array name="opamp_range">
+        <item>+/- 16</item>
+        <item>+/- 8</item>
+        <item>+/- 4</item>
+        <item>+/- 2</item>
+        <item>+/- 1</item>
+        <item>+/- 0.5</item>
+    </string-array>
+
+    <string-array name="wave_generator">
+        <item>W1</item>
+        <item>W2</item>
+    </string-array>
+
+    <string-array name="source_pins">
+        <item>PV1</item>
+        <item>PV2</item>
+        <item>PV3</item>
+        <item>PCS</item>
+    </string-array>
+
     <string name="experiment_icon">Experiment Icon</string>
     <string name="drop_down_arrow">Drop down arrow</string>
+    <string name="voltage_unit">(V)</string>
+    <string name="volts">volts</string>
+    <string name="seconds">(s)</string>
+    <string name="lux">LUX</string>
+    <string name="pressure2">Press.</string>
+    <string name="plot_altitude">Plot - Altitude</string>
+    <string name="celcius">(°C)</string>
+    <string name="plot_temperature">Plot - Temperature</string>
+    <string name="guass">Guass</string>
+    <string name="guass_unit">(Ga)</string>
+    <string name="humid">Humid.</string>
+    <string name="humid_unit">(RH)</string>
+    <string name="plot_humidity">Plot - Humidity</string>
+    <string name="illum">Illum.</string>
+    <string name="lux2">(Lux)</string>
+    <string name="acceleration">Acc.</string>
+    <string name="acceleration_unit">(m/s²)</string>
+    <string name="initial_voltage_v">Initial Voltage (V)</string>
+    <string name="final_voltage_v">Final Voltage (V)</string>
+    <string name="step_size_v">Step Size (V)</string>
+    <string name="gate_voltage_v">Gate Voltage (V)</string>
+    <string name="collector_sweep_pv1">Collector Sweep (PV1)</string>
+    <string name="emitter_voltage_pv2">Emitter Voltage (PV2)</string>
+    <string name="total_steps">Total Steps</string>
+    <string name="base_voltage_pv2">Base Voltage (PV2)</string>
+    <string name="initial_frequency_hz">Initial Frequency (Hz)</string>
+    <string name="voltage_v">Voltage (V)</string>
+    <string name="range">Range</string>
+    <string name="wave1">Wave1</string>
+    <string name="start_experiment">Start Experiment</string>
+    <string name="discharge">Discharge</string>
+    <string name="charge">Charge</string>
+    <string name="wave2">Wave2</string>
+    <string name="label_5000hz">5000Hz</string>
+    <string name="label_180">180°</string>
+
+    <string name="data_logger">Data Logger</string>
+    <string name="start_logging">Start Logging</string>
+    <string name="stop_logging">Stop Logging</string>
+    <string name="cancel">Cancel</string>
+    <string name="save_data">Save Data</string>
+    <string name="view_logged_data">View Logged Data</string>
+    <string name="export_logged_data">Export Logged Data</string>
+    <string name="sensor_logged_data">Sensor Logged Data</string>
+    <string name="begin_experiment">Begin Experiment</string>
+    <string name="current">Current</string>
+    <string name="analyse_ch1">Analyse CH1</string>
+    <string name="analyse_ch2">Analyse CH2</string>
+    <string name="result">Result</string>
+    <string name="acquire_data">Acquire Data</string>
+    <string name="done">Done</string>
+    <string name="fit_failed">fit failed</string>
+
+    <string name="full">Full</string>
+    <string name="ac_voltage">AC Voltage</string>
+    <string name="dc_voltage">DC Voltage</string>
+    <string name="amplitude_range">Amplitude Range</string>
+
+    <string name="steps">Steps</string>
+    <string name="set_steps">Set Steps</string>
+
+    <string name="fossasia_logo">Fossasia Logo</string>
+    <string name="pocket_science_logo">Pocket Science Logo</string>
+
+    <string name="servo_4">Servo 4</string>
+    <string name="servo_3">Servo 3</string>
+    <string name="servo_2">Servo 2</string>
+    <string name="servo_1">Servo 1</string>
+    <string name="servo_angles">Servo Angles</string>
+    <string name="set_angles">Set Angles</string>
+    <string name="reset_angles">Reset Angles</string>
+    <string name="timebase_label_875">875.00 μs</string>
+    <string name="timebase_label_1">1.00 ms</string>
+    <string name="timebase_label_2">2.00 ms</string>
+    <string name="timebase_label_4">4.00 ms</string>
+    <string name="timebase_label_8">8.00 ms</string>
+    <string name="timebase_label_25_60">25.60 ms</string>
+    <string name="timebase_label_38_40">38.40 ms</string>
+    <string name="timebase_label_51_20">51.20 ms</string>
+    <string name="timebase_label_102_40">102.40 ms</string>
+
+    <string-array name="sensor_click_list">
+        <item>Export Data</item>
+        <item>Share Data</item>
+    </string-array>
+
+    <string-array name="export_data_format_list">
+        <item>TXT Format</item>
+        <item>CSV Format</item>
+    </string-array>
+    <string-array name="export_data_format_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
 </resources>

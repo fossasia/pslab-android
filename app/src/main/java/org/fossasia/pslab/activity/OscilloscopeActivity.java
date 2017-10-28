@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -33,9 +32,15 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.OscillatorExperimentFragment;
+import org.fossasia.pslab.experimentsetup.physicsexperiments.SpeedOfSoundFragment;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.DiodeClippingClampingExperiment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.FullWaveRectifierFragment;
+import org.fossasia.pslab.experimentsetup.electronicexperiments.HalfWaveRectifierFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.AudioJack;
@@ -43,7 +48,10 @@ import org.fossasia.pslab.others.Plot2D;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,14 +61,9 @@ import static org.fossasia.pslab.others.MathUtils.map;
  * Created by viveksb007 on 10/5/17.
  */
 
-public class OscilloscopeActivity extends AppCompatActivity implements
-        ChannelParametersFragment.OnFragmentInteractionListener,
-        TimebaseTriggerFragment.OnFragmentInteractionListener,
-        DataAnalysisFragment.OnFragmentInteractionListener,
-        XYPlotFragment.OnFragmentInteractionListener,
-        View.OnClickListener {
+public class OscilloscopeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String TAG = "Oscilloscope Activity";
+    private static final String TAG = "Oscilloscope Activity";
     private ScienceLab scienceLab;
     public LineChart mChart;
     private LinearLayout linearLayout;
@@ -82,6 +85,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public TextView xAxisLabelUnit;
     private int height;
     private int width;
+    public int samples;
+    public double timeGap;
     public double timebase;
     private XAxis x1;
     private YAxis y1;
@@ -97,6 +102,19 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public boolean sineFit;
     public boolean squareFit;
     public boolean viewIsClicked;
+    public boolean isHalfWaveRectifierExperiment;
+    public boolean isFullWaveRectifierExperiment;
+    public boolean isDiodeClippingClampingExperiment;
+    public boolean isAstableMultivibratorExperiment;
+    public boolean isColpittsOscillatorExperiment;
+    public boolean isPhaseShiftOscillatorExperiment;
+    public boolean isWienBridgeOscillatorExperiment;
+    public boolean isMonostableMultivibratorExperiment;
+    public boolean runMonostableMultivibratorExperiment;
+    public boolean isCH1FrequencyRequired;
+    public boolean isCH2FrequencyRequired;
+    public boolean runSpeedOfSoundExperiment;
+    public boolean isSpeedOfSoundExperiment;
     private String leftYAxisInput;
     public String triggerChannel;
     public String curveFittingChannel1;
@@ -105,17 +123,28 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public String xyPlotYAxisChannel;
     public double trigger;
     Fragment channelParametersFragment;
-    Fragment timebasetriggerFragment;
+    Fragment timebaseTriggerFragment;
     Fragment dataAnalysisFragment;
     Fragment xyPlotFragment;
+    Fragment halfWaveRectifierFragment;
+    Fragment fullWaveRectifierFragment;
+    Fragment oscillatorExperimentFragment;
+    Fragment diodeClippingClampingFragment;
+    Fragment speedOfSoundFragment;
     private final Object lock = new Object();
     private CaptureTask captureTask;
     private CaptureTaskTwo captureTask2;
     private CaptureTaskThree captureTask3;
     private XYPlotTask xyPlotTask;
+    private OscillatorTask oscillatorTask;
+    private SpeedOfSoundTask speedOfSoundTask;
     private ImageView ledImageView;
     public Plot2D graph;
     private AudioJack audioJack = null;
+    private AnalyticsClass analyticsClass;
+    private CaptureAudioBuffer captureAudioBuffer;
+    private Thread monitorThread;
+    private volatile boolean monitor = true;
 
 
     @Override
@@ -149,10 +178,29 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         triggerChannel = "CH1";
         trigger = 0;
         timebase = 875;
+        samples = 512;
+        timeGap = 2;
+        sineFit = true;
+        squareFit = false;
         graph = new Plot2D(this, new float[]{}, new float[]{}, 1);
+        curveFittingChannel1 = "None";
+        curveFittingChannel2 = "None";
         xyPlotXAxisChannel = "CH1";
         xyPlotYAxisChannel = "CH2";
         viewIsClicked = false;
+        isHalfWaveRectifierExperiment = false;
+        isFullWaveRectifierExperiment = false;
+        isAstableMultivibratorExperiment = false;
+        analyticsClass = new AnalyticsClass();
+        isCH1FrequencyRequired = false;
+        isCH2FrequencyRequired = false;
+        isColpittsOscillatorExperiment = false;
+        isPhaseShiftOscillatorExperiment = false;
+        isWienBridgeOscillatorExperiment = false;
+        isMonostableMultivibratorExperiment = false;
+        runMonostableMultivibratorExperiment = false;
+        isSpeedOfSoundExperiment = false;
+        runSpeedOfSoundExperiment = false;
 
         //int freq = scienceLab.setSine1(3000);
         //Log.v("SIN Fre", "" + freq);
@@ -164,15 +212,61 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         width = size.x;
         height = size.y;
 
+        Bundle extras = getIntent().getExtras();
+        if ("Half Wave Rectifier".equals(extras.getString("who"))) {
+            isHalfWaveRectifierExperiment = true;
+            if (scienceLab.isConnected())
+                scienceLab.setSine1(5000);
+        } else if ("Full Wave Rectifier".equals(extras.getString("who"))) {
+            isFullWaveRectifierExperiment = true;
+            if (scienceLab.isConnected()) {
+                scienceLab.setWaves(5000, 180, 5000);
+            }
+        } else if ("Diode Clipping Clamping".equals(extras.getString("who"))) {
+            isDiodeClippingClampingExperiment = true;
+            if (scienceLab.isConnected()) {
+                scienceLab.setSine1(5000);
+            }
+        } else if ("Astable Multivibrator".equals(extras.getString("who"))) {
+            isAstableMultivibratorExperiment = true;
+        } else if ("Colpitts Oscillator".equals(extras.getString("who"))) {
+            isColpittsOscillatorExperiment = true;
+        } else if ("Phase Shift Oscillator".equals(extras.getString("who"))) {
+            isPhaseShiftOscillatorExperiment = true;
+        } else if ("Wien Bridge Oscillator".equals(extras.getString("who"))) {
+            isWienBridgeOscillatorExperiment = true;
+        } else if ("Monostable Multivibrator".equals(extras.getString("who"))) {
+            isMonostableMultivibratorExperiment = true;
+        } else if ("Speed of Sound".equals(extras.getString("who"))) {
+            isSpeedOfSoundExperiment = true;
+        }
+
         onWindowFocusChanged();
 
         channelParametersFragment = new ChannelParametersFragment();
-        timebasetriggerFragment = new TimebaseTriggerFragment();
+        timebaseTriggerFragment = new TimebaseTriggerFragment();
         dataAnalysisFragment = new DataAnalysisFragment();
         xyPlotFragment = new XYPlotFragment();
+        halfWaveRectifierFragment = new HalfWaveRectifierFragment();
+        fullWaveRectifierFragment = new FullWaveRectifierFragment();
+        diodeClippingClampingFragment = new DiodeClippingClampingExperiment();
+        oscillatorExperimentFragment = new OscillatorExperimentFragment();
+        speedOfSoundFragment = new SpeedOfSoundFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
-            addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+            if (isHalfWaveRectifierExperiment) {
+                addFragment(R.id.layout_dock_os2, halfWaveRectifierFragment, "HalfWaveFragment");
+            } else if (isFullWaveRectifierExperiment) {
+                addFragment(R.id.layout_dock_os2, fullWaveRectifierFragment, "FullWaveFragment");
+            } else if (isDiodeClippingClampingExperiment) {
+                addFragment(R.id.layout_dock_os2, diodeClippingClampingFragment, "DiodeClippingClampingFragment");
+            } else if (isAstableMultivibratorExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment || isMonostableMultivibratorExperiment) {
+                addFragment(R.id.layout_dock_os2, oscillatorExperimentFragment, "OscillatorFragment");
+            } else if (isSpeedOfSoundExperiment) {
+                addFragment(R.id.layout_dock_os2, speedOfSoundFragment, "SpeedOfSoundFragment");
+            } else {
+                addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+            }
         }
         channelParametersButton.setOnClickListener(this);
         timebaseButton.setOnClickListener(this);
@@ -190,7 +284,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
             @Override
             public void run() {
                 //Thread to check which checkbox is enabled
-                while (true) {
+                while (monitor) {
                     if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute("CH1");
@@ -292,6 +386,42 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
+                    if (scienceLab.isConnected() && (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment || isDiodeClippingClampingExperiment)) {
+                        captureTask2 = new CaptureTaskTwo();
+                        captureTask2.execute("CH1");
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    if (scienceLab.isConnected() && (isAstableMultivibratorExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment)) {
+                        oscillatorTask = new OscillatorTask();
+                        oscillatorTask.execute("CH1");
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    if (scienceLab.isConnected() && isMonostableMultivibratorExperiment && runMonostableMultivibratorExperiment) {
+                        oscillatorTask = new OscillatorTask();
+                        oscillatorTask.execute("CH1");
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
                     if (!scienceLab.isConnected() || (!isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected)) {
                         if (!String.valueOf(ledImageView.getTag()).equals("red")) {
                             runOnUiThread(new Runnable() {
@@ -322,8 +452,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                     if (isInBuiltMicSelected) {
                         if (audioJack == null)
                             audioJack = new AudioJack("input");
-                        captureAudioBuffer audioBuffer = new captureAudioBuffer(audioJack);
-                        audioBuffer.execute();
+                        captureAudioBuffer = new CaptureAudioBuffer(audioJack);
+                        captureAudioBuffer.execute();
                         synchronized (lock) {
                             try {
                                 lock.wait();
@@ -338,13 +468,25 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                         }
                     }
 
+                    if (scienceLab.isConnected() && isSpeedOfSoundExperiment && runSpeedOfSoundExperiment) {
+                        speedOfSoundTask = new SpeedOfSoundTask();
+                        speedOfSoundTask.execute();
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
                 }
             }
         };
 
         // if (scienceLab.isConnected())
-        new Thread(runnable).start();
-
+        monitorThread = new Thread(runnable);
+        monitorThread.start();
     }
 
     @Override
@@ -360,11 +502,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 break;
 
             case R.id.button_timebase_os:
-                replaceFragment(R.id.layout_dock_os2, timebasetriggerFragment, "TimebaseTiggerFragment");
+                replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 break;
 
             case R.id.tv_timebase_tigger_os:
-                replaceFragment(R.id.layout_dock_os2, timebasetriggerFragment, "TimebaseTiggerFragment");
+                replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 break;
 
             case R.id.button_data_analysis_os:
@@ -388,24 +530,43 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     public void onWindowFocusChanged() {
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         //dynamic placing the layouts
-        if (tabletSize) {
+        if (isHalfWaveRectifierExperiment || isDiodeClippingClampingExperiment || isAstableMultivibratorExperiment || isSpeedOfSoundExperiment) {
+            linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
             lineChartParams.height = height * 3 / 4;
-            lineChartParams.width = width * 7 / 8;
-            mChartLayout.setLayoutParams(lineChartParams);
+            lineChartParams.width = width;
             RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
             frameLayoutParams.height = height / 4;
-            frameLayoutParams.width = width * 7 / 8;
-            frameLayout.setLayoutParams(frameLayoutParams);
-        } else {
+            frameLayoutParams.width = width;
+        } else if (isFullWaveRectifierExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment || isMonostableMultivibratorExperiment) {
+            linearLayout.setVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
-            lineChartParams.height = height * 2 / 3;
-            lineChartParams.width = width * 5 / 6;
-            mChartLayout.setLayoutParams(lineChartParams);
+            lineChartParams.height = height * 5 / 6;
+            lineChartParams.width = width;
             RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
-            frameLayoutParams.height = height / 3;
-            frameLayoutParams.width = width * 5 / 6;
-            frameLayout.setLayoutParams(frameLayoutParams);
+            frameLayoutParams.height = height / 6;
+            frameLayoutParams.width = width;
+        } else {
+
+            if (tabletSize) {
+                RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+                lineChartParams.height = height * 3 / 4;
+                lineChartParams.width = width * 7 / 8;
+                mChartLayout.setLayoutParams(lineChartParams);
+                RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+                frameLayoutParams.height = height / 4;
+                frameLayoutParams.width = width * 7 / 8;
+                frameLayout.setLayoutParams(frameLayoutParams);
+            } else {
+                RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+                lineChartParams.height = height * 2 / 3;
+                lineChartParams.width = width * 5 / 6;
+                mChartLayout.setLayoutParams(lineChartParams);
+                RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+                frameLayoutParams.height = height / 3;
+                frameLayoutParams.width = width * 5 / 6;
+                frameLayout.setLayoutParams(frameLayoutParams);
+            }
         }
     }
 
@@ -428,11 +589,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -451,6 +607,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
+        monitor = false;
         if (captureTask != null) {
             captureTask.cancel(true);
         }
@@ -459,6 +616,15 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         }
         if (captureTask3 != null) {
             captureTask3.cancel(true);
+        }
+        if (oscillatorTask != null) {
+            oscillatorTask.cancel(true);
+        }
+        if (captureAudioBuffer != null) {
+            captureAudioBuffer.cancel(true);
+            if (audioJack != null) {
+                audioJack.release();
+            }
         }
         super.onDestroy();
     }
@@ -546,7 +712,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         xAxisLabel.setText(xAxisInput);
     }
 
-
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         ArrayList<Entry> entries;
         String analogInput;
@@ -555,14 +720,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         protected Void doInBackground(String... params) {
             try {
                 analogInput = params[0];
-                //no. of samples and timegap still need to be determined
+                //no. of samples and timeGap still need to be determined
                 if (isTriggerSelected) {
                     scienceLab.configureTrigger(0, analogInput, trigger, null, null);
-                    scienceLab.captureTraces(1, 1000, 10, analogInput, true, null);
+                    scienceLab.captureTraces(1, samples, timeGap, analogInput, true, null);
                 } else {
-                    scienceLab.captureTraces(1, 1000, 10, analogInput, false, null);
+                    scienceLab.captureTraces(1, samples, timeGap, analogInput, false, null);
                 }
-                Log.v("Sleep Time", "" + (1000 * 10 * 1e-3));
+                Log.v("Sleep Time", "" + (1024 * 10 * 1e-3));
                 Thread.sleep((long) (1000 * 10 * 1e-3));
                 HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
 
@@ -570,7 +735,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 double[] yData = data.get("y");
                 //Log.v("XDATA", Arrays.toString(xData));
                 //Log.v("YDATA", Arrays.toString(yData));
-                entries = new ArrayList<Entry>();
+
+                entries = new ArrayList<>();
                 if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries.add(new Entry((float) xData[i], (float) yData[i]));
@@ -596,9 +762,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 ledImageView.setTag("green");
             }
 
-            LineDataSet dataset = new LineDataSet(entries, analogInput);
-            LineData lineData = new LineData(dataset);
-            dataset.setDrawCircles(false);
+            LineDataSet dataSet = new LineDataSet(entries, analogInput);
+            LineData lineData = new LineData(dataSet);
+            dataSet.setDrawCircles(false);
             mChart.setData(lineData);
             mChart.notifyDataSetChanged();
             mChart.invalidate();
@@ -619,23 +785,23 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         protected Void doInBackground(String... params) {
             try {
                 analogInput = params[0];
-                //no. of samples and timegap still need to be determined
+                //no. of samples and timeGap still need to be determined
                 HashMap<String, double[]> data;
                 if (isTriggerSelected && (triggerChannel.equals("CH1") || triggerChannel.equals("CH2"))) {
                     if (triggerChannel.equals("CH1"))
                         scienceLab.configureTrigger(0, analogInput, trigger, null, null);
                     else if (triggerChannel.equals("CH2"))
                         scienceLab.configureTrigger(1, "CH2", trigger, null, null);
-                    data = scienceLab.captureTwo(1000, 10, analogInput, true);
+                    data = scienceLab.captureTwo(samples, timeGap, analogInput, true);
                 } else {
-                    data = scienceLab.captureTwo(1000, 10, analogInput, false);
+                    data = scienceLab.captureTwo(samples, timeGap, analogInput, false);
                 }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y1");
                 double[] y2Data = data.get("y2");
 
-                entries1 = new ArrayList<Entry>();
-                entries2 = new ArrayList<Entry>();
+                entries1 = new ArrayList<>();
+                entries2 = new ArrayList<>();
                 if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
@@ -661,16 +827,27 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 ledImageView.setTag("green");
             }
 
-            LineDataSet dataset1 = new LineDataSet(entries1, analogInput);
-            LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
+            LineDataSet dataSet1;
+            LineDataSet dataSet2;
 
-            dataSet2.setColor(Color.GREEN);
+            if (isHalfWaveRectifierExperiment || isFullWaveRectifierExperiment || isDiodeClippingClampingExperiment) {
+                dataSet1 = new LineDataSet(entries1, analogInput + " INPUT");
+                dataSet2 = new LineDataSet(entries2, "CH2" + " OUTPUT");
+                dataSet1.setColor(Color.GREEN);
+                dataSet2.setColor(Color.RED);
 
-            dataset1.setDrawCircles(false);
+            } else {
+                dataSet1 = new LineDataSet(entries1, analogInput);
+                dataSet2 = new LineDataSet(entries2, "CH2");
+                dataSet2.setColor(Color.GREEN);
+            }
+
+
+            dataSet1.setDrawCircles(false);
             dataSet2.setDrawCircles(false);
 
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-            dataSets.add(dataset1);
+            List<ILineDataSet> dataSets = new ArrayList<>();
+            dataSets.add(dataSet1);
             dataSets.add(dataSet2);
 
             LineData data = new LineData(dataSets);
@@ -693,23 +870,29 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         @Override
         protected Void doInBackground(String... params) {
             try {
-                //no. of samples and timegap still need to be determined
+                //no. of samples and timeGap still need to be determined
                 analogInput = params[0];
                 HashMap<String, double[]> data;
 
                 if (isTriggerSelected) {
-                    if (triggerChannel.equals("CH1"))
-                        scienceLab.configureTrigger(0, analogInput, trigger, null, null);
-                    else if (triggerChannel.equals("CH2"))
-                        scienceLab.configureTrigger(1, analogInput, trigger, null, null);
-                    else if (triggerChannel.equals("CH3"))
-                        scienceLab.configureTrigger(2, analogInput, trigger, null, null);
-                    else if (triggerChannel.equals("MIC"))
-                        scienceLab.configureTrigger(3, analogInput, trigger, null, null);
+                    switch (triggerChannel) {
+                        case "CH1":
+                            scienceLab.configureTrigger(0, analogInput, trigger, null, null);
+                            break;
+                        case "CH2":
+                            scienceLab.configureTrigger(1, analogInput, trigger, null, null);
+                            break;
+                        case "CH3":
+                            scienceLab.configureTrigger(2, analogInput, trigger, null, null);
+                            break;
+                        case "MIC":
+                            scienceLab.configureTrigger(3, analogInput, trigger, null, null);
+                            break;
+                    }
 
-                    data = scienceLab.captureFour(1000, 10, analogInput, true);
+                    data = scienceLab.captureFour(samples, timeGap, analogInput, true);
                 } else {
-                    data = scienceLab.captureFour(1000, 10, analogInput, false);
+                    data = scienceLab.captureFour(samples, timeGap, analogInput, false);
                 }
                 double[] xData = data.get("x");
                 double[] y1Data = data.get("y");
@@ -717,10 +900,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 double[] y3Data = data.get("y3");
                 double[] y4Data = data.get("y4");
 
-                entries1 = new ArrayList<Entry>();
-                entries2 = new ArrayList<Entry>();
-                entries3 = new ArrayList<Entry>();
-                entries4 = new ArrayList<Entry>();
+                entries1 = new ArrayList<>();
+                entries2 = new ArrayList<>();
+                entries3 = new ArrayList<>();
+                entries4 = new ArrayList<>();
                 if (timebase == 875) {
                     for (int i = 0; i < xData.length; i++) {
                         entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
@@ -750,22 +933,22 @@ public class OscilloscopeActivity extends AppCompatActivity implements
                 ledImageView.setTag("green");
             }
 
-            LineDataSet dataset1 = new LineDataSet(entries1, "CH1");
+            LineDataSet dataSet1 = new LineDataSet(entries1, "CH1");
             LineDataSet dataSet2 = new LineDataSet(entries2, "CH2");
             LineDataSet dataSet3 = new LineDataSet(entries3, "CH3");
             LineDataSet dataSet4 = new LineDataSet(entries4, "MIC");
 
-            dataset1.setColor(Color.BLUE);
+            dataSet1.setColor(Color.BLUE);
             dataSet2.setColor(Color.GREEN);
             dataSet3.setColor(Color.RED);
             dataSet4.setColor(Color.YELLOW);
-            dataset1.setDrawCircles(false);
+            dataSet1.setDrawCircles(false);
             dataSet2.setDrawCircles(false);
             dataSet3.setDrawCircles(false);
             dataSet4.setDrawCircles(false);
 
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-            dataSets.add(dataset1);
+            List<ILineDataSet> dataSets = new ArrayList<>();
+            dataSets.add(dataSet1);
             dataSets.add(dataSet2);
             dataSets.add(dataSet3);
             dataSets.add(dataSet4);
@@ -855,18 +1038,23 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         }
     }
 
-    public class captureAudioBuffer extends AsyncTask<Void, Void, Void> {
+    public class CaptureAudioBuffer extends AsyncTask<Void, Void, Void> {
 
         private AudioJack audioJack;
         private short[] buffer;
+        private List<Entry> entries;
 
-        public captureAudioBuffer(AudioJack audioJack) {
+        public CaptureAudioBuffer(AudioJack audioJack) {
             this.audioJack = audioJack;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             buffer = audioJack.read();
+            entries = new ArrayList<>();
+            for (int i = 0; i < buffer.length; i++) {
+                entries.add(new Entry(i, (float) map(buffer[i], -32768, 32767, -3, 3)));
+            }
             //Log.v("AudioBuffer", Arrays.toString(buffer));
             return null;
         }
@@ -875,21 +1063,201 @@ public class OscilloscopeActivity extends AppCompatActivity implements
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             // Update chart
-            List<Entry> entries = new ArrayList<>();
-            for (int i = 0; i < buffer.length; i++) {
-                entries.add(new Entry(i, (float) map(buffer[i], -32768, 32767, -3, 3)));
-            }
             LineDataSet lineDataSet = new LineDataSet(entries, "Audio Data");
             lineDataSet.setColor(Color.WHITE);
             lineDataSet.setDrawCircles(false);
             mChart.setData(new LineData(lineDataSet));
             mChart.notifyDataSetChanged();
             mChart.invalidate();
-            //Log.v("Execution Done", "Completed");
             synchronized (lock) {
                 lock.notify();
             }
         }
     }
 
+    public class OscillatorTask extends AsyncTask<String, Void, Void> {
+        ArrayList<Entry> entries1;
+        ArrayList<Entry> entries2;
+        ArrayList<Entry> entries3;
+        String analogInput;
+        double[] xData;
+        double[] y1Data;
+        double[] y2Data;
+        double[] y3Data;
+        double frequencyCH1;
+        double frequencyCH2;
+        OscillatorExperimentFragment fragment;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                analogInput = params[0];
+                HashMap<String, double[]> data;
+                if (isAstableMultivibratorExperiment || isMonostableMultivibratorExperiment) {
+                    data = scienceLab.captureTwo(128, 10, analogInput, false);
+                    xData = data.get("x");
+                    y1Data = data.get("y1");
+                    y2Data = data.get("y2");
+
+                    entries1 = new ArrayList<>();
+                    entries2 = new ArrayList<>();
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                    }
+                    if (runMonostableMultivibratorExperiment)
+                        runMonostableMultivibratorExperiment = false;
+
+                } else if (isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment) {
+                    scienceLab.captureTraces(1, 128, 10, analogInput, false, null);
+                    Thread.sleep((long) (128 * 10 * 1e-3));
+                    data = scienceLab.fetchTrace(1); //fetching data
+                    xData = data.get("x");
+                    y1Data = data.get("y");
+                    entries1 = new ArrayList<>();
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                    }
+                } else if (isWienBridgeOscillatorExperiment) {
+                    data = scienceLab.captureFour(128, 10, "CH1", false);
+                    xData = data.get("x");
+                    y1Data = data.get("y");
+                    y2Data = data.get("y2");
+                    y3Data = data.get("y3");
+                    entries1 = new ArrayList<>();
+                    entries2 = new ArrayList<>();
+                    entries3 = new ArrayList<>();
+                    for (int i = 0; i < xData.length; i++) {
+                        entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                        entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
+                        entries3.add(new Entry((float) xData[i], (float) y3Data[i]));
+                    }
+                }
+                if (isCH1FrequencyRequired)
+                    frequencyCH1 = analyticsClass.sineFit(xData, y1Data)[1];
+
+                if (isCH2FrequencyRequired)
+                    frequencyCH2 = analyticsClass.sineFit(xData, y2Data)[1];
+
+            } catch (NullPointerException e) {
+                cancel(true);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            fragment = (OscillatorExperimentFragment) getSupportFragmentManager().findFragmentById(oscillatorExperimentFragment.getId());
+            List<ILineDataSet> dataSets = new ArrayList<>();
+            if (isCH1FrequencyRequired) {
+                if (frequencyCH1 >= 0)
+                    fragment.resultCH1Frequency.setText(String.format("%sHz", new DecimalFormat("#.##").format(frequencyCH1)));
+                else
+                    fragment.resultCH1Frequency.setText(R.string.fit_failed);
+                isCH1FrequencyRequired = false;
+            }
+            if (isCH2FrequencyRequired) {
+                if (frequencyCH1 >= 0)
+                    fragment.resultCH2Frequency.setText(new DecimalFormat("#.##").format(frequencyCH2));
+                else
+                    fragment.resultCH2Frequency.setText(R.string.fit_failed);
+                isCH2FrequencyRequired = false;
+            }
+            if (isAstableMultivibratorExperiment || isMonostableMultivibratorExperiment) {
+                LineDataSet dataSet1;
+                LineDataSet dataSet2;
+                if (isMonostableMultivibratorExperiment) {
+                    dataSet1 = new LineDataSet(entries1, "Pulse Output (CH2)");
+                    dataSet2 = new LineDataSet(entries2, "Trigger Pulse (CH1)");
+                    fragment.resultCH1Frequency.setText(R.string.done);
+                } else {
+                    dataSet1 = new LineDataSet(entries1, "CH1 INPUT");
+                    dataSet2 = new LineDataSet(entries2, "CH2 OUTPUT");
+                }
+                dataSet1.setColor(Color.GREEN);
+                dataSet2.setColor(Color.RED);
+                dataSet1.setDrawCircles(false);
+                dataSet2.setDrawCircles(false);
+                dataSets.add(dataSet1);
+                dataSets.add(dataSet2);
+            } else if (isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment) {
+                LineDataSet dataSet1;
+                dataSet1 = new LineDataSet(entries1, "CH1 INPUT");
+                dataSet1.setColor(Color.GREEN);
+                dataSet1.setDrawCircles(false);
+                dataSets.add(dataSet1);
+            } else if (isWienBridgeOscillatorExperiment) {
+                LineDataSet dataSet1;
+                LineDataSet dataSet2;
+                LineDataSet dataSet3;
+                dataSet1 = new LineDataSet(entries1, "Oscillator Output(CH1)");
+                dataSet2 = new LineDataSet(entries2, "Monitor #1(CH2)");
+                dataSet3 = new LineDataSet(entries3, "Monitor #2(CH3)");
+                dataSet1.setColor(Color.GREEN);
+                dataSet2.setColor(Color.RED);
+                dataSet3.setColor(Color.YELLOW);
+                dataSet1.setDrawCircles(false);
+                dataSet2.setDrawCircles(false);
+                dataSet3.setDrawCircles(false);
+                dataSets.add(dataSet1);
+                dataSets.add(dataSet2);
+                dataSets.add(dataSet3);
+            }
+
+            LineData data = new LineData(dataSets);
+            mChart.setData(data);
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+            synchronized (lock) {
+                lock.notify();
+            }
+        }
+    }
+
+    public class SpeedOfSoundTask extends AsyncTask<Void, Void, Void> {
+        ArrayList<Entry> entries;
+        SpeedOfSoundFragment fragment;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            scienceLab.captureFullSpeed("CH1", 128, 10, new ArrayList<>(Collections.singletonList("FIRE_PULSES")), 50);
+            HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
+
+            double[] xData = data.get("x");
+            double[] yData = data.get("y");
+            //Log.v("XDATA", Arrays.toString(xData));
+            //Log.v("YDATA", Arrays.toString(yData));
+            entries = new ArrayList<>();
+            for (int i = 0; i < xData.length; i++) {
+                entries.add(new Entry((float) xData[i], (float) yData[i]));
+            }
+            runSpeedOfSoundExperiment = false;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (!String.valueOf(ledImageView.getTag()).equals("green")) {
+                ledImageView.setImageResource(R.drawable.green_led);
+                ledImageView.setTag("green");
+            }
+
+            fragment = (SpeedOfSoundFragment) getSupportFragmentManager().findFragmentById(speedOfSoundFragment.getId());
+            fragment.resultTextView.setText(R.string.done);
+            LineDataSet dataSet = new LineDataSet(entries, "RAMP in CH1");
+            LineData lineData = new LineData(dataSet);
+            dataSet.setDrawCircles(false);
+            mChart.setData(lineData);
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+
+            synchronized (lock) {
+                lock.notify();
+            }
+        }
+    }
 }

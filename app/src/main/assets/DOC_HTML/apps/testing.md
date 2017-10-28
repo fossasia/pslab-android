@@ -1,19 +1,13 @@
-<html>
-  <head>
-    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
-    <title>index</title>
-  </head>
-  <body style = "background-color:#fff">Self testing<br>
+Self testing
+---
 
-	Make the Following connections for group 1, and run the relevant tests<br>
-	<img src="images/test1.svg" style="width:100%;max-width:500px;"><br>
+* Make the Following connections for group 1, and run the relevant tests
+![](file:///android_asset/DOC_HTML/apps/images/schematics/test1.svg@100%|auto)
 
-	Make the Following connections for group 2.<br>
-	<img src="images/test2.svg" style="width:100%;max-width:500px;"><br>
+* Make the Following connections for group 2.
+![](file:///android_asset/DOC_HTML/apps/images/schematics/test2.svg@100%|auto)
 
+## Screenshot
 
-	<h3>Screenshot</h3>
-	<img src="screenshots/testing.png" width="100%"><br>
+![](file:///android_asset/DOC_HTML/apps/images/schematics/screenshots/testing.png@100%|auto)
 
-  </body>
-</html>

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -43,6 +44,9 @@ dependencies {
     compile "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
     compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+    
+    compile 'com.github.medyo:android-about-page:1.2.1'
+    compile 'com.github.tiagohm.MarkdownView:library:0.17.0'
 
     testCompile "junit:junit:$rootProject.junitVersion"
     androidTestCompile("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {

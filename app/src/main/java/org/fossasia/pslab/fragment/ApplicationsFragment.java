@@ -19,6 +19,7 @@ import org.fossasia.pslab.activity.SensorDataLoggerActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.activity.SensorActivity;
+import org.fossasia.pslab.activity.WavegenActivity;
 import org.fossasia.pslab.items.ApplicationItem;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.ApplicationAdapter;
@@ -56,6 +57,7 @@ public class ApplicationsFragment extends Fragment {
                         switch (item.getApplicationName()) {
                             case "Oscilloscope":
                                 intent = new Intent(context, OscilloscopeActivity.class);
+                                intent.putExtra("who", "Applications");
                                 startActivity(intent);
                                 break;
                             case "Control":
@@ -72,6 +74,10 @@ public class ApplicationsFragment extends Fragment {
                                 break;
                             case "Data Sensor Logger":
                                 intent = new Intent(context, SensorDataLoggerActivity.class);
+                                startActivity(intent);
+                                break;
+                            case "Wave Generator":
+                                intent = new Intent(context, WavegenActivity.class);
                                 startActivity(intent);
                                 break;
                         }
@@ -108,8 +114,8 @@ public class ApplicationsFragment extends Fragment {
                     R.drawable.control_icon,
                     R.drawable.logic_analzers_icon,
                     R.drawable.sensor_icon,
-                    R.drawable.wireless_sensor_icon,
-                    R.drawable.sensor_qv_icon};
+                    R.drawable.sensor_qv_icon,
+                    R.drawable.wavegen};
 
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.oscilloscope), applications[0])
@@ -124,18 +130,15 @@ public class ApplicationsFragment extends Fragment {
                     getResources().getString(R.string.data_sensor_logger), applications[3])
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.w_sensor_logger), applications[4])
+                    getResources().getString(R.string.sensor_quick_view), applications[4])
             );
-            applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.sensor_quick_view), applications[5])
-            );
+            applicationItemList.add(new ApplicationItem(getResources().getString(R.string.wavegen), applications[5]));
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            // Notify the adapter that data has been fetched
             applicationAdapter.notifyDataSetChanged();
         }
     }

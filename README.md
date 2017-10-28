@@ -1,6 +1,12 @@
 # pslab-android
 PSLab Android App
 
+<a href="https://play.google.com/store/apps/details?id=org.fossasia.pslab">
+    <img alt="Get it on Google Play"
+        height="80"
+        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+</a>
+
 [![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=master)](https://travis-ci.org/fossasia/pslab-android)
 [![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Preview app](https://img.shields.io/badge/Preview-Appetize.io-orange.svg)](https://appetize.io/app/4eqye6ea422e5np0gp2jfpemgm)
@@ -54,12 +60,11 @@ Please join us on the following channels:
 -----|-----|-----
 Home Screen|Show status and version of PSLab device|Established
 Application|Exposes PSLab application like Oscilloscope,etc |Established
- |Oscilloscope |Shows variation of analog signals | Working
- |Control |Generate waveforms and PWM signals. Control voltage and current sources and read results from a variety of electric components | Working
+ |Oscilloscope |Shows variation of analog signals | Established
+ |Control |Generate waveforms and PWM signals. Control voltage and current sources and read results from a variety of electric components | Established
  |Logical Analyzer |Captures and displays signals from digital system | Working
- |Data Sensor Logger |Captures and displays data from various sensors | Working
- |Wireless Sensor |Scans, captures and displays data from various wireless sensors |
- |Sensor Quick View |Scans all the sensors connected to PSLab Device and provides interface to Log data| Working
+ |Data Sensor Logger |Scans sensors connected to PSLab Device and provides interface to see and log real-time data | Working
+ |Sensor Quick View |Scans all the sensors connected to PSLab Device and visualise real-time data | Established
  |Settings |Enable Auto-Start |
  |Saved Experiments |Access Pre-defined and Designed Experiments | Working
  |Design Experiments |To Design our own experiments |
@@ -92,7 +97,7 @@ If you want build apk only, go to Build>Build apk and apk would be build and dir
 
 You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through usb cable. 
 
-To debug over Wi-Fi : http://stackoverflow.com/questions/4893953/run-install-debug-android-applications-over-wi-fi
+To debug over Wi-Fi : http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/
  
 Note : 
 1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/org/fossasia/pslab/communication/CommunicationHandler.java) 
@@ -100,7 +105,9 @@ Note :
 ## Setup to use PSLab with Android App
 To use PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ) and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.
 
-## Code practices
+## Contributions Best Practices
+
+### Code practices
 
 Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics. 
 
@@ -110,7 +117,22 @@ Please help us follow the best practice to make it easy for the reviewer as well
  * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
  * If the PR is related to any front end change, please attach relevant screenshots in the pull request description.
 
-## Code style
+### Branch Policy
+
+We have the following branches
+ * **development**
+	 All development goes on in this branch. If you're making a contribution,
+	 you are supposed to make a pull request to _development_.
+	 Make sure it pass a build check on Travis.
+
+ * **master**
+   This contains the stable code. After significant features/bugfixes are accumulated on development, we move it to master.
+
+ * **apk**
+   This branch contains automatically generated apk file for testing.
+
+
+### Code style
 
 Please try to follow the mentioned guidelines while writing and submitting your code as it makes easier for the reviewer and other developers to understand.
 
@@ -118,3 +140,15 @@ Please try to follow the mentioned guidelines while writing and submitting your 
  * Name the views and widgets defined in the layout files as (viewtype/widget) _ (fragment/activity name) _ (no. in the file) like ```spinner_channel_select_la1``` , ```button_activity_oscilloscope1``` .
  * The activity/fragment file name corresponding to the layout files should be named as                       (activity/fragment name)(activity/fragment).java like ```ChannelsParameterFragment.java``` corresponding to the layout file ```fragment_channels_parameter.xml``` .
  * The corresponding widgets for buttons, textboxes, checkboxes etc. in activity files should be named as (viewtype/widget)(fragment/activity name)(no. in the file) like ```spinnerChannelSelect1``` corresponding to ```spinner_channel_select1``` .
+
+## License
+
+This project is currently licensed under the GNU General Public License v3. A copy of [LICENSE](LICENSE.md) is to be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
+
+## Maintainers
+The project is maintained by
+- Praveen Patil ([@wavicles](https://github.com/wavicles))
+- Mario Behling ([@mariobehling](http://github.com/mariobehling))
+- Lorenz Gerber ([@lorenzgerber](https://github.com/lorenzgerber))
+- Jithin ([@jithinbp](https://github.com/jithinbp))
+- Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96)), Asitava Sarkar ([@asitava1998](https://github.com/asitava1998)), Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal)), Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))

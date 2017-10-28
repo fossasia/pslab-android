@@ -92,7 +92,7 @@ public class ScienceLab {
                 mCommunicationHandler.open();
                 //Thread.sleep(200);
                 mPacketHandler = new PacketHandler(50, mCommunicationHandler);
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -605,7 +605,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2 + 1];
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -618,7 +618,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(totalSamples - totalSamples % this.dataSplitting);
                 byte[] data = new byte[2 * (totalSamples % this.dataSplitting) + 1];
                 mPacketHandler.read(data, 2 * (totalSamples % this.dataSplitting) + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -682,7 +682,7 @@ public class ScienceLab {
         }
     }
 
-    private HashMap<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
+    public HashMap<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
         /*
         * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
         */
@@ -761,7 +761,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2 + 1];
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -774,7 +774,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(samples - samples % this.dataSplitting);
                 byte[] data = new byte[2 * (samples % this.dataSplitting)];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -917,7 +917,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2 + 1];
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -930,7 +930,7 @@ public class ScienceLab {
                 mPacketHandler.sendInt(samples - samples % this.dataSplitting);
                 byte[] data = new byte[2 * (samples % this.dataSplitting) + 1];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting) + 1);
-                for (int j = 0; j < data.length; j++)
+                for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
                 //mPacketHandler.getAcknowledgement();
             }
@@ -1146,7 +1146,7 @@ public class ScienceLab {
             int vSum = mPacketHandler.getInt();
             mPacketHandler.getAcknowledgement();
             return vSum / 16.;
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             Log.e(TAG, "Error in getRawAverageVoltage");
         }

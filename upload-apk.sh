@@ -3,6 +3,7 @@
 mkdir $HOME/buildApk/ 
 #copy generated apk from build folder and README.md to the folder just created
 cp -R app/build/outputs/apk/app-debug.apk $HOME/buildApk/
+mv $HOME/buildApk/app-debug.apk $HOME/buildApk/app-release.apk 
 cp -R README.md $HOME/buildApk/
 
 #setup git
@@ -29,3 +30,8 @@ git branch -m apk
 
 #push to the branch apk
 git push origin apk --force --quiet> /dev/null
+
+if [ "$TRAVIS_PULL_REQUEST" == "false" ]
+then 
+curl https://$APPETIZE_API_TOKEN@api.appetize.io/v1/apps/4eqye6ea422e5np0gp2jfpemgm -H 'Content-Type: application/json' -d '{"url":"https://github.com/fossasia/pslab-android/blob/apk/app-debug.apk", "note": "PSLab Android App Update"}' 
+fi

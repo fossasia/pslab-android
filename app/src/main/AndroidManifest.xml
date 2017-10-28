@@ -10,6 +10,7 @@
     <uses-feature android:name="android.hardware.usb.host" />
 
     <application
+        android:name=".PSLabApplication"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
@@ -34,19 +35,23 @@
         </activity>
         <activity android:name=".activity.AboutUs" />
         <activity android:name=".activity.HelpAndFeedback" />
-        <activity android:name=".activity.ReportUs" />
-        <activity android:name=".activity.PerformExperimentActivity" />
+        <activity android:name=".activity.ShowLoggedData" />
+        <activity android:name=".activity.WavegenActivity" />
         <activity
-            android:name=".activity.ControlActivity"
+            android:name=".activity.PerformExperimentActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
+            android:name=".activity.ControlActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
             android:name=".activity.OscilloscopeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="landscape" />
         <activity android:name=".activity.SensorActivity" />
         <activity
             android:name=".activity.LogicalAnalyzerActivity"
             android:configChanges="screenSize|orientation" />
-        <activity android:name=".activity.SensorDataLoggerActivity"/>
+        <activity android:name=".activity.SensorDataLoggerActivity" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />
     </application>
