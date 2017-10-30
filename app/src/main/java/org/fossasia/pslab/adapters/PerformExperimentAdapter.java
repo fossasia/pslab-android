@@ -150,8 +150,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocMdFragment.newInstance("P_CapacitivePhaseShift.md");
                     case "Capacitive Reactance":
                         return ExperimentDocMdFragment.newInstance("O_XC.md");
-                    case "RC Integral":
-                        return ExperimentDocMdFragment.newInstance("Z_designer.md");
+                    case "RC Integrals,Derivatives":
+                        return ExperimentDocMdFragment.newInstance("RC Integrals,Derivatives.md");
                     case "Summing Junction":
                         return ExperimentDocMdFragment.newInstance("L_Summing.md");
                     case "Semiconductor Diode":
@@ -224,7 +224,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return MeasureVoltage.newInstance();
                     case "Capacitive Reactance":
                         return CapacitorReactanceExperiment.newInstance();
-                    case "RC Integral":
+                    case "RC Integrals,Derivatives":
                         return RCIntegralandderivativeexperiment.newInstance();
                     case "Summing Junction":
                         return SummingJunctionExperiment.newInstance();
