@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.ControlMainAdapter;
 
@@ -37,5 +38,12 @@ public class ControlFragmentMain extends Fragment{
         ControlMainAdapter mAdapter = new ControlMainAdapter(new String[]{"PV1", "PV2", "PV3", "PCS", "WAVE 1" , "WAVE 2" , "SQUARE"});
         mRecyclerView.setAdapter(mAdapter);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, ControlFragmentMain.class.getSimpleName());
     }
 }

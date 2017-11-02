@@ -14,6 +14,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 
 /**
@@ -73,6 +74,12 @@ public class ExperimentDocFragment extends Fragment {
             view.loadUrl(request.getUrl().toString());
             return true;
         }
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, ExperimentDocFragment.class.getSimpleName());
     }
 
 }

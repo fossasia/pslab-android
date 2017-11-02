@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 
 import butterknife.ButterKnife;
@@ -35,5 +36,7 @@ public class DesignExperiments extends Fragment {
     @Override public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, DesignExperiments.class.getSimpleName());
     }
 }

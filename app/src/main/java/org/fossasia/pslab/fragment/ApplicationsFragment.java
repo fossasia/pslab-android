@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.activity.ControlActivity;
 import org.fossasia.pslab.activity.SensorDataLoggerActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
@@ -147,5 +148,12 @@ public class ApplicationsFragment extends Fragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, ApplicationsFragment.class.getSimpleName());
     }
 }
