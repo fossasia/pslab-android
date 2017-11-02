@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 
 /**
@@ -200,4 +201,10 @@ public class LAChannelModeFragment extends Fragment {
         void channelSelectedNowAnalyze(Bundle params);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, LAChannelModeFragment.class.getSimpleName());
+    }
 }
