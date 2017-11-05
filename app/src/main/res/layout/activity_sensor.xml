@@ -90,7 +90,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignStart="@+id/checkBox_samples_sensor"
-            android:text="100ms"
+            android:text="@string/hundred_ms"
             android:textSize="12sp" />
 
     </RelativeLayout>

@@ -45,7 +45,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:text="Fourier Transforms"
+        android:text="@string/fourier_transforms"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 </android.support.constraint.ConstraintLayout>
