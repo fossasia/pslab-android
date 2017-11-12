@@ -131,7 +131,7 @@ public class RCIntegralandderivativeexperiment extends Fragment {
             @Override
             public void run() {
                 scienceLab.setSine1(frequency);
-                for (float i = 0; i < 2000; i += 1) {
+                for (int i = 0; i < 2000; i += 1) {
                     new RCIntegralandderivativeexperiment.CalcDataPoint().execute(i);
                     synchronized (lock) {
                         try {
@@ -168,10 +168,10 @@ public class RCIntegralandderivativeexperiment extends Fragment {
         outputChart.invalidate();
     }
 
-    private class CalcDataPoint extends AsyncTask<Float, Void, Void> {
+    private class CalcDataPoint extends AsyncTask<Integer, Void, Void> {
 
         @Override
-        protected Void doInBackground(Float... params) {
+        protected Void doInBackground(Integer... params) {
             float i = params[0];
             readVoltage1 = (float) scienceLab.getVoltage("CH1", 10);
             readVoltage2 = (float) scienceLab.getVoltage("CH2", 10);
