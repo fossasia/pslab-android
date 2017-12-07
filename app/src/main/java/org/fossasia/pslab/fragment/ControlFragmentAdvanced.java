@@ -306,7 +306,7 @@ public class ControlFragmentAdvanced extends Fragment {
                 try {
                     Double frequencyW1 = Double.valueOf(etWidgetControlAdvanced1.getText().toString());
                     Double frequencyW2 = Double.valueOf(etWidgetControlAdvanced2.getText().toString());
-                    int phase = Integer.valueOf(etWidgetControlAdvanced3.getText().toString());
+//                    int phase = Integer.valueOf(etWidgetControlAdvanced3.getText().toString());
 
                     String wavetypeW1 = spinnerControlAdvanced1.getSelectedItem().toString();
                     String wavetypeW2 = spinnerControlAdvanced2.getSelectedItem().toString();
