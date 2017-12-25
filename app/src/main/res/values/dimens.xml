@@ -41,5 +41,6 @@
     <dimen name="reading_box_height">40dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_title_margin">16dp</dimen>
+    <dimen name="navigation_drawer_width">300dp</dimen>
 
 </resources>
