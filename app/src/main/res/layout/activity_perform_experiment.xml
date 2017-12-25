@@ -39,16 +39,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@color/colorAccent"
-        android:src="@drawable/ic_play_arrow_black_24dp"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|right|end" />
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
