@@ -79,7 +79,7 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:paddingEnd="10dp"
                 android:paddingStart="0dp"
-                android:text="Trigger"
+                android:text="@string/trigger"
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp"
                 android:textStyle="normal|bold"

@@ -525,4 +525,12 @@
         <item>1</item>
     </string-array>
 
+    <string name="other">Other</string>
+    <string name="trigger">Trigger</string>
+    <string name="enable_xy_plot">Enable XY plot</string>
+    <string name="source_voltage_v">Source Voltage (V)</string>
+    <string name="plot_hyphen_pressure">Plot - Pressure</string>
+    <string name="plot_object_temperature">Plot - Object Temperature</string>
+    <string name="plot_ambient_temperature">Plot - Ambient Temperature</string>
+
 </resources>
