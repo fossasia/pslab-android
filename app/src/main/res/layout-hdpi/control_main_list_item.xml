@@ -49,7 +49,7 @@
                 android:layout_height="match_parent"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/control_textsize_large"
-                android:text="-"/>
+                android:text="@string/hyphen"/>
 
             <EditText
                 android:id="@+id/edittext_control_main"
@@ -75,7 +75,7 @@
                 android:layout_height="match_parent"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/control_textsize_large"
-                android:text="+"/>
+                android:text="@string/plus"/>
 
             <Button
                 android:id="@+id/button_control_main3"

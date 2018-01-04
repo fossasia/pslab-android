@@ -58,7 +58,7 @@
             android:id="@+id/nfet_source_voltage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Source Voltage (V)"
+            android:hint="@string/source_voltage_v"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
