@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="@dimen/control_text_padding">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,14 +11,14 @@
 
         <Button
             android:id="@+id/btn_begin_charging"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dimen_zero_dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/charge" />
 
         <Button
             android:id="@+id/btn_begin_discharging"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dimen_zero_dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/discharge" />

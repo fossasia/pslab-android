@@ -9,7 +9,7 @@
         android:id="@+id/channel_mode_select_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/control_margin"
         android:gravity="center_horizontal" />
 
 </LinearLayout>

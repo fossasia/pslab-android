@@ -8,22 +8,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/experiment_setup_aim"
-        android:textSize="20sp"
+        android:textSize="@dimen/control_textsize_large"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:padding="2dp"
+        android:layout_marginTop="@dimen/control_margin_small"
+        android:padding="@dimen/control_edittext_padding"
         android:text="@string/lorem_ipsum_text"
-        android:textSize="18sp" />
+        android:textSize="@dimen/control_textsize_medium" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/experiment_setup"
-        android:textSize="26sp"
+        android:textSize="@dimen/exp_setup_textsize"
         android:gravity="center_horizontal"/>
 
 </LinearLayout>

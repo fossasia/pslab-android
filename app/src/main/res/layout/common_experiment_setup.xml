@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="@dimen/control_text_padding">
 
     <Button
         android:id="@+id/btn_configure_dialog"
