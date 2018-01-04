@@ -7,25 +7,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/home_fragment_padding"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="@dimen/home_fragment_padding">
 
         <ImageView
             android:id="@+id/img_device_status"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/device_status_width"
+            android:layout_height="@dimen/device_status_height"
             android:layout_gravity="center"
             android:src="@drawable/usb_disconnected" />
 
         <TextView
             android:id="@+id/tv_device_status"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="@dimen/device_status_height"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="@dimen/home_fragment_padding"
             android:text="@string/pslab_device_not_found"
-            android:textSize="20sp"
+            android:textSize="@dimen/device_status_textsize"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -33,20 +33,20 @@
         android:id="@+id/tv_device_version"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/home_fragment_textview_margin"
         android:gravity="center"
-        android:padding="10dp"
-        android:textSize="20sp"
+        android:padding="@dimen/home_fragment_padding"
+        android:textSize="@dimen/device_status_textsize"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_initialisation_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/home_fragment_textview_margin"
         android:gravity="center"
-        android:padding="10dp"
-        android:textSize="20sp"
+        android:padding="@dimen/home_fragment_padding"
+        android:textSize="@dimen/device_status_textsize"
         android:textStyle="bold" />
 
 </LinearLayout>

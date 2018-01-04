@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="@dimen/control_text_padding">
 
     <Button
         android:id="@+id/btn_begin_experiment"
@@ -23,7 +23,7 @@
             android:padding="@dimen/control_margin_small">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_zero_dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
@@ -33,7 +33,7 @@
 
             <TextView
                 android:id="@+id/tv_voltage_measurement"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_zero_dp"
                 android:layout_height="@dimen/reading_box_height"
                 android:layout_weight="1"
                 android:background="@drawable/tv_border"
@@ -48,7 +48,7 @@
             android:padding="@dimen/control_margin_small">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_zero_dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
@@ -58,7 +58,7 @@
 
             <TextView
                 android:id="@+id/tv_current_measurement"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_zero_dp"
                 android:layout_height="@dimen/reading_box_height"
                 android:layout_weight="1"
                 android:background="@drawable/tv_border"
@@ -73,7 +73,7 @@
             android:padding="@dimen/control_margin_small">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_zero_dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
@@ -83,7 +83,7 @@
 
             <TextView
                 android:id="@+id/tv_resistance_measurement"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_zero_dp"
                 android:layout_height="@dimen/reading_box_height"
                 android:layout_weight="1"
                 android:background="@drawable/tv_border"

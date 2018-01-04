@@ -10,8 +10,8 @@
         android:id="@+id/control_main_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="@dimen/recycler_view_margin"
+        android:layout_marginTop="@dimen/recycler_view_margin"
         android:scrollbars="vertical" />
 
 </LinearLayout>
