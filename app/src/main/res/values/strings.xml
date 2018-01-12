@@ -533,4 +533,19 @@
     <string name="plot_object_temperature">Plot - Object Temperature</string>
     <string name="plot_ambient_temperature">Plot - Ambient Temperature</string>
 
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="closing_control_title">Closing Control</string>
+    <string name="closing_control_message">Are you sure you want to close the Control?</string>
+    <string name="closing_sensor_title">Closing Sensor QuickView</string>
+    <string name="closing_sensor_message">Are you sure you want to close the Sensor QuickView?</string>
+    <string name="closing_logical_analyzer_title">Closing Logical Analyzer</string>
+    <string name="closing_logical_analyzer_message">Are you sure you want to close the Logical Analyzer?</string>
+    <string name="closing_sensor_data_logger_title">Closing Sensor Data Logger</string>
+    <string name="closing_sensor_data_logger_message">Are you sure you want to close the Sensor Data Logger?</string>
+    <string name="closing_wave_generator_title">Closing Wave Generator</string>
+    <string name="closing_wave_generator_message">Are you sure you want to close the Wave Generator?</string>
+    <string name="closing_oscilloscope_title">Closing Oscilloscope</string>
+    <string name="closing_oscilloscope_message">Are you sure you want to close the Oscilloscope?</string>
+
 </resources>
