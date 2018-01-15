@@ -87,4 +87,12 @@
     <dimen name="device_status_textsize">20sp</dimen>
     <dimen name="home_fragment_textview_margin">5dp</dimen>
 
+    <dimen name="body_resistance_margin">10dp</dimen>
+    <dimen name="resistance_text_height">40dp</dimen>
+    <dimen name="stepper_motor_constraint_padding">5dp</dimen>
+    <dimen name="stepper_motor_text_view_height">40dp</dimen>
+    <dimen name="stepper_motor_btn_height">100dp</dimen>
+    <dimen name="stepper_motor_margin">5dp</dimen>
+    <dimen name="stepper_motor_text_size">16sp</dimen>
+
 </resources>
