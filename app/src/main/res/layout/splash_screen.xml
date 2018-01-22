@@ -10,7 +10,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="314dp"
-        app:srcCompat="@drawable/logo"
+        app:srcCompat="@drawable/newlogo"
         android:contentDescription="@string/pocket_science_logo" />
 
     <ImageView
