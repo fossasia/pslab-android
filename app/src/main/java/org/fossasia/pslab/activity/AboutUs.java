@@ -38,9 +38,9 @@ public class AboutUs extends AppCompatActivity {
                 .addGroup("Connect with us")
                 .addEmail("pslab-fossasia@googlegroups.com")
                 .addWebsite("http://pslab.fossasia.org/")
-                .addGitHub("fossasia")
-                .addFacebook("fossasia")
-                .addTwitter("fossasia")
+                .addGitHub("fossasia?utf8=✓&q=pslab")
+                .addFacebook("pslabapp")
+                .addTwitter("pslabapp")
                 .addYoutube("UCQprMsG-raCIMlBudm20iLQ")
                 .create();
 
