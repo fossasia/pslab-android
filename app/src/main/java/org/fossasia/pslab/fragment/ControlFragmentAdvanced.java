@@ -416,7 +416,6 @@ public class ControlFragmentAdvanced extends Fragment {
         userInput.setText(et.getText().toString());
 
         alertDialogBuilder
-                .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
