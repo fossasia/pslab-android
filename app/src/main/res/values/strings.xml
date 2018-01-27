@@ -147,6 +147,8 @@
 
     <string name="amplitude_modulation">Amplitude Modulation</string>
 
+    <string name="temporary_toast">Will be available soon</string>
+
     <string name="electrical_experiments">Electrical Experiments</string>
     <string name="transient_rlc">Transients RLC Response</string>
     <string name="filter_characteristics">Filter Characteristics</string>
