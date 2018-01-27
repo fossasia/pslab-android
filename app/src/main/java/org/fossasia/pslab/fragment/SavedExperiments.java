@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
@@ -33,6 +35,7 @@ public class SavedExperiments extends Fragment {
     private Unbinder unbinder;
     private Context context;
 
+
     @BindView(R.id.saved_experiment_container)
     LinearLayout experimentListContainer;
 
@@ -44,6 +47,7 @@ public class SavedExperiments extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+
     }
 
     @Nullable
@@ -157,6 +161,7 @@ public class SavedExperiments extends Fragment {
                     @Override
                     public void onClick(TreeNode node, Object value) {
                         // Open BJT CE Backup experiment
+                        DisplayTemporaryToast();
                     }
                 });
         TreeNode treeBJTAmplifier = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.bjt_amplifer)))
@@ -170,6 +175,8 @@ public class SavedExperiments extends Fragment {
         tree.addChildren(treeNFETOutput, treeNFETTransfer, treeBJTCB, treeBJTCEOutput, treeBJTCEInput, treeBJTTransfer, treeBJTCEBackup, treeBJTAmplifier);
         return tree;
     }
+
+
 
     private TreeNode loadDiodeTree(TreeNode tree) {
         TreeNode treeZener = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.zener_iv)))
@@ -320,8 +327,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         tree.addChild(treeAM);
         return tree;
@@ -342,16 +348,14 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeFilter = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.filter_characteristics)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeCapReactance = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.capacitive_reactance)))
                 .setViewHolder(new IndividualExperimentHolder(context))
@@ -398,24 +402,21 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeRCIntegral = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.rc_integrals_derivatives)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeLPF = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.voltage_controlled_low_pass_filter)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         tree.addChildren(treeRLC, treeFilter, treeCapReactance, treeIndReactance, treeOhm, treeRCPhase, treeLRPhase, treeLRC, treeRCIntegral, treeLPF);
         return tree;
@@ -444,40 +445,35 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeRandomSample = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.random_sampling)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeSimplePendulum = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.simple_pendulum)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treePiezo = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.piezo_bandwidth_characteristics)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeMPU = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.mpu6050_imu_pendulum)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         tree.addChildren(treeSoundSpeed, treePendulum, treeRandomSample, treeSimplePendulum, treePiezo, treeMPU);
         return tree;
@@ -505,48 +501,42 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeOLED = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.oled_display)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeRGB = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.wireless_rgb_lights)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeTMP = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.sensor_tmp_logger)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeRFID = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.rfid_reader_mf522)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeWS2812B = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.rgb_led_ws2812b)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         tree.addChildren(treeDust, treeOLED, treeRGB, treeTMP, treeRFID, treeWS2812B);
         return tree;
@@ -558,16 +548,14 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeDeviceTest = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.device_testing)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeServo = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.servo_motors)))
                 .setViewHolder(new IndividualExperimentHolder(context))
@@ -590,32 +578,28 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeCalib = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.calibration_loader)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeDeviceCalib = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.device_calibrator)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeRemote = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.remote_access)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         tree.addChildren(treeADS1115, treeDeviceTest, treeServo, treeStepper, treeFlowChart, treeCalib, treeDeviceCalib, treeRemote);
         return tree;
@@ -660,8 +644,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeOhmsLaw = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ohms_law)))
                 .setViewHolder(new IndividualExperimentHolder(context))
@@ -684,8 +667,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeResistanceWater = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.resistance_of_water)))
                 .setViewHolder(new IndividualExperimentHolder(context))
@@ -700,24 +682,21 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treePiezo = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.piezo_buzzer)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeSoundB = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.sound_beats)))
                 .setViewHolder(new IndividualExperimentHolder(context))
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-
-                    }
+                        DisplayTemporaryToast();                    }
                 });
         TreeNode treeCap = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.capacitance_measurement)))
                 .setViewHolder(new IndividualExperimentHolder(context))
@@ -770,6 +749,10 @@ public class SavedExperiments extends Fragment {
         intent.putExtra("toolbar_title", ((IndividualExperimentHolder.IndividualExperiment) value).label);
         intent.putExtra("experiment_title", ((IndividualExperimentHolder.IndividualExperiment) value).label);
         startActivity(intent);
+    }
+    private void DisplayTemporaryToast() {
+        String temporary_toast = getString(R.string.temporary_toast);
+        Toast.makeText(getActivity(), temporary_toast, Toast.LENGTH_SHORT).show();
     }
 
 }
