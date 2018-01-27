@@ -158,7 +158,7 @@ public class SavedExperiments extends Fragment {
                     @Override
                     public void onClick(TreeNode node, Object value) {
                         // Open BJT CE Backup experiment
-                        Toast.makeText(getActivity(), "Will be available soon", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Will be available soon", Toast.LENGTH_SHORT).show();
                     }
                 });
         TreeNode treeBJTAmplifier = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.bjt_amplifer)))
@@ -322,7 +322,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        Toast.makeText(getActivity(), "Will be available soon", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Will be available soon", Toast.LENGTH_SHORT).show();
                     }
                 });
         tree.addChild(treeAM);
@@ -344,7 +344,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        Toast.makeText(getActivity(), "Will be available soon", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Will be available soon", Toast.LENGTH_SHORT).show();
                     }
                 });
         TreeNode treeFilter = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.filter_characteristics)))
@@ -352,7 +352,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        Toast.makeText(getActivity(), "Will be available soon", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Will be available soon", Toast.LENGTH_SHORT).show();
                     }
                 });
         TreeNode treeCapReactance = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.capacitive_reactance)))
