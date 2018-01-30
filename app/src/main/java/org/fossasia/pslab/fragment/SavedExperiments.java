@@ -34,7 +34,6 @@ public class SavedExperiments extends Fragment {
     private Unbinder unbinder;
     private Context context;
 
-
     @BindView(R.id.saved_experiment_container)
     LinearLayout experimentListContainer;
 
@@ -46,7 +45,6 @@ public class SavedExperiments extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-
     }
 
     @Nullable
@@ -174,8 +172,6 @@ public class SavedExperiments extends Fragment {
         tree.addChildren(treeNFETOutput, treeNFETTransfer, treeBJTCB, treeBJTCEOutput, treeBJTCEInput, treeBJTTransfer, treeBJTCEBackup, treeBJTAmplifier);
         return tree;
     }
-
-
 
     private TreeNode loadDiodeTree(TreeNode tree) {
         TreeNode treeZener = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.zener_iv)))
@@ -714,7 +710,8 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        DisplayTemporaryToast();                    }
+                        DisplayTemporaryToast();
+                    }
                 });
         TreeNode treeSoundB = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.sound_beats)))
                 .setViewHolder(new IndividualExperimentHolder(context))
