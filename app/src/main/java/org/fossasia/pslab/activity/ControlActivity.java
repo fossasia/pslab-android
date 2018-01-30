@@ -17,17 +17,23 @@ import org.fossasia.pslab.fragment.ControlFragmentRead;
 
 import org.fossasia.pslab.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by viveksb007 on 10/5/17.
  */
 
 public class ControlActivity extends AppCompatActivity {
 
+    @BindView(R.id.navigation)
+    BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        ButterKnife.bind(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {

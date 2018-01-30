@@ -79,6 +79,8 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.layout_container)
     FrameLayout container;
+    @BindView(android.support.design.R.id.snackbar_text)
+    TextView snackbarTextView;
 
 
     @Override
@@ -139,7 +141,6 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                 } else {
                     Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
                     View snackBarView = snackbar.getView();
-                    TextView snackbarTextView = (TextView) snackBarView.findViewById(android.support.design.R.id.snackbar_text);
                     snackbarTextView.setTextColor(Color.YELLOW);
                     snackbar.show();
                 }
