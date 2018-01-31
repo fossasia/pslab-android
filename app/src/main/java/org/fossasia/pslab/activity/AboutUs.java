@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 
 import org.fossasia.pslab.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mehdi.sakout.aboutpage.AboutPage;
 
 /**
@@ -22,14 +24,18 @@ import mehdi.sakout.aboutpage.AboutPage;
 
 public class AboutUs extends AppCompatActivity {
 
+    @BindView(R.id.toolbar1)
+    Toolbar toolbar1;
+    @BindView(R.id.appBarAnim)
+    AppBarLayout appBarLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         simulateDayNight(0);
         setContentView(R.layout.about_toolbar);
-        Toolbar toolbar1 = (Toolbar) findViewById(R.id.toolbar1);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar1);
-        AppBarLayout appBarLayout=(AppBarLayout)findViewById(R.id.appBarAnim);
 
         View aboutPage = new AboutPage(this)
                 .isRTL(false)

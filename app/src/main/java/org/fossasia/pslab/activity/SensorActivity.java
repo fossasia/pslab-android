@@ -20,16 +20,26 @@ import org.fossasia.pslab.R;
 
 import org.fossasia.pslab.sensorfragment.SensorFragmentMain;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by asitava on 18/6/17.
  */
 
 public class SensorActivity extends AppCompatActivity {
+
+    @BindView(R.id.sensor_control_dock_layout)
     public RelativeLayout sensorDock;
+    @BindView(R.id.checkBox_samples_sensor)
     public CheckBox indefiniteSamplesCheckBox;
+    @BindView(R.id.editBox_samples_sensors)
     public EditText samplesEditBox;
-    private SeekBar timeGapSeekbar;
-    private TextView timeGapLabel;
+    @BindView(R.id.seekBar_timegap_sensor)
+    SeekBar timeGapSeekbar;
+    @BindView(R.id.tv_timegap_label)
+    TextView timeGapLabel;
+    @BindView(R.id.imageButton_play_pause_sensor)
     public ImageButton playPauseButton;
     public boolean play;
     public boolean runIndefinitely;
@@ -40,13 +50,8 @@ public class SensorActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
+        ButterKnife.bind(this);
 
-        sensorDock = (RelativeLayout) findViewById(R.id.sensor_control_dock_layout);
-        indefiniteSamplesCheckBox = (CheckBox) findViewById(R.id.checkBox_samples_sensor);
-        samplesEditBox = (EditText) findViewById(R.id.editBox_samples_sensors);
-        timeGapSeekbar = (SeekBar) findViewById(R.id.seekBar_timegap_sensor);
-        timeGapLabel = (TextView) findViewById(R.id.tv_timegap_label);
-        playPauseButton = (ImageButton) findViewById(R.id.imageButton_play_pause_sensor);
         play = false;
         runIndefinitely = true;
         timeGap = 100;
