@@ -79,7 +79,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.layout_container)
     FrameLayout container;
-    @BindView(android.support.design.R.id.snackbar_text)
+    @Nullable @BindView(android.support.design.R.id.snackbar_text)
     TextView snackbarTextView;
 
 
