@@ -24,7 +24,7 @@
             android:title="@string/nav_settings" />
     </group>
 
-    <item android:title="Other">
+    <item android:title="@string/other">
         <menu>
             <item
                 android:id="@+id/nav_help_feedback"

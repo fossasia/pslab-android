@@ -1,7 +1,9 @@
 package org.fossasia.pslab.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -77,6 +79,8 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.layout_container)
     FrameLayout container;
+    @Nullable @BindView(android.support.design.R.id.snackbar_text)
+    TextView snackbarTextView;
 
 
     @Override
@@ -137,7 +141,6 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                 } else {
                     Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
                     View snackBarView = snackbar.getView();
-                    TextView snackbarTextView = (TextView) snackBarView.findViewById(android.support.design.R.id.snackbar_text);
                     snackbarTextView.setTextColor(Color.YELLOW);
                     snackbar.show();
                 }
@@ -329,5 +332,21 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                 //
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.closing_sensor_data_logger_title)
+                .setMessage(R.string.closing_sensor_data_logger_message)
+                .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.dialog_no, null)
+                .show();
     }
 }

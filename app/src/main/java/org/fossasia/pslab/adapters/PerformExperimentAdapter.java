@@ -64,7 +64,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
             case 0:
                 switch (experimentTitle) {
                     case "Diode IV Characteristics":
-                        return ExperimentDocFragment.newInstance("D_diodeIV.html");
+                        return ExperimentDocMdFragment.newInstance("D_diodeIV.md");
                     case "Zener IV Characteristics":
                         return ExperimentDocMdFragment.newInstance("D_ZenerIV.md");
                     case "Half Wave Rectifier":
@@ -166,7 +166,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
             case 1:
                 switch (experimentTitle) {
                     case "Diode IV Characteristics":
-                        return ZenerSetupFragment.newInstance();
+                        return DiodeExperiment.newInstance("Diode IV Characteristics");
                     case "Zener IV Characteristics":
                         return ZenerSetupFragment.newInstance();
                     case "Half Wave Rectifier":

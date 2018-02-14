@@ -13,7 +13,7 @@
             android:id="@+id/bjt_input_initial_voltage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Initial Voltage (V)"
+            android:hint="@string/initial_voltage_v"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
@@ -28,7 +28,7 @@
             android:id="@+id/bjt_input_final_voltage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Final Voltage (V)"
+            android:hint="@string/final_voltage_v"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
@@ -43,7 +43,7 @@
             android:id="@+id/bjt_input_step_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Step Size"
+            android:hint="@string/step_size"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
@@ -58,7 +58,7 @@
             android:id="@+id/bjt_input_collector_voltage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Collector Voltage (V)"
+            android:hint="@string/collector_voltage_v"
             android:inputType="numberSigned|numberDecimal"
             android:maxLines="1" />
 
