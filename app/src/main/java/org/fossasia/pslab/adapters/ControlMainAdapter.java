@@ -12,9 +12,11 @@ import android.widget.TextView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.ControlActivityCommon;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 import static org.fossasia.pslab.others.MathUtils.map;
 
@@ -27,6 +29,8 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
     private String[] mDataset;
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
     private boolean manualSeekBarChange = false;
+    private HashMap<String, Float> svalue = ControlActivityCommon.editTextValues;
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -135,16 +139,24 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress((int) map(value, -5, 5, 0, 1000));
                             manualSeekBarChange = false;
+                            ControlActivityCommon.editTextValues.put(mDataset[0], value);
                             if (scienceLab.isConnected())
                                 scienceLab.setPV1(value);
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0.0000");
                         }
+
                     }
                 });
-
-                editTextControlMain.setText("-5.0000");
                 seekBarControlMain.setMax(1000);
+                if (svalue.get(mDataset[position]) != null) {
+                    editTextControlMain.setText(svalue.get(mDataset[position]).toString());
+                    seekBarControlMain.setProgress((int) map(svalue.get(mDataset[position]), -5, 5, 0, 1000));
+                } else {
+                    editTextControlMain.setText("-5.0000");
+                }
+
+
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
@@ -166,6 +178,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     }
                 });
+
                 break;
 
             case 1:
@@ -226,6 +239,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress((int) ((value + 3.3) * 100));
                             manualSeekBarChange = false;
+                            ControlActivityCommon.editTextValues.put(mDataset[1], value);
                             if (scienceLab.isConnected())
                                 scienceLab.setPV2(value);
                         } catch (NumberFormatException e) {
@@ -234,8 +248,16 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     }
                 });
 
-                editTextControlMain.setText("-3.3000");
+
                 seekBarControlMain.setMax(660);
+                if (svalue.get(mDataset[position]) != null) {
+                    editTextControlMain.setText(svalue.get(mDataset[position]).toString());
+                    seekBarControlMain.setProgress((int) ((svalue.get(mDataset[position]) + 3.3) * 100));
+
+                } else {
+                    editTextControlMain.setText("-3.3000");
+                }
+
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
@@ -315,6 +337,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress((int) map(value, 0, 3.3, 0, 330));
                             manualSeekBarChange = false;
+                            ControlActivityCommon.editTextValues.put(mDataset[1], value);
                             if (scienceLab.isConnected())
                                 scienceLab.setPV3(value);
                         } catch (NumberFormatException e) {
@@ -324,8 +347,16 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     }
                 });
 
-                editTextControlMain.setText("0.0000");
+
                 seekBarControlMain.setMax(330);
+                if (svalue.get(mDataset[position]) != null) {
+                    editTextControlMain.setText(svalue.get(mDataset[position]).toString());
+                    seekBarControlMain.setProgress((int) map(svalue.get(mDataset[position]), 0, 3.3, 0, 330));
+                } else {
+                    editTextControlMain.setText("0.0000");
+                }
+
+
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
@@ -406,7 +437,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress((int) (value * 100));
                             manualSeekBarChange = false;
-
+                            ControlActivityCommon.editTextValues.put(mDataset[2], value);
                             if (scienceLab.isConnected())
                                 scienceLab.setPCS(value);
                         } catch (NumberFormatException e) {
@@ -415,8 +446,15 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     }
                 });
 
-                editTextControlMain.setText("0.0000");
+
                 seekBarControlMain.setMax(330);
+                if (svalue.get(mDataset[position]) != null) {
+                    editTextControlMain.setText(svalue.get(mDataset[position]).toString());
+                    seekBarControlMain.setProgress((int) (svalue.get(mDataset[position]) * 100));
+                } else {
+                    editTextControlMain.setText("0.0000");
+                }
+
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
@@ -441,7 +479,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 break;
 
             case 4:
-                editTextControlMain.setText("10");
+
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -497,7 +535,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress(value - 10);
                             manualSeekBarChange = false;
-
+                            ControlActivityCommon.editTextValues.put(mDataset[position], (float) value);
                             if (scienceLab.isConnected())
                                 scienceLab.setSine1(value);
 
@@ -508,6 +546,12 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 });
 
                 seekBarControlMain.setMax(4990);
+                if (svalue.get(mDataset[position]) != null) {
+                    editTextControlMain.setText(String.valueOf(svalue.get(mDataset[position]).intValue()));
+                    seekBarControlMain.setProgress( svalue.get(mDataset[position]).intValue() - 10);
+                } else {
+                    editTextControlMain.setText("10");
+                }
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
@@ -531,7 +575,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 });
                 break;
             case 5:
-                editTextControlMain.setText("10");
+
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -587,7 +631,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress(value - 10);
                             manualSeekBarChange = false;
-
+                            ControlActivityCommon.editTextValues.put(mDataset[position], (float) value);
                             if (scienceLab.isConnected())
                                 scienceLab.setSine2(value);
 
@@ -598,6 +642,12 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 });
 
                 seekBarControlMain.setMax(4990);
+                if (svalue.get(mDataset[position]) != null) {
+                    editTextControlMain.setText(String.valueOf(svalue.get(mDataset[position]).intValue()));
+                    seekBarControlMain.setProgress(svalue.get(mDataset[position]).intValue()-10);
+                } else {
+                    editTextControlMain.setText("10");
+                }
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
@@ -622,7 +672,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 break;
 
             case 6:
-                editTextControlMain.setText("10");
+
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -678,7 +728,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress(value - 10);
                             manualSeekBarChange = false;
-
+                            ControlActivityCommon.editTextValues.put(mDataset[position], (float) value);
                             // Setting a SQUARE Wave in SQR1 by default
                             if (scienceLab.isConnected())
                                 scienceLab.setSqr1(value, -1, false);
@@ -689,6 +739,12 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     }
                 });
                 seekBarControlMain.setMax(5000);
+                if (svalue.get(mDataset[position]) != null) {
+                    editTextControlMain.setText(String.valueOf(svalue.get(mDataset[position]).intValue()));
+                    seekBarControlMain.setProgress(svalue.get(mDataset[position]).intValue()- 10);
+                } else {
+                    editTextControlMain.setText("10");
+                }
                 seekBarControlMain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
@@ -712,7 +768,9 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 });
                 break;
         }
+
     }
+
 
     @Override
     public int getItemCount() {
