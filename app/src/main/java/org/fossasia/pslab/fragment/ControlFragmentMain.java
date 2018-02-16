@@ -28,7 +28,7 @@ public class ControlFragmentMain extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         mAdapter = new ControlMainAdapter(new String[]{"PV1", "PV2", "PV3", "PCS", "WAVE 1" , "WAVE 2" , "SQUARE"});
+        mAdapter = new ControlMainAdapter(new String[]{"PV1", "PV2", "PV3", "PCS", "WAVE 1" , "WAVE 2" , "SQUARE"});
         setRetainInstance(true);
     }
 
