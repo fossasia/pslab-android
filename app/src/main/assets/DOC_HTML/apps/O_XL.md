@@ -8,8 +8,6 @@ Inductive Reactance
 * CH2 monitors the phase shifted waveform 
 
 ### Effect of ferromagnets on inductance
-	
-![](file:///android_asset/DOC_HTML/apps/images/schematics/LR.svg@100%|auto)	
-	
+		
 * Introduce a ferrite core into the solenoid, and observe its effect on the inductive reactance.<br>
 	
