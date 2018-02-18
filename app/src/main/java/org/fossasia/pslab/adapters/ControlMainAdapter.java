@@ -139,7 +139,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress((int) map(value, -5, 5, 0, 1000));
                             manualSeekBarChange = false;
-                            ControlActivityCommon.editTextValues.put(mDataset[0], value);
+                            ControlActivityCommon.editTextValues.put(mDataset[position], value);
                             if (scienceLab.isConnected())
                                 scienceLab.setPV1(value);
                         } catch (NumberFormatException e) {
@@ -239,7 +239,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress((int) ((value + 3.3) * 100));
                             manualSeekBarChange = false;
-                            ControlActivityCommon.editTextValues.put(mDataset[1], value);
+                            ControlActivityCommon.editTextValues.put(mDataset[position], value);
                             if (scienceLab.isConnected())
                                 scienceLab.setPV2(value);
                         } catch (NumberFormatException e) {
@@ -337,7 +337,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress((int) map(value, 0, 3.3, 0, 330));
                             manualSeekBarChange = false;
-                            ControlActivityCommon.editTextValues.put(mDataset[1], value);
+                            ControlActivityCommon.editTextValues.put(mDataset[position], value);
                             if (scienceLab.isConnected())
                                 scienceLab.setPV3(value);
                         } catch (NumberFormatException e) {
@@ -437,7 +437,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = true;
                             seekBarControlMain.setProgress((int) (value * 100));
                             manualSeekBarChange = false;
-                            ControlActivityCommon.editTextValues.put(mDataset[2], value);
+                            ControlActivityCommon.editTextValues.put(mDataset[position], value);
                             if (scienceLab.isConnected())
                                 scienceLab.setPCS(value);
                         } catch (NumberFormatException e) {
@@ -479,7 +479,6 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 break;
 
             case 4:
-
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -538,7 +537,6 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             ControlActivityCommon.editTextValues.put(mDataset[position], (float) value);
                             if (scienceLab.isConnected())
                                 scienceLab.setSine1(value);
-
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
@@ -548,7 +546,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 seekBarControlMain.setMax(4990);
                 if (svalue.get(mDataset[position]) != null) {
                     editTextControlMain.setText(String.valueOf(svalue.get(mDataset[position]).intValue()));
-                    seekBarControlMain.setProgress( svalue.get(mDataset[position]).intValue() - 10);
+                    seekBarControlMain.setProgress(svalue.get(mDataset[position]).intValue() - 10);
                 } else {
                     editTextControlMain.setText("10");
                 }
@@ -574,8 +572,8 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     }
                 });
                 break;
-            case 5:
 
+            case 5:
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -634,7 +632,6 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             ControlActivityCommon.editTextValues.put(mDataset[position], (float) value);
                             if (scienceLab.isConnected())
                                 scienceLab.setSine2(value);
-
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
@@ -644,7 +641,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 seekBarControlMain.setMax(4990);
                 if (svalue.get(mDataset[position]) != null) {
                     editTextControlMain.setText(String.valueOf(svalue.get(mDataset[position]).intValue()));
-                    seekBarControlMain.setProgress(svalue.get(mDataset[position]).intValue()-10);
+                    seekBarControlMain.setProgress(svalue.get(mDataset[position]).intValue() - 10);
                 } else {
                     editTextControlMain.setText("10");
                 }
@@ -672,7 +669,6 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 break;
 
             case 6:
-
                 buttonControlMain1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -741,7 +737,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                 seekBarControlMain.setMax(5000);
                 if (svalue.get(mDataset[position]) != null) {
                     editTextControlMain.setText(String.valueOf(svalue.get(mDataset[position]).intValue()));
-                    seekBarControlMain.setProgress(svalue.get(mDataset[position]).intValue()- 10);
+                    seekBarControlMain.setProgress(svalue.get(mDataset[position]).intValue() - 10);
                 } else {
                     editTextControlMain.setText("10");
                 }

@@ -1,6 +1,5 @@
 package org.fossasia.pslab.others;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
