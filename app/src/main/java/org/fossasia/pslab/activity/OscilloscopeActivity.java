@@ -55,6 +55,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static org.fossasia.pslab.others.MathUtils.map;
 
 /**
@@ -65,23 +68,40 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
     private static final String TAG = "Oscilloscope Activity";
     private ScienceLab scienceLab;
+    @BindView(R.id.chart_os)
     public LineChart mChart;
-    private LinearLayout linearLayout;
-    private FrameLayout frameLayout;
-    private RelativeLayout mChartLayout;
-    private ImageButton channelParametersButton;
-    private ImageButton timebaseButton;
-    private ImageButton dataAnalysisButton;
-    private ImageButton xyPlotButton;
-    private TextView channelParametersTextView;
-    private TextView timebaseTiggerTextView;
-    private TextView dataAnalysisTextView;
-    private TextView xyPlotTextView;
+    @BindView(R.id.layout_dock_os1)
+    LinearLayout linearLayout;
+    @BindView(R.id.layout_dock_os2)
+    FrameLayout frameLayout;
+    @BindView(R.id.layout_chart_os)
+    RelativeLayout mChartLayout;
+    @BindView(R.id.button_channel_parameters_os)
+    ImageButton channelParametersButton;
+    @BindView(R.id.button_timebase_os)
+    ImageButton timebaseButton;
+    @BindView(R.id.button_data_analysis_os)
+    ImageButton dataAnalysisButton;
+    @BindView(R.id.button_xy_plot_os)
+    ImageButton xyPlotButton;
+    @BindView(R.id.tv_channel_parameters_os)
+    TextView channelParametersTextView;
+    @BindView(R.id.tv_timebase_tigger_os)
+    TextView timebaseTiggerTextView;
+    @BindView(R.id.tv_data_analysis_os)
+    TextView dataAnalysisTextView;
+    @BindView(R.id.tv_xy_plot_os)
+    TextView xyPlotTextView;
+    @BindView(R.id.tv_label_left_yaxis_os)
     public TextView leftYAxisLabel;
+    @BindView(R.id.tv_unit_left_yaxis_os)
     public TextView leftYAxisLabelUnit;
+    @BindView(R.id.tv_label_right_yaxis_os)
     public TextView rightYAxisLabel;
+    @BindView(R.id.tv_unit_right_yaxis_os)
     public TextView rightYAxisLabelUnit;
     public TextView xAxisLabel;
+    @BindView(R.id.tv_unit_xaxis_os)
     public TextView xAxisLabelUnit;
     private int height;
     private int width;
@@ -138,7 +158,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private XYPlotTask xyPlotTask;
     private OscillatorTask oscillatorTask;
     private SpeedOfSoundTask speedOfSoundTask;
-    private ImageView ledImageView;
+    @BindView(R.id.imageView_led_os)
+    ImageView ledImageView;
     public Plot2D graph;
     private AudioJack audioJack = null;
     private AnalyticsClass analyticsClass;
@@ -151,27 +172,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oscilloscope);
+        ButterKnife.bind(this);
 
         scienceLab = ScienceLabCommon.scienceLab;
-        linearLayout = (LinearLayout) findViewById(R.id.layout_dock_os1);
-        mChart = (LineChart) findViewById(R.id.chart_os);
-        mChartLayout = (RelativeLayout) findViewById(R.id.layout_chart_os);
-        frameLayout = (FrameLayout) findViewById(R.id.layout_dock_os2);
-        channelParametersButton = (ImageButton) findViewById(R.id.button_channel_parameters_os);
-        timebaseButton = (ImageButton) findViewById(R.id.button_timebase_os);
-        dataAnalysisButton = (ImageButton) findViewById(R.id.button_data_analysis_os);
-        xyPlotButton = (ImageButton) findViewById(R.id.button_xy_plot_os);
-        leftYAxisLabel = (TextView) findViewById(R.id.tv_label_left_yaxis_os);
-        leftYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_left_yaxis_os);
-        rightYAxisLabel = (TextView) findViewById(R.id.tv_label_right_yaxis_os);
-        rightYAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_right_yaxis_os);
-        xAxisLabel = (TextView) findViewById(R.id.tv_graph_label_xaxis_os);
-        xAxisLabelUnit = (TextView) findViewById(R.id.tv_unit_xaxis_os);
-        channelParametersTextView = (TextView) findViewById(R.id.tv_channel_parameters_os);
-        timebaseTiggerTextView = (TextView) findViewById(R.id.tv_timebase_tigger_os);
-        dataAnalysisTextView = (TextView) findViewById(R.id.tv_data_analysis_os);
-        xyPlotTextView = (TextView) findViewById(R.id.tv_xy_plot_os);
-        ledImageView = (ImageView) findViewById(R.id.imageView_led_os);
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
         y2 = mChart.getAxisRight();
@@ -592,16 +595,16 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Closing Oscilloscope")
-                .setMessage("Are you sure you want to close the Oscilloscope?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.closing_oscilloscope_title)
+                .setMessage(R.string.closing_oscilloscope_message)
+                .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
 
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(R.string.dialog_no, null)
                 .show();
     }
 

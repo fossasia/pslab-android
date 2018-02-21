@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.PacketHandler;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -132,5 +133,7 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, HomeFragment.class.getSimpleName());
     }
 }

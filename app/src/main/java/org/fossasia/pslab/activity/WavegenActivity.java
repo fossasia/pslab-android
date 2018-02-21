@@ -1,5 +1,7 @@
 package org.fossasia.pslab.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,4 +20,19 @@ public class WavegenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wave_gen);
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.closing_wave_generator_title)
+                .setMessage(R.string.closing_wave_generator_message)
+                .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.dialog_no, null)
+                .show();
+    }
 }

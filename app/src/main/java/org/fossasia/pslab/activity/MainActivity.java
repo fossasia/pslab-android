@@ -10,6 +10,7 @@ import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-    @BindView(R.id.drawer_layout)
+    @Nullable @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadHomeFragment() {
         selectNavMenu();
         setToolbarTitle();
-        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
+        if (drawer != null && getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
             return;
         }
@@ -163,8 +164,10 @@ public class MainActivity extends AppCompatActivity {
         if (mPendingRunnable != null) {
             mHandler.post(mPendingRunnable);
         }
-        drawer.closeDrawers();
-        invalidateOptionsMenu();
+        if(drawer != null) {
+            drawer.closeDrawers();
+            invalidateOptionsMenu();
+        }
     }
 
     private Fragment getHomeFragment() throws IOException {
@@ -217,15 +220,21 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_about_us:
                         startActivity(new Intent(MainActivity.this, AboutUs.class));
-                        drawer.closeDrawers();
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
                         break;
                     case R.id.nav_help_feedback:
                         startActivity(new Intent(MainActivity.this, HelpAndFeedback.class));
-                        drawer.closeDrawers();
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
                         break;
                     case R.id.nav_report_us:
                         customTabService.launchUrl("https://github.com/fossasia/pslab-android/issues");
-                        drawer.closeDrawers();
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
                         break;
                     default:
                         navItemIndex = 0;
@@ -236,19 +245,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, org.fossasia.pslab.R.string.openDrawer, org.fossasia.pslab.R.string.closeDrawer) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
+        if (drawer != null) {
+            ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, org.fossasia.pslab.R.string.openDrawer, org.fossasia.pslab.R.string.closeDrawer) {
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                }
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
-        drawer.setDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    super.onDrawerOpened(drawerView);
+                }
+            };
+            drawer.setDrawerListener(actionBarDrawerToggle);
+            actionBarDrawerToggle.syncState();
+        }
     }
 
     private void loadNavHeader() {
@@ -258,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             return;
         }
