@@ -55,6 +55,7 @@
         android:layout_marginTop="@dimen/dimen_zero_dp"
         android:text="@string/read"
         android:textSize="@dimen/oscillator_exp_button_textsize"
+        android:theme="@style/AppTheme.Button"
         app:layout_constraintRight_toLeftOf="@+id/tv_result_ch2_astable_multivibrator"
         app:layout_constraintTop_toBottomOf="@+id/button_read_ch1_astable_multivibrator" />
 
@@ -66,6 +67,7 @@
         android:layout_marginTop="@dimen/dimen_zero_dp"
         android:text="@string/read"
         android:textSize="@dimen/oscillator_exp_button_textsize"
+        android:theme="@style/AppTheme.Button"
         app:layout_constraintRight_toLeftOf="@+id/tv_result_ch1_astable_multivibrator"
         app:layout_constraintTop_toTopOf="parent" />
 

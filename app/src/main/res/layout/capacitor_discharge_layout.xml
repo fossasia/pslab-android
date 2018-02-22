@@ -19,6 +19,7 @@
         android:layout_width="@dimen/dimen_zero_dp"
         android:layout_height="wrap_content"
         android:text="@string/charge"
+        android:theme="@style/AppTheme.Button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,6 +29,7 @@
         android:layout_width="@dimen/dimen_zero_dp"
         android:layout_height="wrap_content"
         android:text="@string/discharge"
+        android:theme="@style/AppTheme.Button"
         app:layout_constraintLeft_toLeftOf="@+id/guideline"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

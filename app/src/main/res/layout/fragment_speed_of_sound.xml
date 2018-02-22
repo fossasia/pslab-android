@@ -36,6 +36,7 @@
         android:layout_marginTop="@dimen/ragment_speed_of_sound_margin_small"
         android:text="@string/read"
         android:textSize="@dimen/read_button_text_size"
+        android:theme="@style/AppTheme.Button"
         app:layout_constraintLeft_toRightOf="@+id/tv_acquire_data_label_sos"
         app:layout_constraintTop_toTopOf="parent" />
 

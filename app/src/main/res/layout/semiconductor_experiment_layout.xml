@@ -14,14 +14,16 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/ac_voltage" />
+            android:text="@string/ac_voltage"
+            android:theme="@style/AppTheme.Button" />
 
         <Button
             android:id="@+id/btn_experiment_dc"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/dc_voltage" />
+            android:text="@string/dc_voltage"
+            android:theme="@style/AppTheme.Button" />
     </LinearLayout>
 
     <LinearLayout
