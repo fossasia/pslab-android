@@ -16,6 +16,7 @@ import org.fossasia.pslab.fragment.ControlFragmentMain;
 import org.fossasia.pslab.fragment.ControlFragmentRead;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.others.ControlActivityCommon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
  */
 
 public class ControlActivity extends AppCompatActivity {
-
+    ControlActivityCommon common = new ControlActivityCommon();
     @BindView(R.id.navigation)
     BottomNavigationView bottomNavigationView;
 
@@ -79,10 +80,13 @@ public class ControlActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        ControlActivityCommon.editTextValues=null;
                         finish();
                     }
                 })
                 .setNegativeButton(R.string.dialog_no, null)
                 .show();
+
     }
 }
