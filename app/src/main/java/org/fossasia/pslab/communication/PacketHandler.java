@@ -120,6 +120,21 @@ public class PacketHandler {
         return -1;
     }
 
+    int getVoltageSummation() {
+        try {
+            // Note : bytesToBeRead has to be +1 than the requirement
+            int numByteRead = mCommunicationHandler.read(buffer, 3, timeout);
+            if (numByteRead == 3) {
+                return (buffer[0] & 0xff) | ((buffer[1] << 8) & 0xff00);
+            } else {
+                Log.e(TAG, "Error in reading byte");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public int getInt() {
         try {
             int numByteRead = mCommunicationHandler.read(buffer, 2, timeout);

@@ -1143,9 +1143,9 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.ADC);
             mPacketHandler.sendByte(mCommandsProto.GET_VOLTAGE_SUMMED);
             mPacketHandler.sendByte(chosa);
-            int vSum = mPacketHandler.getInt();
+            int vSum = mPacketHandler.getVoltageSummation();
             mPacketHandler.getAcknowledgement();
-            return vSum / 16.;
+            return vSum / 16.0;
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             Log.e(TAG, "Error in getRawAverageVoltage");
