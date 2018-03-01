@@ -15,6 +15,8 @@ import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by asitava on 6/6/17.
  */
@@ -73,8 +75,23 @@ public class ControlFragmentRead extends Fragment {
             @Override
             public void onClick(View view) {
                 if (scienceLab.isConnected()) {
+                    DecimalFormat resistanceFormat = new DecimalFormat("#.##");
                     Double resistance = scienceLab.getResistance();
-                    tvControlRead1.setText(String.valueOf(resistance));
+                    String Resistance = "";
+                    if (resistance == null) {
+                        Resistance = "Infinity";
+                    } else {
+                        if (resistance > 10e5) {
+                            Resistance = resistanceFormat.format((resistance / 10e5)) + " MOhms";
+                        } else if (resistance > 10e2) {
+                            Resistance = resistanceFormat.format((resistance / 10e2)) + " kOhms";
+                        } else if (resistance > 1) {
+                            Resistance = resistanceFormat.format(resistance) + " Ohms";
+                        } else {
+                            Resistance = "Cannot measure!";
+                        }
+                    }
+                    tvControlRead1.setText(Resistance);
                 }
             }
         });
