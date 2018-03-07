@@ -127,9 +127,9 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "Diode Clamping":
                         return ExperimentDocMdFragment.newInstance("L_DiodeClamping.md");
                     case "Inverting Op-Amp":
-                        return ExperimentDocFragment.newInstance("L_Inverting.html");
+                        return ExperimentDocMdFragment.newInstance("L_Inverting1.md");
                     case "Non Inverting Op-Amp":
-                        return ExperimentDocFragment.newInstance("L_NonInverting.html");
+                        return ExperimentDocMdFragment.newInstance("L_NonInverting1.md");
                     case "Precision Rectifier":
                         return ExperimentDocMdFragment.newInstance("Precision_Rectifier.md");
                     case "Capacitor Discharge":
