@@ -100,6 +100,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public TextView rightYAxisLabel;
     @BindView(R.id.tv_unit_right_yaxis_os)
     public TextView rightYAxisLabelUnit;
+    @BindView(R.id.tv_graph_label_xaxis_os)
     public TextView xAxisLabel;
     @BindView(R.id.tv_unit_xaxis_os)
     public TextView xAxisLabelUnit;
