@@ -1,5 +1,6 @@
 package org.fossasia.pslab.fragment;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.PerformExperimentActivity;
+import org.fossasia.pslab.activity.ResistanceMeasurement;
 import org.fossasia.pslab.items.ExperimentHeaderHolder;
 import org.fossasia.pslab.items.IndividualExperimentHolder;
 
@@ -408,7 +410,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                         startExperiment(value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeLPF = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.voltage_controlled_low_pass_filter)))
@@ -638,7 +640,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                       startExperiment(value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeLemonCell = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.lemon_cell)))
@@ -662,7 +664,9 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        DisplayTemporaryToast();
+                        Intent intent=new Intent();
+                        intent.setComponent(new ComponentName(context, ResistanceMeasurement.class));
+                        startActivity(intent);
                     }
                 });
         TreeNode treeOhmsLaw = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.ohms_law)))
