@@ -1,7 +1,7 @@
 Op-Amps : Wien Bridge Oscillator
 ---
 
-![](file:///android_asset/DOC_HTML/apps/images/schematics/wien-bridge.svg@100%|auto)
+![](file:///android_asset/DOC_HTML/apps/images/schematics/Wein_Bridge_Oscillator.svg@100%|auto)
 
 *	Make the Connections as shown in the figure.
 *	Connect the output to CH1.

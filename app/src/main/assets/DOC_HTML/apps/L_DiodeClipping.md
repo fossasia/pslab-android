@@ -3,7 +3,7 @@ Clipping circuit using a diode
 
 ### Shunt Clipping
 
-![](file:///android_asset/DOC_HTML/apps/images/schematics/diode_clipping.svg@100%|auto)
+![](file:///android_asset/DOC_HTML/apps/images/schematics/Shunt_Clipper.svg@100%|auto)
 
 * Make the Connections as shown in the figure.
 * CH1 monitors the original waveform output from W1.
@@ -12,4 +12,4 @@ Clipping circuit using a diode
 
 ### Series Clipping
 
-![](file:///android_asset/DOC_HTML/apps/images/schematics/diode_clipping_series.svg@100%|auto)
+![](file:///android_asset/DOC_HTML/apps/images/schematics/Series_Clipper.svg@100%|auto)
