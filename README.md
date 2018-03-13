@@ -13,7 +13,7 @@ PSLab Android App
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](mailto:pslab-fossasia@googlegroups.com)
 
-This repository holds the Android App for performing experiments with [PSLab](http://pslab.fossasia.org/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at: http://pslab.fossasia.org
+This repository holds the Android App for performing experiments with [PSLab](http://pslab.fossasia.org/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at http://pslab.fossasia.org
 
 ## Communication
 
@@ -23,7 +23,7 @@ Please join us on the following channels:
 
 ## Roadmap
  - [x] First we need to get communication between Android App and PSLab working.
- - [ ] Implement Applications and expose PSLab Hardware functionality to user.
+ - [ ] Implement Applications and expose PSLab Hardware functionality to the user.
  - [ ] Implement Functionality to Perform Experiment using PSLab Hardware Device. 
 
 ## Screenshots
@@ -58,19 +58,19 @@ Please join us on the following channels:
 ## Video Demo
 - [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k)
 - [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ)
-- [Realtime Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo)
+- [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo)
 - [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y) 
 
 ## Features
 **Feature**|**Description**|**Status**
 -----|-----|-----
 Home Screen|Show status and version of PSLab device|Established
-Application|Exposes PSLab application like Oscilloscope,etc |Established
+Application|Exposes PSLab application like Oscilloscope, etc |Established
  |Oscilloscope |Shows variation of analog signals | Established
  |Control |Generate waveforms and PWM signals. Control voltage and current sources and read results from a variety of electric components | Established
  |Logical Analyzer |Captures and displays signals from digital system | Working
- |Data Sensor Logger |Scans sensors connected to PSLab Device and provides interface to see and log real-time data | Working
- |Sensor Quick View |Scans all the sensors connected to PSLab Device and visualise real-time data | Established
+ |Data Sensor Logger |Scans sensors connected to PSLab Device and provides an interface to see and log real-time data | Working
+ |Sensor Quick View |Scans all the sensors connected to PSLab Device and visualize real-time data | Established
  |Settings |Enable Auto-Start |
  |Saved Experiments |Access Pre-defined and Designed Experiments | Working
  |Design Experiments |To Design our own experiments |
@@ -97,13 +97,13 @@ Before you begin, you should already have the Android Studio SDK downloaded and 
 
 6. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
 
-7. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or presing the Run icon in the toolbar.
+7. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
  
 If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
 
-You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through usb cable. 
+You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through USB cable. 
 
-To debug over Wi-Fi : http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/
+To debug over Wi-Fi: http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/
  
 Note : 
 1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/org/fossasia/pslab/communication/CommunicationHandler.java) 
@@ -129,7 +129,7 @@ We have the following branches
  * **development**
 	 All development goes on in this branch. If you're making a contribution,
 	 you are supposed to make a pull request to _development_.
-	 Make sure it pass a build check on Travis.
+	 Make sure it passes a build check on Travis.
 
  * **master**
    This contains the stable code. After significant features/bugfixes are accumulated on development, we move it to master.
