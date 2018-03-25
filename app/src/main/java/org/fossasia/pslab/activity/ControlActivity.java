@@ -9,7 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.fossasia.pslab.fragment.ControlFragmentAdvanced;
 import org.fossasia.pslab.fragment.ControlFragmentMain;
@@ -29,6 +31,8 @@ public class ControlActivity extends AppCompatActivity {
     ControlActivityCommon common = new ControlActivityCommon();
     @BindView(R.id.navigation)
     BottomNavigationView bottomNavigationView;
+    @BindView(R.id.control_toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +40,16 @@ public class ControlActivity extends AppCompatActivity {
         setContentView(R.layout.activity_control);
         ButterKnife.bind(this);
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override

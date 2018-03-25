@@ -7,12 +7,23 @@
     android:layout_height="match_parent"
     tools:context="org.fossasia.pslab.activity.ControlActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/control_toolbar"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        app:title="@string/Control"
+        app:titleTextColor="@color/white"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></android.support.v7.widget.Toolbar>
     <FrameLayout
         android:id="@+id/frame_layout_control"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/navigation"
-        android:animateLayoutChanges="true" />
+        android:animateLayoutChanges="true"
+        android:layout_below="@+id/control_toolbar"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

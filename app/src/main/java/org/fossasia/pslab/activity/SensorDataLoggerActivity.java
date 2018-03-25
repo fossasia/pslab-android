@@ -96,6 +96,14 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Sensor Data Logger");
         }
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         context = this;
         realm = Realm.getDefaultInstance();
         scanFab.setOnClickListener(new View.OnClickListener() {

@@ -9,10 +9,19 @@
     android:orientation="vertical"
     android:weightSum="1">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        />
     <RelativeLayout
         android:id="@+id/layout_chart_os"
         android:layout_width="600dp"
-        android:layout_height="300dp">
+        android:layout_height="300dp"
+        android:layout_below="@+id/toolbar">
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart_os"

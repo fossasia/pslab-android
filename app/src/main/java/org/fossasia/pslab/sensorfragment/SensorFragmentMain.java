@@ -1,5 +1,7 @@
 package org.fossasia.pslab.sensorfragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +12,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +32,9 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by asitava on 13/7/17.
@@ -69,6 +76,8 @@ public class SensorFragmentMain extends Fragment {
         adapter = new ArrayAdapter<>(getContext(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataName);
     }
 
+
+    android.support.v7.widget.Toolbar toolbar;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_main, container, false);
@@ -78,7 +87,18 @@ public class SensorFragmentMain extends Fragment {
         tvSensorScan.setText(tvData);
         lvSensor = (ListView) view.findViewById(R.id.lv_sensor);
         lvSensor.setAdapter(adapter);
-
+        toolbar=(android.support.v7.widget.Toolbar)view.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Sensor View");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         buttonSensorAutoScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +157,21 @@ public class SensorFragmentMain extends Fragment {
 
         });
         return view;
+    }
+
+    private void onBackPressed() {
+        new AlertDialog.Builder(getContext())
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.closing_sensor_title)
+                .setMessage(R.string.closing_sensor_message)
+                .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((AppCompatActivity)getActivity()).finish();
+                    }
+                })
+                .setNegativeButton(R.string.dialog_no, null)
+                .show();
     }
 
     Runnable scanRunnable = new Runnable() {

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -167,6 +168,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private CaptureAudioBuffer captureAudioBuffer;
     private Thread monitorThread;
     private volatile boolean monitor = true;
+    @BindView(R.id.toolbar)
+    android.support.v7.widget.Toolbar toolbar;
 
 
     @Override
@@ -282,6 +285,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         xyPlotTextView.setOnClickListener(this);
 
         chartInit();
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Oscilloscope");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         final Runnable runnable = new Runnable() {
 

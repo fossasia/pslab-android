@@ -7,6 +7,14 @@
     android:focusableInTouchMode="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/toolbar"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></android.support.v7.widget.Toolbar>
     <RelativeLayout
         android:id="@+id/sensor_layout"
         android:layout_width="match_parent"
@@ -14,7 +22,8 @@
         android:layout_above="@+id/sensor_control_dock_layout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_below="@+id/toolbar"/>
 
     <RelativeLayout
         android:id="@+id/sensor_control_dock_layout"
