@@ -58,6 +58,7 @@ public class LightDependentResistorExperiment extends Fragment {
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (scienceLab.isConnected()) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title(getString(R.string.configure_experiment))
                         .customView(R.layout.ldr_experiment_dialog, true)
@@ -84,11 +85,9 @@ public class LightDependentResistorExperiment extends Fragment {
                                     tilFrequency.setError(null);
                                 }
                                 frequency = Float.parseFloat(etFrequency.getText().toString());
-                                if (scienceLab.isConnected()) {
-                                    startExperiment();
-                                } else {
-                                    Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
-                                }
+                                
+                                startExperiment();
+                                
                                 dialog.dismiss();
                             }
                         })
@@ -102,6 +101,9 @@ public class LightDependentResistorExperiment extends Fragment {
                         .autoDismiss(false)
                         .build();
                 dialog.show();
+                 } else {
+                             Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
+                        }
             }
         });
         chartInit();
