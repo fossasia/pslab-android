@@ -4,8 +4,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.fossasia.pslab.R;
+
+import static org.fossasia.pslab.activity.MainActivity.navItemIndex;
 
 /**
  * Created by viveksb007 on 15/3/17.
@@ -48,4 +52,5 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             listPreference.setSummary("Current format is " + listPreference.getEntry().toString());
         }
     }
+
 }
