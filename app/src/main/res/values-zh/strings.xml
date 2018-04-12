@@ -1,0 +1,554 @@
+<resources>
+    <string name="app_name">PSLab</string>
+    <string name="navigation_drawer_open">打开导航抽屉</string>
+    <string name="navigation_drawer_close">关闭导航抽屉</string>
+    <string name="openDrawer">打开抽屉</string>
+    <string name="closeDrawer">关闭抽屉</string>
+
+    <string name="Toast_double_tap">再按一次关闭 PSLab</string>
+
+    <string name="nav_home">家</string>
+    <string name="nav_saved_experiments">保存的实验</string>
+    <string name="nav_design_experiment">设计实验</string>
+    <string name="nav_settings">设置</string>
+    <string name="nav_about_us">关于我们</string>
+    <string name="nav_report">报告问题</string>
+    <string name="nav_help_feedback">帮帮我 &amp; 反馈</string>
+    <string name="nav_applications">应用</string>
+
+    <string name="oscilloscope">示波器</string>
+    <string name="control">控制</string>
+    <string name="advance_control">提前控制</string>
+    <string name="logical_analyzer">逻辑分析仪</string>
+    <string name="data_sensor_logger">数据传感器记录器</string>
+    <string name="sensor_quick_view">传感器快速查看</string>
+    <string name="wavegen">波发生器</string>
+
+    <string name="control_item_1">控制</string>
+    <string name="control_item_2">读</string>
+    <string name="control_item_3">高级</string>
+
+    <string name="about_us_description">PSLab的目标是创建一个可用于教师，学生和公民科学家进行实验的开源硬件设备（在所有图层上打开）。我们的小型口袋实验室提供一系列用于科学和工程实验的传感器。它提供众多测量设备的功能，包括示波器，波形发生器，频率计数器，可编程电压，电流源和数据记录器。</string>
+
+    <string-array name="nav_item_activity_titles">
+        <item>家</item>
+        <item>应用</item>
+        <item>保存的实验</item>
+        <item>设计实验</item>
+        <item>设置</item>
+    </string-array>
+
+    <string name="activity_title_about_us">
+        关于我们</string>
+    <string name="activity_title_privacy_policy">隐私政策</string>
+    <string name="application_icon">应用图标</string>
+
+    <string-array name="select_channel_mode_la">
+        <item>单通道模式</item>
+        <item>双通道模式</item>
+        <item>三通道模式</item>
+        <item>四通道模式</item>
+    </string-array>
+
+    <string name="set">组</string>
+    <string name="read">读</string>
+    <string name="resistance">Resistance</string>
+    <string name="capacitance">Capacitance</string>
+    <string name="frequency">Frequency</string>
+    <string name="count_pulses">计数 Pulses</string>
+    <string-array name="ID">
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+    </string-array>
+    <string name="reset">重启</string>
+    <string name="voltage">电压</string>
+    <string name="ch1">CH1</string>
+    <string name="ch2">CH2</string>
+    <string name="ch3">CH3</string>
+    <string name="cap">CAP</string>
+    <string name="sen">SEN</string>
+    <string name="an8">AN8</string>
+    <string name="w1">Wave 1</string>
+    <string name="w2">Wave 2</string>
+    <string name="phase">Phase</string>
+    <string name="output">产量</string>
+    <string name="dutycycle">Duty cycle</string>
+    <string name="sqr1">SQR1</string>
+    <string name="sqr2">SQR2</string>
+    <string name="sqr3">SQR3</string>
+    <string name="sqr4">SQR4</string>
+    <string name="freq_range">10Hz-5kHz</string>
+    <string name="zero">0</string>
+    <string name="gain">Gain</string>
+    <string-array name="wave_type">
+        <item>SINE</item>
+        <item>SQUARE</item>
+    </string-array>
+    <string name="digital_outputs">数字输出</string>
+    <string name="configure_PWM">配置 PWM</string>
+    <string name="waveform_generator">任意波形发生器</string>
+    <string name="autoscan">自动扫描</string>
+    <string name="select_sensor">选择传感器</string>
+    <string name="get_raw">得到 Raw</string>
+
+    <string name="not_connected">未连接</string>
+    <string name="initialisation_completed">初始化完成</string>
+    <string name="initialising_wait">初始化等待…</string>
+    <string name="device_connected_successfully">设备连接成功</string>
+    <string name="device_not_found">找不到设备</string>
+
+    <string name="time_unit_la">时间 (ms)</string>
+    <string name="analyze">分析</string>
+    <string name="view">视图</string>
+
+    <string-array name="tab_titles">
+        <item>实验文档</item>
+        <item>实验设置</item>
+    </string-array>
+
+    <string name="configure_experiment">配置实验</string>
+
+    <!-- Experiment Headers -->
+    <string name="electronics_experiments">电子实验</string>
+    <string name="bjts_and_fets">BJT和FET</string>
+    <string name="diode_circuits">二极管电路</string>
+    <string name="opamp_circuits">运算放大器电路</string>
+    <string name="oscillators">振荡器</string>
+    <string name="communication">通讯</string>
+    <!-- Experiments -->
+    <string name="nfet_output_characteristics">N-FET输出特性</string>
+    <string name="nfet_transfer_characteristics">N-FET传输特性</string>
+    <string name="transistor_cb">BJT CB特性</string>
+    <string name="transistor_ce">BJT输出特性</string>
+    <string name="bjt_input_characteristics">BJT输入特性</string>
+    <string name="bjt_transfer_characteristics">BJT传输特性</string>
+    <string name="bjt_ce_backup">BJT CE备份</string>
+    <string name="bjt_amplifer">BJT放大器</string>
+
+    <string name="zener_iv">齐纳四特征</string>
+    <string name="diode_iv">二极管IV特性</string>
+    <string name="diode_clamping">二极管钳位</string>
+    <string name="diode_clipping">二极管剪辑</string>
+    <string name="half_wave_rectifier">半波整流器</string>
+    <string name="full_wave_rectifier">全波整流器</string>
+
+    <string name="inverting_opamp">反相运算放大器</string>
+    <string name="ramp_generator">斜坡发生器</string>
+    <string name="non_inverting_opamp">非反相运算放大器</string>
+    <string name="summing_junction">求和连接点</string>
+    <string name="precision_rectifier">精密整流器</string>
+
+    <string name="astable_multivibrator">非稳态多谐振荡器</string>
+    <string name="colpitts_oscillator">Colpitts振荡器</string>
+    <string name="phase_shift_oscillator">相移振荡器</string>
+    <string name="wien_bridge_oscillator">维恩桥振荡器</string>
+    <string name="monostable_multivibrator">单稳态多谐振荡器</string>
+
+    <string name="amplitude_modulation">调幅</string>
+
+    <string name="temporary_toast">即将推出</string>
+
+    <string name="electrical_experiments">电气实验</string>
+    <string name="transient_rlc">瞬态RLC响应</string>
+    <string name="filter_characteristics">滤波器特性</string>
+    <string name="capacitive_reactance">电容电抗</string>
+    <string name="inductive_reactance">归纳电抗</string>
+    <string name="ohms_law">欧姆定律</string>
+    <string name="rc_phase_shift">RC相移</string>
+    <string name="lr_phase_shift">LR相移</string>
+    <string name="lcr_steady_state">LCR稳定状态</string>
+    <string name="rc_integrals_derivatives">RC积分，衍生物</string>
+    <string name="voltage_controlled_low_pass_filter">电压控制低通滤波器</string>
+
+    <string name="physics_experiments">物理实验</string>
+    <string name="speed_of_sound">声音的速度</string>
+    <string name="pendulum_time">摆时间周期</string>
+    <string name="random_sampling">随机抽样</string>
+    <string name="simple_pendulum">单摆</string>
+    <string name="piezo_bandwidth_characteristics">压电带宽特性</string>
+    <string name="mpu6050_imu_pendulum">MPU6050 IMU摆</string>
+
+    <string name="add_on_modules">附加模块</string>
+    <string name="various_utilities">各种实用程序</string>
+    <string name="dust_sensor">灰尘传感器DSM501</string>
+    <string name="oled_display">OLED显示器</string>
+    <string name="wireless_rgb_lights">无线RGB灯</string>
+    <string name="sensor_tmp_logger">传感器TMP记录器</string>
+    <string name="rfid_reader_mf522">RFID阅读器MF522</string>
+    <string name="rgb_led_ws2812b">RGB LED WS2812B</string>
+
+    <string name="ads1115_based_calibrator">基于ADS1115的校准器</string>
+    <string name="device_testing">设备测试</string>
+    <string name="servo_motors">伺服电机</string>
+    <string name="stepper_motors">步进电机</string>
+    <string name="make_a_flow_chart">制作流程图</string>
+    <string name="calibration_loader">校准装载机</string>
+    <string name="device_calibrator">设备校准器</string>
+    <string name="remote_access">远程访问</string>
+
+    <string name="school_level">学校级别</string>
+    <string name="measure_voltages">测量电压</string>
+    <string name="lemon_cell">柠檬细胞</string>
+    <string name="ac_generator">交流发电机</string>
+    <string name="resistance_measurement">电阻测量</string>
+    <string name="human_body_resistance">人体抵抗力</string>
+    <string name="em_induction">电磁感应</string>
+    <string name="resistance_of_water">水的阻力</string>
+    <string name="frequency_of_sound">声音的频率</string>
+    <string name="piezo_buzzer">压电蜂鸣器</string>
+    <string name="sound_beats">声音现象</string>
+    <string name="capacitance_measurement">电容测量</string>
+    <string name="semiconductor_diode">半导体二极管</string>
+    <string name="light_dependent_resistor">光敏电阻</string>
+    <string name="capacitor_discharge">电容器放电</string>
+    <string name="ultrasonic_range_finder">超声波测距仪</string>
+
+
+    <string name="bode_plots">博德情节</string>
+    <string name="ac_and_dc">AC和DC</string>
+
+    <string name="hmc5883l">hmc5883l</string>
+    <string name="mpu6050">mpu6050</string>
+    <string name="sht21">sht21</string>
+    <string name="tsl2561">tsl2561</string>
+    <string name="ads1115">ads1115</string>
+    <string name="mlx90614">mlx90614</string>
+    <string name="bmp180">bmp180</string>
+    <string name="bh1750">bh1750</string>
+    <string name="mpu925x">mpu925x</string>
+
+    <string name="raw_data">原始数据</string>
+    <string name="configure">配置</string>
+    <string name="plot">情节</string>
+
+    <string name="data">数据</string>
+    <string name="bx">Bx</string>
+    <string name="by">By</string>
+    <string name="bz">Bz</string>
+    <string name="ax">Ax</string>
+    <string name="ay">Ay</string>
+    <string name="az">Az</string>
+    <string name="gx">Gx</string>
+    <string name="gy">Gy</string>
+    <string name="gz">Gz</string>
+    <string name="temp">Temp</string>
+    <string name="luminosity">亮度</string>
+    <string name="humidity">湿度</string>
+    <string name="object_temp">物体温度</string>
+    <string name="ambient_temp">环境温度</string>
+    <string name="temperature">温度</string>
+    <string name="altitude">高度</string>
+    <string name="pressure">压力</string>
+    <string name="gyro_range">设置陀螺范围</string>
+    <string name="accel_range">设置加速范围</string>
+    <string name="kalman">卡尔曼滤波器</string>
+    <string name="power_up">充电</string>
+    <string name="full_spectrum">全谱</string>
+    <string name="infrared">红外线</string>
+    <string name="visible">可见</string>
+    <string name="set_gain">设置增益</string>
+    <string name="set_timing">设定时间</string>
+    <string name="set_channel">设置频道</string>
+    <string name="set_rate">设定价格</string>
+    <string name="gain_range">增益范围</string>
+    <string name="plot_accelerometer">绘图 - 加速度计</string>
+    <string name="plot_gyroscope">绘图 - 陀螺仪</string>
+    <string name="rad">(弧度)</string>
+    <string name="angle">角度</string>
+    <string name="time">时间</string>
+    <string name="infinite_symbol">∞</string>
+    <string name="timegap">时间空隙</string>
+    <string name="no_of_samples">样本数量</string>
+    <string name="temp2">温度</string>
+    <string name="alt">Alt.</string>
+    <string name="meter">(m)</string>
+    <string name="pascal">(Pa)</string>
+
+    <string name="voltage_label">电压 (V)</string>
+    <string name="current_label">当前 (mA)</string>
+
+    <string-array name="tsl2561_gain_spinner">
+        <item>No gain</item>
+        <item>1x</item>
+        <item>16x</item>
+    </string-array>
+    <string-array name="mpu6050_gyro_spinner">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+
+    <string-array name="mpu6050_accel_spinner">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="mpu6050_kalman_spinner">
+        <item>0.01</item>
+        <item>0.1</item>
+        <item>1</item>
+        <item>10</item>
+        <item>100</item>
+        <item>1000</item>
+        <item>10000</item>
+        <item>null</item>
+    </string-array>
+
+    <string-array name="mpu6050_power_spinner">
+        <item></item>
+        <item></item>
+    </string-array>
+
+    <string-array name="mpu925x_gyro_spinner">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+
+    <string-array name="mpu925x_accel_spinner">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="mpu925x_kalman_spinner">
+        <item>0.01</item>
+        <item>0.1</item>
+        <item>1</item>
+        <item>10</item>
+        <item>100</item>
+        <item>1000</item>
+        <item>10000</item>
+        <item>null</item>
+    </string-array>
+
+    <string-array name="mpu925x_power_spinner">
+        <item></item>
+        <item></item>
+    </string-array>
+
+
+    <string-array name="ads1115_gain_spinner">
+        <item>GAIN_TWOTHIRDS</item>
+        <item>GAIN_ONE</item>
+        <item>GAIN_TWO</item>
+        <item>GAIN_FOUR</item>
+        <item>GAIN_EIGHT</item>
+        <item>GAIN_SIXTEEN</item>
+    </string-array>
+
+    <string-array name="ads1115_channel_spinner">
+        <item>UNI_0</item>
+        <item>UNI_1</item>
+        <item>UNI_2</item>
+        <item>UNI_3</item>
+        <item>DIFF_01</item>
+        <item>DIFF_23</item>
+    </string-array>
+
+    <string-array name="ads1115_rate_spinner">
+        <item>8</item>
+        <item>16</item>
+        <item>32</item>
+        <item>64</item>
+        <item>128</item>
+        <item>250</item>
+        <item>475</item>
+        <item>860</item>
+    </string-array>
+
+    <string-array name="bh1750_gain_spinner">
+        <item>500mLx</item>
+        <item>1000mLx</item>
+        <item>4000mLx</item>
+    </string-array>
+
+    <string-array name="opamp_timebase">
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+        <item>32</item>
+        <item>102.4</item>
+        <item>204.8</item>
+        <item>409.6</item>
+    </string-array>
+
+    <string-array name="opamp_range">
+        <item>+/- 16</item>
+        <item>+/- 8</item>
+        <item>+/- 4</item>
+        <item>+/- 2</item>
+        <item>+/- 1</item>
+        <item>+/- 0.5</item>
+    </string-array>
+
+    <string-array name="wave_generator">
+        <item>W1</item>
+        <item>W2</item>
+    </string-array>
+
+    <string-array name="source_pins">
+        <item>PV1</item>
+        <item>PV2</item>
+        <item>PV3</item>
+        <item>PCS</item>
+    </string-array>
+
+    <string name="experiment_icon">实验图标</string>
+    <string name="drop_down_arrow">向下箭头</string>
+    <string name="voltage_unit">(V)</string>
+    <string name="volts">伏</string>
+    <string name="seconds">(s)</string>
+    <string name="lux">LUX</string>
+    <string name="pressure2">压力</string>
+    <string name="plot_altitude">情节 - 高度</string>
+    <string name="celcius">(°C)</string>
+    <string name="plot_temperature">绘图 - 温度</string>
+    <string name="guass">高斯</string>
+    <string name="guass_unit">(Ga)</string>
+    <string name="humid">湿度</string>
+    <string name="humid_unit">(RH)</string>
+    <string name="plot_humidity">情节 - 湿度</string>
+    <string name="illum">Illum.</string>
+    <string name="lux2">(Lux)</string>
+    <string name="acceleration">促进</string>
+    <string name="acceleration_unit">(m/s²)</string>
+    <string name="initial_voltage_v">初始电压（V）</string>
+    <string name="final_voltage_v">最终电压（V）</string>
+    <string name="step_size_v">步长（V）</string>
+    <string name="gate_voltage_v">栅极电压（V）</string>
+    <string name="collector_sweep_pv1">收集器扫描（PV1）</string>
+    <string name="emitter_voltage_pv2">发射极电压（PV2）</string>
+    <string name="total_steps">总步骤</string>
+    <string name="base_voltage_pv2">基极电压（PV2）</string>
+    <string name="initial_frequency_hz">初始频率（Hz）</string>
+    <string name="voltage_v">电压（V）</string>
+    <string name="range">范围</string>
+    <string name="wave1">第1波</string>
+    <string name="start_experiment">开始实验</string>
+    <string name="discharge">卸货</string>
+    <string name="charge">收费</string>
+    <string name="wave2">第2波</string>
+    <string name="label_5000hz">5000Hz</string>
+    <string name="label_180">180°</string>
+
+    <string name="data_logger">数据记录仪</string>
+    <string name="start_logging">开始记录</string>
+    <string name="stop_logging">停止记录</string>
+    <string name="cancel">取消</string>
+    <string name="save_data">保存数据</string>
+    <string name="view_logged_data">查看记录的数据</string>
+    <string name="export_logged_data">导出记录的数据</string>
+    <string name="sensor_logged_data">传感器记录的数据</string>
+    <string name="begin_experiment">开始实验</string>
+    <string name="current">当前</string>
+    <string name="analyse_ch1">分析CH1</string>
+    <string name="analyse_ch2">分析CH2</string>
+    <string name="result">结果</string>
+    <string name="acquire_data">获取数据</string>
+    <string name="done">完成</string>
+    <string name="fit_failed">适合失败</string>
+
+    <string name="full">充分</string>
+    <string name="ac_voltage">交流电压</string>
+    <string name="dc_voltage">直流电压</string>
+    <string name="amplitude_range">幅度范围</string>
+
+    <string name="steps">脚步</string>
+    <string name="set_steps">设置步骤</string>
+
+    <string name="fossasia_logo">Fossasia标志</string>
+    <string name="pocket_science_logo">口袋科学标志</string>
+
+    <string name="servo_4">伺服4</string>
+    <string name="servo_3">伺服3</string>
+    <string name="servo_2">伺服2</string>
+    <string name="servo_1">伺服1</string>
+    <string name="servo_angles">伺服角度</string>
+    <string name="set_angles">设置角度</string>
+    <string name="reset_angles">重置角度</string>
+    <string name="timebase_label_875">875.00 μs</string>
+    <string name="timebase_label_1">1.00 ms</string>
+    <string name="timebase_label_2">2.00 ms</string>
+    <string name="timebase_label_4">4.00 ms</string>
+    <string name="timebase_label_8">8.00 ms</string>
+    <string name="timebase_label_25_60">25.60 ms</string>
+    <string name="timebase_label_38_40">38.40 ms</string>
+    <string name="timebase_label_51_20">51.20 ms</string>
+    <string name="timebase_label_102_40">102.40 ms</string>
+    <string name="time_space">时间 </string>
+    <string name="unit_μs">(μs)</string>
+    <string name="label_ch1">CH1</string>
+    <string name="label_V">(V)</string>
+    <string name="label_ch2">CH2</string>
+    <string name="channel_parameters">通道参数</string>
+    <string name="timebase_and_trigger">时基和触发器</string>
+    <string name="data_analysis">数据分析</string>
+    <string name="xy_plot">XY绘图</string>
+    <string name="hundred_ms">100ms</string>
+    <string name="step_size">一步的大小</string>
+    <string name="collector_voltage_v">集电极电压（V）</string>
+    <string name="hyphen">-</string>
+    <string name="plus">+</string>
+    <string name="select_a_value">选择一个值</string>
+    <string name="experiment_setup_aim">目的：研究二极管I-V特性</string>
+    <string name="lorem_ipsum_text">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</string>
+    <string name="experiment_setup">实验设置</string>
+    <string name="ch3_value">CH3 (+/- 3.3V)</string>
+    <string name="one_value">1.0</string>
+    <string name="fourier_transforms">傅里叶变换</string>
+    <string name="pv1">PV1</string>
+    <string name="zero_volts">0.00 V</string>
+    <string name="aquire_data">获取数据</string>
+    <string name="ten_hz">10Hz</string>
+    <string name="timebase">时基</string>
+    <string name="timebase_trigger_value">875.00 μs</string>
+    <string name="text_view">TextView</string>
+    <string name="pslab_device_not_found">未找到PSLAB设备</string>
+    <string name="select_mic">[选择MIC]</string>
+
+    <string-array name="sensor_click_list">
+        <item>导出数据</item>
+        <item>共享数据</item>
+    </string-array>
+
+    <string-array name="export_data_format_list">
+        <item>TXT格式</item>
+        <item>CSV格式</item>
+    </string-array>
+    <string-array name="export_data_format_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="other">其他</string>
+    <string name="trigger">触发</string>
+    <string name="enable_xy_plot">启用XY绘图</string>
+    <string name="source_voltage_v">源电压（V）</string>
+    <string name="plot_hyphen_pressure">情节 - 压力</string>
+    <string name="plot_object_temperature">绘图 - 对象温度</string>
+    <string name="plot_ambient_temperature">绘图 - 环境温度</string>
+
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="closing_control_title">关闭控制</string>
+    <string name="closing_control_message">你确定要关闭控制吗？</string>
+    <string name="closing_sensor_title">关闭传感器QuickView</string>
+    <string name="closing_sensor_message">您确定要关闭Sensor QuickView吗？</string>
+    <string name="closing_logical_analyzer_title">关闭逻辑分析仪</string>
+    <string name="closing_logical_analyzer_message">你确定要关闭逻辑分析仪吗？</string>
+    <string name="closing_sensor_data_logger_title">关闭传感器数据记录器</string>
+    <string name="closing_sensor_data_logger_message">您确定要关闭传感器数据记录器吗？</string>
+    <string name="closing_wave_generator_title">关闭波形发生器</string>
+    <string name="closing_wave_generator_message">你确定要关闭Wave Generator吗？</string>
+    <string name="closing_oscilloscope_title">关闭示波器</string>
+    <string name="closing_oscilloscope_message">你确定要关闭示波器吗？</string>
+
+</resources>

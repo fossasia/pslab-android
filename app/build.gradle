@@ -3,7 +3,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "org.fossasia.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -25,7 +25,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-
     compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
     compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
     compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
@@ -33,7 +32,6 @@ dependencies {
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile "com.android.support:preference-v14:$rootProject.supportLibraryVersion"
     compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
-
     compile "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
     compile "com.github.PhilJay:MPAndroidChart:$rootProject.mpAndroidChartVersion"
     compile "com.github.bmelnychuk:atv:$rootProject.atvVersion"
@@ -50,7 +48,6 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-
     testCompile "junit:junit:$rootProject.junitVersion"
     androidTestCompile("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
