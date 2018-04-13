@@ -17,7 +17,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".activity.SplashActivity"
+            android:theme="@style/AppThemeSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -33,7 +34,7 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-        <activity android:name=".activity.AboutUs" />
+        <activity android:name=".activity.AboutUs"/>
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ShowLoggedData" />
         <activity android:name=".activity.WavegenActivity" />
@@ -45,8 +46,8 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activity.OscilloscopeActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="landscape" />
+            android:configChanges="screenSize|keyboardHidden"
+            android:screenOrientation="sensorLandscape" />
         <activity android:name=".activity.SensorActivity" />
         <activity
             android:name=".activity.LogicalAnalyzerActivity"

@@ -8,8 +8,8 @@ android {
         applicationId "org.fossasia.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -24,43 +24,47 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:design:$rootProject.supportLibraryVersion"
-    compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    compile "com.android.support:preference-v14:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:preference-v14:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:customtabs:$rootProject.supportLibraryVersion"
 
-    compile "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
-    compile "com.github.PhilJay:MPAndroidChart:$rootProject.mpAndroidChartVersion"
-    compile "com.github.bmelnychuk:atv:$rootProject.atvVersion"
-    compile "de.hdodenhof:circleimageview:$rootProject.circleImageViewVersion"
-    compile "org.apache.commons:commons-math3:$rootProject.commonMathVersion"
-    compile "org.apache.commons:commons-lang3:$rootProject.commonLangVersion"
-    compile "com.squareup.picasso:picasso:$rootProject.picassoVersion"
-    compile "com.github.devlight.navigationtabstrip:navigationtabstrip:$rootProject.navTabStripVersion"
-    compile "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
-    compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
+    implementation "com.github.PhilJay:MPAndroidChart:$rootProject.mpAndroidChartVersion"
+    implementation "com.github.bmelnychuk:atv:$rootProject.atvVersion"
+    implementation "de.hdodenhof:circleimageview:$rootProject.circleImageViewVersion"
+    implementation "org.apache.commons:commons-math3:$rootProject.commonMathVersion"
+    implementation "org.apache.commons:commons-lang3:$rootProject.commonLangVersion"
+    implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+    implementation "com.github.devlight.navigationtabstrip:navigationtabstrip:$rootProject.navTabStripVersion"
+    implementation "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
+    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
-    compile 'com.github.medyo:android-about-page:1.2.1'
-    compile 'com.github.tiagohm.MarkdownView:library:0.17.0'
+    implementation 'com.github.medyo:android-about-page:1.2.4'
+    implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
-    testCompile "junit:junit:$rootProject.junitVersion"
-    androidTestCompile("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    androidTestImplementation("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile("com.android.support.test:rules:$rootProject.testRunnerRulesVersion") {
+    androidTestImplementation("com.android.support.test:rules:$rootProject.testRunnerRulesVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion") {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile("com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion") {
+    androidTestImplementation("com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile("com.android.support.test.espresso:espresso-contrib:$rootProject.espressoVersion") {
+    androidTestImplementation("com.android.support.test.espresso:espresso-contrib:$rootProject.espressoVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'recyclerview-v7'

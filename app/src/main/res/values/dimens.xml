@@ -10,7 +10,7 @@
     <dimen name="profile_width">80dp</dimen>
     <dimen name="profile_height">80dp</dimen>
 
-    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_margin">8dp</dimen>
     <dimen name="card_radius">2dp</dimen>
     <dimen name="title_padding">10dp</dimen>
     <dimen name="image_padding_around">30dp</dimen>
@@ -41,5 +41,58 @@
     <dimen name="reading_box_height">40dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_title_margin">16dp</dimen>
+    <dimen name="navigation_drawer_width">300dp</dimen>
+
+    <dimen name="dimen_zero_dp">0dp</dimen>
+    <dimen name="appbar_layout_height">200dp</dimen>
+    <dimen name="sensor_control_doc_height">90dp</dimen>
+    <dimen name="custom_spinner_textsize">14sp</dimen>
+    <dimen name="diode_edit_text_margin">8dp</dimen>
+    <dimen name="nav_tab_strip_height">50dp</dimen>
+    <dimen name="exp_list_item_padding">8dp</dimen>
+    <dimen name="exp_list_item_textsize">15sp</dimen>
+    <dimen name="exp_setup_textsize">26sp</dimen>
+    <dimen name="recycler_view_margin">4dp</dimen>
+    <dimen name="diode_clipping_margin">8dp</dimen>
+    <dimen name="diode_clipping_margin_small">6dp</dimen>
+    <dimen name="diode_clipping_margin_large">10dp</dimen>
+    <dimen name="diode_seekbar_height">18dp</dimen>
+
+    <dimen name="fullwave_rectifier_margin">8dp</dimen>
+    <dimen name="fullwave_rectifier_margin_large">16dp</dimen>
+
+    <dimen name="halfwave_rectifier_margin">16dp</dimen>
+    <dimen name="halfwave_rectifier_margin_large">24dp</dimen>
+
+    <dimen name="oscillator_exp_margin">8dp</dimen>
+    <dimen name="oscillator_exp_margin_small">4dp</dimen>
+    <dimen name="oscillator_exp_margin_large">14dp</dimen>
+    <dimen name="oscillator_exp_button_width">86dp</dimen>
+    <dimen name="oscillator_exp_button_height">33dp</dimen>
+    <dimen name="oscillator_exp_button_textsize">10sp</dimen>
+
+    <dimen name="fragment_speed_of_sound_margin">8dp</dimen>
+    <dimen name="ragment_speed_of_sound_margin_small">2dp</dimen>
+    <dimen name="read_button_width">87dp</dimen>
+    <dimen name="read_button_height">34dp</dimen>
+    <dimen name="read_button_text_size">13sp</dimen>
+    <dimen name="spinner_height">18dp</dimen>
+    <dimen name="spinner_margin">9dp</dimen>
+    <dimen name="seekbar_height">16dp</dimen>
+
+    <dimen name="home_fragment_padding">10dp</dimen>
+    <dimen name="home_fragement_margin">10dp</dimen>
+    <dimen name="device_status_width">80dp</dimen>
+    <dimen name="device_status_height">80dp</dimen>
+    <dimen name="device_status_textsize">20sp</dimen>
+    <dimen name="home_fragment_textview_margin">5dp</dimen>
+
+    <dimen name="body_resistance_margin">10dp</dimen>
+    <dimen name="resistance_text_height">40dp</dimen>
+    <dimen name="stepper_motor_constraint_padding">5dp</dimen>
+    <dimen name="stepper_motor_text_view_height">40dp</dimen>
+    <dimen name="stepper_motor_btn_height">100dp</dimen>
+    <dimen name="stepper_motor_margin">5dp</dimen>
+    <dimen name="stepper_motor_text_size">16sp</dimen>
 
 </resources>

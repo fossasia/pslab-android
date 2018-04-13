@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.others.NothingSelectedSpinnerAdapter;
@@ -306,5 +307,12 @@ public class ChannelParametersFragment extends Fragment {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, ChannelParametersFragment.class.getSimpleName());
     }
 }

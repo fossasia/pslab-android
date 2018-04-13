@@ -141,14 +141,16 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/set_angles" />
+            android:text="@string/set_angles"
+            android:theme="@style/AppTheme.Button" />
 
         <Button
             android:id="@+id/btn_reset_angles"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/reset_angles" />
+            android:text="@string/reset_angles"
+            android:theme="@style/AppTheme.Button" />
     </LinearLayout>
 
 </LinearLayout>

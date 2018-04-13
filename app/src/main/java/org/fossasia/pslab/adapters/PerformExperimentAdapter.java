@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
+import org.fossasia.pslab.experimentsetup.schoollevel.MeasureVoltage;
 import org.fossasia.pslab.experimentsetup.electricalexperiments.InductorReactanceExperiment;
 import org.fossasia.pslab.experimentsetup.electricalexperiments.CapacitorReactanceExperiment;
 import org.fossasia.pslab.experimentsetup.schoollevel.HumanBodyResistanceExperiment;
@@ -21,6 +21,7 @@ import org.fossasia.pslab.experimentsetup.electronicexperiments.DiodeExperiment;
 import org.fossasia.pslab.experimentsetup.electronicexperiments.NFETTransferCharacteristicsExperiment;
 import org.fossasia.pslab.experimentsetup.electronicexperiments.NonInvertingOpAmpExperiment;
 import org.fossasia.pslab.experimentsetup.electricalexperiments.RCPhaseShiftExperiment;
+import org.fossasia.pslab.experimentsetup.electricalexperiments.RCIntegralandderivativeexperiment;
 import org.fossasia.pslab.experimentsetup.addonmodules.ServoMotorsExperiment;
 import org.fossasia.pslab.experimentsetup.electronicexperiments.SummingJunctionExperiment;
 import org.fossasia.pslab.experimentsetup.electronicexperiments.OscillatorExperiment;
@@ -44,6 +45,7 @@ import org.fossasia.pslab.fragment.ExperimentSetupFragment;
  * Created by viveksb007 on 12/7/17.
  */
 
+
 public class PerformExperimentAdapter extends FragmentPagerAdapter {
 
     private final int PAGE_COUNT = 2;
@@ -63,7 +65,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
             case 0:
                 switch (experimentTitle) {
                     case "Diode IV Characteristics":
-                        return ExperimentDocFragment.newInstance("D_diodeIV.html");
+                        return ExperimentDocMdFragment.newInstance("D_diodeIV.md");
                     case "Zener IV Characteristics":
                         return ExperimentDocMdFragment.newInstance("D_ZenerIV.md");
                     case "Half Wave Rectifier":
@@ -100,14 +102,16 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocMdFragment.newInstance("E_OhmsLaw.md");
                     case "Random Sampling":
                         return ExperimentDocMdFragment.newInstance("M_RANDOM_SAMPLING.md");
-                    case "AC and DC":
-                        return ExperimentDocMdFragment.newInstance("A_AC_AND_DC.md");
+                   // case "AC and DC":
+                     //   return ExperimentDocMdFragment.newInstance("A_AC_AND_DC.md");
                     case "AC Generator":
                         return ExperimentDocMdFragment.newInstance("C_AC_GENERATOR.md");
                     case "Capacitance Measurement":
                         return ExperimentDocMdFragment.newInstance("I_CAPACITANCE.md");
                     case "Resistance":
                         return ExperimentDocMdFragment.newInstance("D_RESISTANCE.md");
+                    case "Measure Voltages":
+                        return ExperimentDocMdFragment.newInstance("A_AC_AND_DC.md");
                     case "Electromagnetic Induction":
                         return ExperimentDocMdFragment.newInstance("F_EM_INDUCTION.md");
                     case "Sound Beats Phenomenon":
@@ -123,9 +127,9 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "Diode Clamping":
                         return ExperimentDocMdFragment.newInstance("L_DiodeClamping.md");
                     case "Inverting Op-Amp":
-                        return ExperimentDocFragment.newInstance("L_Inverting.html");
+                        return ExperimentDocMdFragment.newInstance("L_Inverting.md");
                     case "Non Inverting Op-Amp":
-                        return ExperimentDocFragment.newInstance("L_NonInverting.html");
+                        return ExperimentDocMdFragment.newInstance("L_NonInverting.md");
                     case "Precision Rectifier":
                         return ExperimentDocMdFragment.newInstance("Precision_Rectifier.md");
                     case "Capacitor Discharge":
@@ -146,6 +150,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocMdFragment.newInstance("P_CapacitivePhaseShift.md");
                     case "Capacitive Reactance":
                         return ExperimentDocMdFragment.newInstance("O_XC.md");
+                    case "RC Integrals, Derivatives":
+                        return ExperimentDocMdFragment.newInstance("Q_RC_integ_deriv.md");
                     case "Summing Junction":
                         return ExperimentDocMdFragment.newInstance("L_Summing.md");
                     case "Semiconductor Diode":
@@ -155,15 +161,19 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "Stepper Motors":
                         return ExperimentDocMdFragment.newInstance("J_stepper.md");
                     case "Servo Motors":
-                        return ExperimentDocFragment.newInstance("G_servo_motors.md");
+                        return ExperimentDocMdFragment.newInstance("G_servo_motors.md");
                     case "Speed of Sound":
-                        return ExperimentDocFragment.newInstance("speedofsound.html");
+                        return ExperimentDocMdFragment.newInstance("SpeedOfSound.md");
+                    case "Resistance Measurement":
+                        return ExperimentDocMdFragment.newInstance("R_ResistanceMeasurement.md");
+                    case "Piezo Buzzer":
+                        return ExperimentDocMdFragment.newInstance("P_PiezoBuzzer.md");
                 }
 
             case 1:
                 switch (experimentTitle) {
                     case "Diode IV Characteristics":
-                        return ZenerSetupFragment.newInstance();
+                        return DiodeExperiment.newInstance("Diode IV Characteristics");
                     case "Zener IV Characteristics":
                         return ZenerSetupFragment.newInstance();
                     case "Half Wave Rectifier":
@@ -214,8 +224,12 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return LRPhaseShiftExperiment.newInstance();
                     case "RC Phase Shift":
                         return RCPhaseShiftExperiment.newInstance();
+                    case "Measure Voltages":
+                        return MeasureVoltage.newInstance();
                     case "Capacitive Reactance":
                         return CapacitorReactanceExperiment.newInstance();
+                    case "RC Integrals, Derivatives":
+                        return RCIntegralandderivativeexperiment.newInstance();
                     case "Summing Junction":
                         return SummingJunctionExperiment.newInstance();
                     case "Precision Rectifier":

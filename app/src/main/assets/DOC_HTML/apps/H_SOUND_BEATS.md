@@ -1,9 +1,9 @@
 Sounds Beats
 ---
 
-## Explore sound beats using piezo buzzers
+### Explore sound beats using piezo buzzers
 
-## Introduction
+#### Introduction
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/soundBeats.svg@100%|auto)
 
@@ -19,7 +19,7 @@ Sounds Beats
 
 * Two peaks corresponding to the original signals can be observed.
 
-## Screenshot
+#### Screenshot
 	
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/soundBeats.png@100%|auto)
 

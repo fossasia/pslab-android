@@ -37,8 +37,8 @@ public class CommunicationHandler {
     private static final int SET_CONTROL_LINE_STATE = 0x22;
     private static final int SEND_BREAK = 0x23;
 
-    public static final int DEFAULT_READ_BUFFER_SIZE = 16 * 1024;
-    public static final int DEFAULT_WRITE_BUFFER_SIZE = 16 * 1024;
+    public static final int DEFAULT_READ_BUFFER_SIZE = 32 * 1024;
+    public static final int DEFAULT_WRITE_BUFFER_SIZE = 32 * 1024;
 
     public UsbDevice mUsbDevice = null;
 
@@ -74,6 +74,7 @@ public class CommunicationHandler {
         }
         mConnection = mUsbManager.openDevice(mUsbDevice);
         Log.d(TAG, "Claiming interfaces, count=" + mUsbDevice.getInterfaceCount());
+        mConnection.controlTransfer(0x21, 0x22, 0x1, 0, null, 0, 0);
 
         mControlInterface = mUsbDevice.getInterface(0);
         Log.d(TAG, "Control interface=" + mControlInterface);

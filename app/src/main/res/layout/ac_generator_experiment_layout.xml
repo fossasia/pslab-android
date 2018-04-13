@@ -3,24 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="@dimen/control_text_padding">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/dimen_zero_dp"
+            android:layout_height="@dimen/reading_box_height"
             android:text="@string/amplitude_range"
             android:layout_weight="1"
             android:textStyle="bold"
-            android:textSize="16sp"
+            android:textSize="@dimen/control_textsize_small"
             android:gravity="center_vertical" />
 
         <Spinner
             android:id="@+id/amp_range_spinner"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dimen_zero_dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
@@ -30,7 +30,8 @@
         android:id="@+id/btn_configure_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/start_experiment" />
+        android:text="@string/start_experiment"
+        android:theme="@style/AppTheme.Button" />
 
     <LinearLayout
         android:layout_width="match_parent"

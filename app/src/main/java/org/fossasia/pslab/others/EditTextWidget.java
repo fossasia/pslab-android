@@ -75,8 +75,10 @@ public class EditTextWidget extends LinearLayout{
                     data = data > maxima ? maxima : data;
                     data = data < minima ? minima : data;
                     editText.setText(String.valueOf(data));
+                    editText.setSelection(String.valueOf(data).length());
                 } catch (Exception e) {
                     editText.setText("0");
+                    editText.setSelection(1);
                 }
             }
         });
@@ -90,8 +92,10 @@ public class EditTextWidget extends LinearLayout{
                     data = data > maxima ? maxima : data;
                     data = data < minima ? minima : data;
                     editText.setText(String.valueOf(data));
+                    editText.setSelection(String.valueOf(data).length());
                 } catch (Exception e) {
                     editText.setText("0");
+                    editText.setSelection(1);
                 }
             }
         });
@@ -122,5 +126,6 @@ public class EditTextWidget extends LinearLayout{
 
     public void setText(String text) {
         editText.setText(text);
+        editText.setSelection(text.length());
     }
 }

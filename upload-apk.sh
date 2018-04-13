@@ -2,8 +2,9 @@
 #create a new directory that will contain out generated apk
 mkdir $HOME/buildApk/ 
 #copy generated apk from build folder and README.md to the folder just created
-cp -R app/build/outputs/apk/app-debug.apk $HOME/buildApk/
-mv $HOME/buildApk/app-debug.apk $HOME/buildApk/app-release.apk 
+cp -R app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release-unsigned.apk $HOME/buildApk/
+cp -R app/build/outputs/apk/debug/output.json $HOME/buildApk/debug_output.json
+cp -R app/build/outputs/apk/release/output.json $HOME/buildApk/release_output.json
 cp -R README.md $HOME/buildApk/
 
 #setup git
@@ -14,6 +15,7 @@ git config --global user.name "Travis CI"
 git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossasia/pslab-android apk > /dev/null
 
 cd apk
+rm -rf *
 cp -Rf $HOME/buildApk/*  ./
 
 git checkout --orphan workaround

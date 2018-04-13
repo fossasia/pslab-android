@@ -3,12 +3,19 @@ package org.fossasia.pslab.activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import org.fossasia.pslab.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mehdi.sakout.aboutpage.AboutPage;
 
 /**
@@ -17,10 +24,19 @@ import mehdi.sakout.aboutpage.AboutPage;
 
 public class AboutUs extends AppCompatActivity {
 
+    @BindView(R.id.toolbar1)
+    Toolbar toolbar1;
+    @BindView(R.id.appBarAnim)
+    AppBarLayout appBarLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         simulateDayNight(0);
+        setContentView(R.layout.about_toolbar);
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar1);
+
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
                 .setImage(R.drawable.logo200x200)
@@ -28,13 +44,28 @@ public class AboutUs extends AppCompatActivity {
                 .addGroup("Connect with us")
                 .addEmail("pslab-fossasia@googlegroups.com")
                 .addWebsite("http://pslab.fossasia.org/")
-                .addGitHub("fossasia")
-                .addFacebook("fossasia")
-                .addTwitter("fossasia")
+                .addGitHub("fossasia?utf8=✓&q=pslab")
+                .addFacebook("pslabapp")
+                .addTwitter("pslabapp")
                 .addYoutube("UCQprMsG-raCIMlBudm20iLQ")
                 .create();
 
-        setContentView(aboutPage);
+        appBarLayout.addView(aboutPage,-1);
+        getSupportActionBar().setTitle("PSLab");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar1.setTitleTextColor(getResources().getColor(R.color.white));
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void simulateDayNight(int currentSetting) {

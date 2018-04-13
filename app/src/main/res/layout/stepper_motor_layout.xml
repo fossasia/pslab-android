@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="@dimen/stepper_motor_constraint_padding">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_steps"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/stepper_motor_text_view_height"
+        android:layout_marginLeft="@dimen/stepper_motor_margin"
+        android:layout_marginStart="@dimen/stepper_motor_margin"
+        android:layout_marginTop="@dimen/stepper_motor_margin"
+        android:gravity="center_vertical"
+        android:text="@string/steps"
+        android:textSize="@dimen/stepper_motor_text_size"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/step_count"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="@string/steps"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+    <EditText
+        android:id="@+id/step_count"
+        android:layout_width="@dimen/dimen_zero_dp"
+        android:layout_height="@dimen/stepper_motor_text_view_height"
+        android:layout_margin="@dimen/stepper_motor_margin"
+        android:background="@drawable/tv_border"
+        android:gravity="center"
+        android:inputType="numberSigned"
+        app:layout_constraintLeft_toRightOf="@+id/tv_steps"
+        app:layout_constraintRight_toLeftOf="@+id/btn_set_steps"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/step_count"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/tv_border"
-            android:gravity="center"
-            android:inputType="numberSigned" />
+    <Button
+        android:id="@+id/btn_set_steps"
+        android:layout_width="@dimen/dimen_zero_dp"
+        android:layout_height="wrap_content"
+        android:text="@string/set_steps"
+        app:layout_constraintLeft_toRightOf="@+id/step_count"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/AppTheme.Button"/>
 
-        <Button
-            android:id="@+id/btn_set_steps"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/set_steps" />
+    <ImageButton
+        android:id="@+id/btn_step_backward"
+        android:layout_width="@dimen/dimen_zero_dp"
+        android:layout_height="@dimen/stepper_motor_btn_height"
+        android:layout_marginTop="@dimen/stepper_motor_margin"
+        android:theme="@style/AppTheme.Button"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/btn_step_forward"
+        app:layout_constraintTop_toBottomOf="@+id/step_count" />
 
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/btn_step_forward"
+        android:layout_width="@dimen/dimen_zero_dp"
+        android:layout_height="@dimen/stepper_motor_btn_height"
+        android:layout_marginTop="@dimen/stepper_motor_margin"
+        android:theme="@style/AppTheme.Button"
+        android:src="@drawable/ic_arrow_forward_black_24dp"
+        app:layout_constraintLeft_toRightOf="@+id/btn_step_backward"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_count" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <ImageButton
-            android:id="@+id/btn_step_backward"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_arrow_back_black_24dp" />
-
-        <ImageButton
-            android:id="@+id/btn_step_forward"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_arrow_forward_black_24dp" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

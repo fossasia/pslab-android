@@ -12,11 +12,21 @@ import com.gigamole.navigationtabstrip.NavigationTabStrip;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.PerformExperimentAdapter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by viveksb007 on 10/7/17.
  */
 
 public class PerformExperimentActivity extends AppCompatActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.saved_experiment_vpager)
+    ViewPager viewPager;
+    @BindView(R.id.perform_experiment_tab_strip)
+    NavigationTabStrip tabStrip;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,16 +34,14 @@ public class PerformExperimentActivity extends AppCompatActivity {
         String toolbarTitle = getIntent().getStringExtra("toolbar_title");
         String experimentTitle = getIntent().getStringExtra("experiment_title");
         setContentView(R.layout.activity_perform_experiment);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         toolbar.setTitle(toolbarTitle);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        ViewPager viewPager = (ViewPager) findViewById(R.id.saved_experiment_vpager);
         viewPager.setAdapter(new PerformExperimentAdapter(getSupportFragmentManager(),experimentTitle,this));
-        NavigationTabStrip tabStrip = (NavigationTabStrip) findViewById(R.id.perform_experiment_tab_strip);
         tabStrip.setViewPager(viewPager);
     }
 

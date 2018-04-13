@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -15,7 +16,9 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/card_margin">
+            android:layout_margin="@dimen/card_margin"
+            android:padding="@dimen/card_margin"
+            card_view:cardCornerRadius="@dimen/control_card_radius">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -23,14 +26,17 @@
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/TextAppearance.AppCompat.Large"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
                     android:gravity="center_horizontal"
-                    android:text="@string/waveform_generator"
-                    android:textColor="@color/cardview_light_background"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:text="@string/waveform_generator" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="@dimen/card_margin"
+                    android:background="@android:color/darker_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -40,79 +46,93 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.34"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/tv_control_advanced1"
+                            style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/w1"
-                            android:textSize="@dimen/control_textsize_large"
-                            android:textStyle="bold" />
+                            android:textColor="@android:color/primary_text_light" />
 
                         <TextView
+                            style="@style/TextAppearance.AppCompat.Small"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/freq_range"
-                            android:textSize="14sp" />
+                            android:text="@string/freq_range" />
                     </LinearLayout>
 
-                    <org.fossasia.pslab.others.EditTextWidget
+
+                    <EditText
                         android:id="@+id/etwidget_control_advanced1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_margin="5dp"
                         android:layout_marginTop="4dp"
-                        android:layout_weight="2"
-                        android:gravity="center" />
+                        android:layout_weight="0.4"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
+
 
                     <Spinner
                         android:id="@+id/spinner_control_advanced1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1.5"                        android:entries="@array/wave_type" />
+                        android:layout_weight="0.36"
+                        android:entries="@array/wave_type" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:padding="@dimen/control_margin_medium">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0.34"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/tv_control_advanced2"
+                            style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/w2"
-                            android:textSize="@dimen/control_textsize_large"
-                            android:textStyle="bold" />
+                            android:textColor="@android:color/primary_text_light" />
 
                         <TextView
+                            style="@style/TextAppearance.AppCompat.Small"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/freq_range"
-                            android:textSize="14sp" />
+                            android:text="@string/freq_range" />
                     </LinearLayout>
 
-                    <org.fossasia.pslab.others.EditTextWidget
+                    <EditText
                         android:id="@+id/etwidget_control_advanced2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="2"
-                        android:gravity="center" />
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
                     <Spinner
                         android:id="@+id/spinner_control_advanced2"
@@ -120,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="4dp"
-                        android:layout_weight="1.5"
+                        android:layout_weight="0.36"
                         android:entries="@array/wave_type" />
 
                 </LinearLayout>
@@ -132,20 +152,28 @@
 
                     <TextView
                         android:id="@+id/tv_control_advanced6"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.885"
                         android:gravity="center"
                         android:text="@string/phase"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:textColor="@android:color/primary_text_light" />
 
-                    <org.fossasia.pslab.others.EditTextWidget
+
+                    <EditText
                         android:id="@+id/etwidget_control_advanced3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:gravity="center" />
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
 
@@ -153,13 +181,11 @@
                 <Button
                     android:id="@+id/button_control_advanced1"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:background="@drawable/selector_button"
                     android:text="@string/set"
-                    android:textColor="@color/white"
                     android:textSize="@dimen/control_textsize_medium"
-                    android:textStyle="bold" />
+                    android:theme="@style/AppTheme.Button" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -168,7 +194,9 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/card_margin">
+            android:layout_margin="@dimen/card_margin"
+            android:padding="@dimen/card_margin"
+            card_view:cardCornerRadius="@dimen/control_card_radius">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -176,14 +204,17 @@
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/TextAppearance.AppCompat.Large"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
                     android:gravity="center_horizontal"
-                    android:text="@string/configure_PWM"
-                    android:textColor="@color/cardview_light_background"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:text="@string/configure_PWM" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="@dimen/card_margin"
+                    android:background="@android:color/darker_gray" />
                 <!-- Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -193,31 +224,34 @@
 
                     <TextView
                         android:id="@+id/tv_control_advanced8"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/output"
-                        android:textSize="@dimen/control_textsize_large"
+                        android:textColor="@color/colorAccent"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_control_advanced9"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:gravity="center_horizontal"
                         android:text="@string/phase"
-                        android:textSize="@dimen/control_textsize_large"
+                        android:textColor="@color/colorAccent"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_control_advanced10"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:gravity="center_horizontal"
                         android:text="@string/dutycycle"
-                        android:textSize="@dimen/control_textsize_large"
+                        android:textColor="@color/colorAccent"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -229,14 +263,15 @@
 
                     <TextView
                         android:id="@+id/tv_control_advanced11"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/sqr1"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:textColor="@android:color/primary_text_light" />
 
                     <TextView
+
                         android:id="@+id/tv_control_advanced12"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -246,11 +281,18 @@
                         android:textSize="@dimen/control_textsize_large"
                         android:textStyle="bold" />
 
-                    <org.fossasia.pslab.others.EditTextWidget
+
+                    <EditText
                         android:id="@+id/etwidget_control_advanced4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
                 <!-- SQR2 -->
@@ -261,24 +303,36 @@
 
                     <TextView
                         android:id="@+id/tv_control_advanced13"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/sqr2"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:textColor="@android:color/primary_text_light" />
 
-                    <org.fossasia.pslab.others.EditTextWidget
+                    <EditText
                         android:id="@+id/etwidget_control_advanced5"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
-                    <org.fossasia.pslab.others.EditTextWidget
+                    <EditText
                         android:id="@+id/etwidget_control_advanced6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
                 <!-- SQR3 -->
@@ -289,24 +343,36 @@
 
                     <TextView
                         android:id="@+id/tv_control_advanced14"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/sqr3"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:textColor="@android:color/primary_text_light" />
 
-                    <org.fossasia.pslab.others.EditTextWidget
+                    <EditText
                         android:id="@+id/etwidget_control_advanced7"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
-                    <org.fossasia.pslab.others.EditTextWidget
+                    <EditText
                         android:id="@+id/etwidget_control_advanced8"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
                 <!-- SQR4 -->
@@ -318,62 +384,79 @@
 
                     <TextView
                         android:id="@+id/tv_control_advanced15"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
                         android:text="@string/sqr4"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:textColor="@android:color/primary_text_light" />
 
-                    <org.fossasia.pslab.others.EditTextWidget
+                    <EditText
                         android:id="@+id/etwidget_control_advanced9"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
-                    <org.fossasia.pslab.others.EditTextWidget
+                    <EditText
                         android:id="@+id/etwidget_control_advanced10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
                 <!-- Frequency -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/control_margin_medium">
+                    android:padding="@dimen/control_margin_small">
 
                     <TextView
                         android:id="@+id/tv_control_advanced16"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:text="@string/frequency"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:textColor="@android:color/primary_text_light" />
 
-                    <org.fossasia.pslab.others.EditTextWidget
+                    <EditText
                         android:id="@+id/etwidget_control_advanced11"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/control_edittext"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:padding="@dimen/control_edittext_padding" />
 
                 </LinearLayout>
                 <!-- Button -->
                 <Button
                     android:id="@+id/button_control_advanced2"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:background="@drawable/selector_button"
                     android:text="@string/set"
-                    android:textColor="@color/white"
                     android:textSize="@dimen/control_textsize_medium"
-                    android:textStyle="bold" />
+                    android:theme="@style/AppTheme.Button" />
+
 
             </LinearLayout>
 
@@ -383,7 +466,9 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/card_margin">
+            android:layout_margin="@dimen/card_margin"
+            android:padding="@dimen/card_margin"
+            card_view:cardCornerRadius="@dimen/control_card_radius">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -391,14 +476,17 @@
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/TextAppearance.AppCompat.Large"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
                     android:gravity="center_horizontal"
-                    android:text="@string/digital_outputs"
-                    android:textColor="@color/cardview_light_background"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:text="@string/digital_outputs" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="@dimen/card_margin"
+                    android:background="@android:color/darker_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -410,36 +498,28 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/sqr1"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:text="@string/sqr1" />
 
                     <CheckBox
                         android:id="@+id/checkbox_control_advanced2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/sqr2"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:text="@string/sqr2" />
 
                     <CheckBox
                         android:id="@+id/checkbox_control_advanced3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/sqr3"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:text="@string/sqr3" />
 
                     <CheckBox
                         android:id="@+id/checkbox_control_advanced4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/sqr4"
-                        android:textSize="@dimen/control_textsize_large"
-                        android:textStyle="bold" />
+                        android:text="@string/sqr4" />
 
                 </LinearLayout>
 

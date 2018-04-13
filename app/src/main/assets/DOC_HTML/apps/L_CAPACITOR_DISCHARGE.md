@@ -1,7 +1,7 @@
 Capacitor Discharge
 ---
 
-## Voltage across a discharging capacitor
+### Voltage across a discharging capacitor
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/CAP_DISCHARGE.svg@100%|auto)
 
@@ -15,7 +15,7 @@ Capacitor Discharge
 
 * Now click on the START button to start recording this voltage along with time.
 
-## Distributing charges between capacitors
+### Distributing charges between capacitors
 	
 * You will need two capacitors.
 
@@ -27,6 +27,6 @@ Capacitor Discharge
 
 * If you use two different capacitors, imagine two buckets of the same height, but different widths. Even though their levels will equalize when connected, the wider bucket will gain/lose a lot less water than the smaller one.
 
-## Screenshot
+#### Screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/CAP_DISCHARGE.png@100%|auto)

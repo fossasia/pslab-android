@@ -1,9 +1,9 @@
 Transient RLC
 ---
 
-## Study transient response of RLC circuits
+### Study transient response of RLC circuits
 
-## Schematic 
+#### Schematic 
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/astable-multivibrator.svg@100%|auto)
 
@@ -13,13 +13,13 @@ Transient RLC
 
 * If the response shows that it is under-damped, series resistance may be added to increase damping.
 
-## Analysis
+#### Analysis
 
 * Drag the blue region to select a portion of the graph, and click on the 'Fit data' button to fit it with a damped sine function
 
-## Screenshot
+#### Screenshot
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/astable-multivibrator.png@100%|auto)
 
-## Additional reading
+#### Additional reading
 [Tutorial](http://www.electronics-tutorials.ws/waveforms/astable.html)
