@@ -5,12 +5,12 @@ jdk:
 
 env:
   global:
-    - ANDROID_API_LEVEL=25
+    - ANDROID_API_LEVEL=27
     - ANDROID_API_LEVEL_22=22
-    - ANDROID_BUILD_TOOLS_VERSION=26.0.0
+    - ANDROID_BUILD_TOOLS_VERSION=27.0.3
     - ANDROID_ABI=armeabi-v7a
     - ANDROID_TAG=google_apis
-    - ANDROID_TARGET=android-25
+    - ANDROID_TARGET=android-27
     - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
 
 android:
