@@ -168,6 +168,8 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                         return ExperimentDocMdFragment.newInstance("R_ResistanceMeasurement.md");
                     case "Piezo Buzzer":
                         return ExperimentDocMdFragment.newInstance("P_PiezoBuzzer.md");
+                    case "Amplitude Modulation":
+                        return ExperimentDocMdFragment.newInstance("N_Amplitude_Modulation.md");
                 }
 
             case 1:
