@@ -7,7 +7,6 @@ package org.fossasia.pslab.others;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.widget.SeekBar;
 
 import org.fossasia.pslab.R;
 
