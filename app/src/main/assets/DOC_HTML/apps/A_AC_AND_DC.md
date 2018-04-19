@@ -37,5 +37,7 @@ AC and DC
 * Note the time period of the oscillations by using the crosshairs, and confirm that the measured frequency is the same as that which was set.
 * The timescale of the plot is set to 10mS , so you may simply count the total number of cycles on the plot in order to measure the frequency.
 
+#### Screenshot
+
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/acdc.png@100%|auto)
 

@@ -14,4 +14,6 @@ Precision Rectifier
 + CH1 monitors the original waveform output from W1.
 + CH2 monitors the rectified waveform .
 
+#### Screenshot
+
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/precision-rectifier.png@100%|auto)
