@@ -75,8 +75,8 @@ public class AnalogInputSource {
     }
 
     public List<Double> loadCalibrationTable(double[] table, double slope, double intercept) {
-        for (int i = 0; i < table.length; i++) {
-            adc_shifts.add(table[i] * slope - intercept);
+        for (double aTable : table) {
+            adc_shifts.add(aTable * slope - intercept);
         }
         return adc_shifts;
     }
