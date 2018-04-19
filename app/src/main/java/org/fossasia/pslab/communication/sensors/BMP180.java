@@ -64,21 +64,21 @@ public class BMP180 {
         baseline = readPressure();
     }
 
-    public short readInt(int address) throws IOException {
+    private short readInt(int address) throws IOException {
         return (short) readUInt(address);   //short is equivalent to numpy.int16()
     }
 
-    public double readUInt(int address) throws IOException {
+    private double readUInt(int address) throws IOException {
         ArrayList<Character> vals = i2c.readBulk(ADDRESS, address, 2);
         return 1. * ((vals.get(0) << 8) | vals.get(1));
     }
 
-    public void initTemperature() throws IOException, InterruptedException {
+    private void initTemperature() throws IOException, InterruptedException {
         i2c.writeBulk(ADDRESS, new int[]{REG_CONTROL, CMD_TEMP});
         TimeUnit.MILLISECONDS.sleep(5);
     }
 
-    public Double readTemperature() throws IOException {
+    private Double readTemperature() throws IOException {
         ArrayList<Character> vals = i2c.readBulk(ADDRESS, REG_RESULT, 2);
         if (vals.size() == 2) {
             double t = (vals.get(0) << 8) + vals.get(1);
@@ -93,14 +93,14 @@ public class BMP180 {
         oversampling = num;
     }
 
-    public void initPressure() throws IOException, InterruptedException {
+    private void initPressure() throws IOException, InterruptedException {
         int[] os = {0x34, 0x74, 0xb4, 0xf4};
         int[] delays = {5, 8, 14, 26};
         i2c.writeBulk(ADDRESS, new int[]{REG_CONTROL, oversampling});
         TimeUnit.MILLISECONDS.sleep(delays[oversampling]);
     }
 
-    public Double readPressure() throws IOException {
+    private Double readPressure() throws IOException {
         ArrayList<Character> vals = i2c.readBulk(ADDRESS, REG_RESULT, 3);
         if (vals.size() == 3) {
             double p = 1. * (vals.get(0) << 8) + vals.get(1) + (vals.get(2) / 256.0);

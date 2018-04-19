@@ -11,7 +11,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +58,9 @@ public class ZenerSetupFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.common_experiment_setup, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
+        outputChart = view.findViewById(R.id.line_chart);
 
-        Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
+        Button btnConfigure = view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,12 +74,12 @@ public class ZenerSetupFragment extends Fragment {
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.et_initial_voltage);
-                                etFinalVoltage = (TextInputEditText) customView.findViewById(R.id.et_final_voltage);
-                                etStepSize = (TextInputEditText) customView.findViewById(R.id.et_step_size);
-                                tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_iv);
-                                tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.text_input_layout_fv);
-                                tilStepSize = (TextInputLayout) customView.findViewById(R.id.text_input_layout_ss);
+                                etInitialVoltage = customView.findViewById(R.id.et_initial_voltage);
+                                etFinalVoltage = customView.findViewById(R.id.et_final_voltage);
+                                etStepSize = customView.findViewById(R.id.et_step_size);
+                                tilInitialVoltage = customView.findViewById(R.id.text_input_layout_iv);
+                                tilFinalVoltage = customView.findViewById(R.id.text_input_layout_fv);
+                                tilStepSize = customView.findViewById(R.id.text_input_layout_ss);
                                 // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
                                     tilInitialVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);

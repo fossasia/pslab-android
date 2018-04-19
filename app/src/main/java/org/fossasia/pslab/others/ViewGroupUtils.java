@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 
 public class ViewGroupUtils {
 
-    public static ViewGroup getParent(View view) {
+    private static ViewGroup getParent(View view) {
         return (ViewGroup) view.getParent();
     }
 
-    public static void removeView(View view) {
+    private static void removeView(View view) {
         ViewGroup parent = getParent(view);
         if (parent != null) {
             parent.removeView(view);

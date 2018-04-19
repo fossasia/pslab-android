@@ -3,6 +3,7 @@ package org.fossasia.pslab.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
@@ -50,7 +51,6 @@ import org.fossasia.pslab.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -217,32 +217,42 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         height = size.y;
 
         Bundle extras = getIntent().getExtras();
-        if ("Half Wave Rectifier".equals(extras.getString("who"))) {
-            isHalfWaveRectifierExperiment = true;
-            if (scienceLab.isConnected())
-                scienceLab.setSine1(5000);
-        } else if ("Full Wave Rectifier".equals(extras.getString("who"))) {
-            isFullWaveRectifierExperiment = true;
-            if (scienceLab.isConnected()) {
-                scienceLab.setWaves(5000, 180, 5000);
-            }
-        } else if ("Diode Clipping Clamping".equals(extras.getString("who"))) {
-            isDiodeClippingClampingExperiment = true;
-            if (scienceLab.isConnected()) {
-                scienceLab.setSine1(5000);
-            }
-        } else if ("Astable Multivibrator".equals(extras.getString("who"))) {
-            isAstableMultivibratorExperiment = true;
-        } else if ("Colpitts Oscillator".equals(extras.getString("who"))) {
-            isColpittsOscillatorExperiment = true;
-        } else if ("Phase Shift Oscillator".equals(extras.getString("who"))) {
-            isPhaseShiftOscillatorExperiment = true;
-        } else if ("Wien Bridge Oscillator".equals(extras.getString("who"))) {
-            isWienBridgeOscillatorExperiment = true;
-        } else if ("Monostable Multivibrator".equals(extras.getString("who"))) {
-            isMonostableMultivibratorExperiment = true;
-        } else if ("Speed of Sound".equals(extras.getString("who"))) {
-            isSpeedOfSoundExperiment = true;
+        switch (extras.getString("who")) {
+            case "Half Wave Rectifier":
+                isHalfWaveRectifierExperiment = true;
+                if (scienceLab.isConnected())
+                    scienceLab.setSine1(5000);
+                break;
+            case "Full Wave Rectifier":
+                isFullWaveRectifierExperiment = true;
+                if (scienceLab.isConnected())
+                    scienceLab.setWaves(5000, 180, 5000);
+                break;
+            case "Diode Clipping Clamping":
+                isDiodeClippingClampingExperiment = true;
+                if (scienceLab.isConnected())
+                    scienceLab.setSine1(5000);
+                break;
+            case "Astable Multivibrator":
+                isAstableMultivibratorExperiment = true;
+                break;
+            case "Colpitts Oscillator":
+                isColpittsOscillatorExperiment = true;
+                break;
+            case "Phase Shift Oscillator":
+                isPhaseShiftOscillatorExperiment = true;
+                break;
+            case "Wien Bridge Oscillator":
+                isWienBridgeOscillatorExperiment = true;
+                break;
+            case "Monostable Multivibrator":
+                isMonostableMultivibratorExperiment = true;
+                break;
+            case "Speed of Sound":
+                isSpeedOfSoundExperiment = true;
+                break;
+            default:
+                break;
         }
 
         onWindowFocusChanged();
@@ -594,7 +604,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onBackPressed() {
-      finish();
+        finish();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override

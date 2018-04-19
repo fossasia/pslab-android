@@ -36,7 +36,7 @@ public class ExperimentDocFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.experiment_doc, container, false);
-        webView = (WebView) view.findViewById(R.id.perform_experiment_wv);
+        webView = view.findViewById(R.id.perform_experiment_wv);
         configureWebView();
         return view;
     }

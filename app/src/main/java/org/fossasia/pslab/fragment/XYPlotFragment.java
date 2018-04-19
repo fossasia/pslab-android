@@ -33,10 +33,10 @@ public class XYPlotFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_xyplot, container, false);
         final String[] channels = {"CH1", "CH2", "CH3", "MIC"};
-        spinnerChannelSelect1 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy1);
-        spinnerChannelSelect2 = (Spinner) v.findViewById(R.id.spinner_channel_select_xy2);
-        checkBoxXYPlot = (CheckBox) v.findViewById(R.id.checkBox_enable_xy_xy);
-        viewButton = (Button) v.findViewById(R.id.button_view_xy);
+        spinnerChannelSelect1 = v.findViewById(R.id.spinner_channel_select_xy1);
+        spinnerChannelSelect2 = v.findViewById(R.id.spinner_channel_select_xy2);
+        checkBoxXYPlot = v.findViewById(R.id.checkBox_enable_xy_xy);
+        viewButton = v.findViewById(R.id.button_view_xy);
         spinnerChannelSelect1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {

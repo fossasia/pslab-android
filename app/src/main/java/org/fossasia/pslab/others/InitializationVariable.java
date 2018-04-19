@@ -6,7 +6,7 @@ package org.fossasia.pslab.others;
 
 public class InitializationVariable {
 
-    public boolean initialised = false;
+    private boolean initialised = false;
     private onValueChangeListener valueChangeListener;
 
     public boolean isInitialised() {

@@ -19,6 +19,7 @@ import org.fossasia.pslab.communication.peripherals.NRF24L01;
 import org.fossasia.pslab.communication.peripherals.RadioLink;
 import org.fossasia.pslab.communication.peripherals.SPI;
 import org.fossasia.pslab.fragment.HomeFragment;
+import org.fossasia.pslab.others.InitializationVariable;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -114,6 +115,9 @@ public class ScienceLab {
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    if (HomeFragment.booleanVariable == null) {
+                                        HomeFragment.booleanVariable = new InitializationVariable();
+                                    }
                                     HomeFragment.booleanVariable.setVariable(true);
                                 }
                             });
@@ -1098,9 +1102,9 @@ public class ScienceLab {
         cutoffs.put(0.0, 7);
 
         int g = 0;
-        for (int i = 0; i < keys.length; i++) {
-            if (abs(V) > keys[i]) {
-                g = cutoffs.get(keys[i]);
+        for (double key : keys) {
+            if (abs(V) > key) {
+                g = cutoffs.get(key);
                 break;
             }
         }
@@ -1190,8 +1194,8 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.FILL_BUFFER);
             mPacketHandler.sendInt(startingPosition);
             mPacketHandler.sendInt(pointArray.length);
-            for (int i = 0; i < pointArray.length; i++) {
-                mPacketHandler.sendInt(pointArray[i]);
+            for (int aPointArray : pointArray) {
+                mPacketHandler.sendInt(aPointArray);
             }
             mPacketHandler.getAcknowledgement();
         } catch (IOException e) {

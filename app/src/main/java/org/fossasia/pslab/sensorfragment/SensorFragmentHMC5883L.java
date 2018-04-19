@@ -106,10 +106,10 @@ public class SensorFragmentHMC5883L extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_hmc5883l, container, false);
 
-        tvSensorHMC5883Lbx = (TextView) view.findViewById(R.id.tv_sensor_hmc5883l_bx);
-        tvSensorHMC5883Lby = (TextView) view.findViewById(R.id.tv_sensor_hmc5883l_by);
-        tvSensorHMC5883Lbz = (TextView) view.findViewById(R.id.tv_sensor_hmc5883l_bz);
-        mChart = (LineChart) view.findViewById(R.id.chart_hmc5883l);
+        tvSensorHMC5883Lbx = view.findViewById(R.id.tv_sensor_hmc5883l_bx);
+        tvSensorHMC5883Lby = view.findViewById(R.id.tv_sensor_hmc5883l_by);
+        tvSensorHMC5883Lbz = view.findViewById(R.id.tv_sensor_hmc5883l_bz);
+        mChart = view.findViewById(R.id.chart_hmc5883l);
         XAxis x = mChart.getXAxis();
         YAxis y = mChart.getAxisLeft();
         YAxis y2 = mChart.getAxisRight();

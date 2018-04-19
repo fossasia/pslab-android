@@ -173,7 +173,7 @@ public class MF522 {
         enableAntenna();        //Enable the antenna
     }
 
-    public void enableAntenna() throws IOException {
+    private void enableAntenna() throws IOException {
         int val = read(TxControlReg);
         if ((val & 0x03) != 0x03)
             write(TxControlReg, val | 0x03);
@@ -191,7 +191,7 @@ public class MF522 {
         return true;
     }
 
-    public int write(int register, int val) throws IOException {
+    private int write(int register, int val) throws IOException {
         spi.setCS(cs, 0);
         int ret = spi.send16(((register & 0x7F) << 8) | val);
         spi.setCS(cs, 1);
@@ -230,17 +230,17 @@ public class MF522 {
         return version;
     }
 
-    public void setBitMask(int register, int mask) throws IOException {
+    private void setBitMask(int register, int mask) throws IOException {
         int tmp = read(register);
         write(register, tmp | mask);
     }
 
-    public void clearBitMask(int register, int mask) throws IOException {
+    private void clearBitMask(int register, int mask) throws IOException {
         int tmp = read(register);
         write(register, tmp & (~mask));
     }
 
-    public ArrayList<Object> MFRC522ToCard(int command, ArrayList<Integer> sendData) throws IOException {
+    private ArrayList<Object> MFRC522ToCard(int command, ArrayList<Integer> sendData) throws IOException {
         ArrayList<Integer> returnedData = new ArrayList<>();
         int backLen = 0;
         int status = MI_ERR;
@@ -362,7 +362,7 @@ public class MF522 {
 
     }
 
-    public ArrayList<Integer> calulateCRC(ArrayList<Integer> pIndata) throws IOException {
+    private ArrayList<Integer> calulateCRC(ArrayList<Integer> pIndata) throws IOException {
         int n;
         ArrayList<Integer> pOutData = new ArrayList<>();
         clearBitMask(DivIrqReg, 0x04);
@@ -406,7 +406,7 @@ public class MF522 {
             return 0;
     }
 
-    public int MFRC522Auth(int authMode, int blockAddress, int[] sectorkey, int[] serNum) throws IOException {
+    private int MFRC522Auth(int authMode, int blockAddress, int[] sectorkey, int[] serNum) throws IOException {
         ArrayList<Integer> buff = new ArrayList<>();
         ArrayList<Integer> returnedData;
         int status;
@@ -448,7 +448,7 @@ public class MF522 {
         setBitMask(CommandReg, 0x10);
     }
 
-    public ArrayList<Integer> MFRC522Read(int blockAddress) throws IOException {
+    private ArrayList<Integer> MFRC522Read(int blockAddress) throws IOException {
         ArrayList<Integer> recvData = new ArrayList<>();
         int status;
         int backLen;

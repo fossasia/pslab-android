@@ -44,12 +44,15 @@ dependencies {
     implementation "com.github.devlight.navigationtabstrip:navigationtabstrip:$rootProject.navTabStripVersion"
     implementation "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    implementation 'com.android.support:support-v4:27.1.1'
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     implementation 'com.github.medyo:android-about-page:1.2.4'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
+    compile 'com.github.mirrajabi:search-dialog:1.1'
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {

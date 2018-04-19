@@ -33,8 +33,8 @@ public class StepperMotors extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.stepper_motor_layout, container, false);
-        steps = (EditText) view.findViewById(R.id.step_count);
-        Button btnSteps = (Button) view.findViewById(R.id.btn_set_steps);
+        steps = view.findViewById(R.id.step_count);
+        Button btnSteps = view.findViewById(R.id.btn_set_steps);
         btnSteps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,7 +45,7 @@ public class StepperMotors extends Fragment {
                 }
             }
         });
-        ImageButton btnStepForward = (ImageButton) view.findViewById(R.id.btn_step_forward);
+        ImageButton btnStepForward = view.findViewById(R.id.btn_step_forward);
         btnStepForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +56,7 @@ public class StepperMotors extends Fragment {
                 }
             }
         });
-        ImageButton btnStepBackwards = (ImageButton) view.findViewById(R.id.btn_step_backward);
+        ImageButton btnStepBackwards = view.findViewById(R.id.btn_step_backward);
         btnStepBackwards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

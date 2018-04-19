@@ -27,6 +27,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:textStyle="bold"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
 </LinearLayout>

@@ -1,7 +1,7 @@
 Transistors : Monostable Multivibrator
 ---
 
-![](file:///android_asset/DOC_HTML/apps/images/schematics/monostable-trans.svg@100%|auto)
+![](file:///android_asset/DOC_HTML/apps/images/schematics/monostable-multivibrator.svg@100%|auto)
 
 * Make the Connections as shown in the figure.
 * SQR1 provides the trigger pulse which is also simultaneously monitored via CH1.

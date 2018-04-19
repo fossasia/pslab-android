@@ -30,9 +30,8 @@ public class ServoMotorsExperiment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.servo_motor_layout, container, false);
-        Button btnSetServos = (Button) view.findViewById(R.id.btn_set_angles);
+        Button btnSetServos = view.findViewById(R.id.btn_set_angles);
         btnSetServos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,7 +42,7 @@ public class ServoMotorsExperiment extends Fragment {
                 }
             }
         });
-        Button btnResetServos = (Button) view.findViewById(R.id.btn_reset_angles);
+        Button btnResetServos = view.findViewById(R.id.btn_reset_angles);
         btnResetServos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,10 +58,10 @@ public class ServoMotorsExperiment extends Fragment {
             }
         });
 
-        angle1 = (EditText) view.findViewById(R.id.servo_one_angle);
-        angle2 = (EditText) view.findViewById(R.id.servo_two_angle);
-        angle3 = (EditText) view.findViewById(R.id.servo_three_angle);
-        angle4 = (EditText) view.findViewById(R.id.servo_four_angle);
+        angle1 = view.findViewById(R.id.servo_one_angle);
+        angle2 = view.findViewById(R.id.servo_two_angle);
+        angle3 = view.findViewById(R.id.servo_three_angle);
+        angle4 = view.findViewById(R.id.servo_four_angle);
 
         return view;
     }

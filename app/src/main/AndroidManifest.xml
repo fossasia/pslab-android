@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +38,6 @@
         <activity android:name=".activity.AboutUs"/>
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ShowLoggedData" />
-        <activity android:name=".activity.WavegenActivity" />
         <activity
             android:name=".activity.PerformExperimentActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />

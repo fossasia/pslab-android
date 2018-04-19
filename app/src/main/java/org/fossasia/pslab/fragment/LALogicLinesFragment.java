@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -125,15 +124,15 @@ public class LALogicLinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
-        logicLinesChart = (LineChart) v.findViewById(R.id.chart_la);
+        logicLinesChart = v.findViewById(R.id.chart_la);
         Legend legend = logicLinesChart.getLegend();
         legend.setTextColor(Color.WHITE);
         logicLinesChart.setBorderWidth(2);
         XAxis xAxis = logicLinesChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.TOP);
         xAxis.setTextColor(Color.WHITE);
-        ledImageView = (ImageView) v.findViewById(R.id.imageView_led_la);
-        tvTimeUnit = (TextView) v.findViewById(R.id.la_tv_time_unit);
+        ledImageView = v.findViewById(R.id.imageView_led_la);
+        tvTimeUnit = v.findViewById(R.id.la_tv_time_unit);
         tvTimeUnit.setText(getString(R.string.time_unit_la));
         return v;
     }
@@ -170,13 +169,13 @@ public class LALogicLinesFragment extends Fragment {
             List<Entry> tempInput = new ArrayList<>();
             int[] temp = timeStamps.get(j);
             tempInput.add(new Entry(0, 0 + (j * 2)));
-            for (int i = 0; i < temp.length; i++) {
+            for (int aTemp : temp) {
                 if (high) {
-                    tempInput.add(new Entry(temp[i], 1 + (j * 2)));
-                    tempInput.add(new Entry(temp[i], 0 + (j * 2)));
+                    tempInput.add(new Entry(aTemp, 1 + (j * 2)));
+                    tempInput.add(new Entry(aTemp, 0 + (j * 2)));
                 } else {
-                    tempInput.add(new Entry(temp[i], 0 + (j * 2)));
-                    tempInput.add(new Entry(temp[i], 1 + (j * 2)));
+                    tempInput.add(new Entry(aTemp, 0 + (j * 2)));
+                    tempInput.add(new Entry(aTemp, 1 + (j * 2)));
                 }
                 high = !high;
             }

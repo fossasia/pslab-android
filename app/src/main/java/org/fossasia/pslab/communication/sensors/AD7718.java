@@ -154,11 +154,11 @@ public class AD7718 {
         return spi.send8(val);
     }
 
-    public int send16(int val) throws IOException {
+    private int send16(int val) throws IOException {
         return spi.send16(val);
     }
 
-    public int readRegister(int reg) throws IOException {
+    private int readRegister(int reg) throws IOException {
         start();
         int val = send16(0x4000 | (reg << 8));
         stop();
@@ -166,7 +166,7 @@ public class AD7718 {
         return val;
     }
 
-    public int readData() throws IOException {
+    private int readData() throws IOException {
         start();
         int val = send16(0x4000 | (ADCDATA << 8));
         val &= 0xFF;
@@ -176,7 +176,7 @@ public class AD7718 {
         return val;
     }
 
-    public int writeRegister(int reg, int value) throws IOException {
+    private int writeRegister(int reg, int value) throws IOException {
         start();
         int val = send16((reg << 8) | value);
         stop();
@@ -226,7 +226,7 @@ public class AD7718 {
     }
 
 
-    public void configADC(int adccon) throws IOException {
+    private void configADC(int adccon) throws IOException {
         writeRegister(ADCCON, adccon); // unipolar channels, range
         gain = 2 ^ (7 - adccon & 3);
     }
@@ -246,7 +246,7 @@ public class AD7718 {
         Log.d(TAG, stat + ", " + sb.toString());
     }
 
-    public float convertUniPolar(float x) {
+    private float convertUniPolar(float x) {
         return (float) (1.024 * VREF * x) / (gain * 2 ^ 24);
     }
 

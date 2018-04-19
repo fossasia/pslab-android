@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardview_control_main"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:layout_marginBottom="4dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
+    android:layout_height="@dimen/control_layout_height"
+    android:layout_marginBottom="@dimen/control_layout_marginTopBottom"
+    android:layout_marginEnd="@dimen/control_layout_marginEndStart"
+    android:layout_marginStart="@dimen/control_layout_marginEndStart"
+    android:layout_marginTop="@dimen/control_layout_marginTopBottom"
     android:foreground="?attr/selectableItemBackground"
     card_view:cardCornerRadius="@dimen/card_radius"
     card_view:cardElevation="@dimen/card_elevation">
@@ -22,90 +22,108 @@
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/card_title_margin"
             android:layout_marginEnd="@dimen/card_title_margin"
+            android:layout_marginStart="@dimen/card_title_margin"
             android:layout_marginTop="@dimen/card_title_margin"
             android:textColor="@color/black"
-            tools:text="PV1"/>
+            tools:text="PV1" />
 
 
         <LinearLayout
             android:id="@+id/linearlayout_control_main1"
-            android:layout_below="@id/tv_control_main1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="@dimen/control_margin"
+            android:layout_below="@id/tv_control_main1"
             android:layout_marginEnd="@dimen/control_margin"
-            android:layout_marginTop="@dimen/control_margin">
-
+            android:layout_marginStart="@dimen/control_margin"
+            android:layout_marginTop="@dimen/control_margin"
+            android:orientation="horizontal">
 
 
             <Button
                 android:id="@+id/button_control_main1"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="0dp"
-                android:layout_weight="0.7"
+                android:layout_width="@dimen/control_layout_width"
                 android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:text="@string/hyphen"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/control_textsize_large"
-                android:text="@string/hyphen"/>
+                android:textSize="@dimen/control_textsize_large" />
 
             <EditText
                 android:id="@+id/edittext_control_main"
                 android:layout_width="0dp"
-                android:layout_weight="2.5"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_gravity="center"
-                android:textSize="@dimen/textsize_edittext"
-                android:padding="@dimen/control_edittext_padding"
-                android:layout_marginTop="@dimen/control_edittext_padding"
                 android:layout_marginBottom="@dimen/control_edittext_padding"
-                android:inputType="numberDecimal|numberSigned"
+                android:layout_marginTop="@dimen/control_edittext_padding"
+                android:layout_weight="2.5"
                 android:background="@drawable/control_edittext"
-                tools:text="Value"/>
+                android:gravity="center"
+                android:inputType="numberDecimal|numberSigned"
+                android:padding="@dimen/control_edittext_padding"
+                android:textSize="@dimen/textsize_edittext"
+                tools:text="@string/value" />
 
 
             <Button
                 android:id="@+id/button_control_main2"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="0dp"
-                android:layout_weight="0.7"
+                android:layout_width="@dimen/control_layout_width"
                 android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:text="@string/plus"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/control_textsize_large"
-                android:text="@string/plus"/>
+                android:textSize="@dimen/control_textsize_large" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/control_margin_small"
+                android:paddingTop="@dimen/control_text_padding"
+                android:text="@string/Hz"
+                android:textSize="@dimen/control_textsize_large" />
+
 
             <Button
                 android:id="@+id/button_control_main3"
-                android:theme="@style/AppTheme.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/set"
-                />
+                android:theme="@style/AppTheme.Button" />
 
             <TextView
                 android:id="@+id/tv_control_main2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/control_margin_text"
                 android:layout_weight="2.5"
                 android:background="@drawable/tv_border"
-                android:textStyle="bold"
-                android:textSize="@dimen/control_textsize_small"
-                android:layout_margin="5dp"
-                tools:text="Value"
                 android:gravity="center"
-                android:layout_gravity="center" />
+                android:textSize="@dimen/control_textsize_small"
+                android:textStyle="bold"
+                tools:text="@string/value" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/control_margin_small"
+                android:paddingTop="@dimen/control_text_padding"
+                android:text="@string/Hz"
+                android:textSize="@dimen/control_textsize_large" />
+
 
         </LinearLayout>
 
         <SeekBar
             android:id="@+id/seekbar_control_main"
-            android:layout_below="@id/linearlayout_control_main1"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearlayout_control_main1"
+            android:layout_marginTop="@dimen/activity_horizontal_margin" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

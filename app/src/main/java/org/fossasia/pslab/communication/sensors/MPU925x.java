@@ -25,9 +25,9 @@ public class MPU925x {
     private int[] ACCEL_SCALING = new int[]{16384, 8192, 4096, 2048};
     private int AR = 3;
     private int GR = 3;
-    public int NUMPLOTS = 7;
+    private int NUMPLOTS = 7;
     public String[] PLOTNAMES = new String[]{"Ax", "Ay", "Az", "Temp", "Gx", "Gy", "Gz"};
-    public int ADDRESS = 0x68;
+    private int ADDRESS = 0x68;
     private int AK8963_ADDRESS = 0x0C;
     private int AK8963_CNTL = 0x0A;
     public String name = "Accel/gyro";
@@ -67,11 +67,11 @@ public class MPU925x {
         }
     }
 
-    public ArrayList<Character> getVals(int addr, int bytestoread) throws IOException {
+    private ArrayList<Character> getVals(int addr, int bytestoread) throws IOException {
         return i2c.readBulk(ADDRESS, addr, bytestoread);
     }
 
-    public void powerUp() throws IOException {
+    private void powerUp() throws IOException {
         i2c.writeBulk(ADDRESS, new int[]{0x6B, 0});
     }
 
@@ -174,7 +174,7 @@ public class MPU925x {
             return "AK8963 not found. returned " + Integer.toHexString(v);
     }
 
-    public void initMagnetometer() throws IOException {
+    private void initMagnetometer() throws IOException {
         /*
             For MPU925x with integrated magnetometer.
             It's called a 10 DoF sensor, but technically speaking ,

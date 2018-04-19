@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +11,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,9 +59,9 @@ public class ShowLoggedData extends AppCompatActivity {
     private RecyclerView recyclerView;
     private String mSensor;
     private String format;
-    boolean isRecyclerViewOnStack = false;
-    boolean isTrialListViewOnStack = false;
-    boolean isSensorListViewOnStack = false;
+    private boolean isRecyclerViewOnStack = false;
+    private boolean isTrialListViewOnStack = false;
+    private boolean isSensorListViewOnStack = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,7 +119,7 @@ public class ShowLoggedData extends AppCompatActivity {
                 dialog.show();
                 View customView = dialog.getCustomView();
                 assert customView != null;
-                ListView clickOptions = (ListView) customView.findViewById(R.id.lv_sensor_list_click);
+                ListView clickOptions = customView.findViewById(R.id.lv_sensor_list_click);
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sensor_click_list));
                 clickOptions.setAdapter(arrayAdapter);
 
