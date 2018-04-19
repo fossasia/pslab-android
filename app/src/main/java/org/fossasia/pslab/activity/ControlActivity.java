@@ -73,20 +73,7 @@ public class ControlActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string.closing_control_title)
-                .setMessage(R.string.closing_control_message)
-                .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        ControlActivityCommon.editTextValues=null;
-                        finish();
-                    }
-                })
-                .setNegativeButton(R.string.dialog_no, null)
-                .show();
-
+        ControlActivityCommon.editTextValues=null;
+        finish();
     }
 }
