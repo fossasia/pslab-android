@@ -98,12 +98,12 @@ public class SensorFragmentADS1115 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_ads1115, container, false);
 
-        tvSensorADS1115 = (TextView) view.findViewById(R.id.tv_sensor_ads1115);
-        mChart = (LineChart) view.findViewById(R.id.chart_sensor_ads);
+        tvSensorADS1115 = view.findViewById(R.id.tv_sensor_ads1115);
+        mChart = view.findViewById(R.id.chart_sensor_ads);
 
-        Spinner spinnerSensorADS1115Gain = (Spinner) view.findViewById(R.id.spinner_sensor_ads1115_gain);
-        Spinner spinnerSensorADS1115Channel = (Spinner) view.findViewById(R.id.spinner_sensor_ads1115_channel);
-        Spinner spinnerSensorADS1115Rate = (Spinner) view.findViewById(R.id.spinner_sensor_ads1115_rate);
+        Spinner spinnerSensorADS1115Gain = view.findViewById(R.id.spinner_sensor_ads1115_gain);
+        Spinner spinnerSensorADS1115Channel = view.findViewById(R.id.spinner_sensor_ads1115_channel);
+        Spinner spinnerSensorADS1115Rate = view.findViewById(R.id.spinner_sensor_ads1115_rate);
 
         if (sensorADS1115 != null) {
             sensorADS1115.setGain(spinnerSensorADS1115Gain.getSelectedItem().toString());

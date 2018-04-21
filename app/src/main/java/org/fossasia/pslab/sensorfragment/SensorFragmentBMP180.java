@@ -104,13 +104,13 @@ public class SensorFragmentBMP180 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_bmp180, container, false);
 
-        tvSensorBMP180Temp = (TextView) view.findViewById(R.id.tv_sensor_bmp180_temp);
-        tvSensorBMP180Altitude = (TextView) view.findViewById(R.id.tv_sensor_bmp180_altitude);
-        tvSensorBMP180Pressure = (TextView) view.findViewById(R.id.tv_sensor_bmp180_pressure);
+        tvSensorBMP180Temp = view.findViewById(R.id.tv_sensor_bmp180_temp);
+        tvSensorBMP180Altitude = view.findViewById(R.id.tv_sensor_bmp180_altitude);
+        tvSensorBMP180Pressure = view.findViewById(R.id.tv_sensor_bmp180_pressure);
 
-        mChartTemperature = (LineChart) view.findViewById(R.id.chart_temp_bmp180);
-        mChartAltitude = (LineChart) view.findViewById(R.id.chart_alt_bmp180);
-        mChartPressure = (LineChart) view.findViewById(R.id.chart_pre_bmp180);
+        mChartTemperature = view.findViewById(R.id.chart_temp_bmp180);
+        mChartAltitude = view.findViewById(R.id.chart_alt_bmp180);
+        mChartPressure = view.findViewById(R.id.chart_pre_bmp180);
 
         XAxis xTemperature = mChartTemperature.getXAxis();
         YAxis yTemperature = mChartTemperature.getAxisLeft();

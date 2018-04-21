@@ -54,14 +54,14 @@ public class MPUDataAdapter extends RecyclerView.Adapter<MPUDataAdapter.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvAx = (TextView) itemView.findViewById(R.id.tv_sensor_mpu6050_ax);
-            tvAy = (TextView) itemView.findViewById(R.id.tv_sensor_mpu6050_ay);
-            tvAz = (TextView) itemView.findViewById(R.id.tv_sensor_mpu6050_az);
-            tvTemperature = (TextView) itemView.findViewById(R.id.tv_sensor_mpu6050_temp);
-            tvGx = (TextView) itemView.findViewById(R.id.tv_sensor_mpu6050_gx);
-            tvGy = (TextView) itemView.findViewById(R.id.tv_sensor_mpu6050_gy);
-            tvGz = (TextView) itemView.findViewById(R.id.tv_sensor_mpu6050_gz);
-            tvTitle = (TextView) itemView.findViewById(R.id.card_title);
+            tvAx = itemView.findViewById(R.id.tv_sensor_mpu6050_ax);
+            tvAy = itemView.findViewById(R.id.tv_sensor_mpu6050_ay);
+            tvAz = itemView.findViewById(R.id.tv_sensor_mpu6050_az);
+            tvTemperature = itemView.findViewById(R.id.tv_sensor_mpu6050_temp);
+            tvGx = itemView.findViewById(R.id.tv_sensor_mpu6050_gx);
+            tvGy = itemView.findViewById(R.id.tv_sensor_mpu6050_gy);
+            tvGz = itemView.findViewById(R.id.tv_sensor_mpu6050_gz);
+            tvTitle = itemView.findViewById(R.id.card_title);
         }
     }
 

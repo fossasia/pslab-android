@@ -111,12 +111,12 @@ public class SensorFragmentTSL2561 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_tsl2561, container, false);
-        tvSensorTSL2561FullSpectrum = (TextView) view.findViewById(R.id.tv_sensor_tsl2561_full);
-        tvSensorTSL2561Infrared = (TextView) view.findViewById(R.id.tv_sensor_tsl2561_infrared);
-        tvSensorTSL2561Visible = (TextView) view.findViewById(R.id.tv_sensor_tsl2561_visible);
-        Spinner spinnerSensorTSL2561Gain = (Spinner) view.findViewById(R.id.spinner_sensor_tsl2561_gain);
-        etSensorTSL2561Timing = (EditText) view.findViewById(R.id.et_sensor_tsl2561_timing);
-        mChart = (LineChart) view.findViewById(R.id.chart_tsl2561);
+        tvSensorTSL2561FullSpectrum = view.findViewById(R.id.tv_sensor_tsl2561_full);
+        tvSensorTSL2561Infrared = view.findViewById(R.id.tv_sensor_tsl2561_infrared);
+        tvSensorTSL2561Visible = view.findViewById(R.id.tv_sensor_tsl2561_visible);
+        Spinner spinnerSensorTSL2561Gain = view.findViewById(R.id.spinner_sensor_tsl2561_gain);
+        etSensorTSL2561Timing = view.findViewById(R.id.et_sensor_tsl2561_timing);
+        mChart = view.findViewById(R.id.chart_tsl2561);
 
         try {
             if (sensorTSL2561 != null) {

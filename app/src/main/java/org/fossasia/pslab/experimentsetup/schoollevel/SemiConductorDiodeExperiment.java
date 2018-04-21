@@ -49,9 +49,9 @@ public class SemiConductorDiodeExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.semiconductor_experiment_layout, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
+        outputChart = view.findViewById(R.id.line_chart);
         chartInit();
-        Button experimentAC = (Button) view.findViewById(R.id.btn_experiment_ac);
+        Button experimentAC = view.findViewById(R.id.btn_experiment_ac);
         experimentAC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,7 +62,7 @@ public class SemiConductorDiodeExperiment extends Fragment {
                 }
             }
         });
-        Button experimentDC = (Button) view.findViewById(R.id.btn_experiment_dc);
+        Button experimentDC = view.findViewById(R.id.btn_experiment_dc);
         experimentDC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

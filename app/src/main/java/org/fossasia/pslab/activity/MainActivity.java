@@ -122,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler();
 
         navHeader = navigationView.getHeaderView(0);
-        txtName = (TextView) navHeader.findViewById(org.fossasia.pslab.R.id.name);
-        imgProfile = (ImageView) navHeader.findViewById(org.fossasia.pslab.R.id.img_profile);
+        txtName = navHeader.findViewById(org.fossasia.pslab.R.id.name);
+        imgProfile = navHeader.findViewById(org.fossasia.pslab.R.id.img_profile);
         activityTitles = getResources().getStringArray(org.fossasia.pslab.R.array.nav_item_activity_titles);
 
         loadNavHeader();

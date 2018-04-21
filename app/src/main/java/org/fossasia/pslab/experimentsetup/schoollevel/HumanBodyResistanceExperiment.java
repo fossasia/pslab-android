@@ -40,10 +40,10 @@ public class HumanBodyResistanceExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.body_resistance_measurement_layout, container, false);
-        tvVoltage = (TextView) view.findViewById(R.id.tv_voltage_measurement);
-        tvCurrent = (TextView) view.findViewById(R.id.tv_current_measurement);
-        tvResistance = (TextView) view.findViewById(R.id.tv_resistance_measurement);
-        Button btnConfigure = (Button) view.findViewById(R.id.btn_begin_experiment);
+        tvVoltage = view.findViewById(R.id.tv_voltage_measurement);
+        tvCurrent = view.findViewById(R.id.tv_current_measurement);
+        tvResistance = view.findViewById(R.id.tv_resistance_measurement);
+        Button btnConfigure = view.findViewById(R.id.btn_begin_experiment);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

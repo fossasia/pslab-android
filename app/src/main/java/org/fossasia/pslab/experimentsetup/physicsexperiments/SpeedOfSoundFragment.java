@@ -46,11 +46,11 @@ public class SpeedOfSoundFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_speed_of_sound, container, false);
-        readButton = (Button) v.findViewById(R.id.button_read_sos);
-        resultTextView = (TextView) v.findViewById(R.id.tv_result_sos);
-        rangeSpinner = (Spinner) v.findViewById(R.id.spinner_range_sos);
-        sqr1SeekBar = (FloatSeekBar) v.findViewById(R.id.seekBar_sqr1_sos);
-        sqr1ProgressTextView = (TextView) v.findViewById(R.id.tv_sqr1_sos);
+        readButton = v.findViewById(R.id.button_read_sos);
+        resultTextView = v.findViewById(R.id.tv_result_sos);
+        rangeSpinner = v.findViewById(R.id.spinner_range_sos);
+        sqr1SeekBar = v.findViewById(R.id.seekBar_sqr1_sos);
+        sqr1ProgressTextView = v.findViewById(R.id.tv_sqr1_sos);
         scienceLab = ScienceLabCommon.scienceLab;
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 

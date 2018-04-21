@@ -35,7 +35,7 @@ public class ControlFragmentMain extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_control_main, container, false);
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.control_main_recycler_view);
+        RecyclerView mRecyclerView = view.findViewById(R.id.control_main_recycler_view);
         mRecyclerView.setHasFixedSize(false);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());

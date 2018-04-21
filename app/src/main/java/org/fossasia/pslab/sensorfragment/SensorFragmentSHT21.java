@@ -105,10 +105,10 @@ public class SensorFragmentSHT21 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_sht21, container, false);
 
-        tvSensorSHT21Temp = (TextView) view.findViewById(R.id.tv_sensor_sht21_temp);
-        tvSensorSHT21Humidity = (TextView) view.findViewById(R.id.tv_sensor_sht21_humidity);
-        mChartTemperature = (LineChart) view.findViewById(R.id.chart_temperature_sht21);
-        mChartHumidity = (LineChart) view.findViewById(R.id.chart_humidity_sht21);
+        tvSensorSHT21Temp = view.findViewById(R.id.tv_sensor_sht21_temp);
+        tvSensorSHT21Humidity = view.findViewById(R.id.tv_sensor_sht21_humidity);
+        mChartTemperature = view.findViewById(R.id.chart_temperature_sht21);
+        mChartHumidity = view.findViewById(R.id.chart_humidity_sht21);
 
         XAxis xTemperature = mChartTemperature.getXAxis();
         YAxis yTemperature = mChartTemperature.getAxisLeft();

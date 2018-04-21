@@ -35,8 +35,8 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
         public Holder(View itemView) {
             super(itemView);
-            this.applicationName = (TextView) itemView.findViewById(R.id.application_name);
-            this.applicationIcon = (ImageView) itemView.findViewById(R.id.application_icon);
+            this.applicationName = itemView.findViewById(R.id.application_name);
+            this.applicationIcon = itemView.findViewById(R.id.application_icon);
         }
 
         public void setup(final ApplicationItem applicationItem, final OnItemClickListener listener) {

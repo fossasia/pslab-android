@@ -119,7 +119,7 @@ public class ShowLoggedData extends AppCompatActivity {
                 dialog.show();
                 View customView = dialog.getCustomView();
                 assert customView != null;
-                ListView clickOptions = (ListView) customView.findViewById(R.id.lv_sensor_list_click);
+                ListView clickOptions = customView.findViewById(R.id.lv_sensor_list_click);
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sensor_click_list));
                 clickOptions.setAdapter(arrayAdapter);
 

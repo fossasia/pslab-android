@@ -48,9 +48,9 @@ public class CapacitorDischargeExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.capacitor_discharge_layout, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
+        outputChart = view.findViewById(R.id.line_chart);
         chartInit();
-        Button btnCharge = (Button) view.findViewById(R.id.btn_begin_charging);
+        Button btnCharge = view.findViewById(R.id.btn_begin_charging);
         btnCharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +61,7 @@ public class CapacitorDischargeExperiment extends Fragment {
                 }
             }
         });
-        Button btnDischarge = (Button) view.findViewById(R.id.btn_begin_discharging);
+        Button btnDischarge = view.findViewById(R.id.btn_begin_discharging);
         btnDischarge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

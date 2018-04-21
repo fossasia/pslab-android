@@ -63,8 +63,8 @@ public class SummingJunctionExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.common_experiment_setup, container, false); //reusing the common_experiment_setup layout file as it is identical.
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
-        Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
+        outputChart = view.findViewById(R.id.line_chart);
+        Button btnConfigure = view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,15 +78,15 @@ public class SummingJunctionExperiment extends Fragment {
 
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etFrequency = (TextInputEditText) customView.findViewById(R.id.frequency);
-                                tilFrequency = (TextInputLayout) customView.findViewById(R.id.frequency_layout);
-                                spinnerVoltageSource = (Spinner) customView.findViewById(R.id.voltage_source);
-                                etVoltage = (TextInputEditText) customView.findViewById(R.id.voltage);
-                                tilVoltage = (TextInputLayout) customView.findViewById(R.id.voltage_layout);
-                                spinnerWaveGenerator = (Spinner) customView.findViewById(R.id.wave_generator);
-                                spinnerWaveType = (Spinner) customView.findViewById(R.id.wave_type);
-                                etPhase = (TextInputEditText) customView.findViewById(R.id.phase);
-                                tilPhase = (TextInputLayout) customView.findViewById(R.id.phase_layout);
+                                etFrequency = customView.findViewById(R.id.frequency);
+                                tilFrequency = customView.findViewById(R.id.frequency_layout);
+                                spinnerVoltageSource = customView.findViewById(R.id.voltage_source);
+                                etVoltage = customView.findViewById(R.id.voltage);
+                                tilVoltage = customView.findViewById(R.id.voltage_layout);
+                                spinnerWaveGenerator = customView.findViewById(R.id.wave_generator);
+                                spinnerWaveType = customView.findViewById(R.id.wave_type);
+                                etPhase = customView.findViewById(R.id.phase);
+                                tilPhase = customView.findViewById(R.id.phase_layout);
 
                                 voltageSource = spinnerVoltageSource.getSelectedItem().toString();
 

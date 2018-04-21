@@ -67,8 +67,8 @@ public class NFETTransferCharacteristicsExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.common_experiment_setup, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
-        Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
+        outputChart = view.findViewById(R.id.line_chart);
+        Button btnConfigure = view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,14 +82,14 @@ public class NFETTransferCharacteristicsExperiment extends Fragment {
 
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etInitialVoltage = (TextInputEditText) customView.findViewById(R.id.nfet_initial_voltage);
-                                etFinalVoltage = (TextInputEditText) customView.findViewById(R.id.nfet_final_voltage);
-                                etStepSize = (TextInputEditText) customView.findViewById(R.id.nfet_step_size);
-                                etSourceVoltage = (TextInputEditText) customView.findViewById(R.id.nfet_source_voltage);
-                                tilInitialVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_initial_voltage_layout);
-                                tilFinalVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_final_voltage_layout);
-                                tilStepSize = (TextInputLayout) customView.findViewById(R.id.nfet_step_size_layout);
-                                tilSourceVoltage = (TextInputLayout) customView.findViewById(R.id.nfet_source_voltage_layout);
+                                etInitialVoltage = customView.findViewById(R.id.nfet_initial_voltage);
+                                etFinalVoltage = customView.findViewById(R.id.nfet_final_voltage);
+                                etStepSize = customView.findViewById(R.id.nfet_step_size);
+                                etSourceVoltage = customView.findViewById(R.id.nfet_source_voltage);
+                                tilInitialVoltage = customView.findViewById(R.id.nfet_initial_voltage_layout);
+                                tilFinalVoltage = customView.findViewById(R.id.nfet_final_voltage_layout);
+                                tilStepSize = customView.findViewById(R.id.nfet_step_size_layout);
+                                tilSourceVoltage = customView.findViewById(R.id.nfet_source_voltage_layout);
                                 // Initial Voltage
                                 if (TextUtils.isEmpty(etInitialVoltage.getText().toString())) {
                                     tilInitialVoltage.setError(ExperimentErrorStrings.ERROR_MESSAGE);

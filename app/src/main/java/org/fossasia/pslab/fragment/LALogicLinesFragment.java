@@ -124,15 +124,15 @@ public class LALogicLinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
-        logicLinesChart = (LineChart) v.findViewById(R.id.chart_la);
+        logicLinesChart = v.findViewById(R.id.chart_la);
         Legend legend = logicLinesChart.getLegend();
         legend.setTextColor(Color.WHITE);
         logicLinesChart.setBorderWidth(2);
         XAxis xAxis = logicLinesChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.TOP);
         xAxis.setTextColor(Color.WHITE);
-        ledImageView = (ImageView) v.findViewById(R.id.imageView_led_la);
-        tvTimeUnit = (TextView) v.findViewById(R.id.la_tv_time_unit);
+        ledImageView = v.findViewById(R.id.imageView_led_la);
+        tvTimeUnit = v.findViewById(R.id.la_tv_time_unit);
         tvTimeUnit.setText(getString(R.string.time_unit_la));
         return v;
     }

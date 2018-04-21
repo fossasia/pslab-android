@@ -37,9 +37,9 @@ public class DiodeClippingClampingExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_diode_clipping_experiment, container, false);
-        Spinner spinnerRange = (Spinner) v.findViewById(R.id.spinner_diode_clipping);
-        final FloatSeekBar floatSeekBarPV1 = (FloatSeekBar) v.findViewById(R.id.seekBar_pv1_diodeclipping);
-        final TextView progressTextViewPV1 = (TextView) v.findViewById(R.id.seekBar_progress_diode_clipping);
+        Spinner spinnerRange = v.findViewById(R.id.spinner_diode_clipping);
+        final FloatSeekBar floatSeekBarPV1 = v.findViewById(R.id.seekBar_pv1_diodeclipping);
+        final TextView progressTextViewPV1 = v.findViewById(R.id.seekBar_progress_diode_clipping);
         final ScienceLab scienceLab = ScienceLabCommon.scienceLab;
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 

@@ -45,14 +45,14 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
         public ViewHolder(View view) {
             super(view);
-            mCardView = (CardView) view.findViewById(R.id.cardview_control_main);
-            tvControlMain1 = (TextView) view.findViewById(R.id.tv_control_main1);
-            tvControlMain2 = (TextView) view.findViewById(R.id.tv_control_main2);
-            editTextControlMain = (EditText) view.findViewById(R.id.edittext_control_main);
-            buttonControlMain1 = (Button) view.findViewById(R.id.button_control_main1);
-            buttonControlMain2 = (Button) view.findViewById(R.id.button_control_main2);
-            buttonControlMain3 = (Button) view.findViewById(R.id.button_control_main3);
-            seekBarControlMain = (SeekBar) view.findViewById(R.id.seekbar_control_main);
+            mCardView = view.findViewById(R.id.cardview_control_main);
+            tvControlMain1 = view.findViewById(R.id.tv_control_main1);
+            tvControlMain2 = view.findViewById(R.id.tv_control_main2);
+            editTextControlMain = view.findViewById(R.id.edittext_control_main);
+            buttonControlMain1 = view.findViewById(R.id.button_control_main1);
+            buttonControlMain2 = view.findViewById(R.id.button_control_main2);
+            buttonControlMain3 = view.findViewById(R.id.button_control_main3);
+            seekBarControlMain = view.findViewById(R.id.seekbar_control_main);
             editTextControlMain.setText("0");
         }
 
