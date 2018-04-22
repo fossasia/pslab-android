@@ -38,7 +38,7 @@ public class SHT21 {
         TimeUnit.MILLISECONDS.sleep(100);
     }
 
-    public ArrayList<Double> rawToTemp(ArrayList<Byte> vals) {
+    private ArrayList<Double> rawToTemp(ArrayList<Byte> vals) {
         double v;
         ArrayList<Double> v1 = new ArrayList<>();
         if (vals.size() != 0) {
@@ -51,7 +51,7 @@ public class SHT21 {
         } else return null;
     }
 
-    public ArrayList<Double> rawToRH(ArrayList<Byte> vals) {
+    private ArrayList<Double> rawToRH(ArrayList<Byte> vals) {
         double v;
         ArrayList<Double> v1 = new ArrayList<>();
         if (vals.size() != 0) {
@@ -64,7 +64,7 @@ public class SHT21 {
         } else return null;
     }
 
-    public static int calculateChecksum(ArrayList<Byte> data, int numberOfBytes) {
+    private static int calculateChecksum(ArrayList<Byte> data, int numberOfBytes) {
 
         //CRC
         int POLYNOMIAL = 0x131, byteCtr, crc = 0;

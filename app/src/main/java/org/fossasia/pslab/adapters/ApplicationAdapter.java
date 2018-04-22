@@ -30,8 +30,8 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
      */
     public class Holder extends RecyclerView.ViewHolder {
 
-        public TextView applicationName;
-        public ImageView applicationIcon;
+        TextView applicationName;
+        ImageView applicationIcon;
 
         public Holder(View itemView) {
             super(itemView);

@@ -52,7 +52,7 @@ public class MLX90614 {
         Log.v(TAG, Integer.toHexString(address) + " " + Integer.toHexString(x.get(0) | (x.get(1) << 8)));
     }
 
-    public ArrayList<Character> getVals(int addr, int bytes) throws IOException {
+    private ArrayList<Character> getVals(int addr, int bytes) throws IOException {
         ArrayList<Character> vals = i2c.readBulk(ADDRESS, addr, bytes);
         return vals;
     }

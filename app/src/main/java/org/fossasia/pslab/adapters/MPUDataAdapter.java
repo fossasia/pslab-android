@@ -52,7 +52,7 @@ public class MPUDataAdapter extends RecyclerView.Adapter<MPUDataAdapter.ViewHold
 
         private TextView tvAx, tvAy, tvAz, tvGx, tvGy, tvGz, tvTemperature, tvTitle;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             tvAx = (TextView) itemView.findViewById(R.id.tv_sensor_mpu6050_ax);
             tvAy = (TextView) itemView.findViewById(R.id.tv_sensor_mpu6050_ay);

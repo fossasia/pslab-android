@@ -18,7 +18,7 @@ public class PacketHandler {
     private final int BUFSIZE = 10000;
     private byte[] buffer = new byte[BUFSIZE];
     private boolean loadBurst, connected;
-    int inputQueueSize = 0, BAUD = 1000000;
+    private int inputQueueSize = 0, BAUD = 1000000;
     private CommunicationHandler mCommunicationHandler = null;
     public static String version = "";
     private CommandsProto mCommandsProto;

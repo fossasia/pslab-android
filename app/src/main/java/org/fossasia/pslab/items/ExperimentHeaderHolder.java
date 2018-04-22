@@ -49,7 +49,7 @@ public class ExperimentHeaderHolder extends TreeNode.BaseNodeViewHolder<Experime
     public static class ExperimentHeader {
 
         public String title;
-        public int level;
+        int level;
 
         public ExperimentHeader(String title, int level) {
             this.title = title;

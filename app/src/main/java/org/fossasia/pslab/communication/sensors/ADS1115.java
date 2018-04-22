@@ -140,12 +140,12 @@ public class ADS1115 {
         TimeUnit.SECONDS.sleep((long) 0.005);
     }
 
-    public int readRegister(int register) throws IOException {
+    private int readRegister(int register) throws IOException {
         ArrayList<Character> vals = i2c.readBulk(ADDRESS, register, 2);
         return (vals.get(0) << 8) | vals.get(1);
     }
 
-    public void writeRegister(int reg, int value) throws IOException {
+    private void writeRegister(int reg, int value) throws IOException {
         i2c.writeBulk(ADDRESS, new int[]{ADDRESS, (value >> 8) & 0xFF, value & 0xFF});
     }
 
@@ -164,7 +164,7 @@ public class ADS1115 {
         this.rate = rate;
     }
 
-    public double readADCSingleEnded(int chan) throws IOException, InterruptedException {
+    private double readADCSingleEnded(int chan) throws IOException, InterruptedException {
         if (chan > 3) {
             return -1;
         }
@@ -195,7 +195,7 @@ public class ADS1115 {
         return readRegister(REG_POINTER_CONVERT) * gainScaling.get(gain);
     }
 
-    public short readADCDifferential(String chan) throws IOException, InterruptedException {
+    private short readADCDifferential(String chan) throws IOException, InterruptedException {
         //start with default values
         int config = REG_CONFIG_CQUE_NONE              //Disable the comparator (default val)
                 | REG_CONFIG_CLAT_NONLAT               //Non-latching (default val)
