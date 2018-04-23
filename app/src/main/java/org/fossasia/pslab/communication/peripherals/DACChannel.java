@@ -3,10 +3,7 @@ package org.fossasia.pslab.communication.peripherals;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
 /**
  * Created by viveksb007 on 28/3/17.
  */

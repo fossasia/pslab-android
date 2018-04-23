@@ -7,23 +7,22 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/experiment_setup_aim"
-        android:textSize="@dimen/control_textsize_large"
-        android:textStyle="bold" />
+        android:gravity="center_horizontal"
+        android:text="@string/experiment_setup"
+        android:textSize="@dimen/exp_setup_textsize" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="187dp"
+        android:src="@drawable/wip_sign" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/control_margin_small"
         android:padding="@dimen/control_edittext_padding"
-        android:text="@string/lorem_ipsum_text"
+        android:text="@string/work_in_progress"
+        android:textAlignment="center"
         android:textSize="@dimen/control_textsize_medium" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/experiment_setup"
-        android:textSize="@dimen/exp_setup_textsize"
-        android:gravity="center_horizontal"/>
 
 </LinearLayout>

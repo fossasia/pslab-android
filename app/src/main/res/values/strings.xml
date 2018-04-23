@@ -549,5 +549,6 @@
     <string name="closing_wave_generator_message">Are you sure you want to close the Wave Generator?</string>
     <string name="closing_oscilloscope_title">Closing Oscilloscope</string>
     <string name="closing_oscilloscope_message">Are you sure you want to close the Oscilloscope?</string>
+    <string name="work_in_progress">The experiment setup is under development, Will be available soon!!!</string>
 
 </resources>

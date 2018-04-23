@@ -6,10 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AnalogInputSource {
 
