@@ -322,7 +322,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                        DisplayTemporaryToast();
+                        startExperiment(value);
                     }
                 });
         tree.addChild(treeAM);
