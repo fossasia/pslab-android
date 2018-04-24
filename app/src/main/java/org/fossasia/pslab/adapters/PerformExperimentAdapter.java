@@ -39,6 +39,7 @@ import org.fossasia.pslab.experimentsetup.electronicexperiments.ZenerSetupFragme
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.ExperimentDocFragment;
 import org.fossasia.pslab.fragment.ExperimentDocMdFragment;
+import org.fossasia.pslab.fragment.ExperimentDocMdFragmentNew;
 import org.fossasia.pslab.fragment.ExperimentSetupFragment;
 
 /**
@@ -69,7 +70,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "Zener IV Characteristics":
                         return ExperimentDocMdFragment.newInstance("D_ZenerIV.md");
                     case "Half Wave Rectifier":
-                        return ExperimentDocMdFragment.newInstance("L_halfWave.md");
+                        return ExperimentDocMdFragmentNew.newInstance("L_halfWave.md","L_halfWavePart2.md","halfwave");
                     case "BJT CB Characteristics":
                         return ExperimentDocMdFragment.newInstance("D_transistorCB.md");
                     case "BJT Output Characteristics":

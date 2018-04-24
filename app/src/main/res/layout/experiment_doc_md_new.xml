@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <br.tiagohm.markdownview.MarkdownView
+            android:id="@+id/perform_experiment_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:escapeHtml="false" />
+
+        <org.fossasia.pslab.others.TouchImageView
+            android:id="@+id/schematic"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/perform_experiment_top"
+            android:layout_marginTop="-32dp"
+            android:background="@color/white"
+            android:scaleType="fitCenter" />
+
+        <br.tiagohm.markdownview.MarkdownView
+            android:id="@+id/perform_experiment_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/schematic"
+            app:escapeHtml="false" />
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>
