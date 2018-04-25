@@ -219,12 +219,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_about_us:
                         startActivity(new Intent(MainActivity.this, AboutUs.class));
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
                         break;
                     case R.id.nav_help_feedback:
                         startActivity(new Intent(MainActivity.this, HelpAndFeedback.class));
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
