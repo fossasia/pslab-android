@@ -287,7 +287,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         chartInit();
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Oscilloscope");
+        getSupportActionBar().setTitle(getResources().getString(R.string.Oscilloscope));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

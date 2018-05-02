@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:id="@+id/wave_gen_toolbar"
-        app:title="Wave Generator"
+        app:title="@string/wavegen"
         app:titleTextColor="@color/white"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
