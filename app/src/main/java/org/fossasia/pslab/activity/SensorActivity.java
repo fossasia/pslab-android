@@ -64,7 +64,7 @@ public class SensorActivity extends AppCompatActivity {
         final int min = 100;
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Sensor QuickView");
+        getSupportActionBar().setTitle(getResources().getString(R.string.SensorQuickView));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

@@ -31,7 +31,7 @@ public class WavegenActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Wave Generator");
+        getSupportActionBar().setTitle(getResources().getString(R.string.WaveGenerator));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));

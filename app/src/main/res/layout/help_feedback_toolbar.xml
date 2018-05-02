@@ -13,5 +13,5 @@ android:id="@+id/helpToolbarAnim">
     android:background="?attr/colorPrimary"
     android:minHeight="?attr/actionBarSize"
     android:fitsSystemWindows="true"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></android.support.v7.widget.Toolbar>
+    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 </android.support.design.widget.AppBarLayout>

@@ -90,7 +90,7 @@ public class SensorFragmentMain extends Fragment {
         toolbar=(android.support.v7.widget.Toolbar)view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 //        setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Sensor View");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.SensorQuickView));
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
