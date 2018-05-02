@@ -550,5 +550,6 @@
     <string name="closing_oscilloscope_title">Closing Oscilloscope</string>
     <string name="closing_oscilloscope_message">Are you sure you want to close the Oscilloscope?</string>
     <string name="Control">Control</string>
+    <string name="Oscilloscope">Oscilloscope</string>
 
 </resources>

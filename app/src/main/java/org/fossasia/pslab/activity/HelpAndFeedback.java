@@ -29,7 +29,7 @@ public class HelpAndFeedback extends AppCompatActivity {
         setContentView(R.layout.help_feedback_toolbar);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Help & Feedback");
+        getSupportActionBar().setTitle(getResources().getString(R.string.nav_help_feedback));
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));

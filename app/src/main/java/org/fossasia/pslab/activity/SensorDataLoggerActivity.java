@@ -94,7 +94,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
         }
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Sensor Data Logger");
+            getSupportActionBar().setTitle(getResources().getString(R.string.sensor_logged_data));
         }
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
