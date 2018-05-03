@@ -6,47 +6,51 @@
     android:background="@drawable/rounded_custom_border"
     tools:context="org.fossasia.pslab.fragment.DataAnalysisFragment">
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:weightSum="3">
 
-    <Spinner
-        android:id="@+id/spinner_curve_fit_da"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Spinner
+            android:id="@+id/spinner_curve_fit_da"
+            android:layout_width="65dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            />
 
-    <Spinner
-        android:id="@+id/spinner_channel_select_da1"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toRightOf="@+id/spinner_curve_fit_da"
-        app:layout_constraintRight_toLeftOf="@+id/spinner_channel_select_da2"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Spinner
+            android:id="@+id/spinner_channel_select_da1"
+            android:layout_width="65dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1" />
 
-    <Spinner
-        android:id="@+id/spinner_channel_select_da2"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Spinner
+            android:id="@+id/spinner_channel_select_da2"
+            android:layout_width="65dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/checkBox_fourier_da"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/fourier_transforms"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.034"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.983" />
 </android.support.constraint.ConstraintLayout>
 
