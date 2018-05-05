@@ -1,7 +1,10 @@
 package org.fossasia.pslab.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +34,13 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
     private boolean manualSeekBarChange = false;
     private HashMap<String, Float> svalue = ControlActivityCommon.editTextValues;
 
+    private boolean isSet1 = false;
+    private boolean isSet2 = false;
+    private boolean isSet3 = false;
+    private boolean isSet4 = false;
+    private boolean isSet5 = false;
+    private boolean isSet6 = false;
+    private boolean isSet7 = false;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -75,7 +85,7 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
         final Button buttonControlMain1 = holder.buttonControlMain1;
         final Button buttonControlMain2 = holder.buttonControlMain2;
-        Button buttonControlMain3 = holder.buttonControlMain3;
+        final Button buttonControlMain3 = holder.buttonControlMain3;
 
         final SeekBar seekBarControlMain = holder.seekBarControlMain;
         final EditText editTextControlMain = holder.editTextControlMain;
@@ -86,6 +96,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet1) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet1 = false;
+                            }
                             Double data = Double.valueOf(editTextControlMain.getText().toString());
                             Double dataDecrement = data - 0.0025;
                             if (dataDecrement < -5.0)
@@ -108,6 +122,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet1) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet1 = false;
+                            }
                             Double data1 = Double.valueOf(editTextControlMain.getText().toString());
                             Double dataIncrement = data1 + 0.0025;
                             if (dataIncrement < -5.0)
@@ -140,14 +158,40 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             seekBarControlMain.setProgress((int) map(value, -5, 5, 0, 1000));
                             manualSeekBarChange = false;
                             ControlActivityCommon.editTextValues.put(mDataset[position], value);
-                            if (scienceLab.isConnected())
+                            if (scienceLab.isConnected()) {
                                 scienceLab.setPV1(value);
+                                if (!isSet1) {
+                                    buttonControlMain3.setBackgroundColor(Color.GREEN);
+                                    isSet1 = true;
+                                }
+                            }
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0.0000");
                         }
 
                     }
                 });
+                //Text focus listener to figure out if the value has changed. Change color of SET button
+                editTextControlMain.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        if (isSet1) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet1 = false;
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+
                 seekBarControlMain.setMax(1000);
                 if (svalue.get(mDataset[position]) != null) {
                     editTextControlMain.setText(svalue.get(mDataset[position]).toString());
@@ -170,7 +214,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        if (isSet1) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet1 = false;
+                        }
                     }
 
                     @Override
@@ -186,6 +233,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet2) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet2 = false;
+                            }
                             Double data = Double.valueOf(editTextControlMain.getText().toString());
                             Double dataDecrement = data - 0.0025;
                             if (dataDecrement < -3.3)
@@ -208,6 +259,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet2) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet2 = false;
+                            }
                             Double data1 = Double.valueOf(editTextControlMain.getText().toString());
                             Double dataIncrement = data1 + 0.0025;
                             if (dataIncrement < -3.3)
@@ -240,14 +295,39 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             seekBarControlMain.setProgress((int) ((value + 3.3) * 100));
                             manualSeekBarChange = false;
                             ControlActivityCommon.editTextValues.put(mDataset[position], value);
-                            if (scienceLab.isConnected())
+                            if (scienceLab.isConnected()) {
                                 scienceLab.setPV2(value);
+                                if (!isSet2) {
+                                    buttonControlMain3.setBackgroundColor(Color.GREEN);
+                                    isSet2 = true;
+                                }
+                            }
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
                     }
                 });
 
+                //Text focus listener to figure out if the value has changed. Change color of SET button
+                editTextControlMain.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        if (isSet2) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet2 = false;
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
 
                 seekBarControlMain.setMax(660);
                 if (svalue.get(mDataset[position]) != null) {
@@ -271,7 +351,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        if (isSet2) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet2 = false;
+                        }
                     }
 
                     @Override
@@ -286,6 +369,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet3) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet3 = false;
+                            }
                             Double data = Double.valueOf(editTextControlMain.getText().toString());
                             Double dataDecrement = data - 0.0025;
                             if (dataDecrement < 0.0)
@@ -307,6 +394,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet3) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet3 = false;
+                            }
                             Double data1 = Double.valueOf(editTextControlMain.getText().toString());
                             Double dataIncrement = data1 + 0.0025;
                             if (dataIncrement < 0.0)
@@ -338,8 +429,13 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             seekBarControlMain.setProgress((int) map(value, 0, 3.3, 0, 330));
                             manualSeekBarChange = false;
                             ControlActivityCommon.editTextValues.put(mDataset[position], value);
-                            if (scienceLab.isConnected())
+                            if (scienceLab.isConnected()) {
                                 scienceLab.setPV3(value);
+                                if (!isSet3) {
+                                    buttonControlMain3.setBackgroundColor(Color.GREEN);
+                                    isSet3 = true;
+                                }
+                            }
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0.0000");
                         }
@@ -347,6 +443,26 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     }
                 });
 
+                //Text focus listener to figure out if the value has changed. Change color of SET button
+                editTextControlMain.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        if (isSet3) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet3 = false;
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
 
                 seekBarControlMain.setMax(330);
                 if (svalue.get(mDataset[position]) != null) {
@@ -370,7 +486,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        if (isSet3) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet3 = false;
+                        }
                     }
 
                     @Override
@@ -386,6 +505,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet4) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet4 = false;
+                            }
                             Double data = Double.valueOf(editTextControlMain.getText().toString());
                             Double dataDecrement = data - 0.0025;
                             if (dataDecrement < 0.0)
@@ -407,6 +530,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet4) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet4 = false;
+                            }
                             Double data1 = Double.valueOf(editTextControlMain.getText().toString());
                             Double dataIncrement = data1 + 0.0025;
                             if (dataIncrement < 0.0)
@@ -438,14 +565,39 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             seekBarControlMain.setProgress((int) (value * 100));
                             manualSeekBarChange = false;
                             ControlActivityCommon.editTextValues.put(mDataset[position], value);
-                            if (scienceLab.isConnected())
+                            if (scienceLab.isConnected()) {
                                 scienceLab.setPCS(value);
+                                if (!isSet4) {
+                                    buttonControlMain3.setBackgroundColor(Color.GREEN);
+                                    isSet4 = true;
+                                }
+                            }
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0.0000");
                         }
                     }
                 });
 
+                //Text focus listener to figure out if the value has changed. Change color of SET button
+                editTextControlMain.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        if (isSet4) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet4 = false;
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
 
                 seekBarControlMain.setMax(330);
                 if (svalue.get(mDataset[position]) != null) {
@@ -468,7 +620,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        if (isSet4) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet4 = false;
+                        }
                     }
 
                     @Override
@@ -483,6 +638,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet5) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet5 = false;
+                            }
                             int data = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataDecrement = data - 1;
                             if (dataDecrement < 10)
@@ -504,6 +663,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet5) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet5 = false;
+                            }
                             int data1 = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataIncrement = data1 + 1;
                             if (dataIncrement < 10)
@@ -535,11 +698,37 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             seekBarControlMain.setProgress(value - 10);
                             manualSeekBarChange = false;
                             ControlActivityCommon.editTextValues.put(mDataset[position], (float) value);
-                            if (scienceLab.isConnected())
+                            if (scienceLab.isConnected()) {
                                 scienceLab.setSine1(value);
+                                if (!isSet5) {
+                                    buttonControlMain3.setBackgroundColor(Color.GREEN);
+                                    isSet5 = true;
+                                }
+                            }
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
+                    }
+                });
+
+                //Text focus listener to figure out if the value has changed. Change color of SET button
+                editTextControlMain.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        if (isSet5) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet5 = false;
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
                     }
                 });
 
@@ -563,7 +752,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        if (isSet5) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet5 = false;
+                        }
                     }
 
                     @Override
@@ -578,6 +770,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet6) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet6 = false;
+                            }
                             int data = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataDecrement = data - 1;
                             if (dataDecrement < 10)
@@ -599,6 +795,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet6) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet6 = false;
+                            }
                             int data1 = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataIncrement = data1 + 1;
                             if (dataIncrement < 10)
@@ -630,11 +830,37 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             seekBarControlMain.setProgress(value - 10);
                             manualSeekBarChange = false;
                             ControlActivityCommon.editTextValues.put(mDataset[position], (float) value);
-                            if (scienceLab.isConnected())
+                            if (scienceLab.isConnected()) {
                                 scienceLab.setSine2(value);
+                                if (!isSet6) {
+                                    buttonControlMain3.setBackgroundColor(Color.GREEN);
+                                    isSet6 = true;
+                                }
+                            }
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
+                    }
+                });
+
+                //Text focus listener to figure out if the value has changed. Change color of SET button
+                editTextControlMain.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        if (isSet6) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet6 = false;
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
                     }
                 });
 
@@ -658,7 +884,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        if (isSet6) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet6 = false;
+                        }
                     }
 
                     @Override
@@ -673,6 +902,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet7) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet7 = false;
+                            }
                             int data = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataDecrement = data - 1;
                             if (dataDecrement < 10)
@@ -694,6 +927,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (isSet7) {
+                                buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                                isSet7 = false;
+                            }
                             int data1 = Integer.valueOf(editTextControlMain.getText().toString());
                             int dataIncrement = data1 + 1;
                             if (dataIncrement < 10)
@@ -726,14 +963,40 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
                             manualSeekBarChange = false;
                             ControlActivityCommon.editTextValues.put(mDataset[position], (float) value);
                             // Setting a SQUARE Wave in SQR1 by default
-                            if (scienceLab.isConnected())
+                            if (scienceLab.isConnected()) {
                                 scienceLab.setSqr1(value, -1, false);
-
+                                if (!isSet7) {
+                                    buttonControlMain3.setBackgroundColor(Color.GREEN);
+                                    isSet7 = true;
+                                }
+                            }
                         } catch (NumberFormatException e) {
                             editTextControlMain.setText("0");
                         }
                     }
                 });
+
+                //Text focus listener to figure out if the value has changed. Change color of SET button
+                editTextControlMain.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        if (isSet7) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet7 = false;
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+
                 seekBarControlMain.setMax(5000);
                 if (svalue.get(mDataset[position]) != null) {
                     editTextControlMain.setText(String.valueOf(svalue.get(mDataset[position]).intValue()));
@@ -754,7 +1017,10 @@ public class ControlMainAdapter extends RecyclerView.Adapter<ControlMainAdapter.
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        if (isSet7) {
+                            buttonControlMain3.setBackgroundColor(Color.parseColor("#c72c2c"));
+                            isSet7 = false;
+                        }
                     }
 
                     @Override
