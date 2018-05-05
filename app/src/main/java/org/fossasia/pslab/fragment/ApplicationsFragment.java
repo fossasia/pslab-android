@@ -85,8 +85,11 @@ public class ApplicationsFragment extends Fragment {
 
                     }
                 });
-        int rows = context.getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_PORTRAIT ? 2 : 3;
+        int rows = 1;
+        if(getResources().getConfiguration().orientation == 2)
+        {
+            rows = 2;
+        }
         initiateViews(view, rows);
         new loadList().execute();
         return view;
