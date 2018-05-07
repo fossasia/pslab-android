@@ -169,7 +169,7 @@ public class PerformExperimentAdapter extends FragmentPagerAdapter {
                     case "Piezo Buzzer":
                         return ExperimentDocMdFragment.newInstance("P_PiezoBuzzer.md");
                     case "Voltage Controlled Low Pass Filter":
-                        return ExperimentDocFragment.newInstance("Z_VS_LowPass.md");
+                        return ExperimentDocMdFragment.newInstance("Z_VS_LowPass.md");
                     case "Amplitude Modulation":
                         return ExperimentDocMdFragment.newInstance("N_Amplitude_Modulation.md");
                 }
