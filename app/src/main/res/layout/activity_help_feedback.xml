@@ -5,17 +5,18 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/queriesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="50dp"
-        android:text="For all your querries and feedback click the link below:" />
+        android:text="@string/feedbackString" />
+
     <TextView
-        android:id="@+id/text2"
+        android:id="@+id/helpAndFeedbackText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="52dp"
-        android:text="@string/txtCredits"/>
+        android:text="@string/txtCredits" />
 </LinearLayout>
