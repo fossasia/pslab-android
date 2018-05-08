@@ -169,13 +169,13 @@ public class LALogicLinesFragment extends Fragment {
             List<Entry> tempInput = new ArrayList<>();
             int[] temp = timeStamps.get(j);
             tempInput.add(new Entry(0, 0 + (j * 2)));
-            for (int i = 0; i < temp.length; i++) {
+            for (int aTemp : temp) {
                 if (high) {
-                    tempInput.add(new Entry(temp[i], 1 + (j * 2)));
-                    tempInput.add(new Entry(temp[i], 0 + (j * 2)));
+                    tempInput.add(new Entry(aTemp, 1 + (j * 2)));
+                    tempInput.add(new Entry(aTemp, 0 + (j * 2)));
                 } else {
-                    tempInput.add(new Entry(temp[i], 0 + (j * 2)));
-                    tempInput.add(new Entry(temp[i], 1 + (j * 2)));
+                    tempInput.add(new Entry(aTemp, 0 + (j * 2)));
+                    tempInput.add(new Entry(aTemp, 1 + (j * 2)));
                 }
                 high = !high;
             }

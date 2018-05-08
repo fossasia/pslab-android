@@ -99,8 +99,7 @@ public class BandstopFilter {
 
         // Cancel out gain change caused by inversion
         Complex temp = new Complex(1,0);
-        for(int i = 0; i < p.length; i++)
-            temp = temp.multiply(p[i].negate());
+        for (Complex aP : p) temp = temp.multiply(aP.negate());
 
         pProd = temp.getReal();
         kbs = (int) (k / pProd);
@@ -124,9 +123,9 @@ public class BandstopFilter {
 
         //rearranging pz
         ArrayList<Complex> pz2 = new ArrayList<Complex>();
-        for(int i = 0; i < pz.length; i++){
-            if(!pz2.contains(pz[i]) && !pz2.contains(pz[i].conjugate())){
-                pz2.add(pz[i]);
+        for (Complex aPz : pz) {
+            if (!pz2.contains(aPz) && !pz2.contains(aPz.conjugate())) {
+                pz2.add(aPz);
             }
         }
 
@@ -136,13 +135,11 @@ public class BandstopFilter {
         Complex [] pzRearranged = pz2.toArray(new Complex[pz.length]);
 
         Complex temp = new Complex(1,0);
-        for(int i = 0; i < z.length; i++)
-            temp = temp.multiply(complexFs2.subtract(z[i]));
+        for (Complex aZ : z) temp = temp.multiply(complexFs2.subtract(aZ));
 
 
         Complex temp2 = new Complex(1,0);
-        for(int i = 0; i < p.length; i++)
-            temp2 = temp2.multiply(complexFs2.subtract(p[i]));
+        for (Complex aP : p) temp2 = temp2.multiply(complexFs2.subtract(aP));
 
         kz =  (k * (temp.divide(temp2)).getReal());
         return new ArrayList<Object>(Arrays.asList(zz, pzRearranged, kz));
@@ -196,8 +193,8 @@ public class BandstopFilter {
             polynomialFunctionArray[i] = complexRoot;
         }
 
-        for(int i = 0; i < polynomialFunctionArray.length; i ++)
-            product = polynomialFunctionArray[i].multiply(product);
+        for (PolynomialFunction aPolynomialFunctionArray : polynomialFunctionArray)
+            product = aPolynomialFunctionArray.multiply(product);
 
         return product.getCoefficients();
     }

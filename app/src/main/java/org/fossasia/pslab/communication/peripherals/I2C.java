@@ -161,8 +161,8 @@ public class I2C {
         packetHandler.sendByte(commandsProto.I2C_WRITE_BULK);
         packetHandler.sendByte(deviceAddress);
         packetHandler.sendByte(data.length);
-        for (int i = 0; i < data.length; i++) {
-            packetHandler.sendByte(data[i]);
+        for (int aData : data) {
+            packetHandler.sendByte(aData);
         }
         packetHandler.getAcknowledgement();
     }
