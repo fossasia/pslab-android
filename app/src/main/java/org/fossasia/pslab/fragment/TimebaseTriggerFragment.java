@@ -39,12 +39,12 @@ public class TimebaseTriggerFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_timebase_tigger, container, false);
 
         //seekBarTimebase = (SeekBar) v.findViewById(R.id.seekBar_timebase_tt);
-        seekBarTimebase = (FloatSeekBar) v.findViewById(R.id.seekBar_timebase_tt);
-        seekBarTrigger = (FloatSeekBar) v.findViewById(R.id.seekBar_trigger);
-        textViewTimeBase = (TextView) v.findViewById(R.id.tv_timebase_values_tt);
-        textViewTrigger = (TextView) v.findViewById(R.id.tv_trigger_values_tt);
-        spinnerTriggerChannelSelect = (Spinner) v.findViewById(R.id.spinner_trigger_channel_tt);
-        checkBoxTrigger = (CheckBox) v.findViewById(R.id.checkbox_trigger_tt);
+        seekBarTimebase = v.findViewById(R.id.seekBar_timebase_tt);
+        seekBarTrigger = v.findViewById(R.id.seekBar_trigger);
+        textViewTimeBase = v.findViewById(R.id.tv_timebase_values_tt);
+        textViewTrigger = v.findViewById(R.id.tv_trigger_values_tt);
+        spinnerTriggerChannelSelect = v.findViewById(R.id.spinner_trigger_channel_tt);
+        checkBoxTrigger = v.findViewById(R.id.checkbox_trigger_tt);
 
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 

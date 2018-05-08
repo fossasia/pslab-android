@@ -44,7 +44,7 @@ public class LAChannelModeFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.logic_analyzer_select_channel, container, false);
-        Spinner modeSelectSpinner = (Spinner) v.findViewById(R.id.channel_mode_select_spinner);
+        Spinner modeSelectSpinner = v.findViewById(R.id.channel_mode_select_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.select_channel_mode_la, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         modeSelectSpinner.setAdapter(adapter);
@@ -112,15 +112,15 @@ public class LAChannelModeFragment extends Fragment {
             }
         });
 
-        LinearLayout llChannelSelectMode = (LinearLayout) v.findViewById(R.id.channel_select_mode_ll);
+        LinearLayout llChannelSelectMode = v.findViewById(R.id.channel_select_mode_ll);
         View selectView = createSingleChannelMode(inflater);
-        llChannel1 = (LinearLayout) selectView.findViewById(R.id.ll_channel1);
+        llChannel1 = selectView.findViewById(R.id.ll_channel1);
         llChannel1.setVisibility(View.VISIBLE);
-        llChannel2 = (LinearLayout) selectView.findViewById(R.id.ll_channel2);
+        llChannel2 = selectView.findViewById(R.id.ll_channel2);
         llChannel2.setVisibility(View.GONE);
-        llChannel3 = (LinearLayout) selectView.findViewById(R.id.ll_channel3);
+        llChannel3 = selectView.findViewById(R.id.ll_channel3);
         llChannel3.setVisibility(View.GONE);
-        llChannel4 = (LinearLayout) selectView.findViewById(R.id.ll_channel4);
+        llChannel4 = selectView.findViewById(R.id.ll_channel4);
         llChannel4.setVisibility(View.GONE);
         llChannelSelectMode.addView(selectView);
         return v;
@@ -130,27 +130,27 @@ public class LAChannelModeFragment extends Fragment {
 
         View selectView = inflater.inflate(R.layout.logic_analyzer_select_channel_mode, null);
 
-        channelSelectSpinner1 = (Spinner) selectView.findViewById(R.id.single_channel_input_1);
+        channelSelectSpinner1 = selectView.findViewById(R.id.single_channel_input_1);
         channelSelectSpinner1.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, channels));
-        final Spinner edgeSelectSpinner1 = (Spinner) selectView.findViewById(R.id.single_channel_edge_1);
+        final Spinner edgeSelectSpinner1 = selectView.findViewById(R.id.single_channel_edge_1);
         edgeSelectSpinner1.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, edges));
 
-        channelSelectSpinner2 = (Spinner) selectView.findViewById(R.id.single_channel_input_2);
+        channelSelectSpinner2 = selectView.findViewById(R.id.single_channel_input_2);
         channelSelectSpinner2.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, channels));
-        final Spinner edgeSelectSpinner2 = (Spinner) selectView.findViewById(R.id.single_channel_edge_2);
+        final Spinner edgeSelectSpinner2 = selectView.findViewById(R.id.single_channel_edge_2);
         edgeSelectSpinner2.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, edges));
 
-        channelSelectSpinner3 = (Spinner) selectView.findViewById(R.id.single_channel_input_3);
+        channelSelectSpinner3 = selectView.findViewById(R.id.single_channel_input_3);
         channelSelectSpinner3.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, channels));
-        final Spinner edgeSelectSpinner3 = (Spinner) selectView.findViewById(R.id.single_channel_edge_3);
+        final Spinner edgeSelectSpinner3 = selectView.findViewById(R.id.single_channel_edge_3);
         edgeSelectSpinner3.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, edges));
 
-        channelSelectSpinner4 = (Spinner) selectView.findViewById(R.id.single_channel_input_4);
+        channelSelectSpinner4 = selectView.findViewById(R.id.single_channel_input_4);
         channelSelectSpinner4.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, channels));
-        final Spinner edgeSelectSpinner4 = (Spinner) selectView.findViewById(R.id.single_channel_edge_4);
+        final Spinner edgeSelectSpinner4 = selectView.findViewById(R.id.single_channel_edge_4);
         edgeSelectSpinner4.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, edges));
 
-        Button btnAnalyze = (Button) selectView.findViewById(R.id.btn_la_analyze);
+        Button btnAnalyze = selectView.findViewById(R.id.btn_la_analyze);
         btnAnalyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

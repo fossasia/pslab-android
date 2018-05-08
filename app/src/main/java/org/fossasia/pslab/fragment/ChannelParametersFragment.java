@@ -53,16 +53,16 @@ public class ChannelParametersFragment extends Fragment {
         final String[] channels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
         final String[] mics = {"MICROPHONE", "IN-BUILT MIC"};
 
-        spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_ch1_cp);
-        spinnerRangeCh2 = (Spinner) v.findViewById(R.id.spinner_range_ch2_cp);
-        spinnerChannelSelect = (Spinner) v.findViewById(R.id.spinner_channel_select_cp);
-        spinnerMICSelect = (Spinner) v.findViewById(R.id.spinner_mic_select_cp);
+        spinnerRangeCh1 = v.findViewById(R.id.spinner_range_ch1_cp);
+        spinnerRangeCh2 = v.findViewById(R.id.spinner_range_ch2_cp);
+        spinnerChannelSelect = v.findViewById(R.id.spinner_channel_select_cp);
+        spinnerMICSelect = v.findViewById(R.id.spinner_mic_select_cp);
 
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
-        checkBoxCH1 = (CheckBox) v.findViewById(R.id.checkBox_ch1_cp);
-        checkBoxCH2 = (CheckBox) v.findViewById(R.id.checkBox_ch2_cp);
-        checkBoxCH3 = (CheckBox) v.findViewById(R.id.checkBox_ch3_cp);
-        checkBoxMIC = (CheckBox) v.findViewById(R.id.checkBox_mic_cp);
+        checkBoxCH1 = v.findViewById(R.id.checkBox_ch1_cp);
+        checkBoxCH2 = v.findViewById(R.id.checkBox_ch2_cp);
+        checkBoxCH3 = v.findViewById(R.id.checkBox_ch3_cp);
+        checkBoxMIC = v.findViewById(R.id.checkBox_mic_cp);
 
         ArrayAdapter<String> rangesAdapter;
         ArrayAdapter<String> channelsAdapter;

@@ -29,7 +29,7 @@ public class DiodeExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.rectifier_setup, container, false);
-        startButton = (Button) view.findViewById(R.id.button_start_experiment_rectifier);
+        startButton = view.findViewById(R.id.button_start_experiment_rectifier);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

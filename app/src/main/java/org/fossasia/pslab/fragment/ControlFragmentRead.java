@@ -52,24 +52,24 @@ public class ControlFragmentRead extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_control_read, container, false);
 
-        tvControlRead1 = (TextView) view.findViewById(R.id.tv_control_read1);
-        tvControlRead2 = (TextView) view.findViewById(R.id.tv_control_read2);
-        tvControlRead3 = (TextView) view.findViewById(R.id.tv_control_read3);
-        tvControlRead4 = (TextView) view.findViewById(R.id.tv_control_read4);
-        tvControlRead5 = (TextView) view.findViewById(R.id.tv_control_read5);
-        tvControlRead6 = (TextView) view.findViewById(R.id.tv_control_read6);
-        tvControlRead7 = (TextView) view.findViewById(R.id.tv_control_read7);
-        tvControlRead8 = (TextView) view.findViewById(R.id.tv_control_read8);
-        tvControlRead9 = (TextView) view.findViewById(R.id.tv_control_read9);
-        tvControlRead10 = (TextView) view.findViewById(R.id.tv_control_read10);
-        Button buttonControlRead1 = (Button) view.findViewById(R.id.button_control_read1);
-        Button buttonControlRead2 = (Button) view.findViewById(R.id.button_control_read2);
-        Button buttonControlRead3 = (Button) view.findViewById(R.id.button_control_read3);
-        Button buttonControlRead4 = (Button) view.findViewById(R.id.button_control_read4);
-        Button buttonControlRead5 = (Button) view.findViewById(R.id.button_control_read5);
-        Button buttonControlRead6 = (Button) view.findViewById(R.id.button_control_read6);
-        spinnerControlRead1 = (Spinner) view.findViewById(R.id.spinner_control_read1);
-        spinnerControlRead2 = (Spinner) view.findViewById(R.id.spinner_control_read2);
+        tvControlRead1 = view.findViewById(R.id.tv_control_read1);
+        tvControlRead2 = view.findViewById(R.id.tv_control_read2);
+        tvControlRead3 = view.findViewById(R.id.tv_control_read3);
+        tvControlRead4 = view.findViewById(R.id.tv_control_read4);
+        tvControlRead5 = view.findViewById(R.id.tv_control_read5);
+        tvControlRead6 = view.findViewById(R.id.tv_control_read6);
+        tvControlRead7 = view.findViewById(R.id.tv_control_read7);
+        tvControlRead8 = view.findViewById(R.id.tv_control_read8);
+        tvControlRead9 = view.findViewById(R.id.tv_control_read9);
+        tvControlRead10 = view.findViewById(R.id.tv_control_read10);
+        Button buttonControlRead1 = view.findViewById(R.id.button_control_read1);
+        Button buttonControlRead2 = view.findViewById(R.id.button_control_read2);
+        Button buttonControlRead3 = view.findViewById(R.id.button_control_read3);
+        Button buttonControlRead4 = view.findViewById(R.id.button_control_read4);
+        Button buttonControlRead5 = view.findViewById(R.id.button_control_read5);
+        Button buttonControlRead6 = view.findViewById(R.id.button_control_read6);
+        spinnerControlRead1 = view.findViewById(R.id.spinner_control_read1);
+        spinnerControlRead2 = view.findViewById(R.id.spinner_control_read2);
 
         buttonControlRead1.setOnClickListener(new View.OnClickListener() {
             @Override

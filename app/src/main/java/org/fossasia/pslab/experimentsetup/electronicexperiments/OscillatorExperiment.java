@@ -34,7 +34,7 @@ public class OscillatorExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.rectifier_setup, container, false);
-        startButton = (Button) v.findViewById(R.id.button_start_experiment_rectifier);
+        startButton = v.findViewById(R.id.button_start_experiment_rectifier);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

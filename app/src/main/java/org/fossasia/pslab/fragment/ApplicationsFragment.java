@@ -96,7 +96,7 @@ public class ApplicationsFragment extends Fragment {
      * Initiate Recycler view
      */
     private void initiateViews(View view, int rows) {
-        RecyclerView listView = (RecyclerView) view.findViewById(R.id.applications_recycler_view);
+        RecyclerView listView = view.findViewById(R.id.applications_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, rows);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());

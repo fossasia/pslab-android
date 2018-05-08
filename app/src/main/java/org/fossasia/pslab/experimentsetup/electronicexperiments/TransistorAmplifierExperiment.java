@@ -55,8 +55,8 @@ public class TransistorAmplifierExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.transistor_amplifier_view, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
-        Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
+        outputChart = view.findViewById(R.id.line_chart);
+        Button btnConfigure = view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,10 +70,10 @@ public class TransistorAmplifierExperiment extends Fragment {
 
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etInitialFrequency = (TextInputEditText) customView.findViewById(R.id.amplifier_initial_frequency);
-                                etVoltage = (TextInputEditText) customView.findViewById(R.id.amplifier_pv3_voltage);
-                                tilInitialFrequency = (TextInputLayout) customView.findViewById(R.id.amplifier_initial_frequency_layout);
-                                tilVoltage = (TextInputLayout) customView.findViewById(R.id.amplifier_pv3_voltage_layout);
+                                etInitialFrequency = customView.findViewById(R.id.amplifier_initial_frequency);
+                                etVoltage = customView.findViewById(R.id.amplifier_pv3_voltage);
+                                tilInitialFrequency = customView.findViewById(R.id.amplifier_initial_frequency_layout);
+                                tilVoltage = customView.findViewById(R.id.amplifier_pv3_voltage_layout);
                                 // Initial Frequency
                                 if (TextUtils.isEmpty(etInitialFrequency.getText().toString())) {
                                     tilInitialFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);

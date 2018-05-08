@@ -33,7 +33,7 @@ public class USBDetachReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         try {
             if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(intent.getAction())) {
-                UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+                UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
                 if (device != null) {
                     ScienceLabCommon.scienceLab.close();
                     Toast.makeText(context, "USB Device Disconnected", Toast.LENGTH_SHORT).show();

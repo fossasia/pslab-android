@@ -121,21 +121,21 @@ public class SensorFragmentMPU925X extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_mpu925x, container, false);
 
-        tvSensorMPU925Xax = (TextView) view.findViewById(R.id.tv_sensor_mpu925x_ax);
-        tvSensorMPU925Xay = (TextView) view.findViewById(R.id.tv_sensor_mpu925x_ay);
-        tvSensorMPU925Xaz = (TextView) view.findViewById(R.id.tv_sensor_mpu925x_az);
-        tvSensorMPU925Xgx = (TextView) view.findViewById(R.id.tv_sensor_mpu925x_gx);
-        tvSensorMPU925Xgy = (TextView) view.findViewById(R.id.tv_sensor_mpu925x_gy);
-        tvSensorMPU925Xgz = (TextView) view.findViewById(R.id.tv_sensor_mpu925x_gz);
-        tvSensorMPU925Xtemp = (TextView) view.findViewById(R.id.tv_sensor_mpu925x_temp);
+        tvSensorMPU925Xax = view.findViewById(R.id.tv_sensor_mpu925x_ax);
+        tvSensorMPU925Xay = view.findViewById(R.id.tv_sensor_mpu925x_ay);
+        tvSensorMPU925Xaz = view.findViewById(R.id.tv_sensor_mpu925x_az);
+        tvSensorMPU925Xgx = view.findViewById(R.id.tv_sensor_mpu925x_gx);
+        tvSensorMPU925Xgy = view.findViewById(R.id.tv_sensor_mpu925x_gy);
+        tvSensorMPU925Xgz = view.findViewById(R.id.tv_sensor_mpu925x_gz);
+        tvSensorMPU925Xtemp = view.findViewById(R.id.tv_sensor_mpu925x_temp);
 
-        Spinner spinnerSensorMPU925X1 = (Spinner) view.findViewById(R.id.spinner_sensor_mpu925x_1);
-        Spinner spinnerSensorMPU925X2 = (Spinner) view.findViewById(R.id.spinner_sensor_mpu925x_2);
-        Spinner spinnerSensorMPU925X3 = (Spinner) view.findViewById(R.id.spinner_sensor_mpu925x_3);
-        Spinner spinnerSensorMPU925X4 = (Spinner) view.findViewById(R.id.spinner_sensor_mpu925x_4);
+        Spinner spinnerSensorMPU925X1 = view.findViewById(R.id.spinner_sensor_mpu925x_1);
+        Spinner spinnerSensorMPU925X2 = view.findViewById(R.id.spinner_sensor_mpu925x_2);
+        Spinner spinnerSensorMPU925X3 = view.findViewById(R.id.spinner_sensor_mpu925x_3);
+        Spinner spinnerSensorMPU925X4 = view.findViewById(R.id.spinner_sensor_mpu925x_4);
 
-        mChartAcceleration = (LineChart) view.findViewById(R.id.chart_sensor_mpu925x_accelerometer);
-        mChartGyroscope = (LineChart) view.findViewById(R.id.chart_sensor_mpu925x_gyroscope);
+        mChartAcceleration = view.findViewById(R.id.chart_sensor_mpu925x_accelerometer);
+        mChartGyroscope = view.findViewById(R.id.chart_sensor_mpu925x_gyroscope);
 
         XAxis xAccelerometer = mChartAcceleration.getXAxis();
         YAxis yAccelerometer = mChartAcceleration.getAxisLeft();

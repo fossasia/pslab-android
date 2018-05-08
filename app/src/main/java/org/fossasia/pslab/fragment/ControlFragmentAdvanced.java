@@ -52,27 +52,27 @@ public class ControlFragmentAdvanced extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_control_advanced, container, false);
 
-        Button buttonControlAdvanced1 = (Button) view.findViewById(R.id.button_control_advanced1);
-        Button buttonControlAdvanced2 = (Button) view.findViewById(R.id.button_control_advanced2);
+        Button buttonControlAdvanced1 = view.findViewById(R.id.button_control_advanced1);
+        Button buttonControlAdvanced2 = view.findViewById(R.id.button_control_advanced2);
 
-        final EditText etWidgetControlAdvanced1 = (EditText) view.findViewById(R.id.etwidget_control_advanced1);
-        final EditText etWidgetControlAdvanced2 = (EditText) view.findViewById(R.id.etwidget_control_advanced2);
-        final EditText etWidgetControlAdvanced3 = (EditText) view.findViewById(R.id.etwidget_control_advanced3);
-        final EditText etWidgetControlAdvanced4 = (EditText) view.findViewById(R.id.etwidget_control_advanced4);
-        final EditText etWidgetControlAdvanced5 = (EditText) view.findViewById(R.id.etwidget_control_advanced5);
-        final EditText etWidgetControlAdvanced6 = (EditText) view.findViewById(R.id.etwidget_control_advanced6);
-        final EditText etWidgetControlAdvanced7 = (EditText) view.findViewById(R.id.etwidget_control_advanced7);
-        final EditText etWidgetControlAdvanced8 = (EditText) view.findViewById(R.id.etwidget_control_advanced8);
-        final EditText etWidgetControlAdvanced9 = (EditText) view.findViewById(R.id.etwidget_control_advanced9);
-        final EditText etWidgetControlAdvanced10 = (EditText) view.findViewById(R.id.etwidget_control_advanced10);
-        final EditText etWidgetControlAdvanced11 = (EditText) view.findViewById(R.id.etwidget_control_advanced11);
-        final Spinner spinnerControlAdvanced1 = (Spinner) view.findViewById(R.id.spinner_control_advanced1);
-        final Spinner spinnerControlAdvanced2 = (Spinner) view.findViewById(R.id.spinner_control_advanced2);
+        final EditText etWidgetControlAdvanced1 = view.findViewById(R.id.etwidget_control_advanced1);
+        final EditText etWidgetControlAdvanced2 = view.findViewById(R.id.etwidget_control_advanced2);
+        final EditText etWidgetControlAdvanced3 = view.findViewById(R.id.etwidget_control_advanced3);
+        final EditText etWidgetControlAdvanced4 = view.findViewById(R.id.etwidget_control_advanced4);
+        final EditText etWidgetControlAdvanced5 = view.findViewById(R.id.etwidget_control_advanced5);
+        final EditText etWidgetControlAdvanced6 = view.findViewById(R.id.etwidget_control_advanced6);
+        final EditText etWidgetControlAdvanced7 = view.findViewById(R.id.etwidget_control_advanced7);
+        final EditText etWidgetControlAdvanced8 = view.findViewById(R.id.etwidget_control_advanced8);
+        final EditText etWidgetControlAdvanced9 = view.findViewById(R.id.etwidget_control_advanced9);
+        final EditText etWidgetControlAdvanced10 = view.findViewById(R.id.etwidget_control_advanced10);
+        final EditText etWidgetControlAdvanced11 = view.findViewById(R.id.etwidget_control_advanced11);
+        final Spinner spinnerControlAdvanced1 = view.findViewById(R.id.spinner_control_advanced1);
+        final Spinner spinnerControlAdvanced2 = view.findViewById(R.id.spinner_control_advanced2);
 
-        CheckBox checkBoxControlAdvanced1 = (CheckBox) view.findViewById(R.id.checkbox_control_advanced1);
-        CheckBox checkBoxControlAdvanced2 = (CheckBox) view.findViewById(R.id.checkbox_control_advanced2);
-        CheckBox checkBoxControlAdvanced3 = (CheckBox) view.findViewById(R.id.checkbox_control_advanced3);
-        CheckBox checkBoxControlAdvanced4 = (CheckBox) view.findViewById(R.id.checkbox_control_advanced4);
+        CheckBox checkBoxControlAdvanced1 = view.findViewById(R.id.checkbox_control_advanced1);
+        CheckBox checkBoxControlAdvanced2 = view.findViewById(R.id.checkbox_control_advanced2);
+        CheckBox checkBoxControlAdvanced3 = view.findViewById(R.id.checkbox_control_advanced3);
+        CheckBox checkBoxControlAdvanced4 = view.findViewById(R.id.checkbox_control_advanced4);
 
         etWidgetControlAdvanced1.setInputType(InputType.TYPE_NULL);
         etWidgetControlAdvanced2.setInputType(InputType.TYPE_NULL);
@@ -410,7 +410,7 @@ public class ControlFragmentAdvanced extends Fragment {
 
         alertDialogBuilder.setView(promptsView);
         final EditTextWidget userInput =
-                (EditTextWidget) promptsView.findViewById(R.id.editTextDialogUserInput);
+                promptsView.findViewById(R.id.editTextDialogUserInput);
 
         userInput.init(getContext(), leastCount, minima, maxima);
         userInput.setText(et.getText().toString());

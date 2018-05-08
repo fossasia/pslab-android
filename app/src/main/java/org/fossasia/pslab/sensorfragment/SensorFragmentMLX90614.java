@@ -104,11 +104,11 @@ public class SensorFragmentMLX90614 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_mlx90614, container, false);
 
-        tvSensorMLX90614ObjectTemp = (TextView) view.findViewById(R.id.tv_sensor_mlx90614_object_temp);
-        tvSensorMLX90614AmbientTemp = (TextView) view.findViewById(R.id.tv_sensor_mlx90614_ambient_temp);
+        tvSensorMLX90614ObjectTemp = view.findViewById(R.id.tv_sensor_mlx90614_object_temp);
+        tvSensorMLX90614AmbientTemp = view.findViewById(R.id.tv_sensor_mlx90614_ambient_temp);
 
-        mChartObjectTemperature = (LineChart) view.findViewById(R.id.chart_obj_temp_mlx);
-        mChartAmbientTemperature = (LineChart) view.findViewById(R.id.chart_amb_temp_mlx);
+        mChartObjectTemperature = view.findViewById(R.id.chart_obj_temp_mlx);
+        mChartAmbientTemperature = view.findViewById(R.id.chart_amb_temp_mlx);
 
         XAxis xObjectTemperature = mChartObjectTemperature.getXAxis();
         YAxis yObjectTemperature = mChartObjectTemperature.getAxisLeft();

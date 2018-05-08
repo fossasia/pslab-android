@@ -51,10 +51,10 @@ public class WaterResistanceExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.water_resistance_measurement_layout, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
-        tv_resistance = (TextView) view.findViewById(R.id.tv_water_resistance);
+        outputChart = view.findViewById(R.id.line_chart);
+        tv_resistance = view.findViewById(R.id.tv_water_resistance);
         chartInit();
-        Button measureACResistance = (Button) view.findViewById(R.id.btn_measure_ac);
+        Button measureACResistance = view.findViewById(R.id.btn_measure_ac);
         measureACResistance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +65,7 @@ public class WaterResistanceExperiment extends Fragment {
                 }
             }
         });
-        Button measureDCResistance = (Button) view.findViewById(R.id.btn_measure_dc);
+        Button measureDCResistance = view.findViewById(R.id.btn_measure_dc);
         measureDCResistance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
