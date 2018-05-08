@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -16,23 +20,31 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 
 import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.SearchModel;
 import org.fossasia.pslab.activity.PerformExperimentActivity;
 import org.fossasia.pslab.items.ExperimentHeaderHolder;
 import org.fossasia.pslab.items.IndividualExperimentHolder;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat;
+import ir.mirrajabi.searchdialog.core.BaseSearchDialogCompat;
+import ir.mirrajabi.searchdialog.core.SearchResultListener;
 
 /**
  * Created by viveksb007 on 15/3/17.
  * Modified by Padmal on 30/7/17
+ * Modified by Harsh on 8/5/18
  */
 
 public class SavedExperiments extends Fragment {
 
     private Unbinder unbinder;
     private Context context;
+    String[] experimentsArray;
 
     @BindView(R.id.saved_experiment_container)
     LinearLayout experimentListContainer;
@@ -45,6 +57,8 @@ public class SavedExperiments extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+        setHasOptionsMenu(true);
+        experimentsArray = getResources().getStringArray(R.array.experiments_list);
     }
 
     @Nullable
@@ -75,7 +89,43 @@ public class SavedExperiments extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
 
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, SavedExperiments.class.getSimpleName());
+        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, SavedExperiments.class.getSimpleName());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.items_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.search_item);
+
+        Button searchview = (Button) item.getActionView();
+
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                new SimpleSearchDialogCompat<>(getActivity(), getResources().getString(R.string.Search_Bar_Title), getResources().getString(R.string.Search_Bar_Hint_Text), null,
+                        initData(), new SearchResultListener<SearchModel>() {
+                    @Override
+                    public void onSelected(BaseSearchDialogCompat baseSearchDialogCompat, SearchModel searchModel, int i) {
+
+                        int index = 0;
+                        final String experiment_selected = searchModel.getTitle();
+
+                        for (int j = 0; j < experimentsArray.length; j++) {
+                            if (experimentsArray[j].equals(experiment_selected)) {
+                                index = j;
+                                break;
+                            }
+                        }
+                        runExperiment(index);
+
+                        baseSearchDialogCompat.dismiss();
+                    }
+                }).show();
+                return false;
+            }
+        });
     }
 
     private TreeNode loadElectronicExperiments() {
@@ -408,7 +458,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                         startExperiment(value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeLPF = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.voltage_controlled_low_pass_filter)))
@@ -507,7 +557,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                         startExperiment(value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeOLED = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.oled_display)))
@@ -638,7 +688,7 @@ public class SavedExperiments extends Fragment {
                 .setClickListener(new TreeNode.TreeNodeClickListener() {
                     @Override
                     public void onClick(TreeNode node, Object value) {
-                       startExperiment(value);
+                        startExperiment(value);
                     }
                 });
         TreeNode treeLemonCell = new TreeNode(new IndividualExperimentHolder.IndividualExperiment(getString(R.string.lemon_cell)))
@@ -775,7 +825,22 @@ public class SavedExperiments extends Fragment {
     }
 
     private void DisplayTemporaryToast() {
-        Toast.makeText(getActivity(),getString(R.string.temporary_toast),Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.temporary_toast), Toast.LENGTH_SHORT).show();
+    }
+
+    private ArrayList<SearchModel> initData() {
+        ArrayList<SearchModel> items = new ArrayList<>();
+        for (String anExperimentsArray : experimentsArray) {
+            items.add(new SearchModel(anExperimentsArray));
+        }
+        return items;
+    }
+
+    private void runExperiment(int location) {
+        Intent intent = new Intent(context, PerformExperimentActivity.class);
+        intent.putExtra("toolbar_title", experimentsArray[location]);
+        intent.putExtra("experiment_title", experimentsArray[location]);
+        startActivity(intent);
     }
 
 }

@@ -51,6 +51,8 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
+    compile 'com.github.mirrajabi:search-dialog:1.1'
+
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
