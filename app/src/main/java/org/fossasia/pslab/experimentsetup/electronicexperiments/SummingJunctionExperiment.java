@@ -90,62 +90,69 @@ public class SummingJunctionExperiment extends Fragment {
 
                                 voltageSource = spinnerVoltageSource.getSelectedItem().toString();
 
-                                if ("PV1".equals(voltageSource)) {
-                                    if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                        tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
-                                        return;
-                                    } else if (Float.parseFloat(etFrequency.getText().toString()) < -5.0f) {
-                                        tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
-                                        return;
-                                    } else if (Float.parseFloat(etFrequency.getText().toString()) > 5.0f) {
-                                        tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
-                                        return;
-                                    } else {
-                                        tilFrequency.setError(null);
-                                    }
-                                    voltage = Float.parseFloat(etVoltage.getText().toString());
-                                } else if ("PV2".equals(voltageSource)) {
-                                    if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                        tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
-                                        return;
-                                    } else if (Float.parseFloat(etFrequency.getText().toString()) < -3.3f) {
-                                        tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_3V);
-                                        return;
-                                    } else if (Float.parseFloat(etFrequency.getText().toString()) > 3.3f) {
-                                        tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
-                                        return;
-                                    } else {
-                                        tilFrequency.setError(null);
-                                    }
-                                    voltage = Float.parseFloat(etVoltage.getText().toString());
-                                } else if ("PV3".equals(voltageSource)) {
-                                    if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                        tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
-                                        return;
-                                    } else if (Float.parseFloat(etFrequency.getText().toString()) < 0.0f) {
-                                        tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_0V);
-                                        return;
-                                    } else if (Float.parseFloat(etFrequency.getText().toString()) > 3.3f) {
-                                        tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
-                                        return;
-                                    } else {
-                                        tilFrequency.setError(null);
-                                    }
-                                    voltage = Float.parseFloat(etVoltage.getText().toString());
-                                } else if ("PCS".equals(voltageSource)) {
-                                    if (TextUtils.isEmpty(etFrequency.getText().toString())) {
-                                        tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
-                                        return;
-                                    } else if (Float.parseFloat(etFrequency.getText().toString()) < 0.0f) {
-                                        tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_CURRENT);
-                                        return;
-                                    } else if (Float.parseFloat(etFrequency.getText().toString()) > 3.3f) {
-                                        tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_CURRENT);
-                                        return;
-                                    } else {
-                                        tilFrequency.setError(null);
-                                    }
-                                    current = Float.parseFloat(etVoltage.getText().toString());
+                                switch (voltageSource) {
+                                    case "PV1":
+                                        if (TextUtils.isEmpty(etFrequency.getText().toString())) {
+                                            tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
+                                            return;
+                                        } else if (Float.parseFloat(etFrequency.getText().toString()) < -5.0f) {
+                                            tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_5V);
+                                            return;
+                                        } else if (Float.parseFloat(etFrequency.getText().toString()) > 5.0f) {
+                                            tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_5V);
+                                            return;
+                                        } else {
+                                            tilFrequency.setError(null);
+                                        }
+                                        voltage = Float.parseFloat(etVoltage.getText().toString());
+                                        break;
+                                    case "PV2":
+                                        if (TextUtils.isEmpty(etFrequency.getText().toString())) {
+                                            tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
+                                            return;
+                                        } else if (Float.parseFloat(etFrequency.getText().toString()) < -3.3f) {
+                                            tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_3V);
+                                            return;
+                                        } else if (Float.parseFloat(etFrequency.getText().toString()) > 3.3f) {
+                                            tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
+                                            return;
+                                        } else {
+                                            tilFrequency.setError(null);
+                                        }
+                                        voltage = Float.parseFloat(etVoltage.getText().toString());
+                                        break;
+                                    case "PV3":
+                                        if (TextUtils.isEmpty(etFrequency.getText().toString())) {
+                                            tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
+                                            return;
+                                        } else if (Float.parseFloat(etFrequency.getText().toString()) < 0.0f) {
+                                            tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_0V);
+                                            return;
+                                        } else if (Float.parseFloat(etFrequency.getText().toString()) > 3.3f) {
+                                            tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_3V);
+                                            return;
+                                        } else {
+                                            tilFrequency.setError(null);
+                                        }
+                                        voltage = Float.parseFloat(etVoltage.getText().toString());
+                                        break;
+                                    case "PCS":
+                                        if (TextUtils.isEmpty(etFrequency.getText().toString())) {
+                                            tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
+                                            return;
+                                        } else if (Float.parseFloat(etFrequency.getText().toString()) < 0.0f) {
+                                            tilFrequency.setError(ExperimentErrorStrings.MINIMUM_VALUE_CURRENT);
+                                            return;
+                                        } else if (Float.parseFloat(etFrequency.getText().toString()) > 3.3f) {
+                                            tilFrequency.setError(ExperimentErrorStrings.MAXIMUM_VALUE_CURRENT);
+                                            return;
+                                        } else {
+                                            tilFrequency.setError(null);
+                                        }
+                                        current = Float.parseFloat(etVoltage.getText().toString());
+                                        break;
+                                    default:
+                                        break;
                                 }
 
                                 waveGenerator = spinnerWaveGenerator.getSelectedItem().toString();
@@ -271,14 +278,22 @@ public class SummingJunctionExperiment extends Fragment {
             if ("W2".equals(waveGenerator))
                 scienceLab.setW2(frequency, waveType);
 
-            if ("PV1".equals(voltageSource))
-                scienceLab.setPV1(voltage);
-            else if ("PV2".equals(voltageSource))
-                scienceLab.setPV2(voltage);
-            else if ("PV3".equals(voltageSource))
-                scienceLab.setPV3(voltage);
-            else if ("PCS".equals(voltageSource))
-                scienceLab.setPCS(current);
+            switch (voltageSource) {
+                case "PV1":
+                    scienceLab.setPV1(voltage);
+                    break;
+                case "PV2":
+                    scienceLab.setPV2(voltage);
+                    break;
+                case "PV3":
+                    scienceLab.setPV3(voltage);
+                    break;
+                case "PCS":
+                    scienceLab.setPCS(current);
+                    break;
+                default:
+                    break;
+            }
 
             readVoltageCH1 = (float) scienceLab.getVoltage("CH1", 10);
             readVoltageCH2 = (float) scienceLab.getVoltage("CH2", 10);
