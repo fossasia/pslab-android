@@ -19,6 +19,7 @@ import org.fossasia.pslab.activity.OscilloscopeActivity;
 public class DiodeExperiment extends Fragment {
     Button startButton;
     static String experiment;
+
     public static DiodeExperiment newInstance(String param) {
         experiment = param;
         return new DiodeExperiment();
@@ -34,13 +35,17 @@ public class DiodeExperiment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), OscilloscopeActivity.class);
-                if ("Half Wave Rectifier".equals(experiment))
-                    intent.putExtra("who", "Half Wave Rectifier");
-                else if ("Full Wave Rectifier".equals(experiment))
-                    intent.putExtra("who", "Full Wave Rectifier");
-                else
-                    intent.putExtra("who", "Diode Clipping Clamping");
-                startActivity(intent);
+                switch (experiment) {
+                    case "Half Wave Rectifier":
+                        intent.putExtra("who", "Half Wave Rectifier");
+                        break;
+                    case "Full Wave Rectifier":
+                        intent.putExtra("who", "Full Wave Rectifier");
+                        break;
+                    default:
+                        intent.putExtra("who", "Diode Clipping Clamping");
+                        startActivity(intent);
+                }
             }
         });
         return view;
