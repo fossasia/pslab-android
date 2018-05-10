@@ -20,9 +20,9 @@ import static java.lang.Math.tan;
  */
 
 public class BandstopFilter {
-    String TAG = "BandStopFilter";
-    double[] a;
-    double[] b;
+    private String TAG = "BandStopFilter";
+    private double[] a;
+    private double[] b;
 
     public  BandstopFilter(int order, double[] wn){
         int k = 1;

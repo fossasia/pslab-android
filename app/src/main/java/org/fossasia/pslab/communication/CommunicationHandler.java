@@ -37,16 +37,16 @@ public class CommunicationHandler {
     private static final int SET_CONTROL_LINE_STATE = 0x22;
     private static final int SEND_BREAK = 0x23;
 
-    public static final int DEFAULT_READ_BUFFER_SIZE = 32 * 1024;
-    public static final int DEFAULT_WRITE_BUFFER_SIZE = 32 * 1024;
+    private static final int DEFAULT_READ_BUFFER_SIZE = 32 * 1024;
+    private static final int DEFAULT_WRITE_BUFFER_SIZE = 32 * 1024;
 
     public UsbDevice mUsbDevice = null;
 
     protected final Object mReadBufferLock = new Object();
     protected final Object mWriteBufferLock = new Object();
 
-    protected byte[] mReadBuffer;
-    protected byte[] mWriteBuffer;
+    private byte[] mReadBuffer;
+    private byte[] mWriteBuffer;
 
     private UsbDeviceConnection mConnection;
 
@@ -170,7 +170,7 @@ public class CommunicationHandler {
 
 
     // For supporting devices with API version < 18
-    public int writeSupportAPI(byte[] src, int timeoutMillis) throws IOException {
+    private int writeSupportAPI(byte[] src, int timeoutMillis) throws IOException {
         int written = 0;
         while (written < src.length) {
             final int writeLength;
@@ -197,11 +197,11 @@ public class CommunicationHandler {
     }
 
 
-    public void clear() {
+    private void clear() {
         mConnection.bulkTransfer(mReadEndpoint, mReadBuffer, 100, 50);
     }
 
-    public void setBaudRate(int baudRate) {
+    private void setBaudRate(int baudRate) {
         byte[] msg = {
                 (byte) (baudRate & 0xff),
                 (byte) ((baudRate >> 8) & 0xff),

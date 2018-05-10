@@ -59,9 +59,9 @@ public class ShowLoggedData extends AppCompatActivity {
     private RecyclerView recyclerView;
     private String mSensor;
     private String format;
-    boolean isRecyclerViewOnStack = false;
-    boolean isTrialListViewOnStack = false;
-    boolean isSensorListViewOnStack = false;
+    private boolean isRecyclerViewOnStack = false;
+    private boolean isTrialListViewOnStack = false;
+    private boolean isSensorListViewOnStack = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

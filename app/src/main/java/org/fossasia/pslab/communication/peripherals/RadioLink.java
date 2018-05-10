@@ -43,7 +43,7 @@ public class RadioLink {
 
     }
 
-    public void selectMe() {
+    private void selectMe() {
         if (this.nrf24L01.CURRENT_ADDRESS != this.ADDRESS) {
             this.nrf24L01.selectAddress(this.ADDRESS);
         }
@@ -115,7 +115,7 @@ public class RadioLink {
         return addresses;
     }
 
-    public ArrayList<Integer> decodeI2CList(int[] data) {
+    private ArrayList<Integer> decodeI2CList(int[] data) {
         int sum = 0;
         ArrayList<Integer> addressList = new ArrayList<>();
         for (int _data : data) {

@@ -15,8 +15,8 @@ public class BH1750 {
     private int RES_4000mLx = 0x13;
     private I2C i2c;
 
-    public int[] gainChoices = {RES_500mLx, RES_1000mLx, RES_4000mLx};
-    public String[] gainLiteralChoices = {"500mLx", "1000mLx", "4000mLx"};
+    private int[] gainChoices = {RES_500mLx, RES_1000mLx, RES_4000mLx};
+    private String[] gainLiteralChoices = {"500mLx", "1000mLx", "4000mLx"};
     public int gain = 0;
     public double[] scaling = {2, 1, 0.25};
 
@@ -31,7 +31,7 @@ public class BH1750 {
         init();
     }
 
-    public void init() throws IOException {
+    private void init() throws IOException {
         i2c.writeBulk(ADDRESS, new int[]{RES_500mLx});
     }
 
@@ -40,7 +40,7 @@ public class BH1750 {
         i2c.writeBulk(ADDRESS, new int[]{gainChoices[gain]});
     }
 
-    public ArrayList<Byte> getVals(int numbytes) throws IOException {
+    private ArrayList<Byte> getVals(int numbytes) throws IOException {
         ArrayList<Byte> vals = i2c.simpleRead(ADDRESS, numbytes);
         return vals;
     }

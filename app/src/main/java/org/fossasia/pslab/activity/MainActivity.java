@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_SAVED_EXPERIMENTS = "savedExperiments";
     private static final String TAG_DESIGN_EXPERIMENTS = "designExperiments";
     private static final String TAG_SETTINGS = "settings";
-    public static String CURRENT_TAG = TAG_HOME;
+    private static String CURRENT_TAG = TAG_HOME;
     private String[] activityTitles;
 
     private boolean shouldLoadHomeFragOnBackPress = true;

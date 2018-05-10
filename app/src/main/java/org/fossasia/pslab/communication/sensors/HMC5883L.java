@@ -53,12 +53,12 @@ public class HMC5883L {
 
     }
 
-    public void writeCONFB() throws IOException {
+    private void writeCONFB() throws IOException {
         i2c.writeBulk(ADDRESS, new int[]{CONFB, gainValue << 5});     //set gain
     }
 
 
-    public void writeCONFA() throws IOException {
+    private void writeCONFA() throws IOException {
         i2c.writeBulk(ADDRESS, new int[]{CONFA, (dataOutputRate << 2) | (samplesToAverage << 5) | (measurementConf)});
     }
 

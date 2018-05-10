@@ -59,13 +59,13 @@ public class AD9833 {
         frequency = 1000;
     }
 
-    public void write(int con) throws IOException {
+    private void write(int con) throws IOException {
         spi.start(cs);
         spi.send16(con);
         spi.stop(cs);
     }
 
-    public void setFrequency(int frequency, int register, int phase) throws IOException {
+    private void setFrequency(int frequency, int register, int phase) throws IOException {
         int regSel;
         activeChannel = register;
         this.frequency = frequency;
