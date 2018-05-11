@@ -130,7 +130,7 @@ public class SavedExperiments extends Fragment {
 
     private TreeNode loadElectronicExperiments() {
         // Electronic Tree Node
-        TreeNode treeElectronics = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.electronics_experiments), 0))
+        TreeNode treeElectronics = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.electronics_experiments), 0, R.drawable.electronics))
                 .setViewHolder(new ExperimentHeaderHolder(context));
         // Sub nodes of electronics experiments
         TreeNode treeBJT = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.bjts_and_fets), 1))
@@ -381,7 +381,7 @@ public class SavedExperiments extends Fragment {
 
     private TreeNode loadElectricalExperiments() {
         // Electrical Tree Node
-        TreeNode treeElectrical = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.electrical_experiments), 0))
+        TreeNode treeElectrical = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.electrical_experiments), 0, R.drawable.electrical))
                 .setViewHolder(new ExperimentHeaderHolder(context));
         treeElectrical = loadElectricalTree(treeElectrical);
         // Return Electrical Experiments List
@@ -475,7 +475,7 @@ public class SavedExperiments extends Fragment {
 
     private TreeNode loadPhysicsExperiments() {
         // Physics Tree Node
-        TreeNode treePhysics = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.physics_experiments), 0))
+        TreeNode treePhysics = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.physics_experiments), 0, R.drawable.physics))
                 .setViewHolder(new ExperimentHeaderHolder(context));
         treePhysics = loadPhysicsTree(treePhysics);
         // Return Physics Experiments List
@@ -537,7 +537,7 @@ public class SavedExperiments extends Fragment {
 
     private TreeNode loadAddOnModules() {
         // Add Ons Tree Node
-        TreeNode treeAddOnModules = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.add_on_modules), 0))
+        TreeNode treeAddOnModules = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.add_on_modules), 0, R.drawable.add_on))
                 .setViewHolder(new ExperimentHeaderHolder(context));
         // Sub nodes of Add Ons experiments
         TreeNode treeAddOns = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.add_on_modules), 1))
@@ -675,7 +675,7 @@ public class SavedExperiments extends Fragment {
 
     private TreeNode loadSchoolExperiments() {
         // School Experiment Tree Node
-        TreeNode treeGettingStarted = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.school_level), 0))
+        TreeNode treeGettingStarted = new TreeNode(new ExperimentHeaderHolder.ExperimentHeader(getString(R.string.school_level), 0, R.drawable.school))
                 .setViewHolder(new ExperimentHeaderHolder(context));
         treeGettingStarted = loadSchoolTree(treeGettingStarted);
         // Return School Experiments List
