@@ -40,16 +40,15 @@
             android:layout_marginTop="@dimen/control_margin">
 
 
-
             <Button
-                android:id="@+id/button_control_main1"
+                android:id="@+id/button_decrease_value"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
-                android:layout_weight="0.7"
                 android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:text="@string/hyphen"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/control_textsize_large"
-                android:text="@string/hyphen"/>
+                android:textSize="@dimen/control_textsize_large" />
 
             <EditText
                 android:id="@+id/edittext_control_main"
@@ -68,22 +67,21 @@
 
 
             <Button
-                android:id="@+id/button_control_main2"
+                android:id="@+id/button_increase_value"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
-                android:layout_weight="0.7"
                 android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:text="@string/plus"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/control_textsize_large"
-                android:text="@string/plus"/>
+                android:textSize="@dimen/control_textsize_large" />
 
             <Button
-                android:id="@+id/button_control_main3"
-                android:theme="@style/AppTheme.Button"
+                android:id="@+id/button_set_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/set"
-                />
+                android:theme="@style/AppTheme.Button" />
 
             <TextView
                 android:id="@+id/tv_control_main2"

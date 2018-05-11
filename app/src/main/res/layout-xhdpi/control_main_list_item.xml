@@ -42,7 +42,7 @@
 
 
             <Button
-                android:id="@+id/button_control_main1"
+                android:id="@+id/button_increase_value"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -68,7 +68,7 @@
 
 
             <Button
-                android:id="@+id/button_control_main2"
+                android:id="@+id/button_decrease_value"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -78,7 +78,7 @@
                 android:text="@string/plus"/>
 
             <Button
-                android:id="@+id/button_control_main3"
+                android:id="@+id/button_set_value"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
