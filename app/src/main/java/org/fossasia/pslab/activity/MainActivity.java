@@ -1,12 +1,14 @@
 package org.fossasia.pslab.activity;
 
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,32 +19,34 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.CommunicationHandler;
 import org.fossasia.pslab.fragment.ApplicationsFragment;
 import org.fossasia.pslab.fragment.DesignExperiments;
 import org.fossasia.pslab.fragment.HomeFragment;
 import org.fossasia.pslab.fragment.SavedExperiments;
 import org.fossasia.pslab.fragment.SettingsFragment;
-
-import java.io.IOException;
-
-import org.fossasia.pslab.R;
 import org.fossasia.pslab.others.CustomTabService;
+import org.fossasia.pslab.others.InitializationVariable;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.receivers.USBDetachReceiver;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static org.fossasia.pslab.others.ScienceLabCommon.scienceLab;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-    @Nullable @BindView(R.id.drawer_layout)
+    @Nullable
+    @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -58,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
     View navHeader;
     private ImageView imgProfile;
     private TextView txtName;
-    /**** CustomTabService*/
+
+    private ProgressDialog initialisationDialog;
+
     private CustomTabService customTabService;
 
     public static int navItemIndex = 0;
@@ -76,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     private ScienceLabCommon mScienceLabCommon;
 
+    public boolean PSLabisConnected = false;
+
+    InitializationVariable initialisationStatus;
+
     public static boolean hasPermission = false;
     private boolean receiverRegister = false;
     private UsbManager usbManager;
@@ -91,27 +102,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        usbManager = (UsbManager) getSystemService(USB_SERVICE);
-        customTabService = new CustomTabService(MainActivity.this);
-        mScienceLabCommon = ScienceLabCommon.getInstance();
-        communicationHandler = new CommunicationHandler(usbManager);
-        if (!("android.hardware.usb.action.USB_DEVICE_ATTACHED".equals(getIntent().getAction()))) {
-            if (communicationHandler.isDeviceFound() && !usbManager.hasPermission(communicationHandler.mUsbDevice)) {
-                mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
-                IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
-                registerReceiver(mUsbReceiver, filter);
-                receiverRegister = true;
-                usbManager.requestPermission(communicationHandler.mUsbDevice, mPermissionIntent);
-            }
-            if (communicationHandler.mUsbDevice != null) {
-                if (usbManager.hasPermission(communicationHandler.mUsbDevice))
-                    hasPermission = true;
-            }
-        } else if (usbManager.hasPermission(communicationHandler.mUsbDevice)) {
-            hasPermission = true;
-        }
 
-        mScienceLabCommon.openDevice(communicationHandler);
+        initialisationStatus = new InitializationVariable();
+        initialisationDialog = new ProgressDialog(this);
+        initialisationDialog.setMessage(getString(R.string.initialising_wait));
+        initialisationDialog.setIndeterminate(true);
+        initialisationDialog.setCancelable(false);
+
+        usbManager = (UsbManager) getSystemService(USB_SERVICE);
+
+        customTabService = new CustomTabService(MainActivity.this);
+
+        mScienceLabCommon = ScienceLabCommon.getInstance();
+
+        initialisationDialog.show();
+
+        communicationHandler = new CommunicationHandler(usbManager);
+        attemptToGetUSBPermission();
+
+        PSLabisConnected = mScienceLabCommon.openDevice(communicationHandler);
 
         IntentFilter usbDetachFilter = new IntentFilter();
         usbDetachFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
@@ -126,9 +135,10 @@ public class MainActivity extends AppCompatActivity {
         imgProfile = navHeader.findViewById(org.fossasia.pslab.R.id.img_profile);
         activityTitles = getResources().getStringArray(org.fossasia.pslab.R.array.nav_item_activity_titles);
 
-        loadNavHeader();
+        setPSLabVersionIDs();
 
         setUpNavigationView();
+        initialisationDialog.dismiss();
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
@@ -163,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         if (mPendingRunnable != null) {
             mHandler.post(mPendingRunnable);
         }
-        if(drawer != null) {
+        if (drawer != null) {
             drawer.closeDrawers();
             invalidateOptionsMenu();
         }
@@ -180,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             case 4:
                 return SettingsFragment.newInstance();
             default:
-                return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
+                return HomeFragment.newInstance(scienceLab.isConnected(), scienceLab.isDeviceFound());
         }
     }
 
@@ -261,8 +271,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadNavHeader() {
-        txtName.setText("PSLab Testing");
+    private void setPSLabVersionIDs() {
+        try {
+            txtName.setText(scienceLab.getVersion());
+        } catch (IOException e) {
+            txtName.setText(getString(R.string.device_not_found));
+        }
     }
 
     @Override
@@ -294,11 +308,77 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.pslab_connectivity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_pslab_connected:
+                break;
+            case R.id.menu_pslab_disconnected:
+                attemptToConnectPSLab();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    private void attemptToConnectPSLab() {
+        initialisationDialog.show();
+        mScienceLabCommon = ScienceLabCommon.getInstance();
+        if (communicationHandler.isConnected()) {
+            initialisationDialog.dismiss();
+            Toast.makeText(this, getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
+        } else {
+            communicationHandler = new CommunicationHandler(usbManager);
+            if (communicationHandler.isDeviceFound()) {
+                attemptToGetUSBPermission();
+            } else {
+                initialisationDialog.dismiss();
+                Toast.makeText(this, getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void attemptToGetUSBPermission() {
+        if (!("android.hardware.usb.action.USB_DEVICE_ATTACHED".equals(getIntent().getAction()))) {
+            if (communicationHandler.isDeviceFound() && !usbManager.hasPermission(communicationHandler.mUsbDevice)) {
+                mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+                IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+                registerReceiver(mUsbReceiver, filter);
+                receiverRegister = true;
+                usbManager.requestPermission(communicationHandler.mUsbDevice, mPermissionIntent);
+            }
+            if (communicationHandler.mUsbDevice != null) {
+                if (usbManager.hasPermission(communicationHandler.mUsbDevice))
+                    initialisationDialog.dismiss();
+                hasPermission = true;
+            }
+        } else if (usbManager.hasPermission(communicationHandler.mUsbDevice)) {
+            hasPermission = true;
+            initialisationDialog.dismiss();
+        }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.getItem(0).setVisible(PSLabisConnected);
+        menu.getItem(1).setVisible(!PSLabisConnected);
+        setPSLabVersionIDs();
+        return true;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.v(TAG, "MainActivityDestroyed");
         try {
-            ScienceLabCommon.scienceLab.disconnect();
+            scienceLab.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -308,21 +388,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
-
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (ACTION_USB_PERMISSION.equals(action)) {
                 synchronized (this) {
                     UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-
                     if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
                         if (device != null) {
                             hasPermission = true;
-                            mScienceLabCommon.openDevice(communicationHandler);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound())).commit();
+                            PSLabisConnected = mScienceLabCommon.openDevice(communicationHandler);
+                            initialisationDialog.dismiss();
+                            invalidateOptionsMenu();
+                            Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
+                            if (navItemIndex == 0) {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound())).commit();
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     } else {
+                        initialisationDialog.dismiss();
                         Log.d(TAG, "permission denied for device " + device);
+                        Toast.makeText(getApplicationContext(), getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
