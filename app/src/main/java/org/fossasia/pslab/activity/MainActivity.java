@@ -28,8 +28,10 @@ import android.widget.Toast;
 
 
 import org.fossasia.pslab.communication.CommunicationHandler;
+import org.fossasia.pslab.fragment.AboutUsFragment;
 import org.fossasia.pslab.fragment.ApplicationsFragment;
 import org.fossasia.pslab.fragment.DesignExperiments;
+import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
 import org.fossasia.pslab.fragment.SavedExperiments;
 import org.fossasia.pslab.fragment.SettingsFragment;
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_SAVED_EXPERIMENTS = "savedExperiments";
     private static final String TAG_DESIGN_EXPERIMENTS = "designExperiments";
     private static final String TAG_SETTINGS = "settings";
+    private static final String TAG_ABOUTUS = "aboutUs";
+    private static final String TAG_HELPFEEDBACK = "helpFeedback";
     private static String CURRENT_TAG = TAG_HOME;
     private String[] activityTitles;
 
@@ -179,6 +183,10 @@ public class MainActivity extends AppCompatActivity {
                 return DesignExperiments.newInstance();
             case 4:
                 return SettingsFragment.newInstance();
+            case 5:
+                return AboutUsFragment.newInstance();
+            case 6:
+                return HelpAndFeedbackFragment.newInstance();
             default:
                 return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
         }
@@ -189,7 +197,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectNavMenu() {
-        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+       if(navItemIndex == 6){
+            navigationView.getMenu().getItem(5).setChecked(true);
+        }
+        else
+            navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
     private void setUpNavigationView() {
@@ -218,16 +230,12 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_SETTINGS;
                         break;
                     case R.id.nav_about_us:
-                        startActivity(new Intent(MainActivity.this, AboutUs.class));
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        navItemIndex = 5;
+                        CURRENT_TAG = TAG_ABOUTUS;
                         break;
                     case R.id.nav_help_feedback:
-                        startActivity(new Intent(MainActivity.this, HelpAndFeedback.class));
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        navItemIndex = 6;
+                        CURRENT_TAG = TAG_HELPFEEDBACK;
                         break;
                     case R.id.nav_report_us:
                         customTabService.launchUrl("https://github.com/fossasia/pslab-android/issues");

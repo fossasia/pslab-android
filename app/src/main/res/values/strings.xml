@@ -36,6 +36,8 @@
         <item>Saved Experiments</item>
         <item>Design Experiments</item>
         <item>Settings</item>
+        <item>PSLab</item>
+        <item>Help &amp; Feedback</item>
     </string-array>
 
     <string name="activity_title_about_us">About Us</string>
@@ -554,7 +556,7 @@
     <string-array name="experiments_list">
 
         // Electronics Experiment -> root
-            // *BJTs and FETs
+        // *BJTs and FETs
         <item>N-FET Output Characteristics</item>
         <item>N-FET Transfer Characteristics</item>
         <item>BJT CB Characteristics</item>
@@ -564,7 +566,7 @@
         <item>BJT CE Backup</item>
         <item>BJT Amplifier</item>
 
-            // *Diode Circuits
+        // *Diode Circuits
         <item>Zener IV Characteristics</item>
         <item>Diode IV Characteristics</item>
         <item>Diode Clamping</item>
@@ -572,21 +574,21 @@
         <item>Half Wave Rectifier</item>
         <item>Full Wave Rectifier</item>
 
-            // *OpAmp Circuits
+        // *OpAmp Circuits
         <item>Inverting Op-Amp</item>
         <item>Ramp Generator</item>
         <item>Non Inverting Op-Amp</item>
         <item>Summing Junction</item>
         <item>Precision Rectifier</item>
 
-            // *Oscillators
+        // *Oscillators
         <item>Astable Multivibrator</item>
         <item>Colpitts Oscillator</item>
         <item>Phase Shift Oscillator</item>
         <item>Wien Bridge Oscillator</item>
         <item>Monostable Multivibrator</item>
 
-            // *Communication
+        // *Communication
         <item>Amplitude Modulation</item>
 
 
@@ -612,7 +614,7 @@
         <item>MPU6050 IMU Pendulum</item>
 
         // Add-On Modules -> root
-            // *Add-On Modules
+        // *Add-On Modules
         <item>Dust Sensor DSM501</item>
         <item>OLED Display</item>
         <item>Wirelsess RGB Lights</item>
@@ -620,7 +622,7 @@
         <item>RFID Reader MF522</item>
         <item>RGB LED WS2812B</item>
 
-            // *Various Utilities
+        // *Various Utilities
         <item>ADS1115 Based Calibrator</item>
         <item>Device Testing</item>
         <item>Servo Motors</item>
