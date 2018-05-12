@@ -1,9 +1,13 @@
 Servo Motor Control
 ---
 
+#### Actual Servo Motor
+
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/sg-90.png@100%|auto)
 
 * The rotation angle of limited range servo motors can be controlled via Pulsed Width Modulated(PWM) input waveforms.  The angle of rotation is a function of the duty cycle of the PWM waveform as shown in the following figure
+
+#### Working of Servo Motors
 
 ![](file:///android_asset/DOC_HTML/apps/images/screenshots/servo_timing.png@100%|auto)
 

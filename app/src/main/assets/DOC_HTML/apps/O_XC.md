@@ -1,6 +1,8 @@
 Capacitive Reactance
 ---
 
+#### Schematic
+
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/CR.svg@100%|auto)	
 
 * Make the Connections as shown in the figure

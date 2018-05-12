@@ -1,8 +1,7 @@
-Inverting
+Inverting Op-Amp
 ---
 
-### Op-Amp Inverting
-
+### Schematic
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/Inverting.svg@100%|auto)
 * Make the connections as shown in the figure

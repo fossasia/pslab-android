@@ -1,4 +1,5 @@
 Op-Amps : Phase Shift Oscillator
+---
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/Phase_Shift_Oscillator.svg@100%|auto)
 

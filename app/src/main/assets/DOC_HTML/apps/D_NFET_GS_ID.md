@@ -1,4 +1,7 @@
-## Dependence of drain current on G-S voltage, and Source Voltage
+Transfer Characteristics
+---
+
+#### Dependence of drain current on G-S voltage, and Source Voltage
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/njfet.svg@100%|auto)
 

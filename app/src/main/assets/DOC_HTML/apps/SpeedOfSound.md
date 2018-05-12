@@ -1,6 +1,8 @@
 Speed of sound
 ---
 	
+#### Schematic
+
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/HCSR04.svg@100%|auto)	
   
 * Make the Connections as shown in the figure

@@ -21,6 +21,8 @@ Lemon cell
 * The current flowing through the circuit with the load resistor connected, according to Ohm's law, is I = V/R = V(CH1)/1000 .
 * The voltage drop = ( V(CH1) without R connected - V(CH1) with R connected ) 
 * Internal resistance = voltage drop/current(I) 
+
+#### Schematic
 	
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/lemon_battery.png@100%|auto)
 
