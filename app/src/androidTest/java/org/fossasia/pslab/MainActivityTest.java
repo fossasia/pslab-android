@@ -32,15 +32,17 @@ public class MainActivityTest {
     public void checkingAllFragments() throws Throwable {
         Thread.sleep(2000);
 
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_device));
         // checking home fragment views
         onView(withId(R.id.img_device_status)).check(matches(isDisplayed()));
         onView(withId(R.id.tv_device_status)).check(matches(isDisplayed()));
         onView(withId(R.id.tv_device_version)).check(matches(isDisplayed()));
         onView(withId(R.id.tv_initialisation_status)).check(matches(isDisplayed()));
 
-        // Shifting to Applications Fragment
+        // Shifting to Instruments Fragment
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_applications));
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_instruments));
         Thread.sleep(1000);
 
         // checking all is visible tiles inside Application Fragment
@@ -50,18 +52,6 @@ public class MainActivityTest {
         onView(withText("Data Sensor Logger")).check(matches(isDisplayed()));
         onView(withText("Sensor QuickView")).check(matches(isDisplayed()));
         
-        // Shifting to Saved Experiments Fragment
-        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_saved_experiments));
-        Thread.sleep(1000);
-        // checking Saved Experiment Fragment View
-        onView(withId(R.id.saved_experiment_fragment)).check(matches(isDisplayed()));
-
-        // Shifting to Design Experiments Fragment
-        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_design_experiments));
-        Thread.sleep(1000);
-
         // Shifting to Settings Fragment
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings));

@@ -1,0 +1,17 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_pslab_connected"
+        android:icon="@drawable/ic_pslab_connected"
+        android:title="Connect PSLab"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_pslab_disconnected"
+        android:icon="@drawable/ic_pslab_disconnected"
+        app:showAsAction="ifRoom"
+        android:title="Disconnect PSLab">
+    </item>
+
+</menu>
+

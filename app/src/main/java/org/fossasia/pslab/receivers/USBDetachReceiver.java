@@ -46,6 +46,8 @@ public class USBDetachReceiver extends BroadcastReceiver {
                         if (currentFragment instanceof HomeFragment) {
                             mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(false, false)).commitAllowingStateLoss();
                         }
+                        mainActivity.PSLabisConnected = false;
+                        mainActivity.invalidateOptionsMenu();
                     }
                 } else {
                     Log.v(TAG, "USB Device is null");
