@@ -551,4 +551,106 @@
     <string name="closing_oscilloscope_message">Are you sure you want to close the Oscilloscope?</string>
     <string name="work_in_progress">The experiment setup is under development, Will be available soon!!!</string>
 
+    <string-array name="experiments_list">
+
+        // Electronics Experiment -> root
+            // *BJTs and FETs
+        <item>N-FET Output Characteristics</item>
+        <item>N-FET Transfer Characteristics</item>
+        <item>BJT CB Characteristics</item>
+        <item>BJT Output Characteristics</item>
+        <item>BJT Input Characteristics</item>
+        <item>BJT Transfer Characteristics</item>
+        <item>BJT CE Backup</item>
+        <item>BJT Amplifier</item>
+
+            // *Diode Circuits
+        <item>Zener IV Characteristics</item>
+        <item>Diode IV Characteristics</item>
+        <item>Diode Clamping</item>
+        <item>Diode Clipping</item>
+        <item>Half Wave Rectifier</item>
+        <item>Full Wave Rectifier</item>
+
+            // *OpAmp Circuits
+        <item>Inverting Op-Amp</item>
+        <item>Ramp Generator</item>
+        <item>Non Inverting Op-Amp</item>
+        <item>Summing Junction</item>
+        <item>Precision Rectifier</item>
+
+            // *Oscillators
+        <item>Astable Multivibrator</item>
+        <item>Colpitts Oscillator</item>
+        <item>Phase Shift Oscillator</item>
+        <item>Wien Bridge Oscillator</item>
+        <item>Monostable Multivibrator</item>
+
+            // *Communication
+        <item>Amplitude Modulation</item>
+
+
+        // Electrical Experiments -> root
+        <item>Transients RLC Response</item>
+        <item>Filter Characteristics</item>
+        <item>Capacitive Reactance</item>
+        <item>Inductive Reactance</item>
+        <item>Ohms Law</item>
+        <item>RC Phase Shift</item>
+        <item>LR Phase Shift</item>
+        <item>LCR Steady State</item>
+        <item>RC Integrals, Derivatives</item>
+        <item>Voltage Controlled Low Pass Filter</item>
+
+
+        //Physics Experiments -> root
+        <item>Speed of Sound</item>
+        <item>Pendulum Time Period</item>
+        <item>Random Sampling</item>
+        <item>Simple Pendulum</item>
+        <item>Piezo Bandwidth Characteristics</item>
+        <item>MPU6050 IMU Pendulum</item>
+
+        // Add-On Modules -> root
+            // *Add-On Modules
+        <item>Dust Sensor DSM501</item>
+        <item>OLED Display</item>
+        <item>Wirelsess RGB Lights</item>
+        <item>Sensor TMP Logger</item>
+        <item>RFID Reader MF522</item>
+        <item>RGB LED WS2812B</item>
+
+            // *Various Utilities
+        <item>ADS1115 Based Calibrator</item>
+        <item>Device Testing</item>
+        <item>Servo Motors</item>
+        <item>Stepper Motors</item>
+        <item>Make a Flow Chart</item>
+        <item>Calibration Loader</item>
+        <item>Device Calibrator</item>
+        <item>Remote Access</item>
+
+
+        // School Level -> root
+        <item>Measure Voltages</item>
+        <item>Lemon Cell</item>
+        <item>AC Generator</item>
+        <item>Resistance Measurement</item>
+        <item>Human Body Resistance</item>
+        <item>Electromagnetic Induction</item>
+        <item>Resistance of Water</item>
+        <item>Frequency of Sound</item>
+        <item>Piezo Buzzer</item>
+        <item>Sound Beats Phenomenon</item>
+        <item>Capacitance Measurement</item>
+        <item>Semiconductor Diode</item>
+        <item>Light Dependent Resistor</item>
+        <item>Capacitor Discharge</item>
+        <item>Ultrasonic Range Finder</item>
+    </string-array>
+
+    <string name="Search_Bar_Title">Search Experiments</string>
+    <string name="Search_Bar_Hint_Text">Search..</string>
+    <string name="search_menu_title">Search</string>
+
 </resources>
