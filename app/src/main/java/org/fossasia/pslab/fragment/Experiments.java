@@ -35,12 +35,10 @@ import ir.mirrajabi.searchdialog.core.BaseSearchDialogCompat;
 import ir.mirrajabi.searchdialog.core.SearchResultListener;
 
 /**
- * Created by viveksb007 on 15/3/17.
- * Modified by Padmal on 30/7/17
- * Modified by Harsh on 8/5/18
+ * Created by viveksb007 on 15/3/17
  */
 
-public class SavedExperiments extends Fragment {
+public class Experiments extends Fragment {
 
     private Unbinder unbinder;
     private Context context;
@@ -49,8 +47,8 @@ public class SavedExperiments extends Fragment {
     @BindView(R.id.saved_experiment_container)
     LinearLayout experimentListContainer;
 
-    public static SavedExperiments newInstance() {
-        return new SavedExperiments();
+    public static Experiments newInstance() {
+        return new Experiments();
     }
 
     @Override
@@ -89,7 +87,7 @@ public class SavedExperiments extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
 
-        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, SavedExperiments.class.getSimpleName());
+        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, Experiments.class.getSimpleName());
     }
 
     @Override

@@ -19,6 +19,7 @@ import org.fossasia.pslab.communication.peripherals.NRF24L01;
 import org.fossasia.pslab.communication.peripherals.RadioLink;
 import org.fossasia.pslab.communication.peripherals.SPI;
 import org.fossasia.pslab.fragment.HomeFragment;
+import org.fossasia.pslab.others.InitializationVariable;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -114,6 +115,9 @@ public class ScienceLab {
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    if (HomeFragment.booleanVariable == null) {
+                                        HomeFragment.booleanVariable = new InitializationVariable();
+                                    }
                                     HomeFragment.booleanVariable.setVariable(true);
                                 }
                             });
