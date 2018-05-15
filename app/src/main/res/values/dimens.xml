@@ -95,4 +95,14 @@
     <dimen name="stepper_motor_margin">5dp</dimen>
     <dimen name="stepper_motor_text_size">16sp</dimen>
 
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="width_20dp">20dp</dimen>
+    <dimen name="padding_5dp">5dp</dimen>
+    <dimen name="height_1dp">1dp</dimen>
+    <dimen name="padding_20dp">20dp</dimen>
+    <dimen name="margin_50dp">50dp</dimen>
+    <dimen name="text_14sp">14sp</dimen>
+    <dimen name="height_48dp">48dp</dimen>
+    <dimen name="text_18sp">18sp</dimen>
+
 </resources>

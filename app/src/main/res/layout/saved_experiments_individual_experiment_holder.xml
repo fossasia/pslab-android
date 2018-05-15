@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/selectableItemBackground"
-    android:minHeight="48dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:minHeight="@dimen/height_48dp"
+    android:paddingLeft="@dimen/padding_20dp"
+    android:paddingRight="@dimen/padding_20dp">
 
     <ImageView
         android:id="@+id/experiment_icon"
@@ -15,8 +15,10 @@
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_50dp"
+        android:layout_marginStart="@dimen/margin_50dp"
         android:contentDescription="@string/experiment_icon"
-        android:src="@drawable/ic_settings_black_24dp" />
+        android:src="@drawable/text_doc" />
 
     <TextView
         android:id="@+id/individual_experiment_title"
@@ -24,12 +26,12 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginLeft="@dimen/margin_10dp"
+        android:layout_marginStart="@dimen/margin_10dp"
         android:layout_toEndOf="@+id/experiment_icon"
         android:layout_toRightOf="@id/experiment_icon"
         android:gravity="center_vertical"
-        android:textColor="#424242"
-        android:textSize="14sp" />
+        android:textColor="@color/grey"
+        android:textSize="@dimen/text_14sp" />
 
 </RelativeLayout>

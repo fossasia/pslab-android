@@ -7,4 +7,6 @@
     <color name="darkWhite">#dadada</color>
     <color name="black">#000000</color>
     <color name="background">#FAFAFA</color>
+    <color name="dark_grey">#e0e0e0</color>
+    <color name="grey">#424242</color>
 </resources>

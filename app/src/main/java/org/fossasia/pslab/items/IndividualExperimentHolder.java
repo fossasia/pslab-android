@@ -4,9 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
 import com.unnamed.b.atv.model.TreeNode;
-
 import org.fossasia.pslab.R;
 
 /**
@@ -24,10 +22,8 @@ public class IndividualExperimentHolder extends TreeNode.BaseNodeViewHolder<Indi
 
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.saved_experiments_individual_experiment_holder, null, false);
-
-        TextView experimentName = view.findViewById(R.id.individual_experiment_title);
+        TextView experimentName = (TextView) view.findViewById(R.id.individual_experiment_title);
         experimentName.setText(experiment.label);
-
         return view;
     }
 
