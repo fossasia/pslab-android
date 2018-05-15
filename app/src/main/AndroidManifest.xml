@@ -17,11 +17,13 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.SplashActivity"
+        <activity
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,14 +33,14 @@
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
+
             <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-        <activity android:name=".activity.AboutUs"/>
+        <activity android:name=".activity.AboutUs" />
         <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ShowLoggedData" />
-        <activity android:name=".activity.WavegenActivity" />
         <activity
             android:name=".activity.PerformExperimentActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
@@ -54,6 +56,7 @@
             android:name=".activity.LogicalAnalyzerActivity"
             android:configChanges="screenSize|orientation" />
         <activity android:name=".activity.SensorDataLoggerActivity" />
+        <activity android:name=".activity.MultimeterActivity" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />
     </application>
