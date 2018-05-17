@@ -36,7 +36,6 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity android:name=".activity.AboutUs"/>
-        <activity android:name=".activity.HelpAndFeedback" />
         <activity android:name=".activity.ShowLoggedData" />
         <activity
             android:name=".activity.PerformExperimentActivity"
