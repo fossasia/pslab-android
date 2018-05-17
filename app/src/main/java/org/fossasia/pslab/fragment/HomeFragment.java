@@ -59,7 +59,9 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scienceLab = ScienceLabCommon.scienceLab;
-        booleanVariable = new InitializationVariable();
+        if (booleanVariable == null) {
+            booleanVariable = new InitializationVariable();
+        }
         progressDialog = new ProgressDialog(getActivity());
         if (scienceLab.calibrated)
             booleanVariable.setVariable(true);

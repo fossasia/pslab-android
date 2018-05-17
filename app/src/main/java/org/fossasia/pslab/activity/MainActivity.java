@@ -32,8 +32,8 @@ import org.fossasia.pslab.fragment.AboutUsFragment;
 import org.fossasia.pslab.fragment.ApplicationsFragment;
 import org.fossasia.pslab.fragment.DesignExperiments;
 import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
+import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
-import org.fossasia.pslab.fragment.SavedExperiments;
 import org.fossasia.pslab.fragment.SettingsFragment;
 
 import java.io.IOException;
@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-    @Nullable @BindView(R.id.drawer_layout)
+    @Nullable
+    @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -65,15 +66,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static int navItemIndex = 0;
 
-    private static final String TAG_HOME = "home";
-
-    private static final String TAG_APPLICATIONS = "applications";
-    private static final String TAG_SAVED_EXPERIMENTS = "savedExperiments";
-    private static final String TAG_DESIGN_EXPERIMENTS = "designExperiments";
+    private static final String TAG_DEVICE = "device";
+    private static final String TAG_INSTRUMENTS = "instruments";
     private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
     private static final String TAG_HELPFEEDBACK = "helpFeedback";
     private static String CURRENT_TAG = TAG_HOME;
+    private static String CURRENT_TAG = TAG_INSTRUMENTS;
     private String[] activityTitles;
 
     private boolean shouldLoadHomeFragOnBackPress = true;
@@ -136,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
-            CURRENT_TAG = TAG_HOME;
+            CURRENT_TAG = TAG_INSTRUMENTS;
             loadHomeFragment();
         }
     }
@@ -167,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         if (mPendingRunnable != null) {
             mHandler.post(mPendingRunnable);
         }
-        if(drawer != null) {
+        if (drawer != null) {
             drawer.closeDrawers();
             invalidateOptionsMenu();
         }
@@ -176,19 +175,15 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getHomeFragment() throws IOException {
         switch (navItemIndex) {
             case 1:
-                return ApplicationsFragment.newInstance();
+                return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
             case 2:
-                return SavedExperiments.newInstance();
-            case 3:
-                return DesignExperiments.newInstance();
-            case 4:
                 return SettingsFragment.newInstance();
-            case 5:
+            case 3:
                 return AboutUsFragment.newInstance();
             case 6:
                 return HelpAndFeedbackFragment.newInstance();
             default:
-                return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
+                return InstrumentsFragment.newInstance();
         }
     }
 
@@ -209,28 +204,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.nav_home:
+                    case R.id.nav_instruments:
                         navItemIndex = 0;
-                        CURRENT_TAG = TAG_HOME;
+                        CURRENT_TAG = TAG_INSTRUMENTS;
                         break;
-                    case R.id.nav_applications:
+                    case R.id.nav_device:
                         navItemIndex = 1;
-                        CURRENT_TAG = TAG_APPLICATIONS;
-                        break;
-                    case R.id.nav_saved_experiments:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_SAVED_EXPERIMENTS;
-                        break;
-                    case R.id.nav_design_experiments:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_DESIGN_EXPERIMENTS;
+                        CURRENT_TAG = TAG_DEVICE;
                         break;
                     case R.id.nav_settings:
-                        navItemIndex = 4;
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_SETTINGS;
                         break;
                     case R.id.nav_about_us:
-                        navItemIndex = 5;
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
                     case R.id.nav_help_feedback:
@@ -283,22 +270,20 @@ public class MainActivity extends AppCompatActivity {
         if (shouldLoadHomeFragOnBackPress) {
             if (navItemIndex != 0) {
                 navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
+                CURRENT_TAG = TAG_INSTRUMENTS;
                 loadHomeFragment();
                 return;
             }
         }
-        if (fragment instanceof HomeFragment) {
+        if (fragment instanceof InstrumentsFragment) {
             if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
                 super.onBackPressed();
                 return;
             } else {
                 Toast.makeText(getBaseContext(), getString(R.string.Toast_double_tap), Toast.LENGTH_SHORT).show();
             }
-
             mBackPressed = System.currentTimeMillis();
         }
-
     }
 
     @Override
@@ -327,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                         if (device != null) {
                             hasPermission = true;
                             mScienceLabCommon.openDevice(communicationHandler);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound())).commit();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.frame, InstrumentsFragment.newInstance()).commit();
                         }
                     } else {
                         Log.d(TAG, "permission denied for device " + device);
