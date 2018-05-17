@@ -536,6 +536,7 @@
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
     <string name="work_in_progress">The experiment setup is under development, Will be available soon!!!</string>
+    <string name="txtCredits"><a href="https://gitter.im/fossasia/pslab">Help and Feedback</a></string>
 
     <string-array name="experiments_list">
 
