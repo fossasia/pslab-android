@@ -3,6 +3,7 @@ package org.fossasia.pslab.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
@@ -604,6 +605,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onBackPressed() {
         finish();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override

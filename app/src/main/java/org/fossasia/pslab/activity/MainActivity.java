@@ -31,10 +31,9 @@ import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.CommunicationHandler;
-import org.fossasia.pslab.fragment.ApplicationsFragment;
-import org.fossasia.pslab.fragment.DesignExperiments;
+import org.fossasia.pslab.fragment.AboutUsFragment;
+import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
-import org.fossasia.pslab.fragment.SavedExperiments;
 import org.fossasia.pslab.fragment.SettingsFragment;
 import org.fossasia.pslab.others.CustomTabService;
 import org.fossasia.pslab.others.InitializationVariable;
@@ -70,13 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static int navItemIndex = 0;
 
-    private static final String TAG_HOME = "home";
-
-    private static final String TAG_APPLICATIONS = "applications";
-    private static final String TAG_SAVED_EXPERIMENTS = "savedExperiments";
-    private static final String TAG_DESIGN_EXPERIMENTS = "designExperiments";
+    private static final String TAG_DEVICE = "device";
+    private static final String TAG_INSTRUMENTS = "instruments";
     private static final String TAG_SETTINGS = "settings";
-    private static String CURRENT_TAG = TAG_HOME;
+    private static final String TAG_ABOUTUS = "aboutUs";
+    private static String CURRENT_TAG = TAG_INSTRUMENTS;
     private String[] activityTitles;
 
     private boolean shouldLoadHomeFragOnBackPress = true;
@@ -142,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
-            CURRENT_TAG = TAG_HOME;
+            CURRENT_TAG = TAG_INSTRUMENTS;
             loadHomeFragment();
         }
     }
@@ -182,15 +179,13 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getHomeFragment() throws IOException {
         switch (navItemIndex) {
             case 1:
-                return ApplicationsFragment.newInstance();
+                return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
             case 2:
-                return SavedExperiments.newInstance();
-            case 3:
-                return DesignExperiments.newInstance();
-            case 4:
                 return SettingsFragment.newInstance();
+            case 3:
+                return AboutUsFragment.newInstance();
             default:
-                return HomeFragment.newInstance(scienceLab.isConnected(), scienceLab.isDeviceFound());
+                return InstrumentsFragment.newInstance();
         }
     }
 
@@ -207,31 +202,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.nav_home:
+                    case R.id.nav_instruments:
                         navItemIndex = 0;
-                        CURRENT_TAG = TAG_HOME;
+                        CURRENT_TAG = TAG_INSTRUMENTS;
                         break;
-                    case R.id.nav_applications:
+                    case R.id.nav_device:
                         navItemIndex = 1;
-                        CURRENT_TAG = TAG_APPLICATIONS;
-                        break;
-                    case R.id.nav_saved_experiments:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_SAVED_EXPERIMENTS;
-                        break;
-                    case R.id.nav_design_experiments:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_DESIGN_EXPERIMENTS;
+                        CURRENT_TAG = TAG_DEVICE;
                         break;
                     case R.id.nav_settings:
-                        navItemIndex = 4;
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_SETTINGS;
                         break;
                     case R.id.nav_about_us:
-                        startActivity(new Intent(MainActivity.this, AboutUs.class));
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        navItemIndex = 3;
+                        CURRENT_TAG = TAG_ABOUTUS;
                         break;
                     case R.id.nav_help_feedback:
                         startActivity(new Intent(MainActivity.this, HelpAndFeedback.class));
@@ -289,22 +274,20 @@ public class MainActivity extends AppCompatActivity {
         if (shouldLoadHomeFragOnBackPress) {
             if (navItemIndex != 0) {
                 navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
+                CURRENT_TAG = TAG_INSTRUMENTS;
                 loadHomeFragment();
                 return;
             }
         }
-        if (fragment instanceof HomeFragment) {
+        if (fragment instanceof InstrumentsFragment) {
             if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
                 super.onBackPressed();
                 return;
             } else {
                 Toast.makeText(getBaseContext(), getString(R.string.Toast_double_tap), Toast.LENGTH_SHORT).show();
             }
-
             mBackPressed = System.currentTimeMillis();
         }
-
     }
 
     @Override
@@ -401,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
                             invalidateOptionsMenu();
                             Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
                             if (navItemIndex == 0) {
-                                getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound())).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.frame, InstrumentsFragment.newInstance()).commit();
                             } else {
                                 Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
                             }
