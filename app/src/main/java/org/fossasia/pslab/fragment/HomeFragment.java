@@ -1,6 +1,5 @@
 package org.fossasia.pslab.fragment;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,9 +12,7 @@ import android.widget.TextView;
 
 import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
-import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.InitializationVariable;
-import org.fossasia.pslab.others.ScienceLabCommon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +50,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        scienceLab = scienceLab;
         if (booleanVariable == null) {
             booleanVariable = new InitializationVariable();
         }
