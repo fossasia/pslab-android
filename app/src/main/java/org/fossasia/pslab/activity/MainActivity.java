@@ -20,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,6 +31,7 @@ import android.widget.Toast;
 
 import org.fossasia.pslab.communication.CommunicationHandler;
 import org.fossasia.pslab.fragment.AboutUsFragment;
+import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
 import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
 import org.fossasia.pslab.fragment.SettingsFragment;
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_INSTRUMENTS = "instruments";
     private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
+    private static final String TAG_HELPFEEDBACK = "helpFeedback";
     private static String CURRENT_TAG = TAG_INSTRUMENTS;
     private String[] activityTitles;
 
@@ -175,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 return SettingsFragment.newInstance();
             case 3:
                 return AboutUsFragment.newInstance();
+            case 4:
+                return HelpAndFeedbackFragment.newInstance();
             default:
                 return InstrumentsFragment.newInstance();
         }
@@ -184,8 +190,38 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(activityTitles[navItemIndex]);
     }
 
+    private void unCheckAllMenuItems(Menu menu) {
+        int size = menu.size();
+        for (int i = 0; i < size; i++) {
+            final MenuItem item = menu.getItem(i);
+            item.setChecked(false);
+        }
+    }
+
     private void selectNavMenu() {
-        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+        int size_menu = navigationView.getMenu().size();
+        for (int i = 0; i < size_menu; i++) {
+            final MenuItem item = navigationView.getMenu().getItem(i);
+            if (item.hasSubMenu()) {
+                unCheckAllMenuItems(item.getSubMenu());
+            } else {
+                item.setChecked(false);
+            }
+        }
+        switch (navItemIndex) {
+            case 0: case 1: case 2:
+                navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+                break;
+            case 3:
+                navigationView.getMenu().getItem(3).getSubMenu().getItem(1).setChecked(true);
+                break;
+            case 4:
+                navigationView.getMenu().getItem(3).getSubMenu().getItem(0).setChecked(true);
+                break;
+            default:
+                navigationView.getMenu().getItem(0).setChecked(true);
+                break;
+        }
     }
 
     private void setUpNavigationView() {
@@ -210,10 +246,8 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
                     case R.id.nav_help_feedback:
-                        startActivity(new Intent(MainActivity.this, HelpAndFeedback.class));
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        navItemIndex = 4;
+                        CURRENT_TAG = TAG_HELPFEEDBACK;
                         break;
                     case R.id.nav_report_us:
                         customTabService.launchUrl("https://github.com/fossasia/pslab-android/issues");
