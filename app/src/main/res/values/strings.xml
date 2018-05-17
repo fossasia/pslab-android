@@ -34,7 +34,10 @@
         <item>Device</item>
         <item>Settings</item>
         <item>PSLab</item>
-	<item>Help &amp; Feedback</item>
+<<<<<<<<< Temporary merge branch 1
+        <item>Help &amp; Feedback</item>
+=========
+>>>>>>>>> Temporary merge branch 2
     </string-array>
 
     <string name="activity_title_about_us">About Us</string>

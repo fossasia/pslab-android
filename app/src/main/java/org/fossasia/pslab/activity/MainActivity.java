@@ -29,10 +29,15 @@ import android.widget.Toast;
 
 import org.fossasia.pslab.communication.CommunicationHandler;
 import org.fossasia.pslab.fragment.AboutUsFragment;
++<<<<<<<<< Temporary merge branch 1
+import org.fossasia.pslab.fragment.ApplicationsFragment;
+import org.fossasia.pslab.fragment.DesignExperiments;
+import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
+=========
 import org.fossasia.pslab.fragment.InstrumentsFragment;
+>>>>>>>>> Temporary merge branch 2
 import org.fossasia.pslab.fragment.HomeFragment;
 import org.fossasia.pslab.fragment.SettingsFragment;
-import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
 
 import java.io.IOException;
 
@@ -68,8 +73,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_INSTRUMENTS = "instruments";
     private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
+<<<<<<<<< Temporary merge branch 1
     private static final String TAG_HELPFEEDBACK = "helpFeedback";
+    private static String CURRENT_TAG = TAG_HOME;
+=========
     private static String CURRENT_TAG = TAG_INSTRUMENTS;
+>>>>>>>>> Temporary merge branch 2
     private String[] activityTitles;
 
     private boolean shouldLoadHomeFragOnBackPress = true;
@@ -175,10 +184,15 @@ public class MainActivity extends AppCompatActivity {
                 return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
             case 2:
                 return SettingsFragment.newInstance();
+<<<<<<<<< Temporary merge branch 1
+            case 5:
+                return AboutUsFragment.newInstance();
+            case 6:
+                return HelpAndFeedbackFragment.newInstance();
+=========
             case 3:
                 return AboutUsFragment.newInstance();
-	        case 4:
-		        return HelpAndFeedbackFragment.newInstance();
+>>>>>>>>> Temporary merge branch 2
             default:
                 return InstrumentsFragment.newInstance();
         }
@@ -189,8 +203,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectNavMenu() {
-        if(navItemIndex == 4)
-            navigationView.getMenu().getItem(3).setChecked(true);
+       if(navItemIndex == 6){
+            navigationView.getMenu().getItem(5).setChecked(true);
+        }
         else
             navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
@@ -213,11 +228,15 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_SETTINGS;
                         break;
                     case R.id.nav_about_us:
+<<<<<<<<< Temporary merge branch 1
+                        navItemIndex = 5;
+=========
                         navItemIndex = 3;
+>>>>>>>>> Temporary merge branch 2
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
                     case R.id.nav_help_feedback:
-                        navItemIndex = 4;
+                        navItemIndex = 6;
                         CURRENT_TAG = TAG_HELPFEEDBACK;
                         break;
                     case R.id.nav_report_us:
