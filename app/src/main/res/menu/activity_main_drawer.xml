@@ -2,22 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/nav_home" />
-        <item
-            android:id="@+id/nav_applications"
+            android:id="@+id/nav_instruments"
             android:icon="@drawable/ic_apps_black_24dp"
-            android:title="@string/nav_applications"/>
+            android:title="@string/nav_instruments"/>
         <item
-            android:id="@+id/nav_saved_experiments"
-            android:icon="@drawable/ic_save_black_24dp"
-            android:title="@string/nav_saved_experiments" />
-        <item
-            android:id="@+id/nav_design_experiments"
-            android:icon="@drawable/ic_explore_black_24dp"
-            android:title="@string/nav_design_experiment" />
-
+            android:id="@+id/nav_device"
+            android:icon="@drawable/ic_developer_board_black_24dp"
+            android:title="@string/nav_device" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
