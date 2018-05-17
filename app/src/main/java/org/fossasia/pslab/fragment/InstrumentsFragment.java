@@ -20,7 +20,6 @@ import org.fossasia.pslab.activity.SensorDataLoggerActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.activity.SensorActivity;
-import org.fossasia.pslab.activity.WavegenActivity;
 import org.fossasia.pslab.items.ApplicationItem;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.ApplicationAdapter;
@@ -33,14 +32,14 @@ import java.util.List;
  * Created by viveksb007 on 29/3/17.
  */
 
-public class ApplicationsFragment extends Fragment {
+public class InstrumentsFragment extends Fragment {
 
     private ApplicationAdapter applicationAdapter;
     private List<ApplicationItem> applicationItemList;
     private Context context;
 
-    public static ApplicationsFragment newInstance() {
-        return new ApplicationsFragment();
+    public static InstrumentsFragment newInstance() {
+        return new InstrumentsFragment();
     }
 
     @Nullable
@@ -58,7 +57,7 @@ public class ApplicationsFragment extends Fragment {
                         switch (item.getApplicationName()) {
                             case "Oscilloscope":
                                 intent = new Intent(context, OscilloscopeActivity.class);
-                                intent.putExtra("who", "Applications");
+                                intent.putExtra("who", "Instruments");
                                 startActivity(intent);
                                 break;
                             case "Control":
@@ -75,10 +74,6 @@ public class ApplicationsFragment extends Fragment {
                                 break;
                             case "Data Sensor Logger":
                                 intent = new Intent(context, SensorDataLoggerActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Wave Generator":
-                                intent = new Intent(context, WavegenActivity.class);
                                 startActivity(intent);
                                 break;
                         }
@@ -133,7 +128,6 @@ public class ApplicationsFragment extends Fragment {
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.sensor_quick_view), applications[4])
             );
-            applicationItemList.add(new ApplicationItem(getResources().getString(R.string.wavegen), applications[5]));
             return null;
         }
 
@@ -154,6 +148,6 @@ public class ApplicationsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, ApplicationsFragment.class.getSimpleName());
+        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, InstrumentsFragment.class.getSimpleName());
     }
 }
