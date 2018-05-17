@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import org.fossasia.pslab.communication.CommunicationHandler;
 import org.fossasia.pslab.fragment.AboutUsFragment;
+import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
 import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
 import org.fossasia.pslab.fragment.SettingsFragment;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_INSTRUMENTS = "instruments";
     private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
+    private static final String TAG_HELPFEEDBACK = "helpFeedback";
     private static String CURRENT_TAG = TAG_INSTRUMENTS;
     private String[] activityTitles;
 
@@ -175,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
                 return SettingsFragment.newInstance();
             case 3:
                 return AboutUsFragment.newInstance();
+            case 4:
+                return HelpAndFeedbackFragment.newInstance();
             default:
                 return InstrumentsFragment.newInstance();
         }
@@ -185,7 +189,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectNavMenu() {
-        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+       if(navItemIndex == 4){
+            navigationView.getMenu().getItem(3).setChecked(true);
+        }
+        else
+            navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
     private void setUpNavigationView() {
@@ -210,10 +218,8 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
                     case R.id.nav_help_feedback:
-                        startActivity(new Intent(MainActivity.this, HelpAndFeedback.class));
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        navItemIndex = 4;
+                        CURRENT_TAG = TAG_HELPFEEDBACK;
                         break;
                     case R.id.nav_report_us:
                         customTabService.launchUrl("https://github.com/fossasia/pslab-android/issues");
