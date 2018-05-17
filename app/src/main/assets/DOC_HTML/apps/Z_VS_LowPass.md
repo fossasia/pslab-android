@@ -1,6 +1,8 @@
 Voltage controlled Low-Pass Filter
 ---
 
+#### Schematic
+
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/ad9833-lowpass.svg@100%|auto)
 
 * Make the Connections as shown in the figure.

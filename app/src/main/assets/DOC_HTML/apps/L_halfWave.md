@@ -7,6 +7,8 @@ Half-Wave Rectifier
 
 * Only a diode is needed to clip out the negative part of the input signal.
 
+#### Schematic
+
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/halfwave.svg@100%|auto)
 
 * Make the Connections as shown in the figure.

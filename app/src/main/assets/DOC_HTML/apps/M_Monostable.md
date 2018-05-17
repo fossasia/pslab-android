@@ -1,5 +1,7 @@
-Transistors : Monostable Multivibrator
+Monostable Multivibrator
 ---
+
+#### Schematic
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/monostable-multivibrator.svg@100%|auto)
 

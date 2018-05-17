@@ -1,6 +1,8 @@
 L-R Circuit Phase Shift
 ---
 
+#### Schematic
+
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/LR.svg@100%|auto)	
 
 * Make the Connections as shown in the figure

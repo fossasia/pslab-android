@@ -5,6 +5,8 @@ Ultrasonic Range Finder
 * It first emits a high frequency sound (40KHz) , and starts a stopwatch. This emitted sound pulse reflects off the nearest object, and returns to the sensor, which immediately stops the stopwatch.
 * Using the known speed of sound, and the measured time delay, the distance travelled by the sound pulse is calculated. The distance to the object is half of this value.
 
+#### Schematic
+
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/HCSR04.svg@100%|auto)
 
 ### Measuring time period of a pendulum

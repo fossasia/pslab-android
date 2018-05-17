@@ -1,6 +1,8 @@
 Input Characteristics
 ---
 
+#### Schematic
+
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/tranCE.svg@100%|auto)
 
 * Make the connections as shown in the figure

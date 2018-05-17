@@ -1,8 +1,7 @@
-Non-Inverting
+Non-Inverting Op-Amp
 ---
 
-### Op-Amp Non-Inverting
-
+### Schematic
 
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/Non-Inverting.svg@100%|auto)
 

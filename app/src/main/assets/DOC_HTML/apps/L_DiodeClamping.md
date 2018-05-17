@@ -1,6 +1,8 @@
 Clamping circuit using a diode
 ---
 
+#### Schematic
+
 ![](file:///android_asset/DOC_HTML/apps/images/schematics/Clamper.svg@100%|auto)
 
 * Make the Connections as shown in the figure.

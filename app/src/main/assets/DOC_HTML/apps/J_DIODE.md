@@ -1,4 +1,4 @@
-Diode
+Semi-Conductor Diode
 ---
 
 ### One way traffic for current: The semiconductor Diode
