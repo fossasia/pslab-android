@@ -54,28 +54,37 @@
             <EditText
                 android:id="@+id/edittext_control_main"
                 android:layout_width="0dp"
-                android:layout_weight="2.5"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/textsize_edittext"
-                android:padding="@dimen/control_edittext_padding"
-                android:layout_marginTop="@dimen/control_edittext_padding"
                 android:layout_marginBottom="@dimen/control_edittext_padding"
-                android:inputType="numberDecimal|numberSigned"
+                android:layout_marginTop="@dimen/control_edittext_padding"
+                android:layout_weight="2.5"
                 android:background="@drawable/control_edittext"
-                tools:text="Value"/>
+                android:gravity="center"
+                android:inputType="numberDecimal|numberSigned"
+                android:padding="@dimen/control_edittext_padding"
+                android:textSize="@dimen/textsize_edittext"
+                tools:text="Value" />
 
 
             <Button
                 android:id="@+id/button_control_main2"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="9dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/plus"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/control_textsize_large"
-                android:text="@string/plus"/>
+                android:textSize="@dimen/control_textsize_large" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:text="Hz"
+                android:textSize="12sp"
+                android:paddingTop="9dp"/>
 
             <Button
                 android:id="@+id/button_control_main3"
@@ -97,6 +106,16 @@
                 tools:text="Value"
                 android:gravity="center"
                 android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:text="Hz"
+                android:textSize="12sp"
+                android:paddingTop="9dp"/>
+
 
         </LinearLayout>
 

@@ -77,6 +77,16 @@
                 android:textSize="@dimen/control_textsize_large"
                 android:text="@string/plus"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:text="Hz"
+                android:textSize="12sp"
+                android:paddingTop="9dp"/>
+
+
             <Button
                 android:id="@+id/button_control_main3"
                 android:layout_width="0dp"
@@ -97,6 +107,16 @@
                 tools:text="Value"
                 android:gravity="center"
                 android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:text="Hz"
+                android:textSize="12sp"
+                android:paddingTop="9dp"/>
+
 
         </LinearLayout>
 

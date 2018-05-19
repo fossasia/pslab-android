@@ -494,6 +494,8 @@
     <string name="collector_voltage_v">Collector Voltage (V)</string>
     <string name="hyphen">-</string>
     <string name="plus">+</string>
+    <string name="Hz">Hz</string>
+    <string name="value">Value</string>
     <string name="select_a_value">Select a Value </string>
     <string name="experiment_setup_aim">AIM : To study Diode I-V charateristics</string>
     <string name="lorem_ipsum_text">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</string>
