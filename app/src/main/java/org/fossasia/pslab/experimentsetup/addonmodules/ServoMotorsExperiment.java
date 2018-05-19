@@ -30,7 +30,6 @@ public class ServoMotorsExperiment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.servo_motor_layout, container, false);
         Button btnSetServos = view.findViewById(R.id.btn_set_angles);
         btnSetServos.setOnClickListener(new View.OnClickListener() {

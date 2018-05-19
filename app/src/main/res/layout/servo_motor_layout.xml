@@ -152,5 +152,4 @@
             android:text="@string/reset_angles"
             android:theme="@style/AppTheme.Button" />
     </LinearLayout>
-
 </LinearLayout>

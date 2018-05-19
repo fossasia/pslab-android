@@ -18,6 +18,9 @@
 
     <dimen name="title_font_size">14sp</dimen>
 
+    <dimen name="control_layout_marginTopBottom">4dp</dimen>
+    <dimen name="control_layout_marginEndStart">8dp</dimen>
+    <dimen name="control_layout_height">150dp</dimen>
     <dimen name="control_margin">10dp</dimen>
     <dimen name="control_margin_small">5dp</dimen>
     <dimen name="control_margin_medium">15dp</dimen>
@@ -33,6 +36,8 @@
     <dimen name="control_edittext_padding">2dp</dimen>
     <dimen name="control_read_border_hdpi">5dp</dimen>
     <dimen name="control_read_height">60dp</dimen>
+    <dimen name="control_layout_width">0dp</dimen>
+    <dimen name="control_margin_text">5dp</dimen>
 
     <dimen name="sensor_title_font">16sp</dimen>
     <dimen name="sensor_body_font">14sp</dimen>
