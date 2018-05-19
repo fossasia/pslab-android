@@ -1,6 +1,7 @@
 package org.fossasia.pslab.activity;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
@@ -509,36 +510,60 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         switch (v.getId()) {
             case R.id.button_channel_parameters_os:
                 replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+                clearTextBackgroundColor();
+                channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_channel_parameters_os:
                 replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+                clearTextBackgroundColor();
+                channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_timebase_os:
                 replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
+                clearTextBackgroundColor();
+                timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_timebase_tigger_os:
                 replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
+                clearTextBackgroundColor();
+                timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_data_analysis_os:
                 replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
+                clearTextBackgroundColor();
+                dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_data_analysis_os:
                 replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
+                clearTextBackgroundColor();
+                dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_xy_plot_os:
                 replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
+                clearTextBackgroundColor();
+                xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_xy_plot_os:
                 replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
+                clearTextBackgroundColor();
+                xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
         }
+    }
+
+    @SuppressLint("ResourceType")
+    private void clearTextBackgroundColor() {
+        channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.customBorderFill));
+        timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.customBorderFill));
+        dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.customBorderFill));
+        xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.customBorderFill));
     }
 
     public void onWindowFocusChanged() {
