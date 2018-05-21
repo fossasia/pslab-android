@@ -60,9 +60,9 @@ public class NonInvertingOpAmpExperiment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.opamp_setup, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
-        opampGain = (TextView) view.findViewById(R.id.opamp_gain);
-        Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
+        outputChart = view.findViewById(R.id.line_chart);
+        opampGain = view.findViewById(R.id.opamp_gain);
+        Button btnConfigure = view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,8 +76,8 @@ public class NonInvertingOpAmpExperiment extends Fragment{
 
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etFrequency = (TextInputEditText) customView.findViewById(R.id.opamp_frequency);
-                                tilFrequency = (TextInputLayout) customView.findViewById(R.id.opamp_frequency_layout);
+                                etFrequency = customView.findViewById(R.id.opamp_frequency);
+                                tilFrequency = customView.findViewById(R.id.opamp_frequency_layout);
 
                                 if (TextUtils.isEmpty(etFrequency.getText().toString())) {
                                     tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);

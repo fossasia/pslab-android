@@ -30,7 +30,7 @@ public class HalfWaveRectifierFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_halfwave_rectifier, container, false);
-        Spinner spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_h_wave_rectifier);
+        Spinner spinnerRangeCh1 = v.findViewById(R.id.spinner_range_h_wave_rectifier);
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
 
         ArrayAdapter<String> rangesAdapter;

@@ -45,11 +45,11 @@ public class ACGeneratorExperiment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_generator_experiment_layout, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
-        ampSpinner = (Spinner) view.findViewById(R.id.amp_range_spinner);
+        outputChart = view.findViewById(R.id.line_chart);
+        ampSpinner = view.findViewById(R.id.amp_range_spinner);
         chartInit();
         setupRangeSpinner();
-        Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
+        Button btnConfigure = view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setText(getString(R.string.start_experiment));
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override

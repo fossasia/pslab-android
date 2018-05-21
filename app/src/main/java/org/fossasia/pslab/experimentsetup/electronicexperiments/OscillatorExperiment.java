@@ -34,24 +34,34 @@ public class OscillatorExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.rectifier_setup, container, false);
-        startButton = (Button) v.findViewById(R.id.button_start_experiment_rectifier);
+        startButton = v.findViewById(R.id.button_start_experiment_rectifier);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(getActivity(), OscilloscopeActivity.class);
-                if ("Astable Multivibrator".equals(experiment))
-                    intent.putExtra("who", "Astable Multivibrator");
-                else if ("Colpitts Oscillator".equals(experiment))
-                    intent.putExtra("who", "Colpitts Oscillator");
-                else if ("Phase Shift Oscillator".equals(experiment))
-                    intent.putExtra("who", "Phase Shift Oscillator");
-                else if ("Wien Bridge Oscillator".equals(experiment))
-                    intent.putExtra("who", "Wien Bridge Oscillator");
-                else if ("Monostable Multivibrator".equals(experiment))
-                    intent.putExtra("who", "Monostable Multivibrator");
-                else if ("Speed of Sound".equals(experiment))
-                    intent.putExtra("who", "Speed of Sound");
+                switch (experiment) {
+                    case "Astable Multivibrator":
+                        intent.putExtra("who", "Astable Multivibrator");
+                        break;
+                    case "Colpitts Oscillator":
+                        intent.putExtra("who", "Colpitts Oscillator");
+                        break;
+                    case "Phase Shift Oscillator":
+                        intent.putExtra("who", "Phase Shift Oscillator");
+                        break;
+                    case "Wien Bridge Oscillator":
+                        intent.putExtra("who", "Wien Bridge Oscillator");
+                        break;
+                    case "Monostable Multivibrator":
+                        intent.putExtra("who", "Monostable Multivibrator");
+                        break;
+                    case "Speed of Sound":
+                        intent.putExtra("who", "Speed of Sound");
+                        break;
+                    default:
+                        break;
+                }
                 startActivity(intent);
             }
         });

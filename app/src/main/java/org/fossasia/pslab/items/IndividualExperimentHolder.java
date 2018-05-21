@@ -25,7 +25,7 @@ public class IndividualExperimentHolder extends TreeNode.BaseNodeViewHolder<Indi
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.saved_experiments_individual_experiment_holder, null, false);
 
-        TextView experimentName = (TextView) view.findViewById(R.id.individual_experiment_title);
+        TextView experimentName = view.findViewById(R.id.individual_experiment_title);
         experimentName.setText(experiment.label);
 
         return view;

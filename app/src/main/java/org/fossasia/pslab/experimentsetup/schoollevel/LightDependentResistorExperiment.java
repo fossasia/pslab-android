@@ -53,11 +53,12 @@ public class LightDependentResistorExperiment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.transistor_amplifier_view, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.line_chart);
-        Button btnConfigure = (Button) view.findViewById(R.id.btn_configure_dialog);
+        outputChart = view.findViewById(R.id.line_chart);
+        Button btnConfigure = view.findViewById(R.id.btn_configure_dialog);
         btnConfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (scienceLab.isConnected()) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .title(getString(R.string.configure_experiment))
                         .customView(R.layout.ldr_experiment_dialog, true)
@@ -68,8 +69,8 @@ public class LightDependentResistorExperiment extends Fragment {
 
                                 View customView = dialog.getCustomView();
                                 assert customView != null;
-                                etFrequency = (TextInputEditText) customView.findViewById(R.id.ldr_frequency);
-                                tilFrequency = (TextInputLayout) customView.findViewById(R.id.ldr_frequency_layout);
+                                etFrequency = customView.findViewById(R.id.ldr_frequency);
+                                tilFrequency = customView.findViewById(R.id.ldr_frequency_layout);
                                 // Initial Frequency
                                 if (TextUtils.isEmpty(etFrequency.getText().toString())) {
                                     tilFrequency.setError(ExperimentErrorStrings.ERROR_MESSAGE);
@@ -84,11 +85,9 @@ public class LightDependentResistorExperiment extends Fragment {
                                     tilFrequency.setError(null);
                                 }
                                 frequency = Float.parseFloat(etFrequency.getText().toString());
-                                if (scienceLab.isConnected()) {
-                                    startExperiment();
-                                } else {
-                                    Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
-                                }
+                                
+                                startExperiment();
+                                
                                 dialog.dismiss();
                             }
                         })
@@ -102,6 +101,9 @@ public class LightDependentResistorExperiment extends Fragment {
                         .autoDismiss(false)
                         .build();
                 dialog.show();
+                 } else {
+                             Toast.makeText(getContext(), "Device not connected", Toast.LENGTH_SHORT).show();
+                        }
             }
         });
         chartInit();

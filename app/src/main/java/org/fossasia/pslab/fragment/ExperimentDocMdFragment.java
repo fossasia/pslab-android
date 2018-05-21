@@ -30,7 +30,7 @@ public class ExperimentDocMdFragment extends Fragment {
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.experiment_doc_md, container, false);
-        mMarkdownView = (MarkdownView) view.findViewById(R.id.perform_experiment_md);
+        mMarkdownView = view.findViewById(R.id.perform_experiment_md);
         return view;
     }
 

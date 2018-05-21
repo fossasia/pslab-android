@@ -30,11 +30,11 @@ public class ExperimentHeaderHolder extends TreeNode.BaseNodeViewHolder<Experime
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.saved_experiments_header_holder, null, false);
 
-        TextView title = (TextView) view.findViewById(R.id.experiment_header_title);
+        TextView title = view.findViewById(R.id.experiment_header_title);
         title.setText(header.title);
 
-        arrow = (ImageView) view.findViewById(R.id.experiment_arrow);
-        space = (Space) view.findViewById(R.id.experiment_holder_separator);
+        arrow = view.findViewById(R.id.experiment_arrow);
+        space = view.findViewById(R.id.experiment_holder_separator);
         int Visibility = header.level == 1 ? View.VISIBLE : View.GONE;
         space.setVisibility(Visibility);
 
@@ -49,7 +49,7 @@ public class ExperimentHeaderHolder extends TreeNode.BaseNodeViewHolder<Experime
     public static class ExperimentHeader {
 
         public String title;
-        public int level;
+        int level;
 
         public ExperimentHeader(String title, int level) {
             this.title = title;

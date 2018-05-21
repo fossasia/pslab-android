@@ -1,7 +1,5 @@
 package org.fossasia.pslab.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,10 +33,10 @@ public class DataAnalysisFragment extends Fragment {
         String[] curveFits = {"Sine Fit", "Square Fit"};
         String[] channels = {"None", "CH1", "CH2", "CH3", "MIC"};
 
-        spinnerCurveFit = (Spinner) v.findViewById(R.id.spinner_curve_fit_da);
-        spinnerChannelSelect1 = (Spinner) v.findViewById(R.id.spinner_channel_select_da1);
-        spinnerChannelSelect2 = (Spinner) v.findViewById(R.id.spinner_channel_select_da2);
-        checkBoxFouierTransform = (CheckBox) v.findViewById(R.id.checkBox_fourier_da);
+        spinnerCurveFit = v.findViewById(R.id.spinner_curve_fit_da);
+        spinnerChannelSelect1 = v.findViewById(R.id.spinner_channel_select_da1);
+        spinnerChannelSelect2 = v.findViewById(R.id.spinner_channel_select_da2);
+        checkBoxFouierTransform = v.findViewById(R.id.checkBox_fourier_da);
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         ArrayAdapter<String> curveFitAdapter;
         ArrayAdapter<String> adapter;

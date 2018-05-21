@@ -6,10 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AnalogInputSource {
 
@@ -78,8 +75,8 @@ public class AnalogInputSource {
     }
 
     public List<Double> loadCalibrationTable(double[] table, double slope, double intercept) {
-        for (int i = 0; i < table.length; i++) {
-            adc_shifts.add(table[i] * slope - intercept);
+        for (double aTable : table) {
+            adc_shifts.add(aTable * slope - intercept);
         }
         return adc_shifts;
     }

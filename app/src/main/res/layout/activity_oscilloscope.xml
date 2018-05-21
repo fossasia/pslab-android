@@ -188,8 +188,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="1dp"
-            android:layout_weight="2"
+            android:layout_margin="@dimen/oscilloscope_image_margin"
+            android:layout_weight="@dimen/oscilloscope_image_weight"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/channel_parameters" />
 
@@ -197,19 +197,26 @@
             android:id="@+id/tv_channel_parameters_os"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/oscilloscope_text_margin"
             android:gravity="center"
             android:text="@string/channel_parameters"
             android:textAlignment="center"
-            android:textColor="#000"
-            android:textSize="12sp"
-            android:textStyle="normal|bold" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/oscilloscope_text_size"
+            android:textStyle="normal|bold"
+            android:background="@color/colorPrimaryDark"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/oscilloscope_divider_line"
+            android:background="@color/outline"/>
 
         <ImageButton
             android:id="@+id/button_timebase_os"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="2"
+            android:layout_weight="@dimen/oscilloscope_image_weight"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/timebase" />
 
@@ -217,20 +224,26 @@
             android:id="@+id/tv_timebase_tigger_os"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/oscilloscope_text_margin"
             android:gravity="center"
             android:text="@string/timebase_and_trigger"
             android:textAlignment="center"
-            android:textColor="#000"
-            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/oscilloscope_text_size"
             android:textStyle="normal|bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/oscilloscope_divider_line"
+            android:background="@color/outline"/>
 
         <ImageButton
             android:id="@+id/button_data_analysis_os"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="1dp"
-            android:layout_weight="2"
+            android:layout_margin="@dimen/oscilloscope_image_margin"
+            android:layout_weight="@dimen/oscilloscope_image_weight"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/data_analysis" />
 
@@ -238,22 +251,27 @@
             android:id="@+id/tv_data_analysis_os"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/oscilloscope_text_margin"
             android:gravity="center"
             android:maxLines="1"
             android:text="@string/data_analysis"
             android:textAlignment="center"
-            android:textColor="#000"
-            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/oscilloscope_text_size"
             android:textStyle="normal|bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/oscilloscope_divider_line"
+            android:background="@color/outline"/>
 
         <ImageButton
             android:id="@+id/button_xy_plot_os"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="1dp"
-
-            android:layout_weight="2"
+            android:layout_margin="@dimen/oscilloscope_image_margin"
+            android:layout_weight="@dimen/oscilloscope_image_weight"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/xymode" />
 
@@ -261,13 +279,14 @@
             android:id="@+id/tv_xy_plot_os"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:elevation="24dp"
+            android:layout_margin="@dimen/oscilloscope_text_margin"
+            android:layout_marginBottom="@dimen/oscilloscope_divider_line"
+            android:elevation="@dimen/text_elevation"
             android:gravity="center"
             android:text="@string/xy_plot"
             android:textAlignment="center"
-            android:textColor="#000"
-            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/oscilloscope_text_size"
             android:textStyle="normal|bold" />
 
     </LinearLayout>

@@ -62,11 +62,11 @@ public class MPU6050 {
 
     }
 
-    public ArrayList<Character> getVals(int addr, int bytesToRead) throws IOException {
+    private ArrayList<Character> getVals(int addr, int bytesToRead) throws IOException {
         return i2c.readBulk(ADDRESS, addr, bytesToRead);
     }
 
-    public void powerUp() throws IOException {
+    private void powerUp() throws IOException {
         i2c.writeBulk(ADDRESS, new int[]{0x6B, 0});
     }
 

@@ -72,11 +72,11 @@ public class SensorFragmentMain extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_main, container, false);
-        final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.layout_container);
-        Button buttonSensorAutoScan = (Button) view.findViewById(R.id.button_sensor_autoscan);
-        tvSensorScan = (TextView) view.findViewById(R.id.tv_sensor_scan);
+        final CoordinatorLayout coordinatorLayout = view.findViewById(R.id.layout_container);
+        Button buttonSensorAutoScan = view.findViewById(R.id.button_sensor_autoscan);
+        tvSensorScan = view.findViewById(R.id.tv_sensor_scan);
         tvSensorScan.setText(tvData);
-        lvSensor = (ListView) view.findViewById(R.id.lv_sensor);
+        lvSensor = view.findViewById(R.id.lv_sensor);
         lvSensor.setAdapter(adapter);
 
         buttonSensorAutoScan.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +87,7 @@ public class SensorFragmentMain extends Fragment {
                 } else {
                     Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
                     View snackBarView = snackbar.getView();
-                    TextView snackBarTextView = (TextView) snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+                    TextView snackBarTextView = snackBarView.findViewById(android.support.design.R.id.snackbar_text);
                     snackBarTextView.setTextColor(Color.YELLOW);
                     snackbar.show();
                 }

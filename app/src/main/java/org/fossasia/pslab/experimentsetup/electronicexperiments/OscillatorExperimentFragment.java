@@ -35,13 +35,13 @@ public class OscillatorExperimentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_oscillator_experiment, container, false);
-        Spinner spinnerRangeCh1 = (Spinner) v.findViewById(R.id.spinner_range_astable_multivibrator);
-        Button buttonCH1Frequency = (Button) v.findViewById(R.id.button_read_ch1_astable_multivibrator);
-        Button buttonCH2Frequency = (Button) v.findViewById(R.id.button_read_ch2_astable_multivibrator);
-        resultCH1Frequency = (TextView) v.findViewById(R.id.tv_result_ch1_astable_multivibrator);
-        resultCH2Frequency = (TextView) v.findViewById(R.id.tv_result_ch2_astable_multivibrator);
-        analyseCH2Label = (TextView) v.findViewById(R.id.tv_abalyse_ch2_astable_multivibrator);
-        analyseCH1Label = (TextView) v.findViewById(R.id.tv_analyse_ch1_astable_multivibrator);
+        Spinner spinnerRangeCh1 = v.findViewById(R.id.spinner_range_astable_multivibrator);
+        Button buttonCH1Frequency = v.findViewById(R.id.button_read_ch1_astable_multivibrator);
+        Button buttonCH2Frequency = v.findViewById(R.id.button_read_ch2_astable_multivibrator);
+        resultCH1Frequency = v.findViewById(R.id.tv_result_ch1_astable_multivibrator);
+        resultCH2Frequency = v.findViewById(R.id.tv_result_ch2_astable_multivibrator);
+        analyseCH2Label = v.findViewById(R.id.tv_abalyse_ch2_astable_multivibrator);
+        analyseCH1Label = v.findViewById(R.id.tv_analyse_ch1_astable_multivibrator);
 
         if (((OscilloscopeActivity) getActivity()).isColpittsOscillatorExperiment ||
                 ((OscilloscopeActivity) getActivity()).isPhaseShiftOscillatorExperiment ||

@@ -1,8 +1,10 @@
 package org.fossasia.pslab.activity;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
@@ -50,7 +52,6 @@ import org.fossasia.pslab.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -217,32 +218,42 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         height = size.y;
 
         Bundle extras = getIntent().getExtras();
-        if ("Half Wave Rectifier".equals(extras.getString("who"))) {
-            isHalfWaveRectifierExperiment = true;
-            if (scienceLab.isConnected())
-                scienceLab.setSine1(5000);
-        } else if ("Full Wave Rectifier".equals(extras.getString("who"))) {
-            isFullWaveRectifierExperiment = true;
-            if (scienceLab.isConnected()) {
-                scienceLab.setWaves(5000, 180, 5000);
-            }
-        } else if ("Diode Clipping Clamping".equals(extras.getString("who"))) {
-            isDiodeClippingClampingExperiment = true;
-            if (scienceLab.isConnected()) {
-                scienceLab.setSine1(5000);
-            }
-        } else if ("Astable Multivibrator".equals(extras.getString("who"))) {
-            isAstableMultivibratorExperiment = true;
-        } else if ("Colpitts Oscillator".equals(extras.getString("who"))) {
-            isColpittsOscillatorExperiment = true;
-        } else if ("Phase Shift Oscillator".equals(extras.getString("who"))) {
-            isPhaseShiftOscillatorExperiment = true;
-        } else if ("Wien Bridge Oscillator".equals(extras.getString("who"))) {
-            isWienBridgeOscillatorExperiment = true;
-        } else if ("Monostable Multivibrator".equals(extras.getString("who"))) {
-            isMonostableMultivibratorExperiment = true;
-        } else if ("Speed of Sound".equals(extras.getString("who"))) {
-            isSpeedOfSoundExperiment = true;
+        switch (extras.getString("who")) {
+            case "Half Wave Rectifier":
+                isHalfWaveRectifierExperiment = true;
+                if (scienceLab.isConnected())
+                    scienceLab.setSine1(5000);
+                break;
+            case "Full Wave Rectifier":
+                isFullWaveRectifierExperiment = true;
+                if (scienceLab.isConnected())
+                    scienceLab.setWaves(5000, 180, 5000);
+                break;
+            case "Diode Clipping Clamping":
+                isDiodeClippingClampingExperiment = true;
+                if (scienceLab.isConnected())
+                    scienceLab.setSine1(5000);
+                break;
+            case "Astable Multivibrator":
+                isAstableMultivibratorExperiment = true;
+                break;
+            case "Colpitts Oscillator":
+                isColpittsOscillatorExperiment = true;
+                break;
+            case "Phase Shift Oscillator":
+                isPhaseShiftOscillatorExperiment = true;
+                break;
+            case "Wien Bridge Oscillator":
+                isWienBridgeOscillatorExperiment = true;
+                break;
+            case "Monostable Multivibrator":
+                isMonostableMultivibratorExperiment = true;
+                break;
+            case "Speed of Sound":
+                isSpeedOfSoundExperiment = true;
+                break;
+            default:
+                break;
         }
 
         onWindowFocusChanged();
@@ -499,36 +510,60 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         switch (v.getId()) {
             case R.id.button_channel_parameters_os:
                 replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+                clearTextBackgroundColor();
+                channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_channel_parameters_os:
                 replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
+                clearTextBackgroundColor();
+                channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_timebase_os:
                 replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
+                clearTextBackgroundColor();
+                timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_timebase_tigger_os:
                 replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
+                clearTextBackgroundColor();
+                timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_data_analysis_os:
                 replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
+                clearTextBackgroundColor();
+                dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_data_analysis_os:
                 replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
+                clearTextBackgroundColor();
+                dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_xy_plot_os:
                 replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
+                clearTextBackgroundColor();
+                xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_xy_plot_os:
                 replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
+                clearTextBackgroundColor();
+                xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
         }
+    }
+
+    @SuppressLint("ResourceType")
+    private void clearTextBackgroundColor() {
+        channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.customBorderFill));
+        timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.customBorderFill));
+        dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.customBorderFill));
+        xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.customBorderFill));
     }
 
     public void onWindowFocusChanged() {
@@ -594,19 +629,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string.closing_oscilloscope_title)
-                .setMessage(R.string.closing_oscilloscope_message)
-                .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-
-                })
-                .setNegativeButton(R.string.dialog_no, null)
-                .show();
+        finish();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override

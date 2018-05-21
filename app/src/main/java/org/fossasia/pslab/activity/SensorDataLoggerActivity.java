@@ -140,7 +140,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                 } else {
                     Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
                     View snackBarView = snackbar.getView();
-                    TextView snackBarTextView = (TextView) snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+                    TextView snackBarTextView = snackBarView.findViewById(android.support.design.R.id.snackbar_text);
                     snackBarTextView.setTextColor(Color.YELLOW);
                     snackbar.show();
                 }
@@ -278,13 +278,13 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            TextView tvAx = (TextView) customView.findViewById(R.id.tv_sensor_mpu6050_ax);
-            TextView tvAy = (TextView) customView.findViewById(R.id.tv_sensor_mpu6050_ay);
-            TextView tvAz = (TextView) customView.findViewById(R.id.tv_sensor_mpu6050_az);
-            TextView tvGx = (TextView) customView.findViewById(R.id.tv_sensor_mpu6050_gx);
-            TextView tvGy = (TextView) customView.findViewById(R.id.tv_sensor_mpu6050_gy);
-            TextView tvGz = (TextView) customView.findViewById(R.id.tv_sensor_mpu6050_gz);
-            TextView tvTemp = (TextView) customView.findViewById(R.id.tv_sensor_mpu6050_temp);
+            TextView tvAx = customView.findViewById(R.id.tv_sensor_mpu6050_ax);
+            TextView tvAy = customView.findViewById(R.id.tv_sensor_mpu6050_ay);
+            TextView tvAz = customView.findViewById(R.id.tv_sensor_mpu6050_az);
+            TextView tvGx = customView.findViewById(R.id.tv_sensor_mpu6050_gx);
+            TextView tvGy = customView.findViewById(R.id.tv_sensor_mpu6050_gy);
+            TextView tvGz = customView.findViewById(R.id.tv_sensor_mpu6050_gz);
+            TextView tvTemp = customView.findViewById(R.id.tv_sensor_mpu6050_temp);
             tvAx.setText(String.valueOf(dataMPU6050.get(0)));
             tvAy.setText(String.valueOf(dataMPU6050.get(1)));
             tvAz.setText(String.valueOf(dataMPU6050.get(2)));
@@ -336,17 +336,6 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string.closing_sensor_data_logger_title)
-                .setMessage(R.string.closing_sensor_data_logger_message)
-                .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setNegativeButton(R.string.dialog_no, null)
-                .show();
+       finish();
     }
 }

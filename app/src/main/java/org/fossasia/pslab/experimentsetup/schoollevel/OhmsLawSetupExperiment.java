@@ -59,13 +59,13 @@ public class OhmsLawSetupExperiment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ohms_law_setup, container, false);
-        outputChart = (LineChart) view.findViewById(R.id.ohm_chart);
-        tvCurrentValue = (TextView) view.findViewById(R.id.tv_current_value);
+        outputChart = view.findViewById(R.id.ohm_chart);
+        tvCurrentValue = view.findViewById(R.id.tv_current_value);
         tvCurrentValue.setText("0");
-        tvVoltageValue = (TextView) view.findViewById(R.id.tv_voltage_value);
-        seekBar = (SeekBar) view.findViewById(R.id.current_seekbar);
-        Button btnReadVoltage = (Button) view.findViewById(R.id.btn_read_voltage);
-        channelSelectSpinner = (Spinner) view.findViewById(R.id.channel_select_spinner);
+        tvVoltageValue = view.findViewById(R.id.tv_voltage_value);
+        seekBar = view.findViewById(R.id.current_seekbar);
+        Button btnReadVoltage = view.findViewById(R.id.btn_read_voltage);
+        channelSelectSpinner = view.findViewById(R.id.channel_select_spinner);
         channelSelectSpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, channels));
         seekBar.setMax(330);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

@@ -97,9 +97,9 @@ public class SensorFragmentBH1750 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_bh1750, container, false);
-        tvSensorBH1750Luminosity = (TextView) view.findViewById(R.id.tv_sensor_bh1750_luminosity);
-        Spinner spinnerSensorBH1750 = (Spinner) view.findViewById(R.id.spinner_sensor_bh1750);
-        mChart = (LineChart) view.findViewById(R.id.chart_bh1750);
+        tvSensorBH1750Luminosity = view.findViewById(R.id.tv_sensor_bh1750_luminosity);
+        Spinner spinnerSensorBH1750 = view.findViewById(R.id.spinner_sensor_bh1750);
+        mChart = view.findViewById(R.id.chart_bh1750);
         XAxis x = mChart.getXAxis();
         YAxis y = mChart.getAxisLeft();
         YAxis y2 = mChart.getAxisRight();

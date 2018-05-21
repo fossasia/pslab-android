@@ -23,7 +23,7 @@ import static java.lang.Math.abs;
  */
 
 public class SSD1306 {
-    public int ADDRESS = 0x3C;
+    private int ADDRESS = 0x3C;
     private ArrayList<String> load = new ArrayList<>(Collections.singletonList("logo"));
     private ArrayList<String> scroll = new ArrayList<>(Arrays.asList("left", "right, ", "topright", "topleft", "bottomleft", "bottomright", "stop"));
     public int NUMPLOTS = 0;
@@ -218,7 +218,7 @@ public class SSD1306 {
         }
     }
 
-    public void SSD1306_command(int cmd) throws IOException {
+    private void SSD1306_command(int cmd) throws IOException {
         i2c.writeBulk(ADDRESS, new int[]{0x00, cmd});
     }
 
@@ -226,13 +226,13 @@ public class SSD1306 {
         i2c.writeBulk(ADDRESS, new int[]{0x40, data});
     }
 
-    public void clearDisplay() {
+    private void clearDisplay() {
         setCursor(0, 0);
         for (int a = 0; a < SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8; a++)
             buff[a] = 0;
     }
 
-    public void displayOLED() throws IOException {
+    private void displayOLED() throws IOException {
         SSD1306_command(SSD1306_SETLOWCOLUMN | 0x00);
         SSD1306_command(SSD1306_SETHIGHCOLUMN | 0x00);
         SSD1306_command(SSD1306_SETSTARTLINE | 0x00);
@@ -255,7 +255,7 @@ public class SSD1306 {
         SSD1306_command(contrast);
     }
 
-    public void drawPixel(int x, int y, int color) {
+    private void drawPixel(int x, int y, int color) {
         if (color == 1)
             buff[(x + (y / 8) * SSD1306_LCDWIDTH)] |= (1 << (y % 8));
         else
@@ -292,7 +292,7 @@ public class SSD1306 {
         }
     }
 
-    public void drawLine(int x0, int y0, int x1, int y1, int color) {
+    private void drawLine(int x0, int y0, int x1, int y1, int color) {
         boolean steep = abs(y1 - y0) > abs(x1 - x0);
         int tmp, ystep, dx, dy, err;
         if (steep) {
@@ -341,15 +341,15 @@ public class SSD1306 {
         drawFastVLine(x + w + 1, y, h, color);
     }
 
-    public void drawFastVLine(int x, int y, int h, int color) {
+    private void drawFastVLine(int x, int y, int h, int color) {
         drawLine(x, y, x, y + h - 1, color);
     }
 
-    public void drawFastHLine(int x, int y, int w, int color) {
+    private void drawFastHLine(int x, int y, int w, int color) {
         drawLine(x, y, x + w - 1, y, color);
     }
 
-    public void fillRect(int x, int y, int w, int h, int color) {
+    private void fillRect(int x, int y, int w, int h, int color) {
         for (int i = x; i < x + w; i++)
             drawFastVLine(i, y, h, color);
     }
@@ -360,7 +360,7 @@ public class SSD1306 {
         }
     }
 
-    public void writeChar(int c) {
+    private void writeChar(int c) {
         if (c == '\n') {
             cursorY += textSize * 8;
             cursorX = 0;
@@ -375,7 +375,7 @@ public class SSD1306 {
         }
     }
 
-    public void drawChar(int x, int y, int c, int color, int bg, int size) {
+    private void drawChar(int x, int y, int c, int color, int bg, int size) {
         int line;
         if ((x >= width) | (y >= height) | ((x + 5 * size - 1) < 0) | ((y + 8 * size - 1) < 0))
             return;
@@ -401,7 +401,7 @@ public class SSD1306 {
         }
     }
 
-    public void setCursor(int x, int y) {
+    private void setCursor(int x, int y) {
         cursorX = x;
         cursorY = y;
     }

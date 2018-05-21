@@ -1,7 +1,6 @@
 package org.fossasia.pslab.communication.digitalChannel;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**

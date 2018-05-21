@@ -18,7 +18,7 @@ public class SPI {
     private static final String TAG = "SPI";
     private PacketHandler packetHandler;
     private CommandsProto commandsProto;
-    int CKE = 1, CKP = 0, SMP = 1;
+    private int CKE = 1, CKP = 0, SMP = 1;
 
     public SPI(PacketHandler packetHandler) {
         this.packetHandler = packetHandler;

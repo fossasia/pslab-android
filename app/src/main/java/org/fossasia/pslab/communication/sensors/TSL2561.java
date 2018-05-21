@@ -103,7 +103,7 @@ public class TSL2561 {
         i2c.writeBulk(ADDRESS, new int[]{COMMAND_BIT | REGISTER_TIMING, gain | timing});
     }
 
-    public void enable() throws IOException {
+    private void enable() throws IOException {
         i2c.writeBulk(ADDRESS, new int[]{COMMAND_BIT | REGISTER_CONTROL, CONTROL_POWERON});
     }
 
@@ -111,7 +111,7 @@ public class TSL2561 {
         i2c.writeBulk(ADDRESS, new int[]{COMMAND_BIT | REGISTER_CONTROL, CONTROL_POWEROFF});
     }
 
-    public void _wait() throws InterruptedException {
+    private void _wait() throws InterruptedException {
         if (timing == INTEGRATIONTIME_13MS) TimeUnit.MILLISECONDS.sleep(14);
         if (timing == INTEGRATIONTIME_101MS) TimeUnit.MILLISECONDS.sleep(102);
         if (timing == INTEGRATIONTIME_402MS) TimeUnit.MILLISECONDS.sleep(403);
