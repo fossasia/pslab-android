@@ -265,7 +265,6 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         navItemIndex = 0;
                 }
-
                 loadHomeFragment();
                 return true;
             }
@@ -302,6 +301,10 @@ public class MainActivity extends AppCompatActivity {
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             return;
+        }
+        if (fragment instanceof HomeFragment && HomeFragment.isWebViewShowing) {
+                ((HomeFragment) fragment).hideWebView();
+                 return;
         }
         if (shouldLoadHomeFragOnBackPress) {
             if (navItemIndex != 0) {
@@ -417,6 +420,8 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
                             if (navItemIndex == 0) {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, InstrumentsFragment.newInstance()).commit();
+                            } else if (navItemIndex == 1) {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(true, true)).commitAllowingStateLoss();
                             } else {
                                 Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
                             }
@@ -430,5 +435,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
 }

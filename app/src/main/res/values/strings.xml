@@ -509,7 +509,7 @@
     <string name="timebase">TimeBase</string>
     <string name="timebase_trigger_value">875.00 μs</string>
     <string name="text_view">TextView</string>
-    <string name="pslab_device_not_found">PSLAB Device not found</string>
+    <string name="device_status_text">PSLab Device not found</string>
     <string name="select_mic">[SELECT MIC]</string>
 
     <string-array name="sensor_click_list">
@@ -648,5 +648,13 @@
     <string name="sensors_description">Allows logging of data returned \nby sensor connected</string>
     <string name="wave_generator_description">Generates different waveforms \nand PWM signals</string>
     <string name="power_source_description">Displays value returned by \nsensors connected to \nI2C input</string>
+    <string name="web_view_link_text">What is PSLab Device?</string>
+    <string name="pslab_connect_text">Steps to connect the PSLab Device</string>
+    <string name="pslab_instruction_1">Connect a micro USB(Mini B) to PSLab</string>
+    <string name="pslab_instruction_2">Connect the other end of the micro USB cable to a OTG</string>
+    <string name="pslab_instruction_3">Connect the OTG to the phone</string>
+    <string name="number_one">1.</string>
+    <string name="number_two">2.</string>
+    <string name="number_three">3.</string>
 
 </resources>
