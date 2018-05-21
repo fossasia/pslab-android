@@ -7,4 +7,6 @@
     <color name="darkWhite">#dadada</color>
     <color name="black">#000000</color>
     <color name="background">#FAFAFA</color>
+    <color name="outline">#B1BCBE</color>
+    <color name="customBorderFill">#7A7A7A</color>
 </resources>

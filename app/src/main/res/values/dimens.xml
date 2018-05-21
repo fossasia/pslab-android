@@ -95,4 +95,10 @@
     <dimen name="stepper_motor_margin">5dp</dimen>
     <dimen name="stepper_motor_text_size">16sp</dimen>
 
+    <dimen name="oscilloscope_text_margin">4dp</dimen>
+    <dimen name="oscilloscope_text_size">12sp</dimen>
+    <dimen name="oscilloscope_image_margin">1dp</dimen>
+    <dimen name="oscilloscope_image_weight">2</dimen>
+    <dimen name="oscilloscope_divider_line">2dp</dimen>
+    <dimen name="text_elevation">24dp</dimen>
 </resources>
