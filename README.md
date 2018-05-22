@@ -30,28 +30,28 @@ Please join us on the following channels:
 
   <table>
     <tr>
-     <td><img src="/docs/screenshots/screenshot_initialization.png"></td>
-     <td><img src="/docs/screenshots/screenshot_1.png"></td>
-     <td><img src="/docs/screenshots/screenshot_2.png"></td>
-     <td><img src="/docs/screenshots/screenshot_control_main.png"></td>
+     <td><img src="/docs/images/screenshot_initialization.png"></td>
+     <td><img src="/docs/images/screenshot_1.png"></td>
+     <td><img src="/docs/images/screenshot_2.png"></td>
+     <td><img src="/docs/images/screenshot_control_main.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/screenshots/screenshot_3.png"></td>
-     <td><img src="/docs/screenshots/screenshot_logical_analyzer.png"></td>
+     <td><img src="/docs/images/screenshot_3.png"></td>
+     <td><img src="/docs/images/screenshot_logical_analyzer.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/screenshots/screenshot_multilevel_experimentlist.png"></td>
-     <td><img src="/docs/screenshots/screenshot_experiment_doc.png"></td>
-     <td><img src="/docs/screenshots/screenshot_experiment_setup.png"></td>
+     <td><img src="/docs/images/screenshot_multilevel_experimentlist.png"></td>
+     <td><img src="/docs/images/screenshot_experiment_doc.png"></td>
+     <td><img src="/docs/images/screenshot_experiment_setup.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/screenshots/screenshot_audio_jack.png"></td>
+     <td><img src="/docs/images/screenshot_audio_jack.png"></td>
     </tr>
   </table>
 
