@@ -26,9 +26,9 @@ import butterknife.ButterKnife;
 public class LogicalAnalyzerActivity extends AppCompatActivity
         implements LAChannelModeFragment.OnChannelSelectedListener {
 
-    private ScienceLab scienceLab;
     @BindView(R.id.logical_analyzer_toolbar)
     Toolbar toolbar;
+    private ScienceLab scienceLab;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +47,9 @@ public class LogicalAnalyzerActivity extends AppCompatActivity
     public void channelSelectedNowAnalyze(Bundle params) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        ft.replace(R.id.la_frame_layout, LALogicLinesFragment.newInstance(params, this)).commit();
+        ft.replace(R.id.la_frame_layout, LALogicLinesFragment.newInstance(params, this), "logic_analyzer");
+        ft.addToBackStack("logic_analyzer");
+        ft.commit();
     }
 
     @Override
@@ -62,6 +64,9 @@ public class LogicalAnalyzerActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-       finish();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+            getSupportFragmentManager().popBackStackImmediate();
+        else
+            finish();
     }
 }
