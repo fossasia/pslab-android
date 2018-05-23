@@ -34,6 +34,7 @@
         <item>Device</item>
         <item>Settings</item>
         <item>PSLab</item>
+        <item>Help &amp; Feedback</item>
     </string-array>
 
     <string name="activity_title_about_us">About Us</string>
