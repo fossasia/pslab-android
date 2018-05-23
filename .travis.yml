@@ -73,8 +73,7 @@ script:
 
 after_success:
   - bash scripts/prep-key.sh
-  - chmod +x upload-apk.sh
-  - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./upload-apk.sh; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then bash upload-apk.sh; fi'
 
 notifications:
   slack: fossasia:bqOzo4C9y6oI6dTF8kO8zdxp
