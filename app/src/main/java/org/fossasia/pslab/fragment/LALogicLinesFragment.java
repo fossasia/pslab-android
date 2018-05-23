@@ -98,12 +98,6 @@ public class LALogicLinesFragment extends Fragment {
                                 }
                             });
                         }
-                        // TODO : Perform Logic Analyzer related functions
-                        // Colors for Data sets
-                        // - CH1 - (Color.BLUE);
-                        // - CH2 - (Color.GREEN);
-                        // - CH3 - (Color.RED);
-                        // - CH4 - (Color.YELLOW);
                     } else {
                         if (!String.valueOf(ledImageView.getTag()).equals("red")) {
                             getActivity().runOnUiThread(new Runnable() {
@@ -181,7 +175,24 @@ public class LALogicLinesFragment extends Fragment {
             }
             LineDataSet lineDataSet = new LineDataSet(tempInput, channelNames.get(j));
             lineDataSet.setCircleRadius(1);
-            lineDataSet.setColor(Color.GREEN);
+            switch (j) {
+                case 0:
+                    lineDataSet.setColor(Color.MAGENTA);
+                    break;
+                case 1:
+                    lineDataSet.setColor(Color.GREEN);
+                    break;
+                case 2:
+                    lineDataSet.setColor(Color.CYAN);
+                    break;
+                case 3:
+                    lineDataSet.setColor(Color.YELLOW);
+                    break;
+                default:
+                    lineDataSet.setColor(Color.MAGENTA);
+                    break;
+            }
+            lineDataSet.setLineWidth(2);
             lineDataSet.setCircleColor(Color.GREEN);
             lineDataSet.setDrawValues(false);
             lineDataSet.setDrawCircles(false);
@@ -232,6 +243,6 @@ public class LALogicLinesFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, LALogicLinesFragment.class.getSimpleName());
+        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, LALogicLinesFragment.class.getSimpleName());
     }
 }
