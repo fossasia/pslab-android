@@ -639,5 +639,13 @@
     <string name="Search_Bar_Title">Search Experiments</string>
     <string name="Search_Bar_Hint_Text">Search..</string>
     <string name="search_menu_title">Search</string>
+    <string name="id1">ID1</string>
+    <string name="id2">ID2</string>
+    <string name="id3">ID3</string>
+    <string name="id4">ID4</string>
+    <string name="volt_channels">Voltage at Channels</string>
+    <string name="volt_elements">Voltage at elements</string>
+    <string name="frequency">Frequency</string>
+    <string name="count_pulse">Count Pulse</string>
 
 </resources>

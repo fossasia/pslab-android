@@ -32,7 +32,7 @@ import android.widget.Toast;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.CommunicationHandler;
 import org.fossasia.pslab.fragment.AboutUsFragment;
-import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
+
 import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
 import org.fossasia.pslab.fragment.SettingsFragment;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_INSTRUMENTS = "instruments";
     private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
-    private static final String TAG_HELPFEEDBACK = "helpFeedback";
+
     private static String CURRENT_TAG = TAG_INSTRUMENTS;
     private String[] activityTitles;
 
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+  
     private void attemptToGetUSBPermission() {
         if (!("android.hardware.usb.action.USB_DEVICE_ATTACHED".equals(getIntent().getAction()))) {
             if (communicationHandler.isDeviceFound() && !usbManager.hasPermission(communicationHandler.mUsbDevice)) {
