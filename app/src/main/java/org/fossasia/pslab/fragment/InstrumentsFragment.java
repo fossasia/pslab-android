@@ -22,6 +22,7 @@ import org.fossasia.pslab.activity.MultimeterActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.activity.PowerSourceActivity;
 import org.fossasia.pslab.activity.SensorActivity;
+import org.fossasia.pslab.activity.WaveGeneratorActivity;
 import org.fossasia.pslab.items.ApplicationItem;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.ApplicationAdapter;
@@ -75,7 +76,8 @@ public class InstrumentsFragment extends Fragment {
                                 startActivity(intent);
                                 break;
                             case "Wave Generator":
-                                Toast.makeText(getContext(), getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                                intent = new Intent(context, WaveGeneratorActivity.class);
+                                startActivity(intent);
                                 break;
                             case "Power Source":
                                 intent = new Intent(context, PowerSourceActivity.class);

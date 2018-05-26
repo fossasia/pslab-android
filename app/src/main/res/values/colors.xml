@@ -9,6 +9,11 @@
     <color name="background">#FAFAFA</color>
     <color name="outline">#B1BCBE</color>
     <color name="customBorderFill">#7A7A7A</color>
-    <color name="blue_grey">#546E7A</color>
     <color name="grey_light">#bdbdbd</color>
+    <color name="grey">#2D2F31</color>
+    <color name="white_grey">#9ea7aa</color>
+    <color name="dark_grey">#757575</color>
+    <color name="orange">#ff7043</color>
+    <color name="blue_grey">#546E7A</color>
+
 </resources>

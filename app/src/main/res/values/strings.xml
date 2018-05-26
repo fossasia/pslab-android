@@ -688,6 +688,7 @@
     <string name="number_two">2.</string>
     <string name="number_three">3.</string>
 
+
     <string name="schematic_desc">Schematic image goes here</string>
     <string name="donot_show_again">Don\'t show again</string>
     <string name="ok_button_text">OK</string>
@@ -695,6 +696,34 @@
     <string name="logic_analyzer_dialog_heading">Logic Analyzer</string>
     <string name="logic_analyzer_dialog_text">Connect the digital wave generator pins with the logic analyzer pins as shown in the figure\n</string>
     <string name="logic_analyzer_dialog_description">\u2022 The connections shown in the above figure is for the case when all the four pins are in use.\n\n\u2022 The wires can be connected with pins of any ID as per the requirement. </string>
+
+    //wave_generator_activity
+    <string name="wave_name_holder">Triangular</string>
+    <string name="freq_text">Frequency :</string>
+    <string name="freq_holder_text">5.255 Hz</string>
+    <string name="unit_hz">Hz</string>
+    <string name="text_phase_colon">Phase :</string>
+    <string name="text_phase">Phase</string>
+    <string name="deg_text">deg</string>
+    <string name="selected_text_holder">Wave Frequency :</string>
+    <string name="text_sq1">SQ1</string>
+    <string name="text_sq2">SQ2</string>
+    <string name="text_sq3">SQ3</string>
+    <string name="text_sq4">SQ4</string>
+    <string name="channel_name_holder">SQ1</string>
+    <string name="text_duty_colon">Duty :</string>
+    <string name="text_duty">Duty</string>
+    <string name="unit_v">V</string>
+    <string name="waveform_frequecy">WaveForm Frequecy :</string>
+    <string name="pwm_frequecy">PWM Frequency :</string>
+    <string name="reset_lowercase">Reset</string>
+    <string name="unit_percent">%</string>
+    <string name="text_freq">Freq</string>
+    <string name="text_waveform">Waveform</string>
+    <string name="text_pwm">PWM</string>
+    <string name="view_text">View</string>
+    <string name="phase_holder_text">45 deg</string>
+    <string name="duty_holder_text">50 %</string>
 
     <string name="text_connected">Connected</string>
     <string name="text_disconnected">Disconnected</string>
