@@ -23,22 +23,20 @@ import mehdi.sakout.aboutpage.AboutPage;
 
 public class AboutUsFragment extends Fragment {
 
+    @BindView(R.id.appBarAnim)
+    AppBarLayout appBarLayout;
+
     public static AboutUsFragment newInstance() {
         return new AboutUsFragment();
     }
 
-    @BindView(R.id.appBarAnim)
-    AppBarLayout appBarLayout;
-
     public AboutUsFragment() {
-        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         simulateDayNight(0);
         ButterKnife.bind(this, view);
@@ -61,7 +59,6 @@ public class AboutUsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         return super.onOptionsItemSelected(item);
     }
 
