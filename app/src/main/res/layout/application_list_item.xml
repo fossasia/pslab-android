@@ -1,6 +1,6 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true">
@@ -8,39 +8,47 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/total_height_card"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
         card_view:cardCornerRadius="@dimen/card_radius">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/application_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:padding="@dimen/title_padding"
-                android:textSize="@dimen/title_font_size"
-                android:textStyle="bold"/>
-
-            <org.fossasia.pslab.items.SquareImageView
+            <ImageView
                 android:id="@+id/application_icon"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/image_height"
                 android:contentDescription="@string/application_icon"
-                android:paddingBottom="@dimen/image_padding_around"
-                android:paddingEnd="@dimen/image_padding_around"
-                android:paddingStart="@dimen/image_padding_around"
-                android:paddingTop="@dimen/image_padding_top"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/heading_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/header_padding_left"
+                android:paddingTop="@dimen/header_padding_top"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/header_size"
+                android:textStyle="bold"
+                tools:text="oscilloscope" />
+
+            <TextView
+                android:id="@+id/description_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/heading_card"
+                android:gravity="start"
+                android:paddingLeft="@dimen/header_padding_left"
+                android:paddingTop="@dimen/text_padding_top"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size" />
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

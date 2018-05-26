@@ -16,12 +16,12 @@
 
 
     <string name="oscilloscope">Oscilloscope</string>
-    <string name="control">Control</string>
-    <string name="advance_control">Advance Control</string>
+    <string name="multimeter">Multimeter</string>
     <string name="logical_analyzer">Logical Analyzer</string>
-    <string name="data_sensor_logger">Data Sensor Logger</string>
-    <string name="sensor_quick_view">Sensor QuickView</string>
     <string name="wavegen">Wave Generator</string>
+    <string name="sensors">Sensors</string>
+    <string name="power_source">Power Source</string>
+    <string name="coming_soon">Coming Soon!</string>
 
     <string name="control_item_1">Control</string>
     <string name="control_item_2">Read</string>
@@ -639,5 +639,14 @@
     <string name="Search_Bar_Title">Search Experiments</string>
     <string name="Search_Bar_Hint_Text">Search..</string>
     <string name="search_menu_title">Search</string>
+
+    <string name="learn_more">Learn More</string>
+
+    <string name="oscilloscope_description">Allows observation of varying \nsignal voltages</string>
+    <string name="multimeter_description">Measure voltages, currents \nand resistances</string>
+    <string name="logic_analyzer_description">Captures and displays signals \nfrom digital systems</string>
+    <string name="sensors_description">Allows logging of data returned \nby sensor connected</string>
+    <string name="wave_generator_description">Generates different waveforms \nand PWM signals</string>
+    <string name="power_source_description">Displays value returned by \nsensors connected to \nI2C input</string>
 
 </resources>

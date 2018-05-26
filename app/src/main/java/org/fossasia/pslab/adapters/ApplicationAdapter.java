@@ -1,6 +1,7 @@
 package org.fossasia.pslab.adapters;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,23 +26,32 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     private List<ApplicationItem> applicationList;
     private final OnItemClickListener listener;
 
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     /**
      * View holder for application list item
      */
     public class Holder extends RecyclerView.ViewHolder {
 
-        TextView applicationName;
+        TextView header, description;
         ImageView applicationIcon;
 
         public Holder(View itemView) {
             super(itemView);
-            this.applicationName = itemView.findViewById(R.id.application_name);
+            this.header = itemView.findViewById(R.id.heading_card);
+            this.description = itemView.findViewById(R.id.description_card);
             this.applicationIcon = itemView.findViewById(R.id.application_icon);
         }
 
         public void setup(final ApplicationItem applicationItem, final OnItemClickListener listener) {
-            applicationName.setText(applicationItem.getApplicationName());
-            Picasso.with(mContext).load(applicationItem.getApplicationIcon()).into(applicationIcon);
+            header.setText(applicationItem.getApplicationName());
+            description.setText(applicationItem.getApplicationDescription());
+            applicationIcon.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            applicationIcon.setImageResource(applicationItem.getApplicationIcon());
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
