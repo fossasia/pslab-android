@@ -8,11 +8,13 @@ public class ApplicationItem {
 
     private String applicationName;
     private int applicationIcon;
+    private String applicationDescription;
 
     public ApplicationItem() {}
 
-    public ApplicationItem(String applicationName, int applicaitonIcon) {
+    public ApplicationItem(String applicationName, int applicaitonIcon, String applicationDescription) {
         this.applicationName = applicationName;
+        this.applicationDescription = applicationDescription;
         this.applicationIcon = applicaitonIcon;
     }
 
@@ -20,12 +22,18 @@ public class ApplicationItem {
         return applicationName;
     }
 
+    public String getApplicationDescription(){ return applicationDescription; }
+
+    public int getApplicationIcon() {
+        return applicationIcon;
+    }
+
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
     }
 
-    public int getApplicationIcon() {
-        return applicationIcon;
+    public void setApplicationDescription(String applicationDescription){
+        this.applicationDescription = applicationDescription;
     }
 
     public void setApplicationIcon(int applicationIcon) {

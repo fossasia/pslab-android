@@ -13,10 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.activity.ControlActivity;
-import org.fossasia.pslab.activity.SensorDataLoggerActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.activity.SensorActivity;
@@ -60,7 +60,7 @@ public class InstrumentsFragment extends Fragment {
                                 intent.putExtra("who", "Instruments");
                                 startActivity(intent);
                                 break;
-                            case "Control":
+                            case "Multimeter":
                                 intent = new Intent(context, ControlActivity.class);
                                 startActivity(intent);
                                 break;
@@ -68,20 +68,22 @@ public class InstrumentsFragment extends Fragment {
                                 intent = new Intent(context, LogicalAnalyzerActivity.class);
                                 startActivity(intent);
                                 break;
-                            case "Sensor QuickView":
+                            case "Sensors":
                                 intent = new Intent(context, SensorActivity.class);
                                 startActivity(intent);
                                 break;
-                            case "Data Sensor Logger":
-                                intent = new Intent(context, SensorDataLoggerActivity.class);
-                                startActivity(intent);
+                            case "Wave Generator":
+                                Toast.makeText(getContext(), getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                                break;
+                            case "Power Source":
+                                Toast.makeText(getContext(), getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                                 break;
                         }
 
                     }
                 });
         int rows = context.getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_PORTRAIT ? 2 : 3;
+                == Configuration.ORIENTATION_PORTRAIT ? 1 : 2;
         initiateViews(view, rows);
         new loadList().execute();
         return view;
@@ -106,27 +108,39 @@ public class InstrumentsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             int[] applications = new int[]{
-                    R.drawable.osciloscope_icon,
-                    R.drawable.control_icon,
-                    R.drawable.logic_analzers_icon,
-                    R.drawable.sensor_icon,
-                    R.drawable.sensor_qv_icon,
-                    R.drawable.wavegen};
+                    R.drawable.oscilloscope_card,
+                    R.drawable.multimeter_card,
+                    R.drawable.logic_analyzer_card,
+                    R.drawable.sensors_card,
+                    R.drawable.wave_generator_card,
+                    R.drawable.power_source_card};
+
+            int[] descriptions = new int[]{
+                    R.string.oscilloscope_description,
+                    R.string.multimeter_description,
+                    R.string.logic_analyzer_description,
+                    R.string.sensors_description,
+                    R.string.wave_generator_description,
+                    R.string.power_source_description
+            };
 
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.oscilloscope), applications[0])
+                    getResources().getString(R.string.oscilloscope), applications[0], getResources().getString(descriptions[0]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.control), applications[1])
+                    getResources().getString(R.string.multimeter), applications[1], getResources().getString(descriptions[1]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.logical_analyzer), applications[2])
+                    getResources().getString(R.string.logical_analyzer), applications[2], getResources().getString(descriptions[2]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.data_sensor_logger), applications[3])
+                    getResources().getString(R.string.sensors), applications[3], getResources().getString(descriptions[3]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.sensor_quick_view), applications[4])
+                    getResources().getString(R.string.wavegen), applications[4], getResources().getString(descriptions[4]))
+            );
+            applicationItemList.add(new ApplicationItem(
+                    getResources().getString(R.string.power_source), applications[5], getResources().getString(descriptions[5]))
             );
             return null;
         }
@@ -148,6 +162,6 @@ public class InstrumentsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, InstrumentsFragment.class.getSimpleName());
+        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, InstrumentsFragment.class.getSimpleName());
     }
 }
