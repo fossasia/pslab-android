@@ -8,40 +8,17 @@ env:
     - ANDROID_API_LEVEL=27
     - ANDROID_API_LEVEL_22=22
     - ANDROID_BUILD_TOOLS_VERSION=27.0.3
-    - ANDROID_ABI=armeabi-v7a
-    - ANDROID_TAG=google_apis
-    - ANDROID_TARGET=android-27
-    - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
 
 android:
   update_sdk: true 
   components:
     - tools
     - platform-tools
-    - tools
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
-    - android-$ANDROID_API_LEVEL
-    - android-$ANDROID_API_LEVEL_22
-    # For Google APIs
-    - addon-$ANDROID_TAG-google-$ANDROID_API_LEVEL
-    # Google Play Services
-    - extra-google-google_play_services
-    # Support library
-    - extra-android-support
-    # Latest artifacts in local repository
-    - extra-google-m2repository
-    - extra-android-m2repository
-
-    # Specify at least one system image
-    - sys-img-armeabi-v7a-android-$ANDROID_API_LEVEL_22
-    
-install:
-    - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
     
 licenses:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
     - '.+'
 
 before_cache:
@@ -61,19 +38,5 @@ before_install:
  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
  - echo 'count=0' > /home/travis/.android/repositories.cfg
 
-before_script:
-  - android list targets
-  - echo no | android create avd --force --name test --target android-22 --abi $ANDROID_ABI
-  - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-
 script:
-  - ./gradlew build connectedAndroidTest --stacktrace
-
-after_success:
-  - bash scripts/prep-key.sh
-  - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then bash upload-apk.sh; fi'
-
-notifications:
-  slack: fossasia:bqOzo4C9y6oI6dTF8kO8zdxp
+  - bash test.sh
