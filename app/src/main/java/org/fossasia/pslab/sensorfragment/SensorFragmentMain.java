@@ -142,7 +142,7 @@ public class SensorFragmentMain extends Fragment {
     Runnable scanRunnable = new Runnable() {
         @Override
         public void run() {
-            if (scienceLab.isConnected()) {
+            if (scienceLab.isConnected() || true) {
                 populateSensors();
             }
         }
@@ -167,7 +167,6 @@ public class SensorFragmentMain extends Fragment {
             for (Integer myInt : data) {
                 if (myInt != null && sensorAddr.get(myInt) != null) {
                     dataAddress.add(String.valueOf(myInt));
-                    dataName.add(sensorAddr.get(myInt));
                 }
             }
             tvData = "";
@@ -175,6 +174,10 @@ public class SensorFragmentMain extends Fragment {
             for (String s : dataAddress) {
                 tvData += s + ":" + sensorAddr.get(Integer.parseInt(s)) + "\n";
             }
+        }
+
+        for (int key: sensorAddr.keySet()) {
+            dataName.add(sensorAddr.get(key));
         }
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
