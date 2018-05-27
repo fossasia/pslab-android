@@ -1,5 +1,6 @@
 package org.fossasia.pslab.activity;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -15,7 +16,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.preference.PreferenceManager;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.LuxMeterFragmentConfig;
@@ -74,6 +74,7 @@ public class LuxMeterActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("ResourceType")
     public void howToConnectDialog(String title, String intro, int iconID, String desc) {
         try {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);

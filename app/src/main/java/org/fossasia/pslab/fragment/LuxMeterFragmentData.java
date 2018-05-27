@@ -27,6 +27,7 @@ import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.sensors.BH1750;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -133,6 +134,7 @@ public class LuxMeterFragmentData extends Fragment {
         private long timeElapsed;
         private int count = 0;
         private float sum = 0;
+        private DecimalFormat df = new DecimalFormat("#.##");
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -156,7 +158,7 @@ public class LuxMeterFragmentData extends Fragment {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            data = event.values[0];
+            data = Float.valueOf(df.format(event.values[0]));
             if (currentMax < data) {
                 currentMax = data;
                 statMax.setText(String.valueOf(data));
@@ -177,7 +179,7 @@ public class LuxMeterFragmentData extends Fragment {
                 count++;
                 sum += item.getY();
             }
-            statMean.setText(Float.toString(sum / count));
+            statMean.setText(Float.toString(Float.valueOf(df.format(sum / count))));
 
             LineDataSet dataSet = new LineDataSet(entries, getString(R.string.bx));
             LineData data = new LineData(dataSet);
@@ -191,7 +193,7 @@ public class LuxMeterFragmentData extends Fragment {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+            //do nothing
         }
     }
 

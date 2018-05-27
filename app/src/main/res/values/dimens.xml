@@ -225,9 +225,13 @@
     <dimen name="bh1750_config_padding_left">35dp</dimen>
 
     <dimen name="sensor_lable_height">40dp</dimen>
+    <dimen name="luxmeter_config_text_padding">5dp</dimen>
+    <dimen name="luxmeter_text_padding">5dp</dimen>
     <dimen name="stat_card_margin_top">20dp</dimen>
     <dimen name="stat_card_height">150dp</dimen>
     <dimen name="tv_lux_height">10dp</dimen>
+    <dimen name="tv_stat_height">30dp</dimen>
+    <dimen name="tv_top_margin">8dp</dimen>
     <dimen name="lux_card_margin_top">20dp</dimen>
     <dimen name="lux_chart_height">200dp</dimen>
 
