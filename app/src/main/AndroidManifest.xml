@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-feature android:name="android.hardware.sensor.light" android:required="true" />
 
     <uses-feature android:name="android.hardware.usb.host" />
 
@@ -63,6 +64,10 @@
 
         <activity android:name=".activity.WaveGeneratorActivity"
             android:screenOrientation="userLandscape"/>
+
+        <activity
+            android:name=".activity.LuxMeterActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />
 

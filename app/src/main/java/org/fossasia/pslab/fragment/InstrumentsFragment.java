@@ -19,6 +19,7 @@ import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.activity.ControlActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.MultimeterActivity;
+import org.fossasia.pslab.activity.LuxMeterActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.activity.PowerSourceActivity;
 import org.fossasia.pslab.activity.SensorActivity;
@@ -83,6 +84,10 @@ public class InstrumentsFragment extends Fragment {
                                 intent = new Intent(context, PowerSourceActivity.class);
                                 startActivity(intent);
                                 break;
+                            case "Lux Meter":
+                                intent = new Intent(context, LuxMeterActivity.class);
+                                startActivity(intent);
+                                break;
                         }
 
                     }
@@ -118,7 +123,8 @@ public class InstrumentsFragment extends Fragment {
                     R.drawable.logic_analyzer_card,
                     R.drawable.sensors_card,
                     R.drawable.wave_generator_card,
-                    R.drawable.power_source_card};
+                    R.drawable.power_source_card,
+                    R.drawable.oscilloscope_card};
 
             int[] descriptions = new int[]{
                     R.string.oscilloscope_description,
@@ -126,7 +132,8 @@ public class InstrumentsFragment extends Fragment {
                     R.string.logic_analyzer_description,
                     R.string.sensors_description,
                     R.string.wave_generator_description,
-                    R.string.power_source_description
+                    R.string.power_source_description,
+                    R.string.lux_meter_description
             };
 
             applicationItemList.add(new ApplicationItem(
@@ -146,6 +153,9 @@ public class InstrumentsFragment extends Fragment {
             );
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.power_source), applications[5], getResources().getString(descriptions[5]))
+            );
+            applicationItemList.add(new ApplicationItem(
+                    getResources().getString(R.string.lux_meter), applications[6], getResources().getString(descriptions[6]))
             );
             return null;
         }
