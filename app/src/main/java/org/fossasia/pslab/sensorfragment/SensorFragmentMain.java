@@ -115,6 +115,7 @@ public class SensorFragmentMain extends Fragment {
                     break;
                 case "MLX90614":
                     if (howToConnectDialog(getString(R.string.ir_thermometer), getString(R.string.ir_thermometer_intro), R.drawable.mlx90614_schematic, getString(R.string.ir_thermometer_desc)))
+
                         selectedFragment = SensorFragmentMLX90614.newInstance();
                     break;
                 case "HMC5883L":
@@ -181,6 +182,10 @@ public class SensorFragmentMain extends Fragment {
 
         }
         for (int key : sensorAddr.keySet()) {
+            dataName.add(sensorAddr.get(key));
+        }
+
+        for (int key: sensorAddr.keySet()) {
             dataName.add(sensorAddr.get(key));
         }
 

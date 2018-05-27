@@ -58,6 +58,7 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    implementation 'com.github.anastr:speedviewlib:1.2.0'
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {
