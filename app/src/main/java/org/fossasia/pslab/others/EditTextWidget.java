@@ -72,6 +72,7 @@ public class EditTextWidget extends LinearLayout{
                 try {
                     Double data = Double.valueOf(editText.getText().toString());
                     data = data - leastCount;
+                    data = Math.round(data*100.0)/100.0;
                     data = data > maxima ? maxima : data;
                     data = data < minima ? minima : data;
                     editText.setText(String.valueOf(data));
@@ -89,6 +90,7 @@ public class EditTextWidget extends LinearLayout{
                 try {
                     Double data = Double.valueOf(editText.getText().toString());
                     data = data + leastCount;
+                    data = Math.round(data*100.0)/100.0;
                     data = data > maxima ? maxima : data;
                     data = data < minima ? minima : data;
                     editText.setText(String.valueOf(data));
