@@ -648,5 +648,16 @@
     <string name="sensors_description">Allows logging of data returned \nby sensor connected</string>
     <string name="wave_generator_description">Generates different waveforms \nand PWM signals</string>
     <string name="power_source_description">Displays value returned by \nsensors connected to \nI2C input</string>
+    <string name="navigation_bh1750_data">Data</string>
+    <string name="navigation_bh1750_configure">Configure</string>
+    <string name="high_limit">High Limit</string>
+    <string name="update_period">Update Period</string>
+    <string name="statistics">Statistics</string>
+    <string name="light_meter">Light Meter</string>
+    <string name="select_light_sensor">Select Sensor</string>
+    <string-array name="select_light_sensor">
+        <item>Built In</item>
+        <item>BH1750</item>
+    </string-array>
 
 </resources>

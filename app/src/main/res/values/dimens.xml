@@ -109,4 +109,13 @@
     <dimen name="oscilloscope_image_weight">2</dimen>
     <dimen name="oscilloscope_divider_line">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
+
+    <dimen name="weight_1">1</dimen>
+    <dimen name="weight_2">2</dimen>
+
+    <dimen name="sensor_params_left">30dp</dimen>
+    <dimen name="sensor_params_start">30dp</dimen>
+    <dimen name="sensor_params_top">10dp</dimen>
+    <dimen name="sensor_params_end">30dp</dimen>
+    <dimen name="bh1750_config_padding_left">35dp</dimen>
 </resources>
