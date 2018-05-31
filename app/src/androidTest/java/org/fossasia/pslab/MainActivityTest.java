@@ -38,8 +38,6 @@ public class MainActivityTest {
         // checking home fragment views
         onView(withId(R.id.img_device_status)).check(matches(isDisplayed()));
         onView(withId(R.id.tv_device_status)).check(matches(isDisplayed()));
-        onView(withId(R.id.tv_device_version)).check(matches(isDisplayed()));
-        onView(withId(R.id.tv_initialisation_status)).check(matches(isDisplayed()));
 
         // Shifting to Instruments Fragment
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());

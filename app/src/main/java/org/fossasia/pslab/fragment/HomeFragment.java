@@ -1,5 +1,7 @@
 package org.fossasia.pslab.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,13 +9,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
-
 import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.others.InitializationVariable;
-
+import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -33,11 +39,22 @@ public class HomeFragment extends Fragment {
     TextView tvVersion;
     @BindView(R.id.img_device_status)
     ImageView imgViewDeviceStatus;
+    @BindView(R.id.tv_device_description)
+    TextView deviceDescription;
+    @BindView(R.id.tv_connect_msg)
+    LinearLayout tvConnectMsg;
+    @BindView(R.id.pslab_web_view)
+    WebView webView;
+    @BindView(R.id.home_content_scroll_view)
+    ScrollView svHomeContent;
+    @BindView(R.id.web_view_progress)
+    ProgressBar wvProgressBar;
+    @BindView(R.id.steps_header_text)
+    TextView stepsHeader;
     private Unbinder unbinder;
 
-    @BindView(R.id.tv_initialisation_status)
-    TextView tvInitializationStatus;
     public static InitializationVariable booleanVariable;
+    public static boolean isWebViewShowing = false;
 
     public static HomeFragment newInstance(boolean deviceConnected, boolean deviceFound) {
         HomeFragment homeFragment = new HomeFragment();
@@ -45,7 +62,6 @@ public class HomeFragment extends Fragment {
         homeFragment.deviceFound = deviceFound;
         return homeFragment;
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,14 +80,49 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
+        stepsHeader.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+        deviceDescription.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         if (deviceFound & deviceConnected) {
-            imgViewDeviceStatus.setImageResource(org.fossasia.pslab.R.drawable.usb_connected);
+            tvConnectMsg.setVisibility(View.GONE);
+            try {
+                tvVersion.setText(scienceLab.getVersion());
+                tvVersion.setVisibility(View.VISIBLE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            imgViewDeviceStatus.setImageResource(R.drawable.icons8_usb_connected_100);
             tvDeviceStatus.setText(getString(R.string.device_connected_successfully));
         } else {
-            imgViewDeviceStatus.setImageResource(org.fossasia.pslab.R.drawable.usb_disconnected);
+            imgViewDeviceStatus.setImageResource(R.drawable.icons_usb_disconnected_100);
             tvDeviceStatus.setText(getString(R.string.device_not_found));
         }
+        deviceDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                webView.loadUrl("https://pslab.fossasia.org");
+                svHomeContent.setVisibility(View.GONE);
+                webView.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                        wvProgressBar.setIndeterminate(true);
+                        wvProgressBar.setVisibility(View.VISIBLE);
+                    }
+                    public void onPageFinished(WebView view, String url) {
+                        wvProgressBar.setVisibility(View.GONE);
+                        webView.setVisibility(View.VISIBLE);
+                    }
+                });
+                isWebViewShowing = true;
+            }
+        });
+
         return view;
+    }
+
+    public void hideWebView() {
+        webView.setVisibility(View.GONE);
+        svHomeContent.setVisibility(View.VISIBLE);
+        isWebViewShowing = false;
     }
 
     @Override
@@ -79,6 +130,6 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
 
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, HomeFragment.class.getSimpleName());
+        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, HomeFragment.class.getSimpleName());
     }
 }
