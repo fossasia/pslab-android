@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_HELPFEEDBACK;
                         break;
                     case R.id.nav_report_us:
-                        customTabService.launchUrl("https://github.com/fossasia/pslab-android/issues");
+                        customTabService.launchUrl("https://goo.gl/forms/sHlmRAPFmzcGQ27u2");
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
