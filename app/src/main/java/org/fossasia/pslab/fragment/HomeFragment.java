@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.others.InitializationVariable;
+
 import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -32,7 +36,8 @@ import static org.fossasia.pslab.others.ScienceLabCommon.scienceLab;
 
 public class HomeFragment extends Fragment {
 
-    private boolean deviceFound = false, deviceConnected = false;
+    public static InitializationVariable booleanVariable;
+    public static boolean isWebViewShowing = false;
     @BindView(R.id.tv_device_status)
     TextView tvDeviceStatus;
     @BindView(R.id.tv_device_version)
@@ -51,10 +56,8 @@ public class HomeFragment extends Fragment {
     ProgressBar wvProgressBar;
     @BindView(R.id.steps_header_text)
     TextView stepsHeader;
+    private boolean deviceFound = false, deviceConnected = false;
     private Unbinder unbinder;
-
-    public static InitializationVariable booleanVariable;
-    public static boolean isWebViewShowing = false;
 
     public static HomeFragment newInstance(boolean deviceConnected, boolean deviceFound) {
         HomeFragment homeFragment = new HomeFragment();
@@ -107,12 +110,33 @@ public class HomeFragment extends Fragment {
                         wvProgressBar.setIndeterminate(true);
                         wvProgressBar.setVisibility(View.VISIBLE);
                     }
+
                     public void onPageFinished(WebView view, String url) {
                         wvProgressBar.setVisibility(View.GONE);
                         webView.setVisibility(View.VISIBLE);
                     }
                 });
                 isWebViewShowing = true;
+            }
+        });
+
+        webView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    WebView webView = (WebView) v;
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_BACK:
+                            if (webView.canGoBack()) {
+                                webView.goBack();
+                                return true;
+                            }
+                            break;
+                        default:
+                            return false;
+                    }
+                }
+                return false;
             }
         });
 
