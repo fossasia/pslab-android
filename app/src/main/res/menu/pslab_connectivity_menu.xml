@@ -3,14 +3,14 @@
 
     <item
         android:id="@+id/menu_pslab_connected"
-        android:icon="@drawable/ic_pslab_connected"
-        android:title="Connect PSLab"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_usb_connected"
+        android:title="@string/text_connected"
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/menu_pslab_disconnected"
-        android:icon="@drawable/ic_pslab_disconnected"
-        app:showAsAction="ifRoom"
-        android:title="Disconnect PSLab">
+        android:icon="@drawable/ic_usb_disconnected"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/text_disconnected">
     </item>
 
 </menu>
