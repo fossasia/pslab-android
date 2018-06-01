@@ -657,4 +657,8 @@
     <string name="number_two">2.</string>
     <string name="number_three">3.</string>
 
+    <string name="text_connected">Connected</string>
+    <string name="text_disconnected">Disconnected</string>
+
+
 </resources>
