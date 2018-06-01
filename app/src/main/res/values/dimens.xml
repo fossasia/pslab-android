@@ -109,6 +109,14 @@
     <dimen name="oscilloscope_image_weight">2</dimen>
     <dimen name="oscilloscope_divider_line">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
+
+    <dimen name="schematic_height">250dp</dimen>
+    <dimen name="custom_dialog_margin_left">24dp</dimen>
+    <dimen name="ok_button_margin_right">30dp</dimen>
+    <dimen name="ok_button_margin_top">3dp</dimen>
+    <dimen name="ok_button_margin_bottom">10dp</dimen>
+    <dimen name="ok_button_size">15sp</dimen>
+
     <dimen name="device_version_padding">20dp</dimen>
     <dimen name="connect_msg_tv_padding">20dp</dimen>
     <dimen name="device_desc_padding">20dp</dimen>
@@ -124,4 +132,5 @@
     <dimen name="device_status_height_text">60dp</dimen>
     <dimen name="progress_bar_height">8dp</dimen>
     <dimen name="connect_instruction_text_header">18sp</dimen>
+
 </resources>
