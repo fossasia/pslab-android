@@ -19,6 +19,7 @@ import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.activity.ControlActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
+import org.fossasia.pslab.activity.PowerSourceActivity;
 import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.items.ApplicationItem;
 import org.fossasia.pslab.R;
@@ -76,7 +77,8 @@ public class InstrumentsFragment extends Fragment {
                                 Toast.makeText(getContext(), getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                                 break;
                             case "Power Source":
-                                Toast.makeText(getContext(), getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                                intent = new Intent(context, PowerSourceActivity.class);
+                                startActivity(intent);
                                 break;
                         }
 
