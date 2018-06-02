@@ -110,6 +110,14 @@
     <dimen name="oscilloscope_divider_line">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
 
+    <dimen name="pin_description_title_text">20sp</dimen>
+    <dimen name="pin_description_content_text">15sp</dimen>
+    <dimen name="pin_description_dialog_margin">10dp</dimen>
+    <dimen name="pin_description_content_height">50dp</dimen>
+
+    <dimen name="dialog_body_height">20dp</dimen>
+    <dimen name="dialog_body_width">100dp</dimen>
+
     <dimen name="schematic_height">250dp</dimen>
     <dimen name="custom_dialog_margin_left">24dp</dimen>
     <dimen name="ok_button_margin_right">30dp</dimen>

@@ -14,6 +14,7 @@
     <string name="nav_report">Report Issues</string>
     <string name="nav_help_feedback">Help &amp; Feedback</string>
 
+    <string name="pslab_pinlayout">Pin Layout</string>
 
     <string name="oscilloscope">Oscilloscope</string>
     <string name="multimeter">Multimeter</string>
@@ -441,6 +442,7 @@
     <string name="start_logging">Start Logging</string>
     <string name="stop_logging">Stop Logging</string>
     <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
     <string name="save_data">Save Data</string>
     <string name="view_logged_data">View Logged Data</string>
     <string name="export_logged_data">Export Logged Data</string>
