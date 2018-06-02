@@ -1,19 +1,23 @@
 package org.fossasia.pslab.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
@@ -24,6 +28,8 @@ import org.fossasia.pslab.R;
 
 public class LAChannelModeFragment extends Fragment {
 
+    public static final String PREFS_NAME = "customDialogPreference";
+    public CheckBox dontShowAgain;
     private String[] channels = {"ID1", "ID2", "ID3", "ID4", "SEN", "EXT", "CNTR"};
     private String[] edges = {"EVERY EDGE", "EVERY FALLING EDGE", "EVERY RISING EDGE", "EVERY FOURTH RISING EDGE", "DISABLED"};
     private LinearLayout llChannel1, llChannel2, llChannel3, llChannel4;
@@ -44,6 +50,7 @@ public class LAChannelModeFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.logic_analyzer_select_channel, container, false);
+        howToConnectDialog(getString(R.string.logic_analyzer_dialog_heading), getString(R.string.logic_analyzer_dialog_text), R.drawable.logic_analyzer_circuit, getString(R.string.logic_analyzer_dialog_description));
         Spinner modeSelectSpinner = v.findViewById(R.id.channel_mode_select_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.select_channel_mode_la, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -197,14 +204,54 @@ public class LAChannelModeFragment extends Fragment {
         return selectView;
     }
 
-    public interface OnChannelSelectedListener {
-        void channelSelectedNowAnalyze(Bundle params);
+    @SuppressLint("ResourceType")
+    public void howToConnectDialog(String title, String intro, int iconID, String desc) {
+        try {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.custom_dialog_box, null);
+            final SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+            Boolean skipMessage = settings.getBoolean("skipMessage", false);
+
+            dontShowAgain = (CheckBox) dialogView.findViewById(R.id.toggle_show_again);
+            final TextView heading_text = (TextView) dialogView.findViewById(R.id.custom_dialog_text);
+            final TextView description_text = (TextView) dialogView.findViewById(R.id.description_text);
+            final ImageView schematic = (ImageView) dialogView.findViewById(R.id.custom_dialog_schematic);
+            final Button ok_button = (Button) dialogView.findViewById(R.id.dismiss_button);
+
+            builder.setView(dialogView);
+            builder.setTitle(title);
+            heading_text.setText(intro);
+            schematic.setImageResource(iconID);
+            description_text.setText(desc);
+            final AlertDialog dialog = builder.create();
+            ok_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Boolean checkBoxResult = false;
+                    if (dontShowAgain.isChecked())
+                        checkBoxResult = true;
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean("skipMessage", checkBoxResult);
+                    editor.apply();
+                    dialog.dismiss();
+                }
+            });
+            if (!skipMessage)
+                dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, LAChannelModeFragment.class.getSimpleName());
+        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, LAChannelModeFragment.class.getSimpleName());
+    }
+
+    public interface OnChannelSelectedListener {
+        void channelSelectedNowAnalyze(Bundle params);
     }
 }
