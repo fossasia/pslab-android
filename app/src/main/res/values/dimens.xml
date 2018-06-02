@@ -89,11 +89,11 @@
     <dimen name="seekbar_height">16dp</dimen>
 
     <dimen name="home_fragment_padding">10dp</dimen>
-    <dimen name="home_fragement_margin">10dp</dimen>
+    <dimen name="home_fragment_margin">30dp</dimen>
     <dimen name="device_status_width">80dp</dimen>
     <dimen name="device_status_height">80dp</dimen>
     <dimen name="device_status_textsize">20sp</dimen>
-    <dimen name="home_fragment_textview_margin">5dp</dimen>
+    <dimen name="home_fragment_textview_margin">20dp</dimen>
 
     <dimen name="body_resistance_margin">10dp</dimen>
     <dimen name="resistance_text_height">40dp</dimen>
@@ -109,4 +109,28 @@
     <dimen name="oscilloscope_image_weight">2</dimen>
     <dimen name="oscilloscope_divider_line">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
+
+    <dimen name="schematic_height">250dp</dimen>
+    <dimen name="custom_dialog_margin_left">24dp</dimen>
+    <dimen name="ok_button_margin_right">30dp</dimen>
+    <dimen name="ok_button_margin_top">3dp</dimen>
+    <dimen name="ok_button_margin_bottom">10dp</dimen>
+    <dimen name="ok_button_size">15sp</dimen>
+
+    <dimen name="device_version_padding">20dp</dimen>
+    <dimen name="connect_msg_tv_padding">20dp</dimen>
+    <dimen name="device_desc_padding">20dp</dimen>
+    <dimen name="connect_instruction_text">16sp</dimen>
+    <dimen name="instruction_ll_margin">20dp</dimen>
+    <dimen name="inst_bullet_margin">5dp</dimen>
+    <dimen name="inst_margin_bottom">10dp</dimen>
+    <dimen name="separator_margin">120dp</dimen>
+    <dimen name="separator_margin_top">30dp</dimen>
+    <dimen name="separator_width" >1dp</dimen>
+    <dimen name="device_status_margin_bottom">40dp</dimen>
+    <dimen name="connect_inst_margin_b0ttom">20dp</dimen>
+    <dimen name="device_status_height_text">60dp</dimen>
+    <dimen name="progress_bar_height">8dp</dimen>
+    <dimen name="connect_instruction_text_header">18sp</dimen>
+
 </resources>
