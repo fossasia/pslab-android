@@ -648,6 +648,7 @@
     <string name="sensors_description">Allows logging of data returned \nby sensor connected</string>
     <string name="wave_generator_description">Generates different waveforms \nand PWM signals</string>
     <string name="power_source_description">Displays value returned by \nsensors connected to \nI2C input</string>
+
     <string name="web_view_link_text">What is PSLab Device?</string>
     <string name="pslab_connect_text">Steps to connect the PSLab Device</string>
     <string name="pslab_instruction_1">Connect a micro USB(Mini B) to PSLab</string>
