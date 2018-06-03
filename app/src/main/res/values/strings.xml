@@ -48,6 +48,34 @@
         <item>Four Channel Mode</item>
     </string-array>
 
+    <string-array name="multimeter_knob_states">
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+        <item>CH3</item>
+        <item>CH2</item>
+        <item>CH1</item>
+        <item>CAP</item>
+        <item>SEN</item>
+        <item>AN8</item>
+    </string-array>
+
+    <string name="id1">ID1</string>
+    <string name="id2">ID2</string>
+    <string name="id3">ID3</string>
+    <string name="id4">ID4</string>
+    <string name="count_pulse">Count Pulse</string>
+    <string name="capacitance_unit">Farad</string>
+    <string name="frequency_unit">Hz</string>
+    <string name="multimeter_voltage_unit">Volts</string>
+    <string name="voltage_channels">Voltage at Channels</string>
+    <string name="voltage_elements">Voltage at Elements</string>
+
     <string name="set">SET</string>
     <string name="read">READ</string>
     <string name="resistance">Resistance</string>

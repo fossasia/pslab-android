@@ -54,6 +54,8 @@
             android:name=".activity.LogicalAnalyzerActivity"
             android:configChanges="screenSize|orientation" />
         <activity android:name=".activity.SensorDataLoggerActivity" />
+        <activity android:name=".activity.MultimeterActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".receivers.USBDetachReceiver" />
 

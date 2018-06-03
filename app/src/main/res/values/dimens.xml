@@ -95,6 +95,37 @@
     <dimen name="device_status_textsize">20sp</dimen>
     <dimen name="home_fragment_textview_margin">20dp</dimen>
 
+    <dimen name="multimeter_display_height">130dp</dimen>
+    <dimen name="multimeter_display_margin">5dp</dimen>
+    <dimen name="multimeter_display_margin_top">10dp</dimen>
+    <dimen name="multimeter_diplay_textsize">36sp</dimen>
+    <dimen name="multimeter_display_text_margin">50dp</dimen>
+    <dimen name="multimeter_layout_margin">20dp</dimen>
+    <dimen name="multimeter_line_width">1dp</dimen>
+    <dimen name="multimeter_displayline_topmargin">100dp</dimen>
+    <dimen name="multimeter_unitbox_topmargin">105dp</dimen>
+    <dimen name="multimeter_buttons_topmargin">15dp</dimen>
+    <dimen name="multimeter_button_width">150dp</dimen>
+    <dimen name="multimeter_knob_dimension">220dp</dimen>
+    <dimen name="multimeter_knobtext_margin">22dp</dimen>
+    <dimen name="multimeter_knobcenter_topmargin">35dp</dimen>
+    <dimen name="multimeter_knoblines_width">2dp</dimen>
+    <dimen name="multimeter_knob_belowline_height">70dp</dimen>
+    <dimen name="multimeter_knobsquare_belowline_topmargin">230dp</dimen>
+    <dimen name="multimeter_textsize">24sp</dimen>
+    <dimen name="multimeter_knobcircle_radius">175dp</dimen>
+    <dimen name="multimeter_knobtexts_distance">140dp</dimen>
+    <dimen name="multimulter_bottombuttons_topmargin">30dp</dimen>
+    <dimen name="multimeter_bottombutton_textsize">18sp</dimen>
+    <dimen name="multimeter_knob_bottomtext_topmargin">25dp</dimen>
+    <dimen name="multimeter_button1_topmargin">10dp</dimen>
+    <dimen name="multimeter_knob_diameter">260dp</dimen>
+    <dimen name="multimeter_centermarker_margin">45dp</dimen>
+    <dimen name="multimeter_statemarker2_topmargin">4dp</dimen>
+    <dimen name="multimeter_knobline5_height">40dp</dimen>
+    <dimen name="multimeter_knobmarker3_topmargin">200dp</dimen>
+    <dimen name="multimeter_statemarker6_topmargin">25dp</dimen>
+
     <dimen name="body_resistance_margin">10dp</dimen>
     <dimen name="resistance_text_height">40dp</dimen>
     <dimen name="stepper_motor_constraint_padding">5dp</dimen>
