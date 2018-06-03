@@ -35,6 +35,7 @@ import org.fossasia.pslab.fragment.AboutUsFragment;
 import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
 import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
+import org.fossasia.pslab.fragment.PSLabPinLayoutFragment;
 import org.fossasia.pslab.fragment.SettingsFragment;
 import org.fossasia.pslab.others.CustomTabService;
 import org.fossasia.pslab.others.InitializationVariable;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_INSTRUMENTS = "instruments";
     private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
+    private static final String TAG_PINLAYOUT = "pinLayout";
     private static final String TAG_HELPFEEDBACK = "helpFeedback";
     private static String CURRENT_TAG = TAG_INSTRUMENTS;
     private String[] activityTitles;
@@ -307,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
                  return;
         }
         if (shouldLoadHomeFragOnBackPress) {
-            if (navItemIndex != 0) {
+            if (navItemIndex != 0 || CURRENT_TAG.equals(TAG_PINLAYOUT)) {
                 navItemIndex = 0;
                 CURRENT_TAG = TAG_INSTRUMENTS;
                 loadHomeFragment();
@@ -336,10 +338,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_pslab_connected:
+                Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_pslab_disconnected:
                 attemptToConnectPSLab();
                 break;
+            case R.id.menu_pslab_layout:
+                displayPSLabPinLayout();
             default:
                 break;
         }
@@ -361,6 +366,23 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void displayPSLabPinLayout() {
+        CURRENT_TAG = TAG_PINLAYOUT;
+        navigationView.getMenu().getItem(navItemIndex).setChecked(false);
+        getSupportActionBar().setTitle(getResources().getString(R.string.pslab_pinlayout));
+        Runnable mPendingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Fragment fragment = PSLabPinLayoutFragment.newInstance();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                        .replace(R.id.frame, fragment, TAG_PINLAYOUT)
+                        .commitAllowingStateLoss();
+            }
+        };
+        mHandler.post(mPendingRunnable);
     }
 
     private void attemptToGetUSBPermission() {
