@@ -1,5 +1,5 @@
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_pslab_connected"
@@ -9,9 +9,13 @@
     <item
         android:id="@+id/menu_pslab_disconnected"
         android:icon="@drawable/ic_usb_disconnected"
-        app:showAsAction="ifRoom|withText"
-        android:title="@string/text_disconnected">
-    </item>
+        android:title="@string/text_disconnected"
+        app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/menu_pslab_layout"
+        android:icon="@drawable/ic_pslab_pin_layout"
+        android:title="@string/pslab_pinlayout"
+        app:showAsAction="ifRoom"/>
 
 </menu>
 
