@@ -43,9 +43,6 @@
             android:name=".activity.PerformExperimentActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
-            android:name=".activity.ControlActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
             android:name=".activity.OscilloscopeActivity"
             android:configChanges="screenSize|keyboardHidden"
             android:screenOrientation="sensorLandscape" />
@@ -59,7 +56,7 @@
 
         <receiver android:name=".receivers.USBDetachReceiver" />
 
-        <activity android:name=".activity.PowerSourceActivity"></activity>
+        <activity android:name=".activity.PowerSourceActivity"/>
     </application>
 
 </manifest>
