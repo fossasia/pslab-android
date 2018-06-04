@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.fossasia.pslab.PSLabApplication;
-import org.fossasia.pslab.activity.ControlActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.MultimeterActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
