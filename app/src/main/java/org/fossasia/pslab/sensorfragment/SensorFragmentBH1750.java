@@ -95,7 +95,8 @@ public class SensorFragmentBH1750 extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensor_bh1750, container, false);
         tvSensorBH1750Luminosity = view.findViewById(R.id.tv_sensor_bh1750_luminosity);
         Spinner spinnerSensorBH1750 = view.findViewById(R.id.spinner_sensor_bh1750);
@@ -146,7 +147,6 @@ public class SensorFragmentBH1750 extends Fragment {
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
-
         private Double dataBH1750;
         private long timeElapsed;
 

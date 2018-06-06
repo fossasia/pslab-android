@@ -728,4 +728,18 @@
     <string name="text_connected">Connected</string>
     <string name="text_disconnected">Disconnected</string>
 
+    <string name="lux_meter">Lux Meter</string>
+    <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
+    is compatible with either the built in light sensor in your android device or the BH-1750 light sensor.\n
+    \u2022 If you want to use the sensor BH-1750, connect the sensor to PSLab device as shown below</string>
+    <string name="lux_meter_desc">\u2022 The above pin configuration has to be same except for the pin
+    GND. You can use any of the PSLab device GND pins.\n</string>
+
+    <string name="ir_thermometer">Thermometer</string>
+    <string name="ir_thermometer_intro">\u2022 The Thermometer can be used to measure the temperature. This instruments
+    is compatible with the MLX-90614 Infrared thermo sensor.\n\n
+    \u2022 When using the sensor MLX-90614, connect the sensor to PSLab device as shown below</string>
+    <string name="ir_thermometer_desc">\u2022 The above pin configuration has to be same except for the pin
+    GND. You can use any of the PSLab device GND pins.\n</string>
+
 </resources>

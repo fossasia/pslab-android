@@ -199,4 +199,5 @@
     <dimen name="progress_bar_height">8dp</dimen>
     <dimen name="connect_instruction_text_header">18sp</dimen>
 
+    <dimen name="sensor_schematic_height">250dp</dimen>
 </resources>
