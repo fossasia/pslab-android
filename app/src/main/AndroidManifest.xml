@@ -21,11 +21,13 @@
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSplash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".activity.MainActivity"
@@ -57,9 +59,13 @@
         <activity android:name=".activity.MultimeterActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.PowerSourceActivity"/>
+
+        <activity android:name=".activity.WaveGeneratorActivity"
+            android:screenOrientation="userLandscape"/>
+
         <receiver android:name=".receivers.USBDetachReceiver" />
 
-        <activity android:name=".activity.PowerSourceActivity"></activity>
     </application>
 
 </manifest>
