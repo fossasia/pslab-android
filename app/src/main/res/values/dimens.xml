@@ -42,6 +42,20 @@
     <dimen name="control_read_border_hdpi">5dp</dimen>
     <dimen name="control_read_height">60dp</dimen>
 
+    <dimen name="power_source_card_corner">4dp</dimen>
+    <dimen name="power_source_card_margin">5dp</dimen>
+    <dimen name="power_source_card_height">200dp</dimen>
+    <dimen name="weight_scale">0dp</dimen>
+    <dimen name="power_card_big_margin">15dp</dimen>
+    <dimen name="power_card_medium_margin">10dp</dimen>
+    <dimen name="power_card_header_text">30sp</dimen>
+    <dimen name="power_card_tiny_margin">5dp</dimen>
+    <dimen name="power_card_display_text">25sp</dimen>
+    <dimen name="power_card_button_weight">1</dimen>
+    <dimen name="power_card_large_margin">13dp</dimen>
+
+    <item name="power_card_panel_weight" type="dimen" format="float">0.8</item>
+
     <dimen name="sensor_title_font">16sp</dimen>
     <dimen name="sensor_body_font">14sp</dimen>
 
