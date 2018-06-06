@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/mon_title_sep_margin"
                 android:text="@string/wave1"
-                android:textColor="@color/orange"
+                android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/fguideline3"
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/mon_title_sep_margin"
                 android:text="@string/wave2"
-                android:textColor="@color/dark_grey"
+                android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/wave_mon_wave1"
@@ -323,7 +323,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_sq1"
-                android:textColor="@color/dark_grey"
+                android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -336,7 +336,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_sq2"
-                android:textColor="@color/orange"
+                android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -350,7 +350,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_sq3"
-                android:textColor="@color/dark_grey"
+                android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -364,7 +364,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_sq4"
-                android:textColor="@color/dark_grey"
+                android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -505,13 +505,13 @@
             android:background="@color/white">
 
             <com.warkiz.widget.IndicatorSeekBar
-                android:id="@+id/seek_bar"
+                android:id="@+id/seek_bar_wave_gen"
                 android:layout_width="@dimen/length_0dp"
                 android:layout_height="@dimen/seekbar_height_wave"
                 android:layout_marginBottom="@dimen/seekbar_margin"
                 android:layout_marginTop="@dimen/seekbar_margin"
                 android:layout_weight="1"
-                app:isb_indicator_color="@color/colorPrimary"
+                app:isb_show_indicator="false"
                 app:isb_max="5000"
                 app:isb_min="0"
                 app:isb_seek_bar_type="discrete_ticks"
@@ -543,7 +543,7 @@
                 android:stateListAnimator="@animator/selector_animator" />
 
             <Button
-                android:id="@+id/btn_reset"
+                android:id="@+id/btn_set"
                 android:layout_width="@dimen/length_0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/seek_btn_margin"
@@ -551,7 +551,7 @@
                 android:layout_weight="0.18"
                 android:background="@drawable/btn_back_rounded"
                 android:stateListAnimator="@animator/selector_animator"
-                android:text="@string/reset_lowercase"
+                android:text="@string/set_lowercase"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
 

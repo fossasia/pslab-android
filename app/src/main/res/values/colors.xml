@@ -14,6 +14,7 @@
     <color name="white_grey">#9ea7aa</color>
     <color name="dark_grey">#757575</color>
     <color name="orange">#ff7043</color>
+    <color name="theme_red_light">#40c72c2c</color>
     <color name="blue_grey">#546E7A</color>
 
 </resources>
