@@ -49,6 +49,9 @@ dependencies {
     implementation "com.github.medyo:android-about-page:$rootProject.androidAboutPageVersion"
     implementation "com.github.tiagohm.MarkdownView:library:$rootProject.markDownViewVersion"
     implementation "com.github.mirrajabi:search-dialog:$rootProject.searchDialogVersion"
+    implementation "com.github.BeppiMenozzi:Knob:$rootProject.knobLibraryVersion"
+    implementation "com.github.warkiz.widget:indicatorseekbar:$rootProject.seekBarLibraryVersion"
+
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
