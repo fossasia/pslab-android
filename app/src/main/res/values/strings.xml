@@ -692,7 +692,6 @@
     <string name="power_card_pv2">PV2</string>
     <string name="power_card_pv3">PV3</string>
     <string name="power_card_pcs">PCS</string>
-    <string name="power_card_default_text">+0.00</string>
 
     <string name="schematic_desc">Schematic image goes here</string>
     <string name="donot_show_again">Don\'t show again</string>

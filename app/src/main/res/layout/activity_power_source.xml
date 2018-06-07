@@ -88,7 +88,7 @@
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
-                        <EditText
+                        <TextView
                             android:id="@+id/power_card_pv1_display"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -98,10 +98,8 @@
                             android:background="@drawable/control_edittext"
                             android:fontFamily="monospace"
                             android:gravity="center"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5"
+                            android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
-                            android:text="@string/power_card_default_text"
                             android:textSize="@dimen/power_card_display_text" />
                     </LinearLayout>
 
@@ -117,12 +115,12 @@
                         app:indicator_width="10"
                         app:is_continuous="true"
                         app:main_circle_color="@color/white"
-                        app:max="250"
                         app:progress_primary_color="@color/indicator_color"
                         app:progress_secondary_color="@color/progress_secondary_color"
                         app:start_offset="45" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
             <!-- PV2 -->
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
@@ -181,7 +179,7 @@
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
-                        <EditText
+                        <TextView
                             android:id="@+id/power_card_pv2_display"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -191,10 +189,8 @@
                             android:background="@drawable/control_edittext"
                             android:fontFamily="monospace"
                             android:gravity="center"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5"
+                            android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
-                            android:text="@string/power_card_default_text"
                             android:textSize="@dimen/power_card_display_text" />
                     </LinearLayout>
 
@@ -210,12 +206,12 @@
                         app:indicator_width="10"
                         app:is_continuous="true"
                         app:main_circle_color="@color/white"
-                        app:max="250"
                         app:progress_primary_color="@color/indicator_color"
                         app:progress_secondary_color="@color/progress_secondary_color"
                         app:start_offset="45" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
             <!-- PV3 -->
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
@@ -274,7 +270,7 @@
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
-                        <EditText
+                        <TextView
                             android:id="@+id/power_card_pv3_display"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -284,10 +280,8 @@
                             android:background="@drawable/control_edittext"
                             android:fontFamily="monospace"
                             android:gravity="center"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5"
+                            android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
-                            android:text="@string/power_card_default_text"
                             android:textSize="@dimen/power_card_display_text" />
                     </LinearLayout>
 
@@ -303,12 +297,12 @@
                         app:indicator_width="10"
                         app:is_continuous="true"
                         app:main_circle_color="@color/white"
-                        app:max="250"
                         app:progress_primary_color="@color/indicator_color"
                         app:progress_secondary_color="@color/progress_secondary_color"
                         app:start_offset="45" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
             <!-- PCS -->
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
@@ -367,7 +361,7 @@
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
-                        <EditText
+                        <TextView
                             android:id="@+id/power_card_pcs_display"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -377,10 +371,8 @@
                             android:background="@drawable/control_edittext"
                             android:fontFamily="monospace"
                             android:gravity="center"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5"
+                            android:maxLength="8"
                             android:padding="@dimen/power_card_medium_margin"
-                            android:text="@string/power_card_default_text"
                             android:textSize="@dimen/power_card_display_text" />
                     </LinearLayout>
 
@@ -396,7 +388,6 @@
                         app:indicator_width="10"
                         app:is_continuous="true"
                         app:main_circle_color="@color/white"
-                        app:max="250"
                         app:progress_primary_color="@color/indicator_color"
                         app:progress_secondary_color="@color/progress_secondary_color"
                         app:start_offset="45" />
