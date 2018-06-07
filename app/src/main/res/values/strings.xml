@@ -688,6 +688,11 @@
     <string name="number_two">2.</string>
     <string name="number_three">3.</string>
 
+    <string name="power_card_pv1">PV1</string>
+    <string name="power_card_pv2">PV2</string>
+    <string name="power_card_pv3">PV3</string>
+    <string name="power_card_pcs">PCS</string>
+    <string name="power_card_default_text">+0.00</string>
 
     <string name="schematic_desc">Schematic image goes here</string>
     <string name="donot_show_again">Don\'t show again</string>
@@ -697,7 +702,6 @@
     <string name="logic_analyzer_dialog_text">Connect the digital wave generator pins with the logic analyzer pins as shown in the figure\n</string>
     <string name="logic_analyzer_dialog_description">\u2022 The connections shown in the above figure is for the case when all the four pins are in use.\n\n\u2022 The wires can be connected with pins of any ID as per the requirement. </string>
 
-    //wave_generator_activity
     <string name="wave_name_holder">Triangular</string>
     <string name="freq_text">Frequency :</string>
     <string name="freq_holder_text">5.255 Hz</string>

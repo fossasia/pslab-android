@@ -7,6 +7,12 @@
     <color name="darkWhite">#dadada</color>
     <color name="black">#000000</color>
     <color name="background">#FAFAFA</color>
+
+    <!-- Power Source Colors -->
+    <color name="back_circle_color">#EDEDED</color>
+    <color name="indicator_color">#d32f2f</color>
+    <color name="progress_secondary_color">#EEEEEE</color>
+
     <color name="outline">#B1BCBE</color>
     <color name="customBorderFill">#7A7A7A</color>
     <color name="grey_light">#bdbdbd</color>
