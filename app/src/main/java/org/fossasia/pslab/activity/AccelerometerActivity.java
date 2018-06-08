@@ -14,7 +14,7 @@ public class AccelerometerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accelerometer);
-        AccelerometerAdapter adapter = new AccelerometerAdapter(new String[]{"X axis", "Y axis", "Z axis"});
+        AccelerometerAdapter adapter = new AccelerometerAdapter(new String[]{"X axis", "Y axis", "Z axis"}, getApplicationContext());
 
         RecyclerView recyclerView = this.findViewById(R.id.accelerometer_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

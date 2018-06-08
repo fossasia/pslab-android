@@ -44,7 +44,6 @@
                 android:paddingBottom="@dimen/card_margin"
                 android:paddingLeft="@dimen/card_margin"
                 android:paddingTop="@dimen/card_margin"
-                android:text="@string/test_value"
                 android:textAlignment="center"
                 android:textSize="@dimen/accel_textsize_large"
                 android:typeface="monospace" />
@@ -128,7 +127,7 @@
                 android:gravity="top|center_horizontal"
                 android:paddingTop="@dimen/tv_chart_padding"
                 android:rotation="-90"
-                android:text="@string/meters_per_sec"
+                android:text="@string/meters_per_sec_html"
                 android:textColor="@color/white"
                 android:textSize="@dimen/accel_textsize_small"
                 android:textStyle="normal|bold"
