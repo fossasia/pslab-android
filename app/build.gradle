@@ -52,6 +52,7 @@ dependencies {
     implementation "com.sdsmdg.harjot:croller:$rootProject.crollerVersion"
     implementation "com.github.BeppiMenozzi:Knob:$rootProject.knobLibraryVersion"
     implementation "com.github.warkiz.widget:indicatorseekbar:$rootProject.seekBarLibraryVersion"
+    implementation "com.github.Vatican-Cameos:CarouselPicker:$rootProject.carouselPickerVersion"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"

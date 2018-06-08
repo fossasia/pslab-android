@@ -53,6 +53,7 @@ ext{
     leakCanaryVersion = '1.5.4'
     knobLibraryVersion = '1.9.0'
     seekBarLibraryVersion = '1.2.9'
+    carouselPickerVersion = 'v1.0'
 
     //Test dependencies
     testRunnerRulesVersion = '0.5'

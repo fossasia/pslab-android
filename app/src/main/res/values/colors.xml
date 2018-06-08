@@ -5,6 +5,7 @@
     <color name="colorAccent">#ce525f</color>
     <color name="white">#ffffff</color>
     <color name="darkWhite">#dadada</color>
+    <color name="gray">#F2ECEC</color>
     <color name="black">#000000</color>
     <color name="background">#FAFAFA</color>
 
@@ -16,6 +17,7 @@
     <color name="outline">#B1BCBE</color>
     <color name="customBorderFill">#7A7A7A</color>
     <color name="grey_light">#bdbdbd</color>
+    <color name="golden">#FFD700</color>
     <color name="grey">#2D2F31</color>
     <color name="white_grey">#9ea7aa</color>
     <color name="dark_grey">#757575</color>
