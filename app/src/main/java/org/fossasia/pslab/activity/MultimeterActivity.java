@@ -58,21 +58,32 @@ public class MultimeterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (scienceLab.isConnected()) {
                     DecimalFormat resistanceFormat = new DecimalFormat("#.##");
-                    Double resistance = scienceLab.getResistance();
+                    Double resistance;
+                    Double avgResistance = 0.0;
+                    int loops = 20;
+                    for (int i = 0; i < loops; i++) {
+                        resistance = scienceLab.getResistance();
+                        if (resistance == null) {
+                            avgResistance = null;
+                            break;
+                        } else {
+                            avgResistance = avgResistance + resistance / loops;
+                        }
+                    }
                     String resistanceUnit;
                     String Resistance = "";
-                    if (resistance == null) {
+                    if (avgResistance == null) {
                         Resistance = "Infinity";
                         resistanceUnit = "Ohms";
                     } else {
-                        if (resistance > 10e5) {
-                            Resistance = resistanceFormat.format((resistance / 10e5));
+                        if (avgResistance > 10e5) {
+                            Resistance = resistanceFormat.format((avgResistance / 10e5));
                             resistanceUnit = "MOhms";
-                        } else if (resistance > 10e2) {
-                            Resistance = resistanceFormat.format((resistance / 10e2));
+                        } else if (avgResistance > 10e2) {
+                            Resistance = resistanceFormat.format((avgResistance / 10e2));
                             resistanceUnit = "kOhms";
-                        } else if (resistance > 1) {
-                            Resistance = resistanceFormat.format(resistance);
+                        } else if (avgResistance > 1) {
+                            Resistance = resistanceFormat.format(avgResistance);
                             resistanceUnit = "Ohms";
                         } else {
                             Resistance = "Cannot measure!";
