@@ -76,7 +76,6 @@
                 android:textSize="@dimen/accel_textsize_medium"
                 android:typeface="monospace" />
 
-
         </RelativeLayout>
 
         <RelativeLayout
