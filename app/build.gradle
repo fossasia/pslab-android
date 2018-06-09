@@ -41,6 +41,7 @@ dependencies {
     implementation "org.apache.commons:commons-math3:$rootProject.commonMathVersion"
     implementation "org.apache.commons:commons-lang3:$rootProject.commonLangVersion"
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+    implementation "com.github.deano2390:MaterialShowcaseView:$rootProject.showcaseView"
     implementation "com.github.devlight.navigationtabstrip:navigationtabstrip:$rootProject.navTabStripVersion"
     implementation "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
