@@ -54,7 +54,8 @@
         <activity android:name=".activity.SensorActivity" />
         <activity
             android:name=".activity.LogicalAnalyzerActivity"
-            android:configChanges="screenSize|orientation" />
+            android:configChanges="screenSize|orientation"
+            android:screenOrientation="landscape"/>
         <activity android:name=".activity.SensorDataLoggerActivity" />
         <activity android:name=".activity.MultimeterActivity"
             android:screenOrientation="portrait"/>

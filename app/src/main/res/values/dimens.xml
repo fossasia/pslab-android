@@ -155,6 +155,34 @@
     <dimen name="oscilloscope_divider_line">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
 
+    <dimen name="modified_spinner_height">40dp</dimen>
+    <dimen name="spinner_text_size">15sp</dimen>
+    <dimen name="ll_padding_top">5dp</dimen>
+    <dimen name="ll_padding_right">8dp</dimen>
+    <dimen name="ll_padding_left">8dp</dimen>
+    <dimen name="ll_padding_bottom">8dp</dimen>
+    <dimen name="ll_margin_top">15dp</dimen>
+    <dimen name="indicator_margin">5dp</dimen>
+    <dimen name="indicator_width">15dp</dimen>
+    <dimen name="indicator_height">15dp</dimen>
+    <dimen name="chart_layout_margin_top">5dp</dimen>
+    <dimen name="chart_layout_margin_bottom">45dp</dimen>
+    <dimen name="recycler_view_margin_end">5dp</dimen>
+    <dimen name="button_text">15sp</dimen>
+    <dimen name="button_text_height">5dp</dimen>
+    <dimen name="analyze_button_height">40dp</dimen>
+    <dimen name="analyze_button_margin_top">5dp</dimen>
+    <dimen name="units_indicator_padding_top">3dp</dimen>
+    <dimen name="x_coordinate_padding_right">50dp</dimen>
+    <dimen name="x_coordinate_padding_bottom">3dp</dimen>
+    <dimen name="x_coordinate_text_size">15sp</dimen>
+    <dimen name="spinner_margin_bottom">5dp</dimen>
+    <dimen name="spinner_margin_top">5dp</dimen>
+    <dimen name="carousel_margin_top">10dp</dimen>
+    <dimen name="carousel_margin_bottom">5dp</dimen>
+    <dimen name="select_channel_description_text_padding_top">30dp</dimen>
+    <dimen name="select_channel_description_text_size">15sp</dimen>
+
     <dimen name="pin_description_title_text">20sp</dimen>
     <dimen name="pin_description_content_text">15sp</dimen>
     <dimen name="pin_description_dialog_margin">10dp</dimen>
