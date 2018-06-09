@@ -4,6 +4,7 @@ package org.fossasia.pslab.activity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -47,6 +48,7 @@ import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.AudioJack;
 import org.fossasia.pslab.others.Plot2D;
+import org.fossasia.pslab.others.PreferenceManager;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
 
@@ -58,6 +60,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static org.fossasia.pslab.others.MathUtils.map;
 
@@ -267,6 +271,27 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         diodeClippingClampingFragment = new DiodeClippingClampingExperiment();
         oscillatorExperimentFragment = new OscillatorExperimentFragment();
         speedOfSoundFragment = new SpeedOfSoundFragment();
+
+        SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        boolean toShow = prefs.getBoolean("First Run",true);
+        if(toShow) {
+            ShowcaseConfig config = new ShowcaseConfig();
+            config.setDelay(500);
+
+            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this);
+            sequence.setConfig(config);
+
+            sequence.addSequenceItem(channelParametersButton, "Through this you can change which channel you want to observe.", "Got It");
+            sequence.addSequenceItem(xyPlotButton, "This will plot channel to channel voltage", "Got It");
+            sequence.addSequenceItem(timebaseButton, "This will give you control of time axis.", "Got It");
+            sequence.addSequenceItem(dataAnalysisButton, "Through this you can observe some mathematical equations.", "Got It");
+
+            sequence.start();
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("First Run",false);
+            editor.apply();
+        }
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             if (isHalfWaveRectifierExperiment) {
