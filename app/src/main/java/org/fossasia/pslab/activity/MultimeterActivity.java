@@ -1,5 +1,6 @@
 package org.fossasia.pslab.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,6 +17,8 @@ import java.text.DecimalFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.beppi.knoblibrary.Knob;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by Abhinav Raj on 26/5/18.
@@ -52,6 +55,27 @@ public class MultimeterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.scienceLab;
         knobMarker = getResources().getStringArray(org.fossasia.pslab.R.array.multimeter_knob_states);
+
+        SharedPreferences pref1 = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        boolean toShow = pref1.getBoolean("MultiRun",true);
+        if(toShow) {
+            ShowcaseConfig config = new ShowcaseConfig();
+            config.setDelay(500);
+
+            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this);
+            sequence.setConfig(config);
+
+            sequence.addSequenceItem(readResistance, "This button will make your multimeter read resistance.", "Got It");
+            sequence.addSequenceItem(readCapacitance, "This button will make your multimeter read capacitance", "Got It");
+            sequence.addSequenceItem(read, "On clicking this button multimeter will start reading values.", "Got It");
+            sequence.addSequenceItem(reset, "This button will reset your multimeter.", "Got It");
+
+            sequence.start();
+
+            SharedPreferences.Editor editor = pref1.edit();
+            editor.putBoolean("MultiRun",false);
+            editor.apply();
+        }
 
         readResistance.setOnClickListener(new View.OnClickListener() {
             @Override
