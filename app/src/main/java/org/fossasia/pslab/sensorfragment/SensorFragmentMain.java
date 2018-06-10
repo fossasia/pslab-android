@@ -110,10 +110,6 @@ public class SensorFragmentMain extends Fragment {
                 case "ADS1115":
                     selectedFragment = SensorFragmentADS1115.newInstance();
                     break;
-                case "BH1750":
-                    if (howToConnectDialog(getString(R.string.lux_meter), getString(R.string.lux_meter_intro), R.drawable.bh1750_schematic, getString(R.string.lux_meter_desc)))
-                        selectedFragment = SensorFragmentBH1750.newInstance();
-                    break;
                 case "BMP180":
                     selectedFragment = SensorFragmentBMP180.newInstance();
                     break;
@@ -188,6 +184,9 @@ public class SensorFragmentMain extends Fragment {
             dataName.add(sensorAddr.get(key));
         }
 
+        for (int key: sensorAddr.keySet()) {
+            dataName.add(sensorAddr.get(key));
+        }
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
