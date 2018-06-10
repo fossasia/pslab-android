@@ -689,6 +689,38 @@
     <string name="number_two">2.</string>
     <string name="number_three">3.</string>
 
+    <string name="indicator_description">Indicates device connection</string>
+
+    <string-array name="edge_choices">
+        <item>EVERY EDGE</item>
+        <item>EVERY FALLING EDGE</item>
+        <item>EVERY RISING EDGE</item>
+        <item>EVERY FOURTH RISING EDGE</item>
+        <item>DISABLED</item>
+    </string-array>
+
+    <string-array name="channel_choices">
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+        <item>SEN</item>
+        <item>EXT</item>
+        <item>CNTR</item>
+    </string-array>
+
+    <string-array name="measurement_choices">
+        <item>FALLING EDGE</item>
+        <item>RISING EDGE</item>
+        <item>FOURTH RISING EDGE</item>
+    </string-array>
+
+    <string name="analyze_input">Analyze</string>
+    <string name="channel_selection_heading">Channel Selection</string>
+    <string name="channel_selection_description_text">Swipe right to select channels</string>
+
+    <string name="limit_cards_message">Can\'t add more cards</string>
+
     <string name="power_card_pv1">PV1</string>
     <string name="power_card_pv2">PV2</string>
     <string name="power_card_pv3">PV3</string>
