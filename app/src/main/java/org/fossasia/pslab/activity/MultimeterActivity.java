@@ -1,11 +1,18 @@
 package org.fossasia.pslab.activity;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -45,9 +52,13 @@ public class MultimeterActivity extends AppCompatActivity {
     private int knobState;
     private String[] knobMarker;
 
+    public static final String PREFS_NAME = "customDialogPreference";
+    public CheckBox dontShowAgain;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        howToConnectDialog(getString(R.string.multimeter_dialog_heading), getString(R.string.multimeter_dialog_text), R.drawable.multimeter_circuit, getString(R.string.multimeter_dialog_description));
         setContentView(R.layout.activity_multimeter);
         ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.scienceLab;
@@ -144,5 +155,43 @@ public class MultimeterActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @SuppressLint("ResourceType")
+    public void howToConnectDialog(String title, String intro, int iconID, String desc) {
+        try {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.custom_dialog_box, null);
+            final SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            Boolean skipMessage = settings.getBoolean("MultimeterSkipMessage", false);
+            dontShowAgain = (CheckBox) dialogView.findViewById(R.id.toggle_show_again);
+            final TextView heading_text = (TextView) dialogView.findViewById(R.id.custom_dialog_text);
+            final TextView description_text = (TextView) dialogView.findViewById(R.id.description_text);
+            final ImageView schematic = (ImageView) dialogView.findViewById(R.id.custom_dialog_schematic);
+            final Button ok_button = (Button) dialogView.findViewById(R.id.dismiss_button);
+            builder.setView(dialogView);
+            builder.setTitle(title);
+            heading_text.setText(intro);
+            schematic.setImageResource(iconID);
+            description_text.setText(desc);
+            final AlertDialog dialog = builder.create();
+            ok_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Boolean checkBoxResult = false;
+                    if (dontShowAgain.isChecked())
+                        checkBoxResult = true;
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean("MultimeterSkipMessage", checkBoxResult);
+                    editor.apply();
+                    dialog.dismiss();
+                }
+            });
+            if (!skipMessage)
+                dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

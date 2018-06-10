@@ -699,6 +699,10 @@
     <string name="donot_show_again">Don\'t show again</string>
     <string name="ok_button_text">OK</string>
 
+    <string name="multimeter_dialog_heading">Multimeter</string>
+    <string name="multimeter_dialog_text">Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element.</string>
+    <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.</string>
+
     <string name="logic_analyzer_dialog_heading">Logic Analyzer</string>
     <string name="logic_analyzer_dialog_text">Connect the digital wave generator pins with the logic analyzer pins as shown in the figure\n</string>
     <string name="logic_analyzer_dialog_description">\u2022 The connections shown in the above figure is for the case when all the four pins are in use.\n\n\u2022 The wires can be connected with pins of any ID as per the requirement. </string>
