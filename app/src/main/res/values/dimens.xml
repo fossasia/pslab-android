@@ -48,9 +48,9 @@
     <dimen name="weight_scale">0dp</dimen>
     <dimen name="power_card_big_margin">15dp</dimen>
     <dimen name="power_card_medium_margin">10dp</dimen>
-    <dimen name="power_card_header_text">30sp</dimen>
+    <dimen name="power_card_header_text">25sp</dimen>
     <dimen name="power_card_tiny_margin">5dp</dimen>
-    <dimen name="power_card_display_text">25sp</dimen>
+    <dimen name="power_card_display_text">20sp</dimen>
     <dimen name="power_card_button_weight">1</dimen>
     <dimen name="power_card_large_margin">13dp</dimen>
 

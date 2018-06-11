@@ -61,7 +61,10 @@
         <activity android:name=".activity.MultimeterActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".activity.PowerSourceActivity"/>
+        <activity
+            android:name=".activity.PowerSourceActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.WaveGeneratorActivity"
             android:screenOrientation="userLandscape"/>
