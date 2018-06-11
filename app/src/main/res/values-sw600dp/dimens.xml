@@ -11,5 +11,7 @@
     <dimen name="prop_text_offset_margin">25dp</dimen>
     <dimen name="ctrl_panel_margin_bottom">10dp</dimen>
     <dimen name="ctrl_title_text_margin">3dp</dimen>
+    <dimen name="btn_min_width">80dp</dimen>
     <dimen name="mon_title_sep_margin">16dp</dimen>
+
 </resources>
