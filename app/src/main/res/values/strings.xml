@@ -678,6 +678,7 @@
     <string name="sensors_description">Allows logging of data returned \nby sensor connected</string>
     <string name="wave_generator_description">Generates different waveforms \nand PWM signals</string>
     <string name="power_source_description">Displays value returned by \nsensors connected to \nI2C input</string>
+    <string name="lux_meter_description">Measures the ambient light \nintesity</string>
 
     <string name="web_view_link_text">What is PSLab Device?</string>
     <string name="pslab_connect_text">Steps to connect the PSLab Device</string>
@@ -688,16 +689,55 @@
     <string name="number_two">2.</string>
     <string name="number_three">3.</string>
 
+    <string name="indicator_description">Indicates device connection</string>
+
+    <string-array name="edge_choices">
+        <item>EVERY EDGE</item>
+        <item>EVERY FALLING EDGE</item>
+        <item>EVERY RISING EDGE</item>
+        <item>EVERY FOURTH RISING EDGE</item>
+        <item>DISABLED</item>
+    </string-array>
+
+    <string-array name="channel_choices">
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+        <item>SEN</item>
+        <item>EXT</item>
+        <item>CNTR</item>
+    </string-array>
+
+    <string-array name="measurement_choices">
+        <item>FALLING EDGE</item>
+        <item>RISING EDGE</item>
+        <item>FOURTH RISING EDGE</item>
+    </string-array>
+
+    <string name="analyze_input">Analyze</string>
+    <string name="channel_selection_heading">Channel Selection</string>
+    <string name="channel_selection_description_text">Swipe right to select channels</string>
+
+    <string name="limit_cards_message">Can\'t add more cards</string>
+
+    <string name="power_card_pv1">PV1</string>
+    <string name="power_card_pv2">PV2</string>
+    <string name="power_card_pv3">PV3</string>
+    <string name="power_card_pcs">PCS</string>
 
     <string name="schematic_desc">Schematic image goes here</string>
     <string name="donot_show_again">Don\'t show again</string>
     <string name="ok_button_text">OK</string>
 
+    <string name="multimeter_dialog_heading">Multimeter</string>
+    <string name="multimeter_dialog_text">Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element.</string>
+    <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.</string>
+
     <string name="logic_analyzer_dialog_heading">Logic Analyzer</string>
     <string name="logic_analyzer_dialog_text">Connect the digital wave generator pins with the logic analyzer pins as shown in the figure\n</string>
     <string name="logic_analyzer_dialog_description">\u2022 The connections shown in the above figure is for the case when all the four pins are in use.\n\n\u2022 The wires can be connected with pins of any ID as per the requirement. </string>
 
-    //wave_generator_activity
     <string name="wave_name_holder">Triangular</string>
     <string name="freq_text">Frequency :</string>
     <string name="freq_holder_text">5.255 Hz</string>
@@ -716,7 +756,7 @@
     <string name="unit_v">V</string>
     <string name="waveform_frequecy">WaveForm Frequecy :</string>
     <string name="pwm_frequecy">PWM Frequency :</string>
-    <string name="reset_lowercase">Reset</string>
+    <string name="set_lowercase">Set</string>
     <string name="unit_percent">%</string>
     <string name="text_freq">Freq</string>
     <string name="text_waveform">Waveform</string>
@@ -725,7 +765,46 @@
     <string name="phase_holder_text">45 deg</string>
     <string name="duty_holder_text">50 %</string>
 
+    <string name="sine">Sine</string>
+    <string name="triangular">Triangular</string>
+    <string name="square">Square</string>
+    <string name="wave_frequency">Wave Frequency :</string>
+    <string name="phase_offset">Phase Offset :</string>
+    <string name="max_val_warning">Cannot increase more</string>
+    <string name="min_val_warning">Cannot decrease more</string>
+
     <string name="text_connected">Connected</string>
     <string name="text_disconnected">Disconnected</string>
+
+    <string name="ir_thermometer">Thermometer</string>
+    <string name="ir_thermometer_intro">\u2022 The Thermometer can be used to measure the temperature. This instruments
+    is compatible with the MLX-90614 Infrared thermo sensor.\n\n
+    \u2022 When using the sensor MLX-90614, connect the sensor to PSLab device as shown below</string>
+    <string name="ir_thermometer_desc">\u2022 The above pin configuration has to be same except for the pin
+    GND. You can use any of the PSLab device GND pins.\n</string>
+
+    <string name="navigation_lux_meter_data">Data</string>
+    <string name="navigation_lux_meter_configure">Configure</string>
+    <string name="high_limit">High Limit</string>
+    <string name="update_period">Update Period</string>
+    <string name="statistics">Statistics</string>
+    <string name="lux_min">Min</string>
+    <string name="lux_max">Max</string>
+    <string name="lux_avg">Avg</string>
+    <string name="light_meter">Light Meter</string>
+    <string name="select_light_sensor">Select Sensor</string>
+    <string-array name="select_light_sensor">
+        <item>Built In</item>
+        <item>BH1750</item>
+    </string-array>
+
+    <string name="lux_meter">Lux Meter</string>
+    <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
+    is compatible with either the built in light sensor in your android device or the BH-1750 light sensor.\n\n
+    \u2022 If you want to use the sensor BH-1750, connect the sensor to PSLab device as shown below</string>
+    <string name="lux_meter_desc">\u2022 The above pin configuration has to be same except for the pin
+    GND. GND is meant for Ground and you can use any of the PSLab device GND pins as they are common.\n\n
+    \u2022 Then go to the Configure tab from the bottom navigation bar and choose the BH-1750 in the drop down
+    menu Select Sensor.\n</string>
 
 </resources>

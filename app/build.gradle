@@ -8,8 +8,8 @@ android {
         applicationId "org.fossasia.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "1.1.4"
+        versionCode 7
+        versionName "1.1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -49,8 +49,11 @@ dependencies {
     implementation "com.github.medyo:android-about-page:$rootProject.androidAboutPageVersion"
     implementation "com.github.tiagohm.MarkdownView:library:$rootProject.markDownViewVersion"
     implementation "com.github.mirrajabi:search-dialog:$rootProject.searchDialogVersion"
+    implementation "com.sdsmdg.harjot:croller:$rootProject.crollerVersion"
     implementation "com.github.BeppiMenozzi:Knob:$rootProject.knobLibraryVersion"
     implementation "com.github.warkiz.widget:indicatorseekbar:$rootProject.seekBarLibraryVersion"
+    implementation "com.github.Vatican-Cameos:CarouselPicker:$rootProject.carouselPickerVersion"
+    implementation "com.github.anastr:speedviewlib:$rootProject.speedView"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"

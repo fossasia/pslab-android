@@ -49,9 +49,12 @@ ext{
     androidAboutPageVersion = '1.2.4'
     markDownViewVersion = '0.19.0'
     searchDialogVersion = '1.1'
+    crollerVersion = '1.0.7'
     leakCanaryVersion = '1.5.4'
     knobLibraryVersion = '1.9.0'
     seekBarLibraryVersion = '1.2.9'
+    carouselPickerVersion = 'v1.0'
+    speedView = '1.2.0'
 
     //Test dependencies
     testRunnerRulesVersion = '0.5'
