@@ -28,16 +28,14 @@ public class LuxMeterFragmentConfig extends Fragment {
     private Spinner gainValue;
     private Spinner selectSensor;
     private CardView gainRangeCard;
-    private static ScienceLab scienceLab;
-    private static BH1750 bh1750;
+
     final int highLimitMax = 1000;
     final int updatePeriodMax = 980;
     private static int highValue = 0;
     private static int updatePeriodValue = 20;
 
-    public static ScienceLab getScienceLab() {
-        return scienceLab;
-    }
+    private static ScienceLab scienceLab;
+    private static BH1750 bh1750;
 
     public static LuxMeterFragmentConfig newInstance() {
         return new LuxMeterFragmentConfig();
@@ -77,12 +75,12 @@ public class LuxMeterFragmentConfig extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                //do nothing
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                //do nothing
             }
         });
 
@@ -95,12 +93,12 @@ public class LuxMeterFragmentConfig extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                //do nothing
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                //do nothing
             }
         });
 
@@ -118,7 +116,7 @@ public class LuxMeterFragmentConfig extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                //do nothing
             }
         });
 
@@ -148,7 +146,7 @@ public class LuxMeterFragmentConfig extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                //do nothing
             }
         });
 

@@ -10,27 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/sensor_lable_height"
-            android:layout_marginEnd="@dimen/card_margin"
-            android:layout_marginLeft="@dimen/card_margin"
-            android:layout_marginRight="@dimen/card_margin"
-            android:layout_marginStart="@dimen/card_margin"
-            android:background="@color/colorPrimary">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/title_padding"
-                android:text="@string/lux_meter"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/title_font_size"
-                android:textStyle="bold" />
-        </LinearLayout>
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -42,18 +21,18 @@
 
             <com.github.anastr.speedviewlib.PointerSpeedometer
                 android:id="@+id/light_meter"
-                app:sv_speedometerMode="NORMAL"
-                app:sv_unit="@string/lux"
-                app:sv_unitTextColor="@color/black"
-                app:sv_speedTextPosition="BOTTOM_CENTER"
-                app:sv_speedTextColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/card_margin"
+                android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
                 android:layout_marginLeft="@dimen/card_margin"
-                android:layout_gravity="center"/>
+                android:layout_marginRight="@dimen/card_margin"
+                android:layout_marginTop="@dimen/card_margin"
+                app:sv_speedTextColor="@color/black"
+                app:sv_speedTextPosition="BOTTOM_CENTER"
+                app:sv_speedometerMode="NORMAL"
+                app:sv_unit="@string/lux"
+                app:sv_unitTextColor="@color/black" />
 
 
         </android.support.v7.widget.CardView>
@@ -66,7 +45,6 @@
             android:layout_marginRight="@dimen/card_margin"
             android:layout_marginStart="@dimen/card_margin"
             android:layout_marginTop="@dimen/lux_card_margin_top">
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -144,7 +122,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
 
-
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart_lux_meter"
                     android:layout_width="match_parent"
@@ -167,63 +144,68 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/lux_card_margin_top"
-                android:textAlignment="center"
+                android:layout_height="wrap_content"
                 android:padding="@dimen/title_padding"
                 android:text="@string/statistics"
+                android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sensor_title_font"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/lux_card_margin_top">
+                android:layout_marginTop="@dimen/lux_card_margin_top"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/card_margin"
                     android:layout_weight="@dimen/weight_1"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/card_margin">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/lux_stat_max"
                         android:layout_width="@dimen/dimen_zero_dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/weight_1"
-                        android:layout_marginRight="@dimen/card_margin"
+                        android:layout_height="@dimen/tv_stat_height"
+                        android:layout_gravity="bottom"
                         android:layout_marginLeft="@dimen/card_margin"
-                        android:textSize="@dimen/textsize_edittext"
-                        android:textColor="@color/black"
+                        android:layout_marginRight="@dimen/card_margin"
+                        android:layout_weight="@dimen/weight_1"
+                        android:background="@drawable/rounded_custom_border"
+                        android:gravity="center_vertical"
                         android:textAlignment="center"
-                        android:background="@drawable/rounded_custom_border"/>
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size" />
 
                     <TextView
                         android:id="@+id/lux_stat_min"
                         android:layout_width="@dimen/dimen_zero_dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/weight_1"
-                        android:layout_marginRight="@dimen/card_margin"
+                        android:layout_height="@dimen/tv_stat_height"
+                        android:layout_gravity="bottom"
                         android:layout_marginLeft="@dimen/card_margin"
-                        android:textSize="@dimen/textsize_edittext"
-                        android:textColor="@color/black"
+                        android:layout_marginRight="@dimen/card_margin"
+                        android:layout_weight="@dimen/weight_1"
+                        android:background="@drawable/rounded_custom_border"
+                        android:gravity="center_vertical"
                         android:textAlignment="center"
-                        android:background="@drawable/rounded_custom_border"/>
-
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size" />
 
                     <TextView
                         android:id="@+id/lux_stat_mean"
                         android:layout_width="@dimen/dimen_zero_dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/weight_1"
-                        android:layout_marginRight="@dimen/card_margin"
+                        android:layout_height="@dimen/tv_stat_height"
+                        android:layout_gravity="bottom"
                         android:layout_marginLeft="@dimen/card_margin"
-                        android:textSize="@dimen/textsize_edittext"
-                        android:textColor="@color/black"
+                        android:layout_marginRight="@dimen/card_margin"
+                        android:layout_weight="@dimen/weight_1"
+                        android:background="@drawable/rounded_custom_border"
+                        android:gravity="center_vertical"
                         android:textAlignment="center"
-                        android:background="@drawable/rounded_custom_border"/>
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size" />
 
                 </LinearLayout>
 
@@ -236,42 +218,41 @@
                     <TextView
                         android:layout_width="@dimen/dimen_zero_dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/weight_1"
-                        android:layout_marginRight="@dimen/card_margin"
-                        android:layout_marginLeft="@dimen/card_margin"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/card_margin"
+                        android:layout_marginRight="@dimen/card_margin"
+                        android:layout_weight="@dimen/weight_1"
                         android:gravity="center"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:text="@string/lux_max"
                         android:textColor="@color/black"
-                        android:text="@string/lux_max"/>
+                        android:textSize="@dimen/text_size" />
 
                     <TextView
                         android:layout_width="@dimen/dimen_zero_dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/weight_1"
-                        android:layout_marginRight="@dimen/card_margin"
-                        android:layout_marginLeft="@dimen/card_margin"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/card_margin"
+                        android:layout_marginRight="@dimen/card_margin"
+                        android:layout_weight="@dimen/weight_1"
                         android:gravity="center"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:text="@string/lux_min"
                         android:textColor="@color/black"
-                        android:text="@string/lux_min"/>
+                        android:textSize="@dimen/text_size" />
 
                     <TextView
                         android:layout_width="@dimen/dimen_zero_dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/weight_1"
-                        android:layout_marginRight="@dimen/card_margin"
-                        android:layout_marginLeft="@dimen/card_margin"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/card_margin"
+                        android:layout_marginRight="@dimen/card_margin"
+                        android:layout_weight="@dimen/weight_1"
                         android:gravity="center"
-                        android:textSize="@dimen/textsize_edittext"
+                        android:text="@string/lux_avg"
                         android:textColor="@color/black"
-                        android:text="@string/lux_avg"/>
+                        android:textSize="@dimen/text_size" />
                 </LinearLayout>
 
             </LinearLayout>
-
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>
