@@ -4,6 +4,7 @@ package org.fossasia.pslab.activity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -17,7 +18,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -68,6 +72,7 @@ import static org.fossasia.pslab.others.MathUtils.map;
 public class OscilloscopeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "Oscilloscope Activity";
+    private static final String PREF_NAME = "customDialogPreference";
     private ScienceLab scienceLab;
     @BindView(R.id.chart_os)
     public LineChart mChart;
@@ -211,6 +216,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         //Log.v("SIN Fre", "" + freq);
         //scienceLab.setW1(3000, "sine");
 
+
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -221,18 +227,21 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         switch (extras.getString("who")) {
             case "Half Wave Rectifier":
                 isHalfWaveRectifierExperiment = true;
-                if (scienceLab.isConnected())
+                if (scienceLab.isConnected()) {
                     scienceLab.setSine1(5000);
+                }
                 break;
             case "Full Wave Rectifier":
                 isFullWaveRectifierExperiment = true;
-                if (scienceLab.isConnected())
+                if (scienceLab.isConnected()) {
                     scienceLab.setWaves(5000, 180, 5000);
+                }
                 break;
             case "Diode Clipping Clamping":
                 isDiodeClippingClampingExperiment = true;
-                if (scienceLab.isConnected())
+                if (scienceLab.isConnected()) {
                     scienceLab.setSine1(5000);
+                }
                 break;
             case "Astable Multivibrator":
                 isAstableMultivibratorExperiment = true;
@@ -256,6 +265,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
 
+        howToUseDialog(getString(R.string.oscilloscope), getString(R.string.oscilloscope_intro), R.drawable.oscilloscope_schematic, getString(R.string.oscilloscope_desc));
         onWindowFocusChanged();
 
         channelParametersFragment = new ChannelParametersFragment();
@@ -511,48 +521,56 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             case R.id.button_channel_parameters_os:
                 replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
                 clearTextBackgroundColor();
+                howToUseDialog(getString(R.string.channel_parameters), getString(R.string.channel_param_desc), R.drawable.mic_schematic, getString(R.string.channel_param_mic));
                 channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_channel_parameters_os:
                 replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
                 clearTextBackgroundColor();
+                howToUseDialog(getString(R.string.channel_parameters), getString(R.string.channel_param_desc), R.drawable.mic_schematic, getString(R.string.channel_param_mic));
                 channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_timebase_os:
                 replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 clearTextBackgroundColor();
+                howToUseDialog(getString(R.string.timebase), getString(R.string.timebase_desc), R.drawable.timebase_view, null);
                 timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_timebase_tigger_os:
                 replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 clearTextBackgroundColor();
+                howToUseDialog(getString(R.string.timebase), getString(R.string.timebase_desc), R.drawable.timebase_view, null);
                 timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_data_analysis_os:
                 replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
                 clearTextBackgroundColor();
+                howToUseDialog(getString(R.string.data_analysis), getString(R.string.data_analysis_desc), R.drawable.data_analysis_view, null);
                 dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_data_analysis_os:
                 replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
                 clearTextBackgroundColor();
+                howToUseDialog(getString(R.string.data_analysis), getString(R.string.data_analysis_desc), R.drawable.data_analysis_view, null);
                 dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_xy_plot_os:
                 replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
                 clearTextBackgroundColor();
+                howToUseDialog(getString(R.string.xy_plot), getString(R.string.xy_plot_desc), R.drawable.xy_plot_view, null);
                 xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_xy_plot_os:
                 replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
                 clearTextBackgroundColor();
+                howToUseDialog(getString(R.string.xy_plot), getString(R.string.xy_plot_desc), R.drawable.xy_plot_view, null);
                 xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
         }
@@ -738,6 +756,45 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
     public void setXAxisLabel(String xAxisInput) {
         xAxisLabel.setText(xAxisInput);
+    }
+
+    public void howToUseDialog(String title, String intro, int iconID, String desc) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View dialogView = layoutInflater.inflate(R.layout.custom_dialog_box, null);
+        builder.setView(dialogView);
+        builder.setTitle(title);
+
+        final TextView oscGuideText = dialogView.findViewById(R.id.custom_dialog_text);
+        final ImageView oscGuideImage = dialogView.findViewById(R.id.custom_dialog_schematic);
+        final TextView oscDescription = dialogView.findViewById(R.id.description_text);
+        final CheckBox doNotShowDialog = dialogView.findViewById(R.id.toggle_show_again);
+        final Button dismissButton = dialogView.findViewById(R.id.dismiss_button);
+
+        oscGuideText.setText(intro);
+        if (iconID != 0)
+            oscGuideImage.setImageResource(iconID);
+        oscDescription.setText(desc);
+
+        final SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        final AlertDialog dialog = builder.create();
+        final String key = "skipDialog" + title;
+        Boolean skipDialog = sharedPreferences.getBoolean(key, false);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (doNotShowDialog.isChecked()) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(key, true);
+                    editor.apply();
+                }
+                dialog.dismiss();
+            }
+        });
+        if (!skipDialog) {
+            dialog.show();
+        }
     }
 
     public class CaptureTask extends AsyncTask<String, Void, Void> {

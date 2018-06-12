@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/schematic_height"
             android:layout_below="@+id/custom_dialog_text"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/card_margin"
             android:layout_marginLeft="@dimen/card_margin"
             android:layout_marginRight="@dimen/card_margin"
