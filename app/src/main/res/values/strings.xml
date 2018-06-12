@@ -433,6 +433,7 @@
     <string name="voltage_unit">(V)</string>
     <string name="volts">volts</string>
     <string name="seconds">(s)</string>
+    <string name="mili_seconds">(ms)</string>
     <string name="lux">LUX</string>
     <string name="pressure2">Press.</string>
     <string name="plot_altitude">Plot - Altitude</string>

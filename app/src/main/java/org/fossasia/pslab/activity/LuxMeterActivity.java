@@ -24,9 +24,13 @@ import org.fossasia.pslab.fragment.LuxMeterFragmentData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LuxMeterActivity extends AppCompatActivity {
+
+public class LuxMeterActivity extends AppCompatActivity implements LuxMeterFragmentConfig.OnDataPass {
     private static final String PREF_NAME = "customDialogPreference";
     private static final String KEY = "skipLuxMeterDialog";
+    private int sensorType = 0;
+    private int highLimit = 1000;
+    private int updatePeriod = 100;
 
     @BindView(R.id.navigation_lux_meter)
     BottomNavigationView bottomNavigationView;
@@ -47,11 +51,11 @@ public class LuxMeterActivity extends AppCompatActivity {
                         switch (item.getItemId()) {
                             case R.id.action_data:
                                 if (!(fragment instanceof LuxMeterFragmentData))
-                                    selectedFragment = LuxMeterFragmentData.newInstance();
+                                    selectedFragment = LuxMeterFragmentData.newInstance(sensorType, highLimit, updatePeriod);
                                 break;
                             case R.id.action_config:
                                 if (!(fragment instanceof LuxMeterFragmentConfig))
-                                    //
+                                    selectedFragment = LuxMeterFragmentConfig.newInstance();
                                 break;
                             default:
                                 break;
@@ -67,7 +71,7 @@ public class LuxMeterActivity extends AppCompatActivity {
         howToConnectDialog(getString(R.string.lux_meter), getString(R.string.lux_meter_intro), R.drawable.bh1750_schematic, getString(R.string.lux_meter_desc));
         try {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frame_layout_lux_meter, LuxMeterFragmentData.newInstance());
+            transaction.replace(R.id.frame_layout_lux_meter, LuxMeterFragmentData.newInstance(sensorType, highLimit, updatePeriod));
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,5 +115,12 @@ public class LuxMeterActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onDataPass(int sensor, int updatePeriod, int highValue) {
+        this.sensorType = sensor;
+        this.updatePeriod = updatePeriod;
+        this.highLimit = highValue;
     }
 }
