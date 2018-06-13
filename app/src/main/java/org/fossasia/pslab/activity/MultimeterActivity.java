@@ -19,6 +19,7 @@ import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -148,7 +149,7 @@ public class MultimeterActivity extends AppCompatActivity {
                     }
                 } else {
                     if (scienceLab.isConnected()) {
-                        quantity.setText(String.valueOf(scienceLab.getVoltage(knobMarker[knobState], 1)));
+                        quantity.setText(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1)));
                         unit.setText(R.string.multimeter_voltage_unit);
                     }
                 }
