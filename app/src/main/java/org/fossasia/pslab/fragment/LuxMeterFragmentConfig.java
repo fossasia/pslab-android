@@ -21,44 +21,43 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class LuxMeterFragmentConfig extends Fragment {
     private static BH1750 bh1750;
     private final int highLimitMax = 10000;
     private final int updatePeriodMax = 900;
     private final int updatePeriodMin = 100;
     private static int selectedSensor = 0; //0 for built in and 1 for BH1750
-    private static int highValue = 0;
-    private static int updatePeriodValue = 100;
+    private int highValue = 0;
+    private int updatePeriodValue = 100;
+    private Unbinder unbinder;
 
-    private EditText highLimit;
-    private EditText updatePeriod;
-    private CardView gainRangeCard;
-    private Spinner gainValue;
+    @BindView(R.id.lux_hight_limit_text)
+    EditText highLimit;
+    @BindView(R.id.lux_update_period_text)
+    EditText updatePeriod;
+    @BindView(R.id.cardview_gain_range)
+    CardView gainRangeCard;
+    @BindView(R.id.spinner_bh1750_gain)
+    Spinner gainValue;
 
     private static ScienceLab scienceLab;
 
-    private OnDataPass dataParser;
-
     public static LuxMeterFragmentConfig newInstance() {
         return new LuxMeterFragmentConfig();
-    }
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lux_meter_config, container, false);
-
-        highLimit = (EditText) view.findViewById(R.id.lux_hight_limit_text);
+        unbinder = ButterKnife.bind(this, view);
         final SeekBar highLimitSeek = (SeekBar) view.findViewById(R.id.lux_hight_limit_seekbar);
-        updatePeriod = (EditText) view.findViewById(R.id.lux_update_period_text);
         final SeekBar updatePeriodSeek = (SeekBar) view.findViewById(R.id.lux_update_period_seekbar);
-        gainValue = (Spinner) view.findViewById(R.id.spinner_bh1750_gain);
         final Spinner selectSensor = (Spinner) view.findViewById(R.id.spinner_select_light);
-        gainRangeCard = (CardView) view.findViewById(R.id.cardview_gain_range);
 
         highLimitSeek.setMax(highLimitMax);
         updatePeriodSeek.setMax(updatePeriodMax);
@@ -207,7 +206,6 @@ public class LuxMeterFragmentConfig extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        dataParser = (OnDataPass) context;
     }
 
     @Override
@@ -215,12 +213,8 @@ public class LuxMeterFragmentConfig extends Fragment {
         super.onDestroyView();
         highValue = getValueFromText(highLimit, 0, highLimitMax);
         updatePeriodValue = getValueFromText(updatePeriod, updatePeriodMin, updatePeriodMax + 100);
-
-        dataParser.onDataPass(selectedSensor, updatePeriodValue, highValue);
-    }
-
-    public interface OnDataPass {
-        void onDataPass(int sensor, int updatePeriod, int highValue);
+        LuxMeterFragmentData.setParameters(selectedSensor, highValue, updatePeriodValue);
+        unbinder.unbind();
     }
 
     public int getValueFromText(EditText editText, int lowerBound, int upperBound) {
