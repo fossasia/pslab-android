@@ -33,37 +33,46 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 import static android.content.Context.SENSOR_SERVICE;
 
 public class LuxMeterFragmentData extends Fragment {
 
-    private static int sensorType;
-    private static int highLimit;
-    private static int updatePeriod;
+    private static int sensorType = 0;
+    private static int highLimit = 1000;
+    private static int updatePeriod = 100;
     private SensorDataFetch sensorDataFetch;
-    private TextView statMax;
-    private TextView statMin;
-    private TextView statMean;
+
+    @BindView(R.id.lux_stat_max)
+    TextView statMax;
+    @BindView(R.id.lux_stat_min)
+    TextView statMin;
+    @BindView(R.id.lux_stat_mean)
+    TextView statMean;
+    @BindView(R.id.chart_lux_meter)
+    LineChart mChart;
+    @BindView(R.id.light_meter)
+    PointerSpeedometer lightMeter;
+
     private BH1750 sensorBH1750 = null;
     private SensorManager sensorManager;
     private Sensor sensor;
     private ScienceLab scienceLab;
-    private LineChart mChart;
     private long startTime;
     private int flag;
     private ArrayList<Entry> entries;
-    private PointerSpeedometer lightMeter;
     private float currentMin;
     private float currentMax;
     private YAxis y;
     private volatile boolean monitor = true;
+    private Unbinder unbinder;
 
     private final Object lock = new Object();
 
-    public static LuxMeterFragmentData newInstance(int sensorType, int highLimit, int updatePeriod) {
-        LuxMeterFragmentData.sensorType = sensorType;
-        LuxMeterFragmentData.highLimit = highLimit;
-        LuxMeterFragmentData.updatePeriod = updatePeriod;
+    public static LuxMeterFragmentData newInstance() {
         return new LuxMeterFragmentData();
     }
 
@@ -90,7 +99,7 @@ public class LuxMeterFragmentData extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lux_meter_data, container, false);
-
+        unbinder = ButterKnife.bind(this, view);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -147,14 +156,8 @@ public class LuxMeterFragmentData extends Fragment {
         Thread dataThread = new Thread(runnable);
         dataThread.start();
 
-        statMax = (TextView) view.findViewById(R.id.lux_stat_max);
-        statMin = (TextView) view.findViewById(R.id.lux_stat_min);
-        statMean = (TextView) view.findViewById(R.id.lux_stat_mean);
-        lightMeter = (PointerSpeedometer) view.findViewById(R.id.light_meter);
-
         lightMeter.setMaxSpeed(10000);
 
-        mChart = view.findViewById(R.id.chart_lux_meter);
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();
         YAxis y2 = mChart.getAxisRight();
@@ -189,6 +192,12 @@ public class LuxMeterFragmentData extends Fragment {
         y2.setDrawGridLines(false);
 
         return view;
+    }
+
+    public static void setParameters(int sensorType, int highLimit, int updatePeriod) {
+        LuxMeterFragmentData.sensorType = sensorType;
+        LuxMeterFragmentData.highLimit = highLimit;
+        LuxMeterFragmentData.updatePeriod = updatePeriod;
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> implements SensorEventListener {
@@ -284,5 +293,6 @@ public class LuxMeterFragmentData extends Fragment {
             sensorManager.unregisterListener(sensorDataFetch);
             sensorDataFetch.cancel(true);
         }
+        unbinder.unbind();
     }
 }
