@@ -10,9 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -54,16 +52,26 @@ public class MultimeterActivity extends AppCompatActivity {
     private String[] knobMarker;
 
     public static final String PREFS_NAME = "customDialogPreference";
+    public static final String NAME = "savingData";
     public CheckBox dontShowAgain;
+    SharedPreferences multimeter_data;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         howToConnectDialog(getString(R.string.multimeter_dialog_heading), getString(R.string.multimeter_dialog_text), R.drawable.multimeter_circuit, getString(R.string.multimeter_dialog_description));
         setContentView(R.layout.activity_multimeter);
         ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.scienceLab;
         knobMarker = getResources().getStringArray(org.fossasia.pslab.R.array.multimeter_knob_states);
+        multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
+        knobState = multimeter_data.getInt("KnobState", 0);
+        String text_quantity = multimeter_data.getString("TextBox", null);
+        String text_unit = multimeter_data.getString("TextBoxUnit", null);
+        knob.setState(knobState);
+        knobSelection.setText(knobMarker[knobState]);
+        quantity.setText(text_quantity);
+        unit.setText(text_unit);
 
         readResistance.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,8 +110,7 @@ public class MultimeterActivity extends AppCompatActivity {
                             resistanceUnit = "";
                         }
                     }
-                    quantity.setText(Resistance);
-                    unit.setText(resistanceUnit);
+                    saveAndSetData(Resistance, resistanceUnit);
                 }
             }
         });
@@ -112,8 +119,7 @@ public class MultimeterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (scienceLab.isConnected()) {
                     Double capacitance = scienceLab.getCapacitance();
-                    quantity.setText(String.valueOf(capacitance));
-                    unit.setText(R.string.capacitance_unit);
+                    saveAndSetData(String.valueOf(capacitance), getString(R.string.capacitance_unit));
                 }
             }
         });
@@ -121,12 +127,17 @@ public class MultimeterActivity extends AppCompatActivity {
             @Override
             public void onState(int state) {
                 knobState = state;
+                saveKnobState(knobState);
                 knobSelection.setText(knobMarker[knobState]);
             }
         });
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                multimeter_data.edit().clear().commit();
+                knobState = 0;
+                knob.setState(knobState);
+                knobSelection.setText(knobMarker[knobState]);
                 quantity.setText("");
                 unit.setText("");
             }
@@ -138,19 +149,16 @@ public class MultimeterActivity extends AppCompatActivity {
                     if (scienceLab.isConnected()) {
                         scienceLab.countPulses(knobMarker[knobState]);
                         double pulseCount = scienceLab.readPulseCount();
-                        quantity.setText(String.valueOf(pulseCount));
-                        unit.setText("");
+                        saveAndSetData(String.valueOf(pulseCount), "");
                     }
                 } else if (knobState < 8) {
                     if (scienceLab.isConnected()) {
                         Double frequency = scienceLab.getFrequency(knobMarker[knobState], null);
-                        quantity.setText(String.valueOf(frequency));
-                        unit.setText(R.string.frequency_unit);
+                        saveAndSetData(String.valueOf(frequency), getString(R.string.frequency_unit));
                     }
                 } else {
                     if (scienceLab.isConnected()) {
-                        quantity.setText(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1)));
-                        unit.setText(R.string.multimeter_voltage_unit);
+                        saveAndSetData(String.valueOf(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1))), getString(R.string.multimeter_voltage_unit));
                     }
                 }
             }
@@ -194,5 +202,20 @@ public class MultimeterActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void saveAndSetData(String Quantity, String Unit) {
+        SharedPreferences.Editor editor = multimeter_data.edit();
+        editor.putString("TextBox", Quantity);
+        editor.putString("TextBoxUnit", Unit);
+        editor.commit();
+        quantity.setText(Quantity);
+        unit.setText(Unit);
+    }
+
+    private void saveKnobState(int state) {
+        SharedPreferences.Editor editor = multimeter_data.edit();
+        editor.putInt("KnobState", state);
+        editor.commit();
     }
 }
