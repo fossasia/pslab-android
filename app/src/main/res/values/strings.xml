@@ -428,6 +428,8 @@
         <item>PCS</item>
     </string-array>
 
+    <string name="device_not_connected">Device Not Connected</string>
+
     <string name="experiment_icon">Experiment Icon</string>
     <string name="drop_down_arrow">Drop down arrow</string>
     <string name="voltage_unit">(V)</string>

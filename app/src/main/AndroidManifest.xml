@@ -6,7 +6,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-feature android:name="android.hardware.sensor.light" android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.light"
+        android:required="true" />
 
     <uses-feature android:name="android.hardware.usb.host" />
 
@@ -58,6 +61,7 @@
             android:configChanges="screenSize|orientation"
             android:screenOrientation="landscape"/>
         <activity android:name=".activity.SensorDataLoggerActivity" />
+
         <activity android:name=".activity.MultimeterActivity"
             android:screenOrientation="portrait"/>
 
@@ -74,6 +78,15 @@
             android:configChanges="orientation|screenSize|keyboardHidden" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />
+
+        <activity android:name=".sensors.SensorADS1115" />
+        <activity android:name=".sensors.SensorBMP180" />
+        <activity android:name=".sensors.SensorHMC5883L" />
+        <activity android:name=".sensors.SensorMLX90614" />
+        <activity android:name=".sensors.SensorMPU925X" />
+        <activity android:name=".sensors.SensorSHT21" />
+        <activity android:name=".sensors.SensorMPU6050" />
+        <activity android:name=".sensors.SensorTSL2561" />
 
     </application>
 
