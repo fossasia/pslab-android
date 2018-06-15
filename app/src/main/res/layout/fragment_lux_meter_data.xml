@@ -34,7 +34,6 @@
                 app:sv_unit="@string/lux"
                 app:sv_unitTextColor="@color/black" />
 
-
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -89,6 +88,7 @@
                         android:textStyle="normal|bold"
                         app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_hmc"
                         tools:layout_editor_absoluteY="0dp" />
+
                 </RelativeLayout>
 
                 <android.support.constraint.ConstraintLayout
@@ -120,6 +120,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
                 </android.support.constraint.ConstraintLayout>
 
                 <com.github.mikephil.charting.charts.LineChart
@@ -131,6 +132,7 @@
                     android:layout_toRightOf="@+id/chart_yaxis_layout_hmc"
                     android:background="#000" />
             </RelativeLayout>
+
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -250,9 +252,13 @@
                         android:text="@string/lux_avg"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size" />
+
                 </LinearLayout>
 
             </LinearLayout>
+
         </android.support.v7.widget.CardView>
+
     </LinearLayout>
+
 </ScrollView>

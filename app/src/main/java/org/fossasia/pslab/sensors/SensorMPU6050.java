@@ -1,13 +1,16 @@
-package org.fossasia.pslab.sensorfragment;
+package org.fossasia.pslab.sensors;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,7 +24,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.R;
-import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.MPU6050;
@@ -31,16 +33,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.fossasia.pslab.activity.SensorActivity.counter;
-
 /**
- * Created by asitava on 10/7/17.
+ * Created by Harsh on 6/6/18.
  */
 
-public class SensorFragmentMPU6050 extends Fragment {
-
+public class SensorMPU6050 extends AppCompatActivity {
+    private static int counter;
+    private final Object lock = new Object();
     private ScienceLab scienceLab;
-    private SensorDataFetch sensorDataFetch;
+    private SensorMPU6050.SensorDataFetch sensorDataFetch;
     private TextView tvSensorMPU6050ax;
     private TextView tvSensorMPU6050ay;
     private TextView tvSensorMPU6050az;
@@ -59,18 +60,32 @@ public class SensorFragmentMPU6050 extends Fragment {
     private ArrayList<Entry> entriesGx;
     private ArrayList<Entry> entriesGy;
     private ArrayList<Entry> entriesGz;
-    private final Object lock = new Object();
-
-    public static SensorFragmentMPU6050 newInstance() {
-        return new SensorFragmentMPU6050();
-    }
+    private RelativeLayout sensorDock;
+    private CheckBox indefiniteSamplesCheckBox;
+    private EditText samplesEditBox;
+    private SeekBar timeGapSeekbar;
+    private TextView timeGapLabel;
+    private ImageButton playPauseButton;
+    private boolean play;
+    private boolean runIndefinitely;
+    private int timeGap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.sensor_mpu6050);
+
+        sensorDock = (RelativeLayout) findViewById(R.id.sensor_control_dock_layout);
+        indefiniteSamplesCheckBox = (CheckBox) findViewById(R.id.checkBox_samples_sensor);
+        samplesEditBox = (EditText) findViewById(R.id.editBox_samples_sensors);
+        timeGapSeekbar = (SeekBar) findViewById(R.id.seekBar_timegap_sensor);
+        timeGapLabel = (TextView) findViewById(R.id.tv_timegap_label);
+        playPauseButton = (ImageButton) findViewById(R.id.imageButton_play_pause_sensor);
+        setSensorDock();
+        sensorDock.setVisibility(View.VISIBLE);
+
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
-        ((SensorActivity) getActivity()).sensorDock.setVisibility(View.VISIBLE);
         try {
             sensorMPU6050 = new MPU6050(i2c);
         } catch (IOException e) {
@@ -88,8 +103,8 @@ public class SensorFragmentMPU6050 extends Fragment {
             @Override
             public void run() {
                 while (true) {
-                    if (scienceLab.isConnected() && ((SensorActivity) getActivity()).shouldPlay()) {
-                        sensorDataFetch = new SensorDataFetch();
+                    if (scienceLab.isConnected() && shouldPlay()) {
+                        sensorDataFetch = new SensorMPU6050.SensorDataFetch();
                         sensorDataFetch.execute();
 
                         if (flag == 0) {
@@ -106,7 +121,7 @@ public class SensorFragmentMPU6050 extends Fragment {
                         }
 
                         try {
-                            Thread.sleep(((SensorActivity) getActivity()).timeGap);
+                            Thread.sleep(timeGap);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -115,27 +130,22 @@ public class SensorFragmentMPU6050 extends Fragment {
             }
         };
         new Thread(runnable).start();
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.sensor_mpu6050, container, false);
+        tvSensorMPU6050ax = findViewById(R.id.tv_sensor_mpu6050_ax);
+        tvSensorMPU6050ay = findViewById(R.id.tv_sensor_mpu6050_ay);
+        tvSensorMPU6050az = findViewById(R.id.tv_sensor_mpu6050_az);
+        tvSensorMPU6050gx = findViewById(R.id.tv_sensor_mpu6050_gx);
+        tvSensorMPU6050gy = findViewById(R.id.tv_sensor_mpu6050_gy);
+        tvSensorMPU6050gz = findViewById(R.id.tv_sensor_mpu6050_gz);
+        tvSensorMPU6050temp = findViewById(R.id.tv_sensor_mpu6050_temp);
 
-        tvSensorMPU6050ax = view.findViewById(R.id.tv_sensor_mpu6050_ax);
-        tvSensorMPU6050ay = view.findViewById(R.id.tv_sensor_mpu6050_ay);
-        tvSensorMPU6050az = view.findViewById(R.id.tv_sensor_mpu6050_az);
-        tvSensorMPU6050gx = view.findViewById(R.id.tv_sensor_mpu6050_gx);
-        tvSensorMPU6050gy = view.findViewById(R.id.tv_sensor_mpu6050_gy);
-        tvSensorMPU6050gz = view.findViewById(R.id.tv_sensor_mpu6050_gz);
-        tvSensorMPU6050temp = view.findViewById(R.id.tv_sensor_mpu6050_temp);
+        Spinner spinnerSensorMPU60501 = findViewById(R.id.spinner_sensor_mpu6050_1);
+        Spinner spinnerSensorMPU60502 = findViewById(R.id.spinner_sensor_mpu6050_2);
+        Spinner spinnerSensorMPU60503 = findViewById(R.id.spinner_sensor_mpu6050_3);
+        Spinner spinnerSensorMPU60504 = findViewById(R.id.spinner_sensor_mpu6050_4);
 
-        Spinner spinnerSensorMPU60501 = view.findViewById(R.id.spinner_sensor_mpu6050_1);
-        Spinner spinnerSensorMPU60502 = view.findViewById(R.id.spinner_sensor_mpu6050_2);
-        Spinner spinnerSensorMPU60503 = view.findViewById(R.id.spinner_sensor_mpu6050_3);
-        Spinner spinnerSensorMPU60504 = view.findViewById(R.id.spinner_sensor_mpu6050_4);
-
-        mChartAcceleration = view.findViewById(R.id.chart_sensor_mpu6050_accelerometer);
-        mChartGyroscope = view.findViewById(R.id.chart_sensor_mpu6050_gyroscope);
+        mChartAcceleration = findViewById(R.id.chart_sensor_mpu6050_accelerometer);
+        mChartGyroscope = findViewById(R.id.chart_sensor_mpu6050_gyroscope);
 
         XAxis xAccelerometer = mChartAcceleration.getXAxis();
         YAxis yAccelerometer = mChartAcceleration.getAxisLeft();
@@ -221,7 +231,82 @@ public class SensorFragmentMPU6050 extends Fragment {
             e.printStackTrace();
         }
 
-        return view;
+    }
+
+    private boolean shouldPlay() {
+        if (play) {
+            if (indefiniteSamplesCheckBox.isChecked())
+                return true;
+            else if (counter >= 0) {
+                counter--;
+                return true;
+            } else {
+                play = false;
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private void setSensorDock() {
+        play = false;
+        runIndefinitely = true;
+        timeGap = 100;
+        final int step = 1;
+        final int max = 1000;
+        final int min = 100;
+
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (play) {
+                    playPauseButton.setImageResource(R.drawable.play);
+                    play = false;
+                } else {
+                    playPauseButton.setImageResource(R.drawable.pause);
+                    play = true;
+                    if (!indefiniteSamplesCheckBox.isChecked()) {
+                        counter = Integer.parseInt(samplesEditBox.getText().toString());
+                    }
+                }
+            }
+        });
+        sensorDock.setVisibility(View.VISIBLE);
+
+        indefiniteSamplesCheckBox.setChecked(true);
+        samplesEditBox.setEnabled(false);
+        indefiniteSamplesCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    runIndefinitely = true;
+                    samplesEditBox.setEnabled(false);
+                } else {
+                    runIndefinitely = false;
+                    samplesEditBox.setEnabled(true);
+                }
+            }
+        });
+
+        timeGapSeekbar.setMax((max - min) / step);
+        timeGapSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                timeGap = min + (progress * step);
+                timeGapLabel.setText(timeGap + "ms");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
@@ -301,10 +386,10 @@ public class SensorFragmentMPU6050 extends Fragment {
             mChartGyroscope.setVisibleXRangeMaximum(10);
             mChartGyroscope.moveViewToX(data2.getEntryCount());
             mChartGyroscope.invalidate();
-            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(counter));
-            if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
-                ((SensorActivity) getActivity()).play = false;
-                ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);
+            samplesEditBox.setText(String.valueOf(counter));
+            if (counter == 0 && !runIndefinitely) {
+                play = false;
+                playPauseButton.setImageResource(R.drawable.play);
             }
             synchronized (lock) {
                 lock.notify();
