@@ -18,7 +18,7 @@
 
     <string name="oscilloscope">Oscilloscope</string>
     <string name="multimeter">Multimeter</string>
-    <string name="logical_analyzer">Logical Analyzer</string>
+    <string name="logical_analyzer">Logic Analyzer</string>
     <string name="wavegen">Wave Generator</string>
     <string name="sensors">Sensors</string>
     <string name="power_source">Power Source</string>
@@ -701,13 +701,16 @@
 
     <string name="learn_more">Learn More</string>
 
-    <string name="oscilloscope_description">Allows observation of varying \nsignal voltages</string>
-    <string name="multimeter_description">Measure voltages, currents \nand resistances</string>
-    <string name="logic_analyzer_description">Captures and displays signals \nfrom digital systems</string>
-    <string name="sensors_description">Allows logging of data returned \nby sensor connected</string>
-    <string name="wave_generator_description">Generates different waveforms \nand PWM signals</string>
-    <string name="power_source_description">Displays value returned by \nsensors connected to \nI2C input</string>
-    <string name="lux_meter_description">Measures the ambient light \nintesity</string>
+    <string name="oscilloscope_description">Allows observation of varying signal voltages</string>
+    <string name="multimeter_description">Measure voltage, current, resistance and capacitance</string>
+    <string name="logic_analyzer_description">Captures and displays signals from digital systems</string>
+    <string name="sensors_description">Allows logging of data returned by sensor connected</string>
+    <string name="wave_generator_description">Generates arbitrary analog and digital waveforms</string>
+    <string name="power_source_description">Generates programmable voltage and currents</string>
+    <string name="lux_meter_description">Measures the ambient light intensity</string>
+
+    <string name="tile_instrument_horizontal_bars">Horizontal bars to match icon</string>
+    <string name="tile_instrument_vertical_bars">Verticle bars to match tile icon</string>
 
     <string name="web_view_link_text">What is PSLab Device?</string>
     <string name="pslab_connect_text">Steps to connect the PSLab Device</string>
