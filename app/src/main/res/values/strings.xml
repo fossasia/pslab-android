@@ -799,6 +799,8 @@
     <string name="square">Square</string>
     <string name="wave_frequency">Wave Frequency :</string>
     <string name="phase_offset">Phase Offset :</string>
+    <string name="pwm_phase">PWM Phase :</string>
+    <string name="pwm_duty">PWM Duty :</string>
     <string name="max_val_warning">Cannot increase more</string>
     <string name="min_val_warning">Cannot decrease more</string>
 
