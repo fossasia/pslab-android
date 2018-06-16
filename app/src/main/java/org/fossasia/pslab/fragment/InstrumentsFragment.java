@@ -68,7 +68,7 @@ public class InstrumentsFragment extends Fragment {
                                 intent = new Intent(context, MultimeterActivity.class);
                                 startActivity(intent);
                                 break;
-                            case "Logical Analyzer":
+                            case "Logic Analyzer":
                                 intent = new Intent(context, LogicalAnalyzerActivity.class);
                                 startActivity(intent);
                                 break;
@@ -117,14 +117,6 @@ public class InstrumentsFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            int[] applications = new int[]{
-                    R.drawable.oscilloscope_card,
-                    R.drawable.multimeter_card,
-                    R.drawable.logic_analyzer_card,
-                    R.drawable.sensors_card,
-                    R.drawable.wave_generator_card,
-                    R.drawable.power_source_card,
-                    R.drawable.oscilloscope_card};
 
             int[] descriptions = new int[]{
                     R.string.oscilloscope_description,
@@ -137,25 +129,25 @@ public class InstrumentsFragment extends Fragment {
             };
 
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.oscilloscope), applications[0], getResources().getString(descriptions[0]))
+                    getResources().getString(R.string.oscilloscope), R.drawable.tile_icon_oscilloscope, getResources().getString(descriptions[0]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.multimeter), applications[1], getResources().getString(descriptions[1]))
+                    getResources().getString(R.string.multimeter), R.drawable.tile_icon_multimeter, getResources().getString(descriptions[1]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.logical_analyzer), applications[2], getResources().getString(descriptions[2]))
+                    getResources().getString(R.string.logical_analyzer), R.drawable.tile_icon_logic_analyzer, getResources().getString(descriptions[2]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.sensors), applications[3], getResources().getString(descriptions[3]))
+                    getResources().getString(R.string.sensors), R.drawable.tile_icon_sensors, getResources().getString(descriptions[3]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.wavegen), applications[4], getResources().getString(descriptions[4]))
+                    getResources().getString(R.string.wavegen), R.drawable.tile_icon_wave_generator, getResources().getString(descriptions[4]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.power_source), applications[5], getResources().getString(descriptions[5]))
+                    getResources().getString(R.string.power_source), R.drawable.tile_icon_power_source, getResources().getString(descriptions[5]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.lux_meter), applications[6], getResources().getString(descriptions[6]))
+                    getResources().getString(R.string.lux_meter), R.drawable.tile_icon_oscilloscope, getResources().getString(descriptions[6]))
             );
             return null;
         }
