@@ -688,8 +688,8 @@ public class ScienceLab {
 
     public HashMap<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
         /*
-        * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
-        */
+         * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
+         */
 
         this.captureFullSpeedInitialize(channel, samples, timeGap, args, interval);
 
@@ -883,10 +883,10 @@ public class ScienceLab {
 
     public int[] oscilloscopeProgress() {
         /*
-        * returns the number of samples acquired by the capture routines, and the conversion_done status
-        *
-        * return structure int[]{conversionDone, samples}
-        */
+         * returns the number of samples acquired by the capture routines, and the conversion_done status
+         *
+         * return structure int[]{conversionDone, samples}
+         */
 
         int conversionDone = 0;
         int samples = 0;
@@ -1078,15 +1078,18 @@ public class ScienceLab {
 
     public double getVoltage(String channelName, Integer sample) {
         this.voltmeterAutoRange(channelName);
-        return this.getAverageVoltage(channelName, sample);
+        double Voltage = this.getAverageVoltage(channelName, sample);
+        if (channelName.equals("CH3")) {
+            return Voltage;
+        } else {
+            return 2 * Voltage;
+        }
     }
 
-    private double voltmeterAutoRange(String channelName) {
-        if (this.analogInputSources.get(channelName).gainPGA == 0)
-            return 0;
-        this.setGain(channelName, 0, true);
-        double V = this.getAverageVoltage(channelName, null);
-        return this.autoSelectRange(channelName, V);
+    private void voltmeterAutoRange(String channelName) {
+        if (this.analogInputSources.get(channelName).gainPGA != 0) {
+            this.setGain(channelName, 0, true);
+        }
     }
 
     private double autoSelectRange(String channelName, double V) {
@@ -2349,7 +2352,7 @@ public class ScienceLab {
     }
 
     public byte[] readFlash(int page, int location) {
-       /*  Reads 16 BYTES from the specified location  */
+        /*  Reads 16 BYTES from the specified location  */
         try {
             mPacketHandler.sendByte(mCommandsProto.FLASH);
             mPacketHandler.sendByte(mCommandsProto.READ_FLASH);

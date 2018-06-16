@@ -3,6 +3,7 @@ package org.fossasia.pslab.activity;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -105,6 +106,7 @@ public class MultimeterActivity extends AppCompatActivity {
                     quantity.setText(Resistance);
                     unit.setText(resistanceUnit);
                 }
+                howToUseDialog(getString(R.string.guide),getString(R.string.readRes_intro),R.drawable.res,getString(R.string.readRes_desc));
             }
         });
         readCapacitance.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +117,7 @@ public class MultimeterActivity extends AppCompatActivity {
                     quantity.setText(String.valueOf(capacitance));
                     unit.setText(R.string.capacitance_unit);
                 }
+                howToUseDialog(getString(R.string.guide),getString(R.string.readCap_intro),R.drawable.cap,getString(R.string.readCap_desc));
             }
         });
         knob.setOnStateChanged(new Knob.OnStateChanged() {
@@ -129,6 +132,7 @@ public class MultimeterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 quantity.setText("");
                 unit.setText("");
+                howToUseDialog(getString(R.string.guide),getString(R.string.reset_inro),R.drawable.reset,getString(R.string.reset_desc));
             }
         });
         read.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +157,7 @@ public class MultimeterActivity extends AppCompatActivity {
                         unit.setText(R.string.multimeter_voltage_unit);
                     }
                 }
+                howToUseDialog(getString(R.string.guide),getString(R.string.read_intro), R.drawable.read, getString(R.string.read_desc));
             }
         });
 
@@ -195,4 +200,43 @@ public class MultimeterActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    public void howToUseDialog(String title, String intro, int iconID, String desc) {
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View dialogView = layoutInflater.inflate(R.layout.guide_dialog_box, null);
+        builder.setView(dialogView);
+        builder.setTitle(title);
+
+        final TextView multiGuideText = dialogView.findViewById(R.id.custom_dialog_text);
+        final ImageView multiGuideImage = dialogView.findViewById(R.id.custom_dialog_schematic);
+        final TextView multiDescription = dialogView.findViewById(R.id.description_text);
+        final CheckBox doNotShowDialog = dialogView.findViewById(R.id.toggle_show_again);
+        final Button dismissButton = dialogView.findViewById(R.id.dismiss_button);
+
+        multiGuideText.setText(intro);
+        if (iconID != 0)
+            multiGuideImage.setImageResource(iconID);
+        multiDescription.setText(desc);
+
+        final SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        final android.app.AlertDialog dialog = builder.create();
+        final String key = "skipDialog" + title;
+        Boolean skipDialog = sharedPreferences.getBoolean(key, false);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (doNotShowDialog.isChecked()) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(key, true);
+                    editor.apply();
+                }
+                dialog.dismiss();
+            }
+        });
+        if (!skipDialog) {
+            dialog.show();
+        }
+    }
 }
+

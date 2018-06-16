@@ -147,7 +147,7 @@ public class InstrumentsFragment extends Fragment {
                     getResources().getString(R.string.power_source), R.drawable.tile_icon_power_source, getResources().getString(descriptions[5]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.lux_meter), R.drawable.tile_icon_oscilloscope, getResources().getString(descriptions[6]))
+                    getResources().getString(R.string.lux_meter), R.drawable.tile_icon_lux_meter, getResources().getString(descriptions[6]))
             );
             return null;
         }
