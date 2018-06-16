@@ -428,11 +428,14 @@
         <item>PCS</item>
     </string-array>
 
+    <string name="device_not_connected">Device Not Connected</string>
+
     <string name="experiment_icon">Experiment Icon</string>
     <string name="drop_down_arrow">Drop down arrow</string>
     <string name="voltage_unit">(V)</string>
     <string name="volts">volts</string>
     <string name="seconds">(s)</string>
+    <string name="mili_seconds">(ms)</string>
     <string name="lux">LUX</string>
     <string name="pressure2">Press.</string>
     <string name="plot_altitude">Plot - Altitude</string>
@@ -541,6 +544,34 @@
     <string name="text_view">TextView</string>
     <string name="device_status_text">PSLab Device not found</string>
     <string name="select_mic">[SELECT MIC]</string>
+    <string name="oscilloscope_intro">\u2022 Oscilloscope in PSLab gives out many of the functionalities of a
+        commercially available Oscilloscope. It has 4-channels with a MIC in, 2 Sine wave generators and
+        4 PWM square wave generators, can change the timebase, analyses signal and does Sine and Square wave
+        fitting and plots channel to channel voltage.\n\n\u2022 To read from a Sine wave or a square wave, you
+        can connect the Output wave pin and a Channel to the Oscilloscope as follows.</string>
+    <string name="oscilloscope_desc">\u2022 Above shown figure has a connection from SQ1 to CH1 and SI1
+        to CH2.\n\n
+        \u2022 Once you have generated a wave from the Wave Generator instrument connect the relevant pins
+        and observe it from the Oscilloscope by ticking the relevant channel in Channel parameters. If you
+        are using CH1 pin, select CH1 from channel parameters.</string>
+    <string name="channel_param_desc">From this Setting, you can change the Channel that needs
+        to be osbserved from the plot.\n\n\u2022 Tick the check boxes to plot the relevant Channel.\n\n
+        \u2022 Can change the Y-axis voltage range in the plot using the spinner next to the Channel.\n\n
+        \u2022 For the fourth Channel, you can choose either In-built microphone or an external mic. If
+        you are to use an external microphone, the connection is as follows.</string>
+    <string name="channel_param_mic">\u2022 The Positive terminal of the MIC should be connected with the MIC pin
+        and negative terminal should be conneted with the GND pin of PSLab device</string>
+    <string name="timebase_desc">This setting gives you the control of the range of Time axis(X-axis)\n\n
+        \u2022 The timebase slidder can be used to increase or decrease the signal capturing time.
+        Can change the range from 875.0 micro seconds to 102.4 milli seconds.\n\n
+        \u2022 This will be useful to capture periodic wave signals in the given range for analysis.\n\n
+        \u2022 You can use the trigger to set voltage value, so that when the signal exceeds the given
+        value, plot will halt.</string>
+    <string name="data_analysis_desc">\u2022 Using this Setting, the mathematical function of the analysed signal
+        can be found. Can choose the Wave type from Sine or Square and the Channel that needs to be analyzed.\n\n
+        \u2022 Furthermore, analyzed signal\'s Fourier transform can be observed by checking Fourier Transfroms check box.</string>
+    <string name="xy_plot_desc">\u2022 This is used to plot the Channel to Channel voltage in a X-Y plot having
+        voltage as the unit for the both axes relevant for the corresponding Channels.</string>
 
     <string-array name="sensor_click_list">
         <item>Export Data</item>
@@ -770,6 +801,8 @@
     <string name="square">Square</string>
     <string name="wave_frequency">Wave Frequency :</string>
     <string name="phase_offset">Phase Offset :</string>
+    <string name="pwm_phase">PWM Phase :</string>
+    <string name="pwm_duty">PWM Duty :</string>
     <string name="max_val_warning">Cannot increase more</string>
     <string name="min_val_warning">Cannot decrease more</string>
 

@@ -198,6 +198,11 @@
     <dimen name="ok_button_margin_bottom">10dp</dimen>
     <dimen name="ok_button_size">15sp</dimen>
 
+    <dimen name="sensor_dock_margin_bottom">5dp</dimen>
+    <dimen name="sensor_dock_margin_right">2dp</dimen>
+    <dimen name="sensor_dock_margin_left">2dp</dimen>
+    <dimen name="sensor_dock_margin_top">2dp</dimen>
+
     <dimen name="seekbar_margin">10dp</dimen>
     <dimen name="seek_btn_margin">5dp</dimen>
     <dimen name="seekbar_height_wave">14dp</dimen>

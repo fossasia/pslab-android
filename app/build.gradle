@@ -8,8 +8,8 @@ android {
         applicationId "org.fossasia.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "1.1.5"
+        versionCode 8
+        versionName "1.1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -58,6 +58,7 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    implementation 'com.github.anastr:speedviewlib:1.2.0'
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {

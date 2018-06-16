@@ -1,13 +1,16 @@
-package org.fossasia.pslab.sensorfragment;
+package org.fossasia.pslab.sensors;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -19,7 +22,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import org.fossasia.pslab.R;
-import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.BMP180;
@@ -28,16 +30,15 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static org.fossasia.pslab.activity.SensorActivity.counter;
-
 /**
- * Created by asitava on 10/7/17.
+ * Created by Harsh on 6/6/18.
  */
 
-public class SensorFragmentBMP180 extends Fragment {
-
+public class SensorBMP180 extends AppCompatActivity {
+    private static int counter;
+    private final Object lock = new Object();
     private ScienceLab scienceLab;
-    private SensorDataFetch sensorDataFetch;
+    private SensorBMP180.SensorDataFetch sensorDataFetch;
     private TextView tvSensorBMP180Temp;
     private TextView tvSensorBMP180Altitude;
     private TextView tvSensorBMP180Pressure;
@@ -50,29 +51,44 @@ public class SensorFragmentBMP180 extends Fragment {
     private ArrayList<Entry> entriesTemperature;
     private ArrayList<Entry> entriesAltitude;
     private ArrayList<Entry> entriesPressure;
-    private final Object lock = new Object();
-
-    public static SensorFragmentBMP180 newInstance() {
-        return new SensorFragmentBMP180();
-    }
+    private RelativeLayout sensorDock;
+    private CheckBox indefiniteSamplesCheckBox;
+    private EditText samplesEditBox;
+    private SeekBar timeGapSeekbar;
+    private TextView timeGapLabel;
+    private ImageButton playPauseButton;
+    private boolean play;
+    private boolean runIndefinitely;
+    private int timeGap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.sensor_bmp180);
+
+        sensorDock = (RelativeLayout) findViewById(R.id.sensor_control_dock_layout);
+        indefiniteSamplesCheckBox = (CheckBox) findViewById(R.id.checkBox_samples_sensor);
+        samplesEditBox = (EditText) findViewById(R.id.editBox_samples_sensors);
+        timeGapSeekbar = (SeekBar) findViewById(R.id.seekBar_timegap_sensor);
+        timeGapLabel = (TextView) findViewById(R.id.tv_timegap_label);
+        playPauseButton = (ImageButton) findViewById(R.id.imageButton_play_pause_sensor);
+        setSensorDock();
+        sensorDock.setVisibility(View.VISIBLE);
+
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
-        ((SensorActivity) getActivity()).sensorDock.setVisibility(View.VISIBLE);
         try {
             sensorBMP180 = new BMP180(i2c);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    if (scienceLab.isConnected() && ((SensorActivity) getActivity()).shouldPlay()) {
-                        sensorDataFetch = new SensorDataFetch();
+                    if (scienceLab.isConnected() && shouldPlay()) {
+                        sensorDataFetch = new SensorBMP180.SensorDataFetch();
                         sensorDataFetch.execute();
 
                         if (flag == 0) {
@@ -88,7 +104,7 @@ public class SensorFragmentBMP180 extends Fragment {
                             }
                         }
                         try {
-                            Thread.sleep(((SensorActivity) getActivity()).timeGap);
+                            Thread.sleep(timeGap);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -98,19 +114,14 @@ public class SensorFragmentBMP180 extends Fragment {
             }
         };
         new Thread(runnable).start();
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.sensor_bmp180, container, false);
+        tvSensorBMP180Temp = findViewById(R.id.tv_sensor_bmp180_temp);
+        tvSensorBMP180Altitude = findViewById(R.id.tv_sensor_bmp180_altitude);
+        tvSensorBMP180Pressure = findViewById(R.id.tv_sensor_bmp180_pressure);
 
-        tvSensorBMP180Temp = view.findViewById(R.id.tv_sensor_bmp180_temp);
-        tvSensorBMP180Altitude = view.findViewById(R.id.tv_sensor_bmp180_altitude);
-        tvSensorBMP180Pressure = view.findViewById(R.id.tv_sensor_bmp180_pressure);
-
-        mChartTemperature = view.findViewById(R.id.chart_temp_bmp180);
-        mChartAltitude = view.findViewById(R.id.chart_alt_bmp180);
-        mChartPressure = view.findViewById(R.id.chart_pre_bmp180);
+        mChartTemperature = findViewById(R.id.chart_temp_bmp180);
+        mChartAltitude = findViewById(R.id.chart_alt_bmp180);
+        mChartPressure = findViewById(R.id.chart_pre_bmp180);
 
         XAxis xTemperature = mChartTemperature.getXAxis();
         YAxis yTemperature = mChartTemperature.getAxisLeft();
@@ -217,9 +228,83 @@ public class SensorFragmentBMP180 extends Fragment {
         yPressure.setLabelCount(10);
 
         yPressure2.setDrawGridLines(false);
-        return view;
     }
 
+    private boolean shouldPlay() {
+        if (play) {
+            if (indefiniteSamplesCheckBox.isChecked())
+                return true;
+            else if (counter >= 0) {
+                counter--;
+                return true;
+            } else {
+                play = false;
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private void setSensorDock() {
+        play = false;
+        runIndefinitely = true;
+        timeGap = 100;
+        final int step = 1;
+        final int max = 1000;
+        final int min = 100;
+
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (play) {
+                    playPauseButton.setImageResource(R.drawable.play);
+                    play = false;
+                } else {
+                    playPauseButton.setImageResource(R.drawable.pause);
+                    play = true;
+                    if (!indefiniteSamplesCheckBox.isChecked()) {
+                        counter = Integer.parseInt(samplesEditBox.getText().toString());
+                    }
+                }
+            }
+        });
+        sensorDock.setVisibility(View.VISIBLE);
+
+        indefiniteSamplesCheckBox.setChecked(true);
+        samplesEditBox.setEnabled(false);
+        indefiniteSamplesCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    runIndefinitely = true;
+                    samplesEditBox.setEnabled(false);
+                } else {
+                    runIndefinitely = false;
+                    samplesEditBox.setEnabled(true);
+                }
+            }
+        });
+
+        timeGapSeekbar.setMax((max - min) / step);
+        timeGapSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                timeGap = min + (progress * step);
+                timeGapLabel.setText(timeGap + "ms");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
 
@@ -277,10 +362,10 @@ public class SensorFragmentBMP180 extends Fragment {
             mChartPressure.setVisibleXRangeMaximum(10);
             mChartPressure.moveViewToX(data.getEntryCount());
             mChartPressure.invalidate();
-            ((SensorActivity) getActivity()).samplesEditBox.setText(String.valueOf(counter));
-            if (counter == 0 && !((SensorActivity) getActivity()).runIndefinitely) {
-                ((SensorActivity) getActivity()).play = false;
-                ((SensorActivity) getActivity()).playPauseButton.setImageResource(R.drawable.play);
+            samplesEditBox.setText(String.valueOf(counter));
+            if (counter == 0 && !runIndefinitely) {
+                play = false;
+                playPauseButton.setImageResource(R.drawable.play);
             }
             synchronized (lock) {
                 lock.notify();

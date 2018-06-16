@@ -24,6 +24,7 @@ import org.fossasia.pslab.fragment.LuxMeterFragmentData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
 public class LuxMeterActivity extends AppCompatActivity {
     private static final String PREF_NAME = "customDialogPreference";
     private static final String KEY = "skipLuxMeterDialog";
@@ -51,14 +52,14 @@ public class LuxMeterActivity extends AppCompatActivity {
                                 break;
                             case R.id.action_config:
                                 if (!(fragment instanceof LuxMeterFragmentConfig))
-                                    //
+                                    selectedFragment = LuxMeterFragmentConfig.newInstance();
                                 break;
                             default:
                                 break;
                         }
                         if (selectedFragment != null) {
                             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                            transaction.replace(R.id.frame_layout_lux_meter, selectedFragment);
+                            transaction.replace(R.id.frame_layout_lux_meter, selectedFragment, selectedFragment.getTag());
                             transaction.commit();
                         }
                         return true;
@@ -67,7 +68,8 @@ public class LuxMeterActivity extends AppCompatActivity {
         howToConnectDialog(getString(R.string.lux_meter), getString(R.string.lux_meter_intro), R.drawable.bh1750_schematic, getString(R.string.lux_meter_desc));
         try {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frame_layout_lux_meter, LuxMeterFragmentData.newInstance());
+            Fragment selectedFragment = LuxMeterFragmentData.newInstance();
+            transaction.replace(R.id.frame_layout_lux_meter, selectedFragment, selectedFragment.getTag());
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();

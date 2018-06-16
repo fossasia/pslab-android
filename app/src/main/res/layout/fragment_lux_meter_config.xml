@@ -2,13 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
     tools:context="org.fossasia.pslab.fragment.LuxMeterFragmentConfig">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/sensor_params_top">
+        android:layout_marginTop="@dimen/sensor_params_top"
+        android:orientation="vertical">
 
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -16,11 +17,11 @@
             android:id="@+id/cardview_light_sensor"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_zero_dp"
-            android:layout_weight="@dimen/weight_1"
             android:layout_marginBottom="@dimen/recycler_view_margin"
-            android:layout_marginTop="@dimen/recycler_view_margin"
-            android:layout_marginStart="@dimen/card_margin"
             android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="@dimen/recycler_view_margin"
+            android:layout_weight="@dimen/weight_1"
             android:foreground="?attr/selectableItemBackground"
             card_view:cardCornerRadius="@dimen/card_radius"
             card_view:cardElevation="@dimen/card_elevation">
@@ -28,17 +29,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/card_margin"
                 android:layout_marginRight="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="@string/select_light_sensor"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sensor_body_font"
@@ -48,11 +49,11 @@
                     android:id="@+id/spinner_select_light"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/weight_1"
                     android:layout_marginBottom="@dimen/card_margin"
-                    android:layout_marginTop="@dimen/card_margin"
                     android:layout_marginRight="@dimen/bh1750_config_padding_left"
-                    android:entries="@array/select_light_sensor"/>
+                    android:layout_marginTop="@dimen/card_margin"
+                    android:layout_weight="@dimen/weight_1"
+                    android:entries="@array/select_light_sensor" />
 
             </LinearLayout>
 
@@ -64,11 +65,11 @@
             android:id="@+id/cardview_gain_range"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_zero_dp"
-            android:layout_weight="@dimen/weight_1"
             android:layout_marginBottom="@dimen/recycler_view_margin"
-            android:layout_marginTop="@dimen/recycler_view_margin"
-            android:layout_marginStart="@dimen/card_margin"
             android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="@dimen/recycler_view_margin"
+            android:layout_weight="@dimen/weight_1"
             android:foreground="?attr/selectableItemBackground"
             card_view:cardCornerRadius="@dimen/card_radius"
             card_view:cardElevation="@dimen/card_elevation">
@@ -76,17 +77,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/card_margin"
                 android:layout_marginRight="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="@string/gain_range"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sensor_body_font"
@@ -96,10 +97,10 @@
                     android:id="@+id/spinner_bh1750_gain"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/weight_1"
                     android:layout_marginBottom="@dimen/card_margin"
-                    android:layout_marginTop="@dimen/card_margin"
                     android:layout_marginRight="@dimen/bh1750_config_padding_left"
+                    android:layout_marginTop="@dimen/card_margin"
+                    android:layout_weight="@dimen/weight_1"
                     android:entries="@array/bh1750_gain_spinner" />
 
             </LinearLayout>
@@ -111,11 +112,11 @@
             android:id="@+id/cardview_high_limit"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_zero_dp"
-            android:layout_weight="@dimen/weight_2"
             android:layout_marginBottom="@dimen/recycler_view_margin"
-            android:layout_marginTop="@dimen/recycler_view_margin"
-            android:layout_marginStart="@dimen/card_margin"
             android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="@dimen/recycler_view_margin"
+            android:layout_weight="@dimen/weight_2"
             android:foreground="?attr/selectableItemBackground"
             card_view:cardCornerRadius="@dimen/card_radius"
             card_view:cardElevation="@dimen/card_elevation">
@@ -123,13 +124,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/card_margin"
                 android:layout_marginRight="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin">
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="@dimen/dimen_zero_dp"
                         android:layout_height="match_parent"
@@ -138,14 +141,14 @@
                         android:text="@string/high_limit"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sensor_body_font"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/lux_hight_limit_text"
                         android:layout_width="@dimen/dimen_zero_dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/weight_1"
                         android:layout_gravity="center_vertical"
+                        android:layout_weight="@dimen/weight_1"
                         android:ems="10"
                         android:inputType="number" />
 
@@ -156,7 +159,7 @@
                         android:text="@string/lux2"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sensor_body_font"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -164,8 +167,8 @@
                     android:id="@+id/lux_hight_limit_seekbar"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="@dimen/weight_1"
-                    android:layout_marginBottom="@dimen/card_margin"/>
+                    android:layout_marginBottom="@dimen/card_margin"
+                    android:layout_weight="@dimen/weight_1" />
 
             </LinearLayout>
 
@@ -177,11 +180,11 @@
             android:id="@+id/cardview_update_period"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_zero_dp"
-            android:layout_weight="@dimen/weight_2"
             android:layout_marginBottom="@dimen/recycler_view_margin"
-            android:layout_marginTop="@dimen/recycler_view_margin"
-            android:layout_marginStart="@dimen/card_margin"
             android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="@dimen/recycler_view_margin"
+            android:layout_weight="@dimen/weight_2"
             android:foreground="?attr/selectableItemBackground"
             card_view:cardCornerRadius="@dimen/card_radius"
             card_view:cardElevation="@dimen/card_elevation">
@@ -189,9 +192,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/card_margin"
                 android:layout_marginRight="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -207,14 +210,14 @@
                         android:text="@string/update_period"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sensor_body_font"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/lux_update_period_text"
                         android:layout_width="@dimen/dimen_zero_dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/weight_1"
                         android:layout_gravity="center_vertical"
+                        android:layout_weight="@dimen/weight_1"
                         android:ems="10"
                         android:inputType="number" />
 
@@ -222,18 +225,18 @@
                         android:layout_width="@dimen/bh1750_config_padding_left"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/seconds"
+                        android:text="@string/mili_seconds"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sensor_body_font"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <SeekBar
                     android:id="@+id/lux_update_period_seekbar"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="@dimen/weight_1"
-                    android:layout_marginBottom="@dimen/card_margin"/>
+                    android:layout_marginBottom="@dimen/card_margin"
+                    android:layout_weight="@dimen/weight_1" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

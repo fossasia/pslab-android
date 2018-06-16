@@ -1,5 +1,6 @@
 package org.fossasia.pslab.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -19,52 +21,51 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class LuxMeterFragmentConfig extends Fragment {
+    private static BH1750 bh1750;
+    private final int highLimitMax = 10000;
+    private final int updatePeriodMax = 900;
+    private final int updatePeriodMin = 100;
+    private static int selectedSensor = 0; //0 for built in and 1 for BH1750
+    private int highValue = 0;
+    private int updatePeriodValue = 100;
+    private Unbinder unbinder;
 
-    private EditText highLimit;
-    private EditText updatePeriod;
-    private SeekBar highLimitSeek;
-    private SeekBar updatePeriodSeek;
-    private Spinner gainValue;
-    private Spinner selectSensor;
-    private CardView gainRangeCard;
-
-    final int highLimitMax = 1000;
-    final int updatePeriodMax = 980;
-    private static int highValue = 0;
-    private static int updatePeriodValue = 20;
+    @BindView(R.id.lux_hight_limit_text)
+    EditText highLimit;
+    @BindView(R.id.lux_update_period_text)
+    EditText updatePeriod;
+    @BindView(R.id.cardview_gain_range)
+    CardView gainRangeCard;
+    @BindView(R.id.spinner_bh1750_gain)
+    Spinner gainValue;
 
     private static ScienceLab scienceLab;
-    private static BH1750 bh1750;
 
     public static LuxMeterFragmentConfig newInstance() {
         return new LuxMeterFragmentConfig();
-    }
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lux_meter_config, container, false);
-
-        highLimit = (EditText) view.findViewById(R.id.lux_hight_limit_text);
-        highLimitSeek = (SeekBar) view.findViewById(R.id.lux_hight_limit_seekbar);
-        updatePeriod = (EditText) view.findViewById(R.id.lux_update_period_text);
-        updatePeriodSeek = (SeekBar) view.findViewById(R.id.lux_update_period_seekbar);
-        gainValue = (Spinner) view.findViewById(R.id.spinner_bh1750_gain);
-        selectSensor = (Spinner) view.findViewById(R.id.spinner_select_light);
-        gainRangeCard = (CardView) view.findViewById(R.id.cardview_gain_range);
+        unbinder = ButterKnife.bind(this, view);
+        final SeekBar highLimitSeek = (SeekBar) view.findViewById(R.id.lux_hight_limit_seekbar);
+        final SeekBar updatePeriodSeek = (SeekBar) view.findViewById(R.id.lux_update_period_seekbar);
+        final Spinner selectSensor = (Spinner) view.findViewById(R.id.spinner_select_light);
 
         highLimitSeek.setMax(highLimitMax);
         updatePeriodSeek.setMax(updatePeriodMax);
 
         highLimit.setText(String.format("%d", highValue));
         highLimitSeek.setProgress(highValue);
-        updatePeriod.setText(String.format("%d", updatePeriodValue + 20));
-        updatePeriodSeek.setProgress(updatePeriodValue + 20);
+        updatePeriod.setText(String.format("%d", updatePeriodValue));
+        updatePeriodSeek.setProgress(Integer.valueOf(updatePeriod.getText().toString()) - updatePeriodMin);
 
         highLimitSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -84,11 +85,32 @@ public class LuxMeterFragmentConfig extends Fragment {
             }
         });
 
+        highLimit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String stringValue = highLimit.getText().toString();
+                    int value = 0;
+                    try {
+                        value = Integer.parseInt(stringValue);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    if (value > highLimitMax)
+                        highLimitSeek.setProgress(highLimitMax);
+                    else if (value < 0)
+                        highLimitSeek.setProgress(0);
+                    else
+                        highLimitSeek.setProgress(value);
+                }
+            }
+        });
+
         updatePeriodSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updatePeriodValue = progress + 20;
-                updatePeriod.setText("" + updatePeriodValue);
+                updatePeriodValue = progress + updatePeriodMin;
+                updatePeriod.setText(String.format("%d", updatePeriodValue));
             }
 
             @Override
@@ -99,6 +121,27 @@ public class LuxMeterFragmentConfig extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //do nothing
+            }
+        });
+
+        updatePeriod.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String stringValue = updatePeriod.getText().toString();
+                    int value = 100;
+                    try {
+                        value = Integer.parseInt(stringValue);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    if (value > updatePeriodMax)
+                        updatePeriodSeek.setProgress(updatePeriodMax + 100);
+                    else if (value < updatePeriodMin)
+                        updatePeriodSeek.setProgress(updatePeriodMin - 100);
+                    else
+                        updatePeriodSeek.setProgress(value - updatePeriodMin);
+                }
             }
         });
 
@@ -125,18 +168,25 @@ public class LuxMeterFragmentConfig extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        gainRangeCard.setFocusable(false);
+                        gainRangeCard.setEnabled(false);
+                        LuxMeterFragmentConfig.selectedSensor = 0;
                         break;
 
-                     case 1:
-                         gainRangeCard.setFocusable(true);
-                         scienceLab = ScienceLabCommon.scienceLab;
-                         I2C i2c = scienceLab.i2c;
+                    case 1:
+                        scienceLab = ScienceLabCommon.scienceLab;
+                        if (scienceLab.isConnected()) {
+                            I2C i2c = scienceLab.i2c;
 
-                        try {
-                            bh1750 = new BH1750(i2c);
-                        } catch (InterruptedException | IOException e) {
-                            e.printStackTrace();
+                            try {
+                                bh1750 = new BH1750(i2c);
+                                gainRangeCard.setEnabled(true);
+                                LuxMeterFragmentConfig.selectedSensor = 1;
+                            } catch (InterruptedException | IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                            selectSensor.setSelection(0);
                         }
                         break;
                     default:
@@ -151,5 +201,30 @@ public class LuxMeterFragmentConfig extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        highValue = getValueFromText(highLimit, 0, highLimitMax);
+        updatePeriodValue = getValueFromText(updatePeriod, updatePeriodMin, updatePeriodMax + 100);
+        LuxMeterFragmentData.setParameters(selectedSensor, highValue, updatePeriodValue);
+        unbinder.unbind();
+    }
+
+    public int getValueFromText(EditText editText, int lowerBound, int upperBound) {
+        String strValue = editText.getText().toString();
+        if ("".equals(strValue)) {
+            return lowerBound;
+        }
+        int value = Integer.parseInt(strValue);
+        if (value > upperBound) return upperBound;
+        else if (value < lowerBound) return lowerBound;
+        else return value;
     }
 }
