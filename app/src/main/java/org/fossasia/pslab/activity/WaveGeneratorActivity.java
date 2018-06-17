@@ -105,32 +105,28 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private int leastCount, seekMax, seekMin;
     private String unit;
 
+    public enum WaveConst {WAVETYPE, WAVE1, WAVE2, SQ1, SQ2, SQ3, SQ4, FREQUENCY, PHASE, DUTY}
+
+    public enum WaveData {
+        FREQ_MIN(10), DUTY_MIN(0), PHASE_MIN(0), FREQ_MAX(5000), PHASE_MAX(360), DUTY_MAX(100);
+
+        public final int value;
+
+        WaveData(final int v) {
+            value = v;
+        }
+
+        public final int getValue() {
+            return value;
+        }
+    }
+
     //const values
-    public static final int FREQ_MIN = 10;
-    public static final int DUTY_MIN = 0;
-    public static final int PHASE_MIN = 0;
-
-    public static final int FREQ_MAX = 5000;
-    public static final int DUTY_MAX = 100;
-    public static final int PHASE_MAX = 360;
-
     public static final int SIN = 1;
     public static final int TRIANGULAR = 2;
     public static final int SQUARE = 3;
-    public static final String WAVETYPE = "wavetype";
-    public static final String WAVE1 = "wave1";
-    public static final String WAVE2 = "wave2";
-    public static final String SQ1 = "sq1";
-    public static final String SQ2 = "sq2";
-    public static final String SQ3 = "sq3";
-    public static final String SQ4 = "sq4";
-    public static final String FREQUENCY = "frequency";
-    public static final String PHASE = "phase";
-    public static final String DUTY = "duty";
 
-    private static String waveBtnActive = "";
-    private static String pwmBtnActive = "";
-    private static String prop_active = "";
+    private WaveConst waveBtnActive, pwmBtnActive, prop_active;
     private static boolean waveMonSelected;
     private TextView activePropTv = null;
     private TextView activePwmPinTv = null;
@@ -149,9 +145,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         btnCtrlWave1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!waveBtnActive.equals(WAVE1)) {
+                if (!waveBtnActive.equals(WaveConst.WAVE1)) {
                     waveMonSelected = true;
-                    selectBtn(WAVE1);
+                    selectBtn(WaveConst.WAVE1);
                 }
             }
         });
@@ -159,9 +155,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         btnCtrlWave2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!waveBtnActive.equals(WAVE2)) {
+                if (!waveBtnActive.equals(WaveConst.WAVE2)) {
                     waveMonSelected = true;
-                    selectBtn(WAVE2);
+                    selectBtn(WaveConst.WAVE2);
                 }
             }
         });
@@ -169,7 +165,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         imgBtnSin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WaveGeneratorCommon.wave.get(waveBtnActive).put(WAVETYPE, SIN);
+                WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVE1, SIN);
                 selectWaveform(SIN);
             }
         });
@@ -177,7 +173,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         imgBtnSq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WaveGeneratorCommon.wave.get(waveBtnActive).put(WAVETYPE, SQUARE);
+                WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, SQUARE);
                 selectWaveform(SQUARE);
             }
         });
@@ -185,7 +181,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         imgBtnTri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WaveGeneratorCommon.wave.get(waveBtnActive).put(WAVETYPE, TRIANGULAR);
+                WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, TRIANGULAR);
                 selectWaveform(TRIANGULAR);
             }
         });
@@ -194,7 +190,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 waveMonSelected = true;
-                prop_active = FREQUENCY;
+                prop_active = WaveConst.FREQUENCY;
                 unit = getString(R.string.unit_hz);
                 activePropTv = waveFreqValue;
                 waveMonPropSelect.setText(getString(R.string.wave_frequency));
@@ -206,7 +202,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 waveMonSelected = true;
-                prop_active = PHASE;
+                prop_active = WaveConst.PHASE;
                 unit = getString(R.string.deg_text);
                 activePropTv = wavePhaseValue;
                 waveMonPropSelect.setText(getString(R.string.phase_offset));
@@ -218,9 +214,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         btnPwmSq1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!pwmBtnActive.equals(SQ1)) {
+                if (!pwmBtnActive.equals(WaveConst.SQ1)) {
                     waveMonSelected = false;
-                    selectBtn(SQ1);
+                    selectBtn(WaveConst.SQ1);
                 }
             }
         });
@@ -228,9 +224,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         btnPwmSq2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!pwmBtnActive.equals(SQ2)) {
+                if (!pwmBtnActive.equals(WaveConst.SQ2)) {
                     waveMonSelected = false;
-                    selectBtn(SQ2);
+                    selectBtn(WaveConst.SQ2);
                 }
             }
         });
@@ -238,9 +234,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         btnPwmSq3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!pwmBtnActive.equals(SQ3)) {
+                if (!pwmBtnActive.equals(WaveConst.SQ3)) {
                     waveMonSelected = false;
-                    selectBtn(SQ3);
+                    selectBtn(WaveConst.SQ3);
                 }
             }
         });
@@ -248,9 +244,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         btnPwmSq4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!pwmBtnActive.equals(SQ4)) {
+                if (!pwmBtnActive.equals(WaveConst.SQ4)) {
                     waveMonSelected = false;
-                    selectBtn(SQ4);
+                    selectBtn(WaveConst.SQ4);
                 }
             }
         });
@@ -259,7 +255,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 waveMonSelected = false;
-                prop_active = FREQUENCY;
+                prop_active = WaveConst.FREQUENCY;
                 unit = getString(R.string.unit_hz);
                 activePropTv = pwmFreqValue;
                 pwmMonPropSelect.setText(getString(R.string.pwm_frequecy));
@@ -271,7 +267,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 waveMonSelected = false;
-                prop_active = PHASE;
+                prop_active = WaveConst.PHASE;
                 unit = getString(R.string.deg_text);
                 activePropTv = pwmPhaseValue;
                 pwmMonPropSelect.setText(getString(R.string.pwm_phase));
@@ -283,7 +279,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 waveMonSelected = false;
-                prop_active = DUTY;
+                prop_active = WaveConst.DUTY;
                 unit = getString(R.string.unit_percent);
                 activePropTv = pwmDutyValue;
                 pwmMonPropSelect.setText(getString(R.string.pwm_duty));
@@ -340,7 +336,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         });
     }
 
-    public void selectBtn(String btn_selected) {
+    public void selectBtn(WaveConst btn_selected) {
 
         Double value;
         String valueText;
@@ -349,35 +345,35 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
             case WAVE1:
 
-                waveBtnActive = WAVE1;
+                waveBtnActive = WaveConst.WAVE1;
                 waveMonWave1.setEnabled(true);
                 waveMonWave2.setEnabled(false);
 
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
 
-                selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WAVETYPE));
+                selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
 
-                value = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(FREQUENCY);
+                value = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
                 valueText = value + " " + getString(R.string.unit_hz);
                 waveFreqValue.setText(valueText);
                 break;
 
             case WAVE2:
 
-                waveBtnActive = WAVE2;
+                waveBtnActive = WaveConst.WAVE2;
                 waveMonWave1.setEnabled(false);
                 waveMonWave2.setEnabled(true);
 
                 btnCtrlPhase.setEnabled(true); // enable phase for wave2
 
-                selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WAVETYPE));
+                selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
 
-                value = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(FREQUENCY);
+                value = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
                 valueText = value + " " + getString(R.string.unit_hz);
                 waveFreqValue.setText(valueText);
 
-                value = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(PHASE);
+                value = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.PHASE);
                 valueText = value + " " + getString(R.string.deg_text);
                 wavePhaseValue.setText(valueText);
                 break;
@@ -385,18 +381,18 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case SQ1:
 
                 activePwmPinTv.setEnabled(false);
-                pwmBtnActive = SQ1;
+                pwmBtnActive = WaveConst.SQ1;
                 activePwmPinTv = pwmMonSqr1;
                 activePwmPinTv.setEnabled(true);
                 pwmMonSelectPin.setText(getString(R.string.text_sq1));
                 pwmBtnPhase.setEnabled(false);  //phase disabled for sq1
                 pwmPhaseValue.setText("--");
 
-                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(FREQUENCY);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.FREQUENCY);
                 valueText = value + " " + getString(R.string.unit_hz);
                 pwmFreqValue.setText(valueText);
 
-                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(DUTY);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.DUTY);
                 valueText = value + " " + getString(R.string.unit_percent);
                 pwmDutyValue.setText(valueText);
                 break;
@@ -405,21 +401,21 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case SQ2:
 
                 activePwmPinTv.setEnabled(false);
-                pwmBtnActive = SQ2;
+                pwmBtnActive = WaveConst.SQ2;
                 activePwmPinTv = pwmMonSqr2;
                 activePwmPinTv.setEnabled(true);
                 pwmMonSelectPin.setText(getString(R.string.text_sq2));
                 pwmBtnPhase.setEnabled(true);
 
-                value = (double) WaveGeneratorCommon.wave.get(SQ1).get(FREQUENCY);
+                value = (double) WaveGeneratorCommon.wave.get(WaveConst.SQ1).get(WaveConst.FREQUENCY);
                 valueText = value + " " + getString(R.string.unit_hz);
                 pwmFreqValue.setText(valueText);
 
-                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(DUTY);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.DUTY);
                 valueText = value + " " + getString(R.string.unit_percent);
                 pwmDutyValue.setText(valueText);
 
-                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(PHASE);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.PHASE);
                 valueText = value + " " + getString(R.string.deg_text);
                 pwmPhaseValue.setText(valueText);
                 break;
@@ -427,22 +423,22 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case SQ3:
 
                 activePwmPinTv.setEnabled(false);
-                pwmBtnActive = SQ3;
+                pwmBtnActive = WaveConst.SQ3;
                 activePwmPinTv = pwmMonSqr3;
                 activePwmPinTv.setEnabled(true);
                 pwmMonSelectPin.setText(getString(R.string.text_sq3));
                 pwmBtnPhase.setEnabled(true);
 
 
-                value = (double) WaveGeneratorCommon.wave.get(SQ1).get(FREQUENCY);
+                value = (double) WaveGeneratorCommon.wave.get(WaveConst.SQ1).get(WaveConst.FREQUENCY);
                 valueText = value + " " + getString(R.string.unit_hz);
                 pwmFreqValue.setText(valueText);
 
-                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(DUTY);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.DUTY);
                 valueText = value + " " + getString(R.string.unit_percent);
                 pwmDutyValue.setText(valueText);
 
-                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(PHASE);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.PHASE);
                 valueText = value + " " + getString(R.string.deg_text);
                 pwmPhaseValue.setText(valueText);
                 break;
@@ -450,45 +446,45 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case SQ4:
 
                 activePwmPinTv.setEnabled(false);
-                pwmBtnActive = SQ4;
+                pwmBtnActive = WaveConst.SQ4;
                 activePwmPinTv = pwmMonSqr4;
                 activePwmPinTv.setEnabled(true);
                 pwmMonSelectPin.setText(getString(R.string.text_sq4));
                 pwmBtnPhase.setEnabled(true);
 
-                value = (double) WaveGeneratorCommon.wave.get(SQ1).get(FREQUENCY);
+                value = (double) WaveGeneratorCommon.wave.get(WaveConst.SQ1).get(WaveConst.FREQUENCY);
                 valueText = value + " " + getString(R.string.unit_hz);
                 pwmFreqValue.setText(valueText);
 
-                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(DUTY);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.DUTY);
                 valueText = value + " " + getString(R.string.unit_percent);
                 pwmDutyValue.setText(valueText);
 
-                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(PHASE);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.PHASE);
                 valueText = value + " " + getString(R.string.deg_text);
                 pwmPhaseValue.setText(valueText);
                 break;
 
             default:
-                waveBtnActive = WAVE1;
+                waveBtnActive = WaveConst.WAVE1;
                 waveMonWave1.setEnabled(true);
                 waveMonWave2.setEnabled(false);
 
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
 
-                selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WAVETYPE));
+                selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
 
-                value = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(FREQUENCY);
+                value = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
                 valueText = value + " " + getString(R.string.unit_hz);
                 waveFreqValue.setText(valueText);
                 break;
         }
-        prop_active = "";
+        prop_active = null;
         toggleSeekBtns(false);
     }
 
-    private void selectWaveform(int waveType) {
+    private void selectWaveform(final int waveType) {
         String waveFormText;
         Drawable image;
 
@@ -521,22 +517,22 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
         switch (prop_active) {
             case FREQUENCY:
-                seekMin = FREQ_MIN;
-                seekMax = FREQ_MAX;
+                seekMin = WaveData.FREQ_MIN.getValue();
+                seekMax = WaveData.FREQ_MAX.getValue();
                 numTicks = 100;
                 leastCount = 1;
                 break;
 
             case PHASE:
-                seekMin = PHASE_MIN;
-                seekMax = PHASE_MAX;
+                seekMin = WaveData.PHASE_MIN.getValue();
+                seekMax = WaveData.PHASE_MAX.getValue();
                 numTicks = 73;
                 leastCount = 1;
                 break;
 
             case DUTY:
-                seekMin = DUTY_MIN;
-                seekMax = DUTY_MAX;
+                seekMin = WaveData.DUTY_MIN.getValue();
+                seekMax = WaveData.DUTY_MAX.getValue();
                 numTicks = 11;
                 leastCount = 10;
                 unit = getString(R.string.unit_percent);
@@ -553,8 +549,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         if (!waveMonSelected) {
             waveMonPropSelect.setText("");
             waveMonPropValueSelect.setText("");
-            if (prop_active.equals(FREQUENCY)) {
-                seekBar.setProgress(WaveGeneratorCommon.wave.get(SQ1).get(prop_active));
+            if (prop_active.equals(WaveConst.FREQUENCY)) {
+                seekBar.setProgress(WaveGeneratorCommon.wave.get(WaveConst.SQ1).get(prop_active));
             } else {
                 seekBar.setProgress(WaveGeneratorCommon.wave.get(pwmBtnActive).get(prop_active));
             }
@@ -590,8 +586,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         Integer value = seekBar.getProgress();
 
         if (!waveMonSelected) {
-            if (prop_active.equals(FREQUENCY)) {
-                WaveGeneratorCommon.wave.get(SQ1).put(prop_active, value);
+            if (prop_active.equals(WaveConst.FREQUENCY)) {
+                WaveGeneratorCommon.wave.get(WaveConst.SQ1).put(prop_active, value);
             } else {
                 WaveGeneratorCommon.wave.get(pwmBtnActive).put(prop_active, value);
             }
@@ -617,8 +613,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     }
 
     private void enableInitialState() {
-        selectBtn(WAVE1);
+        selectBtn(WaveConst.WAVE1);
         activePwmPinTv = pwmMonSqr1;
-        selectBtn(SQ1);
+        selectBtn(WaveConst.SQ1);
     }
 }
