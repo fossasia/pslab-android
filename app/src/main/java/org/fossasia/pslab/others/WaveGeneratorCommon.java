@@ -32,9 +32,10 @@ public class WaveGeneratorCommon {
         wave.get(WaveConst.SQ1).put(WaveConst.FREQUENCY, WaveData.FREQ_MIN.getValue()); //common frequency for all pins(SQ1,SQ2,SQ3,SQ4)
         wave.get(WaveConst.SQ1).put(WaveConst.DUTY, WaveData.DUTY_MIN.getValue());
 
+        wave.get(WaveConst.SQ2).put(WaveConst.FREQUENCY,WaveData.FREQ_MIN.getValue());
         wave.get(WaveConst.SQ2).put(WaveConst.PHASE, WaveData.PHASE_MIN.getValue());
         wave.get(WaveConst.SQ2).put(WaveConst.DUTY, WaveData.DUTY_MIN.getValue());
-
+        
         wave.get(WaveConst.SQ3).put(WaveConst.PHASE, WaveData.PHASE_MIN.getValue());
         wave.get(WaveConst.SQ3).put(WaveConst.DUTY, WaveData.DUTY_MIN.getValue());
 

@@ -1,5 +1,6 @@
 package org.fossasia.pslab.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.others.WaveGeneratorCommon;
 
 import butterknife.BindView;
@@ -101,6 +104,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     IndicatorSeekBar seekBar;
     @BindView(R.id.btn_set)
     Button btnSet;
+    @BindView(R.id.btn_view)
+    Button btnView;
+
 
     private int leastCount, seekMax, seekMin;
     private String unit;
@@ -131,12 +137,14 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private TextView activePropTv = null;
     private TextView activePwmPinTv = null;
 
+    ScienceLab scienceLab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wave_generator);
         ButterKnife.bind(this);
+        scienceLab = ScienceLabCommon.scienceLab;
         new WaveGeneratorCommon();
 
         enableInitialState();//on starting wave1 and sq1 will be selected
@@ -308,6 +316,34 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
         });
 
+        btnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
+                double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
+                double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
+
+                String waveType;
+
+                if (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE).equals(SIN)) {
+                    waveType = "sine";
+                } else {
+                    waveType = "tria";
+                }
+                if (waveMonSelected) {
+                    if (phase == WaveData.PHASE_MIN.getValue()) {
+                        scienceLab.setW1(freq1, waveType);
+                        scienceLab.setW2(freq2, waveType);
+                    } else {
+                        scienceLab.setWaves(freq1, phase, freq2);
+                    }
+                }
+                Intent intent = new Intent(WaveGeneratorActivity.this, OscilloscopeActivity.class);
+                intent.putExtra("who", "WaveGenerator");
+                startActivity(intent);
+            }
+        });
+
         seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
@@ -407,7 +443,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 pwmMonSelectPin.setText(getString(R.string.text_sq2));
                 pwmBtnPhase.setEnabled(true);
 
-                value = (double) WaveGeneratorCommon.wave.get(WaveConst.SQ1).get(WaveConst.FREQUENCY);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.FREQUENCY);
                 valueText = value + " " + getString(R.string.unit_hz);
                 pwmFreqValue.setText(valueText);
 
@@ -479,6 +515,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 valueText = value + " " + getString(R.string.unit_hz);
                 waveFreqValue.setText(valueText);
                 break;
+
         }
         prop_active = null;
         toggleSeekBtns(false);
@@ -549,7 +586,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         if (!waveMonSelected) {
             waveMonPropSelect.setText("");
             waveMonPropValueSelect.setText("");
-            if (prop_active.equals(WaveConst.FREQUENCY)) {
+
+            if (prop_active.equals(WaveConst.FREQUENCY) && !pwmBtnActive.equals(WaveConst.SQ1) && !pwmBtnActive.equals(WaveConst.SQ2)) {
                 seekBar.setProgress(WaveGeneratorCommon.wave.get(WaveConst.SQ1).get(prop_active));
             } else {
                 seekBar.setProgress(WaveGeneratorCommon.wave.get(pwmBtnActive).get(prop_active));
@@ -586,7 +624,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         Integer value = seekBar.getProgress();
 
         if (!waveMonSelected) {
-            if (prop_active.equals(WaveConst.FREQUENCY)) {
+            if (prop_active.equals(WaveConst.FREQUENCY) && !pwmBtnActive.equals(WaveConst.SQ1) && !pwmBtnActive.equals(WaveConst.SQ2)) {
                 WaveGeneratorCommon.wave.get(WaveConst.SQ1).put(prop_active, value);
             } else {
                 WaveGeneratorCommon.wave.get(pwmBtnActive).put(prop_active, value);
@@ -616,5 +654,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         selectBtn(WaveConst.WAVE1);
         activePwmPinTv = pwmMonSqr1;
         selectBtn(WaveConst.SQ1);
+        imgBtnSq.setEnabled(false);
     }
 }
