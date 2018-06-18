@@ -11,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 
-import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 
@@ -109,12 +108,5 @@ public class DataAnalysisFragment extends Fragment {
         });
 
         return v;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, DataAnalysisFragment.class.getSimpleName());
     }
 }

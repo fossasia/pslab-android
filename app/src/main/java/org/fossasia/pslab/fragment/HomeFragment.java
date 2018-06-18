@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.others.InitializationVariable;
 
@@ -153,7 +152,5 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-
-        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, HomeFragment.class.getSimpleName());
     }
 }

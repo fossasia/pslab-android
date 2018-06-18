@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ScienceLabCommon;
@@ -149,12 +148,5 @@ public class ControlFragmentRead extends Fragment {
             }
         });
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, ControlFragmentRead.class.getSimpleName());
     }
 }

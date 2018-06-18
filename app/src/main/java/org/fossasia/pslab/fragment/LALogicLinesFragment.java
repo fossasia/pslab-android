@@ -33,7 +33,6 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
-import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.others.ChannelAxisFormatter;
@@ -464,12 +463,5 @@ public class LALogicLinesFragment extends Fragment {
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
             ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, LALogicLinesFragment.class.getSimpleName());
     }
 }
