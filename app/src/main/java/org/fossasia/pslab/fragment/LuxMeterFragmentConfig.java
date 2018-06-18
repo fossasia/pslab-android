@@ -88,20 +88,24 @@ public class LuxMeterFragmentConfig extends Fragment {
         highLimit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String stringValue = highLimit.getText().toString();
-                    int value = 0;
-                    try {
-                        value = Integer.parseInt(stringValue);
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
+                try {
+                    if (!hasFocus) {
+                        String stringValue = highLimit.getText().toString();
+                        int value = 0;
+                        try {
+                            value = Integer.parseInt(stringValue);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                        if (value > highLimitMax)
+                            highLimitSeek.setProgress(highLimitMax);
+                        else if (value < 0)
+                            highLimitSeek.setProgress(0);
+                        else
+                            highLimitSeek.setProgress(value);
                     }
-                    if (value > highLimitMax)
-                        highLimitSeek.setProgress(highLimitMax);
-                    else if (value < 0)
-                        highLimitSeek.setProgress(0);
-                    else
-                        highLimitSeek.setProgress(value);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -127,20 +131,24 @@ public class LuxMeterFragmentConfig extends Fragment {
         updatePeriod.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String stringValue = updatePeriod.getText().toString();
-                    int value = 100;
-                    try {
-                        value = Integer.parseInt(stringValue);
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
+                try {
+                    if (!hasFocus) {
+                        String stringValue = updatePeriod.getText().toString();
+                        int value = 100;
+                        try {
+                            value = Integer.parseInt(stringValue);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                        if (value > updatePeriodMax)
+                            updatePeriodSeek.setProgress(updatePeriodMax + 100);
+                        else if (value < updatePeriodMin)
+                            updatePeriodSeek.setProgress(updatePeriodMin - 100);
+                        else
+                            updatePeriodSeek.setProgress(value - updatePeriodMin);
                     }
-                    if (value > updatePeriodMax)
-                        updatePeriodSeek.setProgress(updatePeriodMax + 100);
-                    else if (value < updatePeriodMin)
-                        updatePeriodSeek.setProgress(updatePeriodMin - 100);
-                    else
-                        updatePeriodSeek.setProgress(value - updatePeriodMin);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
             }
         });

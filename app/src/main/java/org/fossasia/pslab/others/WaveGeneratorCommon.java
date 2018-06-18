@@ -1,42 +1,44 @@
 package org.fossasia.pslab.others;
 
 import org.fossasia.pslab.activity.WaveGeneratorActivity;
-
+import org.fossasia.pslab.activity.WaveGeneratorActivity.WaveConst;
+import org.fossasia.pslab.activity.WaveGeneratorActivity.WaveData;
 import java.util.HashMap;
 
 public class WaveGeneratorCommon {
 
-    public static HashMap<String, HashMap<String, Integer>> wave;
+    public static HashMap<WaveGeneratorActivity.WaveConst, HashMap<WaveConst, Integer>> wave;
 
 
     public WaveGeneratorCommon() {
         wave = new HashMap<>();
 
-        wave.put(WaveGeneratorActivity.WAVE1, new HashMap<String, Integer>());
-        wave.put(WaveGeneratorActivity.WAVE2, new HashMap<String, Integer>());
+        wave.put(WaveConst.WAVE1, new HashMap<WaveConst, Integer>());
+        wave.put(WaveConst.WAVE2, new HashMap<WaveConst, Integer>());
+        wave.put(WaveConst.WAVETYPE,new HashMap<WaveConst, Integer>());
 
-        wave.put(WaveGeneratorActivity.SQ1, new HashMap<String, Integer>());
-        wave.put(WaveGeneratorActivity.SQ2, new HashMap<String, Integer>());
-        wave.put(WaveGeneratorActivity.SQ3, new HashMap<String, Integer>());
-        wave.put(WaveGeneratorActivity.SQ4, new HashMap<String, Integer>());
+        wave.put(WaveConst.SQ1, new HashMap<WaveConst, Integer>());
+        wave.put(WaveConst.SQ2, new HashMap<WaveConst, Integer>());
+        wave.put(WaveConst.SQ3, new HashMap<WaveConst, Integer>());
+        wave.put(WaveConst.SQ4, new HashMap<WaveConst, Integer>());
 
-        wave.get(WaveGeneratorActivity.WAVE1).put(WaveGeneratorActivity.FREQUENCY, WaveGeneratorActivity.FREQ_MIN);
-        wave.get(WaveGeneratorActivity.WAVE1).put(WaveGeneratorActivity.WAVETYPE, WaveGeneratorActivity.SIN);
+        wave.get(WaveConst.WAVE1).put(WaveConst.FREQUENCY, WaveData.FREQ_MIN.getValue());
+        wave.get(WaveConst.WAVE1).put(WaveConst.WAVETYPE, WaveGeneratorActivity.SIN);
 
-        wave.get(WaveGeneratorActivity.WAVE2).put(WaveGeneratorActivity.PHASE, WaveGeneratorActivity.PHASE_MIN);
-        wave.get(WaveGeneratorActivity.WAVE2).put(WaveGeneratorActivity.FREQUENCY, WaveGeneratorActivity.FREQ_MIN);
-        wave.get(WaveGeneratorActivity.WAVE2).put(WaveGeneratorActivity.WAVETYPE, WaveGeneratorActivity.SIN);
+        wave.get(WaveConst.WAVE2).put(WaveConst.PHASE, WaveData.PHASE_MIN.getValue());
+        wave.get(WaveConst.WAVE2).put(WaveConst.FREQUENCY, WaveData.FREQ_MIN.getValue());
+        wave.get(WaveConst.WAVE2).put(WaveConst.WAVETYPE, WaveGeneratorActivity.SIN);
 
-        wave.get(WaveGeneratorActivity.SQ1).put(WaveGeneratorActivity.FREQUENCY, WaveGeneratorActivity.FREQ_MIN); //common frequency for all pins(SQ1,SQ2,SQ3,SQ4)
-        wave.get(WaveGeneratorActivity.SQ1).put(WaveGeneratorActivity.DUTY, WaveGeneratorActivity.DUTY_MIN);
+        wave.get(WaveConst.SQ1).put(WaveConst.FREQUENCY, WaveData.FREQ_MIN.getValue()); //common frequency for all pins(SQ1,SQ2,SQ3,SQ4)
+        wave.get(WaveConst.SQ1).put(WaveConst.DUTY, WaveData.DUTY_MIN.getValue());
 
-        wave.get(WaveGeneratorActivity.SQ2).put(WaveGeneratorActivity.PHASE, WaveGeneratorActivity.PHASE_MIN);
-        wave.get(WaveGeneratorActivity.SQ2).put(WaveGeneratorActivity.DUTY, WaveGeneratorActivity.DUTY_MIN);
+        wave.get(WaveConst.SQ2).put(WaveConst.PHASE, WaveData.PHASE_MIN.getValue());
+        wave.get(WaveConst.SQ2).put(WaveConst.DUTY, WaveData.DUTY_MIN.getValue());
 
-        wave.get(WaveGeneratorActivity.SQ3).put(WaveGeneratorActivity.PHASE, WaveGeneratorActivity.PHASE_MIN);
-        wave.get(WaveGeneratorActivity.SQ3).put(WaveGeneratorActivity.DUTY, WaveGeneratorActivity.DUTY_MIN);
+        wave.get(WaveConst.SQ3).put(WaveConst.PHASE, WaveData.PHASE_MIN.getValue());
+        wave.get(WaveConst.SQ3).put(WaveConst.DUTY, WaveData.DUTY_MIN.getValue());
 
-        wave.get(WaveGeneratorActivity.SQ4).put(WaveGeneratorActivity.PHASE, WaveGeneratorActivity.PHASE_MIN);
-        wave.get(WaveGeneratorActivity.SQ4).put(WaveGeneratorActivity.DUTY, WaveGeneratorActivity.DUTY_MIN);
+        wave.get(WaveConst.SQ4).put(WaveConst.PHASE, WaveData.PHASE_MIN.getValue());
+        wave.get(WaveConst.SQ4).put(WaveConst.DUTY, WaveData.DUTY_MIN.getValue());
     }
 }
