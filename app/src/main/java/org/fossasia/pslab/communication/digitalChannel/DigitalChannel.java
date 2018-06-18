@@ -9,19 +9,18 @@ import java.util.LinkedHashMap;
 
 public class DigitalChannel {
 
+    public static final int EVERY_EDGE = 1;
+    public static final int DISABLED = 0;
     private static final int EVERY_SIXTEENTH_RISING_EDGE = 5;
     private static final int EVERY_FOURTH_RISING_EDGE = 4;
     private static final int EVERY_RISING_EDGE = 3;
     private static final int EVERY_FALLING_EDGE = 2;
-    public static final int EVERY_EDGE = 1;
-    public static final int DISABLED = 0;
-
     public static String[] digitalChannelNames = {"ID1", "ID2", "ID3", "ID4", "SEN", "EXT", "CNTR"};
     public String channelName, dataType;
-    boolean initialState;
     public int initialStateOverride, channelNumber, length, prescalar, trigger, dlength, plotLength, maxTime, mode;
-    double gain, maxT;
     public double xAxis[], yAxis[], timestamps[];
+    boolean initialState;
+    double gain, maxT;
 
     public DigitalChannel(int channelNumber) {
         this.channelNumber = channelNumber;
@@ -150,11 +149,11 @@ public class DigitalChannel {
 
     }
 
-    double[] getXAxis() {
+    public double[] getXAxis() {
         return Arrays.copyOfRange(this.xAxis, 0, plotLength);
     }
 
-    double[] getYAxis() {
+    public double[] getYAxis() {
         return Arrays.copyOfRange(this.yAxis, 0, plotLength);
     }
 }

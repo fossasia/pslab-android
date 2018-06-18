@@ -749,6 +749,9 @@
         <item>FOURTH RISING EDGE</item>
     </string-array>
 
+    <string name="no_data_generated">No Data Generated</string>
+    <string name="needs_implementation">Yet to be implemented</string>
+
     <string name="analyze_input">Analyze</string>
     <string name="channel_selection_heading">Channel Selection</string>
     <string name="channel_selection_description_text">Swipe right to select channels</string>

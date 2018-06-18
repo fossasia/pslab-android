@@ -4,8 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import java.lang.Thread;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.fossasia.pslab.activity.MainActivity;
@@ -460,7 +458,6 @@ public class ScienceLab {
                 List<Byte> adcSlopeOffsets = polynomialsByteData.subList(0, tempADC);  //Arrays.copyOfRange(polynomials, 0, tempADC);
                 List<Byte> dacSlopeIntercept = polynomialsByteData.subList(tempADC + 4, tempDAC);  //Arrays.copyOfRange(polynomials, tempADC + 4, tempDAC);
                 List<Byte> inlSlopeIntercept = polynomialsByteData.subList(tempDAC + 4, polynomialsByteData.size());  //Arrays.copyOfRange(polynomials, tempDAC + 4, polynomialsByteData.size());
-
                 int marker = 0;
                 List<List<Byte>> tempSplit = new ArrayList<>();
                 for (int i = 0; i < adcSlopeOffsets.size() - 1; i++) {
@@ -475,7 +472,6 @@ public class ScienceLab {
                 for (List<Byte> temp : tempSplit) {
                     List<Byte> temp_ = temp.subList(5, temp.size());
                     for (int i = 0; i < temp_.size() / 16; i++) {
-
                     }
                 }
                 */
@@ -1404,10 +1400,8 @@ public class ScienceLab {
     public Double measureInterval(String channel1, String channel2, String edge1, String edge2, Float timeout) {
         /*
         Measures time intervals between two logic level changes on any two digital inputs(both can be the same)
-
 		For example, one can measure the time interval between the occurence of a rising edge on ID1, and a falling edge on ID3.
 		If the returned time is negative, it simply means that the event corresponding to channel2 occurred first.
-
 		Returns the calculated time
         */
 
@@ -1925,38 +1919,34 @@ public class ScienceLab {
             mPacketHandler.sendByte(channel - 1);
             byte[] readData = new byte[bytes * 2];
             mPacketHandler.read(readData, bytes * 2);
-            int[] t = new int[bytes * 2];
-            Arrays.fill(t, 0);
-            for (int i = 0; i < bytes; i++) {
-                t[i] = ByteBuffer.wrap(Arrays.copyOfRange(readData, 2 * i, 2 * i + 2)).order(ByteOrder.LITTLE_ENDIAN).getInt();
-            }
-            mPacketHandler.getAcknowledgement();
-            // Trimming array t
-            int markerA = 0;
-            for (int i = 0; i < t.length; i++) {
-                if (t[i] != 0) {
-                    markerA = i;
-                    break;
+            Log.v("Bytes Obtained : ", String.valueOf(readData.length));
+
+            if (readData.length > 0) {
+
+                ArrayList<Integer> l = new ArrayList<>();
+                for (int i = 0; i < readData.length; i += 1) {
+                    l.add((int) readData[i] & 0xff);
                 }
-            }
-            int markerB = 0;
-            for (int i = t.length - 1; i >= 0; i--) {
-                if (t[i] != 0) {
-                    markerB = i;
-                    break;
+
+                String s = "";
+                int[] timeStamps = new int[(int) readData.length / 2 + 1];
+                for (int i = 0; i < (int) (readData.length / 2); i++) {
+                    double t = (l.get(i * 2) | (l.get(i * 2 + 1) << 8));
+                    timeStamps[i + 1] = (int) t;
+                    s += String.valueOf(t);
+                    s += " ";
                 }
+                Log.v("Fetched points : ", s);
+                mPacketHandler.getAcknowledgement();
+                Arrays.sort(timeStamps);
+                timeStamps[0] = 1;
+                return timeStamps;
+            } else {
+                Log.e("Error : ", "Obtained bytes = 0");
+                int[] temp = new int[2501];
+                Arrays.fill(temp, 0);
+                return temp;
             }
-            int[] trimT = Arrays.copyOfRange(t, markerA, markerB + 1);
-            int rollOver = 0;
-            for (int i = 1; i < trimT.length; i++) {
-                if (t[i] < t[i - 1] && t[i] != 0) {
-                    rollOver++;
-                    for (int j = i; j < trimT.length; j++) {
-                        trimT[j] += 65535;
-                    }
-                }
-            }
-            return trimT;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -2009,19 +1999,18 @@ public class ScienceLab {
         LinkedHashMap<String, Integer> data = this.getLAInitialStates();
         for (int i = 0; i < 4; i++) {
             if (this.dChannels.get(i).channelNumber < this.digitalChannelsInBuffer) {
-                this.fetchLAChannel_(i, data);
+                this.fetchLAChannel(i, data);
             }
         }
         return true;
     }
 
-    private boolean fetchLAChannel_(Integer channelNumber, LinkedHashMap<String, Integer> initialStates) {
+    public boolean fetchLAChannel(Integer channelNumber, LinkedHashMap<String, Integer> initialStates) {
         DigitalChannel dChan = this.dChannels.get(channelNumber);
         if (dChan.channelNumber >= this.digitalChannelsInBuffer) {
             Log.e(TAG, "Channel Unavailable");
             return false;
         }
-        int samples = dChan.length;
 
         LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
         tempMap.put("ID1", initialStates.get("ID1"));
@@ -2030,41 +2019,33 @@ public class ScienceLab {
         tempMap.put("ID4", initialStates.get("ID4"));
         tempMap.put("SEN", initialStates.get("SEN"));
 
-        if ("int".equals(dChan.dataType)) {
-            //  Used LinkedHashMap above (initialStates) in which iteration is done sequentially as <key-value> were inserted
-            int i = 0;
-            for (Map.Entry<String, Integer> entry : initialStates.entrySet()) {
-                if (dChan.channelNumber == i) {
-                    i = entry.getValue();
-                    break;
-                }
-                i++;
+        //  Used LinkedHashMap above (initialStates) in which iteration is done sequentially as <key-value> were inserted
+        int i = 0;
+        for (Map.Entry<String, Integer> entry : initialStates.entrySet()) {
+            if (dChan.channelNumber == i) {
+                i = entry.getValue();
+                break;
             }
-            int[] temp = this.fetchIntDataFromLA(i, dChan.channelNumber + 1);
-            double[] data = new double[temp.length];
-            for (int j = 0; j < temp.length; j++) {
-                data[j] = temp[j];
-            }
-            dChan.loadData(tempMap, data);
-        } else {
-            //  Used LinkedHashMap above (initialStates) in which iteration is done sequentially as <key-value> were inserted
-            int i = 0;
-            for (Map.Entry<String, Integer> entry : initialStates.entrySet()) {
-                if (dChan.channelNumber * 2 == i) {
-                    i = entry.getValue();
-                    break;
-                }
-                i++;
-            }
-            long[] temp = this.fetchLongDataFromLA(i, dChan.channelNumber + 1);
-            double[] data = new double[temp.length];
-            for (int j = 0; j < temp.length; j++) {
-                data[j] = temp[j];
-            }
-            dChan.loadData(tempMap, data);
+            i++;
         }
+        int[] temp = this.fetchIntDataFromLA(i, dChan.channelNumber + 1);
+        double[] data = new double[temp.length - 1];
+        if (temp[0] == 1) {
+            for (int j = 1; j < temp.length; j++) {
+                data[j - 1] = temp[j];
+            }
+        } else {
+            Log.e("Error : ", "Can't load data");
+            return false;
+        }
+        dChan.loadData(tempMap, data);
+
         dChan.generateAxes();
         return true;
+    }
+
+    public DigitalChannel getDigitalChannel(int i) {
+        return dChannels.get(i);
     }
 
     public Map<String, Boolean> getStates() {
