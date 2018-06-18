@@ -252,6 +252,15 @@
     <dimen name="progress_bar_height">8dp</dimen>
     <dimen name="connect_instruction_text_header">18sp</dimen>
 
+    <dimen name="bottom_sheet_side_margin">20dp</dimen>
+    <dimen name="peek_height">66dp</dimen>
+    <dimen name="bottom_sheet_padding">10dp</dimen>
+    <dimen name="space_length_btm_sheet">40dp</dimen>
+    <dimen name="bottom_sheet_title_text">18sp</dimen>
+    <dimen name="bottom_sheet_margin">10dp</dimen>
+    <dimen name="btnsheet_top_section_height">46dp</dimen>
+    <dimen name="extra_space_top">20dp</dimen>
+
     <dimen name="sensor_schematic_height">250dp</dimen>
 
     <dimen name="weight_1">1</dimen>
