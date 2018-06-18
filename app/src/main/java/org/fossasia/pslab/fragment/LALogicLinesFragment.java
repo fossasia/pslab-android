@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +74,7 @@ public class LALogicLinesFragment extends Fragment {
     private Spinner channelSelectSpinner1, channelSelectSpinner2, channelSelectSpinner3, channelSelectSpinner4;
     private Spinner edgeSelectSpinner1, edgeSelectSpinner2, edgeSelectSpinner3, edgeSelectSpinner4;
     private Button analyze_button;
+    private ProgressBar progressBar;
     private CaptureOne captureOne;
 
     public static LALogicLinesFragment newInstance(Activity activity) {
@@ -150,6 +152,8 @@ public class LALogicLinesFragment extends Fragment {
         selectChannelText = (TextView) v.findViewById(R.id.select_channel_description_text);
         selectChannelText.setText(getResources().getString(R.string.channel_selection_description_text));
         selectChannelText.setVisibility(View.VISIBLE);
+        progressBar = v.findViewById(R.id.la_progressBar);
+        progressBar.setVisibility(View.GONE);
         channelMode = 0;
 
         // Creating base layout for chart
@@ -260,7 +264,7 @@ public class LALogicLinesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (channelMode > 0) {
-                    if(scienceLab.isConnected()) {
+                    if (scienceLab.isConnected()) {
                         analyze_button.setClickable(false);
                         switch (channelMode) {
                             case 1:
@@ -298,6 +302,7 @@ public class LALogicLinesFragment extends Fragment {
                         }
 
                         if (channelMode == 1) {
+                            progressBar.setVisibility(View.VISIBLE);
                             Thread monitor = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -332,9 +337,8 @@ public class LALogicLinesFragment extends Fragment {
                             }
                         };
                         logicLinesChart.setOnChartValueSelectedListener(listener);
-                    }
-                    else
-                        Toast.makeText(getContext(),getResources().getString(R.string.device_not_found),Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(getContext(), getResources().getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -525,6 +529,7 @@ public class LALogicLinesFragment extends Fragment {
 
                 // Plot the fetched data
                 updateLogicLines(xaxis, yaxis);
+                progressBar.setVisibility(View.GONE);
 
                 List<ILineDataSet> dataSets = new ArrayList<>();
                 LineDataSet lineDataSet = new LineDataSet(tempInput, channelNames.get(0));
@@ -551,6 +556,7 @@ public class LALogicLinesFragment extends Fragment {
                     lock.notify();
                 }
             } else {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), getResources().getString(R.string.no_data_generated), Toast.LENGTH_SHORT).show();
             }
         }

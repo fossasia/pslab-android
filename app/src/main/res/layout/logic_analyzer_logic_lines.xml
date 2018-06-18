@@ -41,6 +41,14 @@
                     android:layout_marginTop="@dimen/chart_layout_margin_top"
                     android:background="#000" />
 
+                <ProgressBar
+                    android:id="@+id/la_progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/colorPrimary" />
+
                 <TextView
                     android:id="@+id/x_coordinate_text"
                     android:layout_width="wrap_content"
