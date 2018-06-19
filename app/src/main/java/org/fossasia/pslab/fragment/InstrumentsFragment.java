@@ -138,7 +138,7 @@ public class InstrumentsFragment extends Fragment {
                     getResources().getString(R.string.sensors), R.drawable.tile_icon_sensors, getResources().getString(descriptions[3]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.wavegen), R.drawable.tile_icon_wave_generator, getResources().getString(descriptions[4]))
+                    getResources().getString(R.string.wave_generator), R.drawable.tile_icon_wave_generator, getResources().getString(descriptions[4]))
             );
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.power_source), R.drawable.tile_icon_power_source, getResources().getString(descriptions[5]))

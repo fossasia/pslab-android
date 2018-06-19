@@ -19,7 +19,7 @@
     <string name="oscilloscope">Oscilloscope</string>
     <string name="multimeter">Multimeter</string>
     <string name="logical_analyzer">Logic Analyzer</string>
-    <string name="wavegen">Wave Generator</string>
+    <string name="wave_generator">Wave Generator</string>
     <string name="sensors">Sensors</string>
     <string name="power_source">Power Source</string>
     <string name="coming_soon">Coming Soon!</string>
@@ -836,6 +836,19 @@
         <item>Built In</item>
         <item>BH1750</item>
     </string-array>
+
+    <string name="show_guide_text">Show Guide</string>
+    <string name="hide_guide_text">Hide Guide</string>
+
+    <string name="wave_gen_guide_intro">The wave generator can be used to generate different types of waves like
+        Sine wave, Square wave, Saw Tooth wave and allow us to changes their characteristics like frequency, phase, duty.
+        \nIt also allows us to produce PWM signals having different phase and duty.</string>
+
+    <string name="wave_gen_guide_desc">To generate Sine wave or Saw-Tooth wave:\n\n
+        \u2022 Connect the Wave pins S1 and S2 to the channel pins CH1, CH2 as shown in the figure\n\n
+        \u2022 Select the Wave1 button for S1 pin and Wave2 button for S2 pin\n\n
+        \u2022 Press Sine image button for Sine wave and Saw-Tooth image button for Saw-Tooth wave\n\n
+        \u2022 Set their respective frequency and phase difference</string>
 
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
