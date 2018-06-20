@@ -347,6 +347,7 @@
 
     <dimen name="bottom_sheet_side_margin">20dp</dimen>
     <dimen name="peek_height">66dp</dimen>
+    <dimen name="bottom_sheet_image_height">200dp</dimen>
     <dimen name="bottom_sheet_padding">10dp</dimen>
     <dimen name="space_length_btm_sheet">40dp</dimen>
     <dimen name="bottom_sheet_title_text">18sp</dimen>

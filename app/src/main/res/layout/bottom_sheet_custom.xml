@@ -71,7 +71,7 @@
             <ImageView
                 android:id="@+id/custom_dialog_schematic"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/bottom_sheet_image_height"
                 android:layout_margin="@dimen/bottom_sheet_margin"
                 android:contentDescription="@string/schematic_desc"
                 android:src="@drawable/sin_wave_guide" />
