@@ -17,16 +17,19 @@ import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.BH1750;
+import org.fossasia.pslab.communication.sensors.TSL2561;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class LuxMeterFragmentConfig extends Fragment {
-    private static BH1750 bh1750;
+    private BH1750 bh1750;
+    private TSL2561 tsl2561;
     private final int highLimitMax = 10000;
     private final int updatePeriodMax = 900;
     private final int updatePeriodMin = 100;
@@ -41,7 +44,7 @@ public class LuxMeterFragmentConfig extends Fragment {
     EditText updatePeriod;
     @BindView(R.id.cardview_gain_range)
     CardView gainRangeCard;
-    @BindView(R.id.spinner_bh1750_gain)
+    @BindView(R.id.spinner_lux_sensor_gain)
     Spinner gainValue;
 
     private static ScienceLab scienceLab;
@@ -67,6 +70,7 @@ public class LuxMeterFragmentConfig extends Fragment {
         updatePeriod.setText(String.format("%d", updatePeriodValue));
         updatePeriodSeek.setProgress(Integer.valueOf(updatePeriod.getText().toString()) - updatePeriodMin);
 
+        gainValue.setEnabled(false);
         highLimitSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -157,8 +161,23 @@ public class LuxMeterFragmentConfig extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    if (bh1750 != null) {
-                        bh1750.setRange(gainValue.getSelectedItem().toString());
+                    switch (position) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            if (bh1750 != null) {
+                                bh1750.setRange(gainValue.getSelectedItem().toString());
+                            }
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                            if (tsl2561 != null) {
+                                tsl2561.setGain(gainValue.getSelectedItem().toString());
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -176,19 +195,51 @@ public class LuxMeterFragmentConfig extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        gainRangeCard.setEnabled(false);
+                        gainValue.setEnabled(false);
                         LuxMeterFragmentConfig.selectedSensor = 0;
                         break;
 
                     case 1:
                         scienceLab = ScienceLabCommon.scienceLab;
                         if (scienceLab.isConnected()) {
+                            ArrayList<Integer> data = new ArrayList<>();
                             I2C i2c = scienceLab.i2c;
+                            try {
+                                data = i2c.scan(null);
+                                if (data.contains(0x23)) {
+                                    bh1750 = new BH1750(i2c);
+                                    gainValue.setEnabled(true);
+                                    LuxMeterFragmentConfig.selectedSensor = 1;
+                                }
+                                else {
+                                    Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected), Toast.LENGTH_SHORT).show();
+                                    selectSensor.setSelection(0);
+                                }
+                            } catch (InterruptedException | IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                            selectSensor.setSelection(0);
+                        }
+                        break;
+                    case 2:
+                        scienceLab = ScienceLabCommon.scienceLab;
+                        if (scienceLab.isConnected()) {
+                            I2C i2c = scienceLab.i2c;
+                            ArrayList<Integer> data = new ArrayList<>();
 
                             try {
-                                bh1750 = new BH1750(i2c);
-                                gainRangeCard.setEnabled(true);
-                                LuxMeterFragmentConfig.selectedSensor = 1;
+                                data = i2c.scan(null);
+                                if (data.contains(0x39)) {
+                                    tsl2561 = new TSL2561(i2c);
+                                    gainValue.setEnabled(true);
+                                    LuxMeterFragmentConfig.selectedSensor = 2;
+                                }
+                                else {
+                                    Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected), Toast.LENGTH_SHORT).show();
+                                    selectSensor.setSelection(0);
+                                }
                             } catch (InterruptedException | IOException e) {
                                 e.printStackTrace();
                             }

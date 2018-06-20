@@ -140,6 +140,7 @@
     <string name="initialising_wait">Initialising Wait…</string>
     <string name="device_connected_successfully">Device Connected Successfully</string>
     <string name="device_not_found">Device Not Found</string>
+    <string name="sensor_not_connected">Sensor not connected</string>
 
     <string name="time_unit_la">Time (ms)</string>
     <string name="analyze">Analyze</string>
@@ -860,6 +861,15 @@
     <string-array name="select_light_sensor">
         <item>Built In</item>
         <item>BH1750</item>
+        <item>TSL2561</item>
+    </string-array>
+    <string-array name="select_lux_gain">
+        <item>No gain</item>
+        <item>1</item>
+        <item>16</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>4000</item>
     </string-array>
 
     <string name="save_csv_data">Save CSV Data</string>
