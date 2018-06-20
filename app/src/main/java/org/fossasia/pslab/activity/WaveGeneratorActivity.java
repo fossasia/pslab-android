@@ -18,11 +18,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.warkiz.widget.IndicatorSeekBar;
+
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.others.MathUtils;
+import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.others.SwipeGestureDetector;
 import org.fossasia.pslab.others.WaveGeneratorCommon;
 
@@ -354,24 +356,27 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
                 double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
 
-                String waveType;
+                String waveType1;
+                String waveType2;
 
-                if (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE).equals(SIN)) {
-                    waveType = "sine";
-                } else {
-                    waveType = "tria";
-                }
-                if (waveMonSelected) {
-                    if (phase == WaveData.PHASE_MIN.getValue()) {
-                        scienceLab.setW1(freq1, waveType);
-                        scienceLab.setW2(freq2, waveType);
-                    } else {
-                        scienceLab.setWaves(freq1, phase, freq2);
+                waveType1 = WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+                waveType2 = WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+
+                if (scienceLab.isConnected()) {
+                    if (waveMonSelected) {
+                        if (phase == WaveData.PHASE_MIN.getValue()) {
+                            scienceLab.setW1(freq1, waveType1);
+                            scienceLab.setW2(freq2, waveType2);
+                        } else {
+                            scienceLab.setWaves(freq1, phase, freq2);
+                        }
                     }
+                    Intent intent = new Intent(WaveGeneratorActivity.this, OscilloscopeActivity.class);
+                    intent.putExtra("who", "WaveGenerator");
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
                 }
-                Intent intent = new Intent(WaveGeneratorActivity.this, OscilloscopeActivity.class);
-                intent.putExtra("who", "WaveGenerator");
-                startActivity(intent);
             }
         });
 
