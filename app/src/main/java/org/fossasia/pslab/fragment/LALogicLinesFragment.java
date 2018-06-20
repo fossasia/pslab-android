@@ -1,23 +1,25 @@
 package org.fossasia.pslab.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -40,13 +42,18 @@ import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.digitalChannel.DigitalChannel;
 import org.fossasia.pslab.others.ChannelAxisFormatter;
+import org.fossasia.pslab.others.MathUtils;
 import org.fossasia.pslab.others.ScienceLabCommon;
+import org.fossasia.pslab.others.SwipeGestureDetector;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import in.goodiebag.carouselpicker.CarouselPicker;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by viveksb007 on 9/6/17.
@@ -54,11 +61,23 @@ import in.goodiebag.carouselpicker.CarouselPicker;
 
 public class LALogicLinesFragment extends Fragment {
 
-    public static final String PREFS_NAME = "customDialogPreference";
+    public static final String PREFS_NAME = "LogicAnalyzerPreference";
     private final Object lock = new Object();
-    public CheckBox dontShowAgain;
     List<Entry> tempInput;
     DigitalChannel digitalChannel;
+    BottomSheetBehavior bottomSheetBehavior;
+    GestureDetector gestureDetector;
+
+    //Bottom Sheet
+    private LinearLayout bottomSheet;
+    private View tvShadow;
+    private ImageView arrowUpDown;
+    private TextView bottomSheetSlideText;
+    private TextView bottomSheetGuideTitle;
+    private TextView bottomSheetText;
+    private ImageView bottomSheetSchematic;
+    private TextView bottomSheetDesc;
+
     private Activity activity;
     private int channelMode;
     private ScienceLab scienceLab;
@@ -86,10 +105,8 @@ public class LALogicLinesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(getActivity());
         scienceLab = ScienceLabCommon.scienceLab;
-
-        // Inflating custom dialog on how to use Logic Analyzer
-        howToConnectDialog(getString(R.string.logic_analyzer_dialog_heading), getString(R.string.logic_analyzer_dialog_text), R.drawable.logic_analyzer_circuit, getString(R.string.logic_analyzer_dialog_description));
 
         logicAnalysis = new Runnable() {
             @Override
@@ -124,11 +141,16 @@ public class LALogicLinesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
+        View v = inflater.inflate(R.layout.logic_analyzer_main_layout, container, false);
 
+        // LED Indicator
         ledImageView = v.findViewById(R.id.imageView_led_la);
+
+        // Heading
         tvTimeUnit = v.findViewById(R.id.la_tv_time_unit);
         tvTimeUnit.setText(getString(R.string.time_unit_la));
+
+        // Carousel View
         carouselPicker = (CarouselPicker) v.findViewById(R.id.carouselPicker);
         llChannel1 = (LinearLayout) v.findViewById(R.id.ll_chart_channel_1);
         llChannel1.setVisibility(View.GONE);
@@ -147,14 +169,37 @@ public class LALogicLinesFragment extends Fragment {
         edgeSelectSpinner3 = (Spinner) v.findViewById(R.id.edge_select_spinner_3);
         edgeSelectSpinner4 = (Spinner) v.findViewById(R.id.edge_select_spinner_4);
         analyze_button = (Button) v.findViewById(R.id.analyze_button);
-        xCoordinateText = v.findViewById(R.id.x_coordinate_text);
-        xCoordinateText.setText("Time:  0.0 mS");
         selectChannelText = (TextView) v.findViewById(R.id.select_channel_description_text);
         selectChannelText.setText(getResources().getString(R.string.channel_selection_description_text));
         selectChannelText.setVisibility(View.VISIBLE);
+        channelMode = 0;
+
+        // Axis Indicator
+        xCoordinateText = v.findViewById(R.id.x_coordinate_text);
+        xCoordinateText.setText("Time:  0.0 mS");
         progressBar = v.findViewById(R.id.la_progressBar);
         progressBar.setVisibility(View.GONE);
-        channelMode = 0;
+
+        // Bottom Sheet guide
+        bottomSheet = (LinearLayout) v.findViewById(R.id.bottom_sheet);
+        tvShadow = (View) v.findViewById(R.id.shadow);
+        arrowUpDown = (ImageView) v.findViewById(R.id.img_arrow);
+        bottomSheetSlideText = (TextView) v.findViewById(R.id.sheet_slide_text);
+        bottomSheetGuideTitle = (TextView) v.findViewById(R.id.guide_title);
+        bottomSheetText = (TextView) v.findViewById(R.id.custom_dialog_text);
+        bottomSheetSchematic = (ImageView) v.findViewById(R.id.custom_dialog_schematic);
+        bottomSheetDesc = (TextView) v.findViewById(R.id.custom_dialog_desc);
+
+        // Inflating bottom sheet dialog on how to use Logic Analyzer
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        setUpBottomSheet();
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
 
         // Creating base layout for chart
         logicLinesChart = v.findViewById(R.id.chart_la);
@@ -418,46 +463,6 @@ public class LALogicLinesFragment extends Fragment {
         carouselPicker.setAdapter(channelAdapter);
     }
 
-    @SuppressLint("ResourceType")
-    public void howToConnectDialog(String title, String intro, int iconID, String desc) {
-        try {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            LayoutInflater inflater = getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.custom_dialog_box, null);
-            final SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
-            Boolean skipMessage = settings.getBoolean("skipMessage", false);
-
-            dontShowAgain = (CheckBox) dialogView.findViewById(R.id.toggle_show_again);
-            final TextView heading_text = (TextView) dialogView.findViewById(R.id.custom_dialog_text);
-            final TextView description_text = (TextView) dialogView.findViewById(R.id.description_text);
-            final ImageView schematic = (ImageView) dialogView.findViewById(R.id.custom_dialog_schematic);
-            final Button ok_button = (Button) dialogView.findViewById(R.id.dismiss_button);
-
-            builder.setView(dialogView);
-            builder.setTitle(title);
-            heading_text.setText(intro);
-            schematic.setImageResource(iconID);
-            description_text.setText(desc);
-            final AlertDialog dialog = builder.create();
-            ok_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Boolean checkBoxResult = false;
-                    if (dontShowAgain.isChecked())
-                        checkBoxResult = true;
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean("skipMessage", checkBoxResult);
-                    editor.apply();
-                    dialog.dismiss();
-                }
-            });
-            if (!skipMessage)
-                dialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -470,6 +475,65 @@ public class LALogicLinesFragment extends Fragment {
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
             ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         super.onStop();
+    }
+
+    private void setUpBottomSheet() {
+        gestureDetector = new GestureDetector(getContext(), new SwipeGestureDetector(bottomSheetBehavior));
+
+        final SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        Boolean isFirstTime = settings.getBoolean("LogicAnalyzerFirstTime", true);
+
+        bottomSheetGuideTitle.setText(R.string.logical_analyzer);
+        bottomSheetText.setText(R.string.logic_analyzer_dialog_text);
+        bottomSheetSchematic.setImageResource(R.drawable.logic_analyzer_circuit);
+        bottomSheetDesc.setText(R.string.logic_analyzer_dialog_description);
+
+        if (isFirstTime) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setAlpha(0.8f);
+            arrowUpDown.setRotation(180);
+            bottomSheetSlideText.setText(R.string.hide_guide_text);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("LogicAnalyzerFirstTime", false);
+            editor.apply();
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            private Handler handler = new Handler();
+            private Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            };
+
+            @Override
+            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.hide_guide_text);
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        handler.postDelayed(runnable, 2000);
+                        break;
+
+                    default:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.show_guide_text);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                tvShadow.setAlpha(value);
+                arrowUpDown.setRotation(slideOffset * 180);
+            }
+        });
     }
 
     private class CaptureOne extends AsyncTask<String, Void, Void> {
