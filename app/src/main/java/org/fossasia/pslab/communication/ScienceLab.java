@@ -1928,15 +1928,15 @@ public class ScienceLab {
                     l.add((int) readData[i] & 0xff);
                 }
 
-                String s = "";
+                StringBuilder stringBuilder = new StringBuilder();
                 int[] timeStamps = new int[(int) readData.length / 2 + 1];
                 for (int i = 0; i < (int) (readData.length / 2); i++) {
                     double t = (l.get(i * 2) | (l.get(i * 2 + 1) << 8));
                     timeStamps[i + 1] = (int) t;
-                    s += String.valueOf(t);
-                    s += " ";
+                    stringBuilder.append(String.valueOf(t));
+                    stringBuilder.append(" ");
                 }
-                Log.v("Fetched points : ", s);
+                Log.v("Fetched points : ", stringBuilder.toString());
                 mPacketHandler.getAcknowledgement();
                 Arrays.sort(timeStamps);
                 timeStamps[0] = 1;
