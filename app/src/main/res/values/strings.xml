@@ -120,6 +120,21 @@
     <string name="select_sensor">Select Sensor</string>
     <string name="get_raw">Get Raw</string>
 
+    <string name="accelerometer">Accelerometer</string>
+    <string name="x_axis">X axis</string>
+    <string name="y_axis">Y axis</string>
+    <string name="z_axis">Z axis</string>
+    <string name="text_max">Max 9.80 ms<sup><small>-2</small></sup></string>
+    <string name="text_min">Min 9.80 ms<sup><small>-2</small></sup></string>
+    <string name="test_value">9.80 ms<sup><small>-2</small></sup></string>
+    <string name="meters_per_sec">ms<sup><small>-2</small></sup></string>
+    <string name="time_seconds">Time (s)</string>
+
+    <string name="set_triggers">Set Triggers</string>
+    <string name="remove">Remove</string>
+    <string name="built_in">Built-In</string>
+    <string name="MPU6050">MPU6050</string>
+
     <string name="not_connected">Not Connected</string>
     <string name="initialisation_completed">Initialisation Completed</string>
     <string name="initialising_wait">Initialising Wait…</string>
@@ -714,6 +729,7 @@
     <string name="tile_instrument_horizontal_bars">Horizontal bars to match icon</string>
     <string name="tile_instrument_vertical_bars">Verticle bars to match tile icon</string>
 
+    <string name="accelerometer_description">Measures the Linear acceleration in XYZ directions</string>
     <string name="web_view_link_text">What is PSLab Device?</string>
     <string name="pslab_connect_text">Steps to connect the PSLab Device</string>
     <string name="pslab_instruction_1">Connect a micro USB(Mini B) to PSLab</string>

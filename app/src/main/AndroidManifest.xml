@@ -77,6 +77,8 @@
             android:name=".activity.LuxMeterActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
 
+        <activity android:name=".activity.AccelerometerActivity"/>
+
         <receiver android:name=".receivers.USBDetachReceiver" />
 
         <activity android:name=".sensors.SensorADS1115" />

@@ -64,6 +64,20 @@
     <dimen name="sensor_title_font">16sp</dimen>
     <dimen name="sensor_body_font">14sp</dimen>
 
+    <dimen name="accel_textsize_large">17sp</dimen>
+    <dimen name="accel_textsize_small">9sp</dimen>
+    <dimen name="accel_textsize_medium">12sp</dimen>
+    <dimen name="accel_value_width">55dp</dimen>
+    <dimen name="accel_minmax_text_width">35dp</dimen>
+    <dimen name="accel_minmax_value_width">33dp</dimen>
+    <dimen name="accel_min_text_padding_top">12dp</dimen>
+    <dimen name="tv_chart_height">24dp</dimen>
+    <dimen name="tv_chart_padding">4dp</dimen>
+    <dimen name="axis_image_size">56dp</dimen>
+    <dimen name="desc_pane_width">110dp</dimen>
+    <dimen name="accel_card_height">175dp</dimen>
+    <dimen name="accel_card_radius">4dp</dimen>
+    <dimen name="editor_absolute_x">288dp</dimen>
 
     <dimen name="reading_box_height">40dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
