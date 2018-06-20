@@ -261,6 +261,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             case "Speed of Sound":
                 isSpeedOfSoundExperiment = true;
                 break;
+            case "WaveGenerator":
+                //do nothing
+                break;
             default:
                 break;
         }

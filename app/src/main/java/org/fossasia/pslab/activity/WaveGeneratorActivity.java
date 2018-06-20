@@ -1,18 +1,29 @@
 package org.fossasia.pslab.activity;
 
+
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.warkiz.widget.IndicatorSeekBar;
-
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.ScienceLabCommon;
+import org.fossasia.pslab.others.MathUtils;
+import org.fossasia.pslab.others.SwipeGestureDetector;
 import org.fossasia.pslab.others.WaveGeneratorCommon;
 
 import butterknife.BindView;
@@ -101,6 +112,27 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     IndicatorSeekBar seekBar;
     @BindView(R.id.btn_set)
     Button btnSet;
+    @BindView(R.id.btn_view)
+    Button btnView;
+
+
+    //bottomSheet
+    @BindView(R.id.bottom_sheet)
+    LinearLayout bottomSheet;
+    @BindView(R.id.shadow)
+    View tvShadow;
+    @BindView(R.id.img_arrow)
+    ImageView arrowUpDown;
+    @BindView(R.id.sheet_slide_text)
+    TextView bottomSheetSlideText;
+    @BindView(R.id.guide_title)
+    TextView bottomSheetGuideTitle;
+    @BindView(R.id.custom_dialog_text)
+    TextView bottomSheetText;
+    @BindView(R.id.custom_dialog_schematic)
+    ImageView bottomSheetSchematic;
+    @BindView(R.id.custom_dialog_desc)
+    TextView bottomSheetDesc;
 
     private int leastCount, seekMax, seekMin;
     private String unit;
@@ -131,13 +163,20 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private TextView activePropTv = null;
     private TextView activePwmPinTv = null;
 
+    ScienceLab scienceLab;
+    BottomSheetBehavior bottomSheetBehavior;
+    GestureDetector gestureDetector;
+    public static final String PREFS_NAME = "customDialogPreference";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wave_generator);
+        setContentView(R.layout.activity_wave_generator_main);
         ButterKnife.bind(this);
+        scienceLab = ScienceLabCommon.scienceLab;
         new WaveGeneratorCommon();
+        setUpBottomSheet();
 
         enableInitialState();//on starting wave1 and sq1 will be selected
 
@@ -308,6 +347,34 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
         });
 
+        btnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
+                double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
+                double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
+
+                String waveType;
+
+                if (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE).equals(SIN)) {
+                    waveType = "sine";
+                } else {
+                    waveType = "tria";
+                }
+                if (waveMonSelected) {
+                    if (phase == WaveData.PHASE_MIN.getValue()) {
+                        scienceLab.setW1(freq1, waveType);
+                        scienceLab.setW2(freq2, waveType);
+                    } else {
+                        scienceLab.setWaves(freq1, phase, freq2);
+                    }
+                }
+                Intent intent = new Intent(WaveGeneratorActivity.this, OscilloscopeActivity.class);
+                intent.putExtra("who", "WaveGenerator");
+                startActivity(intent);
+            }
+        });
+
         seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
@@ -407,7 +474,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 pwmMonSelectPin.setText(getString(R.string.text_sq2));
                 pwmBtnPhase.setEnabled(true);
 
-                value = (double) WaveGeneratorCommon.wave.get(WaveConst.SQ1).get(WaveConst.FREQUENCY);
+                value = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.FREQUENCY);
                 valueText = value + " " + getString(R.string.unit_hz);
                 pwmFreqValue.setText(valueText);
 
@@ -479,6 +546,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 valueText = value + " " + getString(R.string.unit_hz);
                 waveFreqValue.setText(valueText);
                 break;
+
         }
         prop_active = null;
         toggleSeekBtns(false);
@@ -549,7 +617,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         if (!waveMonSelected) {
             waveMonPropSelect.setText("");
             waveMonPropValueSelect.setText("");
-            if (prop_active.equals(WaveConst.FREQUENCY)) {
+
+            if (prop_active.equals(WaveConst.FREQUENCY) && !pwmBtnActive.equals(WaveConst.SQ1) && !pwmBtnActive.equals(WaveConst.SQ2)) {
                 seekBar.setProgress(WaveGeneratorCommon.wave.get(WaveConst.SQ1).get(prop_active));
             } else {
                 seekBar.setProgress(WaveGeneratorCommon.wave.get(pwmBtnActive).get(prop_active));
@@ -586,7 +655,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         Integer value = seekBar.getProgress();
 
         if (!waveMonSelected) {
-            if (prop_active.equals(WaveConst.FREQUENCY)) {
+            if (prop_active.equals(WaveConst.FREQUENCY) && !pwmBtnActive.equals(WaveConst.SQ1) && !pwmBtnActive.equals(WaveConst.SQ2)) {
                 WaveGeneratorCommon.wave.get(WaveConst.SQ1).put(prop_active, value);
             } else {
                 WaveGeneratorCommon.wave.get(pwmBtnActive).put(prop_active, value);
@@ -616,5 +685,72 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         selectBtn(WaveConst.WAVE1);
         activePwmPinTv = pwmMonSqr1;
         selectBtn(WaveConst.SQ1);
+        imgBtnSq.setEnabled(false);
+    }
+
+    private void setUpBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        final SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        Boolean isFirstTime = settings.getBoolean("WaveGenFirstTime", true);
+
+        bottomSheetGuideTitle.setText(R.string.wave_generator);
+        bottomSheetText.setText(R.string.wave_gen_guide_intro);
+        bottomSheetSchematic.setImageResource(R.drawable.sin_wave_guide);
+        bottomSheetDesc.setText(R.string.wave_gen_guide_desc);
+
+        if (isFirstTime) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setAlpha(0.8f);
+            arrowUpDown.setRotation(180);
+            bottomSheetSlideText.setText(R.string.hide_guide_text);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("WaveGenFirstTime", false);
+            editor.apply();
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            private Handler handler = new Handler();
+            private Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            };
+
+            @Override
+            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.hide_guide_text);
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        handler.postDelayed(runnable, 2000);
+                        break;
+
+                    default:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.show_guide_text);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                tvShadow.setAlpha(value);
+                arrowUpDown.setRotation(slideOffset * 180);
+            }
+        });
+        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
+        return super.onTouchEvent(event);
     }
 }

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 
 import br.tiagohm.markdownview.MarkdownView;
@@ -39,11 +38,4 @@ public class ExperimentDocMdFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mMarkdownView.loadMarkdownFromAsset("DOC_HTML/apps/" + mdFile);
     }
-
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, ExperimentDocMdFragment.class.getSimpleName());
-    }
-
 }

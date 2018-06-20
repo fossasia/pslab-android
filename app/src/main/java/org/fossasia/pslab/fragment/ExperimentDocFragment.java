@@ -7,14 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import org.fossasia.pslab.PSLabApplication;
 import org.fossasia.pslab.R;
 
 /**
@@ -75,11 +73,4 @@ public class ExperimentDocFragment extends Fragment {
             return true;
         }
     }
-
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-
-        ((PSLabApplication)getActivity().getApplication()).refWatcher.watch(this, ExperimentDocFragment.class.getSimpleName());
-    }
-
 }

@@ -13,20 +13,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import org.fossasia.pslab.PSLabApplication;
-import org.fossasia.pslab.activity.ControlActivity;
+import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.AccelerometerActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
-import org.fossasia.pslab.activity.MultimeterActivity;
 import org.fossasia.pslab.activity.LuxMeterActivity;
+import org.fossasia.pslab.activity.MultimeterActivity;
 import org.fossasia.pslab.activity.OscilloscopeActivity;
 import org.fossasia.pslab.activity.PowerSourceActivity;
 import org.fossasia.pslab.activity.SensorActivity;
 import org.fossasia.pslab.activity.WaveGeneratorActivity;
-import org.fossasia.pslab.items.ApplicationItem;
-import org.fossasia.pslab.R;
 import org.fossasia.pslab.adapters.ApplicationAdapter;
+import org.fossasia.pslab.items.ApplicationItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +86,12 @@ public class InstrumentsFragment extends Fragment {
                                 intent = new Intent(context, LuxMeterActivity.class);
                                 startActivity(intent);
                                 break;
+                            case "Accelerometer":
+                                intent = new Intent(context, AccelerometerActivity.class);
+                                startActivity(intent);
+                                break;
+                            default:
+                                break;
                         }
 
                     }
@@ -125,7 +129,8 @@ public class InstrumentsFragment extends Fragment {
                     R.string.sensors_description,
                     R.string.wave_generator_description,
                     R.string.power_source_description,
-                    R.string.lux_meter_description
+                    R.string.lux_meter_description,
+                    R.string.accelerometer_description
             };
 
             applicationItemList.add(new ApplicationItem(
@@ -141,13 +146,16 @@ public class InstrumentsFragment extends Fragment {
                     getResources().getString(R.string.sensors), R.drawable.tile_icon_sensors, getResources().getString(descriptions[3]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.wavegen), R.drawable.tile_icon_wave_generator, getResources().getString(descriptions[4]))
+                    getResources().getString(R.string.wave_generator), R.drawable.tile_icon_wave_generator, getResources().getString(descriptions[4]))
             );
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.power_source), R.drawable.tile_icon_power_source, getResources().getString(descriptions[5]))
             );
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.lux_meter), R.drawable.tile_icon_lux_meter, getResources().getString(descriptions[6]))
+            );
+            applicationItemList.add(new ApplicationItem(
+                    getResources().getString(R.string.accelerometer), R.drawable.tile_icon_accelerometer, getResources().getString(descriptions[7]))
             );
             return null;
         }
@@ -163,11 +171,5 @@ public class InstrumentsFragment extends Fragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ((PSLabApplication) getActivity().getApplication()).refWatcher.watch(this, InstrumentsFragment.class.getSimpleName());
     }
 }

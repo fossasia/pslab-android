@@ -1,5 +1,6 @@
 package org.fossasia.pslab.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,9 @@ import butterknife.ButterKnife;
  */
 
 public class PowerSourceActivity extends AppCompatActivity {
+
+    public static final String POWER_PREFERENCES = "Power_Preferences";
+    private SharedPreferences powerPreferences;
 
     private enum Pin {
         PV1, PV2, PV3, PCS;
@@ -87,6 +91,8 @@ public class PowerSourceActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
+        powerPreferences = getSharedPreferences(POWER_PREFERENCES, MODE_PRIVATE);
+
         monitorControllers(controllerPV1, Pin.PV1, PV1_CONTROLLER_MAX);
         monitorControllers(controllerPV2, Pin.PV2, PV2_CONTROLLER_MAX);
         monitorControllers(controllerPV3, Pin.PV3, PV3_CONTROLLER_MAX);
@@ -96,10 +102,20 @@ public class PowerSourceActivity extends AppCompatActivity {
         monitorVariations(upPV2, downPV2, Pin.PV2);
         monitorVariations(upPV3, downPV3, Pin.PV3);
         monitorVariations(upPCS, downPCS, Pin.PCS);
+
+        updateDisplay(displayPV1, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PV1),
+                PV1_CONTROLLER_MAX, 5.00f, -5.00f)), Pin.PV1);
+        updateDisplay(displayPV2, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PV2),
+                PV2_CONTROLLER_MAX, 3.30f, -3.30f)), Pin.PV2);
+        updateDisplay(displayPV3, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PV3),
+                PV3_CONTROLLER_MAX, 3.30f, 0.00f)), Pin.PV3);
+        updateDisplay(displayPCS, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PCS),
+                PCS_CONTROLLER_MAX, 3.30f, 0.00f)), Pin.PCS);
     }
 
     private void monitorControllers(Croller controller, final Pin pin, int controllerLimit) {
         controller.setMax(controllerLimit);
+        controller.setProgress(retrievePowerValues(pin));
         controller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
             @Override
             public void onProgressChanged(Croller croller, int progress) {
@@ -202,42 +218,23 @@ public class PowerSourceActivity extends AppCompatActivity {
         }
     }
 
-    private void setMappedPower(Pin pin, int progress) {
-        switch (pin) {
-            case PV1:
-                voltagePV1 = limitDigits(mapProgressToPower(progress, PV1_CONTROLLER_MAX, 5.00f, -5.00f));
-                updateDisplay(displayPV1, voltagePV1, pin);
-                break;
-            case PV2:
-                voltagePV2 = limitDigits(mapProgressToPower(progress, PV2_CONTROLLER_MAX, 3.30f, -3.30f));
-                updateDisplay(displayPV2, voltagePV2, pin);
-                break;
-            case PV3:
-                voltagePV3 = limitDigits(mapProgressToPower(progress, PV3_CONTROLLER_MAX, 3.30f, 0.00f));
-                updateDisplay(displayPV3, voltagePV3, pin);
-                break;
-            case PCS:
-                currentPCS = limitDigits(mapProgressToPower(progress, PCS_CONTROLLER_MAX, 3.30f, 0.00f));
-                updateDisplay(displayPCS, currentPCS, pin);
-                break;
-            default:
-                break;
-        }
-    }
-
     private void updateController(Croller controller, Pin pin) {
         switch (pin) {
             case PV1:
-                controller.setProgress(mapPowerToProgress(voltagePV1, PV1_CONTROLLER_MAX, 5.00f, -5.00f));
+                controller.setProgress(mapPowerToProgress(voltagePV1, PV1_CONTROLLER_MAX,
+                        5.00f, -5.00f));
                 break;
             case PV2:
-                controller.setProgress(mapPowerToProgress(voltagePV2, PV2_CONTROLLER_MAX, 3.30f, -3.30f));
+                controller.setProgress(mapPowerToProgress(voltagePV2, PV2_CONTROLLER_MAX,
+                        3.30f, -3.30f));
                 break;
             case PV3:
-                controller.setProgress(mapPowerToProgress(voltagePV3, PV3_CONTROLLER_MAX, 3.30f, 0.00f));
+                controller.setProgress(mapPowerToProgress(voltagePV3, PV3_CONTROLLER_MAX,
+                        3.30f, 0.00f));
                 break;
             case PCS:
-                controller.setProgress(mapPowerToProgress(currentPCS, PCS_CONTROLLER_MAX, 3.30f, 0.00f));
+                controller.setProgress(mapPowerToProgress(currentPCS, PCS_CONTROLLER_MAX,
+                        3.30f, 0.00f));
                 break;
             default:
                 break;
@@ -246,9 +243,38 @@ public class PowerSourceActivity extends AppCompatActivity {
     }
 
     private void updateDisplay(TextView display, float value, Pin pin) {
-        String displayText = (value >= 0 ? "+" : "-").concat(String.format(Locale.getDefault(), "%.2f", Math.abs(value))).concat(pin.equals(Pin.PCS) ? " mA" : " V");
+        String displayText = (value >= 0 ? "+" : "-").concat(String.format(Locale.getDefault(),
+                "%.2f", Math.abs(value))).concat(pin.equals(Pin.PCS) ? " mA" : " V");
         display.setText(displayText);
         setPower(pin);
+    }
+
+    private void setMappedPower(Pin pin, int progress) {
+        savePowerValues(pin, progress);
+        switch (pin) {
+            case PV1:
+                voltagePV1 = limitDigits(mapProgressToPower(progress, PV1_CONTROLLER_MAX,
+                        5.00f, -5.00f));
+                updateDisplay(displayPV1, voltagePV1, pin);
+                break;
+            case PV2:
+                voltagePV2 = limitDigits(mapProgressToPower(progress, PV2_CONTROLLER_MAX,
+                        3.30f, -3.30f));
+                updateDisplay(displayPV2, voltagePV2, pin);
+                break;
+            case PV3:
+                voltagePV3 = limitDigits(mapProgressToPower(progress, PV3_CONTROLLER_MAX,
+                        3.30f, 0.00f));
+                updateDisplay(displayPV3, voltagePV3, pin);
+                break;
+            case PCS:
+                currentPCS = limitDigits(mapProgressToPower(progress, PCS_CONTROLLER_MAX,
+                        3.30f, 0.00f));
+                updateDisplay(displayPCS, currentPCS, pin);
+                break;
+            default:
+                break;
+        }
     }
 
     private void setPower(Pin pin) {
@@ -272,12 +298,32 @@ public class PowerSourceActivity extends AppCompatActivity {
         }
     }
 
+    private void savePowerValues(Pin pin, int power) {
+        if (scienceLab.isConnected()) {
+            SharedPreferences.Editor modifier = powerPreferences.edit();
+            modifier.putInt(String.valueOf(pin), power);
+            modifier.apply();
+        }
+    }
+
+    private int retrievePowerValues(Pin pin) {
+        // Detects and responds if user has unplugged the device and closed the app from system
+        if (scienceLab.isConnected()) {
+            return powerPreferences.getInt(String.valueOf(pin), 1);
+        } else {
+            powerPreferences.edit().clear().apply();
+            return 1;
+        }
+    }
+
     private float mapProgressToPower(int progress, int CONTROLLER_MAX, float max, float min) {
-        return (progress - CONTROLLER_MIN) * (max - min) / (CONTROLLER_MAX - CONTROLLER_MIN) + min;
+        return (progress - CONTROLLER_MIN) * (max - min) /
+                (CONTROLLER_MAX - CONTROLLER_MIN) + min;
     }
 
     private int mapPowerToProgress(float progress, int MAX, float max, float min) {
-        return (int) (limitDigits((progress - min) * (MAX - CONTROLLER_MIN) / (max - min)) + CONTROLLER_MIN);
+        return (int) (limitDigits((progress - min) * (MAX - CONTROLLER_MIN) /
+                (max - min)) + CONTROLLER_MIN);
     }
 
     private float limitDigits(float number) {
