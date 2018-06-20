@@ -2,7 +2,6 @@ package org.fossasia.pslab.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -24,6 +23,7 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
     @BindView(R.id.logical_analyzer_toolbar)
     Toolbar toolbar;
     private ScienceLab scienceLab;
+    private boolean isRunning = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +50,11 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        if (!isRunning)
+            finish();
+    }
+
+    public void setStatus(boolean status) {
+        isRunning = status;
     }
 }
