@@ -8,8 +8,6 @@ public class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListene
 
     private BottomSheetBehavior bottomSheet;
 
-    public enum Direction {TOP, RIGHT, LEFT, DOWN}
-
     public SwipeGestureDetector(BottomSheetBehavior bt) {
         bottomSheet = bt;
     }
@@ -19,7 +17,10 @@ public class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListene
         try {
             switch (getDirection(e1.getX(), e1.getY(), e2.getX(), e2.getY())) {
                 case TOP:
-                    bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    if (bottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                        bottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    if (bottomSheet.getState() == BottomSheetBehavior.STATE_HIDDEN)
+                        bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     return true;
                 case LEFT:
                     return true;
@@ -36,7 +37,6 @@ public class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListene
         } catch (Exception e) {
             return false;
         }
-
     }
 
     private Direction getDirection(float x1, float y1, float x2, float y2) {
@@ -51,4 +51,6 @@ public class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListene
             return Direction.RIGHT;
         return null;
     }
+
+    public enum Direction {TOP, RIGHT, LEFT, DOWN}
 }
