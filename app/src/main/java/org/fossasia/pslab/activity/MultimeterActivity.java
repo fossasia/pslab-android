@@ -1,20 +1,25 @@
 package org.fossasia.pslab.activity;
 
-import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import android.widget.TextView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.MathUtils;
 import org.fossasia.pslab.others.ScienceLabCommon;
+import org.fossasia.pslab.others.SwipeGestureDetector;
 
 import java.text.DecimalFormat;
 import java.util.Locale;
@@ -48,22 +53,42 @@ public class MultimeterActivity extends AppCompatActivity {
     @BindView(R.id.resistance)
     Button readResistance;
 
+    //bottomSheet
+    @BindView(R.id.bottom_sheet)
+    LinearLayout bottomSheet;
+    @BindView(R.id.shadow)
+    View tvShadow;
+    @BindView(R.id.img_arrow)
+    ImageView arrowUpDown;
+    @BindView(R.id.sheet_slide_text)
+    TextView bottomSheetSlideText;
+    @BindView(R.id.guide_title)
+    TextView bottomSheetGuideTitle;
+    @BindView(R.id.custom_dialog_text)
+    TextView bottomSheetText;
+    @BindView(R.id.custom_dialog_schematic)
+    ImageView bottomSheetSchematic;
+    @BindView(R.id.custom_dialog_desc)
+    TextView bottomSheetDesc;
+
     private int knobState;
     private String[] knobMarker;
 
+    BottomSheetBehavior bottomSheetBehavior;
+    GestureDetector gestureDetector;
     public static final String PREFS_NAME = "customDialogPreference";
+
     public static final String NAME = "savingData";
-    public CheckBox dontShowAgain;
     SharedPreferences multimeter_data;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        howToConnectDialog(getString(R.string.multimeter_dialog_heading), getString(R.string.multimeter_dialog_text), R.drawable.multimeter_circuit, getString(R.string.multimeter_dialog_description));
-        setContentView(R.layout.activity_multimeter);
+        setContentView(R.layout.activity_multimeter_main);
         ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.scienceLab;
         knobMarker = getResources().getStringArray(org.fossasia.pslab.R.array.multimeter_knob_states);
+        setUpBottomSheet();
         multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
         knobState = multimeter_data.getInt("KnobState", 0);
         String text_quantity = multimeter_data.getString("TextBox", null);
@@ -166,42 +191,70 @@ public class MultimeterActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("ResourceType")
-    public void howToConnectDialog(String title, String intro, int iconID, String desc) {
-        try {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            LayoutInflater inflater = getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.custom_dialog_box, null);
-            final SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            Boolean skipMessage = settings.getBoolean("MultimeterSkipMessage", false);
-            dontShowAgain = (CheckBox) dialogView.findViewById(R.id.toggle_show_again);
-            final TextView heading_text = (TextView) dialogView.findViewById(R.id.custom_dialog_text);
-            final TextView description_text = (TextView) dialogView.findViewById(R.id.description_text);
-            final ImageView schematic = (ImageView) dialogView.findViewById(R.id.custom_dialog_schematic);
-            final Button ok_button = (Button) dialogView.findViewById(R.id.dismiss_button);
-            builder.setView(dialogView);
-            builder.setTitle(title);
-            heading_text.setText(intro);
-            schematic.setImageResource(iconID);
-            description_text.setText(desc);
-            final AlertDialog dialog = builder.create();
-            ok_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Boolean checkBoxResult = false;
-                    if (dontShowAgain.isChecked())
-                        checkBoxResult = true;
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean("MultimeterSkipMessage", checkBoxResult);
-                    editor.apply();
-                    dialog.dismiss();
-                }
-            });
-            if (!skipMessage)
-                dialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void setUpBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        final SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        Boolean isFirstTime = settings.getBoolean("MultimeterFirstTime", true);
+
+        bottomSheetGuideTitle.setText(R.string.multimeter_dialog_heading);
+        bottomSheetText.setText(R.string.multimeter_dialog_text);
+        bottomSheetSchematic.setImageResource(R.drawable.multimeter_circuit);
+        bottomSheetDesc.setText(R.string.multimeter_dialog_description);
+
+        if (isFirstTime) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setAlpha(0.8f);
+            arrowUpDown.setRotation(180);
+            bottomSheetSlideText.setText(R.string.hide_guide_text);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("MultimeterFirstTime", false);
+            editor.apply();
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         }
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            private Handler handler = new Handler();
+            private Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            };
+
+            @Override
+            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.hide_guide_text);
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        handler.postDelayed(runnable, 2000);
+                        break;
+
+                    default:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.show_guide_text);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                tvShadow.setAlpha(value);
+                arrowUpDown.setRotation(slideOffset * 180);
+            }
+        });
+        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
+        return super.onTouchEvent(event);
     }
 
     private void saveAndSetData(String Quantity, String Unit) {
