@@ -1,9 +1,12 @@
 package org.fossasia.pslab.activity;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,13 +19,11 @@ import org.fossasia.pslab.items.SquareImageButton;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * Created by Abhinav Raj on 1/6/18.
- */
 
 public class PowerSourceActivity extends AppCompatActivity {
 
@@ -30,16 +31,23 @@ public class PowerSourceActivity extends AppCompatActivity {
     private SharedPreferences powerPreferences;
 
     private enum Pin {
-        PV1, PV2, PV3, PCS;
+        PV1, PV2, PV3, PCS
     }
 
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
+
+    private Timer powerCounter;
+    private Handler powerHandler = new Handler();
+
+    private boolean incrementPower = false, decrementPower = false;
 
     private final int CONTROLLER_MIN = 1;
     private final int PV1_CONTROLLER_MAX = 1001;
     private final int PV2_CONTROLLER_MAX = 661;
     private final int PV3_CONTROLLER_MAX = 331;
     private final int PCS_CONTROLLER_MAX = 331;
+
+    private final long LONG_CLICK_DELAY = 100;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -103,6 +111,11 @@ public class PowerSourceActivity extends AppCompatActivity {
         monitorVariations(upPV3, downPV3, Pin.PV3);
         monitorVariations(upPCS, downPCS, Pin.PCS);
 
+        monitorLongClicks(upPV1, downPV1);
+        monitorLongClicks(upPV2, downPV2);
+        monitorLongClicks(upPV3, downPV3);
+        monitorLongClicks(upPCS, downPCS);
+
         updateDisplay(displayPV1, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PV1),
                 PV1_CONTROLLER_MAX, 5.00f, -5.00f)), Pin.PV1);
         updateDisplay(displayPV2, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PV2),
@@ -113,6 +126,13 @@ public class PowerSourceActivity extends AppCompatActivity {
                 PCS_CONTROLLER_MAX, 3.30f, 0.00f)), Pin.PCS);
     }
 
+    /**
+     * Initiates and sets up power knob controller
+     *
+     * @param controller      assigned knob
+     * @param pin             assigned power pin
+     * @param controllerLimit maximum value the knob can handle
+     */
     private void monitorControllers(Croller controller, final Pin pin, int controllerLimit) {
         controller.setMax(controllerLimit);
         controller.setProgress(retrievePowerValues(pin));
@@ -130,14 +150,28 @@ public class PowerSourceActivity extends AppCompatActivity {
                 setPower(pin);
             }
         });
-
     }
 
+    /**
+     * Click listeners to increment and decrement buttons
+     *
+     * @param up   increment button
+     * @param down decrement button
+     * @param pin  assigned power pin
+     */
     private void monitorVariations(SquareImageButton up, SquareImageButton down, final Pin pin) {
         up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 incrementValue(pin);
+            }
+        });
+        up.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                incrementPower = true;
+                fastCounter(pin);
+                return true;
             }
         });
         down.setOnClickListener(new View.OnClickListener() {
@@ -146,8 +180,54 @@ public class PowerSourceActivity extends AppCompatActivity {
                 decrementValue(pin);
             }
         });
+        down.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                decrementPower = true;
+                fastCounter(pin);
+                return true;
+            }
+        });
     }
 
+    /**
+     * Handles action when user releases long click on an increment or a decrement button
+     *
+     * @param up   increment button
+     * @param down decrement button
+     */
+    private void monitorLongClicks(SquareImageButton up, SquareImageButton down) {
+        up.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.onTouchEvent(motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP && incrementPower) {
+                    stopCounter();
+                    incrementPower = false;
+                }
+                return true;
+            }
+        });
+        down.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.onTouchEvent(motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP && decrementPower) {
+                    stopCounter();
+                    decrementPower = false;
+                }
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Increase power value by a fraction of hundreds
+     *
+     * @param pin assigned power pin
+     */
     private void incrementValue(Pin pin) {
         switch (pin) {
             case PV1:
@@ -183,6 +263,11 @@ public class PowerSourceActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Decrease power value by a fraction of hundreds
+     *
+     * @param pin assigned power pin
+     */
     private void decrementValue(Pin pin) {
         switch (pin) {
             case PV1:
@@ -218,6 +303,12 @@ public class PowerSourceActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Rotate power knob to the correct position determined by the numerical power value
+     *
+     * @param controller assigned knob
+     * @param pin        assigned power pin
+     */
     private void updateController(Croller controller, Pin pin) {
         switch (pin) {
             case PV1:
@@ -242,6 +333,13 @@ public class PowerSourceActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Updates display with user set values and issue commands to PSLab device to output power
+     *
+     * @param display text view corresponding to power values
+     * @param value   signed power value
+     * @param pin     assigned power pin
+     */
     private void updateDisplay(TextView display, float value, Pin pin) {
         String displayText = (value >= 0 ? "+" : "-").concat(String.format(Locale.getDefault(),
                 "%.2f", Math.abs(value))).concat(pin.equals(Pin.PCS) ? " mA" : " V");
@@ -249,6 +347,12 @@ public class PowerSourceActivity extends AppCompatActivity {
         setPower(pin);
     }
 
+    /**
+     * Updates display and calculate power value determined by knob position
+     *
+     * @param pin      assigned power pin
+     * @param progress corresponding progress value
+     */
     private void setMappedPower(Pin pin, int progress) {
         savePowerValues(pin, progress);
         switch (pin) {
@@ -277,6 +381,11 @@ public class PowerSourceActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Output the power values set by user when the PSLab device is connected
+     *
+     * @param pin assigned power pin
+     */
     private void setPower(Pin pin) {
         if (scienceLab.isConnected()) {
             switch (pin) {
@@ -298,6 +407,12 @@ public class PowerSourceActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves power values set by user if the PSLab device is plugged in
+     *
+     * @param pin   assigned power pin
+     * @param power corresponding progress value
+     */
     private void savePowerValues(Pin pin, int power) {
         if (scienceLab.isConnected()) {
             SharedPreferences.Editor modifier = powerPreferences.edit();
@@ -306,8 +421,14 @@ public class PowerSourceActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Retrieves saved power values corresponding to power pin. If user has already unplugged the
+     * PSLab device, this method will clean up records as the device has reset already
+     *
+     * @param pin assigned power pin
+     * @return corresponding progress value
+     */
     private int retrievePowerValues(Pin pin) {
-        // Detects and responds if user has unplugged the device and closed the app from system
         if (scienceLab.isConnected()) {
             return powerPreferences.getInt(String.valueOf(pin), 1);
         } else {
@@ -316,17 +437,76 @@ public class PowerSourceActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Maps progress value to power values in between the range supported by power pin
+     *
+     * @param progress       value captured from knob position
+     * @param CONTROLLER_MAX maximum value supported by knob
+     * @param max            maximum power output
+     * @param min            minimum power output
+     * @return float value corresponding to the progress value in between min and max
+     */
     private float mapProgressToPower(int progress, int CONTROLLER_MAX, float max, float min) {
         return (progress - CONTROLLER_MIN) * (max - min) /
                 (CONTROLLER_MAX - CONTROLLER_MIN) + min;
     }
 
-    private int mapPowerToProgress(float progress, int MAX, float max, float min) {
-        return (int) (limitDigits((progress - min) * (MAX - CONTROLLER_MIN) /
+    /**
+     * Maps power value to progress values in between the range supported by knob
+     *
+     * @param power          signed voltage or current value
+     * @param CONTROLLER_MAX maximum value supported by knob
+     * @param max            maximum power output
+     * @param min            minimum power output
+     * @return integer value representing progress level at the respective power level in between
+     * CONTROLLER_MIN and CONTROLLER_MAX
+     */
+    private int mapPowerToProgress(float power, int CONTROLLER_MAX, float max, float min) {
+        return (int) (limitDigits((power - min) * (CONTROLLER_MAX - CONTROLLER_MIN) /
                 (max - min)) + CONTROLLER_MIN);
     }
 
+    /**
+     * Chops off excess and rounds off a float number to two decimal places
+     *
+     * @param number float value with inconsistent decimal places
+     * @return truncated float value
+     */
     private float limitDigits(float number) {
         return Float.valueOf(String.format(Locale.getDefault(), "%.2f", number));
+    }
+
+    /**
+     * Stops the Timer that is changing power pin values
+     */
+    private void stopCounter() {
+        if (powerCounter != null) {
+            powerCounter.cancel();
+            powerCounter.purge();
+        }
+    }
+
+    /**
+     * TimerTask implementation to increment or decrement assigned power pin values at a constant
+     * rate provided by LONG_CLICK_DELAY
+     *
+     * @param pin assigned power pin
+     */
+    private void fastCounter(final Pin pin) {
+        powerCounter = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                powerHandler.post(new Runnable() {
+                    public void run() {
+                        if (incrementPower) {
+                            incrementValue(pin);
+                        } else if (decrementPower) {
+                            decrementValue(pin);
+                        }
+                    }
+                });
+            }
+        };
+        powerCounter.schedule(task, 1, LONG_CLICK_DELAY);
     }
 }
