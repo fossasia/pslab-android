@@ -2,26 +2,25 @@ package org.fossasia.pslab.activity;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 
-import android.view.LayoutInflater;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -50,9 +49,11 @@ import org.fossasia.pslab.fragment.DataAnalysisFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.AudioJack;
+import org.fossasia.pslab.others.MathUtils;
 import org.fossasia.pslab.others.Plot2D;
 import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.others.SwipeGestureDetector;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -110,6 +111,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public TextView xAxisLabel;
     @BindView(R.id.tv_unit_xaxis_os)
     public TextView xAxisLabelUnit;
+    @BindView(R.id.img_arrow_oscilloscope)
+    ImageView arrowUpDown;
+    @BindView(R.id.sheet_slide_text_oscilloscope)
+    TextView bottomSheetSlideText;
+    @BindView(R.id.parent_layout)
+    View parentLayout;
+    @BindView(R.id.bottom_sheet_oscilloscope)
+    LinearLayout bottomSheet;
     private int height;
     private int width;
     public int samples;
@@ -173,14 +182,15 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private CaptureAudioBuffer captureAudioBuffer;
     private Thread monitorThread;
     private volatile boolean monitor = true;
-
+    private BottomSheetBehavior bottomSheetBehavior;
+    private GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oscilloscope);
         ButterKnife.bind(this);
-
+        setUpBottomSheet();
         scienceLab = ScienceLabCommon.scienceLab;
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
@@ -268,7 +278,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
 
-        howToUseDialog(getString(R.string.oscilloscope), getString(R.string.oscilloscope_intro), R.drawable.oscilloscope_schematic, getString(R.string.oscilloscope_desc));
         onWindowFocusChanged();
 
         channelParametersFragment = new ChannelParametersFragment();
@@ -524,56 +533,48 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             case R.id.button_channel_parameters_os:
                 replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
                 clearTextBackgroundColor();
-                howToUseDialog(getString(R.string.channel_parameters), getString(R.string.channel_param_desc), R.drawable.mic_schematic, getString(R.string.channel_param_mic));
                 channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_channel_parameters_os:
                 replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
                 clearTextBackgroundColor();
-                howToUseDialog(getString(R.string.channel_parameters), getString(R.string.channel_param_desc), R.drawable.mic_schematic, getString(R.string.channel_param_mic));
                 channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_timebase_os:
                 replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 clearTextBackgroundColor();
-                howToUseDialog(getString(R.string.timebase), getString(R.string.timebase_desc), R.drawable.timebase_view, null);
                 timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_timebase_tigger_os:
                 replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 clearTextBackgroundColor();
-                howToUseDialog(getString(R.string.timebase), getString(R.string.timebase_desc), R.drawable.timebase_view, null);
                 timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_data_analysis_os:
                 replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
                 clearTextBackgroundColor();
-                howToUseDialog(getString(R.string.data_analysis), getString(R.string.data_analysis_desc), R.drawable.data_analysis_view, null);
                 dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_data_analysis_os:
                 replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
                 clearTextBackgroundColor();
-                howToUseDialog(getString(R.string.data_analysis), getString(R.string.data_analysis_desc), R.drawable.data_analysis_view, null);
                 dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.button_xy_plot_os:
                 replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
                 clearTextBackgroundColor();
-                howToUseDialog(getString(R.string.xy_plot), getString(R.string.xy_plot_desc), R.drawable.xy_plot_view, null);
                 xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
 
             case R.id.tv_xy_plot_os:
                 replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
                 clearTextBackgroundColor();
-                howToUseDialog(getString(R.string.xy_plot), getString(R.string.xy_plot_desc), R.drawable.xy_plot_view, null);
                 xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 break;
         }
@@ -761,43 +762,65 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         xAxisLabel.setText(xAxisInput);
     }
 
-    public void howToUseDialog(String title, String intro, int iconID, String desc) {
+    private void setUpBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater layoutInflater = getLayoutInflater();
-        View dialogView = layoutInflater.inflate(R.layout.custom_dialog_box, null);
-        builder.setView(dialogView);
-        builder.setTitle(title);
+        final SharedPreferences settings = this.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        Boolean isFirstTime = settings.getBoolean("WaveGenFirstTime", true);
 
-        final TextView oscGuideText = dialogView.findViewById(R.id.custom_dialog_text);
-        final ImageView oscGuideImage = dialogView.findViewById(R.id.custom_dialog_schematic);
-        final TextView oscDescription = dialogView.findViewById(R.id.description_text);
-        final CheckBox doNotShowDialog = dialogView.findViewById(R.id.toggle_show_again);
-        final Button dismissButton = dialogView.findViewById(R.id.dismiss_button);
+        if (isFirstTime) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            parentLayout.setAlpha(0.8f);
+            arrowUpDown.setRotation(180);
+            bottomSheetSlideText.setText(R.string.hide_guide_text);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("WaveGenFirstTime", false);
+            editor.apply();
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
 
-        oscGuideText.setText(intro);
-        if (iconID != 0)
-            oscGuideImage.setImageResource(iconID);
-        oscDescription.setText(desc);
-
-        final SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        final AlertDialog dialog = builder.create();
-        final String key = "skipDialog" + title;
-        Boolean skipDialog = sharedPreferences.getBoolean(key, false);
-        dismissButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (doNotShowDialog.isChecked()) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(key, true);
-                    editor.apply();
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            private Handler handler = new Handler();
+            private Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
-                dialog.dismiss();
+            };
+
+            @Override
+            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.hide_guide_text);
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        handler.postDelayed(runnable, 2000);
+                        break;
+
+                    default:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.show_guide_text);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                parentLayout.setAlpha(value);
+                arrowUpDown.setRotation(slideOffset * 180);
             }
         });
-        if (!skipDialog) {
-            dialog.show();
-        }
+        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
+        return super.onTouchEvent(event);
     }
 
     public class CaptureTask extends AsyncTask<String, Void, Void> {

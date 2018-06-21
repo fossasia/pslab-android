@@ -247,11 +247,19 @@
     <dimen name="stepper_motor_margin">5dp</dimen>
     <dimen name="stepper_motor_text_size">16sp</dimen>
 
-    <dimen name="oscilloscope_text_margin">4dp</dimen>
-    <dimen name="oscilloscope_text_size">12sp</dimen>
-    <dimen name="oscilloscope_image_margin">1dp</dimen>
-    <dimen name="oscilloscope_image_weight">2</dimen>
-    <dimen name="oscilloscope_divider_line">2dp</dimen>
+    <dimen name="osc_chart_width">600dp</dimen>
+    <dimen name="osc_chart_height">300dp</dimen>
+    <dimen name="osc_axis_text_size">9sp</dimen>
+    <dimen name="osc_absolute_x">288dp</dimen>
+    <dimen name="osc_tv_unit_margin">8dp</dimen>
+    <dimen name="osc_text_margin">4dp</dimen>
+    <dimen name="osc_tv_left_axis_height">9dp</dimen>
+    <dimen name="osc_tv_axis_margin">16dp</dimen>
+    <dimen name="osc_text_size">12sp</dimen>
+    <dimen name="osc_image_dimens">15dp</dimen>
+    <dimen name="osc_image_margin">1dp</dimen>
+    <dimen name="osc_image_weight">2</dimen>
+    <dimen name="osc_divider_line">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
 
     <dimen name="modified_spinner_height">40dp</dimen>
