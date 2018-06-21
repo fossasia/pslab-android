@@ -39,6 +39,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.digitalChannel.DigitalChannel;
 import org.fossasia.pslab.others.ChannelAxisFormatter;
@@ -179,6 +180,7 @@ public class LALogicLinesFragment extends Fragment {
         xCoordinateText.setText("Time:  0.0 mS");
         progressBar = v.findViewById(R.id.la_progressBar);
         progressBar.setVisibility(View.GONE);
+        ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
 
         // Bottom Sheet guide
         bottomSheet = (LinearLayout) v.findViewById(R.id.bottom_sheet);
@@ -348,6 +350,7 @@ public class LALogicLinesFragment extends Fragment {
 
                         if (channelMode == 1) {
                             progressBar.setVisibility(View.VISIBLE);
+                            ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
                             Thread monitor = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -594,6 +597,7 @@ public class LALogicLinesFragment extends Fragment {
                 // Plot the fetched data
                 updateLogicLines(xaxis, yaxis);
                 progressBar.setVisibility(View.GONE);
+                ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
 
                 List<ILineDataSet> dataSets = new ArrayList<>();
                 LineDataSet lineDataSet = new LineDataSet(tempInput, channelNames.get(0));
@@ -621,6 +625,7 @@ public class LALogicLinesFragment extends Fragment {
                 }
             } else {
                 progressBar.setVisibility(View.GONE);
+                ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
                 Toast.makeText(getContext(), getResources().getString(R.string.no_data_generated), Toast.LENGTH_SHORT).show();
             }
         }
