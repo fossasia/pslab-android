@@ -1,42 +1,63 @@
 package org.fossasia.pslab.activity;
 
-import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.LuxMeterFragmentConfig;
 import org.fossasia.pslab.fragment.LuxMeterFragmentData;
+import org.fossasia.pslab.others.MathUtils;
+import org.fossasia.pslab.others.SwipeGestureDetector;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
 public class LuxMeterActivity extends AppCompatActivity {
+    BottomSheetBehavior bottomSheetBehavior;
+    GestureDetector gestureDetector;
     private static final String PREF_NAME = "customDialogPreference";
-    private static final String KEY = "skipLuxMeterDialog";
 
     @BindView(R.id.navigation_lux_meter)
     BottomNavigationView bottomNavigationView;
 
+    //bottomSheet
+    @BindView(R.id.bottom_sheet)
+    LinearLayout bottomSheet;
+    @BindView(R.id.shadow)
+    View tvShadow;
+    @BindView(R.id.img_arrow)
+    ImageView arrowUpDown;
+    @BindView(R.id.sheet_slide_text)
+    TextView bottomSheetSlideText;
+    @BindView(R.id.guide_title)
+    TextView bottomSheetGuideTitle;
+    @BindView(R.id.custom_dialog_text)
+    TextView bottomSheetText;
+    @BindView(R.id.custom_dialog_schematic)
+    ImageView bottomSheetSchematic;
+    @BindView(R.id.custom_dialog_desc)
+    TextView bottomSheetDesc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lux_meter);
+        setContentView(R.layout.activity_lux_main);
         ButterKnife.bind(this);
+        setUpBottomSheet();
 
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,7 +86,6 @@ public class LuxMeterActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-        howToConnectDialog(getString(R.string.lux_meter), getString(R.string.lux_meter_intro), R.drawable.bh1750_schematic, getString(R.string.lux_meter_desc));
         try {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             Fragment selectedFragment = LuxMeterFragmentData.newInstance();
@@ -76,42 +96,69 @@ public class LuxMeterActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("ResourceType")
-    public void howToConnectDialog(String title, String intro, int iconID, String desc) {
-        try {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            LayoutInflater inflater = getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.custom_dialog_box, null);
-            builder.setView(dialogView);
-            builder.setTitle(title);
-            final TextView luxMeterGuideText = (TextView) dialogView.findViewById(R.id.custom_dialog_text);
-            final TextView luxMeterGuideDesc = (TextView) dialogView.findViewById(R.id.description_text);
-            final ImageView bh1750Schematic = (ImageView) dialogView.findViewById(R.id.custom_dialog_schematic);
-            final CheckBox doNotShowDialog = (CheckBox) dialogView.findViewById(R.id.toggle_show_again);
-            final Button dismisButton = (Button) dialogView.findViewById(R.id.dismiss_button);
-            luxMeterGuideText.setText(intro);
-            bh1750Schematic.setImageResource(iconID);
-            luxMeterGuideDesc.setText(desc);
+    private void setUpBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
-            final SharedPreferences sharedPreferences = this.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-            final AlertDialog dialog = builder.create();
-            Boolean skipDialog = sharedPreferences.getBoolean(KEY, false);
-            dismisButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (doNotShowDialog.isChecked()) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(KEY, true);
-                        editor.apply();
-                    }
-                    dialog.dismiss();
-                }
-            });
-            if (!skipDialog) {
-                dialog.show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        final SharedPreferences settings = this.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        Boolean isFirstTime = settings.getBoolean("LuxMeterFirstTime", true);
+
+        bottomSheetGuideTitle.setText(R.string.lux_meter);
+        bottomSheetText.setText(R.string.lux_meter_intro);
+        bottomSheetSchematic.setImageResource(R.drawable.bh1750_schematic);
+        bottomSheetDesc.setText(R.string.lux_meter_desc);
+
+        if (isFirstTime) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setAlpha(0.8f);
+            arrowUpDown.setRotation(180);
+            bottomSheetSlideText.setText(R.string.hide_guide_text);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("LuxMeterFirstTime", false);
+            editor.apply();
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         }
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            private Handler handler = new Handler();
+            private Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            };
+
+            @Override
+            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.hide_guide_text);
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        handler.postDelayed(runnable, 2000);
+                        break;
+
+                    default:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.show_guide_text);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                tvShadow.setAlpha(value);
+                arrowUpDown.setRotation(slideOffset * 180);
+            }
+        });
+        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
+        return super.onTouchEvent(event);
     }
 }
