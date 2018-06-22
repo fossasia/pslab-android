@@ -45,48 +45,56 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <LinearLayout
+        <org.fossasia.pslab.others.ZoomLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/bottom_sheet_padding">
+            android:layout_height="wrap_content">
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_length_btm_sheet" />
-
-            <TextView
-                android:id="@+id/guide_title"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/bottom_sheet_title_text"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:padding="@dimen/bottom_sheet_padding">
 
-            <TextView
-                android:id="@+id/custom_dialog_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/bottom_sheet_margin" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_length_btm_sheet" />
 
-            <ImageView
-                android:id="@+id/custom_dialog_schematic"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/bottom_sheet_image_height"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:contentDescription="@string/schematic_desc"
-                android:src="@drawable/logic_analyzer_circuit" />
+                <TextView
+                    android:id="@+id/guide_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/bottom_sheet_title_text"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/custom_dialog_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:background="@color/white" />
+                <TextView
+                    android:id="@+id/custom_dialog_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/bottom_sheet_margin" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_length_btm_sheet" />
+                <ImageView
+                    android:id="@+id/custom_dialog_schematic"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bottom_sheet_image_height"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:contentDescription="@string/schematic_desc"
+                    android:src="@drawable/logic_analyzer_circuit" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/custom_dialog_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:background="@color/white" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_length_btm_sheet" />
+
+            </LinearLayout>
+
+        </org.fossasia.pslab.others.ZoomLayout>
+
     </android.support.v4.widget.NestedScrollView>
+
 </LinearLayout>
