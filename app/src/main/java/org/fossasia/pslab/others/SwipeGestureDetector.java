@@ -25,9 +25,10 @@ public class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListene
                 case LEFT:
                     return true;
                 case DOWN:
-                    if (bottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    if (bottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                        bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    if (bottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED)
                         bottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-                    }
                     return true;
                 case RIGHT:
                     return true;
