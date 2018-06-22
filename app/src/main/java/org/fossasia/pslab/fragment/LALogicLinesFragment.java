@@ -39,6 +39,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.digitalChannel.DigitalChannel;
 import org.fossasia.pslab.others.ChannelAxisFormatter;
@@ -62,6 +63,13 @@ import static android.content.Context.MODE_PRIVATE;
 public class LALogicLinesFragment extends Fragment {
 
     public static final String PREFS_NAME = "LogicAnalyzerPreference";
+
+    private static final int EVERY_EDGE = 1;
+    private static final int DISABLED = 0;
+    private static final int EVERY_FOURTH_RISING_EDGE = 4;
+    private static final int EVERY_RISING_EDGE = 3;
+    private static final int EVERY_FALLING_EDGE = 2;
+
     private final Object lock = new Object();
     List<Entry> tempInput;
     DigitalChannel digitalChannel;
@@ -179,6 +187,7 @@ public class LALogicLinesFragment extends Fragment {
         xCoordinateText.setText("Time:  0.0 mS");
         progressBar = v.findViewById(R.id.la_progressBar);
         progressBar.setVisibility(View.GONE);
+        ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
 
         // Bottom Sheet guide
         bottomSheet = (LinearLayout) v.findViewById(R.id.bottom_sheet);
@@ -348,11 +357,12 @@ public class LALogicLinesFragment extends Fragment {
 
                         if (channelMode == 1) {
                             progressBar.setVisibility(View.VISIBLE);
+                            ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
                             Thread monitor = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
                                     captureOne = new CaptureOne();
-                                    captureOne.execute(channelNames.get(0));
+                                    captureOne.execute(channelNames.get(0), edgesNames.get(0));
                                     synchronized (lock) {
                                         try {
                                             lock.wait();
@@ -390,7 +400,8 @@ public class LALogicLinesFragment extends Fragment {
 
     }
 
-    private void updateLogicLines(double[] xData, double[] yData) {
+    // Single Channel Mode
+    private void singleChannelEveryEdge(double[] xData, double[] yData) {
 
         tempInput = new ArrayList<>();
         for (int j = 0; j < channelMode; j++) {
@@ -431,6 +442,42 @@ public class LALogicLinesFragment extends Fragment {
 
             }
             tempInput.add(new Entry(xaxis.get(xaxis.size() - 1), yaxis.get(xaxis.size() - 1)));
+        }
+    }
+
+    private void singleChannelFourthRisingEdge(double[] xData) {
+
+        tempInput = new ArrayList<>();
+        int xaxis = (int) xData[0];
+        tempInput.add(new Entry(xaxis, 0));
+        tempInput.add(new Entry(xaxis, 1));
+        tempInput.add(new Entry(xaxis, 0));
+        int check = xaxis;
+        int count = 0;
+
+        for (int i = 1; i < xData.length; i++) {
+            xaxis = (int) xData[i];
+            if (xaxis != check) {
+                if (count == 3) {
+                    tempInput.add(new Entry(xaxis, 0));
+                    tempInput.add(new Entry(xaxis, 1));
+                    tempInput.add(new Entry(xaxis, 0));
+                    count = 0;
+                } else
+                    count++;
+                check = xaxis;
+            }
+        }
+    }
+
+    private void singleChannelOtherEdges(double[] xData, double[] yData) {
+
+        tempInput = new ArrayList<>();
+
+        for (int i = 0; i < xData.length; i++) {
+            int xaxis = (int) xData[i];
+            int yaxis = (int) yData[i];
+            tempInput.add(new Entry(xaxis, yaxis));
         }
     }
 
@@ -536,12 +583,12 @@ public class LALogicLinesFragment extends Fragment {
         });
     }
 
-    private class CaptureOne extends AsyncTask<String, Void, Void> {
+    private class CaptureOne extends AsyncTask<String, String, Void> {
         boolean holder;
+        String edgeOption = "";
 
         @Override
         protected Void doInBackground(String... params) {
-
             try {
                 scienceLab.startOneChannelLA(params[0], 1, params[0], 3);
 
@@ -567,8 +614,29 @@ public class LALogicLinesFragment extends Fragment {
                         break;
                     }
                 }
-                holder = scienceLab.fetchLAChannel(channelNumber, data);
                 digitalChannel = scienceLab.getDigitalChannel(channelNumber);
+                edgeOption = params[1];
+                switch (params[1]) {
+                    case "EVERY EDGE":
+                        digitalChannel.mode = EVERY_EDGE;
+                        break;
+                    case "EVERY FALLING EDGE":
+                        digitalChannel.mode = EVERY_FALLING_EDGE;
+                        break;
+                    case "EVERY RISING EDGE":
+                        digitalChannel.mode = EVERY_RISING_EDGE;
+                        break;
+                    case "EVERY FOURTH RISING EDGE":
+                        digitalChannel.mode = EVERY_FOURTH_RISING_EDGE;
+                        break;
+                    case "DISABLED":
+                        digitalChannel.mode = DISABLED;
+                        break;
+                    default:
+                        digitalChannel.mode = EVERY_EDGE;
+                }
+                holder = scienceLab.fetchLAChannel(channelNumber, data);
+
             } catch (NullPointerException e) {
                 cancel(true);
             }
@@ -584,16 +652,31 @@ public class LALogicLinesFragment extends Fragment {
                 double[] xaxis = digitalChannel.getXAxis();
                 double[] yaxis = digitalChannel.getYAxis();
 
-                String str = "";
+                StringBuilder stringBuilder1 = new StringBuilder();
+                StringBuilder stringBuilder2 = new StringBuilder();
                 for (int i = 0; i < xaxis.length; i++) {
-                    str += String.valueOf(xaxis[i]);
-                    str += " ";
+                    stringBuilder1.append(String.valueOf(xaxis[i]));
+                    stringBuilder2.append(String.valueOf(yaxis[i]));
+                    stringBuilder1.append(" ");
+                    stringBuilder2.append(" ");
                 }
-                Log.v("x Axis", str);
+                Log.v("x Axis", stringBuilder1.toString());
+                Log.v("y Axis", stringBuilder2.toString());
 
                 // Plot the fetched data
-                updateLogicLines(xaxis, yaxis);
+                switch (edgeOption) {
+                    case "EVERY EDGE":
+                        singleChannelEveryEdge(xaxis, yaxis);
+                        break;
+                    case "EVERY FOURTH RISING EDGE":
+                        singleChannelFourthRisingEdge(xaxis);
+                        break;
+                    default:
+                        singleChannelOtherEdges(xaxis, yaxis);
+                        break;
+                }
                 progressBar.setVisibility(View.GONE);
+                ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
 
                 List<ILineDataSet> dataSets = new ArrayList<>();
                 LineDataSet lineDataSet = new LineDataSet(tempInput, channelNames.get(0));
@@ -621,6 +704,7 @@ public class LALogicLinesFragment extends Fragment {
                 }
             } else {
                 progressBar.setVisibility(View.GONE);
+                ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
                 Toast.makeText(getContext(), getResources().getString(R.string.no_data_generated), Toast.LENGTH_SHORT).show();
             }
         }

@@ -5,13 +5,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 
-
-/**
- * Created by Padmal on 5/8/17.
- */
-
 @SuppressLint("AppCompatCustomView")
 public class SquareImageButton extends ImageButton {
+
     public SquareImageButton(Context context) {
         super(context);
     }
@@ -30,5 +26,10 @@ public class SquareImageButton extends ImageButton {
 
         int width = getMeasuredWidth();
         setMeasuredDimension(width, width);
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
     }
 }
