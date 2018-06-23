@@ -122,7 +122,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     @BindView(R.id.btn_view)
     Button btnView;
 
-
     //bottomSheet
     @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
@@ -395,12 +394,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                         double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQ4).get(WaveConst.PHASE) / 360;
 
                         scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, true);
-
-                        state.put("SQR1", 1);
-                        state.put("SQR2", 1);
-                        state.put("SQR3", 1);
-                        state.put("SQR4", 1);
-                        scienceLab.setState(state);
                     }
                     Intent intent = new Intent(WaveGeneratorActivity.this, OscilloscopeActivity.class);
                     intent.putExtra("who", "WaveGenerator");
@@ -616,8 +609,13 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             btnPwmSq2.setEnabled(true);
             btnPwmSq3.setEnabled(true);
             btnPwmSq4.setEnabled(true);
+
             Toast.makeText(this, R.string.wave_pin_disable_comment, Toast.LENGTH_SHORT).show();
         }
+        pwmMonSqr1.setSelected(false);
+        pwmMonSqr2.setSelected(false);
+        pwmMonSqr3.setSelected(false);
+        pwmMonSqr4.setSelected(false);
         selectBtn(WaveConst.SQ1);
     }
 
@@ -715,6 +713,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         Double dValue = (double) value;
         String valueText = String.valueOf(dValue) + " " + unit;
         activePropTv.setText(valueText);
+
+        if(digital_mode==WaveConst.PWM || scienceLab.isConnected()){
+            state.put(pwmBtnActive.toString(),1);
+            scienceLab.setState(state);
+        }
     }
 
     private void toggleSeekBtns(boolean state) {
@@ -802,4 +805,3 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         return super.onTouchEvent(event);
     }
 }
-
