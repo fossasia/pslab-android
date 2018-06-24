@@ -444,6 +444,10 @@
     </string-array>
 
     <string name="device_not_connected">Device Not Connected</string>
+    <string name="use_autoscan">Use Autoscan button to find connected sensors to PSLab device</string>
+    <string name="sensor_not_connected">No sensors connected via I2C. Try selecting a sensor from the below
+        list and learn how to use Inter-Integrated Circuit (I2C) bus. After connecting, click Autoscan</string>
+    <string name="scanning">Scanning...</string>
 
     <string name="experiment_icon">Experiment Icon</string>
     <string name="drop_down_arrow">Drop down arrow</string>

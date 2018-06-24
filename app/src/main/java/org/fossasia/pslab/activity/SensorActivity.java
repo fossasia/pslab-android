@@ -81,7 +81,7 @@ public class SensorActivity extends AppCompatActivity {
         final CoordinatorLayout coordinatorLayout = findViewById(R.id.layout_container);
         Button buttonSensorAutoScan = findViewById(R.id.button_sensor_autoscan);
         tvSensorScan = findViewById(R.id.tv_sensor_scan);
-        tvSensorScan.setText(tvData);
+        tvSensorScan.setText(getResources().getString(R.string.use_autoscan));
         lvSensor = findViewById(R.id.lv_sensor);
         lvSensor.setAdapter(adapter);
 
@@ -91,11 +91,7 @@ public class SensorActivity extends AppCompatActivity {
                 if (scienceLab.isConnected()) {
                     new Thread(scanRunnable).start();
                 } else {
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, getResources().getString(R.string.device_not_connected), Snackbar.LENGTH_SHORT);
-                    View snackBarView = snackbar.getView();
-                    TextView snackBarTextView = snackBarView.findViewById(android.support.design.R.id.snackbar_text);
-                    snackBarTextView.setTextColor(Color.YELLOW);
-                    snackbar.show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.device_not_connected), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -150,6 +146,7 @@ public class SensorActivity extends AppCompatActivity {
         dataName.clear();
         dataAddress.clear();
         try {
+            tvSensorScan.setText(getResources().getString(R.string.scanning));
             data = i2c.scan(null);
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
@@ -166,6 +163,9 @@ public class SensorActivity extends AppCompatActivity {
                 tvData += s + ":" + sensorAddr.get(Integer.parseInt(s)) + "\n";
             }
 
+        }
+        else {
+            tvData = getResources().getString(R.string.sensor_not_connected);
         }
 
         for (int key : sensorAddr.keySet()) {
