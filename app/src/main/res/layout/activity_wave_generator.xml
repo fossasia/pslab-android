@@ -306,7 +306,7 @@
                 android:id="@+id/pwm_ic_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/pwm_mon_select_pin"
+                app:layout_constraintBottom_toTopOf="@+id/pwm_mon_mode_select"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline3"
@@ -315,7 +315,7 @@
                 app:srcCompat="@drawable/ic_pwm_pic" />
 
             <TextView
-                android:id="@+id/pwm_mon_select_pin"
+                android:id="@+id/pwm_mon_mode_select"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/pin_name_margin_top"
@@ -661,21 +661,6 @@
                         app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                         app:layout_constraintGuide_percent="0.5" />
 
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                        app:layout_constraintGuide_percent="0.54" />
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                        app:layout_constraintGuide_percent="0.77" />
 
                     <android.support.constraint.Guideline
                         android:id="@+id/guideline8"
@@ -724,7 +709,7 @@
                         android:background="@drawable/btn_back_rounded"
                         android:src="@drawable/ic_sin"
                         app:layout_constraintBottom_toTopOf="@+id/guideline5"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline8"
                         app:layout_constraintStart_toStartOf="@+id/guideline4"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -736,20 +721,8 @@
                         android:background="@drawable/btn_back_rounded"
                         android:src="@drawable/ic_triangular"
                         app:layout_constraintBottom_toTopOf="@+id/guideline5"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline7"
-                        app:layout_constraintStart_toStartOf="@+id/guideline6"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/ctrl_img_btn_sq"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:src="@drawable/ic_square"
-                        app:layout_constraintBottom_toTopOf="@+id/guideline5"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/guideline7"
+                        app:layout_constraintStart_toStartOf="@+id/guideline8"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
@@ -810,7 +783,7 @@
                     android:background="@color/white"
                     android:paddingLeft="@dimen/ctrl_title_text_padding"
                     android:paddingRight="@dimen/ctrl_title_text_padding"
-                    android:text="@string/text_pwm"
+                    android:text="@string/text_digital"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_size_wavegen"
                     android:textStyle="bold" />
@@ -912,6 +885,21 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
+                        android:id="@+id/pwm_btn_mode"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_margin="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:text="@string/mode"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
+
+                    <Button
                         android:id="@+id/pwm_btn_freq"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -923,7 +911,7 @@
                         android:textSize="@dimen/text_size_wavegen"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/cr_guideline15"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/cr_guideline2"
                         app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
 
                     <Button
