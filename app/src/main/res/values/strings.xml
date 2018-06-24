@@ -124,10 +124,10 @@
     <string name="x_axis">X axis</string>
     <string name="y_axis">Y axis</string>
     <string name="z_axis">Z axis</string>
-    <string name="text_max">Max 9.80 ms<sup><small>-2</small></sup></string>
-    <string name="text_min">Min 9.80 ms<sup><small>-2</small></sup></string>
-    <string name="test_value">9.80 ms<sup><small>-2</small></sup></string>
-    <string name="meters_per_sec">ms<sup><small>-2</small></sup></string>
+    <string name="text_max">Max</string>
+    <string name="text_min">Min</string>
+    <string name="meters_per_sec_text">ms&lt;sup&gt;&lt;small&gt;-2&lt;/small&gt;&lt;/sup&gt;</string>
+    <string name="meters_per_sec_html">ms<sup><small>-2</small></sup></string>
     <string name="time_seconds">Time (s)</string>
 
     <string name="set_triggers">Set Triggers</string>
