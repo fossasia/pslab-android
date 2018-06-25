@@ -872,11 +872,10 @@
 
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
-    is compatible with either the built in light sensor in your android device or the BH-1750 light sensor.\n\n
+    is compatible with either the built in light sensor on any android device or the BH-1750 light sensor.\n\n
     \u2022 If you want to use the sensor BH-1750, connect the sensor to PSLab device as shown below</string>
     <string name="lux_meter_desc">\u2022 The above pin configuration has to be same except for the pin
-    GND. GND is meant for Ground and you can use any of the PSLab device GND pins as they are common.\n\n
-    \u2022 Then go to the Configure tab from the bottom navigation bar and choose the BH-1750 in the drop down
-    menu Select Sensor.\n</string>
+    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
+    \u2022 Select sensor by going to the Configure tab from the bottom navigation bar and choose BHT-1750 in the drop down menu under Select Sensor.\n</string>
 
 </resources>
