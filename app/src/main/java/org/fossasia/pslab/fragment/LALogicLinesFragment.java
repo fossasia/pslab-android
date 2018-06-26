@@ -426,22 +426,25 @@ public class LALogicLinesFragment extends Fragment {
             }
 
             // Add data to axis in actual graph
-            if (yaxis.get(1).equals(yaxis.get(0)))
-                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
-            else {
-                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
-                tempInput.add(new Entry(xaxis.get(0), yaxis.get(1)));
-            }
-            for (int i = 1; i < xaxis.size() - 1; i++) {
-                if (yaxis.get(i).equals(yaxis.get(i + 1)))
-                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i)));
+            if (yaxis.size() > 1) {
+                if (yaxis.get(1).equals(yaxis.get(0)))
+                    tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
                 else {
-                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i)));
-                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i + 1)));
+                    tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
+                    tempInput.add(new Entry(xaxis.get(0), yaxis.get(1)));
                 }
-
+                for (int i = 1; i < xaxis.size() - 1; i++) {
+                    if (yaxis.get(i).equals(yaxis.get(i + 1)))
+                        tempInput.add(new Entry(xaxis.get(i), yaxis.get(i)));
+                    else {
+                        tempInput.add(new Entry(xaxis.get(i), yaxis.get(i)));
+                        tempInput.add(new Entry(xaxis.get(i), yaxis.get(i + 1)));
+                    }
+                }
+                tempInput.add(new Entry(xaxis.get(xaxis.size() - 1), yaxis.get(xaxis.size() - 1)));
+            } else {
+                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
             }
-            tempInput.add(new Entry(xaxis.get(xaxis.size() - 1), yaxis.get(xaxis.size() - 1)));
         }
     }
 
@@ -455,17 +458,19 @@ public class LALogicLinesFragment extends Fragment {
         int check = xaxis;
         int count = 0;
 
-        for (int i = 1; i < xData.length; i++) {
-            xaxis = (int) xData[i];
-            if (xaxis != check) {
-                if (count == 3) {
-                    tempInput.add(new Entry(xaxis, 0));
-                    tempInput.add(new Entry(xaxis, 1));
-                    tempInput.add(new Entry(xaxis, 0));
-                    count = 0;
-                } else
-                    count++;
-                check = xaxis;
+        if (xData.length > 1) {
+            for (int i = 1; i < xData.length; i++) {
+                xaxis = (int) xData[i];
+                if (xaxis != check) {
+                    if (count == 3) {
+                        tempInput.add(new Entry(xaxis, 0));
+                        tempInput.add(new Entry(xaxis, 1));
+                        tempInput.add(new Entry(xaxis, 0));
+                        count = 0;
+                    } else
+                        count++;
+                    check = xaxis;
+                }
             }
         }
     }
