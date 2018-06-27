@@ -745,6 +745,9 @@
     <string name="number_three">3.</string>
 
     <string name="compass">Compass</string>
+    <string name="text_parallel_axes">Select axes parallel to ground</string>
+    <string name="unit_degree">°</string>
+    <string name="compass_test_value">360°</string>
 
     <string name="indicator_description">Indicates device connection</string>
 

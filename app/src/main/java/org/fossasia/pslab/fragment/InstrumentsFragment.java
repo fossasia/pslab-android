@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.AccelerometerActivity;
+import org.fossasia.pslab.activity.CompassActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.LuxMeterActivity;
 import org.fossasia.pslab.activity.MultimeterActivity;
@@ -88,6 +89,10 @@ public class InstrumentsFragment extends Fragment {
                                 break;
                             case "Accelerometer":
                                 intent = new Intent(context, AccelerometerActivity.class);
+                                startActivity(intent);
+                                break;
+                            case "Compass":
+                                intent = new Intent(context, CompassActivity.class);
                                 startActivity(intent);
                                 break;
                             default:

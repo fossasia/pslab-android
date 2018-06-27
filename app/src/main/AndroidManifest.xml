@@ -80,6 +80,9 @@
 
         <activity android:name=".activity.AccelerometerActivity"/>
 
+        <activity android:name=".activity.CompassActivity"
+            android:screenOrientation="portrait"/>
+
         <receiver android:name=".receivers.USBDetachReceiver" />
 
         <activity android:name=".sensors.SensorADS1115" />
