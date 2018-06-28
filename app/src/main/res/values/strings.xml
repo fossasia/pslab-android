@@ -725,6 +725,7 @@
     <string name="wave_generator_description">Generates arbitrary analog and digital waveforms</string>
     <string name="power_source_description">Generates programmable voltage and currents</string>
     <string name="lux_meter_description">Measures the ambient light intensity</string>
+    <string name="compass_description">Three axes magnetometer pointing to magnetic north</string>
 
     <string name="tile_instrument_horizontal_bars">Horizontal bars to match icon</string>
     <string name="tile_instrument_vertical_bars">Verticle bars to match tile icon</string>
@@ -738,6 +739,8 @@
     <string name="number_one">1.</string>
     <string name="number_two">2.</string>
     <string name="number_three">3.</string>
+
+    <string name="compass">Compass</string>
 
     <string name="indicator_description">Indicates device connection</string>
 
