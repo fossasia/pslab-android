@@ -864,11 +864,31 @@
         Sine wave, Square wave, Saw Tooth wave and allow us to changes their characteristics like frequency, phase, duty.
         \nIt also allows us to produce PWM signals having different phase and duty.</string>
 
-    <string name="wave_gen_guide_desc">To generate Sine wave or Saw-Tooth wave:\n\n
-        \u2022 Connect the Wave pins S1 and S2 to the channel pins CH1, CH2 as shown in the figure\n\n
+    <string name="sine_wave_instn">
+        \u2022 Connect the Wave pins S1 and S2 to the channel pins CH1, CH2 as shown in the above figure\n\n
         \u2022 Select the Wave1 button for S1 pin and Wave2 button for S2 pin\n\n
         \u2022 Press Sine image button for Sine wave and Saw-Tooth image button for Saw-Tooth wave\n\n
-        \u2022 Set their respective frequency and phase difference</string>
+        \u2022 Set their respective frequencies and phase difference(optional) using buttons in waveform panel\n\n
+        \u2022 Press the View button to view the waves in oscilloscope
+    </string>
+
+    <string name="square_wave_instn">
+        \u2022 Connect the Wave pins SQ1 to the channel pin CH1 as shown in the above figure\n\n
+        \u2022 Ensure the mode is selected to the Square, if not press the mode button to switch to Square mode\n\n
+        \u2022 Select the SQ1 button\n\n
+        \u2022 Set its Frequency and Duty Cycle\n\n
+        \u2022 Press the View button to view the square wave in oscilloscope
+    </string>
+
+    <string name="pwm_wave_inst">
+        \u2022 Switch over to PWM mode(In this mode S1 and S2 pin will be disabled)\n\n
+        \u2022 Set the common frequency for all the SQ pins\n\n
+        \u2022 Set the duty and phase for all the SQ pins\n\n
+        \u2022 Press View button to generate the PWM signals </string>
+
+    <string name="gen_sine_wave_text">To generate Sine wave or Saw-Tooth wave:</string>
+    <string name="gen_sq_text">To generate Square wave</string>
+    <string name="gen_pwm_text">Similarly, to produce four different PWM signal</string>
 
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments

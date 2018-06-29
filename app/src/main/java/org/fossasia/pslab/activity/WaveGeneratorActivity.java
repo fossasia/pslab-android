@@ -131,14 +131,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     ImageView arrowUpDown;
     @BindView(R.id.sheet_slide_text)
     TextView bottomSheetSlideText;
-    @BindView(R.id.guide_title)
-    TextView bottomSheetGuideTitle;
-    @BindView(R.id.custom_dialog_text)
-    TextView bottomSheetText;
-    @BindView(R.id.custom_dialog_schematic)
-    ImageView bottomSheetSchematic;
-    @BindView(R.id.custom_dialog_desc)
-    TextView bottomSheetDesc;
 
     private int leastCount, seekMax, seekMin;
     private String unit;
@@ -744,11 +736,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
         final SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         Boolean isFirstTime = settings.getBoolean("WaveGenFirstTime", true);
-
-        bottomSheetGuideTitle.setText(R.string.wave_generator);
-        bottomSheetText.setText(R.string.wave_gen_guide_intro);
-        bottomSheetSchematic.setImageResource(R.drawable.sin_wave_guide);
-        bottomSheetDesc.setText(R.string.wave_gen_guide_desc);
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
