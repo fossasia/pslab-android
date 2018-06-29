@@ -1,6 +1,7 @@
 package org.fossasia.pslab.activity;
 
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -91,6 +92,10 @@ public class MultimeterActivity extends AppCompatActivity {
         setUpBottomSheet();
         multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
         knobState = multimeter_data.getInt("KnobState", 0);
+
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/digital-7 (italic).ttf");
+        quantity.setTypeface(tf);
+
         String text_quantity = multimeter_data.getString("TextBox", null);
         String text_unit = multimeter_data.getString("TextBoxUnit", null);
         knob.setState(knobState);

@@ -355,7 +355,7 @@
         android:layout_marginEnd="@dimen/multimeter_valuebox_margin_right"
         android:layout_marginRight="@dimen/multimeter_valuebox_margin_right"
         android:layout_marginTop="@dimen/multimeter_valuebox_margin_top"
-        android:textSize="@dimen/multimeter_textsize"
+        android:textSize="@dimen/multimeter_quantity_dimen"
         app:layout_constraintEnd_toEndOf="@+id/textView6"
         app:layout_constraintTop_toTopOf="@+id/textView6" />
 
