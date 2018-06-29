@@ -1,6 +1,6 @@
 package org.fossasia.pslab.activity;
 
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -30,6 +30,8 @@ import org.fossasia.pslab.others.WaveGeneratorCommon;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -142,6 +144,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
     private int leastCount, seekMax, seekMin;
     private String unit;
+    private Timer waveGenCounter;
+    private Handler wavegenHandler = new Handler();
+    private final long LONG_CLICK_DELAY = 100;
 
     public enum WaveConst {WAVETYPE, WAVE1, WAVE2, SQ1, SQ2, SQ3, SQ4, FREQUENCY, PHASE, DUTY, SQUARE, PWM}
 
@@ -340,19 +345,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
         });
 
-        imgBtnUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                incProgressSeekBar(seekBar);
-            }
-        });
+        monitorVariations(imgBtnUp, imgBtnDown);
 
-        imgBtnDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                decProgressSeekBar(seekBar);
-            }
-        });
+        monitorLongClicks(imgBtnUp, imgBtnDown);
 
         btnSet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -682,7 +677,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         value = value + leastCount;
         if (value > seekMax) {
             value = seekMax;
-            Toast.makeText(this, R.string.max_val_warning, Toast.LENGTH_SHORT).show();
         }
         seekBar.setProgress(value);
     }
@@ -692,7 +686,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         value = value - leastCount;
         if (value < seekMin) {
             value = seekMin;
-            Toast.makeText(this, R.string.min_val_warning, Toast.LENGTH_SHORT).show();
         }
         seekBar.setProgress(value);
     }
@@ -803,5 +796,104 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
         gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
         return super.onTouchEvent(event);
+    }
+
+    /**
+     * Click listeners to increment and decrement buttons
+     *
+     * @param up   increment button
+     * @param down decrement button
+     */
+    private void monitorVariations(ImageButton up, ImageButton down) {
+        up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                incProgressSeekBar(seekBar);
+            }
+        });
+        up.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                fastCounter(true);
+                return true;
+            }
+        });
+        down.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                decProgressSeekBar(seekBar);
+            }
+        });
+        down.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                fastCounter(false);
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Handles action when user releases long click on an increment or a decrement button
+     *
+     * @param up   increment button
+     * @param down decrement button
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private void monitorLongClicks(ImageButton up, ImageButton down) {
+        up.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.onTouchEvent(motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    stopCounter();
+                }
+                return true;
+            }
+        });
+        down.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.onTouchEvent(motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    stopCounter();
+                }
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Stops the Timer that is changing the seekbar value
+     */
+    private void stopCounter() {
+        if (waveGenCounter != null) {
+            waveGenCounter.cancel();
+            waveGenCounter.purge();
+        }
+    }
+
+    /**
+     * TimerTask implementation to increment or decrement value at the seekbar at a constant
+     * rate provided by LONG_CLICK_DELAY
+     *
+     * @param increaseValue flag for whether it is increase or decrease
+     */
+    private void fastCounter(final boolean increaseValue) {
+        waveGenCounter = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                wavegenHandler.post(new Runnable() {
+                    public void run() {
+                        if (increaseValue) {
+                            incProgressSeekBar(seekBar);
+                        } else {
+                            decProgressSeekBar(seekBar);
+                        }
+                    }
+                });
+            }
+        };
+        waveGenCounter.schedule(task, 1, LONG_CLICK_DELAY);
     }
 }
