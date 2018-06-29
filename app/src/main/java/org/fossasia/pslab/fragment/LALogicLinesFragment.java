@@ -611,14 +611,8 @@ public class LALogicLinesFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                String[] channels = getResources().getStringArray(R.array.channel_choices);
-                int channelNumber = 0;
-                for (int i = 0; i < channels.length; i++) {
-                    if (params[0].equals(channels[i])) {
-                        channelNumber = i;
-                        break;
-                    }
-                }
+                int channelNumber = scienceLab.calculateDigitalChannel(params[0]);
+
                 digitalChannel = scienceLab.getDigitalChannel(channelNumber);
                 edgeOption = params[1];
                 switch (params[1]) {
