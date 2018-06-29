@@ -124,10 +124,10 @@
     <string name="x_axis">X axis</string>
     <string name="y_axis">Y axis</string>
     <string name="z_axis">Z axis</string>
-    <string name="text_max">Max 9.80 ms<sup><small>-2</small></sup></string>
-    <string name="text_min">Min 9.80 ms<sup><small>-2</small></sup></string>
-    <string name="test_value">9.80 ms<sup><small>-2</small></sup></string>
-    <string name="meters_per_sec">ms<sup><small>-2</small></sup></string>
+    <string name="text_max">Max</string>
+    <string name="text_min">Min</string>
+    <string name="meters_per_sec_text">ms&lt;sup&gt;&lt;small&gt;-2&lt;/small&gt;&lt;/sup&gt;</string>
+    <string name="meters_per_sec_html">ms<sup><small>-2</small></sup></string>
     <string name="time_seconds">Time (s)</string>
 
     <string name="set_triggers">Set Triggers</string>
@@ -825,6 +825,8 @@
     <string name="phase_offset">Phase Offset :</string>
     <string name="pwm_phase">PWM Phase :</string>
     <string name="pwm_duty">PWM Duty :</string>
+    <string name="mode">Mode</string>
+    <string name="text_digital">Digital</string>
     <string name="max_val_warning">Cannot increase more</string>
     <string name="min_val_warning">Cannot decrease more</string>
 
@@ -856,6 +858,8 @@
     <string name="show_guide_text">Show Guide</string>
     <string name="hide_guide_text">Hide Guide</string>
 
+    <string name="wave_pin_disable_comment">Wave Pins will be disabled</string>
+
     <string name="wave_gen_guide_intro">The wave generator can be used to generate different types of waves like
         Sine wave, Square wave, Saw Tooth wave and allow us to changes their characteristics like frequency, phase, duty.
         \nIt also allows us to produce PWM signals having different phase and duty.</string>
@@ -868,11 +872,10 @@
 
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
-    is compatible with either the built in light sensor in your android device or the BH-1750 light sensor.\n\n
+    is compatible with either the built in light sensor on any android device or the BH-1750 light sensor.\n\n
     \u2022 If you want to use the sensor BH-1750, connect the sensor to PSLab device as shown below</string>
     <string name="lux_meter_desc">\u2022 The above pin configuration has to be same except for the pin
-    GND. GND is meant for Ground and you can use any of the PSLab device GND pins as they are common.\n\n
-    \u2022 Then go to the Configure tab from the bottom navigation bar and choose the BH-1750 in the drop down
-    menu Select Sensor.\n</string>
+    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
+    \u2022 Select sensor by going to the Configure tab from the bottom navigation bar and choose BHT-1750 in the drop down menu under Select Sensor.\n</string>
 
 </resources>

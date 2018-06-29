@@ -64,7 +64,7 @@
     <dimen name="sensor_title_font">16sp</dimen>
     <dimen name="sensor_body_font">14sp</dimen>
 
-    <dimen name="accel_textsize_large">17sp</dimen>
+    <dimen name="accel_textsize_large">15sp</dimen>
     <dimen name="accel_textsize_small">9sp</dimen>
     <dimen name="accel_textsize_medium">12sp</dimen>
     <dimen name="accel_value_width">55dp</dimen>
@@ -208,9 +208,9 @@
     <dimen name="multimeter_textbox_margin_left">5dp</dimen>
     <dimen name="multimeter_textbox_margin_right">5dp</dimen>
     <dimen name="multimeter_textbox_margin_top">10dp</dimen>
-    <dimen name="multimeter_valuebox_height">50dp</dimen>
+    <dimen name="multimeter_valuebox_height">60dp</dimen>
     <dimen name="multimeter_valuebox_margin_right">20dp</dimen>
-    <dimen name="multimeter_valuebox_margin_top">40dp</dimen>
+    <dimen name="multimeter_valuebox_margin_top">32dp</dimen>
     <dimen name="multimeter_button_width">0dp</dimen>
     <dimen name="multimeter_button_height">40dp</dimen>
     <dimen name="multimeter_left_button_margin_left">5dp</dimen>
@@ -237,6 +237,7 @@
     <dimen name="multimeter_knob_margin_left">8dp</dimen>
     <dimen name="multimeter_knob_margin_right">8dp</dimen>
     <dimen name="multimeter_knob_margin_top">8dp</dimen>
+    <dimen name="multimeter_quantity_dimen">50sp</dimen>
 
     <dimen name="body_resistance_margin">10dp</dimen>
     <dimen name="resistance_text_height">40dp</dimen>
