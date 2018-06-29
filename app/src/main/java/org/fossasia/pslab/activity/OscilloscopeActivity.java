@@ -40,13 +40,13 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.experimentsetup.electronicexperiments.OscillatorExperimentFragment;
-import org.fossasia.pslab.experimentsetup.physicsexperiments.SpeedOfSoundFragment;
+import org.fossasia.pslab.experimentsetup.Multi_instrument.DiodeClippingClampingExperiment;
+import org.fossasia.pslab.experimentsetup.Multi_instrument.FullWaveRectifierFragment;
+import org.fossasia.pslab.experimentsetup.Multi_instrument.HalfWaveRectifierFragment;
+import org.fossasia.pslab.experimentsetup.Oscilloscope.OscillatorExperimentFragment;
+import org.fossasia.pslab.experimentsetup.Sensors.SpeedOfSoundFragment;
 import org.fossasia.pslab.fragment.ChannelParametersFragment;
 import org.fossasia.pslab.fragment.DataAnalysisFragment;
-import org.fossasia.pslab.experimentsetup.electronicexperiments.DiodeClippingClampingExperiment;
-import org.fossasia.pslab.experimentsetup.electronicexperiments.FullWaveRectifierFragment;
-import org.fossasia.pslab.experimentsetup.electronicexperiments.HalfWaveRectifierFragment;
 import org.fossasia.pslab.fragment.TimebaseTriggerFragment;
 import org.fossasia.pslab.fragment.XYPlotFragment;
 import org.fossasia.pslab.others.AudioJack;
