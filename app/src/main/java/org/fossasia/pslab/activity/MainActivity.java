@@ -33,8 +33,8 @@ import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.CommunicationHandler;
 import org.fossasia.pslab.fragment.AboutUsFragment;
 import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
-import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
+import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.PSLabPinLayoutFragment;
 import org.fossasia.pslab.fragment.SettingsFragment;
 import org.fossasia.pslab.others.CustomTabService;
@@ -305,8 +305,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         if (fragment instanceof HomeFragment && HomeFragment.isWebViewShowing) {
-                ((HomeFragment) fragment).hideWebView();
-                 return;
+            ((HomeFragment) fragment).hideWebView();
+            return;
         }
         if (shouldLoadHomeFragOnBackPress) {
             if (navItemIndex != 0 || CURRENT_TAG.equals(TAG_PINLAYOUT)) {
@@ -457,4 +457,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        attemptToConnectPSLab();
+        synchronized (this) {
+            UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+            if (device != null && hasPermission) {
+                PSLabisConnected = mScienceLabCommon.openDevice(communicationHandler);
+                initialisationDialog.dismiss();
+                invalidateOptionsMenu();
+                if (navItemIndex == 0) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, InstrumentsFragment.newInstance()).commit();
+                } else if (navItemIndex == 1) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(true, true)).commitAllowingStateLoss();
+                }
+                Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }
