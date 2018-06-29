@@ -1075,10 +1075,10 @@ public class ScienceLab {
     public double getVoltage(String channelName, Integer sample) {
         this.voltmeterAutoRange(channelName);
         double Voltage = this.getAverageVoltage(channelName, sample);
-        if (channelName.equals("CH3")) {
-            return Voltage;
-        } else {
+        if (channelName.equals("CH2") || channelName.equals("CH1") ) {
             return 2 * Voltage;
+        } else {
+            return Voltage;
         }
     }
 
