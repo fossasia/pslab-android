@@ -100,17 +100,6 @@
                 android:background="@drawable/carousel_view_background"
                 app:items_visible="three" />
 
-            <TextView
-                android:id="@+id/select_channel_description_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/carouselPicker"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:paddingTop="@dimen/select_channel_description_text_padding_top"
-                android:textColor="@color/white"
-                android:textSize="@dimen/select_channel_description_text_size" />
-
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
