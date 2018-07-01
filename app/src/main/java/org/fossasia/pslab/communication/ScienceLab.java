@@ -2167,7 +2167,7 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.GET_CAP_RANGE);
             mPacketHandler.sendInt(cTime);
-            int vSum = mPacketHandler.getInt();
+            int vSum = mPacketHandler.getVoltageSummation();
             mPacketHandler.getAcknowledgement();
             double v = vSum * 3.3 / 16 / 4095;
             double c = -cTime * 1e-6 / 1e4 / Math.log(1 - v / 3.3);
@@ -2203,7 +2203,7 @@ public class ScienceLab {
         int CR = 1;
         int iterations = 0;
         long startTime = System.currentTimeMillis() / 1000;
-        while (System.currentTimeMillis() / 1000 - startTime < 1) {
+        while (System.currentTimeMillis() / 1000 - startTime < 5) {
             if (CT > 65000) {
                 Log.v(TAG, "CT too high");
                 return this.capacitanceViaRCDischarge();
@@ -2218,11 +2218,7 @@ public class ScienceLab {
                 return C;
             else if (V < GOOD_VOLTS[0] && V > 0.01 && CT < 40000) {
                 if (GOOD_VOLTS[0] / V > 1.1 && iterations < 10) {
-                    try {
-                        CT = CT * (int) GOOD_VOLTS[0] / (int) V;
-                    } catch (ArithmeticException e) {
-                        Log.e(TAG, "No capacitor connected or a short circuit!");
-                    }
+                    CT = (int) (CT * GOOD_VOLTS[0] / V);
                     iterations += 1;
                     Log.v(TAG, "Increased CT " + CT);
                 } else if (iterations == 10)
@@ -2250,14 +2246,15 @@ public class ScienceLab {
                 mPacketHandler.sendByte((int) trim / 2);
             mPacketHandler.sendInt(chargeTime);
             Thread.sleep((long) (chargeTime * 1e-6 + .02));
-            int VCode = mPacketHandler.getInt();
+            int VCode;
+            do VCode = mPacketHandler.getVoltageSummation();
+            while (VCode == -1);
             double v = 3.3 * VCode / 4095;
             mPacketHandler.getAcknowledgement();
             double chargeCurrent = this.currents[currentRange] * (100 + trim) / 100.0;
             double c = 0;
             if (v != 0)
                 c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE) / this.currentScalars[currentRange];
-
             return new double[]{v, c};
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
