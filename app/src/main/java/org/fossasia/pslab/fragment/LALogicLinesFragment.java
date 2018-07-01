@@ -73,8 +73,10 @@ public class LALogicLinesFragment extends Fragment {
     private final Object lock = new Object();
     List<Entry> tempInput;
     DigitalChannel digitalChannel;
+    ArrayList<DigitalChannel> digitalChannelArray;
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
+    List<ILineDataSet> dataSets;
 
     //Bottom Sheet
     private LinearLayout bottomSheet;
@@ -86,6 +88,19 @@ public class LALogicLinesFragment extends Fragment {
     private ImageView bottomSheetSchematic;
     private TextView bottomSheetDesc;
 
+    // Graph Plot
+    private CarouselPicker carouselPicker;
+    private LinearLayout llChannel1, llChannel2, llChannel3, llChannel4;
+    private Spinner channelSelectSpinner1, channelSelectSpinner2, channelSelectSpinner3, channelSelectSpinner4;
+    private Spinner edgeSelectSpinner1, edgeSelectSpinner2, edgeSelectSpinner3, edgeSelectSpinner4;
+    private Button analyze_button;
+    private ProgressBar progressBar;
+    private CaptureOne captureOne;
+    private CaptureTwo captureTwo;
+    private int currentChannel = 0;
+    private int[] colors = new int[]{Color.MAGENTA, Color.GREEN, Color.CYAN, Color.YELLOW};
+    private OnChartValueSelectedListener listener;
+
     private Activity activity;
     private int channelMode;
     private ScienceLab scienceLab;
@@ -95,14 +110,6 @@ public class LALogicLinesFragment extends Fragment {
     private TextView tvTimeUnit, xCoordinateText, selectChannelText;
     private ImageView ledImageView;
     private Runnable logicAnalysis;
-    private OnChartValueSelectedListener listener;
-    private CarouselPicker carouselPicker;
-    private LinearLayout llChannel1, llChannel2, llChannel3, llChannel4;
-    private Spinner channelSelectSpinner1, channelSelectSpinner2, channelSelectSpinner3, channelSelectSpinner4;
-    private Spinner edgeSelectSpinner1, edgeSelectSpinner2, edgeSelectSpinner3, edgeSelectSpinner4;
-    private Button analyze_button;
-    private ProgressBar progressBar;
-    private CaptureOne captureOne;
 
     public static LALogicLinesFragment newInstance(Activity activity) {
         LALogicLinesFragment laLogicLinesFragment = new LALogicLinesFragment();
@@ -198,6 +205,10 @@ public class LALogicLinesFragment extends Fragment {
         bottomSheetText = (TextView) v.findViewById(R.id.custom_dialog_text);
         bottomSheetSchematic = (ImageView) v.findViewById(R.id.custom_dialog_schematic);
         bottomSheetDesc = (TextView) v.findViewById(R.id.custom_dialog_desc);
+
+        // Declaring digital data set
+        digitalChannelArray = new ArrayList<>();
+        dataSets = new ArrayList<>();
 
         // Inflating bottom sheet dialog on how to use Logic Analyzer
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -373,6 +384,30 @@ public class LALogicLinesFragment extends Fragment {
                                 }
                             });
                             monitor.start();
+                        } else if (channelMode == 2) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
+                            Thread monitor = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    captureTwo = new CaptureTwo();
+                                    ArrayList<String> channels = new ArrayList<>();
+                                    channels.add(channelNames.get(0));
+                                    channels.add(channelNames.get(1));
+                                    ArrayList<String> edges = new ArrayList<>();
+                                    edges.add(edgesNames.get(0));
+                                    edges.add(edgesNames.get(1));
+                                    captureTwo.execute(channels, edges);
+                                    synchronized (lock) {
+                                        try {
+                                            lock.wait();
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            });
+                            monitor.start();
                         } else {
                             Toast.makeText(getContext(), getResources().getString(R.string.needs_implementation), Toast.LENGTH_SHORT).show();
                         }
@@ -400,61 +435,60 @@ public class LALogicLinesFragment extends Fragment {
 
     }
 
-    // Single Channel Mode
     private void singleChannelEveryEdge(double[] xData, double[] yData) {
 
         tempInput = new ArrayList<>();
-        for (int j = 0; j < channelMode; j++) {
-            int[] temp = new int[xData.length];
-            int[] yAxis = new int[yData.length];
+        int[] temp = new int[xData.length];
+        int[] yAxis = new int[yData.length];
 
-            for (int i = 0; i < xData.length; i++) {
-                temp[i] = (int) xData[i];
-                yAxis[i] = (int) yData[i];
-            }
+        for (int i = 0; i < xData.length; i++) {
+            temp[i] = (int) xData[i];
+            yAxis[i] = (int) yData[i];
+        }
 
-            ArrayList<Integer> xaxis = new ArrayList<>();
-            ArrayList<Integer> yaxis = new ArrayList<>();
-            xaxis.add(temp[0]);
-            yaxis.add(yAxis[0]);
+        ArrayList<Integer> xaxis = new ArrayList<>();
+        ArrayList<Integer> yaxis = new ArrayList<>();
+        xaxis.add(temp[0]);
+        yaxis.add(yAxis[0]);
 
-            for (int i = 1; i < xData.length; i++) {
-                if (temp[i] != temp[i - 1]) {
-                    xaxis.add(temp[i]);
-                    yaxis.add(yAxis[i]);
-                }
-            }
-
-            // Add data to axis in actual graph
-            if (yaxis.size() > 1) {
-                if (yaxis.get(1).equals(yaxis.get(0)))
-                    tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
-                else {
-                    tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
-                    tempInput.add(new Entry(xaxis.get(0), yaxis.get(1)));
-                }
-                for (int i = 1; i < xaxis.size() - 1; i++) {
-                    if (yaxis.get(i).equals(yaxis.get(i + 1)))
-                        tempInput.add(new Entry(xaxis.get(i), yaxis.get(i)));
-                    else {
-                        tempInput.add(new Entry(xaxis.get(i), yaxis.get(i)));
-                        tempInput.add(new Entry(xaxis.get(i), yaxis.get(i + 1)));
-                    }
-                }
-                tempInput.add(new Entry(xaxis.get(xaxis.size() - 1), yaxis.get(xaxis.size() - 1)));
-            } else {
-                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
+        for (int i = 1; i < xData.length; i++) {
+            if (temp[i] != temp[i - 1]) {
+                xaxis.add(temp[i]);
+                yaxis.add(yAxis[i]);
             }
         }
+
+        // Add data to axis in actual graph
+        if (yaxis.size() > 1) {
+            if (yaxis.get(1).equals(yaxis.get(0)))
+                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0) + 2 * currentChannel));
+            else {
+                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0) + 2 * currentChannel));
+                tempInput.add(new Entry(xaxis.get(0), yaxis.get(1) + 2 * currentChannel));
+            }
+            for (int i = 1; i < xaxis.size() - 1; i++) {
+                if (yaxis.get(i).equals(yaxis.get(i + 1)))
+                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i) + 2 * currentChannel));
+                else {
+                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i) + 2 * currentChannel));
+                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i + 1) + 2 * currentChannel));
+                }
+                tempInput.add(new Entry(xaxis.get(xaxis.size() - 1), yaxis.get(xaxis.size() - 1)));
+            }
+        } else {
+            tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
+        }
+
+        setLineDataSet();
     }
 
     private void singleChannelFourthRisingEdge(double[] xData) {
 
         tempInput = new ArrayList<>();
         int xaxis = (int) xData[0];
-        tempInput.add(new Entry(xaxis, 0));
-        tempInput.add(new Entry(xaxis, 1));
-        tempInput.add(new Entry(xaxis, 0));
+        tempInput.add(new Entry(xaxis, 0 + 2 * currentChannel));
+        tempInput.add(new Entry(xaxis, 1 + 2 * currentChannel));
+        tempInput.add(new Entry(xaxis, 0 + 2 * currentChannel));
         int check = xaxis;
         int count = 0;
 
@@ -463,9 +497,9 @@ public class LALogicLinesFragment extends Fragment {
                 xaxis = (int) xData[i];
                 if (xaxis != check) {
                     if (count == 3) {
-                        tempInput.add(new Entry(xaxis, 0));
-                        tempInput.add(new Entry(xaxis, 1));
-                        tempInput.add(new Entry(xaxis, 0));
+                        tempInput.add(new Entry(xaxis, 0 + 2 * currentChannel));
+                        tempInput.add(new Entry(xaxis, 1 + 2 * currentChannel));
+                        tempInput.add(new Entry(xaxis, 0 + 2 * currentChannel));
                         count = 0;
                     } else
                         count++;
@@ -473,6 +507,8 @@ public class LALogicLinesFragment extends Fragment {
                 }
             }
         }
+
+        setLineDataSet();
     }
 
     private void singleChannelOtherEdges(double[] xData, double[] yData) {
@@ -482,8 +518,22 @@ public class LALogicLinesFragment extends Fragment {
         for (int i = 0; i < xData.length; i++) {
             int xaxis = (int) xData[i];
             int yaxis = (int) yData[i];
-            tempInput.add(new Entry(xaxis, yaxis));
+            tempInput.add(new Entry(xaxis, yaxis + 2 * currentChannel));
         }
+
+        setLineDataSet();
+    }
+
+    private void setLineDataSet() {
+        LineDataSet lineDataSet = new LineDataSet(tempInput, channelNames.get(currentChannel));
+        lineDataSet.setColor(colors[currentChannel]);
+        lineDataSet.setCircleRadius(1);
+        lineDataSet.setLineWidth(2);
+        lineDataSet.setCircleColor(Color.GREEN);
+        lineDataSet.setDrawValues(false);
+        lineDataSet.setDrawCircles(false);
+        lineDataSet.setHighLightColor(getResources().getColor(R.color.golden));
+        dataSets.add(lineDataSet);
     }
 
     private void setAdapters() {
@@ -677,14 +727,139 @@ public class LALogicLinesFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
 
-                List<ILineDataSet> dataSets = new ArrayList<>();
-                LineDataSet lineDataSet = new LineDataSet(tempInput, channelNames.get(0));
-                lineDataSet.setCircleRadius(1);
-                lineDataSet.setLineWidth(2);
-                lineDataSet.setCircleColor(Color.GREEN);
-                lineDataSet.setDrawValues(false);
-                lineDataSet.setDrawCircles(false);
-                dataSets.add(lineDataSet);
+                logicLinesChart.setData(new LineData(dataSets));
+                logicLinesChart.invalidate();
+
+                YAxis left = logicLinesChart.getAxisLeft();
+                left.setValueFormatter(new ChannelAxisFormatter(channelNames));
+                left.setTextColor(Color.WHITE);
+                left.setGranularity(1f);
+                left.setTextSize(12f);
+                logicLinesChart.getAxisRight().setDrawLabels(false);
+                logicLinesChart.getDescription().setEnabled(false);
+                logicLinesChart.setScaleYEnabled(false);
+
+                synchronized (lock) {
+                    lock.notify();
+                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
+                Toast.makeText(getContext(), getResources().getString(R.string.no_data_generated), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class CaptureTwo extends AsyncTask<ArrayList<String>, ArrayList<String>, Void> {
+        boolean holder1, holder2;
+        String[] edgeOption = new String[channelMode];
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(ArrayList<String>... arrayLists) {
+            try {
+                int channelNumber1 = scienceLab.calculateDigitalChannel(arrayLists[0].get(0));
+                int channelNumber2 = scienceLab.calculateDigitalChannel(arrayLists[0].get(1));
+
+                digitalChannelArray.add(scienceLab.getDigitalChannel(channelNumber1));
+                digitalChannelArray.add(scienceLab.getDigitalChannel(channelNumber2));
+                edgeOption[0] = arrayLists[1].get(0);
+                edgeOption[1] = arrayLists[1].get(1);
+
+                ArrayList<Integer> modes = new ArrayList<>();
+
+                for (int i = 0; i < channelMode; i++) {
+                    switch (edgeOption[i]) {
+                        case "EVERY EDGE":
+                            digitalChannelArray.get(i).mode = EVERY_EDGE;
+                            modes.add(EVERY_EDGE);
+                            break;
+                        case "EVERY FALLING EDGE":
+                            digitalChannelArray.get(i).mode = EVERY_FALLING_EDGE;
+                            modes.add(EVERY_FALLING_EDGE);
+                            break;
+                        case "EVERY RISING EDGE":
+                            digitalChannelArray.get(i).mode = EVERY_RISING_EDGE;
+                            modes.add(EVERY_RISING_EDGE);
+                            break;
+                        case "EVERY FOURTH RISING EDGE":
+                            digitalChannelArray.get(i).mode = EVERY_FOURTH_RISING_EDGE;
+                            modes.add(EVERY_FOURTH_RISING_EDGE);
+                            break;
+                        case "DISABLED":
+                            digitalChannelArray.get(i).mode = DISABLED;
+                            modes.add(DISABLED);
+                            break;
+                        default:
+                            digitalChannelArray.get(i).mode = EVERY_EDGE;
+                            modes.add(EVERY_EDGE);
+                    }
+                }
+
+                scienceLab.startTwoChannelLA(arrayLists[0], modes, 67, null, null, null);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                LinkedHashMap<String, Integer> data = scienceLab.getLAInitialStates();
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                holder1 = scienceLab.fetchLAChannel(channelNumber1, data);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                holder2 = scienceLab.fetchLAChannel(channelNumber2, data);
+
+            } catch (NullPointerException e) {
+                cancel(true);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (holder1 && holder2) {
+
+                ArrayList<double[]> xaxis = new ArrayList<>();
+                xaxis.add(digitalChannelArray.get(0).getXAxis());
+                xaxis.add(digitalChannelArray.get(1).getXAxis());
+
+                ArrayList<double[]> yaxis = new ArrayList<>();
+                yaxis.add(digitalChannelArray.get(0).getYAxis());
+                yaxis.add(digitalChannelArray.get(1).getYAxis());
+
+                // Plot the fetched data
+                for (int i = 0; i < channelMode; i++) {
+                    switch (edgeOption[i]) {
+                        case "EVERY EDGE":
+                            singleChannelEveryEdge(xaxis.get(i), yaxis.get(i));
+                            break;
+                        case "EVERY FOURTH RISING EDGE":
+                            singleChannelFourthRisingEdge(xaxis.get(i));
+                            break;
+                        default:
+                            singleChannelOtherEdges(xaxis.get(i), yaxis.get(i));
+                            break;
+                    }
+                    currentChannel++;
+                }
+
+                progressBar.setVisibility(View.GONE);
+                ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
 
                 logicLinesChart.setData(new LineData(dataSets));
                 logicLinesChart.invalidate();
