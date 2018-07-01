@@ -45,7 +45,7 @@
                 android:gravity="center"
                 android:textAlignment="center"
                 android:textSize="@dimen/sensor_body_font"
-                android:textStyle="bold" />
+                android:text="@string/use_autoscan"/>
         </android.support.v4.widget.NestedScrollView>
 
         <TextView
