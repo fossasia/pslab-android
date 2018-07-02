@@ -45,162 +45,170 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <LinearLayout
+        <org.fossasia.pslab.others.ZoomLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/bottom_sheet_padding">
+            android:layout_height="wrap_content">
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_length_btm_sheet" />
-
-            <TextView
-                android:id="@+id/guide_title_oscilloscope"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/oscilloscope"
-                android:textSize="@dimen/bottom_sheet_title_text"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:padding="@dimen/bottom_sheet_padding">
 
-            <TextView
-                android:id="@+id/guide_intro_oscilloscope"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:text="@string/oscilloscope_intro" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_length_btm_sheet" />
 
-            <ImageView
-                android:id="@+id/oscilloscope_schematic"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/bottom_sheet_image_height"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:contentDescription="@string/schematic_desc"
-                android:src="@drawable/oscilloscope_schematic" />
+                <TextView
+                    android:id="@+id/guide_title_oscilloscope"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/oscilloscope"
+                    android:textSize="@dimen/bottom_sheet_title_text"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/guide_desc_oscilloscope"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:background="@color/white"
-                android:text="@string/oscilloscope_desc" />
+                <TextView
+                    android:id="@+id/guide_intro_oscilloscope"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:text="@string/oscilloscope_intro" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_length_btm_sheet" />
+                <ImageView
+                    android:id="@+id/oscilloscope_schematic"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bottom_sheet_image_height"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:contentDescription="@string/schematic_desc"
+                    android:src="@drawable/oscilloscope_schematic" />
 
-            <TextView
-                android:id="@+id/guide_title_channel_parameters"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/channel_parameters"
-                android:textSize="@dimen/bottom_sheet_title_text"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/guide_desc_oscilloscope"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:background="@color/white"
+                    android:text="@string/oscilloscope_desc" />
 
-            <TextView
-                android:id="@+id/guide_intro_channel_parameters"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:text="@string/channel_param_desc" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_length_btm_sheet" />
 
-            <ImageView
-                android:id="@+id/channel_parameters_schematic"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/bottom_sheet_image_height"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:contentDescription="@string/schematic_desc"
-                android:src="@drawable/mic_schematic" />
+                <TextView
+                    android:id="@+id/guide_title_channel_parameters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/channel_parameters"
+                    android:textSize="@dimen/bottom_sheet_title_text"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/guide_desc_channel_parameters"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:background="@color/white"
-                android:text="@string/channel_param_mic" />
+                <TextView
+                    android:id="@+id/guide_intro_channel_parameters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:text="@string/channel_param_desc" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_length_btm_sheet" />
+                <ImageView
+                    android:id="@+id/channel_parameters_schematic"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bottom_sheet_image_height"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:contentDescription="@string/schematic_desc"
+                    android:src="@drawable/mic_schematic" />
 
-            <TextView
-                android:id="@+id/guide_title_timebase"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/timebase"
-                android:textSize="@dimen/bottom_sheet_title_text"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/guide_desc_channel_parameters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:background="@color/white"
+                    android:text="@string/channel_param_mic" />
 
-            <TextView
-                android:id="@+id/guide_intro_timebase"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:text="@string/timebase_desc" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_length_btm_sheet" />
 
-            <ImageView
-                android:id="@+id/timebase_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/bottom_sheet_image_height"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:contentDescription="@string/schematic_desc"
-                android:src="@drawable/timebase_view" />
+                <TextView
+                    android:id="@+id/guide_title_timebase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/timebase"
+                    android:textSize="@dimen/bottom_sheet_title_text"
+                    android:textStyle="bold" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_length_btm_sheet" />
+                <TextView
+                    android:id="@+id/guide_intro_timebase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:text="@string/timebase_desc" />
 
-            <TextView
-                android:id="@+id/guide_title_data_analysis"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/data_analysis"
-                android:textSize="@dimen/bottom_sheet_title_text"
-                android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/timebase_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bottom_sheet_image_height"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:contentDescription="@string/schematic_desc"
+                    android:src="@drawable/timebase_view" />
 
-            <TextView
-                android:id="@+id/guide_desc_data_analysis"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:text="@string/data_analysis_desc" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_length_btm_sheet" />
 
-            <ImageView
-                android:id="@+id/data_analysis_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/bottom_sheet_image_height"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:contentDescription="@string/schematic_desc"
-                android:src="@drawable/data_analysis_view" />
+                <TextView
+                    android:id="@+id/guide_title_data_analysis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/data_analysis"
+                    android:textSize="@dimen/bottom_sheet_title_text"
+                    android:textStyle="bold" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_length_btm_sheet" />
+                <TextView
+                    android:id="@+id/guide_desc_data_analysis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:text="@string/data_analysis_desc" />
 
-            <TextView
-                android:id="@+id/guide_title_xy_plot"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/xy_plot"
-                android:textSize="@dimen/bottom_sheet_title_text"
-                android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/data_analysis_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bottom_sheet_image_height"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:contentDescription="@string/schematic_desc"
+                    android:src="@drawable/data_analysis_view" />
 
-            <TextView
-                android:id="@+id/guide_desc_xy_plot_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:text="@string/xy_plot_desc" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_length_btm_sheet" />
 
-            <ImageView
-                android:id="@+id/xy_plot_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/bottom_sheet_image_height"
-                android:layout_margin="@dimen/bottom_sheet_margin"
-                android:contentDescription="@string/schematic_desc"
-                android:src="@drawable/xy_plot_view" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/guide_title_xy_plot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/xy_plot"
+                    android:textSize="@dimen/bottom_sheet_title_text"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/guide_desc_xy_plot_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:text="@string/xy_plot_desc" />
+
+                <ImageView
+                    android:id="@+id/xy_plot_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bottom_sheet_image_height"
+                    android:layout_margin="@dimen/bottom_sheet_margin"
+                    android:contentDescription="@string/schematic_desc"
+                    android:src="@drawable/xy_plot_view" />
+            </LinearLayout>
+
+        </org.fossasia.pslab.others.ZoomLayout>
+
     </android.support.v4.widget.NestedScrollView>
+
 </LinearLayout>
