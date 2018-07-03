@@ -1075,7 +1075,7 @@ public class ScienceLab {
     public double getVoltage(String channelName, Integer sample) {
         this.voltmeterAutoRange(channelName);
         double Voltage = this.getAverageVoltage(channelName, sample);
-        if (channelName.equals("CH2") || channelName.equals("CH1") ) {
+        if (channelName.equals("CH2") || channelName.equals("CH1")) {
             return 2 * Voltage;
         } else {
             return Voltage;
@@ -2801,7 +2801,19 @@ public class ScienceLab {
     }
 
     public double sqrPWM(double frequency, double h0, double p1, double h1, double p2, double h2, double p3, double h3, boolean pulse) {
-        if (frequency == 0 || h0 == 0 || h1 == 0 || h2 == 0 || h3 == 0) return -1;
+        if (frequency == 0) return -1;
+        if (h0 == 0) {
+            h0 = 0.1;
+        }
+        if (h1 == 0) {
+            h1 = 0.1;
+        }
+        if (h2 == 0) {
+            h2 = 0.1;
+        }
+        if (h3 == 0) {
+            h3 = 0.1;
+        }
         if (frequency > 10e6) {
             Log.v(TAG, "Frequency is greater than 10MHz. Please use map_reference_clock for 16 & 32MHz outputs");
             return -1;
