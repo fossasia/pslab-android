@@ -436,7 +436,6 @@ public class LALogicLinesFragment extends Fragment {
     }
 
     private void singleChannelEveryEdge(double[] xData, double[] yData) {
-
         tempInput = new ArrayList<>();
         int[] temp = new int[xData.length];
         int[] yAxis = new int[yData.length];
@@ -483,7 +482,6 @@ public class LALogicLinesFragment extends Fragment {
     }
 
     private void singleChannelFourthRisingEdge(double[] xData) {
-
         tempInput = new ArrayList<>();
         int xaxis = (int) xData[0];
         tempInput.add(new Entry(xaxis, 0 + 2 * currentChannel));
@@ -512,13 +510,36 @@ public class LALogicLinesFragment extends Fragment {
     }
 
     private void singleChannelOtherEdges(double[] xData, double[] yData) {
-
         tempInput = new ArrayList<>();
 
         for (int i = 0; i < xData.length; i++) {
             int xaxis = (int) xData[i];
             int yaxis = (int) yData[i];
             tempInput.add(new Entry(xaxis, yaxis + 2 * currentChannel));
+        }
+
+        setLineDataSet();
+    }
+
+    private void singleChannelRisingEdges(double[] xData, double[] yData) {
+        tempInput = new ArrayList<>();
+
+        for (int i = 1; i < xData.length; i += 6) {
+            tempInput.add(new Entry((int) xData[i], (int) yData[i] + 2 * currentChannel));
+            tempInput.add(new Entry((int) xData[i + 1], (int) yData[i + 1] + 2 * currentChannel));
+            tempInput.add(new Entry((int) xData[i + 2], (int) yData[i + 2] + 2 * currentChannel));
+        }
+
+        setLineDataSet();
+    }
+
+    private void singleChannelFallingEdges(double[] xData, double[] yData) {
+        tempInput = new ArrayList<>();
+
+        for (int i = 4; i < xData.length; i += 6) {
+            tempInput.add(new Entry((int) xData[i], (int) yData[i] + 2 * currentChannel));
+            tempInput.add(new Entry((int) xData[i + 1], (int) yData[i + 1] + 2 * currentChannel));
+            tempInput.add(new Entry((int) xData[i + 2], (int) yData[i + 2] + 2 * currentChannel));
         }
 
         setLineDataSet();
@@ -720,6 +741,12 @@ public class LALogicLinesFragment extends Fragment {
                     case "EVERY FOURTH RISING EDGE":
                         singleChannelFourthRisingEdge(xaxis);
                         break;
+                    case "EVERY RISING EDGE":
+                        singleChannelRisingEdges(xaxis, yaxis);
+                        break;
+                    case "EVERY FALLING EDGE":
+                        singleChannelFallingEdges(xaxis, yaxis);
+                        break;
                     default:
                         singleChannelOtherEdges(xaxis, yaxis);
                         break;
@@ -850,6 +877,12 @@ public class LALogicLinesFragment extends Fragment {
                             break;
                         case "EVERY FOURTH RISING EDGE":
                             singleChannelFourthRisingEdge(xaxis.get(i));
+                            break;
+                        case "EVERY RISING EDGE":
+                            singleChannelRisingEdges(xaxis.get(i), yaxis.get(i));
+                            break;
+                        case "EVERY FALLING EDGE":
+                            singleChannelFallingEdges(xaxis.get(i), yaxis.get(i));
                             break;
                         default:
                             singleChannelOtherEdges(xaxis.get(i), yaxis.get(i));
