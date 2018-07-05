@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,15 +25,14 @@ import com.github.mikephil.charting.data.LineDataSet;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.LuxMeterActivity;
+import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.sensors.BH1750;
+import org.fossasia.pslab.others.CSVLogger;
+import org.fossasia.pslab.others.GPSLogger;
+import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-
-import org.fossasia.pslab.communication.ScienceLab;
-import org.fossasia.pslab.others.CSVLogger;
-import org.fossasia.pslab.others.ScienceLabCommon;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -76,6 +76,7 @@ public class LuxMeterFragmentData extends Fragment {
     private boolean logged = false, writeHeader = false;
 
     private final Object lock = new Object();
+    private GPSLogger gpsLogger;
 
     public static LuxMeterFragmentData newInstance() {
         return new LuxMeterFragmentData();
@@ -266,6 +267,7 @@ public class LuxMeterFragmentData extends Fragment {
                 assert parent != null;
                 if (parent.saveData) {
                     if (!writeHeader) {
+                        gpsLogger = parent.gpsLogger;
                         lux_logger = new CSVLogger(getString(R.string.lux_meter));
                         lux_logger.writeCSVFile("Timestamp,X,Y\n");
                         writeHeader = true;
@@ -278,6 +280,12 @@ public class LuxMeterFragmentData extends Fragment {
                     if (logged) {
                         writeHeader = false;
                         logged = false;
+                        Location location = gpsLogger.getBestLocation();
+                        if (location != null) {
+                            String data = "\nLocation" + "," + String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude() + "\n");
+                            lux_logger.writeCSVFile(data);
+                        }
+                        gpsLogger.removeUpdate();
                     }
                 }
                 count++;
