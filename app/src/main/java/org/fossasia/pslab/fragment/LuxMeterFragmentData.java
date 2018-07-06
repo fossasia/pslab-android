@@ -162,6 +162,7 @@ public class LuxMeterFragmentData extends Fragment {
         dataThread.start();
 
         lightMeter.setMaxSpeed(10000);
+        lightMeter.setWithTremble(false);
 
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();
@@ -220,7 +221,7 @@ public class LuxMeterFragmentData extends Fragment {
                     data = sensorBH1750.getRaw().floatValue();
                     sensorManager.unregisterListener(this);
                 } else if (sensor != null) {
-                    sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+                    sensorManager.registerListener(this, sensor, updatePeriod);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -239,7 +240,6 @@ public class LuxMeterFragmentData extends Fragment {
         @Override
         public void onSensorChanged(SensorEvent event) {
             data = Float.valueOf(df.format(event.values[0]));
-            visualizeData();
             unRegisterListener();
         }
 
@@ -291,8 +291,6 @@ public class LuxMeterFragmentData extends Fragment {
 
             mChart.setData(data);
             mChart.notifyDataSetChanged();
-            mChart.setVisibleXRangeMaximum(10);
-            mChart.moveViewToX(data.getEntryCount());
             mChart.invalidate();
         }
 
