@@ -1664,14 +1664,14 @@ public class ScienceLab {
             mPacketHandler.sendByte((trChannel << 4) | trMode);
             mPacketHandler.getAcknowledgement();
             this.digitalChannelsInBuffer = 1;
-            this.dChannels.get(0).prescalar = 0;
-            this.dChannels.get(0).dataType = "long";
-            this.dChannels.get(0).length = this.MAX_SAMPLES / 4;
-            this.dChannels.get(0).maxTime = (int) (67 * 1e6);
-            this.dChannels.get(0).mode = channelMode;
-            this.dChannels.get(0).channelName = channel;
+            this.dChannels.get(aqChannel).prescalar = 0;
+            this.dChannels.get(aqChannel).dataType = "long";
+            this.dChannels.get(aqChannel).length = this.MAX_SAMPLES / 4;
+            this.dChannels.get(aqChannel).maxTime = (int) (67 * 1e6);
+            this.dChannels.get(aqChannel).mode = channelMode;
+            this.dChannels.get(aqChannel).channelName = channel;
             if (trMode == 3 || trMode == 4 || trMode == 5)
-                this.dChannels.get(0).initialStateOverride = 2;
+                this.dChannels.get(aqChannel).initialStateOverride = 2;
             else if (trMode == 2)
                 this.dChannels.get(0).initialStateOverride = 1;
 
@@ -1838,9 +1838,9 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.GET_INITIAL_DIGITAL_STATES);
             int initial = mPacketHandler.getInt();
             int A = (mPacketHandler.getInt() - initial) / 2;
-            int B = (mPacketHandler.getInt() - initial) / 2 - this.MAX_SAMPLES / 4;
-            int C = (mPacketHandler.getInt() - initial) / 2 - 2 * this.MAX_SAMPLES / 4;
-            int D = (mPacketHandler.getInt() - initial) / 2 - 3 * this.MAX_SAMPLES / 4;
+            int B = (mPacketHandler.getInt() - initial) / 2;
+            int C = (mPacketHandler.getInt() - initial) / 2;
+            int D = (mPacketHandler.getInt() - initial) / 2;
             int s = mPacketHandler.getByte();
             int sError = mPacketHandler.getByte();
             mPacketHandler.getAcknowledgement();
@@ -2007,10 +2007,6 @@ public class ScienceLab {
 
     public boolean fetchLAChannel(Integer channelNumber, LinkedHashMap<String, Integer> initialStates) {
         DigitalChannel dChan = this.dChannels.get(channelNumber);
-        if (dChan.channelNumber >= this.digitalChannelsInBuffer) {
-            Log.e(TAG, "Channel Unavailable");
-            return false;
-        }
 
         LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
         tempMap.put("ID1", initialStates.get("ID1"));
@@ -2028,6 +2024,7 @@ public class ScienceLab {
             }
             i++;
         }
+
         int[] temp = this.fetchIntDataFromLA(i, dChan.channelNumber + 1);
         double[] data = new double[temp.length - 1];
         if (temp[0] == 1) {
@@ -2170,7 +2167,7 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.GET_CAP_RANGE);
             mPacketHandler.sendInt(cTime);
-            int vSum = mPacketHandler.getInt();
+            int vSum = mPacketHandler.getVoltageSummation();
             mPacketHandler.getAcknowledgement();
             double v = vSum * 3.3 / 16 / 4095;
             double c = -cTime * 1e-6 / 1e4 / Math.log(1 - v / 3.3);
@@ -2206,7 +2203,7 @@ public class ScienceLab {
         int CR = 1;
         int iterations = 0;
         long startTime = System.currentTimeMillis() / 1000;
-        while (System.currentTimeMillis() / 1000 - startTime < 1) {
+        while (System.currentTimeMillis() / 1000 - startTime < 5) {
             if (CT > 65000) {
                 Log.v(TAG, "CT too high");
                 return this.capacitanceViaRCDischarge();
@@ -2221,11 +2218,7 @@ public class ScienceLab {
                 return C;
             else if (V < GOOD_VOLTS[0] && V > 0.01 && CT < 40000) {
                 if (GOOD_VOLTS[0] / V > 1.1 && iterations < 10) {
-                    try {
-                        CT = CT * (int) GOOD_VOLTS[0] / (int) V;
-                    } catch (ArithmeticException e) {
-                        Log.e(TAG, "No capacitor connected or a short circuit!");
-                    }
+                    CT = (int) (CT * GOOD_VOLTS[0] / V);
                     iterations += 1;
                     Log.v(TAG, "Increased CT " + CT);
                 } else if (iterations == 10)
@@ -2253,14 +2246,15 @@ public class ScienceLab {
                 mPacketHandler.sendByte((int) trim / 2);
             mPacketHandler.sendInt(chargeTime);
             Thread.sleep((long) (chargeTime * 1e-6 + .02));
-            int VCode = mPacketHandler.getInt();
+            int VCode;
+            do VCode = mPacketHandler.getVoltageSummation();
+            while (VCode == -1);
             double v = 3.3 * VCode / 4095;
             mPacketHandler.getAcknowledgement();
             double chargeCurrent = this.currents[currentRange] * (100 + trim) / 100.0;
             double c = 0;
             if (v != 0)
                 c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE) / this.currentScalars[currentRange];
-
             return new double[]{v, c};
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -124,17 +125,17 @@ public class MultimeterActivity extends AppCompatActivity {
                     String Resistance = "";
                     if (avgResistance == null) {
                         Resistance = "Infinity";
-                        resistanceUnit = "Ohms";
+                        resistanceUnit = "\u2126";
                     } else {
                         if (avgResistance > 10e5) {
                             Resistance = resistanceFormat.format((avgResistance / 10e5));
-                            resistanceUnit = "MOhms";
+                            resistanceUnit = "M" + "\u2126";
                         } else if (avgResistance > 10e2) {
                             Resistance = resistanceFormat.format((avgResistance / 10e2));
-                            resistanceUnit = "kOhms";
+                            resistanceUnit = "k" + "\u2126";
                         } else if (avgResistance > 1) {
                             Resistance = resistanceFormat.format(avgResistance);
-                            resistanceUnit = "Ohms";
+                            resistanceUnit = "\u2126";
                         } else {
                             Resistance = "Cannot measure!";
                             resistanceUnit = "";
@@ -149,7 +150,26 @@ public class MultimeterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (scienceLab.isConnected()) {
                     Double capacitance = scienceLab.getCapacitance();
-                    saveAndSetData(String.valueOf(capacitance), getString(R.string.capacitance_unit));
+                    DecimalFormat capacitanceFormat = new DecimalFormat("#.##");
+                    String Capacitance;
+                    String capacitanceUnit;
+                    if (capacitance < 1e-9) {
+                        Capacitance = capacitanceFormat.format((capacitance / 1e-12));
+                        capacitanceUnit = "pF";
+                    } else if (capacitance < 1e-6) {
+                        Capacitance = capacitanceFormat.format((capacitance / 1e-9));
+                        capacitanceUnit = "nF";
+                    } else if (capacitance < 1e-3) {
+                        Capacitance = capacitanceFormat.format((capacitance / 1e-6));
+                        capacitanceUnit = "\u00B5" + "F";
+                    } else if (capacitance < 1e-1) {
+                        Capacitance = capacitanceFormat.format((capacitance / 1e-3));
+                        capacitanceUnit = "mF";
+                    } else {
+                        Capacitance = capacitanceFormat.format(capacitance);
+                        capacitanceUnit = getString(R.string.capacitance_unit);
+                    }
+                    saveAndSetData(Capacitance, capacitanceUnit);
                 }
             }
         });

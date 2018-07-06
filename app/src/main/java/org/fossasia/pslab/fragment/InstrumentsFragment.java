@@ -130,7 +130,8 @@ public class InstrumentsFragment extends Fragment {
                     R.string.wave_generator_description,
                     R.string.power_source_description,
                     R.string.lux_meter_description,
-                    R.string.accelerometer_description
+                    R.string.accelerometer_description,
+                    R.string.compass_description
             };
 
             applicationItemList.add(new ApplicationItem(
@@ -157,6 +158,9 @@ public class InstrumentsFragment extends Fragment {
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.accelerometer), R.drawable.tile_icon_accelerometer, getResources().getString(descriptions[7]))
             );
+            applicationItemList.add(new ApplicationItem(
+                    getResources().getString(R.string.compass), R.drawable.tile_icon_compass, getResources().getString(descriptions[8])
+            ));
             return null;
         }
 
