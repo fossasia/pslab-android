@@ -23,12 +23,14 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import org.fossasia.pslab.R;
+import org.fossasia.pslab.activity.LuxMeterActivity;
 import org.fossasia.pslab.communication.sensors.BH1750;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
 
 import org.fossasia.pslab.communication.ScienceLab;
+import org.fossasia.pslab.others.CSVLogger;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
 import java.util.ArrayList;
@@ -45,6 +47,8 @@ public class LuxMeterFragmentData extends Fragment {
     private static int highLimit = 1000;
     private static int updatePeriod = 100;
     private SensorDataFetch sensorDataFetch;
+
+    public CSVLogger lux_logger;
 
     @BindView(R.id.lux_stat_max)
     TextView statMax;
@@ -69,6 +73,7 @@ public class LuxMeterFragmentData extends Fragment {
     private YAxis y;
     private volatile boolean monitor = true;
     private Unbinder unbinder;
+    private boolean logged = false, writeHeader = false;
 
     private final Object lock = new Object();
 
@@ -256,8 +261,25 @@ public class LuxMeterFragmentData extends Fragment {
             else lightMeter.setPointerColor(Color.WHITE);
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
             entries.add(new Entry((float) timeElapsed, data));
-
+            LuxMeterActivity parent = (LuxMeterActivity) getActivity();
             for (Entry item : entries) {
+                assert parent != null;
+                if (parent.saveData) {
+                    if (!writeHeader) {
+                        lux_logger = new CSVLogger(getString(R.string.lux_meter));
+                        lux_logger.writeCSVFile("Timestamp,X,Y\n");
+                        writeHeader = true;
+                    }
+                    String data = String.valueOf(System.currentTimeMillis()) + "," +
+                            item.getX() + "," + item.getY() + "\n";
+                    lux_logger.writeCSVFile(data);
+                    logged = true;
+                } else {
+                    if (logged) {
+                        writeHeader = false;
+                        logged = false;
+                    }
+                }
                 count++;
                 sum += item.getY();
             }

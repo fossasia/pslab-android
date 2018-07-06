@@ -1,6 +1,7 @@
 package org.fossasia.pslab.activity;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,14 +9,17 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.LuxMeterFragmentConfig;
@@ -33,6 +37,8 @@ public class LuxMeterActivity extends AppCompatActivity {
 
     @BindView(R.id.navigation_lux_meter)
     BottomNavigationView bottomNavigationView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     //bottomSheet
     @BindView(R.id.bottom_sheet)
@@ -52,13 +58,15 @@ public class LuxMeterActivity extends AppCompatActivity {
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
 
+    public boolean saveData = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lux_main);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
         setUpBottomSheet();
-
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -160,5 +168,33 @@ public class LuxMeterActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
         gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.data_log_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save_csv_data:
+                if (saveData) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.data_recording_stop),
+                            Toast.LENGTH_SHORT).show();
+                    saveData = false;
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.data_recording_start),
+                            Toast.LENGTH_SHORT).show();
+                    saveData = true;
+                }
+                invalidateOptionsMenu();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }
