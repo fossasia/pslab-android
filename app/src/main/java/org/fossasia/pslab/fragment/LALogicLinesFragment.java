@@ -645,27 +645,11 @@ public class LALogicLinesFragment extends Fragment {
         @Override
         protected Void doInBackground(String... params) {
             try {
-                scienceLab.startOneChannelLA(params[0], 1, params[0], 3);
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                LinkedHashMap<String, Integer> data = scienceLab.getLAInitialStates();
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
                 int channelNumber = scienceLab.calculateDigitalChannel(params[0]);
-
                 digitalChannel = scienceLab.getDigitalChannel(channelNumber);
                 edgeOption = params[1];
-                switch (params[1]) {
+
+                switch (edgeOption) {
                     case "EVERY EDGE":
                         digitalChannel.mode = EVERY_EDGE;
                         break;
@@ -684,6 +668,23 @@ public class LALogicLinesFragment extends Fragment {
                     default:
                         digitalChannel.mode = EVERY_EDGE;
                 }
+
+                scienceLab.startOneChannelLA(params[0], digitalChannel.mode, params[0], 3);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                LinkedHashMap<String, Integer> data = scienceLab.getLAInitialStates();
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 holder = scienceLab.fetchLAChannel(channelNumber, data);
 
             } catch (NullPointerException e) {
