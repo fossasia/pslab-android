@@ -11,7 +11,6 @@
     <uses-feature
         android:name="android.hardware.sensor.light"
         android:required="true" />
-
     <uses-feature android:name="android.hardware.usb.host" />
 
     <application
@@ -26,13 +25,11 @@
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSplash">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activity.MainActivity"
@@ -46,6 +43,9 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
+
+        <activity android:name=".activity.SettingsActivity"/>
+
         <activity android:name=".activity.ShowLoggedData" />
         <activity
             android:name=".activity.PerformExperimentActivity"
@@ -61,25 +61,22 @@
         <activity
             android:name=".activity.LogicalAnalyzerActivity"
             android:configChanges="screenSize|orientation"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity android:name=".activity.SensorDataLoggerActivity" />
-
-        <activity android:name=".activity.MultimeterActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".activity.MultimeterActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PowerSourceActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:screenOrientation="portrait" />
-
-        <activity android:name=".activity.WaveGeneratorActivity"
-            android:screenOrientation="userLandscape"/>
-
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activity.WaveGeneratorActivity"
+            android:screenOrientation="userLandscape" />
         <activity
             android:name=".activity.LuxMeterActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
-
-        <activity android:name=".activity.AccelerometerActivity"/>
+        <activity android:name=".activity.AccelerometerActivity" />
 
         <activity
             android:name=".activity.Barometer_activity"
