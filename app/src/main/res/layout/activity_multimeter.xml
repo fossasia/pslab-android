@@ -1,269 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayout16"
-        android:layout_width="@dimen/multimeter_ll16_width"
-        android:layout_height="@dimen/multimeter_ll16_height"
-        android:layout_gravity="center"
-        android:layout_marginEnd="@dimen/multimeter_ll16_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_ll16_margin_left"
-        android:layout_marginRight="@dimen/multimeter_ll16_margin_right"
-        android:layout_marginStart="@dimen/multimeter_ll16_margin_left"
-        android:layout_marginTop="@dimen/multimeter_ll16_margin_top"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout14">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/id1"
-            android:textSize="@dimen/control_textsize_tiny"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/multimeter_layout_margin"
-            android:layout_marginStart="@dimen/multimeter_layout_margin"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/id4"
-            android:textSize="@dimen/control_textsize_tiny"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout14"
-        android:layout_width="@dimen/multimeter_ll14_width"
-        android:layout_height="@dimen/multimeter_ll14_height"
-        android:layout_gravity="center"
-        android:layout_marginEnd="@dimen/multimeter_ll14_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_ll14_margin_left"
-        android:layout_marginRight="@dimen/multimeter_ll14_margin_right"
-        android:layout_marginStart="@dimen/multimeter_ll14_margin_left"
-        android:layout_marginTop="@dimen/multimeter_ll14_margin_top"
-        app:layout_constraintEnd_toEndOf="@+id/knob_line6"
-        app:layout_constraintHorizontal_bias="0.42"
-        app:layout_constraintStart_toStartOf="@+id/knob_line6"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout13">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/id2"
-            android:textSize="@dimen/control_textsize_tiny"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/multimeter_layout_margin"
-            android:layout_marginStart="@dimen/multimeter_layout_margin"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/id3"
-            android:textSize="@dimen/control_textsize_tiny"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout13"
-        android:layout_width="@dimen/multimeter_ll13_width"
-        android:layout_height="@dimen/multimeter_ll13_height"
-        android:layout_gravity="center"
-        android:layout_marginEnd="@dimen/multimeter_ll13_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_ll13_margin_left"
-        android:layout_marginRight="@dimen/multimeter_ll13_margin_right"
-        android:layout_marginStart="@dimen/multimeter_ll13_margin_left"
-        android:layout_marginTop="@dimen/multimeter_ll13_margin_top"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-        app:layout_constraintHorizontal_bias="0.451"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/id3"
-            android:textSize="@dimen/control_textsize_tiny"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/multimeter_knobmarker3_topmargin"
-            android:layout_marginStart="@dimen/multimeter_knobmarker3_topmargin"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/id2"
-            android:textSize="@dimen/control_textsize_tiny"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout12"
-        android:layout_width="@dimen/multimeter_ll12_width"
-        android:layout_height="@dimen/multimeter_ll12_height"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/multimeter_ll12_margin_bottom"
-        android:layout_marginEnd="@dimen/multimeter_ll12_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_ll12_margin_left"
-        android:layout_marginRight="@dimen/multimeter_ll12_margin_right"
-        android:layout_marginStart="@dimen/multimeter_ll12_margin_left"
-        android:layout_marginTop="@dimen/multimeter_ll12_margin_top"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-        app:layout_constraintHorizontal_bias="0.46"
-        app:layout_constraintStart_toStartOf="@+id/knob_line6"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <TextView
-            android:id="@+id/textView21"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="@string/id4"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="@string/id1"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout10"
-        android:layout_width="@dimen/multimeter_ll10_width"
-        android:layout_height="@dimen/multimeter_ll10_height"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/multimeter_ll10_margin_bottom"
-        android:layout_marginEnd="@dimen/multimeter_ll10_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_ll10_margin_left"
-        android:layout_marginRight="@dimen/multimeter_ll10_margin_right"
-        android:layout_marginStart="@dimen/multimeter_ll10_margin_left"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintHorizontal_bias="0.47"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout">
-
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/ch3"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="@string/an8"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout11"
-        android:layout_width="@dimen/multimeter_ll11_width"
-        android:layout_height="@dimen/multimeter_ll11_height"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/multimeter_ll11_margin_bottom"
-        android:layout_marginEnd="@dimen/multimeter_ll11_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_ll11_margin_left"
-        android:layout_marginRight="@dimen/multimeter_ll11_margin_right"
-        android:layout_marginStart="@dimen/multimeter_ll11_margin_left"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintHorizontal_bias="0.462"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout">
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="@string/ch2"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="@string/sen"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout15"
-        android:layout_width="@dimen/multimeter_ll15_width"
-        android:layout_height="@dimen/multimeter_ll15_height"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/multimeter_ll15_margin_bottom"
-        android:layout_marginEnd="@dimen/multimeter_ll15_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_ll15_margin_left"
-        android:layout_marginRight="@dimen/multimeter_ll15_margin_right"
-        android:layout_marginStart="@dimen/multimeter_ll15_margin_left"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout11"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/ch1"
-            android:textSize="@dimen/control_textsize_tiny"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/multimeter_layout_margin"
-            android:layout_marginStart="@dimen/multimeter_layout_margin"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/cap"
-            android:textSize="@dimen/control_textsize_tiny"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
     <View
-        android:id="@+id/view3"
+        android:id="@+id/mid_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/multimeter_knoblines_width"
         android:layout_centerVertical="true"
@@ -273,69 +16,15 @@
         android:layout_marginRight="@dimen/multimeter_knoblines_margin_right"
         android:layout_marginStart="@dimen/multimeter_knoblines_margin_left"
         android:background="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/knob_line24"
-        app:layout_constraintEnd_toStartOf="@+id/view2"
-        app:layout_constraintStart_toEndOf="@+id/knob_line"
-        app:layout_constraintTop_toTopOf="@+id/knob_line24"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/knob_line_center"
+        app:layout_constraintEnd_toStartOf="@+id/knob_line_right"
+        app:layout_constraintStart_toEndOf="@+id/knob_line_left"
+        app:layout_constraintTop_toTopOf="@+id/knob_line_center"
         app:layout_constraintVertical_bias="0.447" />
-
-    <View
-        android:id="@+id/view4"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/multimeter_knoblines_width"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/multimeter_knoblines_margin_bottom"
-        android:layout_marginEnd="@dimen/multimeter_knoblines_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_knoblines_margin_left"
-        android:layout_marginRight="@dimen/multimeter_knoblines_margin_right"
-        android:layout_marginStart="@dimen/multimeter_knoblines_margin_left"
-        android:background="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/knob_line24"
-        app:layout_constraintEnd_toStartOf="@+id/view2"
-        app:layout_constraintStart_toEndOf="@+id/knob_line"
-        app:layout_constraintTop_toTopOf="@+id/knob_line24"
-        app:layout_constraintVertical_bias="0.447" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="@dimen/multimeter_heading_ll_width"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/view2"
-        app:layout_constraintStart_toEndOf="@+id/knob_line"
-        app:layout_constraintTop_toTopOf="@+id/knob_line">
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:paddingBottom="@dimen/multimeter_button_text_padding"
-            android:paddingTop="@dimen/multimeter_button_text_padding"
-            android:text="@string/voltage_channels"
-            android:textColor="@color/white"
-            android:textSize="@dimen/multimeter_heading_ll_text_size"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:gravity="center_horizontal"
-            android:paddingBottom="@dimen/multimeter_button_text_padding"
-            android:paddingTop="@dimen/multimeter_button_text_padding"
-            android:text="@string/voltage_elements"
-            android:textColor="@color/white"
-            android:textSize="@dimen/multimeter_heading_ll_text_size"
-            android:textStyle="bold" />
-    </LinearLayout>
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/display_box"
         android:layout_width="@dimen/multimeter_textbox_width"
         android:layout_height="@dimen/multimeter_textbox_height"
         android:layout_marginEnd="@dimen/multimeter_textbox_margin_right"
@@ -356,11 +45,10 @@
         android:layout_marginRight="@dimen/multimeter_valuebox_margin_right"
         android:layout_marginTop="@dimen/multimeter_valuebox_margin_top"
         android:textSize="@dimen/multimeter_quantity_dimen"
-        app:layout_constraintEnd_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/textView6" />
+        app:layout_constraintEnd_toEndOf="@+id/display_box"
+        app:layout_constraintTop_toTopOf="@+id/display_box" />
 
     <View
-        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/multimeter_line_width"
         android:layout_marginEnd="@dimen/multimeter_line_margin_right"
@@ -369,9 +57,9 @@
         android:layout_marginStart="@dimen/multimeter_line_margin_left"
         android:layout_marginTop="@dimen/multimeter_line_margin_top"
         android:background="@android:color/darker_gray"
-        app:layout_constraintEnd_toEndOf="@+id/textView6"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/textView6" />
+        app:layout_constraintEnd_toEndOf="@+id/display_box"
+        app:layout_constraintStart_toStartOf="@+id/display_box"
+        app:layout_constraintTop_toTopOf="@+id/display_box" />
 
     <TextView
         android:id="@+id/unit"
@@ -385,69 +73,32 @@
         android:textSize="@dimen/multimeter_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView6" />
-
-    <Button
-        android:id="@+id/resistance"
-        android:layout_width="@dimen/multimeter_button_width"
-        android:layout_height="@dimen/multimeter_button_height"
-        android:layout_marginEnd="@dimen/multimeter_left_button_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_left_button_margin_left"
-        android:layout_marginRight="@dimen/multimeter_left_button_margin_right"
-        android:layout_marginStart="@dimen/multimeter_left_button_margin_left"
-        android:layout_marginTop="@dimen/multimeter_left_button_margin_top"
-        android:background="@color/colorPrimary"
-        android:text="@string/resistance"
-        android:textColor="@color/white"
-        android:textSize="@dimen/multimeter_bottombutton_textsize"
-        app:layout_constraintEnd_toStartOf="@+id/capacitance"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <Button
-        android:id="@+id/capacitance"
-        android:layout_width="@dimen/multimeter_button_width"
-        android:layout_height="@dimen/multimeter_button_height"
-        android:layout_marginEnd="@dimen/multimeter_right_button_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_right_button_margin_left"
-        android:layout_marginRight="@dimen/multimeter_right_button_margin_right"
-        android:layout_marginStart="@dimen/multimeter_right_button_margin_left"
-        android:layout_marginTop="@dimen/multimeter_right_button_margin_top"
-        android:background="@color/colorPrimary"
-        android:text="@string/capacitance"
-        android:textColor="@color/white"
-        android:textSize="@dimen/multimeter_bottombutton_textsize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/resistance"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toTopOf="@+id/display_box" />
 
     <View
-        android:id="@+id/kno_line"
+        android:id="@+id/knob_line_up"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/multimeter_knoblines_width"
-        android:layout_marginEnd="@dimen/multimeter_square_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_square_margin_left"
-        android:layout_marginRight="@dimen/multimeter_square_margin_right"
-        android:layout_marginStart="@dimen/multimeter_square_margin_left"
-        android:layout_marginTop="@dimen/multimeter_square_horizontal_line_margin_top"
+        android:layout_height="@dimen/multimeter_line_width"
         android:background="@android:color/black"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resistance" />
+        app:layout_constraintTop_toBottomOf="@+id/unit" />
 
     <View
-        android:id="@+id/knob_line"
+        android:id="@+id/knob_line_left"
         android:layout_width="@dimen/multimeter_knoblines_width"
         android:layout_height="@dimen/multimeter_square_vertical_line_height"
-        android:layout_marginLeft="@dimen/multimeter_square_margin_left"
-        android:layout_marginStart="@dimen/multimeter_square_margin_left"
+        android:layout_marginLeft="@dimen/multimeter_left_button_margin_left"
+        android:layout_marginStart="@dimen/multimeter_left_button_margin_left"
         android:background="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/knob_line6"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/knob_line_bottom"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kno_line" />
+        app:layout_constraintTop_toBottomOf="@+id/knob_line_up" />
 
     <View
-        android:id="@+id/knob_line24"
+        android:id="@+id/knob_line_center"
         android:layout_width="@dimen/multimeter_knoblines_width"
         android:layout_height="@dimen/multimeter_square_vertical_line_height"
         android:layout_marginEnd="@dimen/multimeter_square_center_vertical_margin_right"
@@ -455,10 +106,11 @@
         android:layout_marginRight="@dimen/multimeter_square_center_vertical_margin_right"
         android:layout_marginStart="@dimen/multimeter_square_center_vertical_margin_left"
         android:background="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/knob_line6"
-        app:layout_constraintEnd_toStartOf="@+id/view2"
-        app:layout_constraintStart_toEndOf="@+id/knob_line"
-        app:layout_constraintTop_toBottomOf="@+id/kno_line"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/knob_line_bottom"
+        app:layout_constraintEnd_toStartOf="@+id/knob_line_right"
+        app:layout_constraintStart_toEndOf="@+id/knob_line_left"
+        app:layout_constraintTop_toBottomOf="@+id/knob_line_up"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -495,48 +147,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/reset" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="@dimen/multimeter_heading_ll_width"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/knob_line6"
-        app:layout_constraintEnd_toEndOf="@+id/view2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/knob_line">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:gravity="center_horizontal"
-            android:paddingBottom="@dimen/multimeter_button_text_padding"
-            android:paddingTop="@dimen/multimeter_button_text_padding"
-            android:text="@string/frequency"
-            android:textColor="@color/white"
-            android:textSize="@dimen/multimeter_heading_ll_text_size"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:gravity="center_horizontal"
-            android:paddingBottom="@dimen/multimeter_button_text_padding"
-            android:paddingTop="@dimen/multimeter_button_text_padding"
-            android:text="@string/count_pulse"
-            android:textColor="@color/white"
-            android:textSize="@dimen/multimeter_heading_ll_text_size"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
     <View
-        android:id="@+id/knob_line9"
+        android:id="@+id/knob_line_center2"
         android:layout_width="@dimen/multimeter_knoblines_width"
         android:layout_height="@dimen/multimeter_square_vertical_line_height"
         android:layout_centerHorizontal="true"
@@ -545,83 +157,352 @@
         android:layout_marginRight="@dimen/multimeter_square_center_vertical_margin_right"
         android:layout_marginStart="@dimen/multimeter_square_center_vertical_margin_left"
         android:background="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/knob_line24"
-        app:layout_constraintEnd_toStartOf="@+id/view2"
-        app:layout_constraintStart_toEndOf="@+id/knob_line"
-        app:layout_constraintTop_toTopOf="@+id/knob_line24" />
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/knob_line_center"
+        app:layout_constraintEnd_toStartOf="@+id/knob_line_right"
+        app:layout_constraintStart_toEndOf="@+id/knob_line_left"
+        app:layout_constraintTop_toTopOf="@+id/knob_line_center" />
 
     <View
-        android:id="@+id/knob_line6"
+        android:id="@+id/knob_line_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/multimeter_knoblines_width"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/multimeter_square_horizontal_line_margin_bottom"
-        android:layout_marginEnd="@dimen/multimeter_square_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_square_margin_left"
-        android:layout_marginRight="@dimen/multimeter_square_margin_right"
-        android:layout_marginStart="@dimen/multimeter_square_margin_left"
+        android:layout_marginEnd="@dimen/multimeter_right_button_margin_right"
+        android:layout_marginLeft="@dimen/multimeter_left_button_margin_left"
+        android:layout_marginRight="@dimen/multimeter_right_button_margin_right"
+        android:layout_marginStart="@dimen/multimeter_left_button_margin_left"
         android:background="@android:color/black"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/reset"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <View
-        android:id="@+id/view2"
+        android:id="@+id/knob_line_right"
         android:layout_width="@dimen/multimeter_knoblines_width"
         android:layout_height="@dimen/multimeter_square_vertical_line_height"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginEnd="@dimen/multimeter_square_margin_right"
-        android:layout_marginRight="@dimen/multimeter_square_margin_right"
         android:background="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/knob_line6"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/knob_line_bottom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kno_line" />
+        app:layout_constraintTop_toBottomOf="@+id/knob_line_up"
+        app:layout_constraintVertical_bias="0.0" />
 
     <it.beppi.knoblibrary.Knob
         android:id="@+id/knobs"
         android:layout_width="@dimen/multimeter_knob_width"
         android:layout_height="@dimen/multimeter_knob_height"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/multimeter_knob_width"
         android:layout_marginEnd="@dimen/multimeter_knob_margin_right"
         android:layout_marginLeft="@dimen/multimeter_knob_margin_left"
         android:layout_marginRight="@dimen/multimeter_knob_margin_right"
         android:layout_marginStart="@dimen/multimeter_knob_margin_left"
-        android:layout_marginTop="@dimen/multimeter_knob_margin_top"
+        android:layout_marginTop="@dimen/multimeter_constraint_3"
         android:layout_weight="1"
-        android:rotation="90"
+        app:kIndicatorWidth="@dimen/multimeter_zero_length"
         app:kKnobCenterColor="@color/colorPrimaryDark"
         app:kKnobColor="@color/white"
+        app:kKnobDrawable="@drawable/knob"
+        app:kKnobDrawableRotates="true"
         app:kKnobRelativeRadius="0.99"
-        app:kNumberOfStates="14"
-        app:kSelectedStateMarkerColor="@color/white"
+        app:kMaxAngle="120.0"
+        app:kMinAngle="-120.0"
+        app:kNumberOfStates="6"
+        app:kSelectedStateMarkerColor="@color/colorPrimary"
         app:kStateMarkersColor="@color/black"
         app:kStateMarkersWidth="1dp"
-        app:layout_constraintBottom_toBottomOf="@+id/knob_line9"
-        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintBottom_toBottomOf="@+id/knob_line_center2"
+        app:layout_constraintEnd_toEndOf="@+id/knob_line_right"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/knob_line9" />
+        app:layout_constraintTop_toTopOf="@+id/knob_line_center2" />
 
     <TextView
-        android:id="@+id/knob_center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="@dimen/multimeter_knob_text_margin_bottom"
-        android:layout_marginEnd="@dimen/multimeter_knob_text_margin_right"
-        android:layout_marginLeft="@dimen/multimeter_knob_text_margin_left"
-        android:layout_marginRight="@dimen/multimeter_knob_text_margin_right"
-        android:layout_marginStart="@dimen/multimeter_knob_text_margin_left"
-        android:layout_marginTop="@dimen/multimeter_knob_text_margin_top"
-        android:layout_weight="1"
-        android:background="@color/colorPrimaryDark"
-        android:text="@string/id1"
-        android:textColor="@color/white"
-        android:textSize="@dimen/multimeter_textsize"
-        app:layout_constraintBottom_toBottomOf="@+id/knob_line9"
-        app:layout_constraintEnd_toEndOf="@+id/view2"
-        app:layout_constraintStart_toStartOf="@+id/knob_line"
-        app:layout_constraintTop_toTopOf="@+id/knob_line9"
-        app:layout_constraintVertical_bias="0.489" />
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/voltage_elements_abbreviation"
+        android:textColor="@color/black"
+        android:textSize="@dimen/control_textsize_tiny"
+        app:layout_constraintCircle="@id/knobs"
+        app:layout_constraintCircleAngle="336"
+        app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/frequency_abbreviation"
+        android:textColor="@color/black"
+        android:textSize="@dimen/control_textsize_tiny"
+        app:layout_constraintCircle="@id/knobs"
+        app:layout_constraintCircleAngle="24"
+        app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/voltage_channels_abbreviation"
+        android:textColor="@color/black"
+        app:layout_constraintCircle="@id/knobs"
+        app:layout_constraintCircleAngle="288"
+        app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/resistance_abbreviation"
+        android:textColor="@color/black"
+        android:textSize="@dimen/multimeter_bottombutton_textsize"
+        app:layout_constraintCircle="@id/knobs"
+        app:layout_constraintCircleAngle="240"
+        app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1" />
+
+    <ImageView
+        android:layout_width="@dimen/multimeter_symol_width"
+        android:layout_height="@dimen/multimeter_symbol_height"
+        app:layout_constraintCircle="@id/knobs"
+        app:layout_constraintCircleAngle="72"
+        app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1"
+        app:srcCompat="@drawable/count_pulse" />
+
+    <ImageView
+        android:layout_width="@dimen/multimeter_symol_width"
+        android:layout_height="@dimen/multimeter_symbol_height"
+        android:rotation="-90"
+        app:layout_constraintCircle="@id/knobs"
+        app:layout_constraintCircleAngle="120"
+        app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1"
+        app:srcCompat="@drawable/capacitor" />
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/multimeter_zero_length"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/multimeter_constraint_length"
+        android:layout_marginEnd="@dimen/multimeter_layout_margin"
+        android:layout_marginLeft="@dimen/multimeter_layout_margin"
+        android:layout_marginRight="@dimen/multimeter_layout_margin"
+        android:layout_marginStart="@dimen/multimeter_layout_margin"
+        android:layout_marginTop="@dimen/multimeter_constraint_length"
+        card_view:cardCornerRadius="@dimen/multimeter_card_radius"
+        card_view:layout_constraintBottom_toBottomOf="@+id/knob_line_bottom"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/knobs">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/description_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/multimeter_layout_margin"
+                android:layout_marginRight="@dimen/multimeter_layout_margin"
+                android:layout_marginTop="@dimen/multimeter_layout_margin"
+                android:fontFamily="serif"
+                android:text="@string/frequency_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/id_pins"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/description_box"
+                android:layout_marginBottom="@dimen/multimeter_constraint_length2"
+                android:layout_marginLeft="@dimen/multimeter_layout_margin"
+                android:layout_marginRight="@dimen/multimeter_layout_margin"
+                android:layout_marginTop="@dimen/multimeter_layout_margin"
+                android:visibility="visible">
+
+                <RadioButton
+                    android:id="@+id/id1"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/id1" />
+
+                <RadioButton
+                    android:id="@+id/id2"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/id2" />
+
+                <RadioButton
+                    android:id="@+id/id3"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/id3" />
+
+                <RadioButton
+                    android:id="@+id/id4"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/id4" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/channel_pins"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/description_box"
+                android:layout_marginBottom="@dimen/multimeter_constraint_length2"
+                android:layout_marginLeft="@dimen/multimeter_layout_margin"
+                android:layout_marginRight="@dimen/multimeter_layout_margin"
+                android:layout_marginTop="@dimen/multimeter_layout_margin"
+                android:visibility="invisible">
+
+                <RadioButton
+                    android:id="@+id/ch1"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/ch1" />
+
+                <RadioButton
+                    android:id="@+id/ch2"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/ch2" />
+
+                <RadioButton
+                    android:id="@+id/ch3"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/ch3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/resistance_units"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/description_box"
+                android:layout_marginBottom="@dimen/multimeter_constraint_length2"
+                android:layout_marginLeft="@dimen/multimeter_layout_margin"
+                android:layout_marginRight="@dimen/multimeter_layout_margin"
+                android:layout_marginTop="@dimen/multimeter_layout_margin"
+                android:visibility="invisible">
+
+                <RadioButton
+                    android:id="@+id/unit_ohms"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/resistance_unit_1"
+                    android:textSize="@dimen/multimeter_radio_textsize" />
+
+                <RadioButton
+                    android:id="@+id/unit_kohms"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/resistance_unit_2"
+                    android:textSize="@dimen/multimeter_radio_textsize" />
+
+                <RadioButton
+                    android:id="@+id/unit_mohms"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/resistance_unit_3"
+                    android:textSize="@dimen/multimeter_radio_textsize" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/elements_pins"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/description_box"
+                android:layout_marginBottom="@dimen/multimeter_constraint_length2"
+                android:layout_marginLeft="@dimen/multimeter_layout_margin"
+                android:layout_marginRight="@dimen/multimeter_layout_margin"
+                android:layout_marginTop="@dimen/multimeter_layout_margin"
+                android:visibility="invisible">
+
+                <RadioButton
+                    android:id="@+id/sen_pin"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/sen" />
+
+                <RadioButton
+                    android:id="@+id/cap_pin"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/cap" />
+
+                <RadioButton
+                    android:id="@+id/an8_pin"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/an8" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/capacitance_units"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/description_box"
+                android:layout_marginBottom="@dimen/multimeter_constraint_length2"
+                android:layout_marginLeft="@dimen/multimeter_layout_margin"
+                android:layout_marginRight="@dimen/multimeter_layout_margin"
+                android:layout_marginTop="@dimen/multimeter_layout_margin"
+                android:visibility="invisible">
+
+                <RadioButton
+                    android:id="@+id/unit_farad"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/capacitance_unit_1" />
+
+                <RadioButton
+                    android:id="@+id/unit_mfarad"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/capacitance_unit_2" />
+
+                <RadioButton
+                    android:id="@+id/pfarad"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/capacitance_unit_3" />
+
+                <RadioButton
+                    android:id="@+id/unit__microfarad"
+                    android:layout_width="@dimen/multimeter_zero_length"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/capacitance_unit_4" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 
 </android.support.constraint.ConstraintLayout>

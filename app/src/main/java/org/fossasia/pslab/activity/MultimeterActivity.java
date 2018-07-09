@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,262 +40,93 @@ public class MultimeterActivity extends AppCompatActivity {
 
     private ScienceLab scienceLab;
 
+    @BindView(R.id.knobs)
+    Knob knob;
     @BindView(R.id.quantity)
     TextView quantity;
     @BindView(R.id.unit)
     TextView unit;
-    @BindView(R.id.knob_center)
-    TextView knobSelection;
-    @BindView(R.id.knobs)
-    Knob knob;
-    @BindView(R.id.reset)
-    Button reset;
-    @BindView(R.id.read)
-    Button read;
-    @BindView(R.id.capacitance)
-    Button readCapacitance;
-    @BindView(R.id.resistance)
-    Button readResistance;
+    @BindView(R.id.description_box)
+    TextView descriptionBox;
 
-    //bottomSheet
-    @BindView(R.id.bottom_sheet)
-    LinearLayout bottomSheet;
-    @BindView(R.id.shadow)
-    View tvShadow;
-    @BindView(R.id.img_arrow)
-    ImageView arrowUpDown;
-    @BindView(R.id.sheet_slide_text)
-    TextView bottomSheetSlideText;
-    @BindView(R.id.guide_title)
-    TextView bottomSheetGuideTitle;
-    @BindView(R.id.custom_dialog_text)
-    TextView bottomSheetText;
-    @BindView(R.id.custom_dialog_schematic)
-    ImageView bottomSheetSchematic;
-    @BindView(R.id.custom_dialog_desc)
-    TextView bottomSheetDesc;
+    //Linear layouts
+    @BindView(R.id.id_pins)
+    LinearLayout idPins;
+    @BindView(R.id.elements_pins)
+    LinearLayout voltageElements;
+    @BindView(R.id.channel_pins)
+    LinearLayout voltageChannels;
+    @BindView(R.id.capacitance_units)
+    LinearLayout capacitanceUnits;
+    @BindView(R.id.resistance_units)
+    LinearLayout resistanceUnits;
 
-    private int knobState;
+    private int knobState=0;
     private String[] knobMarker;
 
-    BottomSheetBehavior bottomSheetBehavior;
-    GestureDetector gestureDetector;
-    public static final String PREFS_NAME = "customDialogPreference";
+    private RadioButton[] id_buttons = new RadioButton[4];
+    private String[] id_pins = {"ID1", "ID2", "ID3", "ID4"};
 
-    public static final String NAME = "savingData";
-    SharedPreferences multimeter_data;
+    private RadioButton[] channel_buttons = new RadioButton[3];
+    private String[] channel_pins = {"CH1", "CH2", "CH3"};
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_multimeter_main);
+        setContentView(R.layout.activity_multimeter);
         ButterKnife.bind(this);
-        scienceLab = ScienceLabCommon.scienceLab;
-        knobMarker = getResources().getStringArray(org.fossasia.pslab.R.array.multimeter_knob_states);
-        setUpBottomSheet();
-        multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
-        knobState = multimeter_data.getInt("KnobState", 0);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/digital-7 (italic).ttf");
-        quantity.setTypeface(tf);
-
-        String text_quantity = multimeter_data.getString("TextBox", null);
-        String text_unit = multimeter_data.getString("TextBoxUnit", null);
         knob.setState(knobState);
-        knobSelection.setText(knobMarker[knobState]);
-        quantity.setText(text_quantity);
-        unit.setText(text_unit);
+        changeCardViewLayout(knobState);
 
-        readResistance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (scienceLab.isConnected()) {
-                    DecimalFormat resistanceFormat = new DecimalFormat("#.##");
-                    Double resistance;
-                    Double avgResistance = 0.0;
-                    int loops = 20;
-                    for (int i = 0; i < loops; i++) {
-                        resistance = scienceLab.getResistance();
-                        if (resistance == null) {
-                            avgResistance = null;
-                            break;
-                        } else {
-                            avgResistance = avgResistance + resistance / loops;
-                        }
-                    }
-                    String resistanceUnit;
-                    String Resistance = "";
-                    if (avgResistance == null) {
-                        Resistance = "Infinity";
-                        resistanceUnit = "\u2126";
-                    } else {
-                        if (avgResistance > 10e5) {
-                            Resistance = resistanceFormat.format((avgResistance / 10e5));
-                            resistanceUnit = "M" + "\u2126";
-                        } else if (avgResistance > 10e2) {
-                            Resistance = resistanceFormat.format((avgResistance / 10e2));
-                            resistanceUnit = "k" + "\u2126";
-                        } else if (avgResistance > 1) {
-                            Resistance = resistanceFormat.format(avgResistance);
-                            resistanceUnit = "\u2126";
-                        } else {
-                            Resistance = "Cannot measure!";
-                            resistanceUnit = "";
-                        }
-                    }
-                    saveAndSetData(Resistance, resistanceUnit);
-                }
-            }
-        });
-        readCapacitance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (scienceLab.isConnected()) {
-                    Double capacitance = scienceLab.getCapacitance();
-                    DecimalFormat capacitanceFormat = new DecimalFormat("#.##");
-                    String Capacitance;
-                    String capacitanceUnit;
-                    if (capacitance < 1e-9) {
-                        Capacitance = capacitanceFormat.format((capacitance / 1e-12));
-                        capacitanceUnit = "pF";
-                    } else if (capacitance < 1e-6) {
-                        Capacitance = capacitanceFormat.format((capacitance / 1e-9));
-                        capacitanceUnit = "nF";
-                    } else if (capacitance < 1e-3) {
-                        Capacitance = capacitanceFormat.format((capacitance / 1e-6));
-                        capacitanceUnit = "\u00B5" + "F";
-                    } else if (capacitance < 1e-1) {
-                        Capacitance = capacitanceFormat.format((capacitance / 1e-3));
-                        capacitanceUnit = "mF";
-                    } else {
-                        Capacitance = capacitanceFormat.format(capacitance);
-                        capacitanceUnit = getString(R.string.capacitance_unit);
-                    }
-                    saveAndSetData(Capacitance, capacitanceUnit);
-                }
-            }
-        });
         knob.setOnStateChanged(new Knob.OnStateChanged() {
             @Override
-            public void onState(int state) {
-                knobState = state;
-                saveKnobState(knobState);
-                knobSelection.setText(knobMarker[knobState]);
+            public void onState(int i) {
+                knobState = i;
+                changeCardViewLayout(knobState);
             }
         });
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                multimeter_data.edit().clear().commit();
-                knobState = 0;
-                knob.setState(knobState);
-                knobSelection.setText(knobMarker[knobState]);
-                quantity.setText("");
-                unit.setText("");
-            }
-        });
-        read.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (knobState < 4) {
-                    if (scienceLab.isConnected()) {
-                        scienceLab.countPulses(knobMarker[knobState]);
-                        double pulseCount = scienceLab.readPulseCount();
-                        saveAndSetData(String.valueOf(pulseCount), "");
-                    }
-                } else if (knobState < 8) {
-                    if (scienceLab.isConnected()) {
-                        Double frequency = scienceLab.getFrequency(knobMarker[knobState], null);
-                        saveAndSetData(String.valueOf(frequency), getString(R.string.frequency_unit));
-                    }
-                } else {
-                    if (scienceLab.isConnected()) {
-                        saveAndSetData(String.valueOf(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1))), getString(R.string.multimeter_voltage_unit));
-                    }
-                }
-            }
-        });
-
     }
 
-    private void setUpBottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        final SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        Boolean isFirstTime = settings.getBoolean("MultimeterFirstTime", true);
-
-        bottomSheetGuideTitle.setText(R.string.multimeter_dialog_heading);
-        bottomSheetText.setText(R.string.multimeter_dialog_text);
-        bottomSheetSchematic.setImageResource(R.drawable.multimeter_circuit);
-        bottomSheetDesc.setText(R.string.multimeter_dialog_description);
-
-        if (isFirstTime) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            tvShadow.setAlpha(0.8f);
-            arrowUpDown.setRotation(180);
-            bottomSheetSlideText.setText(R.string.hide_guide_text);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("MultimeterFirstTime", false);
-            editor.apply();
-        } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    private void changeCardViewLayout(int state) {
+        switch (state) {
+            case 0:
+                descriptionBox.setText(R.string.resistance_description);
+                showLayout(resistanceUnits);
+                break;
+            case 1:
+                descriptionBox.setText(R.string.voltage_channel_description);
+                showLayout(voltageChannels);
+                break;
+            case 2:
+                descriptionBox.setText(R.string.voltage_elements_description);
+                showLayout(voltageElements);
+                break;
+            case 3:
+                descriptionBox.setText(R.string.frequency_description);
+                showLayout(idPins);
+                break;
+            case 4:
+                descriptionBox.setText(R.string.count_pulse_description);
+                showLayout(idPins);
+                break;
+            case 5:
+                descriptionBox.setText(R.string.capacitance_description);
+                showLayout(capacitanceUnits);
+                break;
+            default:
+                descriptionBox.setText(R.string.resistance_description);
+                showLayout(resistanceUnits);
+                break;
         }
-
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private Handler handler = new Handler();
-            private Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-            };
-
-            @Override
-            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.hide_guide_text);
-                        break;
-
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        handler.postDelayed(runnable, 2000);
-                        break;
-
-                    default:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.show_guide_text);
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
-                tvShadow.setAlpha(value);
-                arrowUpDown.setRotation(slideOffset * 180);
-            }
-        });
-        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
-        return super.onTouchEvent(event);
-    }
-
-    private void saveAndSetData(String Quantity, String Unit) {
-        SharedPreferences.Editor editor = multimeter_data.edit();
-        editor.putString("TextBox", Quantity);
-        editor.putString("TextBoxUnit", Unit);
-        editor.commit();
-        quantity.setText(Quantity);
-        unit.setText(Unit);
-    }
-
-    private void saveKnobState(int state) {
-        SharedPreferences.Editor editor = multimeter_data.edit();
-        editor.putInt("KnobState", state);
-        editor.commit();
+    private void showLayout(LinearLayout layout) {
+        voltageChannels.setVisibility(View.INVISIBLE);
+        voltageElements.setVisibility(View.INVISIBLE);
+        resistanceUnits.setVisibility(View.INVISIBLE);
+        capacitanceUnits.setVisibility(View.INVISIBLE);
+        idPins.setVisibility(View.INVISIBLE);
+        layout.setVisibility(View.VISIBLE);
     }
 }
