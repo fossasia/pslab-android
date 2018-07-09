@@ -50,10 +50,11 @@
     </string-array>
 
     <string-array name="multimeter_knob_states">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>CAP</item>
+        <item>SEN</item>
+        <item>AN8</item>
+        <item>RES</item>
+        <item>C</item>
         <item>ID1</item>
         <item>ID2</item>
         <item>ID3</item>
@@ -61,9 +62,6 @@
         <item>CH3</item>
         <item>CH2</item>
         <item>CH1</item>
-        <item>CAP</item>
-        <item>SEN</item>
-        <item>AN8</item>
     </string-array>
 
     <string name="id1">ID1</string>
@@ -74,8 +72,29 @@
     <string name="capacitance_unit">Farad</string>
     <string name="frequency_unit">Hz</string>
     <string name="multimeter_voltage_unit">Volts</string>
-    <string name="voltage_channels">Voltage at Channels</string>
+    <string name="voltage_channels">Voltage</string>
     <string name="voltage_elements">Voltage at Elements</string>
+    <string name="resistance_description"><b>Resistance:</b> Measures the resistance of the element connected to the SEN pin of the PSLab device</string>
+    <string name="frequency_description"><b>Frequency:</b> Measures the frequency across any element connected between any of ID pins</string>
+    <string name="count_pulse_description"><b>Count Pulse:</b> Measures the pulse of any wave through an element connected across any of ID pins</string>
+    <string name="capacitance_description"><b>Capcitance:</b> Measures the capacitance of the element connected to the CAP pin of the PSLab device.</string>
+    <string name="voltage_channel_description"><b>Voltage:</b> Measures the voltage of any elements connect across any of the channel pins and other pins such as AN8</string>
+    <string name="resistance_abbreviation">\u2126</string>
+    <string name="capacitance_abbreviation">C</string>
+    <string name="multimeter_measure">Measure</string>
+
+    <string name="multimeter_angle_1">15</string>
+    <string name="multimeter_angle_2">45</string>
+    <string name="multimeter_angle_3">75</string>
+    <string name="multimeter_angle_4">105</string>
+    <string name="multimeter_angle_5">135</string>
+    <string name="multimeter_angle_6">165</string>
+    <string name="multimeter_angle_7">195</string>
+    <string name="multimeter_angle_8">225</string>
+    <string name="multimeter_angle_9">255</string>
+    <string name="multimeter_angle_10">285</string>
+    <string name="multimeter_angle_11">315</string>
+    <string name="multimeter_angle_12">345</string>
 
     <string name="set">SET</string>
     <string name="read">READ</string>
