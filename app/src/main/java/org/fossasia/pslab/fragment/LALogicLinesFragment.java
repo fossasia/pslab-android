@@ -98,6 +98,7 @@ public class LALogicLinesFragment extends Fragment {
     private ProgressBar progressBar;
     private CaptureOne captureOne;
     private CaptureTwo captureTwo;
+    private CaptureThree captureThree;
     private int currentChannel = 0;
     private int[] colors = new int[]{Color.MAGENTA, Color.GREEN, Color.CYAN, Color.YELLOW};
     private OnChartValueSelectedListener listener;
@@ -313,106 +314,139 @@ public class LALogicLinesFragment extends Fragment {
         analyze_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (scienceLab.isConnected()) {
-                    analyze_button.setClickable(false);
-                    switch (channelMode) {
-                        case 1:
-                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                            break;
-                        case 2:
-                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                            channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
-                            break;
-                        case 3:
-                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                            channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
-                            channelNames.add(channelSelectSpinner3.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner3.getSelectedItem().toString());
-                            break;
-                        case 4:
-                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                            channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
-                            channelNames.add(channelSelectSpinner3.getSelectedItem().toString());
-                            channelNames.add(channelSelectSpinner4.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner3.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner4.getSelectedItem().toString());
-                            break;
-                        default:
-                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                            break;
-                    }
-
-                    if (channelMode == 1) {
-                        progressBar.setVisibility(View.VISIBLE);
-                        ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
-                        Thread monitor = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                captureOne = new CaptureOne();
-                                captureOne.execute(channelNames.get(0), edgesNames.get(0));
-                                synchronized (lock) {
-                                    try {
-                                        lock.wait();
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
+                if (channelMode > 0) {
+                    if (scienceLab.isConnected()) {
+                        analyze_button.setClickable(false);
+                        switch (channelMode) {
+                            case 1:
+                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                                break;
+                            case 2:
+                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                                channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
+                                break;
+                            case 3:
+                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                                channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
+                                channelNames.add(channelSelectSpinner3.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner3.getSelectedItem().toString());
+                                break;
+                            case 4:
+                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                                channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
+                                channelNames.add(channelSelectSpinner3.getSelectedItem().toString());
+                                channelNames.add(channelSelectSpinner4.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner3.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner4.getSelectedItem().toString());
+                                break;
+                            default:
+                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                                break;
+                        }
+                        Thread monitor;
+                        switch (channelMode) {
+                            case 1:
+                                progressBar.setVisibility(View.VISIBLE);
+                                ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
+                                monitor = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        captureOne = new CaptureOne();
+                                        captureOne.execute(channelNames.get(0), edgesNames.get(0));
+                                        synchronized (lock) {
+                                            try {
+                                                lock.wait();
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                        });
-                        monitor.start();
-                    } else if (channelMode == 2) {
-                        progressBar.setVisibility(View.VISIBLE);
-                        ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
-                        Thread monitor = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                captureTwo = new CaptureTwo();
-                                ArrayList<String> channels = new ArrayList<>();
-                                channels.add(channelNames.get(0));
-                                channels.add(channelNames.get(1));
-                                ArrayList<String> edges = new ArrayList<>();
-                                edges.add(edgesNames.get(0));
-                                edges.add(edgesNames.get(1));
-                                captureTwo.execute(channels, edges);
-                                synchronized (lock) {
-                                    try {
-                                        lock.wait();
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
+                                });
+                                monitor.start();
+                                break;
+                            case 2:
+                                progressBar.setVisibility(View.VISIBLE);
+                                ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
+                                monitor = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        captureTwo = new CaptureTwo();
+                                        ArrayList<String> channels = new ArrayList<>();
+                                        channels.add(channelNames.get(0));
+                                        channels.add(channelNames.get(1));
+                                        ArrayList<String> edges = new ArrayList<>();
+                                        edges.add(edgesNames.get(0));
+                                        edges.add(edgesNames.get(1));
+                                        captureTwo.execute(channels, edges);
+                                        synchronized (lock) {
+                                            try {
+                                                lock.wait();
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                        });
-                        monitor.start();
-                    } else {
-                        Toast.makeText(getContext(), getResources().getString(R.string.needs_implementation), Toast.LENGTH_SHORT).show();
-                    }
-
-                    // Setting cursor to display time at highlighted points
-                    listener = new OnChartValueSelectedListener() {
-                        @Override
-                        public void onValueSelected(Entry e, Highlight h) {
-                            double result = Math.round(e.getX() * 100.0) / 100.0;
-                            xCoordinateText.setText("Time:  " + String.valueOf(result) + " mS");
-                            Log.i("Entry selected", e.toString());
+                                });
+                                monitor.start();
+                                break;
+                            case 3:
+                                progressBar.setVisibility(View.VISIBLE);
+                                ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
+                                monitor = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        captureThree = new CaptureThree();
+                                        ArrayList<String> channels = new ArrayList<>();
+                                        channels.add(channelNames.get(0));
+                                        channels.add(channelNames.get(1));
+                                        channels.add(channelNames.get(2));
+                                        ArrayList<String> edges = new ArrayList<>();
+                                        edges.add(edgesNames.get(0));
+                                        edges.add(edgesNames.get(1));
+                                        edges.add(edgesNames.get(2));
+                                        captureThree.execute(channels, edges);
+                                        synchronized (lock) {
+                                            try {
+                                                lock.wait();
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                });
+                                monitor.start();
+                                break;
+                            default:
+                                Toast.makeText(getContext(), getResources().getString(R.string.needs_implementation), Toast.LENGTH_SHORT).show();
+                                break;
                         }
 
-                        @Override
-                        public void onNothingSelected() {
+                        // Setting cursor to display time at highlighted points
+                        listener = new OnChartValueSelectedListener() {
+                            @Override
+                            public void onValueSelected(Entry e, Highlight h) {
+                                double result = Math.round(e.getX() * 100.0) / 100.0;
+                                xCoordinateText.setText("Time:  " + String.valueOf(result) + " mS");
+                                Log.i("Entry selected", e.toString());
+                            }
 
-                        }
-                    };
-                    logicLinesChart.setOnChartValueSelectedListener(listener);
-                } else
-                    Toast.makeText(getContext(), getResources().getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onNothingSelected() {
+
+                            }
+                        };
+                        logicLinesChart.setOnChartValueSelectedListener(listener);
+                    } else
+                        Toast.makeText(getContext(), getResources().getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -636,8 +670,17 @@ public class LALogicLinesFragment extends Fragment {
         });
     }
 
+    public void delayThread(long delay) {
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private class CaptureOne extends AsyncTask<String, String, Void> {
-        boolean holder;
+        private boolean holder;
         String edgeOption = "";
 
         @Override
@@ -668,21 +711,9 @@ public class LALogicLinesFragment extends Fragment {
                 }
 
                 scienceLab.startOneChannelLA(params[0], digitalChannel.mode, params[0], 3);
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+                delayThread(1000);
                 LinkedHashMap<String, Integer> data = scienceLab.getLAInitialStates();
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+                delayThread(500);
                 holder = scienceLab.fetchLAChannel(channelNumber, data);
 
             } catch (NullPointerException e) {
@@ -750,7 +781,7 @@ public class LALogicLinesFragment extends Fragment {
     }
 
     private class CaptureTwo extends AsyncTask<ArrayList<String>, ArrayList<String>, Void> {
-        boolean holder1, holder2;
+        private boolean holder1, holder2;
         String[] edgeOption = new String[channelMode];
 
         @SafeVarargs
@@ -766,7 +797,6 @@ public class LALogicLinesFragment extends Fragment {
                 edgeOption[1] = arrayLists[1].get(1);
 
                 ArrayList<Integer> modes = new ArrayList<>();
-
                 for (int i = 0; i < channelMode; i++) {
                     switch (edgeOption[i]) {
                         case "EVERY EDGE":
@@ -796,29 +826,11 @@ public class LALogicLinesFragment extends Fragment {
                 }
 
                 scienceLab.startTwoChannelLA(arrayLists[0], modes, 67, null, null, null);
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+                delayThread(1000);
                 LinkedHashMap<String, Integer> data = scienceLab.getLAInitialStates();
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+                delayThread(500);
                 holder1 = scienceLab.fetchLAChannel(channelNumber1, data);
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+                delayThread(500);
                 holder2 = scienceLab.fetchLAChannel(channelNumber2, data);
 
             } catch (NullPointerException e) {
@@ -840,6 +852,128 @@ public class LALogicLinesFragment extends Fragment {
                 ArrayList<double[]> yaxis = new ArrayList<>();
                 yaxis.add(digitalChannelArray.get(0).getYAxis());
                 yaxis.add(digitalChannelArray.get(1).getYAxis());
+
+                // Plot the fetched data
+                for (int i = 0; i < channelMode; i++) {
+                    switch (edgeOption[i]) {
+                        case "EVERY EDGE":
+                            singleChannelEveryEdge(xaxis.get(i), yaxis.get(i));
+                            break;
+                        case "EVERY FOURTH RISING EDGE":
+                            singleChannelFourthRisingEdge(xaxis.get(i));
+                            break;
+                        default:
+                            singleChannelOtherEdges(xaxis.get(i), yaxis.get(i));
+                            break;
+                    }
+                    currentChannel++;
+                }
+
+                progressBar.setVisibility(View.GONE);
+                ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
+
+                logicLinesChart.setData(new LineData(dataSets));
+                logicLinesChart.invalidate();
+
+                YAxis left = logicLinesChart.getAxisLeft();
+                left.setValueFormatter(new ChannelAxisFormatter(channelNames));
+                left.setTextColor(Color.WHITE);
+                left.setGranularity(1f);
+                left.setTextSize(12f);
+                logicLinesChart.getAxisRight().setDrawLabels(false);
+                logicLinesChart.getDescription().setEnabled(false);
+                logicLinesChart.setScaleYEnabled(false);
+
+                synchronized (lock) {
+                    lock.notify();
+                }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
+                Toast.makeText(getContext(), getResources().getString(R.string.no_data_generated), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class CaptureThree extends AsyncTask<ArrayList<String>, ArrayList<String>, Void> {
+        private boolean holder1, holder2, holder3;
+        String[] edgeOption = new String[channelMode];
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(ArrayList<String>... arrayLists) {
+            try {
+                int channelNumber1 = scienceLab.calculateDigitalChannel(arrayLists[0].get(0));
+                int channelNumber2 = scienceLab.calculateDigitalChannel(arrayLists[0].get(1));
+                int channelNumber3 = scienceLab.calculateDigitalChannel(arrayLists[0].get(2));
+
+                digitalChannelArray.add(scienceLab.getDigitalChannel(channelNumber1));
+                digitalChannelArray.add(scienceLab.getDigitalChannel(channelNumber2));
+                digitalChannelArray.add(scienceLab.getDigitalChannel(channelNumber3));
+                edgeOption[0] = arrayLists[1].get(0);
+                edgeOption[1] = arrayLists[1].get(1);
+                edgeOption[2] = arrayLists[1].get(2);
+
+                ArrayList<Integer> modes = new ArrayList<>();
+                for (int i = 0; i < channelMode; i++) {
+                    switch (edgeOption[i]) {
+                        case "EVERY EDGE":
+                            digitalChannelArray.get(i).mode = EVERY_EDGE;
+                            modes.add(EVERY_EDGE);
+                            break;
+                        case "EVERY FALLING EDGE":
+                            digitalChannelArray.get(i).mode = EVERY_FALLING_EDGE;
+                            modes.add(EVERY_FALLING_EDGE);
+                            break;
+                        case "EVERY RISING EDGE":
+                            digitalChannelArray.get(i).mode = EVERY_RISING_EDGE;
+                            modes.add(EVERY_RISING_EDGE);
+                            break;
+                        case "EVERY FOURTH RISING EDGE":
+                            digitalChannelArray.get(i).mode = EVERY_FOURTH_RISING_EDGE;
+                            modes.add(EVERY_FOURTH_RISING_EDGE);
+                            break;
+                        case "DISABLED":
+                            digitalChannelArray.get(i).mode = DISABLED;
+                            modes.add(DISABLED);
+                            break;
+                        default:
+                            digitalChannelArray.get(i).mode = EVERY_EDGE;
+                            modes.add(EVERY_EDGE);
+                    }
+                }
+
+                scienceLab.startThreeChannelLA(modes, null, null);
+                delayThread(1000);
+                LinkedHashMap<String, Integer> data = scienceLab.getLAInitialStates();
+                delayThread(500);
+                holder1 = scienceLab.fetchLAChannel(channelNumber1, data);
+                delayThread(500);
+                holder2 = scienceLab.fetchLAChannel(channelNumber2, data);
+                delayThread(500);
+                holder3 = scienceLab.fetchLAChannel(channelNumber3, data);
+
+            } catch (NullPointerException e) {
+                cancel(true);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (holder1 && holder2 && holder3) {
+
+                ArrayList<double[]> xaxis = new ArrayList<>();
+                xaxis.add(digitalChannelArray.get(0).getXAxis());
+                xaxis.add(digitalChannelArray.get(1).getXAxis());
+                xaxis.add(digitalChannelArray.get(2).getXAxis());
+
+                ArrayList<double[]> yaxis = new ArrayList<>();
+                yaxis.add(digitalChannelArray.get(0).getYAxis());
+                yaxis.add(digitalChannelArray.get(1).getYAxis());
+                yaxis.add(digitalChannelArray.get(2).getYAxis());
 
                 // Plot the fetched data
                 for (int i = 0; i < channelMode; i++) {
