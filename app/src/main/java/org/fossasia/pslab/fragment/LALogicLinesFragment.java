@@ -12,6 +12,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -168,7 +169,7 @@ public class LALogicLinesFragment extends Fragment {
         // Carousel View
         carouselPicker = (CarouselPicker) v.findViewById(R.id.carouselPicker);
         llChannel1 = (LinearLayout) v.findViewById(R.id.ll_chart_channel_1);
-        llChannel1.setVisibility(View.GONE);
+        llChannel1.setVisibility(View.VISIBLE);
         llChannel2 = (LinearLayout) v.findViewById(R.id.ll_chart_channel_2);
         llChannel2.setVisibility(View.GONE);
         llChannel3 = (LinearLayout) v.findViewById(R.id.ll_chart_channel_3);
@@ -184,10 +185,7 @@ public class LALogicLinesFragment extends Fragment {
         edgeSelectSpinner3 = (Spinner) v.findViewById(R.id.edge_select_spinner_3);
         edgeSelectSpinner4 = (Spinner) v.findViewById(R.id.edge_select_spinner_4);
         analyze_button = (Button) v.findViewById(R.id.analyze_button);
-        selectChannelText = (TextView) v.findViewById(R.id.select_channel_description_text);
-        selectChannelText.setText(getResources().getString(R.string.channel_selection_description_text));
-        selectChannelText.setVisibility(View.VISIBLE);
-        channelMode = 0;
+        channelMode = 1;
 
         // Axis Indicator
         xCoordinateText = v.findViewById(R.id.x_coordinate_text);
@@ -255,25 +253,15 @@ public class LALogicLinesFragment extends Fragment {
                 if (state == 0) {
                     switch (carouselPicker.getCurrentItem()) {
                         case 0:
-                            channelMode = 0;
-                            selectChannelText.setVisibility(View.VISIBLE);
-                            llChannel1.setVisibility(View.GONE);
-                            llChannel2.setVisibility(View.GONE);
-                            llChannel3.setVisibility(View.GONE);
-                            llChannel4.setVisibility(View.GONE);
-                            break;
-                        case 1:
                             channelMode = 1;
-                            selectChannelText.setVisibility(View.GONE);
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.GONE);
                             llChannel3.setVisibility(View.GONE);
                             llChannel4.setVisibility(View.GONE);
                             channelSelectSpinner1.setEnabled(true);
                             break;
-                        case 2:
+                        case 1:
                             channelMode = 2;
-                            selectChannelText.setVisibility(View.GONE);
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.VISIBLE);
                             llChannel3.setVisibility(View.GONE);
@@ -281,9 +269,8 @@ public class LALogicLinesFragment extends Fragment {
                             channelSelectSpinner1.setEnabled(true);
                             channelSelectSpinner2.setEnabled(true);
                             break;
-                        case 3:
+                        case 2:
                             channelMode = 3;
-                            selectChannelText.setVisibility(View.GONE);
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.VISIBLE);
                             llChannel3.setVisibility(View.VISIBLE);
@@ -295,9 +282,8 @@ public class LALogicLinesFragment extends Fragment {
                             channelSelectSpinner2.setEnabled(false);
                             channelSelectSpinner3.setEnabled(false);
                             break;
-                        case 4:
+                        case 3:
                             channelMode = 4;
-                            selectChannelText.setVisibility(View.GONE);
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.VISIBLE);
                             llChannel3.setVisibility(View.VISIBLE);
@@ -313,7 +299,6 @@ public class LALogicLinesFragment extends Fragment {
                             break;
                         default:
                             channelMode = 1;
-                            selectChannelText.setVisibility(View.GONE);
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.GONE);
                             llChannel3.setVisibility(View.GONE);
@@ -328,108 +313,106 @@ public class LALogicLinesFragment extends Fragment {
         analyze_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (channelMode > 0) {
-                    if (scienceLab.isConnected()) {
-                        analyze_button.setClickable(false);
-                        switch (channelMode) {
-                            case 1:
-                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                                break;
-                            case 2:
-                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                                channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
-                                break;
-                            case 3:
-                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                                channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
-                                channelNames.add(channelSelectSpinner3.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner3.getSelectedItem().toString());
-                                break;
-                            case 4:
-                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                                channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
-                                channelNames.add(channelSelectSpinner3.getSelectedItem().toString());
-                                channelNames.add(channelSelectSpinner4.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner3.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner4.getSelectedItem().toString());
-                                break;
-                            default:
-                                channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
-                                edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
-                                break;
-                        }
+                if (scienceLab.isConnected()) {
+                    analyze_button.setClickable(false);
+                    switch (channelMode) {
+                        case 1:
+                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                            break;
+                        case 2:
+                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                            channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
+                            break;
+                        case 3:
+                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                            channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
+                            channelNames.add(channelSelectSpinner3.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner3.getSelectedItem().toString());
+                            break;
+                        case 4:
+                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                            channelNames.add(channelSelectSpinner2.getSelectedItem().toString());
+                            channelNames.add(channelSelectSpinner3.getSelectedItem().toString());
+                            channelNames.add(channelSelectSpinner4.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner2.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner3.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner4.getSelectedItem().toString());
+                            break;
+                        default:
+                            channelNames.add(channelSelectSpinner1.getSelectedItem().toString());
+                            edgesNames.add(edgeSelectSpinner1.getSelectedItem().toString());
+                            break;
+                    }
 
-                        if (channelMode == 1) {
-                            progressBar.setVisibility(View.VISIBLE);
-                            ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
-                            Thread monitor = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    captureOne = new CaptureOne();
-                                    captureOne.execute(channelNames.get(0), edgesNames.get(0));
-                                    synchronized (lock) {
-                                        try {
-                                            lock.wait();
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
+                    if (channelMode == 1) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
+                        Thread monitor = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                captureOne = new CaptureOne();
+                                captureOne.execute(channelNames.get(0), edgesNames.get(0));
+                                synchronized (lock) {
+                                    try {
+                                        lock.wait();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
                                     }
                                 }
-                            });
-                            monitor.start();
-                        } else if (channelMode == 2) {
-                            progressBar.setVisibility(View.VISIBLE);
-                            ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
-                            Thread monitor = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    captureTwo = new CaptureTwo();
-                                    ArrayList<String> channels = new ArrayList<>();
-                                    channels.add(channelNames.get(0));
-                                    channels.add(channelNames.get(1));
-                                    ArrayList<String> edges = new ArrayList<>();
-                                    edges.add(edgesNames.get(0));
-                                    edges.add(edgesNames.get(1));
-                                    captureTwo.execute(channels, edges);
-                                    synchronized (lock) {
-                                        try {
-                                            lock.wait();
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
+                            }
+                        });
+                        monitor.start();
+                    } else if (channelMode == 2) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        ((LogicalAnalyzerActivity) getActivity()).setStatus(true);
+                        Thread monitor = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                captureTwo = new CaptureTwo();
+                                ArrayList<String> channels = new ArrayList<>();
+                                channels.add(channelNames.get(0));
+                                channels.add(channelNames.get(1));
+                                ArrayList<String> edges = new ArrayList<>();
+                                edges.add(edgesNames.get(0));
+                                edges.add(edgesNames.get(1));
+                                captureTwo.execute(channels, edges);
+                                synchronized (lock) {
+                                    try {
+                                        lock.wait();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
                                     }
                                 }
-                            });
-                            monitor.start();
-                        } else {
-                            Toast.makeText(getContext(), getResources().getString(R.string.needs_implementation), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        monitor.start();
+                    } else {
+                        Toast.makeText(getContext(), getResources().getString(R.string.needs_implementation), Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Setting cursor to display time at highlighted points
+                    listener = new OnChartValueSelectedListener() {
+                        @Override
+                        public void onValueSelected(Entry e, Highlight h) {
+                            double result = Math.round(e.getX() * 100.0) / 100.0;
+                            xCoordinateText.setText("Time:  " + String.valueOf(result) + " mS");
+                            Log.i("Entry selected", e.toString());
                         }
 
-                        // Setting cursor to display time at highlighted points
-                        listener = new OnChartValueSelectedListener() {
-                            @Override
-                            public void onValueSelected(Entry e, Highlight h) {
-                                double result = Math.round(e.getX() * 100.0) / 100.0;
-                                xCoordinateText.setText("Time:  " + String.valueOf(result) + " mS");
-                                Log.i("Entry selected", e.toString());
-                            }
+                        @Override
+                        public void onNothingSelected() {
 
-                            @Override
-                            public void onNothingSelected() {
-
-                            }
-                        };
-                        logicLinesChart.setOnChartValueSelectedListener(listener);
-                    } else
-                        Toast.makeText(getContext(), getResources().getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
-                }
+                        }
+                    };
+                    logicLinesChart.setOnChartValueSelectedListener(listener);
+                } else
+                    Toast.makeText(getContext(), getResources().getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -553,16 +536,31 @@ public class LALogicLinesFragment extends Fragment {
         edgeSelectSpinner3.setAdapter(edges_adapter);
         edgeSelectSpinner4.setAdapter(edges_adapter);
 
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        double wi = (double) width / (double) dm.xdpi;
+        double hi = (double) height / (double) dm.ydpi;
+        double x = Math.pow(wi, 2);
+        double y = Math.pow(hi, 2);
+        double screenInches = Math.sqrt(x + y) + 0.01;
+        int textsize;
+        if (screenInches < 5)
+            textsize = 11;
+        else
+            textsize = 9;
+
         // Items for Carousel Picker
         List<CarouselPicker.PickerItem> channelModes = new ArrayList<>();
-        channelModes.add(new CarouselPicker.TextItem("SELECT", 9));
-        channelModes.add(new CarouselPicker.TextItem("1", 9));
-        channelModes.add(new CarouselPicker.TextItem("2", 9));
-        channelModes.add(new CarouselPicker.TextItem("3", 9));
-        channelModes.add(new CarouselPicker.TextItem("4", 9));
+        channelModes.add(new CarouselPicker.TextItem("1", textsize));
+        channelModes.add(new CarouselPicker.TextItem("2", textsize));
+        channelModes.add(new CarouselPicker.TextItem("3", textsize));
+        channelModes.add(new CarouselPicker.TextItem("4", textsize));
 
         CarouselPicker.CarouselViewAdapter channelAdapter = new CarouselPicker.CarouselViewAdapter(getContext(), channelModes, 0);
         carouselPicker.setAdapter(channelAdapter);
+        carouselPicker.setCurrentItem(0);
     }
 
     @Override
