@@ -58,6 +58,19 @@
                             android:textSize="@dimen/power_card_header_text"
                             android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/power_card_pv1_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_margin="@dimen/power_card_large_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/control_edittext"
+                            android:fontFamily="monospace"
+                            android:gravity="center"
+                            android:maxLength="7"
+                            android:padding="@dimen/power_card_medium_margin"
+                            android:textSize="@dimen/power_card_display_text" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -88,19 +101,7 @@
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/power_card_pv1_display"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="@dimen/power_card_large_margin"
-                            android:layout_marginLeft="@dimen/power_card_large_margin"
-                            android:layout_marginRight="@dimen/power_card_large_margin"
-                            android:background="@drawable/control_edittext"
-                            android:fontFamily="monospace"
-                            android:gravity="center"
-                            android:maxLength="7"
-                            android:padding="@dimen/power_card_medium_margin"
-                            android:textSize="@dimen/power_card_display_text" />
+
                     </LinearLayout>
 
                     <com.sdsmdg.harjot.crollerTest.Croller
@@ -149,6 +150,19 @@
                             android:textSize="@dimen/power_card_header_text"
                             android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/power_card_pv2_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_margin="@dimen/power_card_large_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/control_edittext"
+                            android:fontFamily="monospace"
+                            android:gravity="center"
+                            android:maxLength="7"
+                            android:padding="@dimen/power_card_medium_margin"
+                            android:textSize="@dimen/power_card_display_text" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -179,19 +193,6 @@
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/power_card_pv2_display"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="@dimen/power_card_large_margin"
-                            android:layout_marginLeft="@dimen/power_card_large_margin"
-                            android:layout_marginRight="@dimen/power_card_large_margin"
-                            android:background="@drawable/control_edittext"
-                            android:fontFamily="monospace"
-                            android:gravity="center"
-                            android:maxLength="7"
-                            android:padding="@dimen/power_card_medium_margin"
-                            android:textSize="@dimen/power_card_display_text" />
                     </LinearLayout>
 
                     <com.sdsmdg.harjot.crollerTest.Croller
@@ -240,6 +241,19 @@
                             android:textSize="@dimen/power_card_header_text"
                             android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/power_card_pv3_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_margin="@dimen/power_card_large_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/control_edittext"
+                            android:fontFamily="monospace"
+                            android:gravity="center"
+                            android:maxLength="7"
+                            android:padding="@dimen/power_card_medium_margin"
+                            android:textSize="@dimen/power_card_display_text" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -270,19 +284,7 @@
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/power_card_pv3_display"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="@dimen/power_card_large_margin"
-                            android:layout_marginLeft="@dimen/power_card_large_margin"
-                            android:layout_marginRight="@dimen/power_card_large_margin"
-                            android:background="@drawable/control_edittext"
-                            android:fontFamily="monospace"
-                            android:gravity="center"
-                            android:maxLength="7"
-                            android:padding="@dimen/power_card_medium_margin"
-                            android:textSize="@dimen/power_card_display_text" />
+
                     </LinearLayout>
 
                     <com.sdsmdg.harjot.crollerTest.Croller
@@ -331,6 +333,20 @@
                             android:textSize="@dimen/power_card_header_text"
                             android:textStyle="bold" />
 
+
+                        <TextView
+                            android:id="@+id/power_card_pcs_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_margin="@dimen/power_card_large_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/control_edittext"
+                            android:fontFamily="monospace"
+                            android:gravity="center"
+                            android:maxLength="8"
+                            android:padding="@dimen/power_card_medium_margin"
+                            android:textSize="@dimen/power_card_display_text" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -360,20 +376,6 @@
                                 android:src="@drawable/ic_arrow_drop_down_white_24dp"
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/power_card_pcs_display"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="@dimen/power_card_large_margin"
-                            android:layout_marginLeft="@dimen/power_card_large_margin"
-                            android:layout_marginRight="@dimen/power_card_large_margin"
-                            android:background="@drawable/control_edittext"
-                            android:fontFamily="monospace"
-                            android:gravity="center"
-                            android:maxLength="8"
-                            android:padding="@dimen/power_card_medium_margin"
-                            android:textSize="@dimen/power_card_display_text" />
                     </LinearLayout>
 
                     <com.sdsmdg.harjot.crollerTest.Croller
