@@ -866,6 +866,10 @@
     <string name="data_recording_start">Data recording started</string>
     <string name="data_recording_stop">Data recording stopped</string>
 
+    <string name="gps_not_enabled">GPS not enabled</string>
+    <string name="allow_gps">Allow GPS</string>
+    <string name="allow_gps_info">Please turn on GPS to include the current location in the logged file</string>
+
     <string name="show_guide_text">Show Guide</string>
     <string name="hide_guide_text">Hide Guide</string>
 
