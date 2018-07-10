@@ -138,7 +138,6 @@ public class SensorActivity extends AppCompatActivity {
                 }
             }
         });
-        new Thread(scanRunnable).start();
     }
 
     private void populateSensors() {
@@ -172,13 +171,6 @@ public class SensorActivity extends AppCompatActivity {
             dataName.add(sensorAddr.get(key));
         }
 
-        for (int key : sensorAddr.keySet()) {
-            dataName.add(sensorAddr.get(key));
-        }
-
-        for (int key : sensorAddr.keySet()) {
-            dataName.add(sensorAddr.get(key));
-        }
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
