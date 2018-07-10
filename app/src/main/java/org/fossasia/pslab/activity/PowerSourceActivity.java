@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
@@ -100,6 +101,12 @@ public class PowerSourceActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         powerPreferences = getSharedPreferences(POWER_PREFERENCES, MODE_PRIVATE);
+
+        // Autosize the voltage display in textView to utilize empty space
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(displayPV1, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(displayPV2, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(displayPV3, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(displayPCS, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
 
         monitorControllers(controllerPV1, Pin.PV1, PV1_CONTROLLER_MAX);
         monitorControllers(controllerPV2, Pin.PV2, PV2_CONTROLLER_MAX);
