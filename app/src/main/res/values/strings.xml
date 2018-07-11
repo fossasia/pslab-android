@@ -863,6 +863,7 @@
     </string-array>
 
     <string name="save_csv_data">Save CSV Data</string>
+    <string name="view_map">View Map</string>
     <string name="data_recording_start">Data recording started</string>
     <string name="data_recording_stop">Data recording stopped</string>
 
