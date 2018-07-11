@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.LuxMeterFragmentConfig;
 import org.fossasia.pslab.fragment.LuxMeterFragmentData;
+import org.fossasia.pslab.others.CustomSnackBar;
 import org.fossasia.pslab.others.GPSLogger;
 import org.fossasia.pslab.others.MathUtils;
 import org.fossasia.pslab.others.SwipeGestureDetector;
@@ -44,6 +46,8 @@ public class LuxMeterActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.cl)
+    CoordinatorLayout coordinatorLayout;
 
     //bottomSheet
     @BindView(R.id.bottom_sheet)
@@ -190,15 +194,12 @@ public class LuxMeterActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.save_csv_data:
                 if (saveData) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.data_recording_stop),
-                            Toast.LENGTH_SHORT).show();
                     saveData = false;
                 } else {
                     if (gpsLogger.checkPermission()) {
                         if (gpsLogger.isGPSEnabled()) {
                             saveData = true;
-                            Toast.makeText(getApplicationContext(), getString(R.string.data_recording_start),
-                                    Toast.LENGTH_SHORT).show();
+                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
                         } else {
                             isloggingLocation = true;
                         }
@@ -226,8 +227,7 @@ public class LuxMeterActivity extends AppCompatActivity {
                     GPSLogger.permissionAvailable = true;
                     if (gpsLogger.isGPSEnabled()) {
                         saveData = true;
-                        Toast.makeText(getApplicationContext(), getString(R.string.data_recording_start),
-                                Toast.LENGTH_SHORT).show();
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
                     } else {
                         isloggingLocation = true;
                     }
@@ -245,8 +245,7 @@ public class LuxMeterActivity extends AppCompatActivity {
         if (isloggingLocation) {
             if (gpsLogger.isGPSEnabled()) {
                 saveData = true;
-                Toast.makeText(getApplicationContext(), getString(R.string.data_recording_start),
-                        Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
             } else {
                 saveData = false;
                 Toast.makeText(getApplicationContext(), getString(R.string.gps_not_enabled),
