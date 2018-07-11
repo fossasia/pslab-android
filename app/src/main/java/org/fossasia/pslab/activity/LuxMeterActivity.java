@@ -1,6 +1,7 @@
 package org.fossasia.pslab.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -205,6 +206,10 @@ public class LuxMeterActivity extends AppCompatActivity {
                     }
                 }
                 invalidateOptionsMenu();
+                break;
+            case R.id.show_map:
+                Intent MAP = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(MAP);
                 break;
             default:
                 break;

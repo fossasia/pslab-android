@@ -10,6 +10,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 14
         versionName "1.1.12"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -54,6 +55,10 @@ dependencies {
     implementation "com.github.warkiz.widget:indicatorseekbar:$rootProject.seekBarLibraryVersion"
     implementation "com.github.Vatican-Cameos:CarouselPicker:$rootProject.carouselPickerVersion"
     implementation "com.github.anastr:speedviewlib:$rootProject.speedView"
+    implementation "org.osmdroid:osmdroid-android:$rootProject.osmVersion"
+    implementation "org.osmdroid:osmdroid-mapsforge:$rootProject.mapsforgeVersion"
+    implementation "org.osmdroid:osmdroid-geopackage:$rootProject.geoPackageVersion"
+    implementation "com.android.support:multidex:$rootProject.multiDexVersion"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {

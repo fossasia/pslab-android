@@ -6,4 +6,9 @@
         android:icon="@drawable/menu_icon_save"
         android:title="@string/save_csv_data"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/show_map"
+        android:icon="@drawable/menu_icon_map"
+        android:title="@string/view_map"
+        app:showAsAction="ifRoom" />
 </menu>
