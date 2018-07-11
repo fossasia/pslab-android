@@ -910,6 +910,7 @@
     <string name="allow_gps_info">Please turn on GPS to include the current location in the logged file</string>
     <string name="location_enabled">Location: Enabled </string>
     <string name="location_disabled">Location: Disabled </string>
+    <string name="prmsn_denied_storage">Permission denied for storage</string>
 
     <string name="show_guide_text">Show Guide</string>
     <string name="hide_guide_text">Hide Guide</string>
