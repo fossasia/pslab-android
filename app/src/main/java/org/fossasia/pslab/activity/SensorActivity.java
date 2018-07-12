@@ -1,13 +1,10 @@
 package org.fossasia.pslab.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,15 +46,7 @@ public class SensorActivity extends AppCompatActivity {
     private String tvData = "";
     private ListView lvSensor;
     private TextView tvSensorScan;
-
-    Runnable scanRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (scienceLab.isConnected()) {
-                populateSensors();
-            }
-        }
-    };
+    private Button buttonSensorAutoScan;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,7 +68,7 @@ public class SensorActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(getApplication(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataName);
 
         final CoordinatorLayout coordinatorLayout = findViewById(R.id.layout_container);
-        Button buttonSensorAutoScan = findViewById(R.id.button_sensor_autoscan);
+        buttonSensorAutoScan = findViewById(R.id.button_sensor_autoscan);
         tvSensorScan = findViewById(R.id.tv_sensor_scan);
         tvSensorScan.setText(getResources().getString(R.string.use_autoscan));
         lvSensor = findViewById(R.id.lv_sensor);
@@ -89,7 +78,9 @@ public class SensorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (scienceLab.isConnected()) {
-                    new Thread(scanRunnable).start();
+                    buttonSensorAutoScan.setClickable(false);
+                    tvSensorScan.setText(getResources().getString(R.string.scanning));
+                    new PopulateSensors().execute();
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.device_not_connected), Toast.LENGTH_SHORT).show();
                 }
@@ -140,43 +131,49 @@ public class SensorActivity extends AppCompatActivity {
         });
     }
 
-    private void populateSensors() {
-        ArrayList<Integer> data = new ArrayList<>();
-        dataName.clear();
-        dataAddress.clear();
-        try {
-            tvSensorScan.setText(getResources().getString(R.string.scanning));
-            data = i2c.scan(null);
-        } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
+    private class PopulateSensors extends AsyncTask<Void, Void, Void> {
+        private ArrayList<Integer> data;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            data = new ArrayList<>();
+            dataName.clear();
+            dataAddress.clear();
+            try {
+                data = i2c.scan(null);
+            } catch (IOException | NullPointerException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
-        if (data != null) {
-            for (Integer myInt : data) {
-                if (myInt != null && sensorAddr.get(myInt) != null) {
-                    dataAddress.add(String.valueOf(myInt));
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (data != null) {
+                for (Integer myInt : data) {
+                    if (myInt != null && sensorAddr.get(myInt) != null) {
+                        dataAddress.add(String.valueOf(myInt));
+                    }
                 }
+                tvData = "";
+
+                for (String s : dataAddress) {
+                    tvData += s + ":" + sensorAddr.get(Integer.parseInt(s)) + "\n";
+                }
+
+            } else {
+                tvData = getResources().getString(R.string.sensor_not_connected);
             }
-            tvData = "";
 
-            for (String s : dataAddress) {
-                tvData += s + ":" + sensorAddr.get(Integer.parseInt(s)) + "\n";
+            for (int key : sensorAddr.keySet()) {
+                dataName.add(sensorAddr.get(key));
             }
 
+            tvSensorScan.setText(tvData);
+            adapter.notifyDataSetChanged();
+            buttonSensorAutoScan.setClickable(true);
         }
-        else {
-            tvData = getResources().getString(R.string.sensor_not_connected);
-        }
-
-        for (int key : sensorAddr.keySet()) {
-            dataName.add(sensorAddr.get(key));
-        }
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                tvSensorScan.setText(tvData);
-                adapter.notifyDataSetChanged();
-            }
-        });
     }
 }
