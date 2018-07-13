@@ -55,7 +55,7 @@
     <dimen name="power_card_medium_margin">10dp</dimen>
     <dimen name="power_card_header_text">25sp</dimen>
     <dimen name="power_card_tiny_margin">5dp</dimen>
-    <dimen name="power_card_display_text">36sp</dimen>
+    <dimen name="power_card_display_text">20sp</dimen>
     <dimen name="power_card_button_weight">1</dimen>
     <dimen name="power_card_large_margin">13dp</dimen>
 
@@ -302,6 +302,8 @@
 
     <dimen name="weight_1">1</dimen>
     <dimen name="weight_2">2</dimen>
+
+    <dimen name="barometer_margin_top">81dp</dimen>
 
     <dimen name="sensor_params_left">30dp</dimen>
     <dimen name="sensor_params_start">30dp</dimen>

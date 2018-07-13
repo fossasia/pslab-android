@@ -81,6 +81,10 @@
 
         <activity android:name=".activity.AccelerometerActivity"/>
 
+        <activity
+            android:name=".activity.Barometer_activity"
+            android:configChanges="keyboardHidden|screenSize|orientation"/>
+
         <activity android:name=".activity.MapsActivity" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />
