@@ -102,8 +102,8 @@ public class AnalogInputSource {
             B /= gain;
             A /= gain;
         }
-        slope = B - A;
-        intercept = A;
+        slope = 2 * (B - A);
+        intercept = 2 * A;
         if (!calibrationReady || gain == 8) {
             calPoly10 = new PolynomialFunction(new double[]{intercept, slope / 1023, 0.});
             calPoly12 = new PolynomialFunction(new double[]{intercept, slope / 4095, 0.});

@@ -905,8 +905,8 @@ public class ScienceLab {
             Log.v(TAG, "Channel Unavailable");
             return false;
         }
-        Log.v("fetchChannel", "samples" + samples);
-        Log.v("fetchCHannel", "dataSplitting" + this.dataSplitting);
+        Log.v("Samples", "" + samples);
+        Log.v("Data Splitting", "" + this.dataSplitting);
         ArrayList<Integer> listData = new ArrayList<>();
         try {
             for (int i = 0; i < samples / this.dataSplitting; i++) {
