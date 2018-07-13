@@ -16,9 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
@@ -217,12 +215,12 @@ public class MultimeterActivity extends AppCompatActivity {
                             if (scienceLab.isConnected()) {
                                 Double frequency = scienceLab.getFrequency(knobMarker[knobState], null);
                                 saveAndSetData(String.valueOf(frequency), getString(R.string.frequency_unit));
-                            } else {
-                                if (scienceLab.isConnected()) {
-                                    scienceLab.countPulses(knobMarker[knobState]);
-                                    double pulseCount = scienceLab.readPulseCount();
-                                    saveAndSetData(String.valueOf(pulseCount), "");
-                                }
+                            }
+                        } else {
+                            if (scienceLab.isConnected()) {
+                                scienceLab.countPulses(knobMarker[knobState]);
+                                double pulseCount = scienceLab.readPulseCount();
+                                saveAndSetData(String.valueOf(pulseCount), "");
                             }
                         }
                         break;
