@@ -780,9 +780,6 @@
         <item>ID2</item>
         <item>ID3</item>
         <item>ID4</item>
-        <item>SEN</item>
-        <item>EXT</item>
-        <item>CNTR</item>
     </string-array>
 
     <string-array name="measurement_choices">
