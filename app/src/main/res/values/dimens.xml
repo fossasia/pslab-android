@@ -332,6 +332,13 @@
     <dimen name="faq_answer_margin">20dp</dimen>
     <dimen name="faq_answer_margin_start">15dp</dimen>
 
+    <dimen name="padding_title_dialog_wave">10dp</dimen>
+    <dimen name="btn_title_side_padding">5dp</dimen>
+    <dimen name="btn_padding">5dp</dimen>
+    <dimen name="btn_margin">10dp</dimen>
+    <dimen name="dialog_space_width">20dp</dimen>
+    <dimen name="dialog_sep_margin_top">40dp</dimen>
+
     <dimen name="sensor_lable_height">40dp</dimen>
     <dimen name="luxmeter_config_text_padding">5dp</dimen>
     <dimen name="luxmeter_text_padding">5dp</dimen>
