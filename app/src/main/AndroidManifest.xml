@@ -81,6 +81,8 @@
 
         <activity android:name=".activity.AccelerometerActivity"/>
 
+        <activity android:name=".activity.MapsActivity" />
+
         <receiver android:name=".receivers.USBDetachReceiver" />
 
         <activity android:name=".sensors.SensorADS1115" />

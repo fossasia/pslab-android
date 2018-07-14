@@ -1,6 +1,10 @@
 package org.fossasia.pslab.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -24,6 +28,7 @@ import android.widget.Toast;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.LuxMeterFragmentConfig;
 import org.fossasia.pslab.fragment.LuxMeterFragmentData;
+import org.fossasia.pslab.others.GPSLogger;
 import org.fossasia.pslab.others.MathUtils;
 import org.fossasia.pslab.others.SwipeGestureDetector;
 
@@ -59,6 +64,8 @@ public class LuxMeterActivity extends AppCompatActivity {
     TextView bottomSheetDesc;
 
     public boolean saveData = false;
+    public GPSLogger gpsLogger;
+    private boolean isloggingLocation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +186,7 @@ public class LuxMeterActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
         switch (item.getItemId()) {
             case R.id.save_csv_data:
                 if (saveData) {
@@ -186,15 +194,64 @@ public class LuxMeterActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     saveData = false;
                 } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.data_recording_start),
-                            Toast.LENGTH_SHORT).show();
-                    saveData = true;
+                    if (gpsLogger.checkPermission()) {
+                        if (gpsLogger.isGPSEnabled()) {
+                            saveData = true;
+                            Toast.makeText(getApplicationContext(), getString(R.string.data_recording_start),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            isloggingLocation = true;
+                        }
+                        gpsLogger.startFetchingLocation();
+                    }
                 }
                 invalidateOptionsMenu();
+                break;
+            case R.id.show_map:
+                Intent MAP = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(MAP);
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case GPSLogger.MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    GPSLogger.permissionAvailable = true;
+                    if (gpsLogger.isGPSEnabled()) {
+                        saveData = true;
+                        Toast.makeText(getApplicationContext(), getString(R.string.data_recording_start),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        isloggingLocation = true;
+                    }
+                    gpsLogger.startFetchingLocation();
+                } else {
+                    GPSLogger.permissionAvailable = false;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isloggingLocation) {
+            if (gpsLogger.isGPSEnabled()) {
+                saveData = true;
+                Toast.makeText(getApplicationContext(), getString(R.string.data_recording_start),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                saveData = false;
+                Toast.makeText(getApplicationContext(), getString(R.string.gps_not_enabled),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

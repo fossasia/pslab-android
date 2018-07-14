@@ -94,14 +94,14 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/spinner_bh1750_gain"
+                    android:id="@+id/spinner_lux_sensor_gain"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/card_margin"
                     android:layout_marginRight="@dimen/bh1750_config_padding_left"
                     android:layout_marginTop="@dimen/card_margin"
                     android:layout_weight="@dimen/weight_1"
-                    android:entries="@array/bh1750_gain_spinner" />
+                    android:entries="@array/select_lux_gain" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
