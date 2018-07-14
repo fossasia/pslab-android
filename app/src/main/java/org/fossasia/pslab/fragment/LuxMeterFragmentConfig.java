@@ -212,7 +212,7 @@ public class LuxMeterFragmentConfig extends Fragment {
                                     LuxMeterFragmentConfig.selectedSensor = 1;
                                 }
                                 else {
-                                    Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
                                     selectSensor.setSelection(0);
                                 }
                             } catch (InterruptedException | IOException e) {
@@ -237,7 +237,7 @@ public class LuxMeterFragmentConfig extends Fragment {
                                     LuxMeterFragmentConfig.selectedSensor = 2;
                                 }
                                 else {
-                                    Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
                                     selectSensor.setSelection(0);
                                 }
                             } catch (InterruptedException | IOException e) {
