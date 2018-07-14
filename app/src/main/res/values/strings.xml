@@ -140,7 +140,7 @@
     <string name="initialising_wait">Initialising Wait…</string>
     <string name="device_connected_successfully">Device Connected Successfully</string>
     <string name="device_not_found">Device Not Found</string>
-    <string name="sensor_not_connected">Sensor not connected</string>
+    <string name="sensor_not_connected_tls">Sensor not connected</string>
 
     <string name="time_unit_la">Time (ms)</string>
     <string name="analyze">Analyze</string>
