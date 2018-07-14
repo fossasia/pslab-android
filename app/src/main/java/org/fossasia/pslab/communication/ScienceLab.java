@@ -1075,7 +1075,7 @@ public class ScienceLab {
     public double getVoltage(String channelName, Integer sample) {
         this.voltmeterAutoRange(channelName);
         double Voltage = this.getAverageVoltage(channelName, sample);
-        if (channelName.equals("CH2") || channelName.equals("CH1") ) {
+        if (channelName.equals("CH2") || channelName.equals("CH1")) {
             return 2 * Voltage;
         } else {
             return Voltage;
@@ -2108,9 +2108,9 @@ public class ScienceLab {
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.FETCH_COUNT);
-            int count = mPacketHandler.getInt();
+            int count = mPacketHandler.getVoltageSummation();
             mPacketHandler.getAcknowledgement();
-            return count;
+            return 10 * count;
         } catch (IOException e) {
             e.printStackTrace();
         }
