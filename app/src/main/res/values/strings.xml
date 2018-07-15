@@ -77,7 +77,7 @@
     <string name="resistance_description"><b>Resistance:</b> Measures the resistance of the element connected to the SEN pin of the PSLab device</string>
     <string name="frequency_description"><b>Frequency:</b> Measures the frequency across any element connected between any of ID pins</string>
     <string name="count_pulse_description"><b>Count Pulse:</b> Measures the pulse of any wave through an element connected across any of ID pins</string>
-    <string name="capacitance_description"><b>Capcitance:</b> Measures the capacitance of the element connected to the CAP pin of the PSLab device.</string>
+    <string name="capacitance_description"><b>Capacitance:</b> Measures the capacitance of the element connected to the CAP pin of the PSLab device.</string>
     <string name="voltage_channel_description"><b>Voltage:</b> Measures the voltage of any elements connect across any of the channel pins and other pins such as AN8</string>
     <string name="resistance_abbreviation">\u2126</string>
     <string name="capacitance_abbreviation">C</string>

@@ -23,7 +23,14 @@
         <item name="colorButtonNormal">@color/colorPrimaryDark</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
+    <style name="SwitchCompatTheme" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/grey</item>
 
+        <item name="colorSwitchThumbNormal">@color/black</item>
+        <!-- inactive track color (30% transparency) -->
+        <item name="colorControlNormal">@color/grey</item>
+    </style>
     <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/rounded_shape</item>
     </style>
