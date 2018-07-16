@@ -65,11 +65,11 @@
         android:layout_marginLeft="@dimen/multimeter_constraint_1"
         android:layout_marginRight="@dimen/multimeter_constraint_1"
         android:layout_marginStart="@dimen/multimeter_constraint_1"
-        android:layout_marginTop="@dimen/multimeter_length_0"
+        android:layout_marginTop="@dimen/multimeter_constraint_1"
         app:layout_constraintBottom_toTopOf="@+id/read"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/unit">
+        app:layout_constraintTop_toBottomOf="@+id/display_box">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -126,7 +126,7 @@
                 android:id="@+id/lower_line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/multimeter_line_width"
-                android:layout_marginBottom="@dimen/multimeter_constraint_2"
+                android:layout_marginBottom="@dimen/multimeter_layout_margin"
                 android:layout_marginEnd="@dimen/multimeter_constraint_1"
                 android:layout_marginLeft="@dimen/multimeter_constraint_1"
                 android:layout_marginRight="@dimen/multimeter_constraint_1"
@@ -183,11 +183,16 @@
                 app:kDefaultState="2"
                 app:kIndicatorWidth="@dimen/multimeter_length_0"
                 app:kKnobCenterColor="@color/colorPrimaryDark"
-                app:kKnobColor="@color/white"
+                app:kKnobColor="@color/black"
                 app:kKnobDrawable="@drawable/knob"
                 app:kKnobRelativeRadius="0.99"
                 app:kNumberOfStates="12"
-                app:kSelectedStateMarkerColor="@color/white"
+                app:kKnobDrawableRotates="true"
+                app:kSwipe="circular"
+                app:kStateMarkersRelativeLength="0"
+                app:kSelectedStateMarkerColor="@color/black"
+                app:kStateMarkersAccentPeriodicity="0"
+                app:kCircularIndicatorRelativeRadius="0"
                 app:kStateMarkersWidth="@dimen/multimeter_length_0"
                 app:layout_constraintBottom_toBottomOf="@+id/knob_marker"
                 app:layout_constraintEnd_toEndOf="@+id/knob_marker"
@@ -220,6 +225,7 @@
                     android:gravity="center"
                     android:text="@string/frequency_unit"
                     android:textStyle="bold"
+                    android:theme="@style/SwitchCompatTheme"
                     android:thumbTextPadding="@dimen/multimeter_margin_2" />
 
                 <TextView
