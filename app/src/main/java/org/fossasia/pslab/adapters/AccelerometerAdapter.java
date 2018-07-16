@@ -46,7 +46,7 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
     private DecimalFormat df = new DecimalFormat("+#0.0;-#0.0");
     private Context context;
     private long startTime;
-    private int[] colors = {Color.YELLOW, Color.BLUE, Color.GREEN};
+    private int[] colors = {Color.YELLOW, Color.MAGENTA, Color.GREEN};
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.axis_image)
