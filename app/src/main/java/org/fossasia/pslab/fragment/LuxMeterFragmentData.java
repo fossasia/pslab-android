@@ -1,5 +1,7 @@
 package org.fossasia.pslab.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -8,6 +10,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +32,7 @@ import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.communication.peripherals.I2C;
 import org.fossasia.pslab.communication.sensors.BH1750;
 import org.fossasia.pslab.others.CSVLogger;
+import org.fossasia.pslab.others.CustomSnackBar;
 import org.fossasia.pslab.others.GPSLogger;
 import org.fossasia.pslab.others.ScienceLabCommon;
 
@@ -290,7 +294,7 @@ public class LuxMeterFragmentData extends Fragment {
             else lightMeter.setPointerColor(Color.WHITE);
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
             entries.add(new Entry((float) timeElapsed, data));
-            LuxMeterActivity parent = (LuxMeterActivity) getActivity();
+            final LuxMeterActivity parent = (LuxMeterActivity) getActivity();
             for (Entry item : entries) {
                 assert parent != null;
                 if (parent.saveData) {
@@ -314,6 +318,25 @@ public class LuxMeterFragmentData extends Fragment {
                             lux_logger.writeCSVFile(data);
                         }
                         gpsLogger.removeUpdate();
+                        CustomSnackBar.showSnackBar((CoordinatorLayout) parent.findViewById(R.id.cl),
+                                getString(R.string.csv_store_text) + " " + lux_logger.getCurrentFilePath()
+                                , getString(R.string.delete_capital), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        new AlertDialog.Builder(parent, R.style.AlertDialogStyle)
+                                                .setTitle(R.string.delete_file)
+                                                .setMessage(R.string.delete_warning)
+                                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        lux_logger.deleteFile();
+                                                    }
+                                                })
+                                                .setNegativeButton(R.string.cancel, null)
+                                                .create()
+                                                .show();
+                                    }
+                                });
                     }
                 }
                 count++;
