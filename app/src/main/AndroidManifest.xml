@@ -85,6 +85,9 @@
             android:name=".activity.Barometer_activity"
             android:configChanges="keyboardHidden|screenSize|orientation"/>
 
+        <activity android:name=".activity.CompassActivity"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".activity.MapsActivity" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />
