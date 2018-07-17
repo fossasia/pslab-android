@@ -326,12 +326,17 @@ public class LuxMeterFragmentData extends Fragment {
                             if (logged) {
                                 writeHeader = false;
                                 logged = false;
-                                Location location = gpsLogger.getBestLocation();
-                                if (location != null) {
-                                    String data = "\nLocation" + "," + String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude() + "\n");
+                                if (parent.locationPref && gpsLogger != null) {
+                                    String data;
+                                    Location location = gpsLogger.getBestLocation();
+                                    if (location != null) {
+                                        data = "\nLocation" + "," + String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude() + "\n");
+                                    } else {
+                                        data = "\nLocation" + "," + "null" + "," + "null";
+                                    }
                                     lux_logger.writeCSVFile(data);
+                                    gpsLogger.removeUpdate();
                                 }
-                                gpsLogger.removeUpdate();
                                 CustomSnackBar.showSnackBar((CoordinatorLayout) parent.findViewById(R.id.cl),
                                         getString(R.string.csv_store_text) + " " + lux_logger.getCurrentFilePath()
                                         , getString(R.string.delete_capital), new View.OnClickListener() {

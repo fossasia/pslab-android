@@ -1,14 +1,19 @@
 package org.fossasia.pslab.activity;
 
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.SettingsFragment;
+import org.fossasia.pslab.others.GPSLogger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +43,9 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.nav_settings);
         }
-        getSupportFragmentManager().beginTransaction().add(R.id.content, new SettingsFragment()).commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.content, new SettingsFragment()).commit();
+        }
     }
 
     @Override
@@ -50,8 +57,22 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         unBinder.unbind();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case GPSLogger.MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length <= 0
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
+                    editor.putBoolean(SettingsFragment.KEY_INCLUDE_LOCATION, false);
+                    editor.commit();
+                }
+            }
+        }
     }
 }

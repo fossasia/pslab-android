@@ -3,7 +3,6 @@ package org.fossasia.pslab.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +13,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -29,6 +29,7 @@ import android.widget.Toast;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.fragment.LuxMeterFragmentConfig;
 import org.fossasia.pslab.fragment.LuxMeterFragmentData;
+import org.fossasia.pslab.fragment.SettingsFragment;
 import org.fossasia.pslab.others.CustomSnackBar;
 import org.fossasia.pslab.others.GPSLogger;
 import org.fossasia.pslab.others.MathUtils;
@@ -70,6 +71,7 @@ public class LuxMeterActivity extends AppCompatActivity {
     public boolean saveData = false;
     public GPSLogger gpsLogger;
     private boolean checkGpsOnResume = false;
+    public boolean locationPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,20 +192,23 @@ public class LuxMeterActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
         switch (item.getItemId()) {
             case R.id.save_csv_data:
                 if (saveData) {
                     saveData = false;
                 } else {
-                    if (gpsLogger.checkPermission()) {
+                    if (locationPref) {
+                        gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
                         if (gpsLogger.isGPSEnabled()) {
                             saveData = true;
-                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
+                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_enabled), null, null);
                         } else {
                             checkGpsOnResume = true;
                         }
                         gpsLogger.startFetchingLocation();
+                    } else {
+                        saveData = true;
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null);
                     }
                 }
                 invalidateOptionsMenu();
@@ -222,27 +227,6 @@ public class LuxMeterActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case GPSLogger.MY_PERMISSIONS_REQUEST_LOCATION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    GPSLogger.permissionAvailable = true;
-                    if (gpsLogger.isGPSEnabled()) {
-                        saveData = true;
-                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
-                    } else {
-                        checkGpsOnResume = true;
-                    }
-                    gpsLogger.startFetchingLocation();
-                } else {
-                    GPSLogger.permissionAvailable = false;
-                }
-            }
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         if (checkGpsOnResume) {
@@ -255,5 +239,6 @@ public class LuxMeterActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         }
+        locationPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getBoolean(SettingsFragment.KEY_INCLUDE_LOCATION, false);
     }
 }

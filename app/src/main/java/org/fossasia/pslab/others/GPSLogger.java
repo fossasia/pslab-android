@@ -26,18 +26,25 @@ import org.fossasia.pslab.activity.LuxMeterActivity;
 public class GPSLogger {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static final int UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
+    private static final int MIN_DISTANCE_CHANGE_FOR_UPDATES = 1;
     private LocationManager locationManager;
     private Context context;
-    public static boolean permissionAvailable = false;
     private Location bestLocation;
+    private LuxMeterActivity callerActivity;
+
+    public GPSLogger(Context context) {
+        this.context = context;
+    }
 
     public GPSLogger(Context context, LocationManager locationManager) {
         this.context = context;
         this.locationManager = locationManager;
-        callerActivity = (LuxMeterActivity) context;
+        if (context instanceof LuxMeterActivity) {
+            callerActivity = (LuxMeterActivity) context;
+        }
     }
 
-    private LuxMeterActivity callerActivity;
     private LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -72,32 +79,40 @@ public class GPSLogger {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
+    /**
+     * Requests constant updates of location
+     */
     @SuppressLint("MissingPermission")
     private void getUpdate() {
-        if (permissionAvailable) {
-            String provider = LocationManager.GPS_PROVIDER;
-            locationManager.requestLocationUpdates(provider, 1000, 1,
-                    locationListener);
-        }
+        String provider = LocationManager.GPS_PROVIDER;
+        locationManager.requestLocationUpdates(provider, UPDATE_INTERVAL_IN_MILLISECONDS, MIN_DISTANCE_CHANGE_FOR_UPDATES,
+                locationListener);
     }
 
+    /**
+     * Stop requesting updates
+     */
     public void removeUpdate() {
         locationManager.removeUpdates(locationListener);
     }
 
     @SuppressLint("MissingPermission")
     public Location whatsLocation() {
-        if (permissionAvailable) {
-            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
-        return null;
+        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
+    /**
+     * @return the best location fetched
+     */
     public Location getBestLocation() {
         return bestLocation;
     }
 
-    public boolean checkPermission() {
+    /**
+     * Request for allow location permission
+     * if the permission is not given initially
+     */
+    public void requestPermissionIfNotGiven() {
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -105,13 +120,13 @@ public class GPSLogger {
             ActivityCompat.requestPermissions((Activity) context,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_LOCATION);
-            return false;
-        } else {
-            permissionAvailable = true;
-            return true;
         }
     }
 
+    /**
+     * First fetch last known location for faster results,
+     * then start listening for location updates
+     */
     public void startFetchingLocation() {
         bestLocation = whatsLocation();
         getUpdate();
