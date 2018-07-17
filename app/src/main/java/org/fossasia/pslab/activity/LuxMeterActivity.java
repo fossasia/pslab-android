@@ -69,7 +69,7 @@ public class LuxMeterActivity extends AppCompatActivity {
 
     public boolean saveData = false;
     public GPSLogger gpsLogger;
-    private boolean isloggingLocation = false;
+    private boolean checkGpsOnResume = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +201,7 @@ public class LuxMeterActivity extends AppCompatActivity {
                             saveData = true;
                             CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
                         } else {
-                            isloggingLocation = true;
+                            checkGpsOnResume = true;
                         }
                         gpsLogger.startFetchingLocation();
                     }
@@ -211,6 +211,9 @@ public class LuxMeterActivity extends AppCompatActivity {
             case R.id.show_map:
                 Intent MAP = new Intent(getApplicationContext(), MapsActivity.class);
                 startActivity(MAP);
+                break;
+            case R.id.settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             default:
                 break;
@@ -229,7 +232,7 @@ public class LuxMeterActivity extends AppCompatActivity {
                         saveData = true;
                         CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
                     } else {
-                        isloggingLocation = true;
+                        checkGpsOnResume = true;
                     }
                     gpsLogger.startFetchingLocation();
                 } else {
@@ -242,7 +245,7 @@ public class LuxMeterActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isloggingLocation) {
+        if (checkGpsOnResume) {
             if (gpsLogger.isGPSEnabled()) {
                 saveData = true;
                 CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);

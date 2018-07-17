@@ -24,6 +24,12 @@
     <string name="power_source">Power Source</string>
     <string name="coming_soon">Coming Soon!</string>
 
+    <string name="setting_auto_start_key">setting_auto_start</string>
+    <string name="setting_auto_start_summary">Auto start app when PSLab device is connected</string>
+    <string name="settting_auto_start_title">Auto Start</string>
+    <string name="setting_data_format_key">export_data_format_list</string>
+    <string name="setting_data_format_title">Export Data Format</string>
+
     <string name="control_item_1">Control</string>
     <string name="control_item_2">Read</string>
     <string name="control_item_3">Advanced</string>
