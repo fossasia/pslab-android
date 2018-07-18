@@ -29,25 +29,13 @@ import butterknife.ButterKnife;
 public class PowerSourceActivity extends AppCompatActivity {
 
     public static final String POWER_PREFERENCES = "Power_Preferences";
-    private SharedPreferences powerPreferences;
-
-    private enum Pin {
-        PV1, PV2, PV3, PCS
-    }
-
-    private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
-
-    private Timer powerCounter;
-    private Handler powerHandler = new Handler();
-
-    private boolean incrementPower = false, decrementPower = false;
 
     private final int CONTROLLER_MIN = 1;
     private final int PV1_CONTROLLER_MAX = 1001;
     private final int PV2_CONTROLLER_MAX = 661;
     private final int PV3_CONTROLLER_MAX = 331;
     private final int PCS_CONTROLLER_MAX = 331;
-
+    
     private final long LONG_CLICK_DELAY = 100;
 
     @BindView(R.id.toolbar)
@@ -88,6 +76,15 @@ public class PowerSourceActivity extends AppCompatActivity {
     SquareImageButton upPCS;
     @BindView(R.id.power_card_pcs_down)
     SquareImageButton downPCS;
+
+    private SharedPreferences powerPreferences;
+    private boolean isRunning = false;
+    private boolean incrementPower = false, decrementPower = false;
+
+    private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
+
+    private Timer powerCounter;
+    private Handler powerHandler = new Handler();
 
     private float voltagePV1 = 0.00f, voltagePV2 = 0.00f, voltagePV3 = 0.00f, currentPCS = 0.00f;
 
@@ -176,8 +173,11 @@ public class PowerSourceActivity extends AppCompatActivity {
         up.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View view) {
-                incrementPower = true;
-                fastCounter(pin);
+                if (!isRunning) {
+                    isRunning = true;
+                    incrementPower = true;
+                    fastCounter(pin);
+                }
                 return true;
             }
         });
@@ -190,8 +190,11 @@ public class PowerSourceActivity extends AppCompatActivity {
         down.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View view) {
-                decrementPower = true;
-                fastCounter(pin);
+                if (!isRunning) {
+                    isRunning = true;
+                    decrementPower = true;
+                    fastCounter(pin);
+                }
                 return true;
             }
         });
@@ -210,8 +213,11 @@ public class PowerSourceActivity extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 view.onTouchEvent(motionEvent);
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP && incrementPower) {
-                    stopCounter();
-                    incrementPower = false;
+                    if (isRunning) {
+                        isRunning = false;
+                        stopCounter();
+                        incrementPower = false;
+                    }
                 }
                 return true;
             }
@@ -222,8 +228,11 @@ public class PowerSourceActivity extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 view.onTouchEvent(motionEvent);
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP && decrementPower) {
-                    stopCounter();
-                    decrementPower = false;
+                    if (isRunning) {
+                        isRunning = false;
+                        stopCounter();
+                        decrementPower = false;
+                    }
                 }
                 return true;
             }
@@ -515,5 +524,9 @@ public class PowerSourceActivity extends AppCompatActivity {
             }
         };
         powerCounter.schedule(task, 1, LONG_CLICK_DELAY);
+    }
+
+    private enum Pin {
+        PV1, PV2, PV3, PCS
     }
 }
