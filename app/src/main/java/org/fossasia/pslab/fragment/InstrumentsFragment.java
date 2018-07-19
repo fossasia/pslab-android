@@ -164,7 +164,7 @@ public class InstrumentsFragment extends Fragment {
                     getResources().getString(R.string.accelerometer), R.drawable.tile_icon_accelerometer, getResources().getString(descriptions[7]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.barometer), R.drawable.tile_barometer, getResources().getString(descriptions[8])
+                    getResources().getString(R.string.barometer), R.drawable.tile_icon_barometer, getResources().getString(descriptions[8])
             ));
             return null;
         }
