@@ -4,7 +4,7 @@
         <item
             android:id="@+id/nav_instruments"
             android:icon="@drawable/ic_apps_black_24dp"
-            android:title="@string/nav_instruments"/>
+            android:title="@string/nav_instruments" />
         <item
             android:id="@+id/nav_device"
             android:icon="@drawable/ic_developer_board_black_24dp"
@@ -29,6 +29,11 @@
                 android:id="@+id/nav_report_us"
                 android:icon="@drawable/ic_bug_report_black_24dp"
                 android:title="@string/nav_report" />
+            <item
+                android:id="@+id/nav_app_version"
+                android:checkable="false"
+                android:icon="@drawable/about_icon_google_play"
+                android:title="@string/app_version" />
         </menu>
     </item>
 </menu>
