@@ -36,7 +36,6 @@ import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
 import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.PSLabPinLayoutFragment;
-import org.fossasia.pslab.fragment.SettingsFragment;
 import org.fossasia.pslab.others.CustomTabService;
 import org.fossasia.pslab.others.InitializationVariable;
 import org.fossasia.pslab.others.ScienceLabCommon;
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
             case 2:
-                return SettingsFragment.newInstance();
+                return null;
             case 3:
                 return AboutUsFragment.newInstance();
             case 4:
@@ -218,7 +217,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         switch (navItemIndex) {
-            case 0: case 1: case 2:
+            case 0:
+            case 1:
+            case 2:
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             case 3:
@@ -247,9 +248,11 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_DEVICE;
                         break;
                     case R.id.nav_settings:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_SETTINGS;
-                        break;
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        return true;
                     case R.id.nav_about_us:
                         navItemIndex = 3;
                         CURRENT_TAG = TAG_ABOUTUS;
@@ -476,5 +479,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        selectNavMenu();
     }
 }

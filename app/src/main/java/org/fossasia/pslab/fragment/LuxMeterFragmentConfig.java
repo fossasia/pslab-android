@@ -1,6 +1,7 @@
 package org.fossasia.pslab.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -28,14 +29,17 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class LuxMeterFragmentConfig extends Fragment {
+
+    private static final String FRAG_CONFIG = "LuxMeterConfig";
+
     private BH1750 bh1750;
     private TSL2561 tsl2561;
     private final int highLimitMax = 10000;
     private final int updatePeriodMax = 900;
     private final int updatePeriodMin = 100;
     private static int selectedSensor = 0; //0 for built in and 1 for BH1750
-    private int highValue = 0;
-    private int updatePeriodValue = 100;
+    private int highValue;
+    private int updatePeriodValue;
     private Unbinder unbinder;
 
     @BindView(R.id.lux_hight_limit_text)
@@ -58,6 +62,9 @@ public class LuxMeterFragmentConfig extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lux_meter_config, container, false);
         unbinder = ButterKnife.bind(this, view);
+        final SharedPreferences settings = getActivity().getSharedPreferences(FRAG_CONFIG, Context.MODE_PRIVATE);
+        highValue = settings.getInt("HighValue", 2000);
+        updatePeriodValue = settings.getInt("UpdatePeriodValue", 100);
         final SeekBar highLimitSeek = (SeekBar) view.findViewById(R.id.lux_hight_limit_seekbar);
         final SeekBar updatePeriodSeek = (SeekBar) view.findViewById(R.id.lux_update_period_seekbar);
         final Spinner selectSensor = (Spinner) view.findViewById(R.id.spinner_select_light);
@@ -66,7 +73,7 @@ public class LuxMeterFragmentConfig extends Fragment {
         updatePeriodSeek.setMax(updatePeriodMax);
 
         highLimit.setText(String.format("%d", highValue));
-        highLimitSeek.setProgress(highValue);
+        highLimitSeek.setProgress(highValue - updatePeriodMin);
         updatePeriod.setText(String.format("%d", updatePeriodValue));
         updatePeriodSeek.setProgress(Integer.valueOf(updatePeriod.getText().toString()) - updatePeriodMin);
 
@@ -76,6 +83,9 @@ public class LuxMeterFragmentConfig extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 highValue = progress;
                 highLimit.setText(String.format("%d", progress));
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("HighValue", highValue);
+                editor.apply();
             }
 
             @Override
@@ -101,12 +111,19 @@ public class LuxMeterFragmentConfig extends Fragment {
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                         }
-                        if (value > highLimitMax)
+                        if (value > highLimitMax) {
                             highLimitSeek.setProgress(highLimitMax);
-                        else if (value < 0)
+                            value = highLimitMax;
+                        }
+                        else if (value < 0) {
                             highLimitSeek.setProgress(0);
+                            value = 0;
+                        }
                         else
                             highLimitSeek.setProgress(value);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putInt("HighValue", value);
+                        editor.apply();
                     }
                 } catch (NullPointerException e) {
                     e.printStackTrace();
@@ -119,6 +136,9 @@ public class LuxMeterFragmentConfig extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 updatePeriodValue = progress + updatePeriodMin;
                 updatePeriod.setText(String.format("%d", updatePeriodValue));
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("UpdatePeriodValue", updatePeriodValue);
+                editor.apply();
             }
 
             @Override
@@ -144,12 +164,19 @@ public class LuxMeterFragmentConfig extends Fragment {
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                         }
-                        if (value > updatePeriodMax)
-                            updatePeriodSeek.setProgress(updatePeriodMax + 100);
-                        else if (value < updatePeriodMin)
+                        if (value > updatePeriodMax + 100) {
+                            updatePeriodSeek.setProgress(updatePeriodMax);
+                            value = updatePeriodMax + 100;
+                        }
+                        else if (value < updatePeriodMin) {
                             updatePeriodSeek.setProgress(updatePeriodMin - 100);
+                            value = updatePeriodMin;
+                        }
                         else
                             updatePeriodSeek.setProgress(value - updatePeriodMin);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putInt("UpdatePeriodValue", value);
+                        editor.apply();
                     }
                 } catch (NullPointerException e) {
                     e.printStackTrace();

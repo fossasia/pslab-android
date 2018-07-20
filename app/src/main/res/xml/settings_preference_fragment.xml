@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="App Settings">
+    <PreferenceCategory android:title="General">
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="setting_auto_start"
-            android:summary="Auto start app when PSLab device is connected"
-            android:title="Auto Start" />
+            android:key="@string/setting_auto_start_key"
+            android:summary="@string/setting_auto_start_summary"
+            android:title="@string/settting_auto_start_title" />
     </PreferenceCategory>
 
-    <ListPreference
-        android:defaultValue="0"
-        android:entries="@array/export_data_format_list"
-        android:entryValues="@array/export_data_format_values"
-        android:key="export_data_format_list"
-        android:title="Export Data Format" />
+    <PreferenceCategory android:title="Data Logging">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/export_data_format_list"
+            android:entryValues="@array/export_data_format_values"
+            android:key="@string/setting_data_format_key"
+            android:title="@string/setting_data_format_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="include_location_sensor_data"
+            android:summary="Include the location data in the logged file"
+            android:title="Include Location Data" />
+    </PreferenceCategory>
 
 </PreferenceScreen>
