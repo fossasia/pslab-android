@@ -21,7 +21,7 @@ public class CSVLogger {
     private String category;
     SimpleDateFormat TIME;
 
-    private final String CSV_DIRECTORY = "PSLab";
+    private static final String CSV_DIRECTORY = "PSLab";
 
     /**
      * Constructor initiate logger with a category folder
@@ -88,5 +88,14 @@ public class CSVLogger {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getCurrentFilePath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() +
+                File.separator + CSV_DIRECTORY + File.separator + category;
+    }
+
+    public void deleteFile() {
+        csvFile.delete();
     }
 }

@@ -105,13 +105,11 @@ public class MultimeterActivity extends AppCompatActivity {
         knob.setState(knobState);
         quantity.setText(text_quantity);
         unit.setText(text_unit);
-        enableSwitch(knobState);
 
         knob.setOnStateChanged(new Knob.OnStateChanged() {
             @Override
             public void onState(int state) {
                 knobState = state;
-                enableSwitch(knobState);
                 setDescriptionText(knobState);
                 saveKnobState(knobState);
             }
@@ -136,7 +134,6 @@ public class MultimeterActivity extends AppCompatActivity {
                 knob.setState(knobState);
                 quantity.setText("");
                 unit.setText("");
-                enableSwitch(knobState);
                 setDescriptionText(knobState);
             }
         });
@@ -235,13 +232,6 @@ public class MultimeterActivity extends AppCompatActivity {
 
     }
 
-    private void enableSwitch(int knobState) {
-        if (knobState > 4 && knobState < 9) {
-            aSwitch.setClickable(true);
-        } else {
-            aSwitch.setClickable(false);
-        }
-    }
 
     private void setDescriptionText(int knobState) {
         switch (knobState) {

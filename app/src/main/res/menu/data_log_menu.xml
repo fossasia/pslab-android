@@ -11,4 +11,9 @@
         android:icon="@drawable/menu_icon_map"
         android:title="@string/view_map"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/settings"
+        android:title="@string/nav_settings"
+        app:showAsAction="never" />
 </menu>
+
