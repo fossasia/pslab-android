@@ -267,6 +267,15 @@ public class MainActivity extends AppCompatActivity {
                             drawer.closeDrawers();
                         }
                         break;
+                    case R.id.nav_app_version:
+                        setTitleColor(R.color.gray);
+                        getTitle();
+                        try {
+                            setTitle(scienceLab.getVersion());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                     default:
                         navItemIndex = 0;
                 }
