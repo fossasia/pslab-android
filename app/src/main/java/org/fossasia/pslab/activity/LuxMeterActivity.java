@@ -1,8 +1,10 @@
 package org.fossasia.pslab.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,8 +12,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +46,7 @@ public class LuxMeterActivity extends AppCompatActivity {
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
     private static final String PREF_NAME = "customDialogPreference";
+    private static final int MY_PERMISSIONS_REQUEST_STORAGE = 101;
 
     @BindView(R.id.navigation_lux_meter)
     BottomNavigationView bottomNavigationView;
@@ -194,6 +199,13 @@ public class LuxMeterActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save_csv_data:
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE);
+                    return true;
+                }
                 if (saveData) {
                     saveData = false;
                 } else {
@@ -240,5 +252,29 @@ public class LuxMeterActivity extends AppCompatActivity {
             }
         }
         locationPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getBoolean(SettingsFragment.KEY_INCLUDE_LOCATION, false);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_STORAGE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (locationPref) {
+                    gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
+                    if (gpsLogger.isGPSEnabled()) {
+                        saveData = true;
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_enabled), null, null);
+                    } else {
+                        checkGpsOnResume = true;
+                    }
+                    gpsLogger.startFetchingLocation();
+                } else {
+                    saveData = true;
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null);
+                }
+            } else {
+                Toast.makeText(this, R.string.prmsn_denied_storage, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
