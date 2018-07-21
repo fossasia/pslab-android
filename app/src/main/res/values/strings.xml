@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">PSLab</string>
-    <string name="app_version">Version: 1.1.14</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="openDrawer">open_drawer</string>
