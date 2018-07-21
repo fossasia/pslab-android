@@ -31,9 +31,8 @@
                 android:title="@string/nav_report" />
             <item
                 android:id="@+id/nav_app_version"
-                android:checkable="false"
-                android:icon="@drawable/about_icon_google_play"
-                android:title="@string/app_version" />
+                android:icon="@drawable/icon_version"
+                android:title="@string/version" />
         </menu>
     </item>
 </menu>
