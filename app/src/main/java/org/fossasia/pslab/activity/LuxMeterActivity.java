@@ -46,7 +46,8 @@ public class LuxMeterActivity extends AppCompatActivity {
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
     private static final String PREF_NAME = "customDialogPreference";
-    private static final int MY_PERMISSIONS_REQUEST_STORAGE = 101;
+    private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
+    private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_MAPS = 102;
 
     @BindView(R.id.navigation_lux_meter)
     BottomNavigationView bottomNavigationView;
@@ -203,7 +204,7 @@ public class LuxMeterActivity extends AppCompatActivity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE);
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA);
                     return true;
                 }
                 if (saveData) {
@@ -226,6 +227,13 @@ public class LuxMeterActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
                 break;
             case R.id.show_map:
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE_FOR_MAPS);
+                    return true;
+                }
                 Intent MAP = new Intent(getApplicationContext(), MapsActivity.class);
                 startActivity(MAP);
                 break;
@@ -256,7 +264,7 @@ public class LuxMeterActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == MY_PERMISSIONS_REQUEST_STORAGE) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (locationPref) {
@@ -275,6 +283,10 @@ public class LuxMeterActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.prmsn_denied_storage, Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == MY_PERMISSIONS_REQUEST_STORAGE_FOR_MAPS
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Intent MAP = new Intent(getApplicationContext(), MapsActivity.class);
+            startActivity(MAP);
         }
     }
 }
