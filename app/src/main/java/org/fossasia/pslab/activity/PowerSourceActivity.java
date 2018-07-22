@@ -4,11 +4,19 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.crollerTest.Croller;
@@ -17,7 +25,9 @@ import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.items.SquareImageButton;
+import org.fossasia.pslab.others.MathUtils;
 import org.fossasia.pslab.others.ScienceLabCommon;
+import org.fossasia.pslab.others.SwipeGestureDetector;
 
 import java.util.Locale;
 import java.util.Timer;
@@ -77,6 +87,25 @@ public class PowerSourceActivity extends AppCompatActivity {
     @BindView(R.id.power_card_pcs_down)
     SquareImageButton downPCS;
 
+    @BindView(R.id.bottom_sheet)
+    LinearLayout bottomSheet;
+    @BindView(R.id.shadow)
+    View tvShadow;
+    @BindView(R.id.img_arrow)
+    ImageView arrowUpDown;
+    @BindView(R.id.sheet_slide_text)
+    TextView bottomSheetSlideText;
+    @BindView(R.id.guide_title)
+    TextView bottomSheetGuideTitle;
+    @BindView(R.id.custom_dialog_text)
+    TextView bottomSheetText;
+    @BindView(R.id.custom_dialog_schematic)
+    ImageView bottomSheetSchematic;
+    @BindView(R.id.custom_dialog_desc)
+    TextView bottomSheetDesc;
+
+    BottomSheetBehavior bottomSheetBehavior;
+    GestureDetector gestureDetector;
     private SharedPreferences powerPreferences;
     private boolean isRunning = false;
     private boolean incrementPower = false, decrementPower = false;
@@ -99,11 +128,12 @@ public class PowerSourceActivity extends AppCompatActivity {
 
         powerPreferences = getSharedPreferences(POWER_PREFERENCES, MODE_PRIVATE);
 
-        // Autosize the voltage display in textView to utilize empty space
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(displayPV1, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(displayPV2, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(displayPV3, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(displayPCS, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        setUpBottomSheet();
+
+        autoSize(displayPV1);
+        autoSize(displayPV2);
+        autoSize(displayPV3);
+        autoSize(displayPCS);
 
         monitorControllers(controllerPV1, Pin.PV1, PV1_CONTROLLER_MAX);
         monitorControllers(controllerPV2, Pin.PV2, PV2_CONTROLLER_MAX);
@@ -129,6 +159,105 @@ public class PowerSourceActivity extends AppCompatActivity {
         updateDisplay(displayPCS, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PCS),
                 PCS_CONTROLLER_MAX, 3.30f, 0.00f)), Pin.PCS);
     }
+
+    /**
+     * Autosize the voltage display in textView to utilize empty space
+     * @param view Display text view
+     */
+    private void autoSize(TextView view) {
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(view,
+                TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+    }
+
+    /**
+     * Initiates bottom sheet to display guides on using Power Source Instruement
+     */
+    private void setUpBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        boolean isFirstTime = powerPreferences.getBoolean("PowerSourceFirstTime", true);
+
+        if (isFirstTime) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setAlpha(0.8f);
+            arrowUpDown.setRotation(180);
+            bottomSheetSlideText.setText(R.string.hide_guide_text);
+            SharedPreferences.Editor editor = powerPreferences.edit();
+            editor.putBoolean("PowerSourceFirstTime", false);
+            editor.apply();
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            private Handler handler = new Handler();
+            private Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    } catch (IllegalArgumentException e) {
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
+                }
+            };
+
+            @Override
+            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.hide_guide_text);
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        handler.postDelayed(runnable, 2000);
+                        break;
+
+                    default:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.show_guide_text);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0,
+                        0.0, 0.8);
+                tvShadow.setAlpha(value);
+                arrowUpDown.setRotation(slideOffset * 180);
+            }
+        });
+        gestureDetector = new GestureDetector(this,
+                new SwipeGestureDetector(bottomSheetBehavior));
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.power_source_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.show_guide:
+                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
+                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            default:
+                break;
+        }
+
+        return true;
+    }
+
 
     /**
      * Initiates and sets up power knob controller
@@ -448,7 +577,11 @@ public class PowerSourceActivity extends AppCompatActivity {
         if (scienceLab.isConnected()) {
             return powerPreferences.getInt(String.valueOf(pin), 1);
         } else {
+            boolean guideState = powerPreferences.getBoolean("PowerSourceFirstTime", true);
             powerPreferences.edit().clear().apply();
+            SharedPreferences.Editor editor = powerPreferences.edit();
+            editor.putBoolean("PowerSourceFirstTime", guideState);
+            editor.apply();
             return 1;
         }
     }
