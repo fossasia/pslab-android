@@ -308,6 +308,7 @@
     <dimen name="bottom_sheet_margin">10dp</dimen>
     <dimen name="btnsheet_top_section_height">46dp</dimen>
     <dimen name="extra_space_top">20dp</dimen>
+    <dimen name="power_source_space_top">120dp</dimen>
 
     <dimen name="sensor_schematic_height">250dp</dimen>
 

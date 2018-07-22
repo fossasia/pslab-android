@@ -817,8 +817,18 @@
     <string name="ok_button_text">OK</string>
 
     <string name="multimeter_dialog_heading">Multimeter</string>
-    <string name="multimeter_dialog_text">Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element.</string>
+    <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element.</string>
     <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.</string>
+
+    <string name="show_guide">Show Guide</string>
+    <string name="powersource_dialog_heading">Power Source</string>
+    <string name="powersource_dialog_text">PSLab device can generate voltages from +5V to -5V at a resolution of 10mV</string>
+    <string name="powersource_dialog_description">
+        \u2022 Connect one wire to PV1 and another wire to GND to generate voltages between +5V to -5V.\n\n
+        \u2022 Similarly connect wires between PV2 to generate voltages between +3.3V to -3.3V\n\n
+        \u2022 Use PV3 pin to generate voltages between 0V to +3.3V\n\n
+        \u2022 PCS pin is used to supply a constant current between PCS pin and a GND pin in a range of 3.3mA
+    </string>
 
     <string name="logic_analyzer_dialog_heading">Logic Analyzer</string>
     <string name="logic_analyzer_dialog_text">Logic Analyzer is an instrument used to find out the time relationship between different digital pulses. The Logic Analyzer available in the PSLab app can be operated as follows :\n</string>
