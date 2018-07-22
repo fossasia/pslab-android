@@ -14,6 +14,9 @@
     <color name="indicator_color">#d32f2f</color>
     <color name="progress_secondary_color">#EEEEEE</color>
 
+    <!-- Compass Colors -->
+    <color name="compass_gray">#e6e6e6</color>
+
     <color name="outline">#B1BCBE</color>
     <color name="customBorderFill">#7A7A7A</color>
     <color name="grey_light">#bdbdbd</color>
