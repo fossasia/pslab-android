@@ -774,6 +774,15 @@
     <string name="text_parallel_axes">Select axes parallel to ground</string>
     <string name="unit_degree">°</string>
     <string name="compass_test_value">360°</string>
+    <string name="show_axis_help">Get current axis</string>
+
+    <string name="compass_bottom_sheet_heading">Compass</string>
+    <string name="compass_bottom_sheet_text">Compass instrument is used to navigate and to find magnetic field along axis. Compass instrument in PSLab app can be used with built-in mobile sensors or with sensor HMC5883L.</string>
+    <string name="compass_bottom_sheet_description">\nSteps to calibrate the axis while using built-in sensor:\n\n
+        \u2022 As shown in the above figure, hold the device in vertical position.\n\n
+        \u2022 Now, choose the axis along which the compass should work.\n\n
+        \u2022 Finally, go to Compass instrument and select the radio button next to the axis chosen.\n\n
+        \u2022 Move the device around the chosen axis and see the compass rotating showing the angle made by the device with the actual axis.</string>
 
     <string name="indicator_description">Indicates device connection</string>
 
