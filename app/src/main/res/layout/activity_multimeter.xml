@@ -116,7 +116,7 @@
                 android:id="@+id/upper_line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/multimeter_line_width"
-                android:layout_marginTop="@dimen/multimeter_topline_topmargin"
+                android:layout_marginTop="@dimen/multimeter_constraint_4"
                 android:background="@color/black"
                 android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@+id/ch3" />
@@ -158,7 +158,7 @@
                 android:layout_marginEnd="@dimen/multimeter_layout_margin"
                 android:layout_marginLeft="@dimen/multimeter_end_box_rightmargin"
                 android:layout_marginRight="@dimen/multimeter_layout_margin"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="@dimen/multimeter_end_box_rightmargin"
                 android:background="@drawable/rectangle_border_black"
                 app:layout_constraintBottom_toTopOf="@+id/cardView"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -178,7 +178,6 @@
                 android:layout_marginStart="@dimen/multimeter_margin_3"
                 android:layout_marginTop="@dimen/multimeter_margin_3"
                 android:layout_weight="1"
-                android:rotation="15"
                 app:kCircularIndicatorRelativeRadius="0"
                 app:kDefaultState="2"
                 app:kIndicatorWidth="@dimen/multimeter_length_0"
@@ -187,7 +186,7 @@
                 app:kKnobDrawable="@drawable/knob"
                 app:kKnobDrawableRotates="true"
                 app:kKnobRelativeRadius="0.99"
-                app:kNumberOfStates="12"
+                app:kNumberOfStates="11"
                 app:kSelectedStateMarkerColor="@color/black"
                 app:kStateMarkersAccentPeriodicity="0"
                 app:kStateMarkersRelativeLength="0"
@@ -251,7 +250,7 @@
                 android:layout_marginRight="@dimen/multimeter_constraint_1"
                 android:layout_marginStart="@dimen/multimeter_constraint_1"
                 android:layout_marginTop="@dimen/multimeter_constraint_1"
-                android:background="@drawable/knob_lines"
+                android:background="@drawable/knob_base"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/freq_count"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -304,7 +303,7 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_1"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -316,18 +315,6 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_11"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="@string/sen"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/control_textsize_tiny"
-                android:textStyle="bold"
-                app:layout_constraintCircle="@id/knobs"
-                app:layout_constraintCircleAngle="@string/multimeter_angle_2"
                 app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3" />
 
             <TextView

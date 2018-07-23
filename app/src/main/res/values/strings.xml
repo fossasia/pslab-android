@@ -58,7 +58,6 @@
 
     <string-array name="multimeter_knob_states">
         <item>CAP</item>
-        <item>SEN</item>
         <item>AN8</item>
         <item>RES</item>
         <item>C</item>
@@ -90,18 +89,18 @@
     <string name="capacitance_abbreviation">C</string>
     <string name="multimeter_measure">Measure</string>
 
-    <string name="multimeter_angle_1">15</string>
-    <string name="multimeter_angle_2">45</string>
-    <string name="multimeter_angle_3">75</string>
-    <string name="multimeter_angle_4">105</string>
-    <string name="multimeter_angle_5">135</string>
-    <string name="multimeter_angle_6">165</string>
-    <string name="multimeter_angle_7">195</string>
-    <string name="multimeter_angle_8">225</string>
-    <string name="multimeter_angle_9">255</string>
-    <string name="multimeter_angle_10">285</string>
-    <string name="multimeter_angle_11">315</string>
-    <string name="multimeter_angle_12">345</string>
+    <string name="multimeter_angle_1">33</string>
+    <string name="multimeter_angle_2">0</string>
+    <string name="multimeter_angle_3">65</string>
+    <string name="multimeter_angle_4">98</string>
+    <string name="multimeter_angle_5">131</string>
+    <string name="multimeter_angle_6">164</string>
+    <string name="multimeter_angle_7">196</string>
+    <string name="multimeter_angle_8">229</string>
+    <string name="multimeter_angle_9">262</string>
+    <string name="multimeter_angle_10">294</string>
+    <string name="multimeter_angle_11">327</string>
+    <string name="multimeter_angle_12">0</string>
 
     <string name="set">SET</string>
     <string name="read">READ</string>
