@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -49,6 +50,7 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.others.SwipeGestureDetector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -230,6 +232,7 @@ public class LALogicLinesFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.TOP);
         xAxis.setTextColor(Color.WHITE);
 
+        setCarouselPicker();
         setAdapters();
         return v;
     }
@@ -256,6 +259,7 @@ public class LALogicLinesFragment extends Fragment {
                     switch (carouselPicker.getCurrentItem()) {
                         case 0:
                             channelMode = 1;
+                            setAdapters();
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.GONE);
                             llChannel3.setVisibility(View.GONE);
@@ -264,6 +268,7 @@ public class LALogicLinesFragment extends Fragment {
                             break;
                         case 1:
                             channelMode = 2;
+                            setAdapterForTwoChannelMode();
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.VISIBLE);
                             llChannel3.setVisibility(View.GONE);
@@ -273,6 +278,7 @@ public class LALogicLinesFragment extends Fragment {
                             break;
                         case 2:
                             channelMode = 3;
+                            setAdapters();
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.VISIBLE);
                             llChannel3.setVisibility(View.VISIBLE);
@@ -286,6 +292,7 @@ public class LALogicLinesFragment extends Fragment {
                             break;
                         case 3:
                             channelMode = 4;
+                            setAdapters();
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.VISIBLE);
                             llChannel3.setVisibility(View.VISIBLE);
@@ -301,6 +308,7 @@ public class LALogicLinesFragment extends Fragment {
                             break;
                         default:
                             channelMode = 1;
+                            setAdapters();
                             llChannel1.setVisibility(View.VISIBLE);
                             llChannel2.setVisibility(View.GONE);
                             llChannel3.setVisibility(View.GONE);
@@ -651,7 +659,7 @@ public class LALogicLinesFragment extends Fragment {
     }
 
     /**
-     * Sets adapters for all spinners and Carousel Picker
+     * Sets adapters to spinners for all modes except for TwoChannel Mode
      */
 
     private void setAdapters() {
@@ -671,6 +679,73 @@ public class LALogicLinesFragment extends Fragment {
         edgeSelectSpinner3.setAdapter(edges_adapter);
         edgeSelectSpinner4.setAdapter(edges_adapter);
 
+    }
+
+    /**
+     * Sets adapters to spinners for TwoChannel Mode
+     */
+
+    private void setAdapterForTwoChannelMode() {
+        final String[] channels = getResources().getStringArray(R.array.channel_choices);
+        final String[] edges = getResources().getStringArray(R.array.edge_choices);
+
+        final List<String> channel_one_list = new ArrayList<>( Arrays.asList(channels));
+        final List<String> channel_two_list = new ArrayList<>( Arrays.asList(channels));
+
+        final ArrayAdapter<String> channel_one_adapter = new ArrayAdapter<>(getContext(), R.layout.modified_spinner_dropdown_list, channel_one_list);
+        final ArrayAdapter<String> channel_two_adapter = new ArrayAdapter<>(getContext(), R.layout.modified_spinner_dropdown_list, channel_two_list);
+        ArrayAdapter<String> edges_adapter = new ArrayAdapter<>(getContext(), R.layout.modified_spinner_dropdown_list, edges);
+
+        channelSelectSpinner1.setAdapter(channel_one_adapter);
+        channelSelectSpinner2.setAdapter(channel_two_adapter);
+
+        edgeSelectSpinner1.setAdapter(edges_adapter);
+        edgeSelectSpinner2.setAdapter(edges_adapter);
+
+        channelSelectSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selection = channelSelectSpinner1.getItemAtPosition(position).toString();
+                channel_two_list.clear();
+                for(int i = 0; i < channels.length; i++) {
+                    if(!channels[i].equals(selection)) {
+                        channel_two_list.add(channels[i]);
+                    }
+                }
+                channel_two_adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No use
+            }
+        });
+
+        channelSelectSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selection = channelSelectSpinner2.getItemAtPosition(position).toString();
+                channel_one_list.clear();
+                for(int i = 0; i < channels.length; i++) {
+                    if(!channels[i].equals(selection)) {
+                        channel_one_list.add(channels[i]);
+                    }
+                }
+                channel_one_adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No use
+            }
+        });
+    }
+
+    /**
+     * Sets the text in Carousel Picker
+     */
+
+    private void setCarouselPicker() {
         // Calculation made for setting the text size in Carousel Picker for different screens
         DisplayMetrics dm = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
