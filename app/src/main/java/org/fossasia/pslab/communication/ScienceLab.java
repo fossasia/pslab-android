@@ -1137,7 +1137,7 @@ public class ScienceLab {
         for (int j = 0; j < vals.size(); j++) {
             sum = sum + poly.value(vals.get(j));
         }
-        return sum / vals.size();
+        return sum / 2 * vals.size();
     }
 
     private double getRawAverageVoltage(String channelName) {
