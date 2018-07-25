@@ -171,6 +171,7 @@
     <dimen name="multimeter_knob_topmargin">40dp</dimen>
     <dimen name="multimeter_cardview_bottommargin">32dp</dimen>
     <dimen name="multimeter_constraint_3">24dp</dimen>
+    <dimen name="multimeter_constraint_4">15dp</dimen>
     <dimen name="multimeter_length_0">0dp</dimen>
 
     <dimen name="body_resistance_margin">10dp</dimen>
@@ -344,5 +345,6 @@
     <dimen name="lux_chart_height">200dp</dimen>
 
     <dimen name="lux_chart_axis_text">9sp</dimen>
+
 
 </resources>
