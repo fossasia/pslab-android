@@ -134,9 +134,6 @@
     <dimen name="multimeter_line_margin_right">5dp</dimen>
     <dimen name="multimeter_line_margin_top">90dp</dimen>
     <dimen name="multimeter_unitbox_margin_top">95dp</dimen>
-    <dimen name="multimeter_knobcircle_radius_1">105dp</dimen>
-    <dimen name="multimeter_knobcircle_radius_2">101dp</dimen>
-    <dimen name="multimeter_knobcircle_radius_3">107dp</dimen>
     <dimen name="multimeter_symol_width">25dp</dimen>
     <dimen name="multimeter_symbol_height">20dp</dimen>
     <dimen name="multimeter_textsize">24sp</dimen>
@@ -164,11 +161,20 @@
     <dimen name="multimeter_margin_2">5dp</dimen>
     <dimen name="multimeter_margin_3">7dp</dimen>
     <dimen name="multimeter_topline_topmargin">10dp</dimen>
-    <dimen name="multimeter_knob_width">187dp</dimen>
-    <dimen name="multimeter_knob_height">185dp</dimen>
+    <dimen name="multimeter_knob_width">185dp</dimen>
+    <dimen name="multimeter_knob_height">183dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_1">120dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_2">116dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_3">122dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_1_xl">130dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_2_xl">126dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_3_xl">132dp</dimen>
     <dimen name="multimeter_left_box_endmargin">4dp</dimen>
     <dimen name="multimeter_end_box_rightmargin">12dp</dimen>
     <dimen name="multimeter_knob_topmargin">40dp</dimen>
+    <dimen name="multimeter_layout_margin_2">10dp</dimen>
+    <dimen name="multimeter_knob_width_xl">230dp</dimen>
+    <dimen name="multimeter_knob_height_xl">228dp</dimen>
     <dimen name="multimeter_cardview_bottommargin">32dp</dimen>
     <dimen name="multimeter_constraint_3">24dp</dimen>
     <dimen name="multimeter_constraint_4">15dp</dimen>
@@ -345,6 +351,5 @@
     <dimen name="lux_chart_height">200dp</dimen>
 
     <dimen name="lux_chart_axis_text">9sp</dimen>
-
 
 </resources>
