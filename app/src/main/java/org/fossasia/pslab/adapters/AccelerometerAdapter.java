@@ -16,13 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
-
-import org.fossasia.pslab.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import java.text.DecimalFormat;
-
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -30,7 +23,13 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import org.fossasia.pslab.R;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -47,46 +46,6 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
     private Context context;
     private long startTime;
     private int[] colors = {Color.YELLOW, Color.MAGENTA, Color.GREEN};
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.axis_image)
-        ImageView axisImage;
-        @BindView(R.id.accel_value)
-        TextView value;
-        @BindView(R.id.accel_max_text)
-        TextView maxValue;
-        @BindView(R.id.accel_min_text)
-        TextView minValue;
-        @BindView(R.id.chart_accelerometer)
-        LineChart chart;
-
-        private float currentMax = Integer.MIN_VALUE;
-        private float currentMin = Integer.MAX_VALUE;
-        private YAxis y;
-        private LineData data = new LineData();
-        private ArrayList<Entry> entries;
-        private long timeElapsed;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
-
-    public AccelerometerAdapter(String[] dataset, Context context) {
-        this.dataset = dataset;
-        this.context = context;
-    }
-
-    @NonNull
-    @Override
-    public AccelerometerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.accelerometer_list_item, parent, false);
-        sensorManager = (SensorManager) parent.getContext().getSystemService(SENSOR_SERVICE);
-        accelerometer = sensorManager != null ? sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) : null;
-        startTime = System.currentTimeMillis();
-        return new ViewHolder(v);
-    }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
@@ -123,6 +82,9 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
         holder.y.setLabelCount(6);
 
         y2.setDrawGridLines(false);
+
+        holder.previousTimeElapsed = 0;
+
         sensorManager.registerListener(new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
@@ -144,18 +106,25 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
                     holder.minValue.setText(Html.fromHtml(builder.toString()));
                     holder.currentMin = currentAcc;
                 }
-                holder.timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-                holder.entries.add(new Entry((float) holder.timeElapsed, currentAcc));
-                LineDataSet dataSet = new LineDataSet(holder.entries, dataset[holder.getAdapterPosition()]);
-                LineData data = new LineData(dataSet);
-                dataSet.setDrawCircles(false);
-                dataSet.setColor(colors[holder.getAdapterPosition()]);
 
-                holder.chart.setData(data);
-                holder.chart.notifyDataSetChanged();
-                holder.chart.setVisibleXRangeMaximum(3);
-                holder.chart.moveViewToX(data.getEntryCount());
-                holder.chart.invalidate();
+                holder.timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
+                if (holder.timeElapsed != holder.previousTimeElapsed) {
+                    holder.previousTimeElapsed = holder.timeElapsed;
+                    holder.entries.add(new Entry((float) holder.timeElapsed, currentAcc));
+                    LineDataSet dataSet = new LineDataSet(holder.entries, dataset[holder.getAdapterPosition()]);
+                    LineData data = new LineData(dataSet);
+                    dataSet.setDrawCircles(false);
+                    dataSet.setDrawValues(false);
+                    dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                    dataSet.setLineWidth(1);
+                    dataSet.setColor(colors[holder.getAdapterPosition()]);
+
+                    holder.chart.setData(data);
+                    holder.chart.notifyDataSetChanged();
+                    holder.chart.setVisibleXRangeMaximum(3);
+                    holder.chart.moveViewToX(data.getEntryCount());
+                    holder.chart.invalidate();
+                }
             }
 
             @Override
@@ -176,6 +145,47 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
                 break;
             default:
                 break;
+        }
+    }
+
+    public AccelerometerAdapter(String[] dataset, Context context) {
+        this.dataset = dataset;
+        this.context = context;
+    }
+
+    @NonNull
+    @Override
+    public AccelerometerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.accelerometer_list_item, parent, false);
+        sensorManager = (SensorManager) parent.getContext().getSystemService(SENSOR_SERVICE);
+        accelerometer = sensorManager != null ? sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) : null;
+        startTime = System.currentTimeMillis();
+        return new ViewHolder(v);
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.axis_image)
+        ImageView axisImage;
+        @BindView(R.id.accel_value)
+        TextView value;
+        @BindView(R.id.accel_max_text)
+        TextView maxValue;
+        @BindView(R.id.accel_min_text)
+        TextView minValue;
+        @BindView(R.id.chart_accelerometer)
+        LineChart chart;
+
+        private float currentMax = Integer.MIN_VALUE;
+        private float currentMin = Integer.MAX_VALUE;
+        private YAxis y;
+        private LineData data = new LineData();
+        private ArrayList<Entry> entries;
+        private long timeElapsed;
+        private long previousTimeElapsed;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 
