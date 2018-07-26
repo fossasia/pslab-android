@@ -1,6 +1,7 @@
 package org.fossasia.pslab.activity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -8,10 +9,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,8 +34,6 @@ import org.fossasia.pslab.others.ScienceLabCommon;
 import org.fossasia.pslab.others.SwipeGestureDetector;
 import org.fossasia.pslab.others.WaveGeneratorCommon;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -139,6 +143,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private Timer waveGenCounter;
     private Handler wavegenHandler = new Handler();
     private final long LONG_CLICK_DELAY = 100;
+    private AlertDialog waveDialog;
 
     public enum WaveConst {WAVETYPE, WAVE1, WAVE2, SQR1, SQR2, SQR3, SQR4, FREQUENCY, PHASE, DUTY, SQUARE, PWM}
 
@@ -177,14 +182,12 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wave_generator_main);
         ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.scienceLab;
-
         if (!WaveGeneratorCommon.isInitialized) {
             new WaveGeneratorCommon(true);
         }
-
         setUpBottomSheet();
-
-        enableInitialState();//on starting wave1 and sq1 will be selected
+        enableInitialState();
+        waveDialog = createIntentDialog();
 
         //wave panel
         btnCtrlWave1.setOnClickListener(new View.OnClickListener() {
@@ -383,9 +386,13 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                         scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, true);
                         scienceLab.setState(WaveGeneratorCommon.state);
                     }
-                    Intent intent = new Intent(WaveGeneratorActivity.this, OscilloscopeActivity.class);
-                    intent.putExtra("who", "WaveGenerator");
-                    startActivity(intent);
+
+                    waveDialog.show();
+                    Window window = waveDialog.getWindow();
+                    window.setLayout(dpToPx(350), dpToPx(300));
+                    waveDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                            .setTextColor(ContextCompat.getColor(WaveGeneratorActivity.this, R.color.colorPrimary));
+
                 } else {
                     Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
                 }
@@ -840,5 +847,39 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
         };
         waveGenCounter.schedule(task, 1, LONG_CLICK_DELAY);
+    }
+
+    private AlertDialog createIntentDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.wavegen_intent_dialog, null);
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                waveDialog.cancel();
+            }
+        }).setTitle(R.string.open_instrument);
+
+        dialogView.findViewById(R.id.osc_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(WaveGeneratorActivity.this, OscilloscopeActivity.class));
+            }
+        });
+
+        dialogView.findViewById(R.id.la_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(WaveGeneratorActivity.this, LogicalAnalyzerActivity.class));
+            }
+        });
+
+        dialogBuilder.setView(dialogView);
+        return dialogBuilder.create();
+    }
+
+    private int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        return Math.round((float) dp * (displayMetrics.xdpi / 160.0F));
     }
 }
