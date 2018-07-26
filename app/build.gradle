@@ -8,8 +8,8 @@ android {
         applicationId "org.fossasia.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName "1.1.14"
+        versionCode 17
+        versionName "1.1.15"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
