@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.activity.AccelerometerActivity;
 import org.fossasia.pslab.activity.Barometer_activity;
+import org.fossasia.pslab.activity.CompassActivity;
 import org.fossasia.pslab.activity.LogicalAnalyzerActivity;
 import org.fossasia.pslab.activity.LuxMeterActivity;
 import org.fossasia.pslab.activity.MultimeterActivity;
@@ -95,6 +96,10 @@ public class InstrumentsFragment extends Fragment {
                                 intent = new Intent(context, Barometer_activity.class);
                                 startActivity(intent);
                                 break;
+                            case "Compass":
+                                intent = new Intent(context, CompassActivity.class);
+                                startActivity(intent);
+                                break;
                             default:
                                 break;
                         }
@@ -136,7 +141,8 @@ public class InstrumentsFragment extends Fragment {
                     R.string.power_source_description,
                     R.string.lux_meter_description,
                     R.string.accelerometer_description,
-                    R.string.barometer_description
+                    R.string.barometer_description,
+                    R.string.compass_description
             };
 
             applicationItemList.add(new ApplicationItem(
@@ -165,6 +171,9 @@ public class InstrumentsFragment extends Fragment {
             );
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.barometer), R.drawable.tile_icon_barometer, getResources().getString(descriptions[8])
+            ));
+            applicationItemList.add(new ApplicationItem(
+                    getResources().getString(R.string.compass), R.drawable.tile_icon_compass, getResources().getString(descriptions[9])
             ));
             return null;
         }

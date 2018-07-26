@@ -13,11 +13,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="@dimen/power_source_space_top" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,11 +64,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/bottom_sheet_title_text"
+                    android:text="@string/powersource_dialog_heading"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/custom_dialog_text"
                     android:layout_width="match_parent"
+                    android:text="@string/powersource_dialog_text"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/bottom_sheet_margin" />
 
@@ -82,12 +80,13 @@
                     android:layout_height="@dimen/bottom_sheet_image_height"
                     android:layout_margin="@dimen/bottom_sheet_margin"
                     android:contentDescription="@string/schematic_desc"
-                    android:src="@drawable/logic_analyzer_circuit" />
+                    android:src="@drawable/powersource_circuit" />
 
                 <TextView
                     android:id="@+id/custom_dialog_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/powersource_dialog_description"
                     android:layout_margin="@dimen/bottom_sheet_margin"
                     android:background="@color/white" />
 

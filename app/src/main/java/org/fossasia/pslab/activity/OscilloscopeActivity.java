@@ -17,7 +17,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
-
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +36,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.AnalyticsClass;
 import org.fossasia.pslab.communication.ScienceLab;
 import org.fossasia.pslab.experimentsetup.Multi_instrument.DiodeClippingClampingExperiment;
@@ -52,7 +52,6 @@ import org.fossasia.pslab.others.AudioJack;
 import org.fossasia.pslab.others.MathUtils;
 import org.fossasia.pslab.others.Plot2D;
 import org.fossasia.pslab.others.ScienceLabCommon;
-import org.fossasia.pslab.R;
 import org.fossasia.pslab.others.SwipeGestureDetector;
 
 import java.text.DecimalFormat;
@@ -233,78 +232,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         width = size.x;
         height = size.y;
 
-        Bundle extras = getIntent().getExtras();
-        switch (extras.getString("who")) {
-            case "Half Wave Rectifier":
-                isHalfWaveRectifierExperiment = true;
-                if (scienceLab.isConnected()) {
-                    scienceLab.setSine1(5000);
-                }
-                break;
-            case "Full Wave Rectifier":
-                isFullWaveRectifierExperiment = true;
-                if (scienceLab.isConnected()) {
-                    scienceLab.setWaves(5000, 180, 5000);
-                }
-                break;
-            case "Diode Clipping Clamping":
-                isDiodeClippingClampingExperiment = true;
-                if (scienceLab.isConnected()) {
-                    scienceLab.setSine1(5000);
-                }
-                break;
-            case "Astable Multivibrator":
-                isAstableMultivibratorExperiment = true;
-                break;
-            case "Colpitts Oscillator":
-                isColpittsOscillatorExperiment = true;
-                break;
-            case "Phase Shift Oscillator":
-                isPhaseShiftOscillatorExperiment = true;
-                break;
-            case "Wien Bridge Oscillator":
-                isWienBridgeOscillatorExperiment = true;
-                break;
-            case "Monostable Multivibrator":
-                isMonostableMultivibratorExperiment = true;
-                break;
-            case "Speed of Sound":
-                isSpeedOfSoundExperiment = true;
-                break;
-            case "WaveGenerator":
-                //do nothing
-                break;
-            default:
-                break;
-        }
-
         onWindowFocusChanged();
 
         channelParametersFragment = new ChannelParametersFragment();
         timebaseTriggerFragment = new TimebaseTriggerFragment();
         dataAnalysisFragment = new DataAnalysisFragment();
         xyPlotFragment = new XYPlotFragment();
-        halfWaveRectifierFragment = new HalfWaveRectifierFragment();
-        fullWaveRectifierFragment = new FullWaveRectifierFragment();
-        diodeClippingClampingFragment = new DiodeClippingClampingExperiment();
-        oscillatorExperimentFragment = new OscillatorExperimentFragment();
-        speedOfSoundFragment = new SpeedOfSoundFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
-            if (isHalfWaveRectifierExperiment) {
-                addFragment(R.id.layout_dock_os2, halfWaveRectifierFragment, "HalfWaveFragment");
-            } else if (isFullWaveRectifierExperiment) {
-                addFragment(R.id.layout_dock_os2, fullWaveRectifierFragment, "FullWaveFragment");
-            } else if (isDiodeClippingClampingExperiment) {
-                addFragment(R.id.layout_dock_os2, diodeClippingClampingFragment, "DiodeClippingClampingFragment");
-            } else if (isAstableMultivibratorExperiment || isColpittsOscillatorExperiment || isPhaseShiftOscillatorExperiment || isWienBridgeOscillatorExperiment || isMonostableMultivibratorExperiment) {
-                addFragment(R.id.layout_dock_os2, oscillatorExperimentFragment, "OscillatorFragment");
-            } else if (isSpeedOfSoundExperiment) {
-                addFragment(R.id.layout_dock_os2, speedOfSoundFragment, "SpeedOfSoundFragment");
-            } else {
-                addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
-            }
+            addFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
         }
+
         channelParametersButton.setOnClickListener(this);
         timebaseButton.setOnClickListener(this);
         dataAnalysisButton.setOnClickListener(this);
@@ -652,7 +590,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onBackPressed() {
         finish();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override

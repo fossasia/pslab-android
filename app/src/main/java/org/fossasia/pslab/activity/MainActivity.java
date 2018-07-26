@@ -32,7 +32,7 @@ import android.widget.Toast;
 import org.fossasia.pslab.R;
 import org.fossasia.pslab.communication.CommunicationHandler;
 import org.fossasia.pslab.fragment.AboutUsFragment;
-import org.fossasia.pslab.fragment.HelpAndFeedbackFragment;
+import org.fossasia.pslab.fragment.FAQFragment;
 import org.fossasia.pslab.fragment.HomeFragment;
 import org.fossasia.pslab.fragment.InstrumentsFragment;
 import org.fossasia.pslab.fragment.PSLabPinLayoutFragment;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
     private static final String TAG_PINLAYOUT = "pinLayout";
-    private static final String TAG_HELPFEEDBACK = "helpFeedback";
+    private static final String TAG_FAQ = "faq";
     private static String CURRENT_TAG = TAG_INSTRUMENTS;
     private String[] activityTitles;
 
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 return AboutUsFragment.newInstance();
             case 4:
-                return HelpAndFeedbackFragment.newInstance();
+                return FAQFragment.newInstance();
             default:
                 return InstrumentsFragment.newInstance();
         }
@@ -259,13 +259,16 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_help_feedback:
                         navItemIndex = 4;
-                        CURRENT_TAG = TAG_HELPFEEDBACK;
+                        CURRENT_TAG = TAG_FAQ;
                         break;
                     case R.id.nav_report_us:
                         customTabService.launchUrl("https://goo.gl/forms/sHlmRAPFmzcGQ27u2");
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
+                        break;
+                    case R.id.nav_app_version:
+                        setTitleColor(R.color.gray);
                         break;
                     default:
                         navItemIndex = 0;

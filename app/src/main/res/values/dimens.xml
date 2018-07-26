@@ -171,6 +171,7 @@
     <dimen name="multimeter_knob_topmargin">40dp</dimen>
     <dimen name="multimeter_cardview_bottommargin">32dp</dimen>
     <dimen name="multimeter_constraint_3">24dp</dimen>
+    <dimen name="multimeter_constraint_4">15dp</dimen>
     <dimen name="multimeter_length_0">0dp</dimen>
 
     <dimen name="body_resistance_margin">10dp</dimen>
@@ -288,6 +289,18 @@
     <dimen name="progress_bar_height">8dp</dimen>
     <dimen name="connect_instruction_text_header">18sp</dimen>
 
+    <dimen name="compass_padding">4dp</dimen>
+    <dimen name="compass_tv_axis_margin">8dp</dimen>
+    <dimen name="compass_tv_height">30dp</dimen>
+    <dimen name="compass_tv_value_margin">20dp</dimen>
+    <dimen name="compass_select_axes_text_size">18sp</dimen>
+    <dimen name="compass_start_degree">270</dimen>
+    <dimen name="compass_end_degree">630</dimen>
+    <dimen name="compass_max_value">360</dimen>
+    <dimen name="compass_ticks">5</dimen>
+    <dimen name="compass_text_size_large">25sp</dimen>
+    <dimen name="compass_space_top">120dp</dimen>
+
     <dimen name="bottom_sheet_side_margin">20dp</dimen>
     <dimen name="peek_height">66dp</dimen>
     <dimen name="bottom_sheet_image_height">200dp</dimen>
@@ -297,6 +310,7 @@
     <dimen name="bottom_sheet_margin">10dp</dimen>
     <dimen name="btnsheet_top_section_height">46dp</dimen>
     <dimen name="extra_space_top">20dp</dimen>
+    <dimen name="power_source_space_top">120dp</dimen>
 
     <dimen name="sensor_schematic_height">250dp</dimen>
 
@@ -311,6 +325,22 @@
     <dimen name="sensor_params_end">30dp</dimen>
     <dimen name="bh1750_config_padding_left">35dp</dimen>
 
+    <dimen name="list_group_layout_height">52dp</dimen>
+    <dimen name="list_group_layout_width">52dp</dimen>
+    <dimen name="list_item_layout_height">120dp</dimen>
+    <dimen name="list_item_padding">5dp</dimen>
+    <dimen name="faq_question_text_size">20dp</dimen>
+    <dimen name="faq_question_margin_top">10dp</dimen>
+    <dimen name="faq_answer_margin">20dp</dimen>
+    <dimen name="faq_answer_margin_start">15dp</dimen>
+
+    <dimen name="padding_title_dialog_wave">10dp</dimen>
+    <dimen name="btn_title_side_padding">5dp</dimen>
+    <dimen name="btn_padding">5dp</dimen>
+    <dimen name="btn_margin">10dp</dimen>
+    <dimen name="dialog_space_width">20dp</dimen>
+    <dimen name="dialog_sep_margin_top">40dp</dimen>
+
     <dimen name="sensor_lable_height">40dp</dimen>
     <dimen name="luxmeter_config_text_padding">5dp</dimen>
     <dimen name="luxmeter_text_padding">5dp</dimen>
@@ -323,5 +353,6 @@
     <dimen name="lux_chart_height">200dp</dimen>
 
     <dimen name="lux_chart_axis_text">9sp</dimen>
+
 
 </resources>
