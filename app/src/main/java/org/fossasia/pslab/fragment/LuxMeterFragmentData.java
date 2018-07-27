@@ -1,5 +1,6 @@
 package org.fossasia.pslab.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -284,6 +285,7 @@ public class LuxMeterFragmentData extends Fragment {
             unRegisterListener();
         }
 
+        @SuppressLint("SetTextI18n")
         private void visualizeData() {
             if (currentMax < data) {
                 currentMax = data;
@@ -361,7 +363,11 @@ public class LuxMeterFragmentData extends Fragment {
                         count++;
                         sum += item.getY();
                     }
-                    statMean.setText(Float.toString(Float.valueOf(df.format(sum / count))));
+                    try {
+                        statMean.setText(Float.toString(Float.valueOf(df.format(sum / count))));
+                    } catch (NumberFormatException e) {
+                        statMean.setText(getString(R.string.lux_meter_none));
+                    }
 
                     LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
                     LineData data = new LineData(dataSet);
