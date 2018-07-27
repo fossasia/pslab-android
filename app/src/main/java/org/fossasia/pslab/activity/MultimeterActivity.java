@@ -49,8 +49,6 @@ public class MultimeterActivity extends AppCompatActivity {
     Button reset;
     @BindView(R.id.read)
     Button read;
-    @BindView(R.id.description_box)
-    TextView description;
     @BindView(R.id.selector)
     SwitchCompat aSwitch;
 
@@ -95,7 +93,6 @@ public class MultimeterActivity extends AppCompatActivity {
         knobState = multimeter_data.getInt("KnobState", 2);
         switchIsChecked = multimeter_data.getBoolean("SwitchState", false);
         aSwitch.setChecked(switchIsChecked);
-        setDescriptionText(knobState);
 
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/digital-7 (italic).ttf");
         quantity.setTypeface(tf);
@@ -110,7 +107,6 @@ public class MultimeterActivity extends AppCompatActivity {
             @Override
             public void onState(int state) {
                 knobState = state;
-                setDescriptionText(knobState);
                 saveKnobState(knobState);
             }
         });
@@ -118,7 +114,6 @@ public class MultimeterActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 switchIsChecked = isChecked;
-                setDescriptionText(knobState);
                 SharedPreferences.Editor editor = multimeter_data.edit();
                 editor.putBoolean("SwitchState", switchIsChecked);
                 editor.commit();
@@ -134,7 +129,6 @@ public class MultimeterActivity extends AppCompatActivity {
                 knob.setState(knobState);
                 quantity.setText("");
                 unit.setText("");
-                setDescriptionText(knobState);
             }
         });
         read.setOnClickListener(new View.OnClickListener() {
@@ -230,31 +224,6 @@ public class MultimeterActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-
-    private void setDescriptionText(int knobState) {
-        switch (knobState) {
-            case 3:
-                description.setText(R.string.resistance_description);
-                break;
-            case 4:
-                description.setText(R.string.capacitance_description);
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                if (!switchIsChecked) {
-                    description.setText(R.string.frequency_description);
-                } else {
-                    description.setText(R.string.count_pulse_description);
-                }
-                break;
-            default:
-                description.setText(R.string.voltage_channel_description);
-                break;
-        }
     }
 
     private void setUpBottomSheet() {

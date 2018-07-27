@@ -60,7 +60,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/multimeter_length_0"
+        android:layout_height="0dp"
         android:layout_marginBottom="@dimen/multimeter_layout_margin_2"
         android:layout_marginTop="@dimen/multimeter_layout_margin_2"
         app:layout_constraintBottom_toTopOf="@+id/read"
