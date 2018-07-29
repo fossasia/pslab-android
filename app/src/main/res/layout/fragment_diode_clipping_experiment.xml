@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/rounded_custom_border"
-    tools:context="org.fossasia.pslab.experimentsetup.electronicexperiments.DiodeClippingClampingExperiment">
+    tools:context="org.pslab.experimentsetup.electronicexperiments.DiodeClippingClampingExperiment">
 
 
     <TextView
@@ -70,7 +70,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_wave1_diode_clipping" />
 
-    <org.fossasia.pslab.others.FloatSeekBar
+    <org.pslab.others.FloatSeekBar
         android:id="@+id/seekBar_pv1_diodeclipping"
         android:layout_width="@dimen/dimen_zero_dp"
         android:layout_height="@dimen/diode_seekbar_height"

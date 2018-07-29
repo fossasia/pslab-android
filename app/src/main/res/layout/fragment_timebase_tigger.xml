@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/rounded_custom_border"
-    tools:context="org.fossasia.pslab.fragment.TimebaseTriggerFragment">
+    tools:context="org.pslab.fragment.TimebaseTriggerFragment">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
 
-            <org.fossasia.pslab.others.FloatSeekBar
+            <org.pslab.others.FloatSeekBar
                 android:id="@+id/seekBar_timebase_tt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                 tools:layout_editor_absoluteX="52dp"
                 tools:layout_editor_absoluteY="121dp" />
 
-            <org.fossasia.pslab.others.FloatSeekBar
+            <org.pslab.others.FloatSeekBar
                 android:id="@+id/seekBar_trigger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

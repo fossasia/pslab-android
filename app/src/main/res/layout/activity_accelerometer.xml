@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="org.fossasia.pslab.activity.AccelerometerActivity">
+    tools:context="org.pslab.activity.AccelerometerActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/top_app_bar_layout"
