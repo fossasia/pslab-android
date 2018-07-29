@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/rounded_custom_border"
-    tools:context="org.fossasia.pslab.fragment.XYPlotFragment">
+    tools:context="org.pslab.fragment.XYPlotFragment">
 
 
     <CheckBox
