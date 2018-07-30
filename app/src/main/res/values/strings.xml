@@ -56,6 +56,7 @@
     </string-array>
 
     <string-array name="multimeter_knob_states">
+        <item>CH1</item>
         <item>CAP</item>
         <item>AN8</item>
         <item>RES</item>
@@ -66,7 +67,6 @@
         <item>ID4</item>
         <item>CH3</item>
         <item>CH2</item>
-        <item>CH1</item>
     </string-array>
 
     <string name="id1">ID1</string>
