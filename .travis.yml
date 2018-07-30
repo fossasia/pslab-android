@@ -25,7 +25,7 @@ install:
     - echo yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platforms;android-27"
 
 script:
-  - ./gradlew build --stacktrace
+  - 'if [ "$TRAVIS_BRANCH" != "apk" ]; then ./gradlew build --stacktrace; fi'
 
 after_success:
   - bash scripts/prep-key.sh
