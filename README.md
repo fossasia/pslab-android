@@ -1,15 +1,10 @@
-# pslab-android
-PSLab Android App
+# PSLab Android App
 
-<a href="https://play.google.com/store/apps/details?id=org.fossasia.pslab">
-    <img alt="Get it on Google Play"
-        height="80"
-        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
-</a>
+<a href="https://play.google.com/store/apps/details?id=org.fossasia.pslab"><img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"></a>
+<a href="https://f-droid.org/app/org.fossasia.pslab"><img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png"></a>
 
 [![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=development)](https://travis-ci.org/fossasia/pslab-android)
 [![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Preview app](https://img.shields.io/badge/Preview-Appetize.io-orange.svg)](https://appetize.io/app/4eqye6ea422e5np0gp2jfpemgm)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](mailto:pslab-fossasia@googlegroups.com)
 
@@ -24,34 +19,35 @@ Please join us on the following channels:
 ## Roadmap
  - [x] First we need to get communication between Android App and PSLab working.
  - [ ] Implement Applications and expose PSLab Hardware functionality to the user.
- - [ ] Implement Functionality to Perform Experiment using PSLab Hardware Device. 
+ - [ ] Implement Functionality to Perform Experiment using PSLab Hardware Device.
 
 ## Screenshots
 
   <table>
     <tr>
-     <td><img src="/docs/screenshots/screenshot_initialization.png"></td>
-     <td><img src="/docs/screenshots/screenshot_1.png"></td>
-     <td><img src="/docs/screenshots/screenshot_2.png"></td>
-     <td><img src="/docs/screenshots/screenshot_control_main.png"></td>
+     <td><img src="/docs/images/view_home_screen.png"></td>
+     <td><img src="/docs/images/view_navigation_drawer.png"></td>
+     <td><img src="/docs/images/view_instruement_panel.png"></td>
+     <td><img src="/docs/images/view_pin_layout.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/screenshots/screenshot_3.png"></td>
-     <td><img src="/docs/screenshots/screenshot_logical_analyzer.png"></td>
+     <td><img src="/docs/images/screenshot_3.png"></td>
+     <td><img src="/docs/images/screenshot_audio_jack.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/screenshots/screenshot_multilevel_experimentlist.png"></td>
-     <td><img src="/docs/screenshots/screenshot_experiment_doc.png"></td>
-     <td><img src="/docs/screenshots/screenshot_experiment_setup.png"></td>
+     <td><img src="/docs/images/wave_generator_view.png"></td>
+     <td><img src="/docs/images/view_logic_analyzer.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/screenshots/screenshot_audio_jack.png"></td>
+     <td><img src="/docs/images/view_power_source.png"></td>
+     <td><img src="/docs/images/view_guide_box.png"></td>
+     <td><img src="/docs/images/view_lux_meter.png"></td>
     </tr>
   </table>
 
@@ -62,18 +58,17 @@ Please join us on the following channels:
 - [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y) 
 
 ## Features
-**Feature**|**Description**|**Status**
------|-----|-----
-Home Screen|Show status and version of PSLab device|Established
-Application|Exposes PSLab application like Oscilloscope, etc |Established
- |Oscilloscope |Shows variation of analog signals | Established
- |Control |Generate waveforms and PWM signals. Control voltage and current sources and read results from a variety of electric components | Established
- |Logical Analyzer |Captures and displays signals from digital system | Working
- |Data Sensor Logger |Scans sensors connected to PSLab Device and provides an interface to see and log real-time data | Working
- |Sensor Quick View |Scans all the sensors connected to PSLab Device and visualize real-time data | Established
- |Settings |Enable Auto-Start |
- |Saved Experiments |Access Pre-defined and Designed Experiments | Working
- |Design Experiments |To Design our own experiments |
+|   **Feature**    |                    **Description**                    |   **Status**    |
+|------------------|-------------------------------------------------------|-----------------|
+|   Home Screen    | Show status and version of PSLab device               |   Established   |
+|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      |   Established   |
+|  Oscilloscope    | Shows variation of analog signals                     |   Established   |
+|   Multimeter     | Measures voltage, current, resistance and capacitance |   Established   |
+| Logical Analyzer | Captures and displays signals from digital system     |   In Progress   |
+|  Wave Generator  | Generates arbitrary analog and digital waveforms      |   In Progress   |
+|   Power Source   | Generates programmable voltage and currents	   |   Established   |
+|    Lux Meter     | Measures the ambient light intensity                  |   Established   |
+
 
 ## How to set up the Android app in your development environment
 
