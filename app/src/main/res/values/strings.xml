@@ -917,6 +917,7 @@
         <item>1000</item>
         <item>4000</item>
     </string-array>
+    <string name="lux_meter_none">None</string>
 
     <string name="save_csv_data">Save CSV Data</string>
     <string name="view_map">View Map</string>

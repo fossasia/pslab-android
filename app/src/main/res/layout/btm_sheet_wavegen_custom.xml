@@ -45,7 +45,7 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <org.fossasia.pslab.others.ZoomLayout
+        <org.pslab.others.ZoomLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -135,7 +135,7 @@
 
             </LinearLayout>
 
-        </org.fossasia.pslab.others.ZoomLayout>
+        </org.pslab.others.ZoomLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

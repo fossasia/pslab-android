@@ -5,7 +5,7 @@
     android:id="@+id/activity_control"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.fossasia.pslab.activity.ControlActivity">
+    tools:context="org.pslab.activity.ControlActivity">
 
     <FrameLayout
         android:id="@+id/frame_layout_control"
