@@ -79,11 +79,6 @@
     <string name="multimeter_voltage_unit">Volts</string>
     <string name="voltage_channels">Voltage</string>
     <string name="voltage_elements">Voltage at Elements</string>
-    <string name="resistance_description"><b>Resistance:</b> Measures the resistance of the element connected to the SEN pin of the PSLab device</string>
-    <string name="frequency_description"><b>Frequency:</b> Measures the frequency across any element connected between any of ID pins</string>
-    <string name="count_pulse_description"><b>Count Pulse:</b> Measures the pulse of any wave through an element connected across any of ID pins</string>
-    <string name="capacitance_description"><b>Capacitance:</b> Measures the capacitance of the element connected to the CAP pin of the PSLab device.</string>
-    <string name="voltage_channel_description"><b>Voltage:</b> Measures the voltage of any elements connect across any of the channel pins and other pins such as AN8</string>
     <string name="resistance_abbreviation">\u2126</string>
     <string name="capacitance_abbreviation">C</string>
     <string name="multimeter_measure">Measure</string>
@@ -826,7 +821,14 @@
 
     <string name="multimeter_dialog_heading">Multimeter</string>
     <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element.</string>
-    <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.</string>
+    <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.\n\n
+        <b>Different Sections</b>\n\n
+        <b>Resistance:</b> Measures the resistance of the element connected between the SEN and GND pin of the PSLab device.\n\n
+        <b>Capacitance:</b> Measures the capacitance of the element connected between the CAP and GND pin of the PSLab device.\n\n
+        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as AN8.\n\n
+        <b>Frequency:</b> Measures the frequency across any element connected between any of ID and GND pins.\n\n
+        <b>Count Pulse:</b> Measures the pulse of any wave through an element connected between any of ID and GND pins.\n\n
+    </string>
 
     <string name="show_guide">Show Guide</string>
     <string name="powersource_dialog_heading">Power Source</string>
