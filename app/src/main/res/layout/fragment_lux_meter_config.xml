@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    tools:context="org.pslab.fragment.LuxMeterFragmentConfig">
+    tools:context="io.pslab.fragment.LuxMeterFragmentConfig">
 
     <LinearLayout
         android:layout_width="match_parent"

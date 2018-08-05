@@ -5,7 +5,7 @@
     android:layout_gravity="center_horizontal"
     android:layout_margin="@dimen/dialog_space_width">
 
-    <org.pslab.items.SquareLinearLayout
+    <io.pslab.items.SquareLinearLayout
         android:id="@+id/osc_btn"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -34,7 +34,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/icon_oscilloscope_white" />
 
-    </org.pslab.items.SquareLinearLayout>
+    </io.pslab.items.SquareLinearLayout>
 
     <View
         android:layout_width="@dimen/separator_width"
@@ -43,7 +43,7 @@
         android:layout_marginTop="@dimen/dialog_sep_margin_top"
         android:background="@color/grey_light" />
 
-    <org.pslab.items.SquareLinearLayout
+    <io.pslab.items.SquareLinearLayout
         android:id="@+id/la_btn"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -69,6 +69,6 @@
             android:layout_margin="@dimen/btn_margin"
             android:scaleType="centerCrop"
             android:src="@drawable/icon_logic_analyzer_white" />
-    </org.pslab.items.SquareLinearLayout>
+    </io.pslab.items.SquareLinearLayout>
 
 </LinearLayout>
