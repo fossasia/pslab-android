@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/rounded_custom_border"
-    tools:context="org.pslab.experimentsetup.electronicexperiments.HalfWaveRectifierFragment">
+    tools:context="io.pslab.experimentsetup.electronicexperiments.HalfWaveRectifierFragment">
 
     <TextView
         android:id="@+id/tv_wave1_label_h_wave_rectifier"

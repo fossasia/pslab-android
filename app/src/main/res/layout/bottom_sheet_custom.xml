@@ -49,7 +49,7 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <org.pslab.others.ZoomLayout
+        <io.pslab.others.ZoomLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -97,7 +97,7 @@
 
             </LinearLayout>
 
-        </org.pslab.others.ZoomLayout>
+        </io.pslab.others.ZoomLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
