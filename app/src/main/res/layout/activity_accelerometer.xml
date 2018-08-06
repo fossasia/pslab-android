@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/accel_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -26,8 +27,10 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/accelerometer_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/top_app_bar_layout"
-        android:layout_marginBottom="@dimen/recycler_view_margin"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="?attr/actionBarSize"
         android:scrollbars="vertical" />
-</RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
