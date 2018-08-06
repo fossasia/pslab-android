@@ -61,7 +61,7 @@
                             android:gravity="center"
                             android:orientation="horizontal">
 
-                            <org.pslab.items.SquareImageButton
+                            <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pv1_up"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                 android:theme="@style/AppTheme.Button" />
 
-                            <org.pslab.items.SquareImageButton
+                            <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pv1_down"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
                             android:gravity="center"
                             android:orientation="horizontal">
 
-                            <org.pslab.items.SquareImageButton
+                            <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pv2_up"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                 android:theme="@style/AppTheme.Button" />
 
-                            <org.pslab.items.SquareImageButton
+                            <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pv2_down"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
@@ -242,7 +242,7 @@
                             android:gravity="center"
                             android:orientation="horizontal">
 
-                            <org.pslab.items.SquareImageButton
+                            <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pv3_up"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
@@ -253,7 +253,7 @@
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                 android:theme="@style/AppTheme.Button" />
 
-                            <org.pslab.items.SquareImageButton
+                            <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pv3_down"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
@@ -334,7 +334,7 @@
                             android:gravity="center"
                             android:orientation="horizontal">
 
-                            <org.pslab.items.SquareImageButton
+                            <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pcs_up"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
@@ -345,7 +345,7 @@
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                 android:theme="@style/AppTheme.Button" />
 
-                            <org.pslab.items.SquareImageButton
+                            <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pcs_down"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
