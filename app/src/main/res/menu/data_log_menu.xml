@@ -2,15 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/save_csv_data"
+        android:id="@+id/record_pause_data"
+        android:icon="@drawable/record_icon"
+        android:title="@string/record_csv_data"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/delete_csv_data"
+        android:icon="@drawable/delete_icon"
+        android:title="@string/delete_csv_data"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/record_csv_data"
         android:icon="@drawable/menu_icon_save"
         android:title="@string/save_csv_data"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/show_map"
         android:icon="@drawable/menu_icon_map"
         android:title="@string/view_map"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/settings"
         android:title="@string/nav_settings"

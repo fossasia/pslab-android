@@ -59,7 +59,7 @@ public class GPSLogger {
 
         @Override
         public void onProviderDisabled(String s) {
-            callerActivity.saveData = false;
+            callerActivity.recordData = false;
             new AlertDialog.Builder(callerActivity, R.style.AlertDialogStyle)
                     .setTitle(R.string.allow_gps)
                     .setMessage(R.string.allow_gps_info)
