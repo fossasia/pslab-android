@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <org.pslab.others.CustomScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
@@ -377,6 +377,6 @@
             </android.support.v7.widget.CardView>
 
         </LinearLayout>
-    </ScrollView>
+    </org.pslab.others.CustomScrollView>
 
 </android.support.constraint.ConstraintLayout>
