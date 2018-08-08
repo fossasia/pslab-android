@@ -174,7 +174,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             try {
-                                                MPU6050 sensorMPU6050 = new MPU6050(i2c);
+                                                MPU6050 sensorMPU6050 = new MPU6050(i2c, scienceLab);
                                                 while (loggingThreadRunning) {
                                                     TaskMPU6050 taskMPU6050 = new TaskMPU6050(sensorMPU6050);
                                                     taskMPU6050.execute();

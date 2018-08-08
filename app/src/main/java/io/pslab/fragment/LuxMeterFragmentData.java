@@ -120,7 +120,7 @@ public class LuxMeterFragmentData extends Fragment {
                 if (scienceLab.isConnected()) {
                     try {
                         I2C i2c = scienceLab.i2c;
-                        sensorTSL2561 = new TSL2561(i2c);
+                        sensorTSL2561 = new TSL2561(i2c, scienceLab);
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }

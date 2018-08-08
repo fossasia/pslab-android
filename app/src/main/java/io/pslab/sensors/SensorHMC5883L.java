@@ -78,7 +78,7 @@ public class SensorHMC5883L extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
         try {
-            sensorHMC5883L = new HMC5883L(i2c);
+            sensorHMC5883L = new HMC5883L(i2c, scienceLab);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -183,7 +183,10 @@ public class SensorHMC5883L extends AppCompatActivity {
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (play) {
+                if (play && scienceLab.isConnected()) {
+                    playPauseButton.setImageResource(R.drawable.play);
+                    play = false;
+                } else if (!scienceLab.isConnected()) {
                     playPauseButton.setImageResource(R.drawable.play);
                     play = false;
                 } else {

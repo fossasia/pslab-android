@@ -2,6 +2,7 @@ package io.pslab.communication.sensors;
 
 import android.util.Log;
 
+import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import static java.lang.Math.pow;
  */
 
 public class BMP180 {
+
     private String TAG = "BMP180";
     private int ADDRESS = 0x77;
     private int REG_CONTROL = 0xF4;
@@ -36,32 +38,34 @@ public class BMP180 {
     private double c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, y2, p0, p1, p2, temperature, pressure, baseline;
     private ArrayList<Integer> setOverSampling = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
 
-    public BMP180(I2C i2c) throws IOException, InterruptedException {
+    public BMP180(I2C i2c, ScienceLab scienceLab) throws IOException, InterruptedException {
         this.i2c = i2c;
-        MB = readInt(0xBA);
-        c3 = 160 * pow(2, -15) * readInt(0xAE);
-        c4 = pow(10, -3) * pow(2, -15) * readUInt(0xB0);
-        b1 = pow(160, 2) * pow(2, -30) * readInt(0xB6);
-        c5 = (pow(2, -15) / 160) * readUInt(0xB2);
-        c6 = readUInt(0xB4);
-        mc = (pow(2, 11) / pow(160, 2)) * readInt(0xBC);
-        md = readInt(0xBE) / 160.0;
-        x0 = readInt(0xAA);
-        x1 = 160.0 * pow(2, -13) * readInt(0xAC);
-        x2 = pow(160, 2) * pow(2, -25) * readInt(0xB8);
-        y0 = c4 * pow(2, 15);
-        y1 = c4 * c3;
-        y2 = c4 * b1;
-        p0 = (3791.0 - 8.0) / 1600.0;
-        p1 = 1.0 - 7357.0 * pow(2, -20);
-        p2 = 3038.0 * 100.0 * pow(2, -36);
-        temperature = 25;
+        if (scienceLab.isConnected()) {
+            MB = readInt(0xBA);
+            c3 = 160 * pow(2, -15) * readInt(0xAE);
+            c4 = pow(10, -3) * pow(2, -15) * readUInt(0xB0);
+            b1 = pow(160, 2) * pow(2, -30) * readInt(0xB6);
+            c5 = (pow(2, -15) / 160) * readUInt(0xB2);
+            c6 = readUInt(0xB4);
+            mc = (pow(2, 11) / pow(160, 2)) * readInt(0xBC);
+            md = readInt(0xBE) / 160.0;
+            x0 = readInt(0xAA);
+            x1 = 160.0 * pow(2, -13) * readInt(0xAC);
+            x2 = pow(160, 2) * pow(2, -25) * readInt(0xB8);
+            y0 = c4 * pow(2, 15);
+            y1 = c4 * c3;
+            y2 = c4 * b1;
+            p0 = (3791.0 - 8.0) / 1600.0;
+            p1 = 1.0 - 7357.0 * pow(2, -20);
+            p2 = 3038.0 * 100.0 * pow(2, -36);
+            temperature = 25;
 
-        Log.v("calib", Arrays.toString((new double[]{c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, p0, p1, p2})));
-        initTemperature();
-        readTemperature();
-        initPressure();
-        baseline = readPressure();
+            Log.v("calib", Arrays.toString((new double[]{c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, p0, p1, p2})));
+            initTemperature();
+            readTemperature();
+            initPressure();
+            baseline = readPressure();
+        }
     }
 
     private short readInt(int address) throws IOException {
