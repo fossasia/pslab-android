@@ -259,7 +259,7 @@ public class LuxMeterFragmentConfig extends Fragment {
                             try {
                                 data = i2c.scan(null);
                                 if (data.contains(0x39)) {
-                                    tsl2561 = new TSL2561(i2c);
+                                    tsl2561 = new TSL2561(i2c, scienceLab);
                                     gainValue.setEnabled(true);
                                     LuxMeterFragmentConfig.selectedSensor = 2;
                                 }

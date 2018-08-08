@@ -2,6 +2,7 @@ package io.pslab.communication.sensors;
 
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.util.FastMath;
+import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 
 import java.io.IOException;
@@ -32,11 +33,13 @@ public class MPU6050 {
     private ArrayList<Integer> setAccelRange = new ArrayList<>(Arrays.asList(2, 4, 8, 16));
     private ArrayList<Double> kalmanFilter = new ArrayList<>(Arrays.asList(0.01, 0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0, 0.0));
 
-    public MPU6050(I2C i2c) throws IOException {
+    public MPU6050(I2C i2c, ScienceLab scienceLab) throws IOException {
         this.i2c = i2c;
-        setGyroRange(2000);
-        setAccelerationRange(16);
-        powerUp();
+        if (scienceLab.isConnected()) {
+            setGyroRange(2000);
+            setAccelerationRange(16);
+            powerUp();
+        }
     }
 
     public void kalmanFilter(Double opt) throws IOException, NullPointerException {

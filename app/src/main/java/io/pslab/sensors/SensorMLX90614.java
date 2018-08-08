@@ -227,7 +227,10 @@ public class SensorMLX90614 extends AppCompatActivity {
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (play) {
+                if (play && scienceLab.isConnected()) {
+                    playPauseButton.setImageResource(R.drawable.play);
+                    play = false;
+                } else if (!scienceLab.isConnected()) {
                     playPauseButton.setImageResource(R.drawable.play);
                     play = false;
                 } else {

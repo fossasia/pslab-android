@@ -78,7 +78,7 @@ public class SensorBMP180 extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
         try {
-            sensorBMP180 = new BMP180(i2c);
+            sensorBMP180 = new BMP180(i2c, scienceLab);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -231,7 +231,7 @@ public class SensorBMP180 extends AppCompatActivity {
     }
 
     private boolean shouldPlay() {
-        if (play) {
+        if (play && scienceLab.isConnected()) {
             if (indefiniteSamplesCheckBox.isChecked())
                 return true;
             else if (counter >= 0) {
@@ -257,7 +257,10 @@ public class SensorBMP180 extends AppCompatActivity {
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (play) {
+                if (play && scienceLab.isConnected()) {
+                    playPauseButton.setImageResource(R.drawable.play);
+                    play = false;
+                } else if (!scienceLab.isConnected()) {
                     playPauseButton.setImageResource(R.drawable.play);
                     play = false;
                 } else {
@@ -314,7 +317,7 @@ public class SensorBMP180 extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (sensorBMP180 != null) {
+                if (sensorBMP180 != null && scienceLab.isConnected()) {
                     dataBMP180 = sensorBMP180.getRaw();
                 }
             } catch (IOException | InterruptedException e) {

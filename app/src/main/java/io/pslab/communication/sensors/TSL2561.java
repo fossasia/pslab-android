@@ -2,6 +2,7 @@ package io.pslab.communication.sensors;
 
 import android.util.Log;
 
+import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 
 import java.io.IOException;
@@ -51,21 +52,23 @@ public class TSL2561 {
     private ArrayList<java.io.Serializable> setGain = new ArrayList<java.io.Serializable>(Arrays.asList("1x", "16x"));
     private ArrayList<java.io.Serializable> setTiming = new ArrayList<java.io.Serializable>(Arrays.asList(0, 1, 2));
 
-    public TSL2561(I2C i2c) throws IOException, InterruptedException {
+    public TSL2561(I2C i2c, ScienceLab scienceLab) throws IOException, InterruptedException {
         this.i2c = i2c;
         // set timing 101ms & 16x gain
-        enable();
-        _wait();
-        i2c.writeBulk(ADDRESS, new int[]{0x80 | 0x01, 0x01 | 0x10});
-        //full scale luminosity
-        infraList = i2c.readBulk(ADDRESS, 0x80 | 0x20 | 0x0E, 2);
-        fullList = i2c.readBulk(ADDRESS, 0x80 | 0x20 | 0x0C, 2);
-        full = (fullList.get(1) << 8) | fullList.get(0);
-        infra = (infraList.get(1) << 8) | infraList.get(0);
+        if (scienceLab.isConnected()) {
+            enable();
+            _wait();
+            i2c.writeBulk(ADDRESS, new int[]{0x80 | 0x01, 0x01 | 0x10});
+            //full scale luminosity
+            infraList = i2c.readBulk(ADDRESS, 0x80 | 0x20 | 0x0E, 2);
+            fullList = i2c.readBulk(ADDRESS, 0x80 | 0x20 | 0x0C, 2);
+            full = (fullList.get(1) << 8) | fullList.get(0);
+            infra = (infraList.get(1) << 8) | infraList.get(0);
 
-        Log.v(TAG, "Full - " + Integer.toString(full));
-        Log.v(TAG, "Infrared - " + Integer.toString(infra));
-        Log.v(TAG, "Visible -" + Integer.toString(full - infra));
+            Log.v(TAG, "Full - " + Integer.toString(full));
+            Log.v(TAG, "Infrared - " + Integer.toString(infra));
+            Log.v(TAG, "Visible -" + Integer.toString(full - infra));
+        }
     }
 
     public int getID() throws IOException {
