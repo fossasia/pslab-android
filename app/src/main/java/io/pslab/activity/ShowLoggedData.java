@@ -42,6 +42,7 @@ import io.realm.RealmResults;
 
 /**
  * Created by viveksb007 on 12/8/17.
+ * deprecated
  */
 
 public class ShowLoggedData extends AppCompatActivity {

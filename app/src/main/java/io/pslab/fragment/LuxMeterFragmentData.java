@@ -1,19 +1,16 @@
 package io.pslab.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +25,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import io.pslab.R;
-import io.pslab.activity.LuxMeterActivity;
-import io.pslab.communication.ScienceLab;
-import io.pslab.communication.sensors.BH1750;
-import io.pslab.communication.sensors.TSL2561;
-import io.pslab.others.CSVLogger;
-import io.pslab.others.GPSLogger;
-import io.pslab.others.ScienceLabCommon;
-import io.pslab.communication.peripherals.I2C;
-import io.pslab.others.CustomSnackBar;
-
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -46,6 +32,17 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.pslab.R;
+import io.pslab.activity.LuxMeterActivity;
+import io.pslab.communication.ScienceLab;
+import io.pslab.communication.peripherals.I2C;
+import io.pslab.communication.sensors.BH1750;
+import io.pslab.communication.sensors.TSL2561;
+import io.pslab.models.LuxData;
+import io.pslab.models.SensorLogged;
+import io.pslab.others.GPSLogger;
+import io.pslab.others.ScienceLabCommon;
+import io.realm.Realm;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -76,6 +73,7 @@ public class LuxMeterFragmentData extends Fragment {
     private long startTime;
     private int flag;
     private ArrayList<Entry> entries;
+    private ArrayList<LuxData> luxRealmData;
     private float currentMin;
     private float currentMax;
     private YAxis y;
@@ -84,6 +82,7 @@ public class LuxMeterFragmentData extends Fragment {
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / 1000;
     private GPSLogger gpsLogger;
     private Runnable runnable;
+    private Realm realm;
 
     public static LuxMeterFragmentData newInstance() {
         return new LuxMeterFragmentData();
@@ -102,6 +101,8 @@ public class LuxMeterFragmentData extends Fragment {
         currentMin = 10000;
         currentMax = 30;
         entries = new ArrayList<>();
+        luxRealmData = new ArrayList<>();
+        realm = Realm.getDefaultInstance();
         switch (sensorType) {
             case 0:
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
@@ -304,64 +305,20 @@ public class LuxMeterFragmentData extends Fragment {
                     lightMeter.setPointerColor(Color.RED);
                 else
                     lightMeter.setPointerColor(Color.WHITE);
-
                 timeElapsed = ((System.currentTimeMillis() - startTime) / 1000);
                 if (timeElapsed != previousTimeElapsed) {
                     previousTimeElapsed = timeElapsed;
-                    entries.add(new Entry((float) timeElapsed, data));
+                    Entry entry = new Entry((float) timeElapsed, data);
+                    entries.add(entry);
+                    Long currentTime = System.currentTimeMillis();
+                    LuxData tempObject = new LuxData(data, currentTime, timeElapsed);
+                    luxRealmData.add(tempObject);
                     final LuxMeterActivity parent = (LuxMeterActivity) getActivity();
-                    for (Entry item : entries) {
-                        assert parent != null;
+                    assert parent != null;
 
-                        if (parent.recordData) {
-                            gpsLogger = parent.gpsLogger;
-                            String data = String.valueOf(System.currentTimeMillis()) + "," +
-                                    item.getX() + "," + item.getY() + "\n";
-                            parent.luxLogger.writeCSVFile(data);
-                        }
-
-                        if (parent.exportData) {
-                            parent.exportData = false;
-                            if (parent.locationPref && gpsLogger != null) {
-                                String data;
-                                Location location = gpsLogger.getBestLocation();
-                                if (location != null) {
-                                    data = "\nLocation" + "," + String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude() + "\n");
-                                } else {
-                                    data = "\nLocation" + "," + "null" + "," + "null";
-                                }
-                                parent.luxLogger.writeCSVFile(data);
-                                gpsLogger.removeUpdate();
-                            }
-                            CustomSnackBar.showSnackBar((CoordinatorLayout) parent.findViewById(R.id.cl),
-                                    getString(R.string.csv_store_text) + " " + parent.luxLogger.getCurrentFilePath()
-                                    , getString(R.string.delete_capital), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            new AlertDialog.Builder(parent, R.style.AlertDialogStyle)
-                                                    .setTitle(R.string.delete_file)
-                                                    .setMessage(R.string.delete_warning)
-                                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            parent.luxLogger.deleteFile();
-                                                        }
-                                                    })
-                                                    .setNegativeButton(R.string.cancel, null)
-                                                    .create()
-                                                    .show();
-                                        }
-                                    });
-                        }
-
-                        count++;
-                        sum += item.getY();
-                    }
-                    try {
-                        statMean.setText(Float.toString(Float.valueOf(df.format(sum / count))));
-                    } catch (NumberFormatException e) {
-                        statMean.setText(getString(R.string.lux_meter_none));
-                    }
+                    count++;
+                    sum += entry.getY();
+                    statMean.setText(Float.toString(Float.valueOf(df.format(sum / count))));
 
                     LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
                     LineData data = new LineData(dataSet);
@@ -410,4 +367,30 @@ public class LuxMeterFragmentData extends Fragment {
         }
     }
 
+    public void saveDataInRealm(Long uniqueRef) {
+        realm.beginTransaction();
+
+        SensorLogged sensorLogged = realm.createObject(SensorLogged.class, uniqueRef);
+        sensorLogged.setSensor("Lux Meter");
+        sensorLogged.setDateTimeStamp(System.currentTimeMillis());
+
+
+        for (int i = 0; i < luxRealmData.size(); i++) {
+            LuxData tempObject = luxRealmData.get(i);
+            tempObject.setId(i);
+            tempObject.setForeignKey(uniqueRef);
+            realm.copyToRealm(tempObject);
+            Log.i("dataResult", String.valueOf(tempObject.getLux()));
+
+        }
+        realm.copyToRealm(sensorLogged);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mChart.clear();
+        mChart.invalidate();
+    }
 }

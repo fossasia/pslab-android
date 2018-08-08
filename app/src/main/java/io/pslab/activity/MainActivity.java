@@ -270,6 +270,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_app_version:
                         setTitleColor(R.color.gray);
                         break;
+                    case R.id.sensor_data_logger:
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
+                        startActivity(new Intent(MainActivity.this, DataLoggerActivity.class));
+                        break;
                     default:
                         navItemIndex = 0;
                 }
