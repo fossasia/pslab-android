@@ -78,6 +78,8 @@
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".activity.AccelerometerActivity" />
 
+        <activity android:name=".activity.DataLoggerActivity"></activity>
+
         <activity
             android:name=".activity.Barometer_activity"
             android:configChanges="keyboardHidden|screenSize|orientation"/>
