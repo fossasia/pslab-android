@@ -1,5 +1,6 @@
 package io.pslab.communication.sensors;
 
+import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 
 import java.io.IOException;
@@ -41,9 +42,11 @@ public class HMC5883L {
 
     private I2C i2c;
 
-    public HMC5883L(I2C i2c) throws IOException {
+    public HMC5883L(I2C i2c, ScienceLab scienceLab) throws IOException {
         this.i2c = i2c;
-        init();
+        if (scienceLab.isConnected()) {
+            init();
+        }
     }
 
     private void init() throws IOException {

@@ -80,7 +80,7 @@ public class SensorTSL2561 extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
         try {
-            sensorTSL2561 = new TSL2561(i2c);
+            sensorTSL2561 = new TSL2561(i2c, scienceLab);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -130,7 +130,7 @@ public class SensorTSL2561 extends AppCompatActivity {
         mChart = findViewById(R.id.chart_tsl2561);
 
         try {
-            if (sensorTSL2561 != null) {
+            if (sensorTSL2561 != null & scienceLab.isConnected()) {
                 sensorTSL2561.setGain(spinnerSensorTSL2561Gain.getSelectedItem().toString());
             }
         } catch (IOException e) {
@@ -201,7 +201,10 @@ public class SensorTSL2561 extends AppCompatActivity {
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (play) {
+                if (play && scienceLab.isConnected()) {
+                    playPauseButton.setImageResource(R.drawable.play);
+                    play = false;
+                } else if (!scienceLab.isConnected()) {
                     playPauseButton.setImageResource(R.drawable.play);
                     play = false;
                 } else {

@@ -54,7 +54,6 @@ public class LuxMeterFragmentData extends Fragment {
     private static int highLimit = 2000;
     private static int updatePeriod = 100;
     private final Object lock = new Object();
-    public CSVLogger lux_logger;
 
     @BindView(R.id.lux_stat_max)
     TextView statMax;
@@ -81,7 +80,6 @@ public class LuxMeterFragmentData extends Fragment {
     private YAxis y;
     private volatile boolean monitor = true;
     private Unbinder unbinder;
-    private boolean logged = false, writeHeader = false;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / 1000;
     private GPSLogger gpsLogger;
 
@@ -122,7 +120,7 @@ public class LuxMeterFragmentData extends Fragment {
                 if (scienceLab.isConnected()) {
                     try {
                         I2C i2c = scienceLab.i2c;
-                        sensorTSL2561 = new TSL2561(i2c);
+                        sensorTSL2561 = new TSL2561(i2c, scienceLab);
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -313,53 +311,48 @@ public class LuxMeterFragmentData extends Fragment {
                     final LuxMeterActivity parent = (LuxMeterActivity) getActivity();
                     for (Entry item : entries) {
                         assert parent != null;
-                        if (parent.saveData) {
-                            if (!writeHeader) {
-                                gpsLogger = parent.gpsLogger;
-                                lux_logger = new CSVLogger(getString(R.string.lux_meter));
-                                lux_logger.writeCSVFile("Timestamp,X,Y\n");
-                                writeHeader = true;
-                            }
+
+                        if (parent.recordData) {
+                            gpsLogger = parent.gpsLogger;
                             String data = String.valueOf(System.currentTimeMillis()) + "," +
                                     item.getX() + "," + item.getY() + "\n";
-                            lux_logger.writeCSVFile(data);
-                            logged = true;
-                        } else {
-                            if (logged) {
-                                writeHeader = false;
-                                logged = false;
-                                if (parent.locationPref && gpsLogger != null) {
-                                    String data;
-                                    Location location = gpsLogger.getBestLocation();
-                                    if (location != null) {
-                                        data = "\nLocation" + "," + String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude() + "\n");
-                                    } else {
-                                        data = "\nLocation" + "," + "null" + "," + "null";
-                                    }
-                                    lux_logger.writeCSVFile(data);
-                                    gpsLogger.removeUpdate();
-                                }
-                                CustomSnackBar.showSnackBar((CoordinatorLayout) parent.findViewById(R.id.cl),
-                                        getString(R.string.csv_store_text) + " " + lux_logger.getCurrentFilePath()
-                                        , getString(R.string.delete_capital), new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                new AlertDialog.Builder(parent, R.style.AlertDialogStyle)
-                                                        .setTitle(R.string.delete_file)
-                                                        .setMessage(R.string.delete_warning)
-                                                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                                lux_logger.deleteFile();
-                                                            }
-                                                        })
-                                                        .setNegativeButton(R.string.cancel, null)
-                                                        .create()
-                                                        .show();
-                                            }
-                                        });
-                            }
+                            parent.luxLogger.writeCSVFile(data);
                         }
+
+                        if (parent.exportData) {
+                            parent.exportData = false;
+                            if (parent.locationPref && gpsLogger != null) {
+                                String data;
+                                Location location = gpsLogger.getBestLocation();
+                                if (location != null) {
+                                    data = "\nLocation" + "," + String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude() + "\n");
+                                } else {
+                                    data = "\nLocation" + "," + "null" + "," + "null";
+                                }
+                                parent.luxLogger.writeCSVFile(data);
+                                gpsLogger.removeUpdate();
+                            }
+                            CustomSnackBar.showSnackBar((CoordinatorLayout) parent.findViewById(R.id.cl),
+                                    getString(R.string.csv_store_text) + " " + parent.luxLogger.getCurrentFilePath()
+                                    , getString(R.string.delete_capital), new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            new AlertDialog.Builder(parent, R.style.AlertDialogStyle)
+                                                    .setTitle(R.string.delete_file)
+                                                    .setMessage(R.string.delete_warning)
+                                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            parent.luxLogger.deleteFile();
+                                                        }
+                                                    })
+                                                    .setNegativeButton(R.string.cancel, null)
+                                                    .create()
+                                                    .show();
+                                        }
+                                    });
+                        }
+
                         count++;
                         sum += item.getY();
                     }

@@ -33,6 +33,7 @@ import android.widget.Toast;
 import io.pslab.R;
 import io.pslab.fragment.LuxMeterFragmentConfig;
 import io.pslab.fragment.LuxMeterFragmentData;
+import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.MathUtils;
@@ -43,11 +44,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LuxMeterActivity extends AppCompatActivity {
-    BottomSheetBehavior bottomSheetBehavior;
-    GestureDetector gestureDetector;
+
     private static final String PREF_NAME = "customDialogPreference";
     private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
     private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_MAPS = 102;
+
+    public boolean recordData = false;
+    public boolean exportData = false;
+    public boolean recordingStarted = false;
+    public GPSLogger gpsLogger;
+    public boolean locationPref;
+    public CSVLogger luxLogger;
+    private Menu menu;
+
+    BottomSheetBehavior bottomSheetBehavior;
+    GestureDetector gestureDetector;
 
     @BindView(R.id.navigation_lux_meter)
     BottomNavigationView bottomNavigationView;
@@ -55,7 +66,6 @@ public class LuxMeterActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.cl)
     CoordinatorLayout coordinatorLayout;
-
     //bottomSheet
     @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
@@ -73,11 +83,7 @@ public class LuxMeterActivity extends AppCompatActivity {
     ImageView bottomSheetSchematic;
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
-
-    public boolean saveData = false;
-    public GPSLogger gpsLogger;
     private boolean checkGpsOnResume = false;
-    public boolean locationPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,13 +199,14 @@ public class LuxMeterActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.data_log_menu, menu);
+        this.menu = menu;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.save_csv_data:
+            case R.id.record_pause_data:
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -207,24 +214,53 @@ public class LuxMeterActivity extends AppCompatActivity {
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA);
                     return true;
                 }
-                if (saveData) {
-                    saveData = false;
+                if (recordData) {
+                    item.setIcon(R.drawable.record_icon);
+                    recordData = false;
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null);
                 } else {
+                    item.setIcon(R.drawable.pause_icon);
+                    if (!recordingStarted) {
+                        luxLogger = new CSVLogger(getString(R.string.lux_meter));
+                        luxLogger.writeCSVFile("Timestamp,X,Y\n");
+                        recordingStarted = true;
+                    }
                     if (locationPref) {
                         gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
                         if (gpsLogger.isGPSEnabled()) {
-                            saveData = true;
+                            recordData = true;
                             CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_enabled), null, null);
                         } else {
                             checkGpsOnResume = true;
                         }
                         gpsLogger.startFetchingLocation();
                     } else {
-                        saveData = true;
+                        recordData = true;
                         CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null);
                     }
                 }
-                invalidateOptionsMenu();
+                break;
+            case R.id.record_csv_data:
+                if (recordingStarted) {
+                    MenuItem item1 = menu.findItem(R.id.record_pause_data);
+                    item1.setIcon(R.drawable.record_icon);
+                    exportData = true;
+                    recordingStarted = false;
+                    recordData = false;
+                } else {
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null);
+                }
+                break;
+            case R.id.delete_csv_data:
+                if (recordingStarted) {
+                    MenuItem item1 = menu.findItem(R.id.record_pause_data);
+                    item1.setIcon(R.drawable.record_icon);
+                    luxLogger.deleteFile();
+                    recordingStarted = false;
+                    recordData = false;
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null);
+                } else
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null);
                 break;
             case R.id.show_map:
                 if (ContextCompat.checkSelfPermission(this,
@@ -251,10 +287,10 @@ public class LuxMeterActivity extends AppCompatActivity {
         super.onResume();
         if (checkGpsOnResume) {
             if (gpsLogger.isGPSEnabled()) {
-                saveData = true;
+                recordData = true;
                 CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
             } else {
-                saveData = false;
+                recordData = false;
                 Toast.makeText(getApplicationContext(), getString(R.string.gps_not_enabled),
                         Toast.LENGTH_SHORT).show();
             }
@@ -270,14 +306,14 @@ public class LuxMeterActivity extends AppCompatActivity {
                 if (locationPref) {
                     gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
                     if (gpsLogger.isGPSEnabled()) {
-                        saveData = true;
+                        recordData = true;
                         CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_enabled), null, null);
                     } else {
                         checkGpsOnResume = true;
                     }
                     gpsLogger.startFetchingLocation();
                 } else {
-                    saveData = true;
+                    recordData = true;
                     CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null);
                 }
             } else {

@@ -55,9 +55,7 @@ public class SensorActivity extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
 
         i2c = scienceLab.i2c;
-        sensorAddr.put(0x60, "MCP4728");
         sensorAddr.put(0x48, "ADS1115");
-        sensorAddr.put(0x23, "BH1750");
         sensorAddr.put(0x77, "BMP180");
         sensorAddr.put(0x5A, "MLX90614");
         sensorAddr.put(0x1E, "HMC5883L");
@@ -77,13 +75,9 @@ public class SensorActivity extends AppCompatActivity {
         buttonSensorAutoScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (scienceLab.isConnected()) {
-                    buttonSensorAutoScan.setClickable(false);
-                    tvSensorScan.setText(getResources().getString(R.string.scanning));
-                    new PopulateSensors().execute();
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.device_not_connected), Toast.LENGTH_SHORT).show();
-                }
+                buttonSensorAutoScan.setClickable(false);
+                tvSensorScan.setText(getResources().getString(R.string.scanning));
+                new PopulateSensors().execute();
             }
         });
         lvSensor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -139,10 +133,12 @@ public class SensorActivity extends AppCompatActivity {
             data = new ArrayList<>();
             dataName.clear();
             dataAddress.clear();
-            try {
-                data = i2c.scan(null);
-            } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
+            if (scienceLab.isConnected()) {
+                try {
+                    data = i2c.scan(null);
+                } catch (IOException | NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
             return null;
         }
@@ -171,7 +167,11 @@ public class SensorActivity extends AppCompatActivity {
                 dataName.add(sensorAddr.get(key));
             }
 
-            tvSensorScan.setText(tvData);
+            if (scienceLab.isConnected()) {
+                tvSensorScan.setText(tvData);
+            } else {
+                tvSensorScan.setText(getString(R.string.not_connected));
+            }
             adapter.notifyDataSetChanged();
             buttonSensorAutoScan.setClickable(true);
         }

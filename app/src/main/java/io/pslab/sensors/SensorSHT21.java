@@ -75,7 +75,7 @@ public class SensorSHT21 extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
         try {
-            sensorSHT21 = new SHT21(i2c);
+            sensorSHT21 = new SHT21(i2c, scienceLab);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -217,7 +217,10 @@ public class SensorSHT21 extends AppCompatActivity {
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (play) {
+                if (play && scienceLab.isConnected()) {
+                    playPauseButton.setImageResource(R.drawable.play);
+                    play = false;
+                } else if (!scienceLab.isConnected()) {
                     playPauseButton.setImageResource(R.drawable.play);
                     play = false;
                 } else {

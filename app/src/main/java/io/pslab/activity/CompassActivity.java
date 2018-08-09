@@ -152,9 +152,13 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         switch (direction) {
             case 0:
                 degree = Math.round(event.values[1]);
+                if (degree < 0)
+                    degree += 360;
                 break;
             case 1:
                 degree = Math.round(event.values[2]);
+                if (degree < 0)
+                    degree += 360;
                 break;
             case 2:
                 degree = Math.round(event.values[0]);

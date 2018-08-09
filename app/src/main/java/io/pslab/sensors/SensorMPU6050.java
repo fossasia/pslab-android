@@ -87,7 +87,7 @@ public class SensorMPU6050 extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
         try {
-            sensorMPU6050 = new MPU6050(i2c);
+            sensorMPU6050 = new MPU6050(i2c, scienceLab);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -216,7 +216,7 @@ public class SensorMPU6050 extends AppCompatActivity {
         yGyroscope2.setDrawGridLines(false);
 
         try {
-            if (sensorMPU6050 != null) {
+            if (sensorMPU6050 != null && scienceLab.isConnected()) {
                 sensorMPU6050.setAccelerationRange(Integer.parseInt(spinnerSensorMPU60502.getSelectedItem().toString()));
             }
         } catch (IOException e) {
@@ -224,7 +224,7 @@ public class SensorMPU6050 extends AppCompatActivity {
         }
 
         try {
-            if (sensorMPU6050 != null) {
+            if (sensorMPU6050 != null && scienceLab.isConnected()) {
                 sensorMPU6050.setGyroRange(Integer.parseInt(spinnerSensorMPU60501.getSelectedItem().toString()));
             }
         } catch (IOException e) {
@@ -234,7 +234,7 @@ public class SensorMPU6050 extends AppCompatActivity {
     }
 
     private boolean shouldPlay() {
-        if (play) {
+        if (play && scienceLab.isConnected()) {
             if (indefiniteSamplesCheckBox.isChecked())
                 return true;
             else if (counter >= 0) {
@@ -260,7 +260,10 @@ public class SensorMPU6050 extends AppCompatActivity {
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (play) {
+                if (play && scienceLab.isConnected()) {
+                    playPauseButton.setImageResource(R.drawable.play);
+                    play = false;
+                } else if (!scienceLab.isConnected()) {
                     playPauseButton.setImageResource(R.drawable.play);
                     play = false;
                 } else {

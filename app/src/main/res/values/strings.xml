@@ -79,11 +79,6 @@
     <string name="multimeter_voltage_unit">Volts</string>
     <string name="voltage_channels">Voltage</string>
     <string name="voltage_elements">Voltage at Elements</string>
-    <string name="resistance_description"><b>Resistance:</b> Measures the resistance of the element connected to the SEN pin of the PSLab device</string>
-    <string name="frequency_description"><b>Frequency:</b> Measures the frequency across any element connected between any of ID pins</string>
-    <string name="count_pulse_description"><b>Count Pulse:</b> Measures the pulse of any wave through an element connected across any of ID pins</string>
-    <string name="capacitance_description"><b>Capacitance:</b> Measures the capacitance of the element connected to the CAP pin of the PSLab device.</string>
-    <string name="voltage_channel_description"><b>Voltage:</b> Measures the voltage of any elements connect across any of the channel pins and other pins such as AN8</string>
     <string name="resistance_abbreviation">\u2126</string>
     <string name="capacitance_abbreviation">C</string>
     <string name="multimeter_measure">Measure</string>
@@ -153,6 +148,8 @@
     <string name="meters_per_sec_text">ms&lt;sup&gt;&lt;small&gt;-2&lt;/small&gt;&lt;/sup&gt;</string>
     <string name="meters_per_sec_html">ms<sup><small>-2</small></sup></string>
     <string name="time_seconds">Time (s)</string>
+    <string name="accelerometer_intro">Accelerometer is used to measure acceleration of a body along the X, Y and Z axis.\n</string>
+    <string name="accelerometer_description_text">\n\nThe figure above shows the direction of all the three axis when the mobile is held straight.\n\nSteps to measure acceleration in PSLab app:\n\n\u2022 Hold the device as shown in the above figure.\n\n\u2022 Accelerate the device along any one or multiple axis.\n\n\u2022 Observe the values in the cards or the plotted graph of any particular axis.\n\nThe Accelerometer instrument can also be used to measure the acceleration of a moving body by placing the device on/inside the body and then accelerating the body.\n\nNOTE: Don\'t accelerate the body if the device isn\'t properly attached else the device could be damaged. </string>
 
     <string name="set_triggers">Set Triggers</string>
     <string name="remove">Remove</string>
@@ -826,7 +823,14 @@
 
     <string name="multimeter_dialog_heading">Multimeter</string>
     <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element.</string>
-    <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.</string>
+    <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.\n\n
+        <b>Different Sections</b>\n\n
+        <b>Resistance:</b> Measures the resistance of the element connected between the SEN and GND pin of the PSLab device.\n\n
+        <b>Capacitance:</b> Measures the capacitance of the element connected between the CAP and GND pin of the PSLab device.\n\n
+        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as AN8.\n\n
+        <b>Frequency:</b> Measures the frequency across any element connected between any of ID and GND pins.\n\n
+        <b>Count Pulse:</b> Measures the pulse of any wave through an element connected between any of ID and GND pins.\n\n
+    </string>
 
     <string name="show_guide">Show Guide</string>
     <string name="powersource_dialog_heading">Power Source</string>
@@ -891,10 +895,16 @@
     <string name="ir_thermometer_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. You can use any of the PSLab device GND pins.\n</string>
 
-    <string name="barometer_description">Measures the pressure of the atmosphere</string>
     <string name="barometer">Barometer</string>
+    <string name="barometer_description">Measures the atmospheric pressure</string>
+    <string name="barometer_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
+    is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n
+    \u2022 If you want to use the sensor BMP-180, connect the sensor to PSLab device as shown in the figure.</string>
+    <string name="barometer_desc">\u2022 The above pin configuration has to be same except for the pin
+    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
+    \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
 
-    <string name="navigation_lux_meter_data">Data</string>
+    <string name="navigation_lux_meter_data">Data Plot</string>
     <string name="navigation_lux_meter_configure">Configure</string>
     <string name="high_limit">High Limit</string>
     <string name="update_period">Update Period</string>
@@ -919,9 +929,16 @@
     </string-array>
     <string name="lux_meter_none">None</string>
 
-    <string name="save_csv_data">Save CSV Data</string>
+    <string name="save_csv_data">Export Data</string>
+    <string name="delete_csv_data">Delete CSV Data</string>
+    <string name="record_csv_data">Record Data</string>
+    <string name="pause_recording_data">Pause Recording</string>
     <string name="view_map">View Map</string>
     <string name="data_recording_start">Data Recording: Started</string>
+    <string name="data_recording_paused">Data Recording: Paused</string>
+    <string name="data_deleted">Recorded data deleted successfully</string>
+    <string name="nothing_to_delete">Nothing to delete</string>
+    <string name="nothing_to_export">Please record some data</string>
     <string name="csv_store_text">CSV file stored at </string>
 
     <string name="delete_warning">Are you sure you want to delete this file?</string>

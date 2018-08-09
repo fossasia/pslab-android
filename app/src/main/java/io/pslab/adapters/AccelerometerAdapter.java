@@ -46,6 +46,13 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
     private Context context;
     private long startTime;
     private int[] colors = {Color.YELLOW, Color.MAGENTA, Color.GREEN};
+    private ArrayList<Entry> xAxis, yAxis, zAxis;
+    private boolean isRecording = false;
+
+    public AccelerometerAdapter(String[] dataset, Context context) {
+        this.dataset = dataset;
+        this.context = context;
+    }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
@@ -125,6 +132,23 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
                     holder.chart.moveViewToX(data.getEntryCount());
                     holder.chart.invalidate();
                 }
+
+                switch (holder.getAdapterPosition()) {
+                    case 0:
+                        if (isRecording)
+                            xAxis = holder.entries;
+                        break;
+                    case 1:
+                        if (isRecording)
+                            yAxis = holder.entries;
+                        break;
+                    case 2:
+                        if (isRecording)
+                            zAxis = holder.entries;
+                        break;
+                    default:
+                        break;
+                }
             }
 
             @Override
@@ -148,11 +172,6 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
         }
     }
 
-    public AccelerometerAdapter(String[] dataset, Context context) {
-        this.dataset = dataset;
-        this.context = context;
-    }
-
     @NonNull
     @Override
     public AccelerometerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -161,6 +180,28 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
         accelerometer = sensorManager != null ? sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) : null;
         startTime = System.currentTimeMillis();
         return new ViewHolder(v);
+    }
+
+    @Override
+    public int getItemCount() {
+        return dataset.length;
+    }
+
+    public void setRecordingStatus(boolean status) {
+        this.isRecording = status;
+    }
+
+    public ArrayList<Entry> getEntries(int axis) {
+        switch (axis) {
+            case 0:
+                return this.xAxis;
+            case 1:
+                return this.yAxis;
+            case 2:
+                return this.zAxis;
+            default:
+                return this.xAxis;
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -187,10 +228,5 @@ public class AccelerometerAdapter extends RecyclerView.Adapter<AccelerometerAdap
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return dataset.length;
     }
 }
