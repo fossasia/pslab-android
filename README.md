@@ -144,7 +144,7 @@ Please try to follow the mentioned guidelines while writing and submitting your 
 
 ## License
 
-This project is currently licensed under the GNU General Public License v3. A copy of [LICENSE](LICENSE.md) is to be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
+This project is currently licensed under the Apache License 2.0. A copy of [LICENSE](LICENSE) is to be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
 
 ## Maintainers
 The project is maintained by
