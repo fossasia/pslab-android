@@ -895,8 +895,14 @@
     <string name="ir_thermometer_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. You can use any of the PSLab device GND pins.\n</string>
 
-    <string name="barometer_description">Measures the pressure of the atmosphere</string>
     <string name="barometer">Barometer</string>
+    <string name="barometer_description">Measures the atmospheric pressure</string>
+    <string name="barometer_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
+    is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n
+    \u2022 If you want to use the sensor BMP-180, connect the sensor to PSLab device as shown in the figure.</string>
+    <string name="barometer_desc">\u2022 The above pin configuration has to be same except for the pin
+    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
+    \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
 
     <string name="navigation_lux_meter_data">Data Plot</string>
     <string name="navigation_lux_meter_configure">Configure</string>

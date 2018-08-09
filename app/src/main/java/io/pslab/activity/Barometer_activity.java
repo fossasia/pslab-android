@@ -339,7 +339,9 @@ public class Barometer_activity extends AppCompatActivity {
         Boolean isFirstTime = settings.getBoolean("BarometerFirstTime", true);
 
         bottomSheetGuideTitle.setText(R.string.barometer);
-        bottomSheetDesc.setText(R.string.barometer_description);
+        bottomSheetDesc.setText(R.string.barometer_intro);
+        bottomSheetSchematic.setImageResource(R.drawable.bmp180_schematic);
+        bottomSheetDesc.setText(R.string.barometer_desc);
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
