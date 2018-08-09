@@ -22,7 +22,6 @@ public class LuxData extends RealmObject {
         this.time = time;
         this.timeElapsed = timeElapsed;
     }
-
     public long getForeignKey() {
         return foreignKey;
     }

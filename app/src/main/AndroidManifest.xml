@@ -43,9 +43,7 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-
-        <activity android:name=".activity.SettingsActivity"/>
-
+        <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.ShowLoggedData" />
         <activity
             android:name=".activity.PerformExperimentActivity"
@@ -77,16 +75,13 @@
             android:name=".activity.LuxMeterActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".activity.AccelerometerActivity" />
-
-        <activity android:name=".activity.DataLoggerActivity"></activity>
-
+        <activity android:name=".activity.DataLoggerActivity" />
         <activity
             android:name=".activity.Barometer_activity"
-            android:configChanges="keyboardHidden|screenSize|orientation"/>
-
-        <activity android:name=".activity.CompassActivity"
-            android:screenOrientation="portrait"/>
-
+            android:configChanges="keyboardHidden|screenSize|orientation" />
+        <activity
+            android:name=".activity.CompassActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.MapsActivity" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />
@@ -99,7 +94,7 @@
         <activity android:name=".sensors.SensorSHT21" />
         <activity android:name=".sensors.SensorMPU6050" />
         <activity android:name=".sensors.SensorTSL2561" />
-
+        <activity android:name=".activity.SensorGraphViewActivity"></activity>
     </application>
 
 </manifest>

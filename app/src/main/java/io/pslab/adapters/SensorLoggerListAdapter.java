@@ -1,6 +1,7 @@
 package io.pslab.adapters;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,12 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.pslab.R;
+import io.pslab.activity.SensorGraphViewActivity;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorLogged;
 import io.realm.Realm;
@@ -27,11 +28,11 @@ import io.realm.RealmResults;
 public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorLogged, SensorLoggerListAdapter.ViewHolder> {
 
 
-    private Context context;
+    private Activity context;
     private SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy  HH:mm:ss");
     private Realm realm;
 
-    public SensorLoggerListAdapter(RealmResults<SensorLogged> results, Context context) {
+    public SensorLoggerListAdapter(RealmResults<SensorLogged> results, Activity context) {
         super(results, true, true);
         this.context = context;
         realm = Realm.getDefaultInstance();
@@ -46,15 +47,23 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorLogg
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final SensorLogged temp = getItem(position);
+        SensorLogged temp = getItem(position);
         holder.sensor.setText(temp.getSensor());
-        Date date = new Date(temp.getDateTimeStamp());
+        Date date = new Date(temp.getDateTimeStart());
         holder.dateTime.setText(String.valueOf(sdf.format(date)));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RealmResults<LuxData> results = realm.where(LuxData.class).equalTo("foreignKey", getItem(holder.getAdapterPosition()).getUniqueRef()).findAll();
-                Toast.makeText(context, "Results size :" + String.valueOf(results.size()), Toast.LENGTH_SHORT).show();
+                SensorLogged item = getItem(holder.getAdapterPosition());
+                Intent intent = new Intent(context, SensorGraphViewActivity.class);
+                intent.putExtra(SensorGraphViewActivity.TYPE_SENSOR, item.getSensor());
+                intent.putExtra(SensorGraphViewActivity.DATA_FOREIGN_KEY, item.getUniqueRef());
+                intent.putExtra(SensorGraphViewActivity.DATE_TIME_START,item.getDateTimeStart());
+                intent.putExtra(SensorGraphViewActivity.DATE_TIME_END,item.getDateTimeEnd());
+                intent.putExtra(SensorGraphViewActivity.TIME_ZONE,item.getTimeZone());
+                intent.putExtra(SensorGraphViewActivity.LATITUDE,item.getLatitude());
+                intent.putExtra(SensorGraphViewActivity.LONGITUDE,item.getLongitude());
+                context.startActivity(intent);
             }
         });
         holder.deleteIcon.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +81,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorLogg
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView sensor, dateTime;
-        ImageView deleteIcon;
+        private ImageView deleteIcon;
         private CardView cardView;
 
         public ViewHolder(View itemView) {

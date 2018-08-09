@@ -52,6 +52,8 @@ dependencies {
     implementation "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     implementation "com.github.medyo:android-about-page:$rootProject.androidAboutPageVersion"
     implementation "com.github.tiagohm.MarkdownView:library:$rootProject.markDownViewVersion"

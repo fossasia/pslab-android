@@ -27,5 +27,6 @@
     <color name="orange">#ff7043</color>
     <color name="theme_red_light">#40c72c2c</color>
     <color name="blue_grey">#546E7A</color>
+    <color name="default_grey">#EEEEEE</color>
 
 </resources>

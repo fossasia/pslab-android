@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,12 +29,12 @@ import com.github.mikephil.charting.data.LineDataSet;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.pslab.R;
-import io.pslab.activity.LuxMeterActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.BH1750;
@@ -71,6 +72,7 @@ public class LuxMeterFragmentData extends Fragment {
     private Sensor sensor;
     private ScienceLab scienceLab;
     private long startTime;
+    private long endTime;
     private int flag;
     private ArrayList<Entry> entries;
     private ArrayList<LuxData> luxRealmData;
@@ -313,8 +315,6 @@ public class LuxMeterFragmentData extends Fragment {
                     Long currentTime = System.currentTimeMillis();
                     LuxData tempObject = new LuxData(data, currentTime, timeElapsed);
                     luxRealmData.add(tempObject);
-                    final LuxMeterActivity parent = (LuxMeterActivity) getActivity();
-                    assert parent != null;
 
                     count++;
                     sum += entry.getY();
@@ -352,12 +352,15 @@ public class LuxMeterFragmentData extends Fragment {
         monitor = true;
         flag = 0;
         lightMeter.setWithTremble(true);
+
         Thread dataThread = new Thread(runnable);
+
         dataThread.start();
     }
 
     public void stopSensorFetching() {
         monitor = false;
+        endTime = System.currentTimeMillis();
         if (sensor != null && sensorDataFetch != null) {
             sensorManager.unregisterListener(sensorDataFetch);
             sensorDataFetch.cancel(true);
@@ -367,13 +370,29 @@ public class LuxMeterFragmentData extends Fragment {
         }
     }
 
-    public void saveDataInRealm(Long uniqueRef) {
+    public void saveDataInRealm(Long uniqueRef, boolean includeLocation, GPSLogger gpsLogger) {
         realm.beginTransaction();
 
         SensorLogged sensorLogged = realm.createObject(SensorLogged.class, uniqueRef);
         sensorLogged.setSensor("Lux Meter");
-        sensorLogged.setDateTimeStamp(System.currentTimeMillis());
+        sensorLogged.setDateTimeStart(startTime);
+        sensorLogged.setDateTimeEnd(endTime);
+        sensorLogged.setTimeZone(TimeZone.getDefault().getDisplayName());
 
+        if (includeLocation && gpsLogger != null) {
+            Location location = gpsLogger.getBestLocation();
+            if (location != null) {
+                sensorLogged.setLatitude(location.getLatitude());
+                sensorLogged.setLongitude(location.getLongitude());
+            } else {
+                sensorLogged.setLatitude(0.0);
+                sensorLogged.setLongitude(0.0);
+            }
+            gpsLogger.removeUpdate();
+        } else {
+            sensorLogged.setLatitude(0.0);
+            sensorLogged.setLongitude(0.0);
+        }
 
         for (int i = 0; i < luxRealmData.size(); i++) {
             LuxData tempObject = luxRealmData.get(i);
@@ -381,10 +400,10 @@ public class LuxMeterFragmentData extends Fragment {
             tempObject.setForeignKey(uniqueRef);
             realm.copyToRealm(tempObject);
             Log.i("dataResult", String.valueOf(tempObject.getLux()));
-
         }
         realm.copyToRealm(sensorLogged);
         realm.commitTransaction();
+        luxRealmData.clear();
     }
 
     @Override

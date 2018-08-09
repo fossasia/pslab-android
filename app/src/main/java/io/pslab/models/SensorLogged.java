@@ -10,9 +10,13 @@ import io.realm.annotations.PrimaryKey;
 public class SensorLogged extends RealmObject {
 
     private String sensor;
-    private long dateTimeStamp;
+    private long dateTimeStart;
     @PrimaryKey
     private long uniqueRef;
+    private double latitude;
+    private double longitude;
+    private long dateTimeEnd;
+    private String timeZone;
 
 
     public SensorLogged() {
@@ -30,12 +34,12 @@ public class SensorLogged extends RealmObject {
         this.sensor = sensor;
     }
 
-    public long getDateTimeStamp() {
-        return dateTimeStamp;
+    public long getDateTimeStart() {
+        return dateTimeStart;
     }
 
-    public void setDateTimeStamp(long dateTimeStamp) {
-        this.dateTimeStamp = dateTimeStamp;
+    public void setDateTimeStart(long dateTimeStart) {
+        this.dateTimeStart = dateTimeStart;
     }
 
     public long getUniqueRef() {
@@ -46,4 +50,37 @@ public class SensorLogged extends RealmObject {
         this.uniqueRef = uniqueRef;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+
+    public long getDateTimeEnd() {
+        return dateTimeEnd;
+    }
+
+    public void setDateTimeEnd(long dateTimeEnd) {
+        this.dateTimeEnd = dateTimeEnd;
+    }
+
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
 }

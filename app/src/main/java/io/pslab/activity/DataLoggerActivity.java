@@ -46,13 +46,13 @@ public class DataLoggerActivity extends AppCompatActivity {
             case "Lux Meter":
                 results = realm.where(SensorLogged.class).equalTo("sensor", caller)
                         .findAll()
-                        .sort("dateTimeStamp", Sort.DESCENDING);
+                        .sort("dateTimeStart", Sort.DESCENDING);
                 title = caller + " Data";
                 break;
             default:
                 results = realm.where(SensorLogged.class)
                         .findAll()
-                        .sort("dateTimeStamp", Sort.DESCENDING);
+                        .sort("dateTimeStart", Sort.DESCENDING);
                 title = getString(R.string.logged_data);
         }
         if (getSupportActionBar() != null) {

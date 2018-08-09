@@ -290,7 +290,7 @@ public class ShowLoggedData extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_show_logged_data, menu);
+        getMenuInflater().inflate(R.menu.activity_show_item_logged_data, menu);
         return true;
     }
 
