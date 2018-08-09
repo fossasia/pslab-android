@@ -5,10 +5,10 @@
     <dimen name="control_margin">3dp</dimen>
     <dimen name="card_margin">8dp</dimen>
 
-    <dimen name="multimeter_knob_width">175dp</dimen>
-    <dimen name="multimeter_knob_height">173dp</dimen>
-    <dimen name="multimeter_knobcircle_radius_1">100dp</dimen>
-    <dimen name="multimeter_knobcircle_radius_2">96dp</dimen>
-    <dimen name="multimeter_knobcircle_radius_3">102dp</dimen>
+    <dimen name="multimeter_knob_width">170dp</dimen>
+    <dimen name="multimeter_knob_height">168dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_1">97dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_2">93dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_3">99dp</dimen>
 
 </resources>

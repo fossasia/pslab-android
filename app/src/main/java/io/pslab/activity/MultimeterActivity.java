@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,6 +40,8 @@ public class MultimeterActivity extends AppCompatActivity {
 
     private ScienceLab scienceLab;
 
+    @BindView(R.id.multimeter_toolbar)
+    Toolbar mToolbar;
     @BindView(R.id.quantity)
     TextView quantity;
     @BindView(R.id.unit)
@@ -88,6 +91,7 @@ public class MultimeterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.scienceLab;
         knobMarker = getResources().getStringArray(io.pslab.R.array.multimeter_knob_states);
+        setSupportActionBar(mToolbar);
         setUpBottomSheet();
         multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
         knobState = multimeter_data.getInt("KnobState", 2);
