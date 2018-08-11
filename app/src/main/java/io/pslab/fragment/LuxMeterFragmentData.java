@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,7 @@ public class LuxMeterFragmentData extends Fragment {
     private Unbinder unbinder;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / 1000;
     private GPSLogger gpsLogger;
+    private Runnable runnable;
 
     public static LuxMeterFragmentData newInstance() {
         return new LuxMeterFragmentData();
@@ -98,6 +100,7 @@ public class LuxMeterFragmentData extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         currentMin = 10000;
+        currentMax = 30;
         entries = new ArrayList<>();
         switch (sensorType) {
             case 0:
@@ -135,7 +138,7 @@ public class LuxMeterFragmentData extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lux_meter_data, container, false);
         unbinder = ButterKnife.bind(this, view);
-        Runnable runnable = new Runnable() {
+        runnable = new Runnable() {
             @Override
             public void run() {
                 if (flag == 0) {
@@ -189,8 +192,6 @@ public class LuxMeterFragmentData extends Fragment {
                 }
             }
         };
-        Thread dataThread = new Thread(runnable);
-        dataThread.start();
 
         lightMeter.setMaxSpeed(10000);
 
@@ -304,7 +305,7 @@ public class LuxMeterFragmentData extends Fragment {
                 else
                     lightMeter.setPointerColor(Color.WHITE);
 
-                timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
+                timeElapsed = ((System.currentTimeMillis() - startTime) / 1000);
                 if (timeElapsed != previousTimeElapsed) {
                     previousTimeElapsed = timeElapsed;
                     entries.add(new Entry((float) timeElapsed, data));
@@ -370,7 +371,7 @@ public class LuxMeterFragmentData extends Fragment {
 
                     mChart.setData(data);
                     mChart.notifyDataSetChanged();
-                    mChart.setVisibleXRangeMaximum(20);
+                    mChart.setVisibleXRangeMaximum(80);
                     mChart.moveViewToX(data.getEntryCount());
                     mChart.invalidate();
                 }
@@ -386,4 +387,27 @@ public class LuxMeterFragmentData extends Fragment {
             sensorManager.unregisterListener(this);
         }
     }
+
+    public void startSensorFetching() {
+        entries.clear();
+        mChart.invalidate();
+        mChart.clear();
+        monitor = true;
+        flag = 0;
+        lightMeter.setWithTremble(true);
+        Thread dataThread = new Thread(runnable);
+        dataThread.start();
+    }
+
+    public void stopSensorFetching() {
+        monitor = false;
+        if (sensor != null && sensorDataFetch != null) {
+            sensorManager.unregisterListener(sensorDataFetch);
+            sensorDataFetch.cancel(true);
+            lightMeter.setWithTremble(false);
+            lightMeter.speedTo(0f, 500);
+            lightMeter.setPointerColor(ContextCompat.getColor(getActivity(), R.color.white));
+        }
+    }
+
 }

@@ -53,7 +53,6 @@ public class LuxMeterActivity extends AppCompatActivity {
     public boolean exportData = false;
     public boolean recordingStarted = false;
     public GPSLogger gpsLogger;
-    public boolean locationPref;
     public CSVLogger luxLogger;
     private Menu menu;
 
@@ -84,6 +83,8 @@ public class LuxMeterActivity extends AppCompatActivity {
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
     private boolean checkGpsOnResume = false;
+    public boolean locationPref;
+    private LuxMeterFragmentData selectedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +122,7 @@ public class LuxMeterActivity extends AppCompatActivity {
                 });
         try {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            Fragment selectedFragment = LuxMeterFragmentData.newInstance();
+            selectedFragment = LuxMeterFragmentData.newInstance();
             transaction.replace(R.id.frame_layout_lux_meter, selectedFragment, selectedFragment.getTag());
             transaction.commit();
         } catch (Exception e) {
@@ -198,15 +199,22 @@ public class LuxMeterActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.data_log_menu, menu);
+        inflater.inflate(R.menu.lux_data_log_menu, menu);
         this.menu = menu;
         return true;
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.record_data);
+        item.setIcon(recordData? R.drawable.ic_record_stop_white: R.drawable.ic_record_white);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.record_pause_data:
+            case R.id.record_data:
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -215,16 +223,15 @@ public class LuxMeterActivity extends AppCompatActivity {
                     return true;
                 }
                 if (recordData) {
-                    item.setIcon(R.drawable.record_icon);
+                    ((LuxMeterFragmentData)selectedFragment).stopSensorFetching();
+                    invalidateOptionsMenu();
                     recordData = false;
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null);
                 } else {
-                    item.setIcon(R.drawable.pause_icon);
-                    if (!recordingStarted) {
-                        luxLogger = new CSVLogger(getString(R.string.lux_meter));
-                        luxLogger.writeCSVFile("Timestamp,X,Y\n");
-                        recordingStarted = true;
-                    }
+                    luxLogger = new CSVLogger(getString(R.string.lux_meter));
+                    luxLogger.writeCSVFile("Timestamp,X,Y,Z\n");
+                    recordData = true;
+                    ((LuxMeterFragmentData)selectedFragment).startSensorFetching();
+                   invalidateOptionsMenu();
                     if (locationPref) {
                         gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
                         if (gpsLogger.isGPSEnabled()) {
@@ -239,28 +246,6 @@ public class LuxMeterActivity extends AppCompatActivity {
                         CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null);
                     }
                 }
-                break;
-            case R.id.record_csv_data:
-                if (recordingStarted) {
-                    MenuItem item1 = menu.findItem(R.id.record_pause_data);
-                    item1.setIcon(R.drawable.record_icon);
-                    exportData = true;
-                    recordingStarted = false;
-                    recordData = false;
-                } else {
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null);
-                }
-                break;
-            case R.id.delete_csv_data:
-                if (recordingStarted) {
-                    MenuItem item1 = menu.findItem(R.id.record_pause_data);
-                    item1.setIcon(R.drawable.record_icon);
-                    luxLogger.deleteFile();
-                    recordingStarted = false;
-                    recordData = false;
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null);
-                } else
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null);
                 break;
             case R.id.show_map:
                 if (ContextCompat.checkSelfPermission(this,
