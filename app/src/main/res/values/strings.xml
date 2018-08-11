@@ -1001,6 +1001,27 @@
     <string name="faq_answer4">Right now, we are not having an option to make and save custom experiments. But we will implement it soon.</string>
     <string name="faq_answer5">You can submit your reviews, feature requests and feedback through our Feedback and Issues page.</string>
 
+    <string name="date_of_recording">DATE OF RECORDING</string>
+    <string name="time_of_recording">TIME OF RECORDING</string>
+    <string name="date_of_rec">Date of Rec</string>
+    <string name="time_of_rec">Time of Rec</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="location">Location</string>
+
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="timezone">Timezone</string>
+    <string name="dev_model">Device Model</string>
+    <string name="dev_brand">Device Brand</string>
+    <string name="dev_android_sdk">Device Android SDK</string>
+
+
+    <string name="logged_data">Logged Data</string>
+    <string name="show_logged_data">Show Logged Data</string>
+    <string name="time_elapsed">Time Elapsed</string>
+    <string name="exp_data_saved">Experiment Logged Data Saved</string>
+
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
     is compatible with either the built in light sensor on any android device or the BH-1750 light sensor.\n\n

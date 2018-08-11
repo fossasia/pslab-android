@@ -358,6 +358,24 @@
     <dimen name="lux_card_margin_top">20dp</dimen>
     <dimen name="lux_chart_height">200dp</dimen>
 
+    <dimen name="exp_icn_padding">3dp</dimen>
+    <dimen name="view_data_loc_middle">20dp</dimen>
     <dimen name="lux_chart_axis_text">9sp</dimen>
+    <dimen name="item_margin">10dp</dimen>
+    <dimen name="logger_card_margin">5dp</dimen>
+    <dimen name="logger_card_corner_rad">5dp</dimen>
+    <dimen name="content_left_margin">10dp</dimen>
+    <dimen name="icn_btn_left_margin">10dp</dimen>
+    <dimen name="view_data_rl_left">10dp</dimen>
+    <dimen name="view_data_rl_right">15dp</dimen>
+    <dimen name="view_data_sep_margin">5dp</dimen>
+    <dimen name="view_data_rl_top">10dp</dimen>
+    <dimen name="view_data_ll_margin">5dp</dimen>
+    <dimen name="view_data_card_corner">5dp</dimen>
+    <dimen name="view_data_graph_bottom">20dp</dimen>
+    <dimen name="view_data_info_bottom">20dp</dimen>
+    <dimen name="view_data_loc_height">40dp</dimen>
+    <dimen name="view_data_loc_padding">10dp</dimen>
+    <dimen name="view_data_map_rl_margin">10dp</dimen>
 
 </resources>
