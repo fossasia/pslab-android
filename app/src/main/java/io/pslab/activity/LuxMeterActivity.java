@@ -39,7 +39,6 @@ import io.pslab.others.GPSLogger;
 import io.pslab.others.MathUtils;
 import io.pslab.fragment.SettingsFragment;
 import io.pslab.others.SwipeGestureDetector;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -85,6 +84,8 @@ public class LuxMeterActivity extends AppCompatActivity {
     private boolean checkGpsOnResume = false;
     public boolean locationPref;
     private LuxMeterFragmentData selectedFragment;
+    public static final String NAME = "realmData";
+    private SharedPreferences realmPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class LuxMeterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lux_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        realmPreferences = getSharedPreferences(NAME, Context.MODE_PRIVATE);
         setUpBottomSheet();
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -215,35 +217,31 @@ public class LuxMeterActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.record_data:
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA);
-                    return true;
-                }
                 if (recordData) {
-                    ((LuxMeterFragmentData)selectedFragment).stopSensorFetching();
+                    ((LuxMeterFragmentData) selectedFragment).stopSensorFetching();
                     invalidateOptionsMenu();
+                    Long uniqueRef = realmPreferences.getLong("uniqueCount", 0);
+                    selectedFragment.saveDataInRealm(uniqueRef);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.exp_data_saved), null, null);
+                    SharedPreferences.Editor editor = realmPreferences.edit();
+                    editor.putLong("uniqueCount", uniqueRef + 1);
+                    editor.commit();
                     recordData = false;
                 } else {
-                    luxLogger = new CSVLogger(getString(R.string.lux_meter));
-                    luxLogger.writeCSVFile("Timestamp,X,Y,Z\n");
-                    recordData = true;
-                    ((LuxMeterFragmentData)selectedFragment).startSensorFetching();
-                   invalidateOptionsMenu();
                     if (locationPref) {
                         gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
                         if (gpsLogger.isGPSEnabled()) {
                             recordData = true;
-                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_enabled), null, null);
+                            ((LuxMeterFragmentData) selectedFragment).startSensorFetching();
+                            invalidateOptionsMenu();
                         } else {
                             checkGpsOnResume = true;
                         }
                         gpsLogger.startFetchingLocation();
                     } else {
                         recordData = true;
-                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null);
+                        ((LuxMeterFragmentData) selectedFragment).startSensorFetching();
+                        invalidateOptionsMenu();
                     }
                 }
                 break;
@@ -257,9 +255,16 @@ public class LuxMeterActivity extends AppCompatActivity {
                 }
                 Intent MAP = new Intent(getApplicationContext(), MapsActivity.class);
                 startActivity(MAP);
+                startActivity(new Intent(this, ShowLoggedData.class));
                 break;
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            case R.id.show_logged_data:
+                Intent intent = new Intent(this,DataLoggerActivity.class);
+                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY,"Lux Meter");
+                startActivity(intent);
+
                 break;
             default:
                 break;
@@ -273,7 +278,8 @@ public class LuxMeterActivity extends AppCompatActivity {
         if (checkGpsOnResume) {
             if (gpsLogger.isGPSEnabled()) {
                 recordData = true;
-                CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
+                ((LuxMeterFragmentData) selectedFragment).startSensorFetching();
+                invalidateOptionsMenu();
             } else {
                 recordData = false;
                 Toast.makeText(getApplicationContext(), getString(R.string.gps_not_enabled),

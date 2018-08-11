@@ -359,5 +359,11 @@
     <dimen name="lux_chart_height">200dp</dimen>
 
     <dimen name="lux_chart_axis_text">9sp</dimen>
+    <dimen name="item_margin">10dp</dimen>
+    <dimen name="logger_card_margin">5dp</dimen>
+    <dimen name="logger_card_corner_rad">5dp</dimen>
+    <dimen name="content_left_margin">10dp</dimen>
+    <dimen name="icn_btn_left_margin">10dp</dimen>
+    <dimen name="item_text_size">18sp</dimen>
 
 </resources>
