@@ -5,7 +5,7 @@ import io.realm.RealmObject;
 
 
 /**
- * Created by Your name on 31-07-2018.
+ * Created by Avjeet on 31-07-2018.
  */
 public class LuxData extends RealmObject {
     private long foreignKey;

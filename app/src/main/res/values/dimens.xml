@@ -358,6 +358,7 @@
     <dimen name="lux_card_margin_top">20dp</dimen>
     <dimen name="lux_chart_height">200dp</dimen>
 
+    <dimen name="item_text_size">18sp</dimen>
     <dimen name="exp_icn_padding">3dp</dimen>
     <dimen name="view_data_loc_middle">20dp</dimen>
     <dimen name="lux_chart_axis_text">9sp</dimen>
