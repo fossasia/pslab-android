@@ -29,7 +29,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorLogg
 
 
     private Activity context;
-    private SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy  HH:mm:ss");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM,yyyy  HH:mm:ss");
     private Realm realm;
 
     public SensorLoggerListAdapter(RealmResults<SensorLogged> results, Activity context) {

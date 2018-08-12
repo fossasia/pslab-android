@@ -67,7 +67,7 @@ dependencies {
     implementation "org.osmdroid:osmdroid-mapsforge:$rootProject.mapsforgeVersion"
     implementation "org.osmdroid:osmdroid-geopackage:$rootProject.geoPackageVersion"
     implementation "com.android.support:multidex:$rootProject.multiDexVersion"
-    implementation 'io.realm:android-adapters:2.1.1'
+    implementation "io.realm:android-adapters:$rootProject.realmAdapter"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation("com.android.support.test:runner:$rootProject.testRunnerRulesVersion") {
