@@ -896,6 +896,8 @@
     GND. You can use any of the PSLab device GND pins.\n</string>
 
     <string name="barometer">Barometer</string>
+    <string name="barometer_alert_title">No barometer sensor in device</string>
+    <string name="barometer_alert_description">Connect a BMP180 sensor using I2C pins on PSLab to use this instrument</string>
     <string name="barometer_description">Measures the atmospheric pressure</string>
     <string name="barometer_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
     is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n

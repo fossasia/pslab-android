@@ -1,6 +1,7 @@
 package io.pslab.activity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -11,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -47,7 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class Barometer_activity extends AppCompatActivity {
+public class BarometerActivity extends AppCompatActivity {
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
     private static final String PREF_NAME = "customDialogPreference";
@@ -55,7 +57,7 @@ public class Barometer_activity extends AppCompatActivity {
     private static int sensorType = 0;
     private static int highLimit = 1000;
     private static int updatePeriod = 100;
-    private Barometer_activity.SensorDataFetch sensorDataFetch;
+    private BarometerActivity.SensorDataFetch sensorDataFetch;
 
     @BindView(R.id.barometer_max)
     TextView statMax;
@@ -101,8 +103,8 @@ public class Barometer_activity extends AppCompatActivity {
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
 
-    public static Barometer_activity newInstance() {
-        return new Barometer_activity();
+    public static BarometerActivity newInstance() {
+        return new BarometerActivity();
     }
 
     @SuppressLint("ResourceType")
@@ -112,7 +114,7 @@ public class Barometer_activity extends AppCompatActivity {
         setContentView(R.layout.activity_barometer_main);
         ButterKnife.bind(this);
         setUpBottomSheet();
-        Barometer_activity.newInstance();
+        BarometerActivity.newInstance();
 
         currentMin = 10000;
         entries = new ArrayList<>();
@@ -120,6 +122,25 @@ public class Barometer_activity extends AppCompatActivity {
             case 0:
                 sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager != null ? sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) : null;
+                if (sensor == null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isFinishing()) {
+                                new AlertDialog.Builder(BarometerActivity.this)
+                                        .setTitle(R.string.barometer_alert_title)
+                                        .setMessage(R.string.barometer_alert_description)
+                                        .setCancelable(false)
+                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();
+                            }
+                        }
+                    });
+                }
                 break;
             case 1:
                 scienceLab = ScienceLabCommon.scienceLab;
@@ -228,9 +249,9 @@ public class Barometer_activity extends AppCompatActivity {
     }
 
     public static void setParameters(int sensorType, int highLimit, int updatePeriod) {
-        Barometer_activity.sensorType = sensorType;
-        Barometer_activity.highLimit = highLimit;
-        Barometer_activity.updatePeriod = updatePeriod;
+        BarometerActivity.sensorType = sensorType;
+        BarometerActivity.highLimit = highLimit;
+        BarometerActivity.updatePeriod = updatePeriod;
     }
 
 
