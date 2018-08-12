@@ -92,7 +92,17 @@ public class MultimeterActivity extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         knobMarker = getResources().getStringArray(io.pslab.R.array.multimeter_knob_states);
         setSupportActionBar(mToolbar);
+
         setUpBottomSheet();
+        tvShadow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                tvShadow.setVisibility(View.GONE);
+            }
+        });
+
         multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
         knobState = multimeter_data.getInt("KnobState", 2);
         switchIsChecked = multimeter_data.getBoolean("SwitchState", false);
@@ -243,6 +253,7 @@ public class MultimeterActivity extends AppCompatActivity {
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setVisibility(View.VISIBLE);
             tvShadow.setAlpha(0.8f);
             arrowUpDown.setRotation(180);
             bottomSheetSlideText.setText(R.string.hide_guide_text);
@@ -277,12 +288,14 @@ public class MultimeterActivity extends AppCompatActivity {
                     default:
                         handler.removeCallbacks(runnable);
                         bottomSheetSlideText.setText(R.string.show_guide_text);
+                        break;
                 }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                tvShadow.setVisibility(View.VISIBLE);
                 tvShadow.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
             }
