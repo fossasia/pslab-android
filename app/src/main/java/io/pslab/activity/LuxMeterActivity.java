@@ -233,6 +233,7 @@ public class LuxMeterActivity extends AppCompatActivity {
                         if (gpsLogger.isGPSEnabled()) {
                             recordData = true;
                             ((LuxMeterFragmentData) selectedFragment).startSensorFetching();
+                            CustomSnackBar.showSnackBar(coordinatorLayout,getString(R.string.data_recording_start)+"\n"+getString(R.string.location_enabled) , null, null);
                             invalidateOptionsMenu();
                         } else {
                             checkGpsOnResume = true;
@@ -241,10 +242,9 @@ public class LuxMeterActivity extends AppCompatActivity {
                     } else {
                         recordData = true;
                         ((LuxMeterFragmentData) selectedFragment).startSensorFetching();
+                        CustomSnackBar.showSnackBar(coordinatorLayout,getString(R.string.data_recording_start)+"\n"+getString(R.string.location_disabled) , null, null);
                         invalidateOptionsMenu();
                     }
-                    String snackText = getString(R.string.data_recording_start)+"\n"+(locationPref?getString(R.string.location_enabled):getString(R.string.location_disabled));
-                    CustomSnackBar.showSnackBar(coordinatorLayout, snackText, null, null);
                 }
                 break;
             case R.id.show_map:
@@ -279,10 +279,10 @@ public class LuxMeterActivity extends AppCompatActivity {
         if (checkGpsOnResume) {
             if (gpsLogger.isGPSEnabled()) {
                 recordData = true;
+                gpsLogger.startFetchingLocation();
                 ((LuxMeterFragmentData) selectedFragment).startSensorFetching();
                 invalidateOptionsMenu();
-                gpsLogger.startFetchingLocation();
-                CustomSnackBar.showSnackBar(coordinatorLayout,getString(R.string.data_recording_start)+getString(R.string.location_enabled) , null, null);
+                CustomSnackBar.showSnackBar(coordinatorLayout,getString(R.string.data_recording_start)+"\n"+getString(R.string.location_enabled) , null, null);
             } else {
                 recordData = false;
                 Toast.makeText(getApplicationContext(), getString(R.string.gps_not_enabled),
