@@ -26,7 +26,7 @@ import io.pslab.activity.SensorActivity;
 import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.adapters.ApplicationAdapter;
 import io.pslab.items.ApplicationItem;
-import io.pslab.activity.Barometer_activity;
+import io.pslab.activity.BarometerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +93,7 @@ public class InstrumentsFragment extends Fragment {
                                 startActivity(intent);
                                 break;
                             case "Barometer":
-                                intent = new Intent(context, Barometer_activity.class);
+                                intent = new Intent(context, BarometerActivity.class);
                                 startActivity(intent);
                                 break;
                             case "Compass":

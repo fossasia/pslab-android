@@ -77,7 +77,7 @@
         <activity android:name=".activity.AccelerometerActivity" />
         <activity android:name=".activity.DataLoggerActivity" />
         <activity
-            android:name=".activity.Barometer_activity"
+            android:name=".activity.BarometerActivity"
             android:configChanges="keyboardHidden|screenSize|orientation" />
         <activity
             android:name=".activity.CompassActivity"
