@@ -13,11 +13,4 @@
         app:srcCompat="@drawable/logo"
         android:contentDescription="@string/pocket_science_logo" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="337dp"
-        android:layout_height="144dp"
-        android:padding="10dp"
-        app:srcCompat="@drawable/fossasia"
-        android:contentDescription="@string/fossasia_logo" />
 </LinearLayout>
