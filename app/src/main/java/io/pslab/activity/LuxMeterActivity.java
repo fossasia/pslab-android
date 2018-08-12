@@ -298,6 +298,15 @@ public class LuxMeterActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(recordingStarted) {
+            luxLogger.deleteFile();
+            recordingStarted = false;
+        }
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST_STORAGE_FOR_MAPS
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
