@@ -94,7 +94,17 @@ public class LuxMeterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         realmPreferences = getSharedPreferences(NAME, Context.MODE_PRIVATE);
+
         setUpBottomSheet();
+        tvShadow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                tvShadow.setVisibility(View.GONE);
+            }
+        });
+
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -145,6 +155,7 @@ public class LuxMeterActivity extends AppCompatActivity {
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setVisibility(View.VISIBLE);
             tvShadow.setAlpha(0.8f);
             arrowUpDown.setRotation(180);
             bottomSheetSlideText.setText(R.string.hide_guide_text);
@@ -179,12 +190,14 @@ public class LuxMeterActivity extends AppCompatActivity {
                     default:
                         handler.removeCallbacks(runnable);
                         bottomSheetSlideText.setText(R.string.show_guide_text);
+                        break;
                 }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                tvShadow.setVisibility(View.VISIBLE);
                 tvShadow.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
             }

@@ -114,6 +114,14 @@ public class BarometerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_barometer_main);
         ButterKnife.bind(this);
         setUpBottomSheet();
+        tvShadow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                tvShadow.setVisibility(View.GONE);
+            }
+        });
         BarometerActivity.newInstance();
 
         currentMin = 10000;
@@ -366,6 +374,7 @@ public class BarometerActivity extends AppCompatActivity {
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setVisibility(View.VISIBLE);
             tvShadow.setAlpha(0.8f);
             arrowUpDown.setRotation(180);
             bottomSheetSlideText.setText(R.string.hide_guide_text);
@@ -407,6 +416,7 @@ public class BarometerActivity extends AppCompatActivity {
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                tvShadow.setVisibility(View.VISIBLE);
                 tvShadow.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
             }

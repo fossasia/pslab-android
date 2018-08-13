@@ -129,6 +129,15 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
                 direction = 2;
             }
         });
+
+        tvShadow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                tvShadow.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -200,13 +209,6 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         compass.startAnimation(ra);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_compass_help_menu, menu);
-        return true;
-    }
-
     /**
      * Initiates bottom sheet to display guide on how to use Compass instrument
      */
@@ -217,6 +219,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setVisibility(View.VISIBLE);
             tvShadow.setAlpha(0.8f);
             arrowUpDown.setRotation(180);
             bottomSheetSlideText.setText(R.string.hide_guide_text);
@@ -249,12 +252,13 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
                         break;
 
                     case BottomSheetBehavior.STATE_COLLAPSED:
-                        handler.postDelayed(runnable, 1000);
+                        handler.postDelayed(runnable, 2000);
                         break;
 
                     default:
                         handler.removeCallbacks(runnable);
                         bottomSheetSlideText.setText(R.string.show_guide_text);
+                        break;
                 }
             }
 
@@ -262,6 +266,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0,
                         0.0, 0.8);
+                tvShadow.setVisibility(View.VISIBLE);
                 tvShadow.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
             }
@@ -274,6 +279,13 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     public boolean onTouchEvent(MotionEvent event) {
         gestureDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_compass_help_menu, menu);
+        return true;
     }
 
     @Override

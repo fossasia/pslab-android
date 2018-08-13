@@ -185,7 +185,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oscilloscope);
         ButterKnife.bind(this);
+
         setUpBottomSheet();
+        parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                parentLayout.setVisibility(View.GONE);
+            }
+        });
+
         scienceLab = ScienceLabCommon.scienceLab;
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
@@ -703,6 +713,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            parentLayout.setVisibility(View.VISIBLE);
             parentLayout.setAlpha(0.8f);
             arrowUpDown.setRotation(180);
             bottomSheetSlideText.setText(R.string.hide_guide_text);
@@ -737,12 +748,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     default:
                         handler.removeCallbacks(runnable);
                         bottomSheetSlideText.setText(R.string.show_guide_text);
+                        break;
                 }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                parentLayout.setVisibility(View.VISIBLE);
                 parentLayout.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
             }

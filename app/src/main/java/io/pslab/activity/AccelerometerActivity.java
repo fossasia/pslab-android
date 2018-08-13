@@ -94,6 +94,14 @@ public class AccelerometerActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setUpBottomSheet();
+        tvShadow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                tvShadow.setVisibility(View.GONE);
+            }
+        });
         setSupportActionBar(mToolbar);
 
         adapter = new AccelerometerAdapter(new String[]{"X axis", "Y axis", "Z axis"}, getApplicationContext());
@@ -258,6 +266,7 @@ public class AccelerometerActivity extends AppCompatActivity {
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setVisibility(View.VISIBLE);
             tvShadow.setAlpha(0.8f);
             arrowUpDown.setRotation(180);
             bottomSheetSlideText.setText(R.string.hide_guide_text);
@@ -292,12 +301,14 @@ public class AccelerometerActivity extends AppCompatActivity {
                     default:
                         handler.removeCallbacks(runnable);
                         bottomSheetSlideText.setText(R.string.show_guide_text);
+                        break;
                 }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                tvShadow.setVisibility(View.VISIBLE);
                 tvShadow.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
             }
