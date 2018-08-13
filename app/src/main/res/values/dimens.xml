@@ -358,6 +358,7 @@
     <dimen name="lux_card_margin_top">20dp</dimen>
     <dimen name="lux_chart_height">200dp</dimen>
 
+    <dimen name="sensor_card_view_rad">5dp</dimen>
     <dimen name="item_text_size">18sp</dimen>
     <dimen name="exp_icn_padding">3dp</dimen>
     <dimen name="view_data_loc_middle">20dp</dimen>
@@ -378,5 +379,8 @@
     <dimen name="view_data_loc_height">40dp</dimen>
     <dimen name="view_data_loc_padding">10dp</dimen>
     <dimen name="view_data_map_rl_margin">10dp</dimen>
+    <dimen name="range_card_margin">5dp</dimen>
+    <dimen name="speedometer_height">200dp</dimen>
+    <dimen name="select_sensor_margin">5dp</dimen>
 
 </resources>

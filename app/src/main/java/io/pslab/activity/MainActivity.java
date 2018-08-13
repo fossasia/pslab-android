@@ -29,6 +29,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.communication.CommunicationHandler;
 import io.pslab.fragment.AboutUsFragment;
@@ -40,11 +44,6 @@ import io.pslab.others.CustomTabService;
 import io.pslab.others.InitializationVariable;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.receivers.USBDetachReceiver;
-
-import java.io.IOException;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static io.pslab.others.ScienceLabCommon.scienceLab;
 
@@ -251,7 +250,9 @@ public class MainActivity extends AppCompatActivity {
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
-                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                        intent.putExtra("title", "Settings");
+                        startActivity(intent);
                         return true;
                     case R.id.nav_about_us:
                         navItemIndex = 3;

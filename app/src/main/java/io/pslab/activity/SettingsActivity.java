@@ -1,9 +1,11 @@
 package io.pslab.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
@@ -11,13 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
-import io.pslab.R;
-import io.pslab.fragment.SettingsFragment;
-import io.pslab.others.GPSLogger;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.pslab.R;
+import io.pslab.fragment.LuxMeterSettingFragment;
+import io.pslab.fragment.SettingsFragment;
+import io.pslab.others.GPSLogger;
 
 /**
  * Created by Avjeet on 7/7/18.
@@ -37,15 +39,29 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         unBinder = ButterKnife.bind(this);
 
+        Intent intent = getIntent();
+        String title = intent.getStringExtra("title");
+
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.nav_settings);
+            actionBar.setTitle(title);
         }
+
+        Fragment fragment;
+        switch (title) {
+            case "Lux Meter Settings":
+                fragment = new LuxMeterSettingFragment();
+                break;
+            default:
+                fragment = new SettingsFragment();
+                break;
+        }
+
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.content, new SettingsFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.content, fragment).commit();
         }
     }
 
@@ -70,7 +86,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if (grantResults.length <= 0
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
-                    editor.putBoolean(SettingsFragment.KEY_INCLUDE_LOCATION, false);
+                    editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, false);
                     editor.commit();
                 }
             }
