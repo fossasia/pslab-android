@@ -67,8 +67,7 @@ import static io.pslab.others.MathUtils.map;
 
 public class OscilloscopeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "Oscilloscope Activity";
-    private static final String PREF_NAME = "customDialogPreference";
+    private static final String PREF_NAME = "OscilloscopeActivity";
     private ScienceLab scienceLab;
     @BindView(R.id.chart_os)
     public LineChart mChart;
@@ -709,7 +708,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
         final SharedPreferences settings = this.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        Boolean isFirstTime = settings.getBoolean("WaveGenFirstTime", true);
+        Boolean isFirstTime = settings.getBoolean("OscilloscopeFirstTime", true);
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -718,7 +717,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             arrowUpDown.setRotation(180);
             bottomSheetSlideText.setText(R.string.hide_guide_text);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("WaveGenFirstTime", false);
+            editor.putBoolean("OscilloscopeFirstTime", false);
             editor.apply();
         } else {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
