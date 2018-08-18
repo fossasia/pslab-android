@@ -223,10 +223,10 @@ public class MainActivity extends AppCompatActivity {
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             case 3:
-                navigationView.getMenu().getItem(3).getSubMenu().getItem(1).setChecked(true);
+                navigationView.getMenu().getItem(4).getSubMenu().getItem(1).setChecked(true);
                 break;
             case 4:
-                navigationView.getMenu().getItem(3).getSubMenu().getItem(0).setChecked(true);
+                navigationView.getMenu().getItem(4).getSubMenu().getItem(0).setChecked(true);
                 break;
             default:
                 navigationView.getMenu().getItem(0).setChecked(true);
