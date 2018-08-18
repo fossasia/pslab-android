@@ -129,6 +129,14 @@ public class PowerSourceActivity extends AppCompatActivity {
         powerPreferences = getSharedPreferences(POWER_PREFERENCES, MODE_PRIVATE);
 
         setUpBottomSheet();
+        tvShadow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                tvShadow.setVisibility(View.GONE);
+            }
+        });
 
         autoSize(displayPV1);
         autoSize(displayPV2);
@@ -179,6 +187,7 @@ public class PowerSourceActivity extends AppCompatActivity {
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setVisibility(View.VISIBLE);
             tvShadow.setAlpha(0.8f);
             arrowUpDown.setRotation(180);
             bottomSheetSlideText.setText(R.string.hide_guide_text);
@@ -217,6 +226,7 @@ public class PowerSourceActivity extends AppCompatActivity {
                     default:
                         handler.removeCallbacks(runnable);
                         bottomSheetSlideText.setText(R.string.show_guide_text);
+                        break;
                 }
             }
 
@@ -224,6 +234,7 @@ public class PowerSourceActivity extends AppCompatActivity {
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0,
                         0.0, 0.8);
+                tvShadow.setVisibility(View.VISIBLE);
                 tvShadow.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
             }
@@ -244,6 +255,7 @@ public class PowerSourceActivity extends AppCompatActivity {
         inflater.inflate(R.menu.power_source_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

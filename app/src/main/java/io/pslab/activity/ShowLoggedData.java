@@ -42,6 +42,7 @@ import io.realm.RealmResults;
 
 /**
  * Created by viveksb007 on 12/8/17.
+ * deprecated
  */
 
 public class ShowLoggedData extends AppCompatActivity {
@@ -289,7 +290,7 @@ public class ShowLoggedData extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_show_logged_data, menu);
+        getMenuInflater().inflate(R.menu.activity_show_item_logged_data, menu);
         return true;
     }
 

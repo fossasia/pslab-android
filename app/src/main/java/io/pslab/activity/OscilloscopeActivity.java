@@ -67,8 +67,7 @@ import static io.pslab.others.MathUtils.map;
 
 public class OscilloscopeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "Oscilloscope Activity";
-    private static final String PREF_NAME = "customDialogPreference";
+    private static final String PREF_NAME = "OscilloscopeActivity";
     private ScienceLab scienceLab;
     @BindView(R.id.chart_os)
     public LineChart mChart;
@@ -185,7 +184,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oscilloscope);
         ButterKnife.bind(this);
+
         setUpBottomSheet();
+        parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                parentLayout.setVisibility(View.GONE);
+            }
+        });
+
         scienceLab = ScienceLabCommon.scienceLab;
         x1 = mChart.getXAxis();
         y1 = mChart.getAxisLeft();
@@ -699,15 +708,16 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
         final SharedPreferences settings = this.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        Boolean isFirstTime = settings.getBoolean("WaveGenFirstTime", true);
+        Boolean isFirstTime = settings.getBoolean("OscilloscopeFirstTime", true);
 
         if (isFirstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            parentLayout.setVisibility(View.VISIBLE);
             parentLayout.setAlpha(0.8f);
             arrowUpDown.setRotation(180);
             bottomSheetSlideText.setText(R.string.hide_guide_text);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("WaveGenFirstTime", false);
+            editor.putBoolean("OscilloscopeFirstTime", false);
             editor.apply();
         } else {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -737,12 +747,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     default:
                         handler.removeCallbacks(runnable);
                         bottomSheetSlideText.setText(R.string.show_guide_text);
+                        break;
                 }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                parentLayout.setVisibility(View.VISIBLE);
                 parentLayout.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
             }

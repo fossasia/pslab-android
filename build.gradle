@@ -54,6 +54,7 @@ ext{
     seekBarLibraryVersion = '1.2.9'
     carouselPickerVersion = 'v1.0'
     speedView = '1.2.0'
+    realmAdapter = '2.1.1'
     // Open Street Maps versions
     osmVersion = '5.1'
     mapsforgeVersion = '6.0.1'

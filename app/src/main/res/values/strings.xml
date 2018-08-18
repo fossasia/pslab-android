@@ -536,7 +536,6 @@
     <string name="steps">Steps</string>
     <string name="set_steps">Set Steps</string>
 
-    <string name="fossasia_logo">Fossasia Logo</string>
     <string name="pocket_science_logo">Pocket Science Logo</string>
 
     <string name="servo_4">Servo 4</string>
@@ -896,6 +895,8 @@
     GND. You can use any of the PSLab device GND pins.\n</string>
 
     <string name="barometer">Barometer</string>
+    <string name="barometer_alert_title">No barometer sensor in device</string>
+    <string name="barometer_alert_description">Connect a BMP180 sensor using I2C pins on PSLab to use this instrument</string>
     <string name="barometer_description">Measures the atmospheric pressure</string>
     <string name="barometer_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
     is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n
@@ -1000,6 +1001,27 @@
     <string name="faq_answer3">The bottomsheet guide implemented in each instrument has all the schematics for the connection of the device.</string>
     <string name="faq_answer4">Right now, we are not having an option to make and save custom experiments. But we will implement it soon.</string>
     <string name="faq_answer5">You can submit your reviews, feature requests and feedback through our Feedback and Issues page.</string>
+
+    <string name="date_of_recording">DATE OF RECORDING</string>
+    <string name="time_of_recording">TIME OF RECORDING</string>
+    <string name="date_of_rec">Date of Rec</string>
+    <string name="time_of_rec">Time of Rec</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="location">Location</string>
+
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="timezone">Timezone</string>
+    <string name="dev_model">Device Model</string>
+    <string name="dev_brand">Device Brand</string>
+    <string name="dev_android_sdk">Device Android SDK</string>
+
+
+    <string name="logged_data">Logged Data</string>
+    <string name="show_logged_data">Show Logged Data</string>
+    <string name="time_elapsed">Time Elapsed</string>
+    <string name="exp_data_saved">Experiment Logged Data Saved</string>
 
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
