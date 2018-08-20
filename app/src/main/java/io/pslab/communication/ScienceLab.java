@@ -2247,8 +2247,9 @@ public class ScienceLab {
             mPacketHandler.sendInt(chargeTime);
             Thread.sleep((long) (chargeTime * 1e-6 + .02));
             int VCode;
+            int i = 0;
             do VCode = mPacketHandler.getVoltageSummation();
-            while (VCode == -1);
+            while (VCode == -1 & i++ < 10);
             double v = 3.3 * VCode / 4095;
             mPacketHandler.getAcknowledgement();
             double chargeCurrent = this.currents[currentRange] * (100 + trim) / 100.0;

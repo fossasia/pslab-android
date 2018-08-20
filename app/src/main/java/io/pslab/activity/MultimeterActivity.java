@@ -128,7 +128,7 @@ public class MultimeterActivity extends AppCompatActivity {
         tvShadow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 tvShadow.setVisibility(View.GONE);
             }
@@ -184,6 +184,7 @@ public class MultimeterActivity extends AppCompatActivity {
                 switch (knobState) {
                     case 3:
                         if (scienceLab.isConnected()) {
+                            v.setEnabled(false);
                             DecimalFormat resistanceFormat = new DecimalFormat("#.##");
                             Double resistance;
                             Double avgResistance = 0.0;
@@ -225,33 +226,41 @@ public class MultimeterActivity extends AppCompatActivity {
                             saveAndSetData(Resistance, resistanceUnit);
                             if (recordData)
                                 record("Resistance", Resistance + recordUnit);
+                            v.setEnabled(true);
                         }
                         break;
                     case 4:
                         if (scienceLab.isConnected()) {
+                            v.setEnabled(false);
                             Double capacitance = scienceLab.getCapacitance();
                             DecimalFormat capacitanceFormat = new DecimalFormat("#.##");
                             String Capacitance;
                             String capacitanceUnit;
-                            if (capacitance < 1e-9) {
-                                Capacitance = capacitanceFormat.format((capacitance / 1e-12));
-                                capacitanceUnit = "pF";
-                            } else if (capacitance < 1e-6) {
-                                Capacitance = capacitanceFormat.format((capacitance / 1e-9));
-                                capacitanceUnit = "nF";
-                            } else if (capacitance < 1e-3) {
-                                Capacitance = capacitanceFormat.format((capacitance / 1e-6));
-                                capacitanceUnit = "\u00B5" + "F";
-                            } else if (capacitance < 1e-1) {
-                                Capacitance = capacitanceFormat.format((capacitance / 1e-3));
-                                capacitanceUnit = "mF";
+                            if (capacitance == null) {
+                                Capacitance = "Cannot measure!";
+                                capacitanceUnit = "";
                             } else {
-                                Capacitance = capacitanceFormat.format(capacitance);
-                                capacitanceUnit = getString(R.string.capacitance_unit);
+                                if (capacitance < 1e-9) {
+                                    Capacitance = capacitanceFormat.format((capacitance / 1e-12));
+                                    capacitanceUnit = "pF";
+                                } else if (capacitance < 1e-6) {
+                                    Capacitance = capacitanceFormat.format((capacitance / 1e-9));
+                                    capacitanceUnit = "nF";
+                                } else if (capacitance < 1e-3) {
+                                    Capacitance = capacitanceFormat.format((capacitance / 1e-6));
+                                    capacitanceUnit = "\u00B5" + "F";
+                                } else if (capacitance < 1e-1) {
+                                    Capacitance = capacitanceFormat.format((capacitance / 1e-3));
+                                    capacitanceUnit = "mF";
+                                } else {
+                                    Capacitance = capacitanceFormat.format(capacitance);
+                                    capacitanceUnit = getString(R.string.capacitance_unit);
+                                }
                             }
                             saveAndSetData(Capacitance, capacitanceUnit);
                             if (recordData)
                                 record("Capacitance", Capacitance + capacitanceUnit);
+                            v.setEnabled(true);
                         }
                         break;
                     case 5:
@@ -260,26 +269,32 @@ public class MultimeterActivity extends AppCompatActivity {
                     case 8:
                         if (!switchIsChecked) {
                             if (scienceLab.isConnected()) {
+                                v.setEnabled(false);
                                 Double frequency = scienceLab.getFrequency(knobMarker[knobState], null);
                                 saveAndSetData(String.valueOf(frequency), getString(R.string.frequency_unit));
                                 if (recordData)
                                     record(knobMarker[knobState], String.valueOf(frequency) + getString(R.string.frequency_unit));
+                                v.setEnabled(true);
                             }
                         } else {
                             if (scienceLab.isConnected()) {
+                                v.setEnabled(false);
                                 scienceLab.countPulses(knobMarker[knobState]);
                                 double pulseCount = scienceLab.readPulseCount();
                                 saveAndSetData(String.valueOf(pulseCount), "");
                                 if (recordData)
                                     record(knobMarker[knobState], String.valueOf(pulseCount));
+                                v.setEnabled(true);
                             }
                         }
                         break;
                     default:
                         if (scienceLab.isConnected()) {
+                            v.setEnabled(false);
                             saveAndSetData(String.valueOf(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1))), getString(R.string.multimeter_voltage_unit));
                             if (recordData)
                                 record(knobMarker[knobState], String.valueOf(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1))) + getString(R.string.multimeter_voltage_unit));
+                            v.setEnabled(true);
                         }
                         break;
                 }
