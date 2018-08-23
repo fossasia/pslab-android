@@ -7,6 +7,10 @@
         android:title="@string/record_csv_data"
         app:showAsAction="always" />
     <item
+        android:id="@+id/show_guide"
+        android:title="@string/show_guide"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/show_logged_data"
         android:title="@string/show_logged_data"
         app:showAsAction="never" />
@@ -17,7 +21,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/settings"
-        android:title="@string/nav_settings"
+        android:title="@string/lux_meter_settings"
         app:showAsAction="never" />
 </menu>
 

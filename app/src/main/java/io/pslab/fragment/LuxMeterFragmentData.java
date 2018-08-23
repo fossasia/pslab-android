@@ -11,11 +11,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -62,9 +66,13 @@ public class LuxMeterFragmentData extends Fragment {
     TextView statMean;
     @BindView(R.id.chart_lux_meter)
     LineChart mChart;
+    @BindView(R.id.spinner_lux_sensor_gain)
+    Spinner gainValue;
     @BindView(R.id.light_meter)
-
     PointerSpeedometer lightMeter;
+    @BindView(R.id.cardview_gain_range)
+    CardView gainRangeCardView;
+
     private SensorDataFetch sensorDataFetch;
     private BH1750 sensorBH1750 = null;
     private TSL2561 sensorTSL2561 = null;
@@ -85,13 +93,13 @@ public class LuxMeterFragmentData extends Fragment {
     private GPSLogger gpsLogger;
     private Runnable runnable;
     private Realm realm;
+    private Spinner selectSensor;
 
     public static LuxMeterFragmentData newInstance() {
         return new LuxMeterFragmentData();
     }
 
-    public static void setParameters(int sensorType, int highLimit, int updatePeriod) {
-        LuxMeterFragmentData.sensorType = sensorType;
+    public static void setParameters(int highLimit, int updatePeriod) {
         LuxMeterFragmentData.highLimit = highLimit;
         LuxMeterFragmentData.updatePeriod = updatePeriod;
     }
@@ -101,46 +109,20 @@ public class LuxMeterFragmentData extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         currentMin = 10000;
-        currentMax = 30;
+        currentMax = 0;
         entries = new ArrayList<>();
         luxRealmData = new ArrayList<>();
         realm = Realm.getDefaultInstance();
-        switch (sensorType) {
-            case 0:
-                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
-                sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-                break;
-            case 1:
-                scienceLab = ScienceLabCommon.scienceLab;
-                if (scienceLab.isConnected()) {
-                    try {
-                        I2C i2c = scienceLab.i2c;
-                        sensorBH1750 = new BH1750(i2c);
-                    } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-            case 2:
-                scienceLab = ScienceLabCommon.scienceLab;
-                if (scienceLab.isConnected()) {
-                    try {
-                        I2C i2c = scienceLab.i2c;
-                        sensorTSL2561 = new TSL2561(i2c, scienceLab);
-                    } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            default:
-                break;
-        }
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lux_meter_data, container, false);
         unbinder = ButterKnife.bind(this, view);
+        selectSensor = (Spinner) view.findViewById(R.id.spinner_select_light);
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -195,6 +177,54 @@ public class LuxMeterFragmentData extends Fragment {
                 }
             }
         };
+
+        changeSensor(sensorType);
+        gainRangeCardView.setVisibility(View.GONE);
+
+        selectSensor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                changeSensor(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //do nothing
+            }
+        });
+
+        gainValue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    switch (position) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            if (sensorBH1750 != null) {
+                                sensorBH1750.setRange(gainValue.getSelectedItem().toString());
+                            }
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                            if (sensorTSL2561 != null) {
+                                sensorTSL2561.setGain(gainValue.getSelectedItem().toString());
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //do nothing
+            }
+        });
 
         lightMeter.setMaxSpeed(10000);
 
@@ -411,5 +441,67 @@ public class LuxMeterFragmentData extends Fragment {
         super.onResume();
         mChart.clear();
         mChart.invalidate();
+    }
+
+    private void changeSensor(int sensorTypeSelected) {
+        switch (sensorTypeSelected) {
+            case 0:
+                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
+                sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+                break;
+            case 1:
+                scienceLab = ScienceLabCommon.scienceLab;
+                if (scienceLab.isConnected()) {
+                    ArrayList<Integer> data = new ArrayList<>();
+                    try {
+                        I2C i2c = scienceLab.i2c;
+                        data = i2c.scan(null);
+                        if (data.contains(0x23)) {
+                            sensorBH1750 = new BH1750(i2c);
+                            gainRangeCardView.setVisibility(View.VISIBLE);
+                            sensorType = 0;
+                        } else {
+                            Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
+                            sensorType = 0;
+                            selectSensor.setSelection(0);
+                        }
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                    sensorType = 0;
+                    selectSensor.setSelection(0);
+                }
+
+                break;
+            case 2:
+                scienceLab = ScienceLabCommon.scienceLab;
+                if (scienceLab.isConnected()) {
+                    try {
+                        I2C i2c = scienceLab.i2c;
+                        ArrayList<Integer> data = new ArrayList<>();
+                        data = i2c.scan(null);
+                        if (data.contains(0x39)) {
+                            sensorTSL2561 = new TSL2561(i2c, scienceLab);
+                            gainRangeCardView.setVisibility(View.VISIBLE);
+                            sensorType = 2;
+                        } else {
+                            Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
+                            sensorType = 0;
+                            selectSensor.setSelection(0);
+                        }
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                    sensorType = 0;
+                    selectSensor.setSelection(0);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
