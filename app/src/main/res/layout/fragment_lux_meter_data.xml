@@ -114,7 +114,7 @@
             android:layout_marginRight="@dimen/card_margin"
             android:layout_marginStart="@dimen/card_margin">
 
-            <com.github.anastr.speedviewlib.PointerSpeedometer
+            <com.github.anastr.speedviewlib.TubeSpeedometer
                 android:id="@+id/light_meter"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/speedometer_height"
@@ -126,6 +126,7 @@
                 app:sv_speedTextColor="@color/black"
                 app:sv_speedTextPosition="BOTTOM_CENTER"
                 app:sv_speedometerMode="NORMAL"
+                app:sv_speedometerBackColor="@color/colorPrimary"
                 app:sv_unit="@string/lux"
                 app:sv_unitTextColor="@color/black" />
 

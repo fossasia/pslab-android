@@ -117,7 +117,7 @@ public class BarometerActivity extends AppCompatActivity {
         tvShadow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 tvShadow.setVisibility(View.GONE);
             }
@@ -217,8 +217,6 @@ public class BarometerActivity extends AppCompatActivity {
         };
         Thread dataThread = new Thread(runnable);
         dataThread.start();
-
-        barometer.setMaxSpeed(10000);
 
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();

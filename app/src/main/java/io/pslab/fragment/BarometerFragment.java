@@ -158,8 +158,6 @@ public class BarometerFragment extends Fragment {
         Thread dataThread = new Thread(runnable);
         dataThread.start();
 
-        barometer.setMaxSpeed(10000);
-
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();
         YAxis y2 = mChart.getAxisRight();

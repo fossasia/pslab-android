@@ -1,3 +1,4 @@
+
 package io.pslab.fragment;
 
 import android.annotation.SuppressLint;
@@ -21,7 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.anastr.speedviewlib.PointerSpeedometer;
+import com.github.anastr.speedviewlib.TubeSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -69,7 +70,7 @@ public class LuxMeterFragmentData extends Fragment {
     @BindView(R.id.spinner_lux_sensor_gain)
     Spinner gainValue;
     @BindView(R.id.light_meter)
-    PointerSpeedometer lightMeter;
+    TubeSpeedometer lightMeter;
     @BindView(R.id.cardview_gain_range)
     CardView gainRangeCardView;
 
@@ -108,7 +109,7 @@ public class LuxMeterFragmentData extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        currentMin = 10000;
+        currentMin = 100000;
         currentMax = 0;
         entries = new ArrayList<>();
         luxRealmData = new ArrayList<>();
@@ -334,9 +335,9 @@ public class LuxMeterFragmentData extends Fragment {
                 lightMeter.setSpeedAt(data);
 
                 if (data > highLimit)
-                    lightMeter.setPointerColor(Color.RED);
+                    lightMeter.setIndicatorColor(Color.RED);
                 else
-                    lightMeter.setPointerColor(Color.WHITE);
+                    lightMeter.setIndicatorColor(Color.WHITE);
                 timeElapsed = ((System.currentTimeMillis() - startTime) / 1000);
                 if (timeElapsed != previousTimeElapsed) {
                     previousTimeElapsed = timeElapsed;
@@ -396,7 +397,7 @@ public class LuxMeterFragmentData extends Fragment {
             sensorDataFetch.cancel(true);
             lightMeter.setWithTremble(false);
             lightMeter.speedTo(0f, 500);
-            lightMeter.setPointerColor(ContextCompat.getColor(getActivity(), R.color.white));
+            lightMeter.setIndicatorColor(ContextCompat.getColor(getActivity(), R.color.white));
         }
     }
 
