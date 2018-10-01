@@ -877,6 +877,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(WaveGeneratorActivity.this, OscilloscopeActivity.class));
+                waveDialog.cancel();
             }
         });
 
@@ -884,6 +885,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(WaveGeneratorActivity.this, LogicalAnalyzerActivity.class));
+                waveDialog.cancel();
             }
         });
 
