@@ -24,11 +24,13 @@
             <item
                 android:id="@+id/nav_help_feedback"
                 android:icon="@drawable/ic_feedback_black_24dp"
-                android:title="@string/nav_help_feedback" />
+                android:title="@string/nav_help_feedback"
+                android:checkable="true" />
             <item
                 android:id="@+id/nav_about_us"
                 android:icon="@drawable/ic_info_black_24dp"
-                android:title="@string/nav_about_us" />
+                android:title="@string/nav_about_us"
+                android:checkable="true" />
             <item
                 android:id="@+id/nav_report_us"
                 android:icon="@drawable/ic_bug_report_black_24dp"
