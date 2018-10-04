@@ -9,14 +9,14 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="314dp"
-        android:src="@drawable/logo"
-        android:contentDescription="@string/pocket_science_logo" />
+        android:layout_height="@dimen/splash_screen_logo_height"
+        android:contentDescription="@string/pocket_science_logo"
+        android:src="@drawable/logo" />
 
     <ImageView
         android:id="@+id/PSLabText"
-        android:layout_width="271dp"
-        android:layout_height="95dp"
+        android:layout_width="@dimen/splash_screen_name_width"
+        android:layout_height="@dimen/splash_screen_name_height"
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/text" />
 
