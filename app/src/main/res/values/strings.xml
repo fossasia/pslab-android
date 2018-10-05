@@ -920,6 +920,11 @@
         <item>BH1750</item>
         <item>TSL2561</item>
     </string-array>
+    <string-array name="select_light_sensor_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string-array name="select_lux_gain">
         <item>No gain</item>
         <item>1</item>
@@ -1030,5 +1035,6 @@
     <string name="lux_meter_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
     \u2022 Select sensor by going to the Configure tab from the bottom navigation bar and choose BHT-1750 in the drop down menu under Select Sensor.\n</string>
+    <string name="lux_meter_settings">Lux Meter Settings</string>
 
 </resources>

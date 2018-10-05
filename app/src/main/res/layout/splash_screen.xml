@@ -10,7 +10,14 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="314dp"
-        app:srcCompat="@drawable/logo"
+        android:src="@drawable/logo"
         android:contentDescription="@string/pocket_science_logo" />
+
+    <ImageView
+        android:id="@+id/PSLabText"
+        android:layout_width="271dp"
+        android:layout_height="95dp"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/text" />
 
 </LinearLayout>

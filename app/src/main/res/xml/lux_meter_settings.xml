@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <EditTextPreference
+            android:key="setting_lux_update_period"
+            android:title="@string/update_period"
+            android:dialogTitle="@string/update_period"
+            android:defaultValue="1000"
+            android:dialogMessage="Please provide time interval(in ms) at which data will be updated"
+            android:summary="Update period is 900ms"/>
+
+        <EditTextPreference
+            android:key="setting_lux_high_limit"
+            android:title="High Limit"
+            android:dialogTitle="High Limit"
+            android:defaultValue="2000"
+            android:dialogMessage="Please provide maximum limit of LUX value to be recorded"
+            android:summary="High Limit is 2000 Lux"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="include_location_sensor_data"
+            android:summary="Include the location data in the logged file"
+            android:title="Include Location Data" />
+</PreferenceScreen>

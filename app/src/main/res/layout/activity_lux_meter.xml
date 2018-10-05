@@ -24,18 +24,6 @@
         android:id="@+id/frame_layout_lux_meter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/navigation_lux_meter"
         android:layout_marginTop="?attr/actionBarSize"
-        android:layout_marginBottom="?attr/actionBarSize"
         android:animateLayoutChanges="true" />
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation_lux_meter"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        app:menu="@menu/activity_lux_meter_bottom_navigation"
-        app:theme="@style/AppTheme.BottomNavigationBar" />
-
 </android.support.design.widget.CoordinatorLayout>
