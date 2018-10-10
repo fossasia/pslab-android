@@ -190,8 +190,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-        else {
+        } else {
             View decorView = getWindow().getDecorView();
 
             decorView.setSystemUiVisibility((View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -207,7 +206,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 parentLayout.setVisibility(View.GONE);
             }
