@@ -26,7 +26,7 @@ import io.pslab.activity.LuxMeterActivity;
 public class GPSLogger {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    private static final int UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
+    private static final int UPDATE_INTERVAL_IN_MILLISECONDS = 400;
     private static final int MIN_DISTANCE_CHANGE_FOR_UPDATES = 1;
     private LocationManager locationManager;
     private Context context;
