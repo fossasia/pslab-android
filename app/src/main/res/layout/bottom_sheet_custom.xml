@@ -59,10 +59,6 @@
                 android:orientation="vertical"
                 android:padding="@dimen/bottom_sheet_padding">
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/space_length_btm_sheet" />
-
                 <TextView
                     android:id="@+id/guide_title"
                     android:layout_width="match_parent"
@@ -91,9 +87,11 @@
                     android:layout_margin="@dimen/bottom_sheet_margin"
                     android:background="@color/white" />
 
-                <Space
+                <LinearLayout
+                    android:id="@+id/custom_dialog_additional_content"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/space_length_btm_sheet" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
 
             </LinearLayout>
 
