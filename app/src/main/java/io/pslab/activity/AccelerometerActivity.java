@@ -233,7 +233,9 @@ public class AccelerometerActivity extends AppCompatActivity {
                 startActivity(MAP);
                 break;
             case R.id.settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                Intent settingIntent = new Intent(this, SettingsActivity.class);
+                settingIntent.putExtra("title", getResources().getString(R.string.accelerometer_configurations));
+                startActivity(settingIntent);
                 break;
             default:
                 break;

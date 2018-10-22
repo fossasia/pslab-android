@@ -466,7 +466,9 @@ public class MultimeterActivity extends AppCompatActivity {
                     CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null);
                 break;
             case R.id.settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                Intent settingIntent = new Intent(this, SettingsActivity.class);
+                settingIntent.putExtra("title", getResources().getString(R.string.multimeter_configurations));
+                startActivity(settingIntent);
                 break;
             default:
                 break;
