@@ -243,7 +243,7 @@ public class LuxMeterActivity extends AppCompatActivity {
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
-                settingIntent.putExtra("title", "Lux Meter Settings");
+                settingIntent.putExtra("title", getResources().getString(R.string.lux_meter_configurations));
                 startActivity(settingIntent);
                 break;
             case R.id.show_logged_data:
