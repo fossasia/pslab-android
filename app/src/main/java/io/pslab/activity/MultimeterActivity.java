@@ -58,8 +58,11 @@ import it.beppi.knoblibrary.Knob;
 
 public class MultimeterActivity extends AppCompatActivity {
 
-    private ScienceLab scienceLab;
-
+    public static final String PREFS_NAME = "customDialogPreference";
+    public static final String NAME = "savingData";
+    private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
+    public boolean recordData = false;
+    public CSVLogger multimeterLogger;
     @BindView(R.id.multimeter_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.quantity)
@@ -74,7 +77,6 @@ public class MultimeterActivity extends AppCompatActivity {
     Button read;
     @BindView(R.id.selector)
     SwitchCompat aSwitch;
-
     @BindView(R.id.multimeter_coordinator_layout)
     CoordinatorLayout coordinatorLayout;
     //bottomSheet
@@ -94,26 +96,18 @@ public class MultimeterActivity extends AppCompatActivity {
     ImageView bottomSheetSchematic;
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
-
-    public boolean recordData = false;
-
+    BottomSheetBehavior bottomSheetBehavior;
+    GestureDetector gestureDetector;
+    SharedPreferences multimeter_data;
+    private ScienceLab scienceLab;
     private int knobState;
     private String dataRecorded;
     private String valueRecorded;
     private Menu menu;
     private Boolean switchIsChecked;
     private String[] knobMarker;
-    public CSVLogger multimeterLogger;
     private boolean isRecordingStarted = false;
     private boolean isDataRecorded = false;
-
-    BottomSheetBehavior bottomSheetBehavior;
-    GestureDetector gestureDetector;
-    public static final String PREFS_NAME = "customDialogPreference";
-    private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
-
-    public static final String NAME = "savingData";
-    SharedPreferences multimeter_data;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -412,7 +406,7 @@ public class MultimeterActivity extends AppCompatActivity {
                     return true;
                 }
                 if (recordData) {
-                    item.setIcon(R.drawable.record_icon);
+                    item.setIcon(R.drawable.ic_record_white);
                     recordData = false;
                     CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null);
                 } else {
@@ -429,7 +423,7 @@ public class MultimeterActivity extends AppCompatActivity {
             case R.id.record_csv_data:
                 if (isDataRecorded) {
                     MenuItem item1 = menu.findItem(R.id.record_pause_data);
-                    item1.setIcon(R.drawable.record_icon);
+                    item1.setIcon(R.drawable.ic_record_white);
                     multimeterLogger.writeCSVFile(dataRecorded + "\n" + valueRecorded + "\n");
                     dataRecorded = "Data";
                     valueRecorded = "Value";
@@ -462,7 +456,7 @@ public class MultimeterActivity extends AppCompatActivity {
             case R.id.delete_csv_data:
                 if (isDataRecorded) {
                     MenuItem item1 = menu.findItem(R.id.record_pause_data);
-                    item1.setIcon(R.drawable.record_icon);
+                    item1.setIcon(R.drawable.ic_record_white);
                     recordData = false;
                     isRecordingStarted = false;
                     isDataRecorded = false;

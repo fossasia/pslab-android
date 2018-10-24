@@ -201,11 +201,14 @@ public class LuxMeterActivity extends AppCompatActivity {
                     ((LuxMeterFragmentData) selectedFragment).stopSensorFetching();
                     invalidateOptionsMenu();
                     Long uniqueRef = realmPreferences.getLong("uniqueCount", 0);
-                    selectedFragment.saveDataInRealm(uniqueRef, locationPref, gpsLogger);
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.exp_data_saved), null, null);
-                    SharedPreferences.Editor editor = realmPreferences.edit();
-                    editor.putLong("uniqueCount", uniqueRef + 1);
-                    editor.commit();
+                    if (selectedFragment.saveDataInRealm(uniqueRef, locationPref, gpsLogger)) {
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.exp_data_saved), null, null);
+                        SharedPreferences.Editor editor = realmPreferences.edit();
+                        editor.putLong("uniqueCount", uniqueRef + 1);
+                        editor.commit();
+                    } else {
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.no_data_fetched), null, null);
+                    }
                     recordData = false;
                 } else {
                     if (locationPref) {
