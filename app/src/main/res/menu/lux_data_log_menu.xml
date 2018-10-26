@@ -21,7 +21,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/settings"
-        android:title="@string/lux_meter_settings"
+        android:title="@string/lux_meter_configurations"
         app:showAsAction="never" />
 </menu>
 

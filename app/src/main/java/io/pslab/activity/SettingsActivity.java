@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         Fragment fragment;
         switch (title) {
-            case "Lux Meter Settings":
+            case "Lux Meter Configurations":
                 fragment = new LuxMeterSettingFragment();
                 break;
             default:
