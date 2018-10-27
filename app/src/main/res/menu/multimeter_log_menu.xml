@@ -18,6 +18,6 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/settings"
-        android:title="@string/nav_settings"
+        android:title="@string/multimeter_configurations"
         app:showAsAction="never" />
 </menu>
