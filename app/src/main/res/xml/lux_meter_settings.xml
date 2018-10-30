@@ -17,7 +17,7 @@
             android:summary="High Limit is 2000 Lux"/>
 
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="include_location_sensor_data"
             android:summary="Include the location data in the logged file"
             android:title="Include Location Data" />
