@@ -39,7 +39,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, false);
+            editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, true);
             editor.commit();
         }
 
@@ -48,7 +48,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
     @Override
     public void onResume() {
         super.onResume();
-        locationPreference.setChecked(sharedPref.getBoolean(KEY_INCLUDE_LOCATION, false));
+        locationPreference.setChecked(sharedPref.getBoolean(KEY_INCLUDE_LOCATION, true));
         updatePeriodPref.setSummary("Update Period is " + updatePeriodPref.getText() + " ms");
         higLimitPref.setSummary("High Limit is " + higLimitPref.getText());
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);

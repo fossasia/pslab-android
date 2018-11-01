@@ -89,7 +89,7 @@ public class LuxMeterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         realmPreferences = getSharedPreferences(NAME, Context.MODE_PRIVATE);
-
+        new GPSLogger(this).requestPermissionIfNotGiven();
         setUpBottomSheet();
         tvShadow.setOnClickListener(new View.OnClickListener() {
             @Override
