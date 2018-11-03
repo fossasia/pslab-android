@@ -88,6 +88,9 @@ public class LuxMeterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lux_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         realmPreferences = getSharedPreferences(NAME, Context.MODE_PRIVATE);
         new GPSLogger(this).requestPermissionIfNotGiven();
         setUpBottomSheet();
@@ -254,6 +257,9 @@ public class LuxMeterActivity extends AppCompatActivity {
             case R.id.show_guide:
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case android.R.id.home:
+                this.finish();
                 break;
             default:
                 break;
