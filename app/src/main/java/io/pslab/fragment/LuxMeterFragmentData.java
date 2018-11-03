@@ -400,40 +400,46 @@ public class LuxMeterFragmentData extends Fragment {
         }
     }
 
-    public void saveDataInRealm(Long uniqueRef, boolean includeLocation, GPSLogger gpsLogger) {
-        realm.beginTransaction();
+    public boolean saveDataInRealm(Long uniqueRef, boolean includeLocation, GPSLogger gpsLogger) {
+        boolean flag = luxRealmData.isEmpty();
+        if (!flag) {
+            realm.beginTransaction();
 
-        SensorLogged sensorLogged = realm.createObject(SensorLogged.class, uniqueRef);
-        sensorLogged.setSensor("Lux Meter");
-        sensorLogged.setDateTimeStart(startTime);
-        sensorLogged.setDateTimeEnd(endTime);
-        sensorLogged.setTimeZone(TimeZone.getDefault().getDisplayName());
+            SensorLogged sensorLogged = realm.createObject(SensorLogged.class, uniqueRef);
+            sensorLogged.setSensor(getResources().getString(R.string.lux_meter));
+            sensorLogged.setDateTimeStart(startTime);
+            sensorLogged.setDateTimeEnd(endTime);
+            sensorLogged.setTimeZone(TimeZone.getDefault().getDisplayName());
 
-        if (includeLocation && gpsLogger != null) {
-            Location location = gpsLogger.getBestLocation();
-            if (location != null) {
-                sensorLogged.setLatitude(location.getLatitude());
-                sensorLogged.setLongitude(location.getLongitude());
+            if (includeLocation && gpsLogger != null) {
+                Location location = gpsLogger.getBestLocation();
+                if (location != null) {
+                    sensorLogged.setLatitude(location.getLatitude());
+                    sensorLogged.setLongitude(location.getLongitude());
+                } else {
+                    sensorLogged.setLatitude(0.0);
+                    sensorLogged.setLongitude(0.0);
+                }
+                gpsLogger.removeUpdate();
             } else {
                 sensorLogged.setLatitude(0.0);
                 sensorLogged.setLongitude(0.0);
             }
-            gpsLogger.removeUpdate();
-        } else {
-            sensorLogged.setLatitude(0.0);
-            sensorLogged.setLongitude(0.0);
-        }
 
-        for (int i = 0; i < luxRealmData.size(); i++) {
-            LuxData tempObject = luxRealmData.get(i);
-            tempObject.setId(i);
-            tempObject.setForeignKey(uniqueRef);
-            realm.copyToRealm(tempObject);
-            Log.i("dataResult", String.valueOf(tempObject.getLux()));
+            for (int i = 0; i < luxRealmData.size(); i++) {
+                LuxData tempObject = luxRealmData.get(i);
+                tempObject.setId(i);
+                tempObject.setForeignKey(uniqueRef);
+                realm.copyToRealm(tempObject);
+                Log.i("dataResult", String.valueOf(tempObject.getLux()));
+            }
+            realm.copyToRealm(sensorLogged);
+            realm.commitTransaction();
+            luxRealmData.clear();
+            return true;
+        } else {
+            return false;
         }
-        realm.copyToRealm(sensorLogged);
-        realm.commitTransaction();
-        luxRealmData.clear();
     }
 
     @Override

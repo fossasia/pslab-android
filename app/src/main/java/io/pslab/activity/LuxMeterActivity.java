@@ -89,7 +89,7 @@ public class LuxMeterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         realmPreferences = getSharedPreferences(NAME, Context.MODE_PRIVATE);
-
+        new GPSLogger(this).requestPermissionIfNotGiven();
         setUpBottomSheet();
         tvShadow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,11 +201,14 @@ public class LuxMeterActivity extends AppCompatActivity {
                     ((LuxMeterFragmentData) selectedFragment).stopSensorFetching();
                     invalidateOptionsMenu();
                     Long uniqueRef = realmPreferences.getLong("uniqueCount", 0);
-                    selectedFragment.saveDataInRealm(uniqueRef, locationPref, gpsLogger);
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.exp_data_saved), null, null);
-                    SharedPreferences.Editor editor = realmPreferences.edit();
-                    editor.putLong("uniqueCount", uniqueRef + 1);
-                    editor.commit();
+                    if (selectedFragment.saveDataInRealm(uniqueRef, locationPref, gpsLogger)) {
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.exp_data_saved), null, null);
+                        SharedPreferences.Editor editor = realmPreferences.edit();
+                        editor.putLong("uniqueCount", uniqueRef + 1);
+                        editor.commit();
+                    } else {
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.no_data_fetched), null, null);
+                    }
                     recordData = false;
                 } else {
                     if (locationPref) {
@@ -240,7 +243,7 @@ public class LuxMeterActivity extends AppCompatActivity {
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
-                settingIntent.putExtra("title", "Lux Meter Settings");
+                settingIntent.putExtra("title", getResources().getString(R.string.lux_meter_configurations));
                 startActivity(settingIntent);
                 break;
             case R.id.show_logged_data:

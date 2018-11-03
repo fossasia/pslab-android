@@ -382,5 +382,8 @@
     <dimen name="range_card_margin">5dp</dimen>
     <dimen name="speedometer_height">200dp</dimen>
     <dimen name="select_sensor_margin">5dp</dimen>
+    <dimen name="splash_screen_logo_height">314dp</dimen>
+    <dimen name="splash_screen_name_width">271dp</dimen>
+    <dimen name="splash_screen_name_height">95dp</dimen>
 
 </resources>

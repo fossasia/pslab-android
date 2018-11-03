@@ -9,22 +9,20 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.anastr.speedviewlib.TubeSpeedometer;
+import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -32,13 +30,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-
-import io.pslab.R;
-import io.pslab.communication.ScienceLab;
-import io.pslab.communication.sensors.BMP180;
-import io.pslab.others.MathUtils;
-import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -48,17 +39,21 @@ import java.util.Arrays;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.pslab.R;
+import io.pslab.communication.ScienceLab;
+import io.pslab.communication.sensors.BMP180;
+import io.pslab.others.MathUtils;
+import io.pslab.others.ScienceLabCommon;
+import io.pslab.others.SwipeGestureDetector;
 
 public class BarometerActivity extends AppCompatActivity {
+    private static final String PREF_NAME = "customDialogPreference";
+    private static int sensorType = 0;
+    private static int highLimit = 20;
+    private static int updatePeriod = 100;
+    private final Object lock = new Object();
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
-    private static final String PREF_NAME = "customDialogPreference";
-
-    private static int sensorType = 0;
-    private static int highLimit = 1000;
-    private static int updatePeriod = 100;
-    private BarometerActivity.SensorDataFetch sensorDataFetch;
-
     @BindView(R.id.barometer_max)
     TextView statMax;
     @BindView(R.id.barometer_min)
@@ -68,23 +63,7 @@ public class BarometerActivity extends AppCompatActivity {
     @BindView(R.id.chart_barometer)
     LineChart mChart;
     @BindView(R.id.barometer)
-    TubeSpeedometer barometer;
-
-    private BMP180 sensorBMP180 = null;
-    private SensorManager sensorManager;
-    private Sensor sensor;
-    private ScienceLab scienceLab;
-    private long startTime;
-    private int flag;
-    private ArrayList<Entry> entries;
-    private float currentMin;
-    private float currentMax;
-    private YAxis y;
-    private volatile boolean monitor = true;
-    private Unbinder unbinder;
-
-    private final Object lock = new Object();
-
+    PointerSpeedometer barometer;
     //bottomSheet
     @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
@@ -102,6 +81,19 @@ public class BarometerActivity extends AppCompatActivity {
     ImageView bottomSheetSchematic;
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
+    private BarometerActivity.SensorDataFetch sensorDataFetch;
+    private BMP180 sensorBMP180 = null;
+    private SensorManager sensorManager;
+    private Sensor sensor;
+    private ScienceLab scienceLab;
+    private long startTime;
+    private int flag;
+    private ArrayList<Entry> entries;
+    private float currentMin;
+    private float currentMax;
+    private YAxis y;
+    private volatile boolean monitor = true;
+    private Unbinder unbinder;
 
     public static BarometerActivity newInstance() {
         return new BarometerActivity();
@@ -113,16 +105,8 @@ public class BarometerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barometer_main);
         ButterKnife.bind(this);
+
         setUpBottomSheet();
-        tvShadow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                tvShadow.setVisibility(View.GONE);
-            }
-        });
-        BarometerActivity.newInstance();
 
         currentMin = 10000;
         entries = new ArrayList<>();
@@ -156,12 +140,7 @@ public class BarometerActivity extends AppCompatActivity {
             default:
                 break;
         }
-    }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_barometer, container, false);
-        unbinder = ButterKnife.bind(this, view);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -218,7 +197,7 @@ public class BarometerActivity extends AppCompatActivity {
         Thread dataThread = new Thread(runnable);
         dataThread.start();
 
-        barometer.setMaxSpeed(10000);
+        barometer.setMaxSpeed(100);
 
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();
@@ -252,113 +231,16 @@ public class BarometerActivity extends AppCompatActivity {
         y.setLabelCount(10);
 
         y2.setDrawGridLines(false);
-
-        return view;
     }
 
-    public static void setParameters(int sensorType, int highLimit, int updatePeriod) {
-        BarometerActivity.sensorType = sensorType;
-        BarometerActivity.highLimit = highLimit;
-        BarometerActivity.updatePeriod = updatePeriod;
-    }
-
-
-    private class SensorDataFetch extends AsyncTask<Void, Void, Void> implements SensorEventListener {
-
-        private float data;
-        private long timeElapsed;
-        private int count = 0;
-        private float sum = 0;
-        private DecimalFormat df = new DecimalFormat("#.##");
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                if (sensorBMP180 != null) {
-                    data = Float.valueOf(Arrays.toString(sensorBMP180.getRaw()));
-                    sensorManager.unregisterListener(this);
-                } else if (sensor != null) {
-                    sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            visualizeData();
-            synchronized (lock) {
-                lock.notify();
-            }
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            data = Float.valueOf(df.format(event.values[0]));
-            visualizeData();
-            unRegisterListener();
-        }
-
-        @SuppressLint("SetTextI18n")
-        private void visualizeData() {
-            if (currentMax < data) {
-                currentMax = data;
-                statMax.setText(String.valueOf(data));
-            } else if (currentMin > data) {
-                currentMin = data;
-                statMin.setText(String.valueOf(data));
-            }
-
-            y.setAxisMaximum(currentMax);
-            y.setAxisMinimum(currentMin);
-            y.setLabelCount(10);
-            barometer.setSpeedAt(data);
-
-            if (data > highLimit) barometer.setIndicatorColor(Color.RED);
-            else barometer.setIndicatorColor(Color.WHITE);
-            timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-            entries.add(new Entry((float) timeElapsed, data));
-
-            for (Entry item : entries) {
-                count++;
-                sum += item.getY();
-            }
-            statMean.setText(Float.toString(Float.valueOf(df.format(sum / count))));
-
-            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.barometer));
-            LineData data = new LineData(dataSet);
-            dataSet.setDrawCircles(false);
-
-            mChart.setData(data);
-            mChart.notifyDataSetChanged();
-            mChart.setVisibleXRangeMaximum(10);
-            mChart.moveViewToX(data.getEntryCount());
-            mChart.invalidate();
-        }
-
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            //do nothing
-        }
-
-        private void unRegisterListener() {
-            sensorManager.unregisterListener(this);
-        }
-    }
-
-    public void onDestroyView() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         monitor = false;
         if (sensor != null && sensorDataFetch != null) {
             sensorManager.unregisterListener(sensorDataFetch);
             sensorDataFetch.cancel(true);
         }
-        unbinder.unbind();
     }
 
     private void setUpBottomSheet() {
@@ -426,7 +308,96 @@ public class BarometerActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
+        gestureDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
+
+    private class SensorDataFetch extends AsyncTask<Void, Void, Void> implements SensorEventListener {
+
+        private float data;
+        private long timeElapsed;
+        private int count = 0;
+        private float sum = 0;
+        private DecimalFormat df = new DecimalFormat("#.##");
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (sensorBMP180 != null) {
+                    data = Float.valueOf(Arrays.toString(sensorBMP180.getRaw()));
+                    sensorManager.unregisterListener(this);
+                } else if (sensor != null) {
+                    sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            visualizeData();
+            synchronized (lock) {
+                lock.notify();
+            }
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            data = Float.valueOf(df.format(event.values[0]));
+            data = data * 101325; // Convert hPa to atm unit
+            visualizeData();
+            unRegisterListener();
+        }
+
+        @SuppressLint("SetTextI18n")
+        private void visualizeData() {
+            if (currentMax < data) {
+                currentMax = data;
+                statMax.setText(String.valueOf(data));
+            } else if (currentMin > data) {
+                currentMin = data;
+                statMin.setText(String.valueOf(data));
+            }
+
+            y.setAxisMaximum(currentMax);
+            y.setAxisMinimum(currentMin);
+            y.setLabelCount(10);
+            barometer.setSpeedAt(data);
+
+            if (data > highLimit) barometer.setIndicatorColor(Color.RED);
+            else barometer.setIndicatorColor(Color.WHITE);
+            timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
+            entries.add(new Entry((float) timeElapsed, data));
+
+            for (Entry item : entries) {
+                count++;
+                sum += item.getY();
+            }
+            statMax.setText(String.valueOf(currentMax));
+            statMin.setText(String.valueOf(currentMin));
+            statMean.setText(Float.toString(Float.valueOf(df.format(sum / count))));
+
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.barometer));
+            LineData data = new LineData(dataSet);
+            dataSet.setDrawCircles(false);
+
+            mChart.setData(data);
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+        }
+
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            //do nothing
+        }
+
+        private void unRegisterListener() {
+            sensorManager.unregisterListener(this);
+        }
     }
 }

@@ -53,18 +53,11 @@ public class AccelerometerActivity extends AppCompatActivity {
 
     public boolean recordData = false;
     public boolean locationPref;
-    private boolean checkGpsOnResume = false;
-    private boolean isRecordingStarted = false;
-    private boolean isDataRecorded = false;
     public GPSLogger gpsLogger;
     public CSVLogger accLogger;
-
-    private Menu menu;
     AccelerometerAdapter adapter;
-
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
-
     @BindView(R.id.accel_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.accel_coordinator_layout)
@@ -85,6 +78,10 @@ public class AccelerometerActivity extends AppCompatActivity {
     ImageView bottomSheetSchematic;
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
+    private boolean checkGpsOnResume = false;
+    private boolean isRecordingStarted = false;
+    private boolean isDataRecorded = false;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +94,7 @@ public class AccelerometerActivity extends AppCompatActivity {
         tvShadow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 tvShadow.setVisibility(View.GONE);
             }
@@ -131,7 +128,7 @@ public class AccelerometerActivity extends AppCompatActivity {
                     return true;
                 }
                 if (recordData) {
-                    item.setIcon(R.drawable.record_icon);
+                    item.setIcon(R.drawable.ic_record_white);
                     adapter.setRecordingStatus(false);
                     recordData = false;
                     CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null);
@@ -163,7 +160,7 @@ public class AccelerometerActivity extends AppCompatActivity {
             case R.id.record_csv_data:
                 if (isDataRecorded) {
                     MenuItem item1 = menu.findItem(R.id.record_pause_data);
-                    item1.setIcon(R.drawable.record_icon);
+                    item1.setIcon(R.drawable.ic_record_white);
 
                     // Export Data
                     ArrayList<Entry> dataX = adapter.getEntries(0);
@@ -214,7 +211,7 @@ public class AccelerometerActivity extends AppCompatActivity {
             case R.id.delete_csv_data:
                 if (isDataRecorded) {
                     MenuItem item1 = menu.findItem(R.id.record_pause_data);
-                    item1.setIcon(R.drawable.record_icon);
+                    item1.setIcon(R.drawable.ic_record_white);
                     adapter.setRecordingStatus(false);
                     recordData = false;
                     isRecordingStarted = false;
@@ -236,7 +233,9 @@ public class AccelerometerActivity extends AppCompatActivity {
                 startActivity(MAP);
                 break;
             case R.id.settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                Intent settingIntent = new Intent(this, SettingsActivity.class);
+                settingIntent.putExtra("title", getResources().getString(R.string.accelerometer_configurations));
+                startActivity(settingIntent);
                 break;
             default:
                 break;
@@ -247,7 +246,7 @@ public class AccelerometerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(isRecordingStarted) {
+        if (isRecordingStarted) {
             accLogger.deleteFile();
             isRecordingStarted = false;
         }
