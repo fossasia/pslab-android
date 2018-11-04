@@ -57,7 +57,10 @@ public class CSVLogger {
                 e.printStackTrace();
             }
         }
-        TIME = new SimpleDateFormat("yyyyMMdd-hh:mm:ss", Locale.getDefault());
+    }
+
+    public void prepareLogFile() {
+        TIME = new SimpleDateFormat("yyyyMMdd-hh:mm:ss:SSS", Locale.getDefault());
         String uniqueFileName = TIME.format(new Date());
         csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
                 File.separator + CSV_DIRECTORY + File.separator + category +
@@ -81,7 +84,7 @@ public class CSVLogger {
             try {
                 PrintWriter out
                         = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write(data);
+                out.write(data + "\n");
                 out.flush();
                 out.close();
             } catch (IOException e) {

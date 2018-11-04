@@ -311,7 +311,7 @@
     <dimen name="peek_height">66dp</dimen>
     <dimen name="bottom_sheet_image_height">200dp</dimen>
     <dimen name="bottom_sheet_padding">10dp</dimen>
-    <dimen name="space_length_btm_sheet">40dp</dimen>
+    <dimen name="space_length_btm_sheet">10dp</dimen>
     <dimen name="bottom_sheet_title_text">18sp</dimen>
     <dimen name="bottom_sheet_margin">10dp</dimen>
     <dimen name="btnsheet_top_section_height">46dp</dimen>
@@ -357,6 +357,9 @@
     <dimen name="tv_top_margin">8dp</dimen>
     <dimen name="lux_card_margin_top">20dp</dimen>
     <dimen name="lux_chart_height">200dp</dimen>
+    <dimen name="lux_display_font_size">16sp</dimen>
+    <dimen name="lux_guage_font_size">8sp</dimen>
+    <dimen name="lux_sensor_label_title_size">16sp</dimen>
 
     <dimen name="sensor_card_view_rad">5dp</dimen>
     <dimen name="item_text_size">18sp</dimen>

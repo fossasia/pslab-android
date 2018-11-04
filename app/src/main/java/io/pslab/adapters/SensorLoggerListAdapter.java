@@ -10,78 +10,113 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import io.pslab.R;
-import io.pslab.activity.SensorGraphViewActivity;
+import io.pslab.activity.LuxMeterActivity;
+import io.pslab.activity.MapsActivity;
 import io.pslab.models.LuxData;
-import io.pslab.models.SensorLogged;
-import io.realm.Realm;
+import io.pslab.models.SensorDataBlock;
+import io.pslab.others.LocalDataLog;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 /**
  * Created by Avjeet on 03-08-2018.
  */
-public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorLogged, SensorLoggerListAdapter.ViewHolder> {
+
+public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorDataBlock, SensorLoggerListAdapter.ViewHolder> {
 
 
     private Activity context;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM,yyyy  HH:mm:ss");
-    private Realm realm;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
+    private final String KEY_LOG = "has_log";
+    private final String DATA_BLOCK = "data_block";
 
-    public SensorLoggerListAdapter(RealmResults<SensorLogged> results, Activity context) {
+    public SensorLoggerListAdapter(RealmResults<SensorDataBlock> results, Activity context) {
         super(results, true, true);
         this.context = context;
-        realm = Realm.getDefaultInstance();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.logger_data_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.logger_data_item, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        SensorLogged temp = getItem(position);
-        holder.sensor.setText(temp.getSensor());
-        Date date = new Date(temp.getDateTimeStart());
-        holder.dateTime.setText(String.valueOf(sdf.format(date)));
+        final SensorDataBlock block = getItem(position);
+        assert block != null;
+        holder.sensor.setText(block.getSensorType());
+        holder.dateTime.setText(String.valueOf(sdf.format(new Date(block.getBlock()))));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SensorLogged item = getItem(holder.getAdapterPosition());
-                Intent intent = new Intent(context, SensorGraphViewActivity.class);
-                intent.putExtra(SensorGraphViewActivity.TYPE_SENSOR, item.getSensor());
-                intent.putExtra(SensorGraphViewActivity.DATA_FOREIGN_KEY, item.getUniqueRef());
-                intent.putExtra(SensorGraphViewActivity.DATE_TIME_START,item.getDateTimeStart());
-                intent.putExtra(SensorGraphViewActivity.DATE_TIME_END,item.getDateTimeEnd());
-                intent.putExtra(SensorGraphViewActivity.TIME_ZONE,item.getTimeZone());
-                intent.putExtra(SensorGraphViewActivity.LATITUDE,item.getLatitude());
-                intent.putExtra(SensorGraphViewActivity.LONGITUDE,item.getLongitude());
-                context.startActivity(intent);
+                if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.lux_meter))) {
+                    Intent LuxMeter = new Intent(context, LuxMeterActivity.class);
+                    LuxMeter.putExtra(KEY_LOG, true);
+                    LuxMeter.putExtra(DATA_BLOCK, block.getBlock());
+                    context.startActivity(LuxMeter);
+                }
             }
         });
         holder.deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RealmResults<SensorLogged> sensorItem = realm.where(SensorLogged.class).equalTo("uniqueRef", getItem(holder.getAdapterPosition()).getUniqueRef()).findAll();
-                RealmResults<LuxData> results = realm.where(LuxData.class).equalTo("foreignKey", getItem(holder.getAdapterPosition()).getUniqueRef()).findAll();
-                realm.beginTransaction();
-                results.deleteAllFromRealm();
-                sensorItem.deleteAllFromRealm();
-                realm.commitTransaction();
+                // TODO: Request confirmation
+                if (block.getSensorType().equalsIgnoreCase("Lux Meter")) {
+                    LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
+                    LocalDataLog.with().clearSensorBlock(block.getBlock());
+                }
+            }
+        });
+        holder.mapIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (block.getSensorType().equalsIgnoreCase("Lux Meter")) {
+                    RealmResults<LuxData> data = LocalDataLog.with().getBlockOfLuxRecords(block.getBlock());
+                    JSONArray array = new JSONArray();
+                    for (LuxData d : data) {
+                        try {
+                            JSONObject i = new JSONObject();
+                            i.put("date", sdf.format(d.getTime()));
+                            i.put("data", d.getLux());
+                            i.put("lon", d.getLon());
+                            i.put("lat", d.getLat());
+                            if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Intent map = new Intent(context, MapsActivity.class);
+                    if (array.length() > 0) {
+                        map.putExtra("hasMarkers", true);
+                        map.putExtra("markers", array.toString());
+                        context.startActivity(map);
+                    } else {
+                        map.putExtra("hasMarkers", false);
+                        Toast.makeText(context, context.getResources().getString(R.string.no_location_data), Toast.LENGTH_LONG).show();
+                    }
+
+                }
             }
         });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView sensor, dateTime;
-        private ImageView deleteIcon;
+        private ImageView deleteIcon, mapIcon;
         private CardView cardView;
 
         public ViewHolder(View itemView) {
@@ -89,6 +124,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorLogg
             dateTime = itemView.findViewById(R.id.date_time);
             sensor = itemView.findViewById(R.id.sensor_name);
             deleteIcon = itemView.findViewById(R.id.delete_item);
+            mapIcon = itemView.findViewById(R.id.map_item);
             cardView = itemView.findViewById(R.id.data_item_card);
         }
     }

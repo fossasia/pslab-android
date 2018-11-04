@@ -2,215 +2,123 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollview"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/scrollview">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/cardview_light_sensor"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_zero_dp"
-            android:layout_marginBottom="@dimen/recycler_view_margin"
-            android:layout_marginEnd="@dimen/card_margin"
-            android:layout_marginStart="@dimen/card_margin"
-            android:layout_marginTop="@dimen/recycler_view_margin"
-            android:layout_weight="@dimen/weight_1"
-            android:foreground="?attr/selectableItemBackground"
-            card_view:cardCornerRadius="@dimen/sensor_card_view_rad"
-            card_view:cardElevation="@dimen/card_elevation">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="@dimen/length_0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/select_sensor_margin"
-                    android:layout_marginTop="@dimen/select_sensor_margin"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/select_light_sensor"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sensor_body_font"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/spinner_select_light"
-                    android:layout_width="@dimen/length_0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/card_margin"
-                    android:layout_marginRight="@dimen/bh1750_config_padding_left"
-                    android:layout_marginTop="@dimen/card_margin"
-                    android:layout_weight="@dimen/weight_1"
-                    android:entries="@array/select_light_sensor" />
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/cardview_gain_range"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_zero_dp"
-            android:layout_marginBottom="@dimen/recycler_view_margin"
-            android:layout_marginEnd="@dimen/card_margin"
-            android:layout_marginStart="@dimen/card_margin"
-            android:layout_marginTop="@dimen/recycler_view_margin"
-            android:layout_weight="@dimen/weight_1"
-            android:foreground="?attr/selectableItemBackground"
-            card_view:cardCornerRadius="@dimen/sensor_card_view_rad"
-            card_view:cardElevation="@dimen/card_elevation">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="@dimen/length_0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/range_card_margin"
-                    android:layout_marginTop="@dimen/range_card_margin"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/gain_range"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sensor_body_font"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/spinner_lux_sensor_gain"
-                    android:layout_width="@dimen/length_0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/card_margin"
-                    android:layout_marginRight="@dimen/bh1750_config_padding_left"
-                    android:layout_marginTop="@dimen/card_margin"
-                    android:layout_weight="@dimen/weight_1"
-                    android:entries="@array/select_lux_gain" />
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/card_margin"
-            android:layout_marginLeft="@dimen/card_margin"
-            android:layout_marginRight="@dimen/card_margin"
-            android:layout_marginStart="@dimen/card_margin">
+            android:layout_margin="@dimen/card_margin">
 
-            <com.github.anastr.speedviewlib.PointerSpeedometer
-                android:id="@+id/light_meter"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/speedometer_height"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
-                android:layout_marginTop="@dimen/card_margin"
-                app:sv_speedTextColor="@color/black"
-                app:sv_speedTextPosition="BOTTOM_CENTER"
-                app:sv_speedometerMode="NORMAL"
-                app:sv_unit="@string/lux"
-                app:sv_unitTextColor="@color/black" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/label_lux_sensor"
+                        style="@style/lux_meter_stat_heading"
+                        android:paddingBottom="5dp"
+                        android:textSize="@dimen/lux_sensor_label_title_size" />
+
+                    <TextView
+                        android:id="@+id/label_lux_stat_max"
+                        style="@style/lux_meter_stat_heading"
+                        android:text="@string/max_lx" />
+
+                    <TextView
+                        android:id="@+id/lux_max"
+                        style="@style/lux_meter_stat_display" />
+
+                    <TextView
+                        android:id="@+id/label_lux_stat_min"
+                        style="@style/lux_meter_stat_heading"
+                        android:text="@string/min_lx" />
+
+                    <TextView
+                        android:id="@+id/lux_min"
+                        style="@style/lux_meter_stat_display" />
+
+                    <TextView
+                        android:id="@+id/label_lux_stat_avg"
+                        style="@style/lux_meter_stat_heading"
+                        android:text="@string/avg_lx" />
+
+                    <TextView
+                        android:id="@+id/lux_avg"
+                        style="@style/lux_meter_stat_display" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="@dimen/length_0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:orientation="vertical">
+
+                    <com.github.anastr.speedviewlib.PointerSpeedometer
+                        android:id="@+id/light_meter"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/speedometer_height"
+                        android:padding="15dp"
+                        app:sv_speedTextColor="@color/black"
+                        app:sv_speedTextPosition="BOTTOM_CENTER"
+                        app:sv_speedTextSize="@dimen/lux_display_font_size"
+                        app:sv_speedometerMode="NORMAL"
+                        app:sv_textSize="@dimen/lux_guage_font_size"
+                        app:sv_unit="@string/lux"
+                        app:sv_unitTextColor="@color/black" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="@dimen/lux_chart_height"
-            android:layout_marginEnd="@dimen/card_margin"
-            android:layout_marginLeft="@dimen/card_margin"
-            android:layout_marginRight="@dimen/card_margin"
-            android:layout_marginStart="@dimen/card_margin"
-            android:layout_marginTop="@dimen/lux_card_margin_top">
+            android:layout_margin="@dimen/card_margin">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="4">
 
                 <RelativeLayout
                     android:id="@+id/chart_xaxis_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:background="@color/black"
-                    android:orientation="vertical">
+                    style="@style/graph_x_axis_title_block">
 
                     <TextView
                         android:id="@+id/tv_graph_label_xaxis_hmc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center_vertical|center_horizontal|center"
-                        android:foregroundGravity="center_vertical"
-                        android:gravity="center_vertical|center_horizontal|center"
+                        style="@style/graph_x_axis_title_text"
                         android:text="@string/time"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/lux_chart_axis_text"
-                        android:textStyle="normal|bold"
                         tools:layout_editor_absoluteX="288dp"
-                        tools:layout_editor_absoluteY="0dp" />
-
-                    <TextView
-                        android:id="@+id/tv_unit_xaxis_hmc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_toEndOf="@+id/tv_graph_label_xaxis_hmc"
-                        android:layout_toRightOf="@+id/tv_graph_label_xaxis_hmc"
-                        android:text="@string/seconds"
-                        android:textColor="#ffff"
-                        android:textSize="@dimen/lux_chart_axis_text"
-                        android:textStyle="normal|bold"
-                        app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_hmc"
                         tools:layout_editor_absoluteY="0dp" />
 
                 </RelativeLayout>
 
                 <android.support.constraint.ConstraintLayout
                     android:id="@+id/chart_yaxis_layout_hmc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:background="@color/black"
-                    android:foregroundGravity="center_vertical"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    style="@style/graph_y_axis_title_block">
 
                     <TextView
                         android:id="@+id/tv_label_left_yaxis_hmc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/tv_lux_height"
-                        android:layout_gravity="center"
-                        android:foregroundGravity="center_horizontal"
-                        android:gravity="top|center_horizontal"
-                        android:includeFontPadding="false"
-                        android:rotation="-90"
+                        style="@style/graph_y_axis_title_text"
                         android:text="@string/lux"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/lux_chart_axis_text"
-                        android:textStyle="normal|bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -227,130 +135,6 @@
                     android:layout_toRightOf="@+id/chart_yaxis_layout_hmc"
                     android:background="@color/black" />
             </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/stat_card_height"
-            android:layout_marginEnd="@dimen/card_margin"
-            android:layout_marginLeft="@dimen/card_margin"
-            android:layout_marginRight="@dimen/card_margin"
-            android:layout_marginStart="@dimen/card_margin"
-            android:layout_marginTop="@dimen/lux_card_margin_top">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/title_padding"
-                android:text="@string/statistics"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sensor_title_font"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/lux_card_margin_top"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/length_0dp"
-                    android:layout_marginTop="@dimen/card_margin"
-                    android:layout_weight="@dimen/weight_1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/lux_stat_max"
-                        android:layout_width="@dimen/dimen_zero_dp"
-                        android:layout_height="@dimen/tv_stat_height"
-                        android:layout_gravity="bottom"
-                        android:layout_marginLeft="@dimen/card_margin"
-                        android:layout_marginRight="@dimen/card_margin"
-                        android:layout_weight="@dimen/weight_1"
-                        android:background="@drawable/control_edittext"
-                        android:gravity="center_vertical"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size" />
-
-                    <TextView
-                        android:id="@+id/lux_stat_min"
-                        android:layout_width="@dimen/dimen_zero_dp"
-                        android:layout_height="@dimen/tv_stat_height"
-                        android:layout_gravity="bottom"
-                        android:layout_marginLeft="@dimen/card_margin"
-                        android:layout_marginRight="@dimen/card_margin"
-                        android:layout_weight="@dimen/weight_1"
-                        android:background="@drawable/control_edittext"
-                        android:gravity="center_vertical"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size" />
-
-                    <TextView
-                        android:id="@+id/lux_stat_mean"
-                        android:layout_width="@dimen/dimen_zero_dp"
-                        android:layout_height="@dimen/tv_stat_height"
-                        android:layout_gravity="bottom"
-                        android:layout_marginLeft="@dimen/card_margin"
-                        android:layout_marginRight="@dimen/card_margin"
-                        android:layout_weight="@dimen/weight_1"
-                        android:background="@drawable/control_edittext"
-                        android:gravity="center_vertical"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="@dimen/weight_1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="@dimen/dimen_zero_dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="@dimen/card_margin"
-                        android:layout_marginRight="@dimen/card_margin"
-                        android:layout_weight="@dimen/weight_1"
-                        android:gravity="center"
-                        android:text="@string/lux_max"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size" />
-
-                    <TextView
-                        android:layout_width="@dimen/dimen_zero_dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="@dimen/card_margin"
-                        android:layout_marginRight="@dimen/card_margin"
-                        android:layout_weight="@dimen/weight_1"
-                        android:gravity="center"
-                        android:text="@string/lux_min"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size" />
-
-                    <TextView
-                        android:layout_width="@dimen/dimen_zero_dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="@dimen/card_margin"
-                        android:layout_marginRight="@dimen/card_margin"
-                        android:layout_weight="@dimen/weight_1"
-                        android:gravity="center"
-                        android:text="@string/lux_avg"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size" />
-
-                </LinearLayout>
-
-            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
