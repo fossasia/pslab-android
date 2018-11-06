@@ -73,6 +73,7 @@ Please join us on the following channels:
 ## How to set up the Android app in your development environment
 
   Minimum Android version 4.1 (API Level 16)
+  
   Maximum Android version 8.1 (API Level 27)
 
 ### Development Setup
