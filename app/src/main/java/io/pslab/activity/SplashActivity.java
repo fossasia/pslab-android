@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import io.pslab.R;
 
@@ -19,11 +20,18 @@ public class SplashActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 2000;
     private Handler handler;
     private Runnable runnable;
+    private ImageView logo;
+    private ImageView text;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
         ButterKnife.bind(this);
+        logo = findViewById(R.id.imageView);
+        text = findViewById(R.id.PSLabText);
+        logo.animate().alpha(1f).setDuration(2500);
+        text.animate().alpha(1f).setDuration(2500);
         handler = new Handler();
         handler.postDelayed(runnable=new Runnable() {
             @Override
