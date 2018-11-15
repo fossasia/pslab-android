@@ -17,7 +17,7 @@
             android:layout_width="@dimen/length_0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.2"
+            android:layout_weight="0.1"
             android:src="@drawable/tile_icon_lux_meter"
             android:tint="@color/colorPrimary" />
 
@@ -25,10 +25,10 @@
             android:layout_width="@dimen/length_0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/content_left_margin"
+            android:layout_marginStart="@dimen/content_left_margin"
             android:layout_weight="0.6"
             android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:layout_marginStart="@dimen/content_left_margin">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/sensor_name"
@@ -46,13 +46,22 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/map_item"
+            android:layout_width="@dimen/length_0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp"
+            android:layout_weight="0.1"
+            android:src="@drawable/ic_map_red_24dp" />
+
+        <ImageView
             android:id="@+id/delete_item"
             android:layout_width="@dimen/length_0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="@dimen/icn_btn_left_margin"
             android:layout_weight="0.1"
-            android:src="@drawable/ic_delete_red_24dp"
-            android:layout_marginEnd="@dimen/icn_btn_left_margin" />
+            android:src="@drawable/ic_delete_red_24dp" />
+
     </LinearLayout>
+
 </android.support.v7.widget.CardView>

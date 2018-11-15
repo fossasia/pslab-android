@@ -39,11 +39,8 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
-import io.pslab.models.LuxData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class SensorGraphViewActivity extends AppCompatActivity {
     public static final String TYPE_SENSOR = "sensor";
@@ -139,13 +136,7 @@ public class SensorGraphViewActivity extends AppCompatActivity {
             tv_long.setText("NA");
         }
 
-        Long foreignKey = intent.getLongExtra(DATA_FOREIGN_KEY, -1);
-        Realm realm = Realm.getDefaultInstance();
         entries = new ArrayList<>();
-        RealmResults<LuxData> results = realm.where(LuxData.class).equalTo(DATA_FOREIGN_KEY, foreignKey).findAll();
-        for (LuxData item : results) {
-            entries.add(new Entry((float) item.getTimeElapsed(), item.getLux()));
-        }
 
         XAxis x = mChart.getXAxis();
         YAxis y = mChart.getAxisLeft();

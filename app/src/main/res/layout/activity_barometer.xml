@@ -244,7 +244,7 @@
                             android:layout_marginRight="@dimen/card_margin"
                             android:layout_weight="@dimen/weight_1"
                             android:gravity="center"
-                            android:text="@string/lux_max"
+                            android:text="@string/max_lx"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_size" />
 
@@ -256,7 +256,7 @@
                             android:layout_marginRight="@dimen/card_margin"
                             android:layout_weight="@dimen/weight_1"
                             android:gravity="center"
-                            android:text="@string/lux_min"
+                            android:text="@string/min_lx"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_size" />
 
@@ -268,7 +268,7 @@
                             android:layout_marginRight="@dimen/card_margin"
                             android:layout_weight="@dimen/weight_1"
                             android:gravity="center"
-                            android:text="@string/lux_avg"
+                            android:text="@string/avg_lx"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_size" />
 

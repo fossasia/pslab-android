@@ -1,17 +1,16 @@
 package io.pslab.fragment;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 
 import io.pslab.R;
-import io.pslab.others.GPSLogger;
+import io.pslab.others.PSLabPermission;
 
 /**
  * Created by Avjeet on 10-08-2018.
@@ -21,10 +20,16 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
     public static final String KEY_UPDATE_PERIOD = "setting_lux_update_period";
     public static final String KEY_HIGH_LIMIT = "setting_lux_high_limit";
+    public static final String KEY_LUX_SENSOR_TYPE = "setting_lux_sensor_type";
+    public static final String KEY_LUX_SENSOR_GAIN = "setting_lux_sensor_gain";
+
+    private PSLabPermission psLabPermission;
 
     private EditTextPreference updatePeriodPref;
     private EditTextPreference higLimitPref;
+    private EditTextPreference sensorGainPref;
     private CheckBoxPreference locationPreference;
+    private ListPreference sensorTypePreference;
     private SharedPreferences sharedPref;
 
     @Override
@@ -32,25 +37,27 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
         setPreferencesFromResource(R.xml.lux_meter_settings, rootKey);
         updatePeriodPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_UPDATE_PERIOD);
         higLimitPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_HIGH_LIMIT);
+        sensorGainPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_LUX_SENSOR_GAIN);
         locationPreference = (CheckBoxPreference) getPreferenceScreen().findPreference(KEY_INCLUDE_LOCATION);
+        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_LUX_SENSOR_TYPE);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        psLabPermission = PSLabPermission.getInstance();
+        if (!psLabPermission.checkPermissions(getActivity(), PSLabPermission.MAP_PERMISSION)) {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, true);
-            editor.commit();
+            editor.apply();
         }
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         locationPreference.setChecked(sharedPref.getBoolean(KEY_INCLUDE_LOCATION, true));
-        updatePeriodPref.setSummary("Update Period is " + updatePeriodPref.getText() + " ms");
-        higLimitPref.setSummary("High Limit is " + higLimitPref.getText());
+        updatePeriodPref.setSummary(updatePeriodPref.getText() + " ms");
+        higLimitPref.setSummary(higLimitPref.getText() + " Lx");
+        sensorTypePreference.setSummary(sensorTypePreference.getEntry());
+        sensorGainPref.setSummary(sensorGainPref.getText());
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -60,19 +67,54 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
+    @SuppressLint("ApplySharedPref")
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         switch (s) {
             case KEY_INCLUDE_LOCATION:
                 if (locationPreference.isChecked()) {
-                    new GPSLogger(getActivity()).requestPermissionIfNotGiven();
+                    psLabPermission.checkPermissions(
+                            getActivity(), PSLabPermission.MAP_PERMISSION);
                 }
                 break;
             case KEY_UPDATE_PERIOD:
-                updatePeriodPref.setSummary("Update Period is " + updatePeriodPref.getText() + " " + "ms");
+                try {
+                    Integer updatePeriod = Integer.valueOf(updatePeriodPref.getText());
+                    updatePeriodPref.setSummary(updatePeriod + " ms");
+                } catch (NumberFormatException e) {
+                    updatePeriodPref.setSummary("1000 ms");
+                    updatePeriodPref.setText("1000");
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(s, "1000");
+                    editor.commit();
+                }
+                break;
+            case KEY_LUX_SENSOR_GAIN:
+                try {
+                    Integer gain = Integer.valueOf(sensorGainPref.getText());
+                    sensorGainPref.setSummary(String.valueOf(gain));
+                } catch (NumberFormatException e) {
+                    sensorGainPref.setSummary("1");
+                    sensorGainPref.setText("1");
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(KEY_LUX_SENSOR_GAIN, "1");
+                    editor.commit();
+                }
                 break;
             case KEY_HIGH_LIMIT:
-                higLimitPref.setSummary("High Limit is " + higLimitPref.getText());
+                try {
+                    Integer highLimit = Integer.valueOf(higLimitPref.getText());
+                    higLimitPref.setSummary(String.valueOf(highLimit));
+                } catch (NumberFormatException e) {
+                    higLimitPref.setSummary("2000 Lx");
+                    higLimitPref.setText("2000");
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(KEY_HIGH_LIMIT, "2000");
+                    editor.commit();
+                }
+                break;
+            case KEY_LUX_SENSOR_TYPE:
+                sensorTypePreference.setSummary(sensorTypePreference.getEntry());
                 break;
             default:
                 break;

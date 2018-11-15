@@ -150,7 +150,7 @@ public class AccelerometerActivity extends AppCompatActivity {
                         } else {
                             checkGpsOnResume = true;
                         }
-                        gpsLogger.startFetchingLocation();
+                        gpsLogger.startCaptureLocation();
                     } else {
                         recordData = true;
                         CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null);
@@ -173,7 +173,7 @@ public class AccelerometerActivity extends AppCompatActivity {
                     }
                     if (locationPref && gpsLogger != null) {
                         String data;
-                        Location location = gpsLogger.getBestLocation();
+                        Location location = gpsLogger.getDeviceLocation();
                         if (location != null) {
                             data = "\nLocation" + "," + String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude() + "\n");
                         } else {
