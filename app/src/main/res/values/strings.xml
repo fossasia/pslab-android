@@ -150,6 +150,7 @@
     <string name="time_seconds">Time (s)</string>
     <string name="accelerometer_intro">Accelerometer is used to measure acceleration of a body along the X, Y and Z axis.\n</string>
     <string name="accelerometer_description_text">\n\nThe figure above shows the direction of all the three axis when the mobile is held straight.\n\nSteps to measure acceleration in PSLab app:\n\n\u2022 Hold the device as shown in the above figure.\n\n\u2022 Accelerate the device along any one or multiple axis.\n\n\u2022 Observe the values in the cards or the plotted graph of any particular axis.\n\nThe Accelerometer instrument can also be used to measure the acceleration of a moving body by placing the device on/inside the body and then accelerating the body.\n\nNOTE: Don\'t accelerate the body if the device isn\'t properly attached else the device could be damaged. </string>
+    <string name="accelerometer_configurations">Accelerometer Configurations</string>
 
     <string name="set_triggers">Set Triggers</string>
     <string name="remove">Remove</string>
@@ -321,7 +322,7 @@
     <string name="plot_gyroscope">Plot - Gyroscope</string>
     <string name="rad">(rad)</string>
     <string name="angle">Angle</string>
-    <string name="time">Time</string>
+    <string name="time">Time (sec)</string>
     <string name="infinite_symbol">∞</string>
     <string name="timegap">Timegap</string>
     <string name="no_of_samples">No. of samples</string>
@@ -465,6 +466,18 @@
         <item>PCS</item>
     </string-array>
 
+    <string-array name="lux_sensor_list">
+        <item>In-built Sensor</item>
+        <item>BH1750</item>
+        <item>TSL2561</item>
+    </string-array>
+
+    <string-array name="lux_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string name="device_not_connected">Device Not Connected</string>
     <string name="use_autoscan">Use Autoscan button to find connected sensors to PSLab device</string>
     <string name="sensor_not_connected">No sensors connected via I2C. Try selecting a sensor from the below
@@ -477,7 +490,8 @@
     <string name="volts">volts</string>
     <string name="seconds">(s)</string>
     <string name="mili_seconds">(ms)</string>
-    <string name="lux">LUX</string>
+    <string name="lux">Lx</string>
+    <string name="lux_graph_y_label">Intensity (Lx)</string>
     <string name="pressure2">Press.</string>
     <string name="plot_altitude">Plot - Altitude</string>
     <string name="celcius">(°C)</string>
@@ -617,6 +631,12 @@
         <item>Export Data</item>
         <item>Share Data</item>
     </string-array>
+
+    <string name="no_permission_for_maps">Not sufficient permission to load map</string>
+    <string name="no_permission_for_gps">Not sufficient permission to locate device</string>
+    <string name="no_permission_for_logs">Not sufficient permission to log data</string>
+
+    <string name="value_null">0.00</string>
 
     <string-array name="export_data_format_list">
         <item>TXT Format</item>
@@ -821,6 +841,7 @@
     <string name="ok_button_text">OK</string>
 
     <string name="multimeter_dialog_heading">Multimeter</string>
+    <string name="multimeter_configurations">Multimeter Configurations</string>
     <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element.</string>
     <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.\n\n
         <b>Different Sections</b>\n\n
@@ -910,13 +931,14 @@
     <string name="high_limit">High Limit</string>
     <string name="update_period">Update Period</string>
     <string name="statistics">Statistics</string>
-    <string name="lux_min">Min</string>
-    <string name="lux_max">Max</string>
-    <string name="lux_avg">Avg</string>
+    <string name="max_lx">Max (Lx)</string>
+    <string name="min_lx">Min (Lx)</string>
+    <string name="avg_lx">Avg (Lx)</string>
+    <string name="no_lux_sensor">Device does not have a Lux sensor</string>
     <string name="light_meter">Light Meter</string>
     <string name="select_light_sensor">Select Sensor</string>
-    <string-array name="select_light_sensor">
-        <item>Built In</item>
+    <string-array name="lux_sensors">
+        <item>Built-In</item>
         <item>BH1750</item>
         <item>TSL2561</item>
     </string-array>
@@ -940,6 +962,14 @@
     <string name="record_csv_data">Record Data</string>
     <string name="pause_recording_data">Pause Recording</string>
     <string name="view_map">View Map</string>
+
+    <string name="data_recording_with_location">Data recording started with location</string>
+    <string name="data_recording_with_nogps">Data recording started but GPS is off</string>
+    <string name="data_recording_with_gps_off">Recorded data will not contain location</string>
+    <string name="data_recording_without_location">Data recording started without location</string>
+    <string name="data_recording_stopped">Data recording stopped</string>
+    <string name="no_location_data">No location data in this log</string>
+
     <string name="data_recording_start">Data Recording: Started</string>
     <string name="data_recording_paused">Data Recording: Paused</string>
     <string name="data_deleted">Recorded data deleted successfully</string>
@@ -1022,7 +1052,6 @@
     <string name="dev_brand">Device Brand</string>
     <string name="dev_android_sdk">Device Android SDK</string>
 
-
     <string name="logged_data">Logged Data</string>
     <string name="show_logged_data">Show Logged Data</string>
     <string name="time_elapsed">Time Elapsed</string>
@@ -1035,7 +1064,9 @@
     <string name="lux_meter_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
     \u2022 Select sensor by going to the Configure tab from the bottom navigation bar and choose BHT-1750 in the drop down menu under Select Sensor.\n</string>
-    <string name="lux_meter_settings">Lux Meter Settings</string>
+    <string name="lux_meter_configurations">Lux Meter Configurations</string>
     <string name="no_data_fetched">No Data Fetched</string>
+    <string name="recorder">Recorder</string>
+    <string name="save_graph">Save Graph</string>
 
 </resources>

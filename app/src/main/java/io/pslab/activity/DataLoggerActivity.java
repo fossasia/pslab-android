@@ -12,17 +12,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.adapters.SensorLoggerListAdapter;
-import io.pslab.models.SensorLogged;
-import io.realm.Realm;
+import io.pslab.models.SensorDataBlock;
+import io.pslab.others.LocalDataLog;
 import io.realm.RealmResults;
-import io.realm.Sort;
 
 /**
  * Created by Avjeet on 05/08/18.
  */
 
 public class DataLoggerActivity extends AppCompatActivity {
+
     public static final String CALLER_ACTIVITY = "Caller";
+
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
@@ -35,33 +36,29 @@ public class DataLoggerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_data_logger);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        Realm realm = Realm.getDefaultInstance();
         String caller = getIntent().getStringExtra(CALLER_ACTIVITY);
-        if (caller == null)
-            caller = "";
-
-        RealmResults<SensorLogged> results;
-        String title;
-        switch (caller) {
-            case "Lux Meter":
-                results = realm.where(SensorLogged.class).equalTo("sensor", caller)
-                        .findAll()
-                        .sort("dateTimeStart", Sort.DESCENDING);
-                title = caller + " Data";
-                break;
-            default:
-                results = realm.where(SensorLogged.class)
-                        .findAll()
-                        .sort("dateTimeStart", Sort.DESCENDING);
-                title = getString(R.string.logged_data);
-        }
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(title);
         }
-        SensorLoggerListAdapter adapter = new SensorLoggerListAdapter(results, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        if (caller == null) caller = "";
+
+        RealmResults<SensorDataBlock> categoryData;
+
+        switch (caller) {
+            case "Lux Meter":
+                getSupportActionBar().setTitle(caller);
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks("Lux Meter");
+                break;
+            default:
+                // TODO: Fetch all
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks("Lux Meter");
+                getSupportActionBar().setTitle(getString(R.string.logged_data));
+        }
+
+        SensorLoggerListAdapter adapter = new SensorLoggerListAdapter(categoryData, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
+                this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);

@@ -23,7 +23,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/settings"
-        android:title="@string/nav_settings"
+        android:title="@string/accelerometer_configurations"
         app:showAsAction="never" />
 </menu>
 

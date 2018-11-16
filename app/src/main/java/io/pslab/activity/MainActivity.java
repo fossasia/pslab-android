@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog initialisationDialog;
 
     private CustomTabService customTabService;
+    private CustomTabsServiceConnection customTabsServiceConnection;
 
     public static int navItemIndex = 0;
 
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         usbManager = (UsbManager) getSystemService(USB_SERVICE);
 
-        customTabService = new CustomTabService(MainActivity.this);
+        customTabService = new CustomTabService(MainActivity.this, customTabsServiceConnection);
 
         mScienceLabCommon = ScienceLabCommon.getInstance();
 
@@ -436,6 +438,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         unregisterReceiver(usbDetachReceiver);
+        if (customTabsServiceConnection != null) {
+            this.unbindService(customTabsServiceConnection);
+        }
         if (receiverRegister)
             unregisterReceiver(mUsbReceiver);
     }
