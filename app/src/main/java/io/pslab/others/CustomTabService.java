@@ -29,6 +29,12 @@ public class CustomTabService {
         init();
     }
 
+    public CustomTabService (Activity currentActivity, CustomTabsServiceConnection serviceConnection) {
+        this.activity = currentActivity;
+        this.mCustomTabsServiceConnection = serviceConnection;
+        init();
+    }
+
     private void init() {
         mCustomTabsServiceConnection = new CustomTabsServiceConnection() {
             @Override
