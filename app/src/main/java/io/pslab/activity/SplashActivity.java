@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import butterknife.ButterKnife;
 import io.pslab.R;
@@ -19,12 +20,18 @@ public class SplashActivity extends AppCompatActivity {
 
     private Handler handler;
     private Runnable runnable;
+    private ImageView logo;
+    private ImageView text;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
         ButterKnife.bind(this);
+        logo = findViewById(R.id.imageView);
+        text = findViewById(R.id.PSLabText);
+        logo.animate().alpha(1f).setDuration(2500);
+        text.animate().alpha(1f).setDuration(2500);
         PSLabPermission psLabPermission = PSLabPermission.getInstance();
         if (psLabPermission.checkPermissions(SplashActivity.this,
                 PSLabPermission.ALL_PERMISSION)) {
