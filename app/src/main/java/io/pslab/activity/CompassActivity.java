@@ -92,8 +92,6 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         compassPreference = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         setUpBottomSheet();
@@ -296,9 +294,6 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             case R.id.compass_help_icon:
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
-                break;
-            case android.R.id.home:
-                this.finish();
                 break;
             default:
                 break;

@@ -100,8 +100,6 @@ public class AccelerometerActivity extends AppCompatActivity {
             }
         });
         setSupportActionBar(mToolbar);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         adapter = new AccelerometerAdapter(new String[]{"X axis", "Y axis", "Z axis"}, getApplicationContext());
         RecyclerView recyclerView = this.findViewById(R.id.accelerometer_recycler_view);
@@ -238,9 +236,6 @@ public class AccelerometerActivity extends AppCompatActivity {
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
                 settingIntent.putExtra("title", getResources().getString(R.string.accelerometer_configurations));
                 startActivity(settingIntent);
-                break;
-            case android.R.id.home:
-                this.finish();
                 break;
             default:
                 break;

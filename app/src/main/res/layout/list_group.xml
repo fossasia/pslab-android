@@ -9,36 +9,35 @@
     <LinearLayout
         android:layout_width="@dimen/list_group_layout_width"
         android:layout_height="@dimen/list_group_layout_height"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/faq_question_margin_top"
             android:text="@string/question"
             android:textAlignment="center"
-            android:layout_marginTop="@dimen/faq_question_margin_top"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="@dimen/faq_question_text_size"/>
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/faq_question_text_size" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/lblListHeader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:justificationMode="inter_word"
+            android:paddingBottom="@dimen/text_padding_top"
             android:paddingLeft="@dimen/text_padding_top"
             android:paddingTop="@dimen/text_padding_top"
-            android:paddingBottom="@dimen/text_padding_top"
-            android:textColor="@color/black"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/text_size"
-            android:justificationMode="inter_word"
             tools:ignore="SpUsage" />
 
     </LinearLayout>
