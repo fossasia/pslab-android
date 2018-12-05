@@ -160,12 +160,17 @@ public class LuxMeterDataFragment extends Fragment {
 
     private void playRecordedData() {
         recordedLuxArray.addAll(luxSensor.recordedLuxData);
-        if (recordedLuxArray.size() > 1) {
-            LuxData i = recordedLuxArray.get(1);
-            long timeGap = i.getTime() - i.getBlock();
-            processRecordedData(timeGap);
-        } else {
-            processRecordedData(0);
+        try {
+            if (recordedLuxArray.size() > 1) {
+                LuxData i = recordedLuxArray.get(1);
+                long timeGap = i.getTime() - i.getBlock();
+                processRecordedData(timeGap);
+            } else {
+                processRecordedData(0);
+            }
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(getActivity(),
+                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
         }
     }
 
