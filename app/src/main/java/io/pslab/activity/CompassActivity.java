@@ -56,7 +56,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     @BindView(R.id.tv_sensor_hmc5883l_by)
     TextView yAxisMagneticField;
     @BindView(R.id.tv_sensor_hmc5883l_bz)
-    TextView zAxismagneticField;
+    TextView zAxisMagneticField;
 
     @BindView(R.id.compass_toolbar)
     Toolbar mToolbar;
@@ -92,6 +92,8 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         compassPreference = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         setUpBottomSheet();
@@ -160,20 +162,22 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         float degree;
         switch (direction) {
             case 0:
-                degree = Math.round(event.values[1]);
+                degree = Math.round(event.values[0]);
                 if (degree < 0)
                     degree += 360;
                 break;
             case 1:
-                degree = Math.round(event.values[2]);
+                degree = Math.round(event.values[1]);
                 if (degree < 0)
                     degree += 360;
                 break;
             case 2:
-                degree = Math.round(event.values[0]);
+                degree = Math.round(event.values[2]);
+                if (degree < 0)
+                    degree += 360;
                 break;
             default:
-                degree = Math.round(event.values[1]);
+                degree = Math.round(event.values[0]);
                 break;
         }
 
@@ -181,6 +185,21 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
         degreeIndicator.setText(String.valueOf(degree));
         currentDegree = -degree;
+
+        degree = Math.round(event.values[0]);
+        if (degree < 0)
+            degree += 360;
+        xAxisMagneticField.setText(String.valueOf(degree));
+
+        degree = Math.round(event.values[1]);
+        if (degree < 0)
+            degree += 360;
+        yAxisMagneticField.setText(String.valueOf(degree));
+
+        degree = Math.round(event.values[2]);
+        if (degree < 0)
+            degree += 360;
+        zAxisMagneticField.setText(String.valueOf(degree));
     }
 
     @Override
@@ -294,6 +313,9 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             case R.id.compass_help_icon:
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case android.R.id.home:
+                this.finish();
                 break;
             default:
                 break;

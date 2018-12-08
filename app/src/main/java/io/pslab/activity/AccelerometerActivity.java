@@ -100,6 +100,8 @@ public class AccelerometerActivity extends AppCompatActivity {
             }
         });
         setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         adapter = new AccelerometerAdapter(new String[]{"X axis", "Y axis", "Z axis"}, getApplicationContext());
         RecyclerView recyclerView = this.findViewById(R.id.accelerometer_recycler_view);
@@ -150,7 +152,7 @@ public class AccelerometerActivity extends AppCompatActivity {
                         } else {
                             checkGpsOnResume = true;
                         }
-                        gpsLogger.startFetchingLocation();
+                        gpsLogger.startCaptureLocation();
                     } else {
                         recordData = true;
                         CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null);
@@ -173,7 +175,7 @@ public class AccelerometerActivity extends AppCompatActivity {
                     }
                     if (locationPref && gpsLogger != null) {
                         String data;
-                        Location location = gpsLogger.getBestLocation();
+                        Location location = gpsLogger.getDeviceLocation();
                         if (location != null) {
                             data = "\nLocation" + "," + String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude() + "\n");
                         } else {
@@ -236,6 +238,9 @@ public class AccelerometerActivity extends AppCompatActivity {
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
                 settingIntent.putExtra("title", getResources().getString(R.string.accelerometer_configurations));
                 startActivity(settingIntent);
+                break;
+            case android.R.id.home:
+                this.finish();
                 break;
             default:
                 break;

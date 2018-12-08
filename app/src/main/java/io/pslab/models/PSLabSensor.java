@@ -1,17 +1,18 @@
 package io.pslab.models;
 
-import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
@@ -24,6 +25,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,8 +38,16 @@ import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
+import io.pslab.fragment.LuxMeterDataFragment;
+import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
+import io.pslab.others.GPSLogger;
+import io.pslab.others.LocalDataLog;
 import io.pslab.others.MathUtils;
+import io.pslab.others.PSLabPermission;
 import io.pslab.others.SwipeGestureDetector;
+import io.realm.Realm;
+import io.realm.RealmObject;
 
 /**
  * Created by Padmal on 10/20/18.
@@ -40,17 +55,36 @@ import io.pslab.others.SwipeGestureDetector;
 
 public abstract class PSLabSensor extends AppCompatActivity {
 
-    public boolean recordData = false;
+    public boolean isRecording = false;
+    public boolean locationEnabled = true;
+    public boolean addLocation = true;
+    public boolean checkGPSOnResume = false;
+    public boolean writeHeaderToFile = true;
+    public boolean playingData = false;
 
-    public final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_MAPS = 102;
-
-    public Toolbar sensorToolBar;
-
+    public CoordinatorLayout sensorParentView;
     public BottomSheetBehavior bottomSheetBehavior;
     public GestureDetector gestureDetector;
 
-    @BindView(R.id.cl)
+    public JSONArray markers;
+
+    public Fragment sensorFragment;
+    public PSLabPermission psLabPermission;
+    public GPSLogger gpsLogger;
+    public CSVLogger csvLogger;
+    public Realm realm;
+    private Intent map;
+
+    public SimpleDateFormat dateFormat;
+    public SimpleDateFormat titleFormat;
+    public final String KEY_LOG = "has_log";
+    public final String DATA_BLOCK = "data_block";
+
+    @BindView(R.id.sensor_toolbar)
+    Toolbar sensorToolBar;
+    @BindView(R.id.sensor_cl)
     CoordinatorLayout coordinatorLayout;
+
     @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
     @BindView(R.id.shadow)
@@ -83,13 +117,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
      * @return Menu resource file in 'R.menu.id' format
      */
     public abstract int getMenu();
-
-    /**
-     * Getting toolbar layout distinct to each sensor
-     *
-     * @return Toolbar resource in 'R.id.id' format
-     */
-    public abstract int getSensorToolBar();
 
     /**
      * Getting saved setting configurations for dialogs
@@ -148,62 +175,129 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public abstract int getGuideExtraContent();
 
     /**
+     * This method will create a new entry in Realm database with a new block
+     *
+     * @param block Start timestamp of the recording
+     */
+    public abstract void recordSensorDataBlockID(SensorDataBlock block);
+
+    /**
      * This method will be called upon when menu button for recording data has been clicked
      */
-    public abstract void startRecordSensorData();
+    public abstract void recordSensorData(RealmObject sensorData);
 
     /**
      * This method will be called upon when menu button for stop recording data has been clicked
      */
     public abstract void stopRecordSensorData();
 
+    /**
+     * Fragment implementation of each individual sensor
+     *
+     * @return Custom fragment instance of the sensor
+     */
+    public abstract Fragment getSensorFragment();
+
+    /**
+     * This method will fetch logged data information from the data logger activity
+     */
+    public abstract void getDataFromDataLogger();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
         ButterKnife.bind(this);
-        sensorToolBar = findViewById(getSensorToolBar());
         setSupportActionBar(sensorToolBar);
+        getSupportActionBar().setTitle(getSensorName());
+        markers = new JSONArray();
+        psLabPermission = PSLabPermission.getInstance();
+        gpsLogger = new GPSLogger(this,
+                (LocationManager) getSystemService(Context.LOCATION_SERVICE));
+        map = new Intent(this, MapsActivity.class);
+        csvLogger = new CSVLogger(getSensorName());
+        realm = LocalDataLog.with().getRealm();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.getDefault());
+        titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        sensorParentView = coordinatorLayout;
         setUpBottomSheet();
+        fillUpFragment();
+        invalidateOptionsMenu();
+    }
+
+    /**
+     * Fill up the frame with the individual sensor fragment layout
+     */
+    private void fillUpFragment() {
+        try {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            sensorFragment = getSensorFragment();
+            transaction.replace(R.id.sensor_frame, sensorFragment, getSensorName());
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setUpMenu(Menu menu) {
+        if (playingData) {
+            for (int i = 0; i < menu.size(); i++) {
+                menu.getItem(i).setVisible(false);
+            }
+        }
+        menu.findItem(R.id.save_graph).setVisible(playingData);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(getMenu(), menu);
+        setUpMenu(menu);
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.record_data);
-        item.setIcon(recordData ? R.drawable.ic_record_stop_white : R.drawable.ic_record_white);
+        MenuItem record = menu.findItem(R.id.record_data);
+        record.setIcon(isRecording ? R.drawable.ic_record_stop_white : R.drawable.ic_record_white);
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void prepareMarkers() {
+        if (markers.length() > 0) {
+            map.putExtra("hasMarkers", true);
+            map.putExtra("markers", markers.toString());
+        } else {
+            map.putExtra("hasMarkers", false);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            /*
+              When record data button has been pressed, check if the device has write permission
+              to log and access to location. checkPermission method will prompt user with a dialog
+              box to allow app to use those features. Upon allowing, onRequestPermissionsResult
+              will fire up. If user declines to give permission, don't do anything.
+             */
             case R.id.record_data:
-                if (recordData) {
-                    startRecordSensorData();
+                if (!isRecording) {
+                    dataRecordingCycle();
                 } else {
                     stopRecordSensorData();
+                    CustomSnackBar.showSnackBar(sensorParentView,
+                            getString(R.string.data_recording_stopped), null, null);
+                    isRecording = false;
+                    prepareMarkers();
                 }
-                recordData = !recordData;
                 invalidateOptionsMenu();
                 break;
             case R.id.show_map:
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            MY_PERMISSIONS_REQUEST_STORAGE_FOR_MAPS);
-                    return true;
+                if (psLabPermission.checkPermissions(PSLabSensor.this,
+                        PSLabPermission.MAP_PERMISSION)) {
+                    startActivity(map);
                 }
-                Intent MAP = new Intent(getApplicationContext(), MapsActivity.class);
-                startActivity(MAP);
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
@@ -211,12 +305,21 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 startActivity(settingIntent);
                 break;
             case R.id.show_logged_data:
-                Intent intent = new Intent(this, DataLoggerActivity.class);
-                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getSensorName());
-                startActivity(intent);
+                if (psLabPermission.checkPermissions(PSLabSensor.this,
+                        PSLabPermission.CSV_PERMISSION)) {
+                    Intent intent = new Intent(this, DataLoggerActivity.class);
+                    intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getSensorName());
+                    startActivity(intent);
+                }
                 break;
             case R.id.show_guide:
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                break;
+            case R.id.save_graph:
+                if (getSensorFragment() instanceof LuxMeterDataFragment) {
+                    ((LuxMeterDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).saveGraph();
+                }
                 break;
             default:
                 break;
@@ -224,13 +327,77 @@ public abstract class PSLabSensor extends AppCompatActivity {
         return true;
     }
 
+    private void dataRecordingCycle() {
+        if (psLabPermission.checkPermissions(PSLabSensor.this, PSLabPermission.LOG_PERMISSION)) {
+            if (locationEnabled) {
+                if (psLabPermission.checkPermissions(PSLabSensor.this, PSLabPermission.GPS_PERMISSION)) {
+                    gpsRecordingCycle();
+                }
+            } else {
+                CustomSnackBar.showSnackBar(sensorParentView,
+                        getString(R.string.data_recording_without_location), null, null);
+                isRecording = true;
+            }
+        }
+    }
+
+    private void gpsRecordingCycle() {
+        addLocation = true;
+        gpsLogger.startCaptureLocation();
+        if (gpsLogger.isGPSEnabled()) {
+            CustomSnackBar.showSnackBar(sensorParentView,
+                    getString(R.string.data_recording_with_location), null, null);
+            isRecording = true;
+        } else {
+            gpsLogger.gpsAlert.show();
+        }
+    }
+
+    private void nogpsRecordingCycle() {
+        CustomSnackBar.showSnackBar(sensorParentView,
+                getString(R.string.data_recording_without_location), null, null);
+        addLocation = false;
+        isRecording = true;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == MY_PERMISSIONS_REQUEST_STORAGE_FOR_MAPS
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Intent MAP = new Intent(getApplicationContext(), MapsActivity.class);
-            startActivity(MAP);
+        switch (requestCode) {
+            case PSLabPermission.MAP_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent map = new Intent(getApplicationContext(), MapsActivity.class);
+                    startActivity(map);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            getResources().getString(R.string.no_permission_for_maps),
+                            Toast.LENGTH_LONG).show();
+                }
+                break;
+            case PSLabPermission.LOG_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dataRecordingCycle();
+                    invalidateOptionsMenu();
+                }
+                break;
+            case PSLabPermission.GPS_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    gpsRecordingCycle();
+                    invalidateOptionsMenu();
+                } else {
+                    nogpsRecordingCycle();
+                    invalidateOptionsMenu();
+                }
+                break;
+            case PSLabPermission.CSV_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(this, DataLoggerActivity.class);
+                    intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getSensorName());
+                    startActivity(intent);
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -247,8 +414,23 @@ public abstract class PSLabSensor extends AppCompatActivity {
         setupGuideLayout();
         handleFirstTimeUsage();
         handleBottomSheetBehavior();
+        handleShadowClicks();
         gestureDetector = new GestureDetector(this,
                 new SwipeGestureDetector(bottomSheetBehavior));
+    }
+
+    /**
+     * Closes the guide when user clicks on dark background area
+     */
+    private void handleShadowClicks() {
+        tvShadow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                tvShadow.setVisibility(View.GONE);
+            }
+        });
     }
 
     /**
@@ -261,6 +443,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 @Override
                 public void run() {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    tvShadow.setVisibility(View.GONE);
                 }
             };
 
@@ -277,6 +460,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                         break;
 
                     default:
+                        tvShadow.setVisibility(View.GONE);
                         handler.removeCallbacks(runnable);
                         bottomSheetSlideText.setText(R.string.show_guide_text);
                         break;
@@ -285,7 +469,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                Float value = (float) MathUtils.map((double) slideOffset,
+                        0.0, 1.0, 0.0, 0.8);
                 tvShadow.setVisibility(View.VISIBLE);
                 tvShadow.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
@@ -328,7 +513,18 @@ public abstract class PSLabSensor extends AppCompatActivity {
             editor.apply();
         } else {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            tvShadow.setVisibility(View.GONE);
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getDataFromDataLogger();
+        if (checkGPSOnResume) {
+            isRecording = true;
+            checkGPSOnResume = false;
+            invalidateOptionsMenu();
+        }
+    }
 }

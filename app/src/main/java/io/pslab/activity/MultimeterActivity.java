@@ -117,6 +117,8 @@ public class MultimeterActivity extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         knobMarker = getResources().getStringArray(io.pslab.R.array.multimeter_knob_states);
         setSupportActionBar(mToolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         setUpBottomSheet();
         tvShadow.setOnClickListener(new View.OnClickListener() {
@@ -469,6 +471,9 @@ public class MultimeterActivity extends AppCompatActivity {
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
                 settingIntent.putExtra("title", getResources().getString(R.string.multimeter_configurations));
                 startActivity(settingIntent);
+                break;
+            case android.R.id.home:
+                this.finish();
                 break;
             default:
                 break;

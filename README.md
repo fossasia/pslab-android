@@ -55,22 +55,26 @@ Please join us on the following channels:
 - [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k)
 - [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ)
 - [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo)
-- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y) 
+- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y)
 
 ## Features
 |   **Feature**    |                    **Description**                    |   **Status**    |
 |------------------|-------------------------------------------------------|-----------------|
-|   Home Screen    | Show status and version of PSLab device               |   Established   |
-|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      |   Established   |
-|  Oscilloscope    | Shows variation of analog signals                     |   Established   |
-|   Multimeter     | Measures voltage, current, resistance and capacitance |   Established   |
-| Logical Analyzer | Captures and displays signals from digital system     |   In Progress   |
-|  Wave Generator  | Generates arbitrary analog and digital waveforms      |   In Progress   |
-|   Power Source   | Generates programmable voltage and currents	   |   Established   |
-|    Lux Meter     | Measures the ambient light intensity                  |   Established   |
+|   Home Screen    | Show status and version of PSLab device               |  		 ✓   |
+|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      | 		 ✓   |
+|  Oscilloscope    | Shows variation of analog signals                     | 		 ✓   |
+|   Multimeter     | Measures voltage, current, resistance and capacitance | 		 ✓   |
+| Logical Analyzer | Captures and displays signals from digital system     | 		 ✓   |
+|  Wave Generator  | Generates arbitrary analog and digital waveforms      | 		 ✓   |
+|   Power Source   | Generates programmable voltage and currents	   | 		 ✓   |
+|    Lux Meter     | Measures the ambient light intensity                  | 		 ✓   |
 
 
 ## How to set up the Android app in your development environment
+
+  Minimum Android version 4.1 (API Level 16)
+  
+  Maximum Android version 8.1 (API Level 27)
 
 ### Development Setup
 
@@ -93,16 +97,16 @@ Before you begin, you should already have the Android Studio SDK downloaded and 
 6. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
 
 7. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
- 
+
 If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
 
-You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through USB cable. 
+You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through USB cable.
 
 To debug over Wi-Fi: http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/
- 
-Note : 
-1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/org/fossasia/pslab/communication/CommunicationHandler.java) 
- 
+
+Note :
+1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/org/fossasia/pslab/communication/CommunicationHandler.java)
+
 ## Setup to use PSLab with Android App
 To use PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ) and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.
 
@@ -110,7 +114,7 @@ To use PSLab device with Android, you simply need an OTG cable, an Android Devic
 
 ### Code practices
 
-Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics. 
+Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
 
  * Single commit per pull request
  * Reference the issue numbers in the commit message. Follow the pattern ``` Fixes #<issue number> <commit message>```
@@ -148,11 +152,19 @@ This project is currently licensed under the Apache License 2.0. A copy of [LICE
 
 ## Maintainers
 The project is maintained by
-- Praveen Patil ([@wavicles](https://github.com/wavicles))
+- Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal))
 - Mario Behling ([@mariobehling](http://github.com/mariobehling))
 - Lorenz Gerber ([@lorenzgerber](https://github.com/lorenzgerber))
 - Wei Tat ([@cweitat](https://github.com/cweitat))
 - Wai Gie ([@woshikie](https://github.com/woshikie))
+
+## Alumni
+- Praveen Patil ([@wavicles](https://github.com/wavicles))
 - Jithin ([@jithinbp](https://github.com/jithinbp))
-- Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96)), Asitava Sarkar ([@asitava1998](https://github.com/asitava1998)), Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal)), Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))
-- Avjeet ([@Avjeet](https://github.com/Avjeet)), Abhinav ([@abhinavraj23](https://github.com/abhinavraj23)), Harsh ([@harsh-2711](https://github.com/harsh-2711)), Yatri ([@yatri1609](https://github.com/yatri1609))
+- Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96))
+- Asitava Sarkar ([@asitava1998](https://github.com/asitava1998))
+- Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))
+- Avjeet ([@Avjeet](https://github.com/Avjeet))
+- Abhinav ([@abhinavraj23](https://github.com/abhinavraj23))
+- Harsh ([@harsh-2711](https://github.com/harsh-2711))
+- Yatri ([@yatri1609](https://github.com/yatri1609))
