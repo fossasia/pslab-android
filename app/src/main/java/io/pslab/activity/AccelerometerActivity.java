@@ -319,4 +319,10 @@ public class AccelerometerActivity extends AppCompatActivity {
         });
         gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
     }
+    
+     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
+        return super.onTouchEvent(event);
+    }
 }
