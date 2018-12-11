@@ -60,14 +60,14 @@ Please join us on the following channels:
 ## Features
 |   **Feature**    |                    **Description**                    |   **Status**    |
 |------------------|-------------------------------------------------------|-----------------|
-|   Home Screen    | Show status and version of PSLab device               |   Established   |
-|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      |   Established   |
-|  Oscilloscope    | Shows variation of analog signals                     |   Established   |
-|   Multimeter     | Measures voltage, current, resistance and capacitance |   Established   |
-| Logical Analyzer | Captures and displays signals from digital system     |   In Progress   |
-|  Wave Generator  | Generates arbitrary analog and digital waveforms      |   In Progress   |
-|   Power Source   | Generates programmable voltage and currents	   |   Established   |
-|    Lux Meter     | Measures the ambient light intensity                  |   Established   |
+|   Home Screen    | Show status and version of PSLab device               |  		 ✓   |
+|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      | 		 ✓   |
+|  Oscilloscope    | Shows variation of analog signals                     | 		 ✓   |
+|   Multimeter     | Measures voltage, current, resistance and capacitance | 		 ✓   |
+| Logical Analyzer | Captures and displays signals from digital system     | 		 ✓   |
+|  Wave Generator  | Generates arbitrary analog and digital waveforms      | 		 ✓   |
+|   Power Source   | Generates programmable voltage and currents	   | 		 ✓   |
+|    Lux Meter     | Measures the ambient light intensity                  | 		 ✓   |
 
 
 ## How to set up the Android app in your development environment
@@ -152,11 +152,19 @@ This project is currently licensed under the Apache License 2.0. A copy of [LICE
 
 ## Maintainers
 The project is maintained by
-- Praveen Patil ([@wavicles](https://github.com/wavicles))
+- Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal))
 - Mario Behling ([@mariobehling](http://github.com/mariobehling))
 - Lorenz Gerber ([@lorenzgerber](https://github.com/lorenzgerber))
 - Wei Tat ([@cweitat](https://github.com/cweitat))
 - Wai Gie ([@woshikie](https://github.com/woshikie))
+
+## Alumni
+- Praveen Patil ([@wavicles](https://github.com/wavicles))
 - Jithin ([@jithinbp](https://github.com/jithinbp))
-- Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96)), Asitava Sarkar ([@asitava1998](https://github.com/asitava1998)), Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal)), Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))
-- Avjeet ([@Avjeet](https://github.com/Avjeet)), Abhinav ([@abhinavraj23](https://github.com/abhinavraj23)), Harsh ([@harsh-2711](https://github.com/harsh-2711)), Yatri ([@yatri1609](https://github.com/yatri1609))
+- Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96))
+- Asitava Sarkar ([@asitava1998](https://github.com/asitava1998))
+- Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))
+- Avjeet ([@Avjeet](https://github.com/Avjeet))
+- Abhinav ([@abhinavraj23](https://github.com/abhinavraj23))
+- Harsh ([@harsh-2711](https://github.com/harsh-2711))
+- Yatri ([@yatri1609](https://github.com/yatri1609))

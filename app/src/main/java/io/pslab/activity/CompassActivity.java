@@ -56,7 +56,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     @BindView(R.id.tv_sensor_hmc5883l_by)
     TextView yAxisMagneticField;
     @BindView(R.id.tv_sensor_hmc5883l_bz)
-    TextView zAxismagneticField;
+    TextView zAxisMagneticField;
 
     @BindView(R.id.compass_toolbar)
     Toolbar mToolbar;
@@ -162,20 +162,22 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         float degree;
         switch (direction) {
             case 0:
-                degree = Math.round(event.values[1]);
+                degree = Math.round(event.values[0]);
                 if (degree < 0)
                     degree += 360;
                 break;
             case 1:
-                degree = Math.round(event.values[2]);
+                degree = Math.round(event.values[1]);
                 if (degree < 0)
                     degree += 360;
                 break;
             case 2:
-                degree = Math.round(event.values[0]);
+                degree = Math.round(event.values[2]);
+                if (degree < 0)
+                    degree += 360;
                 break;
             default:
-                degree = Math.round(event.values[1]);
+                degree = Math.round(event.values[0]);
                 break;
         }
 
@@ -183,6 +185,21 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
         degreeIndicator.setText(String.valueOf(degree));
         currentDegree = -degree;
+
+        degree = Math.round(event.values[0]);
+        if (degree < 0)
+            degree += 360;
+        xAxisMagneticField.setText(String.valueOf(degree));
+
+        degree = Math.round(event.values[1]);
+        if (degree < 0)
+            degree += 360;
+        yAxisMagneticField.setText(String.valueOf(degree));
+
+        degree = Math.round(event.values[2]);
+        if (degree < 0)
+            degree += 360;
+        zAxisMagneticField.setText(String.valueOf(degree));
     }
 
     @Override
