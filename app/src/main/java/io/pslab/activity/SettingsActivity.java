@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         Fragment fragment;
         switch (title) {
-            case "Lux Meter Configurations":
+            case "Lux Meter":
                 fragment = new LuxMeterSettingFragment();
                 break;
             default:
@@ -82,12 +82,12 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case GPSLogger.MY_PERMISSIONS_REQUEST_LOCATION: {
+            case GPSLogger.PSLAB_PERMISSION_FOR_MAPS: {
                 if (grantResults.length <= 0
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
                     editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, false);
-                    editor.commit();
+                    editor.apply();
                 }
             }
         }
