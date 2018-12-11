@@ -209,7 +209,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
         setContentView(getLayout());
         ButterKnife.bind(this);
         setSupportActionBar(sensorToolBar);
-        getSupportActionBar().setTitle(getSensorName());
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getSensorName());
+        actionBar.setDisplayHomeAsUpEnabled(true);
         markers = new JSONArray();
         psLabPermission = PSLabPermission.getInstance();
         gpsLogger = new GPSLogger(this,
@@ -320,6 +322,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     ((LuxMeterDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
                 }
+                break;
+            case android.R.id.home:
+                this.finish();
                 break;
             default:
                 break;
