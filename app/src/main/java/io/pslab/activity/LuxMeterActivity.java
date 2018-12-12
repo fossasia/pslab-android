@@ -96,7 +96,8 @@ public class LuxMeterActivity extends PSLabSensor {
     @Override
     public void getDataFromDataLogger() {
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
-            playingData = true;
+            //playingData = true;
+            viewingData = true;
             recordedLuxData = LocalDataLog.with()
                     .getBlockOfLuxRecords(getIntent().getExtras().getLong(DATA_BLOCK));
             String title = titleFormat.format(recordedLuxData.get(0).getTime());

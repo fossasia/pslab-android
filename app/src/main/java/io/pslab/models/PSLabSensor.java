@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +32,8 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -61,6 +66,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public boolean checkGPSOnResume = false;
     public boolean writeHeaderToFile = true;
     public boolean playingData = false;
+    public boolean viewingData = false;
+    public boolean startedPlay = false;
 
     public CoordinatorLayout sensorParentView;
     public BottomSheetBehavior bottomSheetBehavior;
@@ -240,12 +247,13 @@ public abstract class PSLabSensor extends AppCompatActivity {
     }
 
     private void setUpMenu(Menu menu) {
-        if (playingData) {
+        if (playingData || viewingData) {
             for (int i = 0; i < menu.size(); i++) {
                 menu.getItem(i).setVisible(false);
             }
         }
-        menu.findItem(R.id.save_graph).setVisible(playingData);
+        menu.findItem(R.id.save_graph).setVisible(viewingData || playingData);
+        menu.findItem(R.id.play_data).setVisible(viewingData || playingData);
     }
 
     @Override
@@ -260,6 +268,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem record = menu.findItem(R.id.record_data);
         record.setIcon(isRecording ? R.drawable.ic_record_stop_white : R.drawable.ic_record_white);
+        MenuItem play = menu.findItem(R.id.play_data);
+        play.setIcon(playingData ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -286,10 +296,41 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     dataRecordingCycle();
                 } else {
                     stopRecordSensorData();
-                    CustomSnackBar.showSnackBar(sensorParentView,
-                            getString(R.string.data_recording_stopped), null, null);
+                    final File logDirectory = new File(
+                            Environment.getExternalStorageDirectory().getAbsolutePath() +
+                                    File.separator + CSVLogger.CSV_DIRECTORY + File.separator + getSensorName());
+                    String logLocation;
+                    try {
+                        logLocation = getString(R.string.log_saved_directory) + logDirectory.getCanonicalPath();
+                    } catch (IOException e) {
+                        // This message wouldn't appear in usual cases. Added in order to handle ex:
+                        logLocation = getString(R.string.log_saved_failed);
+                    }
+                    CustomSnackBar.showSnackBar(sensorParentView, logLocation, null, null);
+                    CustomSnackBar.snackbar.setDuration(Snackbar.LENGTH_INDEFINITE);
+                    CustomSnackBar.snackbar.setAction(getString(R.string.open), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Uri selectedUri = Uri.parse(logDirectory.getAbsolutePath());
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setDataAndType(selectedUri, "resource/folder");
+                            if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
+                                startActivity(intent);
+                            }
+                        }
+                    });
                     isRecording = false;
                     prepareMarkers();
+                }
+                invalidateOptionsMenu();
+                break;
+            case R.id.play_data:
+                playingData = !playingData;
+                if (!startedPlay) {
+                    if (getSensorFragment() instanceof LuxMeterDataFragment) {
+                        ((LuxMeterDataFragment) getSupportFragmentManager()
+                                .findFragmentByTag(getSensorName())).playData();
+                    }
                 }
                 invalidateOptionsMenu();
                 break;

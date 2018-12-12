@@ -21,7 +21,7 @@ public class CSVLogger {
     private String category;
     SimpleDateFormat TIME;
 
-    private static final String CSV_DIRECTORY = "PSLab";
+    public static final String CSV_DIRECTORY = "PSLab";
 
     /**
      * Constructor initiate logger with a category folder
