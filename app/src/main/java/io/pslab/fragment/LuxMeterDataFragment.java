@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,7 +89,6 @@ public class LuxMeterDataFragment extends Fragment {
     private LuxData sensorData;
     private float currentMin = 10000;
     private float currentMax = 0;
-    private boolean playComplete = false;
     private YAxis y;
     private Unbinder unbinder;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
@@ -130,7 +130,12 @@ public class LuxMeterDataFragment extends Fragment {
             recordedLuxArray = new ArrayList<>();
             resetInstrumentData();
             playRecordedData();
-
+        } else if (luxSensor.viewingData) {
+            sensorLabel.setText(getResources().getString(R.string.recorder));
+            recordedLuxArray = new ArrayList<>();
+            resetInstrumentData();
+            plotAllRecordedData();
+            // TODO: Display the whole graph with filled data
         } else if (!luxSensor.isRecording) {
             updateGraphs();
             sum = 0;
@@ -156,6 +161,41 @@ public class LuxMeterDataFragment extends Fragment {
             sensorManager.unregisterListener(lightSensorEventListener);
         }
         unbinder.unbind();
+    }
+
+    private void plotAllRecordedData() {
+        recordedLuxArray.addAll(luxSensor.recordedLuxData);
+        if (recordedLuxArray.size() != 0) {
+            for (LuxData d: recordedLuxArray) {
+                if (currentMax < d.getLux()) {
+                    currentMax = d.getLux();
+                }
+                if (currentMin > d.getLux()) {
+                    currentMin = d.getLux();
+                }
+                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
+                entries.add(entry);
+                sum += entry.getY();
+            }
+            y.setAxisMaximum(currentMax);
+            y.setAxisMinimum(currentMin);
+            y.setLabelCount(10);
+            statMax.setText(String.valueOf(currentMax));
+            statMin.setText(String.valueOf(currentMin));
+            statMean.setText(String.format(Locale.getDefault(), "%.2f", (sum / recordedLuxArray.size())));
+
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
+            dataSet.setDrawCircles(false);
+            dataSet.setDrawValues(false);
+            dataSet.setLineWidth(2);
+            LineData data = new LineData(dataSet);
+
+            mChart.setData(data);
+            mChart.notifyDataSetChanged();
+            mChart.setVisibleXRangeMaximum(80);
+            mChart.moveViewToX(data.getEntryCount());
+            mChart.invalidate();
+        }
     }
 
     private void playRecordedData() {
@@ -187,44 +227,49 @@ public class LuxMeterDataFragment extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            playComplete = false;
-                            LuxData d = recordedLuxArray.get(turns);
-                            turns++;
-                            if (currentMax < d.getLux()) {
-                                currentMax = d.getLux();
-                                statMax.setText(String.valueOf(d.getLux()));
+                        if (luxSensor.playingData) {
+                            try {
+                                LuxData d = recordedLuxArray.get(turns);
+                                turns++;
+                                if (currentMax < d.getLux()) {
+                                    currentMax = d.getLux();
+                                    statMax.setText(String.valueOf(d.getLux()));
+                                }
+                                if (currentMin > d.getLux()) {
+                                    currentMin = d.getLux();
+                                    statMin.setText(String.valueOf(d.getLux()));
+                                }
+                                y.setAxisMaximum(currentMax);
+                                y.setAxisMinimum(currentMin);
+                                y.setLabelCount(10);
+                                lightMeter.setWithTremble(false);
+                                lightMeter.setSpeedAt(d.getLux());
+
+                                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
+                                entries.add(entry);
+                                count++;
+                                sum += entry.getY();
+                                statMean.setText(String.format(Locale.getDefault(), "%.2f", (sum / count)));
+
+                                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
+                                dataSet.setDrawCircles(false);
+                                dataSet.setDrawValues(false);
+                                dataSet.setLineWidth(2);
+                                LineData data = new LineData(dataSet);
+
+                                mChart.setData(data);
+                                mChart.notifyDataSetChanged();
+                                mChart.setVisibleXRangeMaximum(80);
+                                mChart.moveViewToX(data.getEntryCount());
+                                mChart.invalidate();
+                            } catch (IndexOutOfBoundsException e) {
+                                graphTimer.cancel();
+                                graphTimer = null;
+                                turns = 0;
+                                luxSensor.playingData = false;
+                                luxSensor.startedPlay = false;
+                                luxSensor.invalidateOptionsMenu();
                             }
-                            if (currentMin > d.getLux()) {
-                                currentMin = d.getLux();
-                                statMin.setText(String.valueOf(d.getLux()));
-                            }
-                            y.setAxisMaximum(currentMax);
-                            y.setAxisMinimum(currentMin);
-                            y.setLabelCount(10);
-                            lightMeter.setWithTremble(false);
-                            lightMeter.setSpeedAt(d.getLux());
-
-                            Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
-                            entries.add(entry);
-                            count++;
-                            sum += entry.getY();
-                            statMean.setText(String.format(Locale.getDefault(), "%.2f", (sum / count)));
-
-                            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
-                            dataSet.setDrawCircles(false);
-                            dataSet.setDrawValues(false);
-                            dataSet.setLineWidth(2);
-                            LineData data = new LineData(dataSet);
-
-                            mChart.setData(data);
-                            mChart.notifyDataSetChanged();
-                            mChart.setVisibleXRangeMaximum(80);
-                            mChart.moveViewToX(data.getEntryCount());
-                            mChart.invalidate();
-                        } catch (IndexOutOfBoundsException e) {
-                            graphTimer.cancel();
-                            playComplete = true;
                         }
                     }
                 });
@@ -232,13 +277,25 @@ public class LuxMeterDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
-    public void saveGraph() {
-        if (playComplete) {
-            mChart.saveToGallery(luxSensor.dateFormat.format(recordedLuxArray.get(0).getTime()), 100);
-            Toast.makeText(getActivity(), "Graph saved to gallery", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(getActivity(), "Wait until the play is complete", Toast.LENGTH_LONG).show();
+    public void playData() {
+        resetInstrumentData();
+        luxSensor.startedPlay = true;
+        try {
+            if (recordedLuxArray.size() > 1) {
+                LuxData i = recordedLuxArray.get(1);
+                long timeGap = i.getTime() - i.getBlock();
+                processRecordedData(timeGap);
+            } else {
+                processRecordedData(0);
+            }
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(getActivity(),
+                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void saveGraph() {
+        // Todo: Implement export here
     }
 
     private void setupInstruments() {
