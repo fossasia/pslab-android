@@ -25,6 +25,7 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -318,5 +319,10 @@ public class AccelerometerActivity extends AppCompatActivity {
             }
         });
         gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
+    }
+     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
+        return super.onTouchEvent(event);
     }
 }
