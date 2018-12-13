@@ -107,6 +107,7 @@ public class LuxMeterActivity extends PSLabSensor {
 
     /**
      * Once settings have been changed, those changes can be captured from onResume method.
+     * reinstateConfigurations() will update the logs with new settings
      */
     @Override
     protected void onResume() {

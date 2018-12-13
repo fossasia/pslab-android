@@ -18,8 +18,8 @@ public class CustomSnackBar {
     public static Snackbar snackbar;
 
     public static void showSnackBar(@NonNull CoordinatorLayout holderLayout, @NonNull String displayText,
-                                    String actionText, View.OnClickListener clickListener) {
-        snackbar = Snackbar.make(holderLayout, displayText, Snackbar.LENGTH_LONG)
+                                    String actionText, View.OnClickListener clickListener, int duration) {
+        snackbar = Snackbar.make(holderLayout, displayText, duration)
                 .setAction(actionText, clickListener);
         snackbar.setActionTextColor(ContextCompat.getColor(holderLayout.getContext(), R.color.colorPrimary));
         View sbView = snackbar.getView();

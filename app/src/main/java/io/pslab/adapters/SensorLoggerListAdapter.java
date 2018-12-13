@@ -1,8 +1,11 @@
 package io.pslab.adapters;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,15 +19,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
+import java.io.File;
 import java.util.Date;
-import java.util.Locale;
 
 import io.pslab.R;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -37,7 +40,6 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
 
 
     private Activity context;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
 
@@ -59,7 +61,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
         final SensorDataBlock block = getItem(position);
         assert block != null;
         holder.sensor.setText(block.getSensorType());
-        holder.dateTime.setText(String.valueOf(sdf.format(new Date(block.getBlock()))));
+        holder.dateTime.setText(String.valueOf(CSVLogger.FILE_NAME_FORMAT.format(new Date(block.getBlock()))));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,11 +76,34 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
         holder.deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Request confirmation
-                if (block.getSensorType().equalsIgnoreCase("Lux Meter")) {
-                    LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
-                    LocalDataLog.with().clearSensorBlock(block.getBlock());
-                }
+                new AlertDialog.Builder(context)
+                        .setTitle(context.getString(R.string.delete))
+                        .setMessage(context.getString(R.string.delete_confirmation) + " " +
+                                CSVLogger.FILE_NAME_FORMAT.format(block.getBlock()) + "?")
+                        .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if (block.getSensorType().equalsIgnoreCase("Lux Meter")) {
+                                    File logDirectory = new File(
+                                            Environment.getExternalStorageDirectory().getAbsolutePath() +
+                                                    File.separator + CSVLogger.CSV_DIRECTORY +
+                                                    File.separator + block.getSensorType() +
+                                                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(block.getBlock()) + ".csv");
+                                    Toast.makeText(context, logDirectory.delete()
+                                                    ? context.getString(R.string.log_deleted)
+                                                    : context.getString(R.string.nothing_to_delete),
+                                            Toast.LENGTH_LONG).show();
+                                    LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
+                                    LocalDataLog.with().clearSensorBlock(block.getBlock());
+                                }
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create().show();
             }
         });
         holder.mapIcon.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +115,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     for (LuxData d : data) {
                         try {
                             JSONObject i = new JSONObject();
-                            i.put("date", sdf.format(d.getTime()));
+                            i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
                             i.put("data", d.getLux());
                             i.put("lon", d.getLon());
                             i.put("lat", d.getLat());
