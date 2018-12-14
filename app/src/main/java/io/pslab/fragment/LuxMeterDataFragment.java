@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,7 @@ import io.pslab.communication.sensors.BH1750;
 import io.pslab.communication.sensors.TSL2561;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVLogger;
 import io.pslab.others.ScienceLabCommon;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -135,7 +135,6 @@ public class LuxMeterDataFragment extends Fragment {
             recordedLuxArray = new ArrayList<>();
             resetInstrumentData();
             plotAllRecordedData();
-            // TODO: Display the whole graph with filled data
         } else if (!luxSensor.isRecording) {
             updateGraphs();
             sum = 0;
@@ -175,6 +174,7 @@ public class LuxMeterDataFragment extends Fragment {
                 }
                 Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
                 entries.add(entry);
+                lightMeter.setSpeedAt(d.getLux());
                 sum += entry.getY();
             }
             y.setAxisMaximum(currentMax);
@@ -277,6 +277,20 @@ public class LuxMeterDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    public void stopData() {
+        if (graphTimer != null) {
+            graphTimer.cancel();
+            graphTimer = null;
+        }
+        recordedLuxArray.clear();
+        entries.clear();
+        plotAllRecordedData();
+        luxSensor.startedPlay = false;
+        luxSensor.playingData = false;
+        turns = 0;
+        luxSensor.invalidateOptionsMenu();
+    }
+
     public void playData() {
         resetInstrumentData();
         luxSensor.startedPlay = true;
@@ -295,7 +309,7 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        // Todo: Implement export here
+        luxSensor.displayLogLocationOnSnackBar();
     }
 
     private void setupInstruments() {
@@ -381,13 +395,13 @@ public class LuxMeterDataFragment extends Fragment {
                 luxSensor.writeHeaderToFile = !luxSensor.writeHeaderToFile;
             }
             if (luxSensor.addLocation && luxSensor.gpsLogger.isGPSEnabled()) {
-                String dateTime = luxSensor.dateFormat.format(new Date(timestamp));
+                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = luxSensor.gpsLogger.getDeviceLocation();
                 luxSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + sensorReading + "," + location.getLatitude() + "," + location.getLongitude());
                 sensorData = new LuxData(timestamp, block, luxValue, location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = luxSensor.dateFormat.format(new Date(timestamp));
+                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 luxSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + sensorReading + ",0.0,0.0");
                 sensorData = new LuxData(timestamp, block, luxValue, 0.0, 0.0);

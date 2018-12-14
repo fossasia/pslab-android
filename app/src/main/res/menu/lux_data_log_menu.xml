@@ -12,6 +12,11 @@
         android:title="@string/play"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/stop_data"
+        android:icon="@drawable/ic_stop_white_24dp"
+        android:title="@string/stop"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/show_guide"
         android:title="@string/show_guide"
         app:showAsAction="never" />
