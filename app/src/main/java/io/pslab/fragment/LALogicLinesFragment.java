@@ -252,7 +252,7 @@ public class LALogicLinesFragment extends Fragment {
             new Thread(logicAnalysis).start();
         }
 
-        carouselPicker.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }

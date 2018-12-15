@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                     super.onDrawerOpened(drawerView);
                 }
             };
-            drawer.setDrawerListener(actionBarDrawerToggle);
+            drawer.addDrawerListener(actionBarDrawerToggle);
             actionBarDrawerToggle.syncState();
         }
     }

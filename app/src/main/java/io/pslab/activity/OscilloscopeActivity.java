@@ -333,7 +333,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                                 e.printStackTrace();
                             }
                         }
-
                     }
 
                     if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
