@@ -17,16 +17,12 @@ import io.realm.RealmResults;
 public class LuxMeterActivity extends PSLabSensor {
 
     private static final String PREF_NAME = "customDialogPreference";
+    public final String LUXMETER_LIMIT = "luxmeter_limit";
     public RealmResults<LuxData> recordedLuxData;
 
     @Override
-    public int getLayout() {
-        return R.layout.activity_generic_sensor;
-    }
-
-    @Override
     public int getMenu() {
-        return R.menu.lux_data_log_menu;
+        return R.menu.sensor_data_log_menu;
     }
 
     @Override

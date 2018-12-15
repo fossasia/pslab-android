@@ -916,17 +916,6 @@
     <string name="ir_thermometer_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. You can use any of the PSLab device GND pins.\n</string>
 
-    <string name="barometer">Barometer</string>
-    <string name="barometer_alert_title">No barometer sensor in device</string>
-    <string name="barometer_alert_description">Connect a BMP180 sensor using I2C pins on PSLab to use this instrument</string>
-    <string name="barometer_description">Measures the atmospheric pressure</string>
-    <string name="barometer_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
-    is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n
-    \u2022 If you want to use the sensor BMP-180, connect the sensor to PSLab device as shown in the figure.</string>
-    <string name="barometer_desc">\u2022 The above pin configuration has to be same except for the pin
-    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
-    \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
-
     <string name="navigation_lux_meter_data">Data Plot</string>
     <string name="navigation_lux_meter_configure">Configure</string>
     <string name="high_limit">High Limit</string>
@@ -1061,6 +1050,31 @@
     <string name="time_elapsed">Time Elapsed</string>
     <string name="exp_data_saved">Experiment Logged Data Saved</string>
 
+    <string name="no_baro_sensor">Device does not have a barometer</string>
+
+    <string-array name="baro_sensors">
+        <item>Built-In</item>
+        <item>BMP180</item>
+    </string-array>
+    <string-array name="baro_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="baro_meter">Barometer</string>
+    <string name="baro_unit">atm</string>
+    <string name="avg_baro">Avg (atm)</string>
+    <string name="min_baro">Min (atm)</string>
+    <string name="max_baro">Max (atm)</string>
+    <string name="baro_meter_alert_description">Connect a BMP180 sensor using I2C pins on PSLab to use this instrument</string>
+    <string name="baro_meter_description">Measures the atmospheric pressure</string>
+    <string name="baro_meter_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
+    is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n
+    \u2022 If you want to use the sensor BMP-180, connect the sensor to PSLab device as shown in the figure.</string>
+    <string name="baro_meter_desc">\u2022 The above pin configuration has to be same except for the pin
+    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
+    \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
+
     <string name="lux_meter">Lux Meter</string>
     <string name="log_saved_directory">Log saved in\n</string>
     <string name="log_saved_failed">Could not save the log. Please check storage permission.</string>
@@ -1072,7 +1086,6 @@
     <string name="lux_meter_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
     \u2022 Select sensor by going to the Configure tab from the bottom navigation bar and choose BHT-1750 in the drop down menu under Select Sensor.\n</string>
-    <string name="lux_meter_configurations">Lux Meter Configurations</string>
     <string name="no_data_fetched">No Data Fetched</string>
     <string name="recorder">Recorder</string>
     <string name="save_graph">Save Graph</string>

@@ -24,37 +24,37 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/label_lux_sensor"
-                    style="@style/lux_meter_stat_heading"
+                    android:id="@+id/label_baro_sensor"
+                    style="@style/baro_meter_stat_heading"
                     android:paddingBottom="5dp"
-                    android:textSize="@dimen/lux_sensor_label_title_size" />
+                    android:textSize="@dimen/baro_sensor_label_title_size" />
 
                 <TextView
-                    android:id="@+id/label_lux_stat_max"
-                    style="@style/lux_meter_stat_heading"
-                    android:text="@string/max_lx" />
+                    android:id="@+id/label_baro_stat_max"
+                    style="@style/baro_meter_stat_heading"
+                    android:text="@string/max_baro" />
 
                 <TextView
-                    android:id="@+id/lux_max"
-                    style="@style/lux_meter_stat_display" />
+                    android:id="@+id/baro_max"
+                    style="@style/baro_meter_stat_display" />
 
                 <TextView
-                    android:id="@+id/label_lux_stat_min"
-                    style="@style/lux_meter_stat_heading"
-                    android:text="@string/min_lx" />
+                    android:id="@+id/label_baro_stat_min"
+                    style="@style/baro_meter_stat_heading"
+                    android:text="@string/min_baro" />
 
                 <TextView
-                    android:id="@+id/lux_min"
-                    style="@style/lux_meter_stat_display" />
+                    android:id="@+id/baro_min"
+                    style="@style/baro_meter_stat_display" />
 
                 <TextView
-                    android:id="@+id/label_lux_stat_avg"
-                    style="@style/lux_meter_stat_heading"
-                    android:text="@string/avg_lx" />
+                    android:id="@+id/label_baro_stat_avg"
+                    style="@style/baro_meter_stat_heading"
+                    android:text="@string/avg_baro" />
 
                 <TextView
-                    android:id="@+id/lux_avg"
-                    style="@style/lux_meter_stat_display" />
+                    android:id="@+id/baro_avg"
+                    style="@style/baro_meter_stat_display" />
 
             </LinearLayout>
 
@@ -65,16 +65,16 @@
                 android:orientation="vertical">
 
                 <com.github.anastr.speedviewlib.PointerSpeedometer
-                    android:id="@+id/light_meter"
+                    android:id="@+id/baro_meter"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/speedometer_height"
                     android:padding="15dp"
                     app:sv_speedTextColor="@color/black"
                     app:sv_speedTextPosition="BOTTOM_CENTER"
-                    app:sv_speedTextSize="@dimen/lux_display_font_size"
+                    app:sv_speedTextSize="@dimen/baro_display_font_size"
                     app:sv_speedometerMode="NORMAL"
-                    app:sv_textSize="@dimen/lux_guage_font_size"
-                    app:sv_unit="@string/lux"
+                    app:sv_textSize="@dimen/baro_guage_font_size"
+                    app:sv_unit="@string/baro_unit"
                     app:sv_unitTextColor="@color/black" />
 
             </LinearLayout>
@@ -90,8 +90,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4">
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:id="@+id/chart_xaxis_layout"
@@ -113,7 +112,7 @@
                 <TextView
                     android:id="@+id/tv_label_left_yaxis_hmc"
                     style="@style/graph_y_axis_title_text"
-                    android:text="@string/lux"
+                    android:text="@string/baro_unit"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -122,8 +121,8 @@
             </android.support.constraint.ConstraintLayout>
 
             <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart_lux_meter"
-                android:layout_width="match_parent"
+                android:id="@+id/chart_baro_meter"
+                android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/chart_xaxis_layout"
                 android:layout_toEndOf="@+id/chart_yaxis_layout_hmc"
