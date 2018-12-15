@@ -11,6 +11,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
 import io.pslab.R;
@@ -63,13 +64,13 @@ public class GPSLogger {
                         if (sensorActivity.isRecording) {
                             CustomSnackBar.showSnackBar(sensorActivity.sensorParentView,
                                     context.getResources().getString(R.string.data_recording_with_gps_off),
-                                    null, null);
+                                    null, null, Snackbar.LENGTH_LONG);
                         } else {
                             sensorActivity.isRecording = true;
                             sensorActivity.invalidateOptionsMenu();
                             CustomSnackBar.showSnackBar(sensorActivity.sensorParentView,
                                     context.getResources().getString(R.string.data_recording_with_nogps),
-                                    null, null);
+                                    null, null, Snackbar.LENGTH_LONG);
                         }
                     }
                 })

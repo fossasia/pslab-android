@@ -19,9 +19,10 @@ public class CSVLogger {
 
     private File csvFile;
     private String category;
-    SimpleDateFormat TIME;
 
     public static final String CSV_DIRECTORY = "PSLab";
+    public static final SimpleDateFormat FILE_NAME_FORMAT = new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
 
     /**
      * Constructor initiate logger with a category folder
@@ -60,8 +61,7 @@ public class CSVLogger {
     }
 
     public void prepareLogFile() {
-        TIME = new SimpleDateFormat("yyyyMMdd-hh:mm:ss:SSS", Locale.getDefault());
-        String uniqueFileName = TIME.format(new Date());
+        String uniqueFileName = FILE_NAME_FORMAT.format(new Date());
         csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
                 File.separator + CSV_DIRECTORY + File.separator + category +
                 File.separator + uniqueFileName + ".csv");

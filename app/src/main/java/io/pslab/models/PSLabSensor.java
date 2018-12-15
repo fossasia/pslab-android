@@ -82,7 +82,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public Realm realm;
     private Intent map;
 
-    public SimpleDateFormat dateFormat;
     public SimpleDateFormat titleFormat;
     public final String KEY_LOG = "has_log";
     public final String DATA_BLOCK = "data_block";
@@ -224,7 +223,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
         map = new Intent(this, MapsActivity.class);
         csvLogger = new CSVLogger(getSensorName());
         realm = LocalDataLog.with().getRealm();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.getDefault());
         titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         sensorParentView = coordinatorLayout;
         setUpBottomSheet();
@@ -254,6 +252,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         }
         menu.findItem(R.id.save_graph).setVisible(viewingData || playingData);
         menu.findItem(R.id.play_data).setVisible(viewingData || playingData);
+        menu.findItem(R.id.stop_data).setVisible(viewingData).setEnabled(startedPlay);
     }
 
     @Override
@@ -270,6 +269,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
         record.setIcon(isRecording ? R.drawable.ic_record_stop_white : R.drawable.ic_record_white);
         MenuItem play = menu.findItem(R.id.play_data);
         play.setIcon(playingData ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp);
+        MenuItem stop = menu.findItem(R.id.stop_data);
+        stop.setEnabled(startedPlay);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -296,29 +297,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     dataRecordingCycle();
                 } else {
                     stopRecordSensorData();
-                    final File logDirectory = new File(
-                            Environment.getExternalStorageDirectory().getAbsolutePath() +
-                                    File.separator + CSVLogger.CSV_DIRECTORY + File.separator + getSensorName());
-                    String logLocation;
-                    try {
-                        logLocation = getString(R.string.log_saved_directory) + logDirectory.getCanonicalPath();
-                    } catch (IOException e) {
-                        // This message wouldn't appear in usual cases. Added in order to handle ex:
-                        logLocation = getString(R.string.log_saved_failed);
-                    }
-                    CustomSnackBar.showSnackBar(sensorParentView, logLocation, null, null);
-                    CustomSnackBar.snackbar.setDuration(Snackbar.LENGTH_INDEFINITE);
-                    CustomSnackBar.snackbar.setAction(getString(R.string.open), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Uri selectedUri = Uri.parse(logDirectory.getAbsolutePath());
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setDataAndType(selectedUri, "resource/folder");
-                            if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
-                                startActivity(intent);
-                            }
-                        }
-                    });
+                    displayLogLocationOnSnackBar();
                     isRecording = false;
                     prepareMarkers();
                 }
@@ -333,6 +312,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     }
                 }
                 invalidateOptionsMenu();
+                break;
+            case R.id.stop_data:
+                if (getSensorFragment() instanceof LuxMeterDataFragment) {
+                    ((LuxMeterDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
+                }
                 break;
             case R.id.show_map:
                 if (psLabPermission.checkPermissions(PSLabSensor.this,
@@ -376,7 +361,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 }
             } else {
                 CustomSnackBar.showSnackBar(sensorParentView,
-                        getString(R.string.data_recording_without_location), null, null);
+                        getString(R.string.data_recording_without_location), null, null, Snackbar.LENGTH_LONG);
                 isRecording = true;
             }
         }
@@ -387,16 +372,41 @@ public abstract class PSLabSensor extends AppCompatActivity {
         gpsLogger.startCaptureLocation();
         if (gpsLogger.isGPSEnabled()) {
             CustomSnackBar.showSnackBar(sensorParentView,
-                    getString(R.string.data_recording_with_location), null, null);
+                    getString(R.string.data_recording_with_location), null, null, Snackbar.LENGTH_LONG);
             isRecording = true;
         } else {
             gpsLogger.gpsAlert.show();
         }
     }
 
+    public void displayLogLocationOnSnackBar() {
+        final File logDirectory = new File(
+                Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        File.separator + CSVLogger.CSV_DIRECTORY + File.separator + getSensorName());
+        String logLocation;
+        try {
+            logLocation = getString(R.string.log_saved_directory) + logDirectory.getCanonicalPath();
+        } catch (IOException e) {
+            // This message wouldn't appear in usual cases. Added in order to handle ex:
+            logLocation = getString(R.string.log_saved_failed);
+        }
+        CustomSnackBar.showSnackBar(sensorParentView, logLocation, getString(R.string.open),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Uri selectedUri = Uri.parse(logDirectory.getAbsolutePath());
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(selectedUri, "resource/folder");
+                        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
+                            startActivity(intent);
+                        }
+                    }
+                }, Snackbar.LENGTH_INDEFINITE);
+    }
+
     private void nogpsRecordingCycle() {
         CustomSnackBar.showSnackBar(sensorParentView,
-                getString(R.string.data_recording_without_location), null, null);
+                getString(R.string.data_recording_without_location), null, null, Snackbar.LENGTH_LONG);
         addLocation = false;
         isRecording = true;
     }
