@@ -15,8 +15,10 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -100,6 +102,8 @@ public class AccelerometerActivity extends AppCompatActivity {
             }
         });
         setSupportActionBar(mToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         adapter = new AccelerometerAdapter(new String[]{"X axis", "Y axis", "Z axis"}, getApplicationContext());
         RecyclerView recyclerView = this.findViewById(R.id.accelerometer_recycler_view);
@@ -131,7 +135,7 @@ public class AccelerometerActivity extends AppCompatActivity {
                     item.setIcon(R.drawable.ic_record_white);
                     adapter.setRecordingStatus(false);
                     recordData = false;
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null, Snackbar.LENGTH_LONG);
                 } else {
                     isDataRecorded = true;
                     item.setIcon(R.drawable.pause_icon);
@@ -146,14 +150,14 @@ public class AccelerometerActivity extends AppCompatActivity {
                         gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
                         if (gpsLogger.isGPSEnabled()) {
                             recordData = true;
-                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_enabled), null, null);
+                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_enabled), null, null, Snackbar.LENGTH_LONG);
                         } else {
                             checkGpsOnResume = true;
                         }
                         gpsLogger.startCaptureLocation();
                     } else {
                         recordData = true;
-                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null);
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start) + "\n" + getString(R.string.location_disabled), null, null, Snackbar.LENGTH_LONG);
                     }
                 }
                 break;
@@ -200,12 +204,12 @@ public class AccelerometerActivity extends AppCompatActivity {
                                             .create()
                                             .show();
                                 }
-                            });
+                            }, Snackbar.LENGTH_LONG);
                     adapter.setRecordingStatus(false);
                     isRecordingStarted = false;
                     recordData = false;
                 } else {
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null, Snackbar.LENGTH_LONG);
                 }
                 break;
             case R.id.delete_csv_data:
@@ -217,9 +221,9 @@ public class AccelerometerActivity extends AppCompatActivity {
                     isRecordingStarted = false;
                     isDataRecorded = false;
                     accLogger.deleteFile();
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null, Snackbar.LENGTH_LONG);
                 } else
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null, Snackbar.LENGTH_LONG);
                 break;
             case R.id.show_map:
                 if (ContextCompat.checkSelfPermission(this,
@@ -236,6 +240,9 @@ public class AccelerometerActivity extends AppCompatActivity {
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
                 settingIntent.putExtra("title", getResources().getString(R.string.accelerometer_configurations));
                 startActivity(settingIntent);
+                break;
+            case android.R.id.home:
+                this.finish();
                 break;
             default:
                 break;

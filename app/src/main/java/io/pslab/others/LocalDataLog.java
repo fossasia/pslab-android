@@ -1,7 +1,9 @@
 package io.pslab.others;
 
+import io.pslab.interfaces.sensorloggers.BaroMeterRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
+import io.pslab.models.BaroData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
 import io.realm.Realm;
@@ -12,7 +14,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, SensorRecordables {
+public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -115,6 +117,41 @@ public class LocalDataLog implements LuxMeterRecordables, SensorRecordables {
     @Override
     public RealmResults<LuxData> getBlockOfLuxRecords(long block) {
         return realm.where(LuxData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Baro Sensor Section
+     ***********************************************************************************************/
+    @Override
+    public BaroData getBaroData(long timestamp) {
+        return realm.where(BaroData.class).equalTo("time", timestamp).findFirst();
+    }
+
+    @Override
+    public void clearAllBaroRecords() {
+        realm.beginTransaction();
+        realm.delete(BaroData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfBaroRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<BaroData> data = getBlockOfBaroRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<BaroData> getAllBaroRecords() {
+        return realm.where(BaroData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<BaroData> getBlockOfBaroRecords(long block) {
+        return realm.where(BaroData.class)
                 .equalTo("block", block)
                 .findAll();
     }
