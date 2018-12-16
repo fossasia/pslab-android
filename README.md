@@ -50,6 +50,13 @@ Please join us on the following channels:
      <td><img src="/docs/images/view_lux_meter.png"></td>
     </tr>
   </table>
+  <table>
+    <tr>
+     <td><img src="/docs/images/view_log_map_location.png"></td>
+     <td><img src="/docs/images/view_barometer.png"></td>
+     <td><img src="/docs/images/view_data_logger.png"></td>
+    </tr>
+  </table>
 
 ## Video Demo
 - [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k)

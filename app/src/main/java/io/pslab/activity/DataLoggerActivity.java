@@ -48,11 +48,14 @@ public class DataLoggerActivity extends AppCompatActivity {
         switch (caller) {
             case "Lux Meter":
                 getSupportActionBar().setTitle(caller);
-                categoryData = LocalDataLog.with().getTypeOfSensorBlocks("Lux Meter");
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.lux_meter));
+                break;
+            case "Baro Meter":
+                getSupportActionBar().setTitle(caller);
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.baro_meter));
                 break;
             default:
-                // TODO: Fetch all
-                categoryData = LocalDataLog.with().getTypeOfSensorBlocks("Lux Meter");
+                categoryData = LocalDataLog.with().getAllSensorBlocks();
                 getSupportActionBar().setTitle(getString(R.string.logged_data));
         }
 

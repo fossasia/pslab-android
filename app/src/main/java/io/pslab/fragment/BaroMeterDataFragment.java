@@ -37,12 +37,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.pslab.R;
-import io.pslab.activity.LuxMeterActivity;
+import io.pslab.activity.BarometerActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
-import io.pslab.communication.sensors.BH1750;
-import io.pslab.communication.sensors.TSL2561;
-import io.pslab.models.LuxData;
+import io.pslab.communication.sensors.BMP180;
+import io.pslab.models.BaroData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
@@ -51,60 +50,58 @@ import io.pslab.others.ScienceLabCommon;
 import static android.content.Context.SENSOR_SERVICE;
 
 /**
- * Created by Padmal on 11/2/18.
+ * Created by Padmal on 12/13/18.
  */
 
-public class LuxMeterDataFragment extends Fragment {
+public class BaroMeterDataFragment extends Fragment {
 
     private static int sensorType = 0;
-    private static int highLimit = 2000;
-    private static int updatePeriod = 100;
-    private static int gain = 1;
+    private static float highLimit = 1.2f;
+    private static int updatePeriod = 1000;
     private long timeElapsed;
     private int count = 0, turns = 0;
     private float sum = 0;
     private boolean returningFromPause = false;
 
-    private float luxValue = -1;
+    private float baroValue = -1;
 
-    private enum LUX_SENSOR {INBUILT_SENSOR, BH1750_SENSOR, TSL2561_SENSOR}
+    private enum BARO_SENSOR {INBUILT_SENSOR, BMP180_SENSOR}
 
-    @BindView(R.id.lux_max)
+    @BindView(R.id.baro_max)
     TextView statMax;
-    @BindView(R.id.lux_min)
+    @BindView(R.id.baro_min)
     TextView statMin;
-    @BindView(R.id.lux_avg)
+    @BindView(R.id.baro_avg)
     TextView statMean;
-    @BindView(R.id.label_lux_sensor)
+    @BindView(R.id.label_baro_sensor)
     TextView sensorLabel;
-    @BindView(R.id.chart_lux_meter)
+    @BindView(R.id.chart_baro_meter)
     LineChart mChart;
-    @BindView(R.id.light_meter)
-    PointerSpeedometer lightMeter;
+    @BindView(R.id.baro_meter)
+    PointerSpeedometer baroMeter;
 
     private Timer graphTimer;
     private SensorManager sensorManager;
     private Sensor sensor;
     private long startTime, block;
     private ArrayList<Entry> entries;
-    private ArrayList<LuxData> recordedLuxArray;
-    private LuxData sensorData;
-    private float currentMin = 10000;
-    private float currentMax = 0;
+    private ArrayList<BaroData> recordedBaroArray;
+    private BaroData sensorData;
+    private float currentMin = 2;
+    private float currentMax = 0.5f;
     private YAxis y;
     private Unbinder unbinder;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
-    private LuxMeterActivity luxSensor;
+    private BarometerActivity baroSensor;
 
-    public static LuxMeterDataFragment newInstance() {
-        return new LuxMeterDataFragment();
+    public static BaroMeterDataFragment newInstance() {
+        return new BaroMeterDataFragment();
     }
 
-    public static void setParameters(int highLimit, int updatePeriod, String type, String gain) {
-        LuxMeterDataFragment.highLimit = highLimit;
-        LuxMeterDataFragment.updatePeriod = updatePeriod;
-        LuxMeterDataFragment.sensorType = Integer.valueOf(type);
-        LuxMeterDataFragment.gain = Integer.valueOf(gain);
+    public static void setParameters(float highLimit, int updatePeriod, String type) {
+        BaroMeterDataFragment.highLimit = highLimit;
+        BaroMeterDataFragment.updatePeriod = updatePeriod;
+        BaroMeterDataFragment.sensorType = Integer.valueOf(type);
     }
 
     @Override
@@ -112,13 +109,13 @@ public class LuxMeterDataFragment extends Fragment {
         super.onCreate(savedInstanceState);
         startTime = System.currentTimeMillis();
         entries = new ArrayList<>();
-        luxSensor = (LuxMeterActivity) getActivity();
+        baroSensor = (BarometerActivity) getActivity();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_lux_meter_data, container, false);
+        View view = inflater.inflate(R.layout.fragment_barometer_data, container, false);
         unbinder = ButterKnife.bind(this, view);
         setupInstruments();
         return view;
@@ -127,26 +124,26 @@ public class LuxMeterDataFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (luxSensor.playingData) {
-            sensorLabel.setText(getResources().getString(R.string.lux_meter));
-            recordedLuxArray = new ArrayList<>();
+        if (baroSensor.playingData) {
+            sensorLabel.setText(getResources().getString(R.string.baro_meter));
+            recordedBaroArray = new ArrayList<>();
             resetInstrumentData();
             playRecordedData();
-        } else if (luxSensor.viewingData) {
-            sensorLabel.setText(getResources().getString(R.string.lux_meter));
-            recordedLuxArray = new ArrayList<>();
+        } else if (baroSensor.viewingData) {
+            sensorLabel.setText(getResources().getString(R.string.baro_meter));
+            recordedBaroArray = new ArrayList<>();
             resetInstrumentData();
             plotAllRecordedData();
-        } else if (!luxSensor.isRecording) {
+        } else if (!baroSensor.isRecording) {
             updateGraphs();
             sum = 0;
             count = 0;
-            currentMin = 10000;
-            currentMax = 0;
+            currentMin = 2;
+            currentMax = 0.5f;
             entries.clear();
             mChart.clear();
             mChart.invalidate();
-            initiateLuxSensor(sensorType);
+            initiateBaroSensor(sensorType);
         } else if (returningFromPause) {
             updateGraphs();
         }
@@ -159,25 +156,25 @@ public class LuxMeterDataFragment extends Fragment {
             graphTimer.cancel();
         }
         if (sensorManager != null) {
-            sensorManager.unregisterListener(lightSensorEventListener);
+            sensorManager.unregisterListener(baroSensorEventListener);
         }
         unbinder.unbind();
     }
 
     private void plotAllRecordedData() {
-        recordedLuxArray.addAll(luxSensor.recordedLuxData);
-        if (recordedLuxArray.size() != 0) {
-            for (LuxData d: recordedLuxArray) {
-                if (currentMax < d.getLux()) {
-                    currentMax = d.getLux();
+        recordedBaroArray.addAll(baroSensor.recordedBaroData);
+        if (recordedBaroArray.size() != 0) {
+            for (BaroData d : recordedBaroArray) {
+                if (currentMax < d.getBaro()) {
+                    currentMax = d.getBaro();
                 }
-                if (currentMin > d.getLux()) {
-                    currentMin = d.getLux();
+                if (currentMin > d.getBaro()) {
+                    currentMin = d.getBaro();
                 }
-                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
+                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getBaro());
                 entries.add(entry);
-                lightMeter.setWithTremble(false);
-                lightMeter.setSpeedAt(d.getLux());
+                baroMeter.setWithTremble(false);
+                baroMeter.setSpeedAt(d.getBaro());
                 sum += entry.getY();
             }
             y.setAxisMaximum(currentMax);
@@ -185,9 +182,9 @@ public class LuxMeterDataFragment extends Fragment {
             y.setLabelCount(10);
             statMax.setText(String.valueOf(currentMax));
             statMin.setText(String.valueOf(currentMin));
-            statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / recordedLuxArray.size())));
+            statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / recordedBaroArray.size())));
 
-            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
             dataSet.setDrawCircles(false);
             dataSet.setDrawValues(false);
             dataSet.setLineWidth(2);
@@ -202,10 +199,10 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     private void playRecordedData() {
-        recordedLuxArray.addAll(luxSensor.recordedLuxData);
+        recordedBaroArray.addAll(baroSensor.recordedBaroData);
         try {
-            if (recordedLuxArray.size() > 1) {
-                LuxData i = recordedLuxArray.get(1);
+            if (recordedBaroArray.size() > 1) {
+                BaroData i = recordedBaroArray.get(1);
                 long timeGap = i.getTime() - i.getBlock();
                 processRecordedData(timeGap);
             } else {
@@ -230,31 +227,31 @@ public class LuxMeterDataFragment extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (luxSensor.playingData) {
+                        if (baroSensor.playingData) {
                             try {
-                                LuxData d = recordedLuxArray.get(turns);
+                                BaroData d = recordedBaroArray.get(turns);
                                 turns++;
-                                if (currentMax < d.getLux()) {
-                                    currentMax = d.getLux();
-                                    statMax.setText(String.valueOf(d.getLux()));
+                                if (currentMax < d.getBaro()) {
+                                    currentMax = d.getBaro();
+                                    statMax.setText(String.valueOf(d.getBaro()));
                                 }
-                                if (currentMin > d.getLux()) {
-                                    currentMin = d.getLux();
-                                    statMin.setText(String.valueOf(d.getLux()));
+                                if (currentMin > d.getBaro()) {
+                                    currentMin = d.getBaro();
+                                    statMin.setText(String.valueOf(d.getBaro()));
                                 }
                                 y.setAxisMaximum(currentMax);
                                 y.setAxisMinimum(currentMin);
                                 y.setLabelCount(10);
-                                lightMeter.setWithTremble(false);
-                                lightMeter.setSpeedAt(d.getLux());
+                                baroMeter.setWithTremble(false);
+                                baroMeter.setSpeedAt(d.getBaro());
 
-                                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
+                                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getBaro());
                                 entries.add(entry);
                                 count++;
                                 sum += entry.getY();
-                                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / count)));
+                                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / count)));
 
-                                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
+                                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
                                 dataSet.setDrawCircles(false);
                                 dataSet.setDrawValues(false);
                                 dataSet.setLineWidth(2);
@@ -269,9 +266,9 @@ public class LuxMeterDataFragment extends Fragment {
                                 graphTimer.cancel();
                                 graphTimer = null;
                                 turns = 0;
-                                luxSensor.playingData = false;
-                                luxSensor.startedPlay = false;
-                                luxSensor.invalidateOptionsMenu();
+                                baroSensor.playingData = false;
+                                baroSensor.startedPlay = false;
+                                baroSensor.invalidateOptionsMenu();
                             }
                         }
                     }
@@ -280,26 +277,12 @@ public class LuxMeterDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
-    public void stopData() {
-        if (graphTimer != null) {
-            graphTimer.cancel();
-            graphTimer = null;
-        }
-        recordedLuxArray.clear();
-        entries.clear();
-        plotAllRecordedData();
-        luxSensor.startedPlay = false;
-        luxSensor.playingData = false;
-        turns = 0;
-        luxSensor.invalidateOptionsMenu();
-    }
-
     public void playData() {
         resetInstrumentData();
-        luxSensor.startedPlay = true;
+        baroSensor.startedPlay = true;
         try {
-            if (recordedLuxArray.size() > 1) {
-                LuxData i = recordedLuxArray.get(1);
+            if (recordedBaroArray.size() > 1) {
+                BaroData i = recordedBaroArray.get(1);
                 long timeGap = i.getTime() - i.getBlock();
                 processRecordedData(timeGap);
             } else {
@@ -311,13 +294,26 @@ public class LuxMeterDataFragment extends Fragment {
         }
     }
 
+    public void stopData() {
+        if (graphTimer != null) {
+            graphTimer.cancel();
+            graphTimer = null;
+        }
+        recordedBaroArray.clear();
+        entries.clear();
+        plotAllRecordedData();
+        baroSensor.startedPlay = false;
+        baroSensor.playingData = false;
+        turns = 0;
+        baroSensor.invalidateOptionsMenu();
+    }
+
     public void saveGraph() {
         // Todo: Save graph view to gallery
     }
 
     private void setupInstruments() {
-        lightMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(luxSensor.LUXMETER_LIMIT, 10000));
-
+        baroMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(baroSensor.BAROMETER_LIMIT, 2));
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();
         YAxis y2 = mChart.getAxisRight();
@@ -350,6 +346,7 @@ public class LuxMeterDataFragment extends Fragment {
         y.setLabelCount(10);
 
         y2.setDrawGridLines(false);
+        y2.setMaxWidth(0);
     }
 
     @Override
@@ -359,8 +356,8 @@ public class LuxMeterDataFragment extends Fragment {
             returningFromPause = true;
             graphTimer.cancel();
             graphTimer = null;
-            if (luxSensor.playingData) {
-                luxSensor.finish();
+            if (baroSensor.playingData) {
+                baroSensor.finish();
             }
         }
     }
@@ -389,65 +386,65 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     private void writeLogToFile(long timestamp, float sensorReading) {
-        if (getActivity() != null && luxSensor.isRecording) {
-            if (luxSensor.writeHeaderToFile) {
-                luxSensor.csvLogger.prepareLogFile();
-                luxSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+        if (getActivity() != null && baroSensor.isRecording) {
+            if (baroSensor.writeHeaderToFile) {
+                baroSensor.csvLogger.prepareLogFile();
+                baroSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
                 block = timestamp;
-                luxSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, luxSensor.getSensorName()));
-                luxSensor.writeHeaderToFile = !luxSensor.writeHeaderToFile;
+                baroSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, baroSensor.getSensorName()));
+                baroSensor.writeHeaderToFile = !baroSensor.writeHeaderToFile;
             }
-            if (luxSensor.addLocation && luxSensor.gpsLogger.isGPSEnabled()) {
+            if (baroSensor.addLocation && baroSensor.gpsLogger.isGPSEnabled()) {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                Location location = luxSensor.gpsLogger.getDeviceLocation();
-                luxSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
+                Location location = baroSensor.gpsLogger.getDeviceLocation();
+                baroSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + sensorReading + "," + location.getLatitude() + "," + location.getLongitude());
-                sensorData = new LuxData(timestamp, block, luxValue, location.getLatitude(), location.getLongitude());
+                sensorData = new BaroData(timestamp, block, baroValue, location.getLatitude(), location.getLongitude());
             } else {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                luxSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
+                baroSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + sensorReading + ",0.0,0.0");
-                sensorData = new LuxData(timestamp, block, luxValue, 0.0, 0.0);
+                sensorData = new BaroData(timestamp, block, baroValue, 0.0, 0.0);
             }
-            luxSensor.recordSensorData(sensorData);
+            baroSensor.recordSensorData(sensorData);
         } else {
-            luxSensor.writeHeaderToFile = true;
+            baroSensor.writeHeaderToFile = true;
         }
     }
 
     private void visualizeData() {
-        if (currentMax < luxValue) {
-            currentMax = luxValue;
-            statMax.setText(String.valueOf(luxValue));
+        if (currentMax < baroValue) {
+            currentMax = baroValue;
+            statMax.setText(String.valueOf(baroValue));
         }
-        if (currentMin > luxValue) {
-            currentMin = luxValue;
-            statMin.setText(String.valueOf(luxValue));
+        if (currentMin > baroValue) {
+            currentMin = baroValue;
+            statMin.setText(String.valueOf(baroValue));
         }
         y.setAxisMaximum(currentMax);
         y.setAxisMinimum(currentMin);
         y.setLabelCount(10);
-        if (luxValue >= 0) {
-            lightMeter.setWithTremble(false);
-            lightMeter.setSpeedAt(luxValue);
-            if (luxValue > highLimit)
-                lightMeter.setPointerColor(Color.RED);
+        if (baroValue >= 0) {
+            baroMeter.setWithTremble(false);
+            baroMeter.setSpeedAt(baroValue);
+            if (baroValue > highLimit)
+                baroMeter.setPointerColor(Color.RED);
             else
-                lightMeter.setPointerColor(Color.WHITE);
+                baroMeter.setPointerColor(Color.WHITE);
 
             timeElapsed = ((System.currentTimeMillis() - startTime) / updatePeriod);
             if (timeElapsed != previousTimeElapsed) {
                 previousTimeElapsed = timeElapsed;
-                Entry entry = new Entry((float) timeElapsed, luxValue);
+                Entry entry = new Entry((float) timeElapsed, baroValue);
                 Long currentTime = System.currentTimeMillis();
-                writeLogToFile(currentTime, luxValue);
+                writeLogToFile(currentTime, baroValue);
                 entries.add(entry);
 
                 count++;
                 sum += entry.getY();
-                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / count)));
+                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / count)));
 
-                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
+                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
                 dataSet.setLineWidth(2);
@@ -462,59 +459,59 @@ public class LuxMeterDataFragment extends Fragment {
         }
     }
 
-    private SensorEventListener lightSensorEventListener = new SensorEventListener() {
+    private SensorEventListener baroSensorEventListener = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {/**/}
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                luxValue = event.values[0];
+            if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
+                baroValue = Float.valueOf(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, event.values[0] / 1000));
             }
         }
     };
 
     private void resetInstrumentData() {
-        luxValue = 0;
+        baroValue = 0;
         count = 0;
-        currentMin = 10000;
-        currentMax = 0;
+        currentMin = 2;
+        currentMax = 0.5f;
         sum = 0;
         sensor = null;
         if (sensorManager != null) {
-            sensorManager.unregisterListener(lightSensorEventListener);
+            sensorManager.unregisterListener(baroSensorEventListener);
         }
         startTime = System.currentTimeMillis();
         statMax.setText(getResources().getString(R.string.value_null));
         statMin.setText(getResources().getString(R.string.value_null));
         statMean.setText(getResources().getString(R.string.value_null));
-        lightMeter.setSpeedAt(0);
-        lightMeter.setWithTremble(false);
+        baroMeter.setSpeedAt(0);
+        baroMeter.setWithTremble(false);
         entries.clear();
     }
 
-    private void initiateLuxSensor(int type) {
-        LUX_SENSOR s = LUX_SENSOR.values()[type];
+    private void initiateBaroSensor(int type) {
+        BaroMeterDataFragment.BARO_SENSOR s = BaroMeterDataFragment.BARO_SENSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
             case INBUILT_SENSOR:
-                sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[0]);
+                sensorLabel.setText(getResources().getStringArray(R.array.baro_sensors)[0]);
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
-                sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+                sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
                 if (sensor == null) {
-                    Toast.makeText(getContext(), getResources().getString(R.string.no_lux_sensor), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_baro_sensor), Toast.LENGTH_LONG).show();
                 } else {
-                    float max = sensor.getMaximumRange();
-                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(luxSensor.LUXMETER_LIMIT, max).apply();
-                    lightMeter.setMaxSpeed(max);
-                    sensorManager.registerListener(lightSensorEventListener,
+                    float max = sensor.getMaximumRange() / 1000;
+                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(baroSensor.BAROMETER_LIMIT, max).apply();
+                    baroMeter.setMaxSpeed(max);
+                    sensorManager.registerListener(baroSensorEventListener,
                             sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
-            case BH1750_SENSOR:
-                sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[1]);
+            case BMP180_SENSOR:
+                sensorLabel.setText(getResources().getStringArray(R.array.baro_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {
                     ArrayList<Integer> data;
@@ -522,34 +519,9 @@ public class LuxMeterDataFragment extends Fragment {
                         I2C i2c = scienceLab.i2c;
                         data = i2c.scan(null);
                         if (data.contains(0x23)) {
-                            BH1750 sensorBH1750 = new BH1750(i2c);
-                            sensorBH1750.setRange(String.valueOf(gain));
+                            BMP180 sensorBMP180 = new BMP180(i2c, scienceLab);
+                            sensorBMP180.setOversampling(10);
                             sensorType = 0;
-                        } else {
-                            Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
-                            sensorType = 0;
-                        }
-                    } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
-                    sensorType = 0;
-                }
-
-                break;
-            case TSL2561_SENSOR:
-                sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[2]);
-                scienceLab = ScienceLabCommon.scienceLab;
-                if (scienceLab.isConnected()) {
-                    try {
-                        I2C i2c = scienceLab.i2c;
-                        ArrayList<Integer> data;
-                        data = i2c.scan(null);
-                        if (data.contains(0x39)) {
-                            TSL2561 sensorTSL2561 = new TSL2561(i2c, scienceLab);
-                            sensorTSL2561.setGain(String.valueOf(gain));
-                            sensorType = 2;
                         } else {
                             Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
                             sensorType = 0;

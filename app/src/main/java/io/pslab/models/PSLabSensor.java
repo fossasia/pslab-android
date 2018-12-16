@@ -43,6 +43,7 @@ import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
+import io.pslab.fragment.BaroMeterDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
@@ -86,6 +87,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public final String KEY_LOG = "has_log";
     public final String DATA_BLOCK = "data_block";
 
+    public static final String LUXMETER = "Lux Meter";
+    public static final String LUXMETER_DATA_FORMAT = "%.2f";
+    public static final String BAROMETER = "Barometer";
+    public static final String BAROMETER_DATA_FORMAT = "%.5f";
+
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
     @BindView(R.id.sensor_cl)
@@ -109,13 +115,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     TextView bottomSheetDesc;
     @BindView(R.id.custom_dialog_additional_content)
     LinearLayout bottomSheetAdditionalContent;
-
-    /**
-     * Getting layout file distinct to each sensor
-     *
-     * @return Layout resource file in 'R.layout.id' format
-     */
-    public abstract int getLayout();
 
     /**
      * Getting menu layout distinct to each sensor
@@ -212,7 +211,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayout());
+        setContentView(R.layout.activity_generic_sensor);
         ButterKnife.bind(this);
         setSupportActionBar(sensorToolBar);
         getSupportActionBar().setTitle(getSensorName());
@@ -252,6 +251,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         }
         menu.findItem(R.id.save_graph).setVisible(viewingData || playingData);
         menu.findItem(R.id.play_data).setVisible(viewingData || playingData);
+        menu.findItem(R.id.settings).setTitle(getSensorName() + " Configurations");
         menu.findItem(R.id.stop_data).setVisible(viewingData).setEnabled(startedPlay);
     }
 
@@ -270,7 +270,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         MenuItem play = menu.findItem(R.id.play_data);
         play.setIcon(playingData ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp);
         MenuItem stop = menu.findItem(R.id.stop_data);
-        stop.setEnabled(startedPlay);
+        stop.setVisible(startedPlay);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -309,6 +309,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     if (getSensorFragment() instanceof LuxMeterDataFragment) {
                         ((LuxMeterDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
+                    } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
+                        ((BaroMeterDataFragment) getSupportFragmentManager()
+                                .findFragmentByTag(getSensorName())).playData();
                     }
                 }
                 invalidateOptionsMenu();
@@ -316,6 +319,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
             case R.id.stop_data:
                 if (getSensorFragment() instanceof LuxMeterDataFragment) {
                     ((LuxMeterDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
+                } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
+                    ((BaroMeterDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
                 }
                 break;
@@ -342,8 +348,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 break;
             case R.id.save_graph:
+                displayLogLocationOnSnackBar();
                 if (getSensorFragment() instanceof LuxMeterDataFragment) {
                     ((LuxMeterDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).saveGraph();
+                } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
+                    ((BaroMeterDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
                 }
                 break;
@@ -571,7 +581,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getDataFromDataLogger();
+        try {
+            getDataFromDataLogger();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Toast.makeText(getApplicationContext(), getString(R.string.no_data_fetched), Toast.LENGTH_LONG).show();
+        }
         if (checkGPSOnResume) {
             isRecording = true;
             checkGPSOnResume = false;

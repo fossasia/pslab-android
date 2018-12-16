@@ -361,6 +361,15 @@
     <dimen name="lux_guage_font_size">8sp</dimen>
     <dimen name="lux_sensor_label_title_size">16sp</dimen>
 
+    <dimen name="barometer_config_text_padding">5dp</dimen>
+    <dimen name="barometer_text_padding">5dp</dimen>
+    <dimen name="tv_baro_height">10dp</dimen>
+    <dimen name="baro_card_margin_top">20dp</dimen>
+    <dimen name="baro_chart_height">200dp</dimen>
+    <dimen name="baro_display_font_size">16sp</dimen>
+    <dimen name="baro_guage_font_size">8sp</dimen>
+    <dimen name="baro_sensor_label_title_size">16sp</dimen>
+
     <dimen name="sensor_card_view_rad">5dp</dimen>
     <dimen name="item_text_size">18sp</dimen>
     <dimen name="exp_icn_padding">3dp</dimen>
