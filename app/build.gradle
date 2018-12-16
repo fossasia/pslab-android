@@ -8,8 +8,8 @@ android {
         applicationId "io.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "2.0.6"
+        versionCode 8
+        versionName "2.0.7"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
