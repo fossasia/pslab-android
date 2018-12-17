@@ -1046,6 +1046,7 @@
     <string name="dev_android_sdk">Device Android SDK</string>
 
     <string name="logged_data">Logged Data</string>
+    <string name="no_logs_to_display">There are no data logs to display</string>
     <string name="show_logged_data">Show Logged Data</string>
     <string name="time_elapsed">Time Elapsed</string>
     <string name="exp_data_saved">Experiment Logged Data Saved</string>
