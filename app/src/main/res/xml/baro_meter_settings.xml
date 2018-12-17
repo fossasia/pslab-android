@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditTextPreference
         android:defaultValue="1000"
         android:dialogMessage="Please provide time interval(in ms) at which data will be updated"
@@ -7,7 +8,8 @@
         android:inputType="numberDecimal"
         android:key="setting_baro_update_period"
         android:summary="1000 ms"
-        android:title="@string/update_period" />
+        android:title="@string/update_period"
+        app:iconSpaceReserved="false" />
 
     <EditTextPreference
         android:defaultValue="1.1"
@@ -16,18 +18,21 @@
         android:inputType="numberDecimal"
         android:key="setting_baro_high_limit"
         android:summary="1.1"
-        android:title="High Limit" />
+        android:title="High Limit"
+        app:iconSpaceReserved="false" />
 
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/baro_sensors"
         android:entryValues="@array/baro_sensor_list_values"
         android:key="setting_baro_sensor_type"
-        android:title="Active Sensor" />
+        android:title="Active Sensor"
+        app:iconSpaceReserved="false" />
 
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="include_location_sensor_data"
         android:summary="Include the location data in the logged file"
-        android:title="Include Location Data" />
+        android:title="Include Location Data"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>
