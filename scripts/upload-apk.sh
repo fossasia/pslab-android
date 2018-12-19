@@ -23,7 +23,7 @@ cd apk
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     echo "Push to master branch detected, signing the app..."
     # Retain apk files for testing
-    mv app-debug.apk app-master-debug.apk
+    mv app-debug.apk pslab-master-debug.apk
     # Generate temporary apk for signing
     cp app-release-unsigned.apk app-release-unaligned.apk
     # Sign APK
@@ -34,7 +34,7 @@ if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     ${ANDROID_HOME}/build-tools/27.0.3/zipalign -v -p 4 app-release-unaligned.apk app-release.apk
     # Rename unsigned release apk to master
     rm -f app-release-unaligned.apk
-    mv app-release-unsigned.apk app-master-release.apk
+    mv app-release-unsigned.apk pslab-master-release.apk
     # Push generated apk files to apk branch
     git checkout apk
     git add -A
@@ -45,8 +45,8 @@ fi
 if [ "$TRAVIS_BRANCH" == "$DEVELOPMENT_BRANCH" ]; then
     echo "Push to development branch detected, generating apk..."
     # Rename apks with dev prefixes
-    mv app-debug.apk app-dev-debug.apk
-    mv app-release-unsigned.apk app-dev-release.apk
+    mv app-debug.apk pslab-dev-debug.apk
+    mv app-release-unsigned.apk pslab-dev-release.apk
     # Push generated apk files to apk branch
     git checkout apk
     git add -A
