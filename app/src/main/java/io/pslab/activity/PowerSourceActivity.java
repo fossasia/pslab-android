@@ -640,7 +640,11 @@ public class PowerSourceActivity extends AppCompatActivity {
      * @return truncated float value
      */
     private float limitDigits(float number) {
-        return Float.valueOf(String.format(Locale.getDefault(), "%.2f", number));
+        try {
+            return Float.valueOf(String.format(Locale.getDefault(), "%.2f", number));
+        } catch (NumberFormatException e) {
+            return 0.00f;
+        }
     }
 
     /**
