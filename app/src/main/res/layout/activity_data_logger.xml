@@ -26,12 +26,25 @@
         android:layout_height="match_parent"
         android:layout_below="@id/top_app_bar_layout">
 
-        <TextView
+        <LinearLayout
             android:id="@+id/data_logger_blank_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/no_logs_to_display" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_wifi_tethering_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_logs_to_display" />
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
