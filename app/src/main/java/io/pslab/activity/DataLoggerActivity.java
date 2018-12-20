@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +28,8 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.data_logger_blank_view)
+    TextView blankView;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -59,14 +63,20 @@ public class DataLoggerActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(getString(R.string.logged_data));
         }
 
-        SensorLoggerListAdapter adapter = new SensorLoggerListAdapter(categoryData, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
-                this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        if (categoryData.size() > 0) {
+            blankView.setVisibility(View.GONE);
+            SensorLoggerListAdapter adapter = new SensorLoggerListAdapter(categoryData, this);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
+                    this, LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(linearLayoutManager);
 
-        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
-        recyclerView.addItemDecoration(itemDecor);
-        recyclerView.setAdapter(adapter);
+            DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
+            recyclerView.addItemDecoration(itemDecor);
+            recyclerView.setAdapter(adapter);
+        } else {
+            recyclerView.setVisibility(View.GONE);
+            blankView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

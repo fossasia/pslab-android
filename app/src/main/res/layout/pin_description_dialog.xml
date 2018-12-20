@@ -43,20 +43,13 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/pin_description_dismiss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/pin_description_dialog_margin">
-
-        <Button
-            android:id="@+id/pin_description_dismiss"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/ok"
-            android:textColor="@color/black" />
-
-    </LinearLayout>
+        android:layout_margin="@dimen/pin_description_dialog_margin"
+        android:text="@string/ok"
+        android:textColor="@color/black" />
 
 </LinearLayout>
