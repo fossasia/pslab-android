@@ -24,36 +24,50 @@ Please join us on the following channels:
 ## Screenshots
 
   <table>
+      <tr>
+       <td><img src="/docs/images/view_device_not_found.png"></td>
+       <td><img src="/docs/images/view_initialization.png"></td>
+       <td><img src="/docs/images/view_home_screen.png"></td>
+       <td><img src="/docs/images/view_instrument_panel.png"></td>
+      </tr>
+  </table>
+  <table>
+      <tr>
+       <td><img src="/docs/images/instrument_oscilloscope_guide.png"></td>
+       <td><img src="/docs/images/instrument_logic_analyzer_guide.png"></td>
+      </tr>
+    </table>
+  <table>
     <tr>
-     <td><img src="/docs/images/view_home_screen.png"></td>
+     <td><img src="/docs/images/view_about_us.png"></td>
      <td><img src="/docs/images/view_navigation_drawer.png"></td>
-     <td><img src="/docs/images/view_instruement_panel.png"></td>
      <td><img src="/docs/images/view_pin_layout.png"></td>
+     <td><img src="/docs/images/view_pin_detail_dialog.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/images/screenshot_3.png"></td>
-     <td><img src="/docs/images/screenshot_audio_jack.png"></td>
+     <td><img src="/docs/images/instrument_oscilloscope_channelparam.png"></td>
+     <td><img src="/docs/images/instrument_oscilloscope_audiojack.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/images/wave_generator_view.png"></td>
-     <td><img src="/docs/images/view_logic_analyzer.png"></td>
+     <td><img src="/docs/images/instrument_wavegenerator_view.png"></td>
+     <td><img src="/docs/images/instrument_logic_analyzer_view.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/images/view_power_source.png"></td>
-     <td><img src="/docs/images/view_guide_box.png"></td>
-     <td><img src="/docs/images/view_lux_meter.png"></td>
+     <td><img src="/docs/images/instrument_power_source_view.png"></td>
+     <td><img src="/docs/images/instrument_luxmeter_guide.png"></td>
+     <td><img src="/docs/images/instrument_multimeter_view.png"></td>
     </tr>
   </table>
   <table>
     <tr>
+     <td><img src="/docs/images/instrument_barometer_view.png"></td>
      <td><img src="/docs/images/view_log_map_location.png"></td>
-     <td><img src="/docs/images/view_barometer.png"></td>
      <td><img src="/docs/images/view_data_logger.png"></td>
     </tr>
   </table>
