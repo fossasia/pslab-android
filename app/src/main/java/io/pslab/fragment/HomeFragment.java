@@ -101,7 +101,7 @@ public class HomeFragment extends Fragment {
         deviceDescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                webView.loadUrl("https://pslab.fossasia.org");
+                webView.loadUrl("https://pslab.io");
                 svHomeContent.setVisibility(View.GONE);
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
