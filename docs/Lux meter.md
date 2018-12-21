@@ -19,14 +19,14 @@ The layout of the oscilloscope graphical user interface contains two main parts.
 
 <table>
     <tr>
-        <td><img src="/docs/images/lux_meter_dialog_box.png"></td>
-        <td><img src="/docs/images/lux_meter_data_1.png"></td>
+        <td><img src="/docs/images/instrument_luxmeter_guide.png"></td>
+        <td><img src="/docs/images/instrument_luxmeter_view.png"></td>
     </tr>
 </table>
 <table>
     <tr>
-        <td><img src="/docs/images/lux_meter_data_2.png"></td>
-        <td><img src="/docs/images/lux_meter_configure.png"></td>
+        <td><img src="/docs/images/instrument_luxmeter_config.png"></td>
+        <td><img src="/docs/images/view_datalogger_play.png"></td>
     </tr>
 </table>
 
