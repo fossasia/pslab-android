@@ -8,6 +8,7 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,10 +18,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import io.pslab.R;
 import io.pslab.items.PinDetails;
-
-import java.util.ArrayList;
 
 /**
  * Created by Padmal on 5/22/18.
@@ -32,6 +33,8 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
 
     private Matrix matrix = new Matrix();
     private Matrix savedMatrix = new Matrix();
+
+    public static boolean frontSide = true;
 
     private static final int NONE = 0;
     private static final int DRAG = 1;
@@ -52,9 +55,12 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pin_layout, container, false);
-
         ImageView imgLayout = view.findViewById(R.id.img_pslab_pin_layout);
-        colorMap = view.findViewById(R.id.img_pslab_pin_layout2);
+        colorMap = view.findViewById(R.id.img_pslab_color_map);
+        imgLayout.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
+                frontSide ? R.drawable.pslab_v5_front_layout : R.drawable.pslab_v5_back_layout, null));
+        colorMap.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
+                frontSide ? R.drawable.pslab_v5_front_colormap : R.drawable.pslab_v5_back_colormap, null));
         imgLayout.setOnTouchListener(this);
         populatePinDetails();
 
@@ -72,20 +78,20 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
         pinDetails.add(new PinDetails("SQ2", "PWM generator pin 2", Color.parseColor("#406743"), Color.parseColor("#22ba6d")));
         pinDetails.add(new PinDetails("SQ3", "PWM generator pin 3", Color.parseColor("#406743"), Color.parseColor("#aa44aa")));
         pinDetails.add(new PinDetails("SQ4", "PWM generator pin 4", Color.parseColor("#406743"), Color.parseColor("#d28080")));
-        pinDetails.add(new PinDetails("ID1", "Logic analyzer pin 1", Color.parseColor("#406743"), Color.parseColor("#e7a41a")));
-        pinDetails.add(new PinDetails("ID2", "Logic analyzer pin 2", Color.parseColor("#406743"), Color.parseColor("#e7a4ff")));
-        pinDetails.add(new PinDetails("ID3", "Logic analyzer pin 3", Color.parseColor("#406743"), Color.parseColor("#ad2d00")));
-        pinDetails.add(new PinDetails("ID4", "Logic analyzer pin 4", Color.parseColor("#406743"), Color.parseColor("#0053ad")));
+        pinDetails.add(new PinDetails("LA1", "Logic analyzer pin 1", Color.parseColor("#406743"), Color.parseColor("#e7a41a")));
+        pinDetails.add(new PinDetails("LA2", "Logic analyzer pin 2", Color.parseColor("#406743"), Color.parseColor("#e7a4ff")));
+        pinDetails.add(new PinDetails("LA3", "Logic analyzer pin 3", Color.parseColor("#406743"), Color.parseColor("#ad2d00")));
+        pinDetails.add(new PinDetails("LA4", "Logic analyzer pin 4", Color.parseColor("#406743"), Color.parseColor("#0053ad")));
         pinDetails.add(new PinDetails("AC1", "Alternative channel input", Color.parseColor("#ffe040"), Color.parseColor("#b01498")));
         pinDetails.add(new PinDetails("CH1", "Oscilloscope channel input 1", Color.parseColor("#ffe040"), Color.parseColor("#0b4189")));
         pinDetails.add(new PinDetails("CH2", "Oscilloscope channel input 2", Color.parseColor("#ffe040"), Color.parseColor("#410b89")));
         pinDetails.add(new PinDetails("CH3", "Oscilloscope channel input 3", Color.parseColor("#ffe040"), Color.parseColor("#41890b")));
-        pinDetails.add(new PinDetails("CHG", "Oscilloscope channel input 4", Color.parseColor("#ffe040"), Color.parseColor("#89410b")));
+        pinDetails.add(new PinDetails("CHG", "Oscilloscope channel 3 gain set", Color.parseColor("#ffe040"), Color.parseColor("#89410b")));
         pinDetails.add(new PinDetails("MIC", "External microphone input", Color.parseColor("#7d5840"), Color.parseColor("#890b41")));
-        pinDetails.add(new PinDetails("FCi", "Frequency counter pin", Color.parseColor("#7d5840"), Color.parseColor("#ff0b41")));
+        pinDetails.add(new PinDetails("FRQ", "Frequency counter pin", Color.parseColor("#7d5840"), Color.parseColor("#ff0b41")));
         pinDetails.add(new PinDetails("CAP", "Capacitance measurement pin", Color.parseColor("#7d5840"), Color.parseColor("#ff410b")));
-        pinDetails.add(new PinDetails("SEN", "Resistance measurement pin", Color.parseColor("#7d5840"), Color.parseColor("#41ff0b")));
-        pinDetails.add(new PinDetails("AN8", "Voltage measurement pin", Color.parseColor("#7d5840"), Color.parseColor("#410bff")));
+        pinDetails.add(new PinDetails("RES", "Resistance measurement pin", Color.parseColor("#7d5840"), Color.parseColor("#41ff0b")));
+        pinDetails.add(new PinDetails("VOL", "Voltage measurement pin", Color.parseColor("#7d5840"), Color.parseColor("#410bff")));
         pinDetails.add(new PinDetails("PCS", "Programmable current source (3.3 mA)", Color.parseColor("#c3007c"), Color.parseColor("#3fa96f")));
         pinDetails.add(new PinDetails("PV3", "Programmable voltage source 3 (0-3.3 V)", Color.parseColor("#c3007c"), Color.parseColor("#a93f6f")));
         pinDetails.add(new PinDetails("PV2", "Programmable voltage source 2 (-+3.3 V)", Color.parseColor("#c3007c"), Color.parseColor("#a96f3f")));
@@ -93,17 +99,20 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
         pinDetails.add(new PinDetails("SCL", "Serial clock pin for I2C", Color.parseColor("#4372a2"), Color.parseColor("#6e4472")));
         pinDetails.add(new PinDetails("SDA", "Serial data pin for I2C", Color.parseColor("#4372a2"), Color.parseColor("#6e7244")));
         pinDetails.add(new PinDetails("VDD", "Voltage supply pin (3.3 V)", Color.parseColor("#ff4040"), Color.parseColor("#d25c3c")));
-        pinDetails.add(new PinDetails("VR+", "Voltage test pin (+6.8 V)", Color.parseColor("#ff4040"), Color.parseColor("#5c5c3c")));
-        pinDetails.add(new PinDetails("V+", "Voltage test pin (+10.0 V)", Color.parseColor("#ff4040"), Color.parseColor("#5cd23c")));
-        pinDetails.add(new PinDetails("VR-", "Voltage test pin (-6.8 V)", Color.parseColor("#ff4040"), Color.parseColor("#5c143c")));
-        pinDetails.add(new PinDetails("V-", "Voltage test pin (-10.0 V)", Color.parseColor("#ff4040"), Color.parseColor("#5c3c14")));
+        pinDetails.add(new PinDetails("STA", "Bluetooth device state output pin", Color.parseColor("#4372a2"), Color.parseColor("#5c5c3c")));
+        pinDetails.add(new PinDetails("V+", "Voltage test pin (+8.0 V)", Color.parseColor("#ff4040"), Color.parseColor("#5cd23c")));
+        pinDetails.add(new PinDetails("ENA", "Bluetooth device enable/disable pin", Color.parseColor("#4372a2"), Color.parseColor("#5c143c")));
+        pinDetails.add(new PinDetails("V-", "Voltage test pin (-8.0 V)", Color.parseColor("#ff4040"), Color.parseColor("#5c3c14")));
         pinDetails.add(new PinDetails("MCL", "Master clear pin for programmer", Color.parseColor("#4372a2"), Color.parseColor("#143c14")));
-        pinDetails.add(new PinDetails("R41", "Test pin for programmer", Color.parseColor("#7d5840"), Color.parseColor("#b73cf1")));
+        pinDetails.add(new PinDetails("PGM", "Mode pin for programmer", Color.parseColor("#4372a2"), Color.parseColor("#b73cf1")));
         pinDetails.add(new PinDetails("PGC", "Clock pin for programmer", Color.parseColor("#4372a2"), Color.parseColor("#fff724")));
         pinDetails.add(new PinDetails("PGD", "Data pin for programmer", Color.parseColor("#4372a2"), Color.parseColor("#724fff")));
         pinDetails.add(new PinDetails("NRF", "Radio communication module using nRF24", Color.parseColor("#6b40a9"), Color.parseColor("#ffa64f")));
         pinDetails.add(new PinDetails("USB", "Micro B type USB socket", Color.parseColor("#6b40a9"), Color.parseColor("#ff2b4f")));
-        pinDetails.add(new PinDetails("SI1 Knob", "Amplitude controller for SI1 waves", Color.parseColor("#6b40a9"), Color.parseColor("#6b6500")));
+        pinDetails.add(new PinDetails("VCC", "Voltage supply pin (+5.0 V)", Color.parseColor("#ff4040"), Color.parseColor("#6b6500")));
+        pinDetails.add(new PinDetails("+5V", "Test pin +5.0 V", Color.parseColor("#ff4040"), Color.parseColor("#765f40")));
+        pinDetails.add(new PinDetails("D+", "Test pin for USB Data +", Color.parseColor("#6b40a9"), Color.parseColor("#681654")));
+        pinDetails.add(new PinDetails("D-", "Test pin for USB Data -", Color.parseColor("#6b40a9"), Color.parseColor("#a68b47")));
     }
 
     @SuppressLint("ClickableViewAccessibility")

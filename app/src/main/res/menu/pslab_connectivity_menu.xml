@@ -12,10 +12,13 @@
         android:title="@string/text_disconnected"
         app:showAsAction="ifRoom|withText"/>
     <item
-        android:id="@+id/menu_pslab_layout"
-        android:icon="@drawable/ic_pslab_pin_layout"
-        android:title="@string/pslab_pinlayout"
-        app:showAsAction="ifRoom"/>
+        android:id="@+id/menu_pslab_layout_front"
+        android:title="@string/pslab_pinlayout_front"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_pslab_layout_back"
+        android:title="@string/pslab_pinlayout_back"
+        app:showAsAction="never"/>
 
 </menu>
 
