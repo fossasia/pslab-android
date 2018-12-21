@@ -31,7 +31,7 @@ if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     # Remove previous release-apk file
     \rm -f app-release.apk
     # Generate new release-apk file
-    ${ANDROID_HOME}/build-tools/27.0.3/zipalign -v -p 4 app-release-unaligned.apk app-release.apk
+    ${ANDROID_HOME}/build-tools/28.0.3/zipalign -v -p 4 app-release-unaligned.apk app-release.apk
     # Rename unsigned release apk to master
     rm -f app-release-unaligned.apk
     mv app-release-unsigned.apk pslab-master-release.apk
