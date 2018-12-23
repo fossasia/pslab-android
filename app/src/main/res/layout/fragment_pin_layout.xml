@@ -10,15 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
-        android:src="@drawable/pslab_v4_layout"
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/img_pslab_pin_layout2"
+        android:id="@+id/img_pslab_color_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
-        android:src="@drawable/pslab_v4_colormap"
         android:visibility="invisible"
         tools:ignore="ContentDescription" />
 

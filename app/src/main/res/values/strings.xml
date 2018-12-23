@@ -15,6 +15,8 @@
     <string name="nav_help_feedback">FAQs</string>
 
     <string name="pslab_pinlayout">Pin Layout</string>
+    <string name="pslab_pinlayout_front">Pin Layout Front</string>
+    <string name="pslab_pinlayout_back">Pin Layout Back</string>
 
     <string name="oscilloscope">Oscilloscope</string>
     <string name="multimeter">Multimeter</string>
