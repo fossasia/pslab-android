@@ -41,8 +41,8 @@ Please join us on the following channels:
     <tr>
      <td><img src="/docs/images/view_about_us.png"></td>
      <td><img src="/docs/images/view_navigation_drawer.png"></td>
-     <td><img src="/docs/images/view_pin_layout.png"></td>
-     <td><img src="/docs/images/view_pin_detail_dialog.png"></td>
+     <td><img src="/docs/images/view_pin_layout_front.png"></td>
+     <td><img src="/docs/images/view_pin_layout_back.png"></td>
     </tr>
   </table>
   <table>
