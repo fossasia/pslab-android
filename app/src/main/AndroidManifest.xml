@@ -46,9 +46,6 @@
         <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.ShowLoggedData" />
         <activity
-            android:name=".activity.PerformExperimentActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity
             android:name=".activity.ControlActivity"
             android:configChanges="orientation|screenSize" />
         <activity
@@ -78,7 +75,8 @@
         <activity android:name=".activity.DataLoggerActivity" />
         <activity
             android:name=".activity.BarometerActivity"
-            android:configChanges="keyboardHidden|screenSize|orientation" />
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.CompassActivity"
             android:screenOrientation="portrait" />
