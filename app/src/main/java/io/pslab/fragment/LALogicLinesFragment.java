@@ -65,6 +65,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class LALogicLinesFragment extends Fragment {
 
+    public static final String PREFS_NAME = "LogicAnalyzerPreference";
+
     private static final int EVERY_EDGE = 1;
     private static final int DISABLED = 0;
     private static final int EVERY_FOURTH_RISING_EDGE = 4;
@@ -75,7 +77,19 @@ public class LALogicLinesFragment extends Fragment {
     List<Entry> tempInput;
     DigitalChannel digitalChannel;
     ArrayList<DigitalChannel> digitalChannelArray;
+    BottomSheetBehavior bottomSheetBehavior;
+    GestureDetector gestureDetector;
     List<ILineDataSet> dataSets;
+
+    //Bottom Sheet
+    private LinearLayout bottomSheet;
+    private View tvShadow;
+    private ImageView arrowUpDown;
+    private TextView bottomSheetSlideText;
+    private TextView bottomSheetGuideTitle;
+    private TextView bottomSheetText;
+    private ImageView bottomSheetSchematic;
+    private TextView bottomSheetDesc;
 
     // Graph Plot
     private CarouselPicker carouselPicker;
@@ -147,7 +161,7 @@ public class LALogicLinesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
+        View v = inflater.inflate(R.layout.logic_analyzer_main_layout, container, false);
 
         // LED Indicator
         ledImageView = v.findViewById(R.id.imageView_led_la);
@@ -184,9 +198,38 @@ public class LALogicLinesFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
         ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
 
+        // Bottom Sheet guide
+        bottomSheet = v.findViewById(R.id.bottom_sheet);
+        tvShadow = v.findViewById(R.id.shadow);
+        arrowUpDown = v.findViewById(R.id.img_arrow);
+        bottomSheetSlideText = v.findViewById(R.id.sheet_slide_text);
+        bottomSheetGuideTitle = v.findViewById(R.id.guide_title);
+        bottomSheetText = v.findViewById(R.id.custom_dialog_text);
+        bottomSheetSchematic = v.findViewById(R.id.custom_dialog_schematic);
+        bottomSheetDesc = v.findViewById(R.id.custom_dialog_desc);
+
         // Declaring digital data set
         digitalChannelArray = new ArrayList<>();
         dataSets = new ArrayList<>();
+
+        // Inflating bottom sheet dialog on how to use Logic Analyzer
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        setUpBottomSheet();
+        tvShadow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                tvShadow.setVisibility(View.GONE);
+            }
+        });
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
 
         // Creating base layout for chart
         logicLinesChart = v.findViewById(R.id.chart_la);
@@ -751,6 +794,72 @@ public class LALogicLinesFragment extends Fragment {
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
             ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         super.onStop();
+    }
+
+    /**
+     * Sets the bottom sheet for Logic Analyzer on how to use the instrument
+     */
+
+    private void setUpBottomSheet() {
+        gestureDetector = new GestureDetector(getContext(), new SwipeGestureDetector(bottomSheetBehavior));
+
+        final SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        Boolean isFirstTime = settings.getBoolean("LogicAnalyzerFirstTime", true);
+
+        bottomSheetGuideTitle.setText(R.string.logical_analyzer);
+        bottomSheetText.setText(R.string.logic_analyzer_dialog_text);
+        bottomSheetSchematic.setImageResource(R.drawable.logic_analyzer_circuit);
+        bottomSheetDesc.setText(R.string.logic_analyzer_dialog_description);
+
+        if (isFirstTime) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            tvShadow.setVisibility(View.VISIBLE);
+            tvShadow.setAlpha(0.8f);
+            arrowUpDown.setRotation(180);
+            bottomSheetSlideText.setText(R.string.hide_guide_text);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("LogicAnalyzerFirstTime", false);
+            editor.apply();
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            private Handler handler = new Handler();
+            private Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            };
+
+            @Override
+            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.hide_guide_text);
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        handler.postDelayed(runnable, 2000);
+                        break;
+
+                    default:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.show_guide_text);
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                tvShadow.setVisibility(View.VISIBLE);
+                tvShadow.setAlpha(value);
+                arrowUpDown.setRotation(slideOffset * 180);
+            }
+        });
     }
 
     /**

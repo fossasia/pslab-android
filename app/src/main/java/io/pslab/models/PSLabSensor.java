@@ -5,19 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,8 +30,6 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -43,7 +39,6 @@ import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
-import io.pslab.fragment.BaroMeterDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
@@ -67,8 +62,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public boolean checkGPSOnResume = false;
     public boolean writeHeaderToFile = true;
     public boolean playingData = false;
-    public boolean viewingData = false;
-    public boolean startedPlay = false;
 
     public CoordinatorLayout sensorParentView;
     public BottomSheetBehavior bottomSheetBehavior;
@@ -83,14 +76,10 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public Realm realm;
     private Intent map;
 
+    public SimpleDateFormat dateFormat;
     public SimpleDateFormat titleFormat;
     public final String KEY_LOG = "has_log";
     public final String DATA_BLOCK = "data_block";
-
-    public static final String LUXMETER = "Lux Meter";
-    public static final String LUXMETER_DATA_FORMAT = "%.2f";
-    public static final String BAROMETER = "Barometer";
-    public static final String BAROMETER_DATA_FORMAT = "%.5f";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -115,6 +104,13 @@ public abstract class PSLabSensor extends AppCompatActivity {
     TextView bottomSheetDesc;
     @BindView(R.id.custom_dialog_additional_content)
     LinearLayout bottomSheetAdditionalContent;
+
+    /**
+     * Getting layout file distinct to each sensor
+     *
+     * @return Layout resource file in 'R.layout.id' format
+     */
+    public abstract int getLayout();
 
     /**
      * Getting menu layout distinct to each sensor
@@ -211,7 +207,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generic_sensor);
+        setContentView(getLayout());
         ButterKnife.bind(this);
         setSupportActionBar(sensorToolBar);
         getSupportActionBar().setTitle(getSensorName());
@@ -222,6 +218,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         map = new Intent(this, MapsActivity.class);
         csvLogger = new CSVLogger(getSensorName());
         realm = LocalDataLog.with().getRealm();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.getDefault());
         titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         sensorParentView = coordinatorLayout;
         setUpBottomSheet();
@@ -244,15 +241,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
     }
 
     private void setUpMenu(Menu menu) {
-        if (playingData || viewingData) {
+        if (playingData) {
             for (int i = 0; i < menu.size(); i++) {
                 menu.getItem(i).setVisible(false);
             }
         }
-        menu.findItem(R.id.save_graph).setVisible(viewingData || playingData);
-        menu.findItem(R.id.play_data).setVisible(viewingData || playingData);
-        menu.findItem(R.id.settings).setTitle(getSensorName() + " Configurations");
-        menu.findItem(R.id.stop_data).setVisible(viewingData).setEnabled(startedPlay);
+        menu.findItem(R.id.save_graph).setVisible(playingData);
     }
 
     @Override
@@ -267,10 +261,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem record = menu.findItem(R.id.record_data);
         record.setIcon(isRecording ? R.drawable.ic_record_stop_white : R.drawable.ic_record_white);
-        MenuItem play = menu.findItem(R.id.play_data);
-        play.setIcon(playingData ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp);
-        MenuItem stop = menu.findItem(R.id.stop_data);
-        stop.setVisible(startedPlay);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -297,33 +287,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     dataRecordingCycle();
                 } else {
                     stopRecordSensorData();
-                    displayLogLocationOnSnackBar();
+                    CustomSnackBar.showSnackBar(sensorParentView,
+                            getString(R.string.data_recording_stopped), null, null);
                     isRecording = false;
                     prepareMarkers();
                 }
                 invalidateOptionsMenu();
-                break;
-            case R.id.play_data:
-                playingData = !playingData;
-                if (!startedPlay) {
-                    if (getSensorFragment() instanceof LuxMeterDataFragment) {
-                        ((LuxMeterDataFragment) getSupportFragmentManager()
-                                .findFragmentByTag(getSensorName())).playData();
-                    } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
-                        ((BaroMeterDataFragment) getSupportFragmentManager()
-                                .findFragmentByTag(getSensorName())).playData();
-                    }
-                }
-                invalidateOptionsMenu();
-                break;
-            case R.id.stop_data:
-                if (getSensorFragment() instanceof LuxMeterDataFragment) {
-                    ((LuxMeterDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).stopData();
-                } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
-                    ((BaroMeterDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).stopData();
-                }
                 break;
             case R.id.show_map:
                 if (psLabPermission.checkPermissions(PSLabSensor.this,
@@ -348,12 +317,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 break;
             case R.id.save_graph:
-                displayLogLocationOnSnackBar();
                 if (getSensorFragment() instanceof LuxMeterDataFragment) {
                     ((LuxMeterDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
-                    ((BaroMeterDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
                 }
                 break;
@@ -364,6 +329,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     }
 
     private void dataRecordingCycle() {
+        Log.i("kunalvisualise","DataRecordingCycle");
         if (psLabPermission.checkPermissions(PSLabSensor.this, PSLabPermission.LOG_PERMISSION)) {
             if (locationEnabled) {
                 if (psLabPermission.checkPermissions(PSLabSensor.this, PSLabPermission.GPS_PERMISSION)) {
@@ -371,52 +337,29 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 }
             } else {
                 CustomSnackBar.showSnackBar(sensorParentView,
-                        getString(R.string.data_recording_without_location), null, null, Snackbar.LENGTH_LONG);
+                        getString(R.string.data_recording_without_location), null, null);
                 isRecording = true;
             }
         }
     }
 
     private void gpsRecordingCycle() {
+        Log.i("kunalvisualise","gpsRecordingCycle");
         addLocation = true;
         gpsLogger.startCaptureLocation();
         if (gpsLogger.isGPSEnabled()) {
             CustomSnackBar.showSnackBar(sensorParentView,
-                    getString(R.string.data_recording_with_location), null, null, Snackbar.LENGTH_LONG);
+                    getString(R.string.data_recording_with_location), null, null);
             isRecording = true;
         } else {
             gpsLogger.gpsAlert.show();
         }
     }
 
-    public void displayLogLocationOnSnackBar() {
-        final File logDirectory = new File(
-                Environment.getExternalStorageDirectory().getAbsolutePath() +
-                        File.separator + CSVLogger.CSV_DIRECTORY + File.separator + getSensorName());
-        String logLocation;
-        try {
-            logLocation = getString(R.string.log_saved_directory) + logDirectory.getCanonicalPath();
-        } catch (IOException e) {
-            // This message wouldn't appear in usual cases. Added in order to handle ex:
-            logLocation = getString(R.string.log_saved_failed);
-        }
-        CustomSnackBar.showSnackBar(sensorParentView, logLocation, getString(R.string.open),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Uri selectedUri = Uri.parse(logDirectory.getAbsolutePath());
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(selectedUri, "resource/folder");
-                        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
-                            startActivity(intent);
-                        }
-                    }
-                }, Snackbar.LENGTH_INDEFINITE);
-    }
-
     private void nogpsRecordingCycle() {
+        Log.i("kunalvisualise","nogpsRecordingCycle");
         CustomSnackBar.showSnackBar(sensorParentView,
-                getString(R.string.data_recording_without_location), null, null, Snackbar.LENGTH_LONG);
+                getString(R.string.data_recording_without_location), null, null);
         addLocation = false;
         isRecording = true;
     }
@@ -472,6 +415,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
      * Configure the sensor guide with content and settings
      */
     private void setUpBottomSheet() {
+        Log.i("kunalvisualise","setUpBottomSheet");
         setupGuideLayout();
         handleFirstTimeUsage();
         handleBottomSheetBehavior();
@@ -581,11 +525,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            getDataFromDataLogger();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_data_fetched), Toast.LENGTH_LONG).show();
-        }
+        getDataFromDataLogger();
         if (checkGPSOnResume) {
             isRecording = true;
             checkGPSOnResume = false;

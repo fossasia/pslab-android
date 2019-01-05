@@ -22,14 +22,14 @@ The layout of the oscilloscope graphical user interface contains three main part
 
 <table>
     <tr>
-        <td><img src="/docs/images/instrument_oscilloscope_channelparam.png"></td>
-        <td><img src="/docs/images/instrument_oscilloscope_dataanalysis.png"></td>
+        <td><img src="/docs/images/oscilloscope_channel_params.png"></td>
+        <td><img src="/docs/images/oscilloscope_data_analysis.png"></td>
     </tr>
 </table>
 <table>
     <tr>
-        <td><img src="/docs/images/instrument_oscilloscope_timebase.png"></td>
-        <td><img src="/docs/images/instrument_oscilloscope_xyplot.png"></td>
+        <td><img src="/docs/images/oscilloscope_timebase_and_trigger.png"></td>
+        <td><img src="/docs/images/oscilloscope_xy_plot.png"></td>
     </tr>
 </table>
 

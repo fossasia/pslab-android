@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/record_data"
+        android:icon="@drawable/ic_record_white"
+        android:title="@string/record_csv_data"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/show_guide"
+        android:title="@string/show_guide"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/show_logged_data"
+        android:title="@string/show_logged_data"
+        app:showAsAction="never" />
+    <!--<item
+        android:id="@+id/show_map"
+        android:icon="@drawable/menu_icon_map"
+        android:title="@string/view_map"
+        app:showAsAction="never" />-->
+    <item
+        android:id="@+id/settings"
+        android:title="@string/accelerometer_configurations"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/save_graph"
+        android:title="@string/save_graph"
+        android:icon="@drawable/menu_icon_save"
+        app:showAsAction="ifRoom" />
+</menu>

@@ -6,9 +6,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,14 +27,13 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.data_logger_blank_view)
-    TextView blankView;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("kunalvisualise","DataLoggerActivity- onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_logger);
         ButterKnife.bind(this);
@@ -52,31 +50,26 @@ public class DataLoggerActivity extends AppCompatActivity {
         switch (caller) {
             case "Lux Meter":
                 getSupportActionBar().setTitle(caller);
-                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.lux_meter));
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks("Lux Meter");
                 break;
-            case "Baro Meter":
+            case "Accelerometer":
                 getSupportActionBar().setTitle(caller);
-                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.baro_meter));
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks("Accelerometer");
                 break;
             default:
-                categoryData = LocalDataLog.with().getAllSensorBlocks();
+                // TODO: Fetch all
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks("Lux Meter");
                 getSupportActionBar().setTitle(getString(R.string.logged_data));
         }
 
-        if (categoryData.size() > 0) {
-            blankView.setVisibility(View.GONE);
-            SensorLoggerListAdapter adapter = new SensorLoggerListAdapter(categoryData, this);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
-                    this, LinearLayoutManager.VERTICAL, false);
-            recyclerView.setLayoutManager(linearLayoutManager);
+        SensorLoggerListAdapter adapter = new SensorLoggerListAdapter(categoryData, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
+                this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-            DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
-            recyclerView.addItemDecoration(itemDecor);
-            recyclerView.setAdapter(adapter);
-        } else {
-            recyclerView.setVisibility(View.GONE);
-            blankView.setVisibility(View.VISIBLE);
-        }
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
+        recyclerView.addItemDecoration(itemDecor);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

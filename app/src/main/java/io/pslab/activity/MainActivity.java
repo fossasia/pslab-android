@@ -358,14 +358,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_pslab_disconnected:
                 attemptToConnectPSLab();
                 break;
-            case R.id.menu_pslab_layout_front:
-                PSLabPinLayoutFragment.frontSide = true;
+            case R.id.menu_pslab_layout:
                 displayPSLabPinLayout();
-                break;
-            case R.id.menu_pslab_layout_back:
-                PSLabPinLayoutFragment.frontSide = false;
-                displayPSLabPinLayout();
-                break;
             default:
                 break;
         }

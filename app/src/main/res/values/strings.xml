@@ -15,8 +15,6 @@
     <string name="nav_help_feedback">FAQs</string>
 
     <string name="pslab_pinlayout">Pin Layout</string>
-    <string name="pslab_pinlayout_front">Pin Layout Front</string>
-    <string name="pslab_pinlayout_back">Pin Layout Back</string>
 
     <string name="oscilloscope">Oscilloscope</string>
     <string name="multimeter">Multimeter</string>
@@ -150,6 +148,7 @@
     <string name="meters_per_sec_text">ms&lt;sup&gt;&lt;small&gt;-2&lt;/small&gt;&lt;/sup&gt;</string>
     <string name="meters_per_sec_html">ms<sup><small>-2</small></sup></string>
     <string name="time_seconds">Time (s)</string>
+    <string name="no_accelerometer_sensor">No Accelerometer sensor in the device</string>
     <string name="accelerometer_intro">Accelerometer is used to measure acceleration of a body along the X, Y and Z axis.\n</string>
     <string name="accelerometer_description_text">\n\nThe figure above shows the direction of all the three axis when the mobile is held straight.\n\nSteps to measure acceleration in PSLab app:\n\n\u2022 Hold the device as shown in the above figure.\n\n\u2022 Accelerate the device along any one or multiple axis.\n\n\u2022 Observe the values in the cards or the plotted graph of any particular axis.\n\nThe Accelerometer instrument can also be used to measure the acceleration of a moving body by placing the device on/inside the body and then accelerating the body.\n\nNOTE: Don\'t accelerate the body if the device isn\'t properly attached else the device could be damaged. </string>
     <string name="accelerometer_configurations">Accelerometer Configurations</string>
@@ -529,7 +528,6 @@
     <string name="data_logger">Data Logger</string>
     <string name="start_logging">Start Logging</string>
     <string name="stop_logging">Stop Logging</string>
-    <string name="stop">Stop</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="save_data">Save Data</string>
@@ -918,6 +916,17 @@
     <string name="ir_thermometer_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. You can use any of the PSLab device GND pins.\n</string>
 
+    <string name="barometer">Barometer</string>
+    <string name="barometer_alert_title">No barometer sensor in device</string>
+    <string name="barometer_alert_description">Connect a BMP180 sensor using I2C pins on PSLab to use this instrument</string>
+    <string name="barometer_description">Measures the atmospheric pressure</string>
+    <string name="barometer_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
+    is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n
+    \u2022 If you want to use the sensor BMP-180, connect the sensor to PSLab device as shown in the figure.</string>
+    <string name="barometer_desc">\u2022 The above pin configuration has to be same except for the pin
+    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
+    \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
+
     <string name="navigation_lux_meter_data">Data Plot</string>
     <string name="navigation_lux_meter_configure">Configure</string>
     <string name="high_limit">High Limit</string>
@@ -966,15 +975,12 @@
     <string name="data_recording_paused">Data Recording: Paused</string>
     <string name="data_deleted">Recorded data deleted successfully</string>
     <string name="nothing_to_delete">Nothing to delete</string>
-    <string name="log_deleted">Log deleted</string>
     <string name="nothing_to_export">Please record some data</string>
     <string name="csv_store_text">CSV file stored at </string>
 
     <string name="delete_warning">Are you sure you want to delete this file?</string>
     <string name="delete_file">Delete File</string>
     <string name="delete_capital">DELETE</string>
-    <string name="delete">Delete</string>
-    <string name="delete_confirmation">Are you sure you want to delete this log</string>
 
     <string name="gps_not_enabled">GPS not enabled</string>
     <string name="allow_gps">Allow GPS</string>
@@ -1048,49 +1054,23 @@
     <string name="dev_android_sdk">Device Android SDK</string>
 
     <string name="logged_data">Logged Data</string>
-    <string name="no_logs_to_display">There are no data logs to display</string>
     <string name="show_logged_data">Show Logged Data</string>
     <string name="time_elapsed">Time Elapsed</string>
     <string name="exp_data_saved">Experiment Logged Data Saved</string>
 
-    <string name="no_baro_sensor">Device does not have a barometer</string>
-
-    <string-array name="baro_sensors">
-        <item>Built-In</item>
-        <item>BMP180</item>
-    </string-array>
-    <string-array name="baro_sensor_list_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
-    <string name="baro_meter">Barometer</string>
-    <string name="baro_unit">atm</string>
-    <string name="avg_baro">Avg (atm)</string>
-    <string name="min_baro">Min (atm)</string>
-    <string name="max_baro">Max (atm)</string>
-    <string name="baro_meter_alert_description">Connect a BMP180 sensor using I2C pins on PSLab to use this instrument</string>
-    <string name="baro_meter_description">Measures the atmospheric pressure</string>
-    <string name="baro_meter_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
-    is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n
-    \u2022 If you want to use the sensor BMP-180, connect the sensor to PSLab device as shown in the figure.</string>
-    <string name="baro_meter_desc">\u2022 The above pin configuration has to be same except for the pin
-    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
-    \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
-
     <string name="lux_meter">Lux Meter</string>
-    <string name="log_saved_directory">Log saved in\n</string>
-    <string name="log_saved_failed">Could not save the log. Please check storage permission.</string>
-    <string name="open">Open</string>
-    <string name="play">Play</string>
     <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
     is compatible with either the built in light sensor on any android device or the BH-1750 light sensor.\n\n
     \u2022 If you want to use the sensor BH-1750, connect the sensor to PSLab device as shown below</string>
     <string name="lux_meter_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
     \u2022 Select sensor by going to the Configure tab from the bottom navigation bar and choose BHT-1750 in the drop down menu under Select Sensor.\n</string>
+    <string name="lux_meter_configurations">Lux Meter Configurations</string>
     <string name="no_data_fetched">No Data Fetched</string>
     <string name="recorder">Recorder</string>
     <string name="save_graph">Save Graph</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

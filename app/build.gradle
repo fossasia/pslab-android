@@ -8,8 +8,8 @@ android {
         applicationId "io.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "2.0.9"
+        versionCode 7
+        versionName "2.0.6"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -27,32 +27,34 @@ android {
     lintOptions {
         abortOnError false
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // Android stock libraries
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-v13:$rootProject.supportLibraryVersion"
     implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
     implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     implementation "com.android.support:design:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:support-v13:$rootProject.supportLibraryVersion"
     implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     implementation "com.android.support:preference-v14:$rootProject.supportLibraryVersion"
     implementation "com.android.support:customtabs:$rootProject.supportLibraryVersion"
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
 
-    // Custom tools libraries
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
     implementation "com.github.PhilJay:MPAndroidChart:$rootProject.mpAndroidChartVersion"
     implementation "com.github.bmelnychuk:atv:$rootProject.atvVersion"
     implementation "de.hdodenhof:circleimageview:$rootProject.circleImageViewVersion"
+    implementation "org.apache.commons:commons-math3:$rootProject.commonMathVersion"
+    implementation "org.apache.commons:commons-lang3:$rootProject.commonLangVersion"
+    implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
     implementation "com.github.devlight.navigationtabstrip:navigationtabstrip:$rootProject.navTabStripVersion"
     implementation "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
+    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     implementation "com.github.medyo:android-about-page:$rootProject.androidAboutPageVersion"
     implementation "com.github.tiagohm.MarkdownView:library:$rootProject.markDownViewVersion"
     implementation "com.github.mirrajabi:search-dialog:$rootProject.searchDialogVersion"
@@ -61,19 +63,9 @@ dependencies {
     implementation "com.github.warkiz.widget:indicatorseekbar:$rootProject.seekBarLibraryVersion"
     implementation "com.github.Vatican-Cameos:CarouselPicker:$rootProject.carouselPickerVersion"
     implementation "com.github.anastr:speedviewlib:$rootProject.speedView"
-
-    implementation "org.apache.commons:commons-math3:$rootProject.commonMathVersion"
-    implementation "org.apache.commons:commons-lang3:$rootProject.commonLangVersion"
-    implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
-
-    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
-
-    // Map libraries
     implementation "org.osmdroid:osmdroid-android:$rootProject.osmVersion"
     implementation "org.osmdroid:osmdroid-mapsforge:$rootProject.mapsforgeVersion"
     implementation "org.osmdroid:osmdroid-geopackage:$rootProject.geoPackageVersion"
-
     implementation "com.android.support:multidex:$rootProject.multiDexVersion"
     implementation "io.realm:android-adapters:$rootProject.realmAdapter"
 
