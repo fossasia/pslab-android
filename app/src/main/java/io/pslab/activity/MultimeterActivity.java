@@ -2,21 +2,20 @@ package io.pslab.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -30,26 +29,20 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import android.widget.TextView;
 
-import com.github.mikephil.charting.data.Entry;
-
-import io.pslab.R;
-import io.pslab.communication.ScienceLab;
-import io.pslab.others.CSVLogger;
-import io.pslab.others.CustomSnackBar;
-import io.pslab.others.GPSLogger;
-import io.pslab.others.MathUtils;
-import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
-
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.R;
+import io.pslab.communication.ScienceLab;
+import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
+import io.pslab.others.MathUtils;
+import io.pslab.others.ScienceLabCommon;
+import io.pslab.others.SwipeGestureDetector;
 import it.beppi.knoblibrary.Knob;
 
 /**
@@ -62,7 +55,7 @@ public class MultimeterActivity extends AppCompatActivity {
     public static final String NAME = "savingData";
     private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
     public boolean recordData = false;
-    public CSVLogger multimeterLogger;
+    public CSVLogger multimeterLogger = null;
     @BindView(R.id.multimeter_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.quantity)
@@ -117,7 +110,7 @@ public class MultimeterActivity extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         knobMarker = getResources().getStringArray(io.pslab.R.array.multimeter_knob_states);
         setSupportActionBar(mToolbar);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         setUpBottomSheet();
@@ -400,26 +393,30 @@ public class MultimeterActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.record_pause_data:
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA);
-                    return true;
-                }
-                if (recordData) {
-                    item.setIcon(R.drawable.ic_record_white);
-                    recordData = false;
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null);
-                } else {
-                    isDataRecorded = true;
-                    item.setIcon(R.drawable.pause_icon);
-                    if (!isRecordingStarted) {
-                        multimeterLogger = new CSVLogger(getString(R.string.multimeter));
-                        isRecordingStarted = true;
-                        recordData = true;
-                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
+                if (scienceLab.isConnected()) {
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA);
+                        return true;
                     }
+                    if (recordData) {
+                        item.setIcon(R.drawable.ic_record_white);
+                        recordData = false;
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null, Snackbar.LENGTH_LONG);
+                    } else {
+                        isDataRecorded = true;
+                        item.setIcon(R.drawable.pause_icon);
+                        if (!isRecordingStarted) {
+                            multimeterLogger = new CSVLogger(getString(R.string.multimeter));
+                            isRecordingStarted = true;
+                            recordData = true;
+                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_LONG);
+                        }
+                    }
+                } else {
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.device_not_found), null, null, Snackbar.LENGTH_LONG);
                 }
                 break;
             case R.id.record_csv_data:
@@ -448,11 +445,11 @@ public class MultimeterActivity extends AppCompatActivity {
                                             .create()
                                             .show();
                                 }
-                            });
+                            }, Snackbar.LENGTH_LONG);
                     isRecordingStarted = false;
                     recordData = false;
                 } else {
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null, Snackbar.LENGTH_LONG);
                 }
                 break;
             case R.id.delete_csv_data:
@@ -463,9 +460,9 @@ public class MultimeterActivity extends AppCompatActivity {
                     isRecordingStarted = false;
                     isDataRecorded = false;
                     multimeterLogger.deleteFile();
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null, Snackbar.LENGTH_LONG);
                 } else
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null, Snackbar.LENGTH_LONG);
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
@@ -485,7 +482,8 @@ public class MultimeterActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (isRecordingStarted) {
-            multimeterLogger.deleteFile();
+            if (multimeterLogger != null)
+                multimeterLogger.deleteFile();
             isRecordingStarted = false;
         }
     }
