@@ -62,7 +62,7 @@ public class MultimeterActivity extends AppCompatActivity {
     public static final String NAME = "savingData";
     private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
     public boolean recordData = false;
-    public CSVLogger multimeterLogger;
+    public CSVLogger multimeterLogger = null;
     @BindView(R.id.multimeter_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.quantity)
@@ -400,26 +400,30 @@ public class MultimeterActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.record_pause_data:
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA);
-                    return true;
-                }
-                if (recordData) {
-                    item.setIcon(R.drawable.ic_record_white);
-                    recordData = false;
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null);
-                } else {
-                    isDataRecorded = true;
-                    item.setIcon(R.drawable.pause_icon);
-                    if (!isRecordingStarted) {
-                        multimeterLogger = new CSVLogger(getString(R.string.multimeter));
-                        isRecordingStarted = true;
-                        recordData = true;
-                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
+                if (scienceLab.isConnected()) {
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA);
+                        return true;
                     }
+                    if (recordData) {
+                        item.setIcon(R.drawable.ic_record_white);
+                        recordData = false;
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null, Snackbar.LENGTH_LONG);
+                    } else {
+                        isDataRecorded = true;
+                        item.setIcon(R.drawable.pause_icon);
+                        if (!isRecordingStarted) {
+                            multimeterLogger = new CSVLogger(getString(R.string.multimeter));
+                            isRecordingStarted = true;
+                            recordData = true;
+                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_LONG);
+                        }
+                    }
+                } else {
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.device_not_found), null, null, Snackbar.LENGTH_LONG);
                 }
                 break;
             case R.id.record_csv_data:
@@ -485,7 +489,8 @@ public class MultimeterActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (isRecordingStarted) {
-            multimeterLogger.deleteFile();
+            if (multimeterLogger != null)
+                multimeterLogger.deleteFile();
             isRecordingStarted = false;
         }
     }
