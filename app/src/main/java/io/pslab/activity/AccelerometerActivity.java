@@ -3,8 +3,6 @@ package io.pslab.activity;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
-import android.util.Log;
-
 import io.pslab.R;
 import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.AccelerometerSettingsFragment;
@@ -72,7 +70,6 @@ public class AccelerometerActivity extends PSLabSensor {
 
     @Override
     public void recordSensorDataBlockID(SensorDataBlock categoryData) {
-        Log.i("kunalvisualise","recordSensorDataBlockId");
         realm.beginTransaction();
         realm.copyToRealm(categoryData);
         realm.commitTransaction();
@@ -80,7 +77,6 @@ public class AccelerometerActivity extends PSLabSensor {
 
     @Override
     public void recordSensorData(RealmObject sensorData) {
-        Log.i("kunalvisualise","recordSensorData");
         realm.beginTransaction();
         realm.copyToRealm((AccelerometerData) sensorData);
         realm.commitTransaction();
@@ -98,7 +94,6 @@ public class AccelerometerActivity extends PSLabSensor {
 
     @Override
     public void getDataFromDataLogger() {
-        Log.i("kunalvisualise","getDataFromDataLogger");
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
             playingData = true;
             recordedAccelerometerData = LocalDataLog.with()
@@ -118,7 +113,6 @@ public class AccelerometerActivity extends PSLabSensor {
     }
 
     private void reinstateConfigurations() {
-        Log.i("kunalvisualise","reinstateConfig");
         SharedPreferences accelerometerConfigurations;
         accelerometerConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         locationEnabled = accelerometerConfigurations.getBoolean(AccelerometerSettingsFragment.KEY_INCLUDE_LOCATION, true);

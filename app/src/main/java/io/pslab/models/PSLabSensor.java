@@ -329,7 +329,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     }
 
     private void dataRecordingCycle() {
-        Log.i("kunalvisualise","DataRecordingCycle");
         if (psLabPermission.checkPermissions(PSLabSensor.this, PSLabPermission.LOG_PERMISSION)) {
             if (locationEnabled) {
                 if (psLabPermission.checkPermissions(PSLabSensor.this, PSLabPermission.GPS_PERMISSION)) {
@@ -344,7 +343,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     }
 
     private void gpsRecordingCycle() {
-        Log.i("kunalvisualise","gpsRecordingCycle");
         addLocation = true;
         gpsLogger.startCaptureLocation();
         if (gpsLogger.isGPSEnabled()) {
@@ -357,7 +355,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     }
 
     private void nogpsRecordingCycle() {
-        Log.i("kunalvisualise","nogpsRecordingCycle");
         CustomSnackBar.showSnackBar(sensorParentView,
                 getString(R.string.data_recording_without_location), null, null);
         addLocation = false;
@@ -415,7 +412,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
      * Configure the sensor guide with content and settings
      */
     private void setUpBottomSheet() {
-        Log.i("kunalvisualise","setUpBottomSheet");
         setupGuideLayout();
         handleFirstTimeUsage();
         handleBottomSheetBehavior();

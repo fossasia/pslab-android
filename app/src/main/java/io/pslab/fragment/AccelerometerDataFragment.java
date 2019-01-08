@@ -143,7 +143,6 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     public static void setParameters(int highLimit, int updatePeriod, String type, String gain) {
-        Log.i("kunalvisualise","setParams");
         AccelerometerDataFragment.highLimit = highLimit;
         AccelerometerDataFragment.updatePeriod = updatePeriod;
         AccelerometerDataFragment.sensorType = Integer.valueOf(type);
@@ -152,7 +151,6 @@ public class AccelerometerDataFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i("kunalvisualise","onCreate");
         super.onCreate(savedInstanceState);
         startTime = System.currentTimeMillis();
         entriesX = new ArrayList<>();
@@ -164,17 +162,14 @@ public class AccelerometerDataFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("kunalvisualise","CreateView");
         View view = inflater.inflate(R.layout.fragment_accelerometer_data, container, false);
         unbinder = ButterKnife.bind(this, view);
         setupInstruments();
-        Log.i("accelerometerFragment:","fragment started");
         return view;
     }
 
     @Override
     public void onResume() {
-        Log.i("kunalvisualise","resume");
         super.onResume();
         if (accelerometerSensor.playingData) {
 //            z_accel_max_text.setText(getResources().getString(R.string.recorder));
@@ -216,7 +211,6 @@ public class AccelerometerDataFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.i("kunalvisualise","destroyView");
         super.onDestroyView();
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -228,7 +222,6 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     private void playRecordedData() {
-        Log.i("kunalvisualise","playRecordedData");
         recordedAccelerometerArray.addAll(accelerometerSensor.recordedAccelerometerData);
         try {
             if (recordedAccelerometerArray.size() > 1) {
@@ -257,7 +250,6 @@ public class AccelerometerDataFragment extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("kunalvisualise","run, processRecordedData");
                         try {
                             playComplete = false;
                             AccelerometerData d = recordedAccelerometerArray.get(turns);
@@ -407,7 +399,6 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     private void setupInstruments() {
-        Log.i("kunalvisualise","setupInstruments");
         LineData data_x = new LineData();
         XAxis x = x_chart_accelerometer.getXAxis();
         this.y = x_chart_accelerometer.getAxisLeft();
@@ -525,7 +516,6 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     private void updateGraphs() {
-        Log.i("kunalvisualise","updateGraphs");
         final Handler handler = new Handler();
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -549,7 +539,6 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     private void writeLogToFile(long timestamp, float sensorReading) {
-        Log.i("kunalvisualise","writeLogToFile");
         if (getActivity() != null && accelerometerSensor.isRecording) {
             if (accelerometerSensor.writeHeaderToFile) {
                 accelerometerSensor.csvLogger.prepareLogFile();
@@ -577,14 +566,8 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     private void visualizeData() {
-            Log.i("kunalvisualise","visualiseData");
-
         timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-        Log.i("kunalvisualise",""+timeElapsed);
-        Log.i("kunalvisualise",""+ previousTimeElapsed_X);
         if (timeElapsed != previousTimeElapsed_X) {
-            Log.i("kunalvisualiseInsideif",""+timeElapsed);
-            Log.i("kunalvisualiseIndsideif",""+ previousTimeElapsed_X);
             previousTimeElapsed_X = timeElapsed;
             Long currentTime = System.currentTimeMillis();
             writeLogToFile(currentTime, accelerometerValue_X);
@@ -606,11 +589,7 @@ public class AccelerometerDataFragment extends Fragment {
         }
 
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-        Log.i("kunalvisualise",""+timeElapsed);
-        Log.i("kunalvisualise",""+ previousTimeElapsed_Y);
             if (timeElapsed != previousTimeElapsed_Y) {
-                Log.i("kunalvisualiseif",""+timeElapsed);
-                Log.i("kunalvisualiseif",""+ previousTimeElapsed_Y);
                 previousTimeElapsed_Y = timeElapsed;
                 Long currentTime = System.currentTimeMillis();
                 writeLogToFile(currentTime, accelerometerValue_Y);
@@ -634,11 +613,7 @@ public class AccelerometerDataFragment extends Fragment {
             }
 
         timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-            Log.i("kunalvisualise",""+timeElapsed);
-            Log.i("kunalvisualise",""+ previousTimeElapsed_Z);
         if (timeElapsed != previousTimeElapsed_Z) {
-            Log.i("kunalvisualiseif",""+timeElapsed);
-            Log.i("kunalvisualiseif",""+ previousTimeElapsed_Z);
             previousTimeElapsed_Z = timeElapsed;
             Long currentTime = System.currentTimeMillis();
             writeLogToFile(currentTime, accelerometerValue_Z);
@@ -673,7 +648,6 @@ public class AccelerometerDataFragment extends Fragment {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            Log.i("kunalvisualise","onSensorChanged");
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 accelerometerValue_X = event.values[0];
                 StringBuilder builder_x = new StringBuilder();
@@ -736,7 +710,6 @@ public class AccelerometerDataFragment extends Fragment {
     };
 
     private void resetInstrumentData(){
-        Log.i("kunalvisualise","resetInstrumentData");
         accelerometerValue_X = 0;
         accelerometerValue_Y = 0;
         accelerometerValue_Z = 0;
@@ -762,7 +735,6 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     private void initiateAccelerometerSensor(int type) {
-        Log.i("kunalvisualise","initiateAccelerometerSensor");
         ACCELEROMETER_SENSOR s = ACCELEROMETER_SENSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;

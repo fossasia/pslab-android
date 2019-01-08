@@ -72,7 +72,6 @@ public class LuxMeterActivity extends PSLabSensor {
 
     @Override
     public void recordSensorDataBlockID(SensorDataBlock categoryData) {
-        Log.i("kunalvisualise","recordSensorDataID");
         realm.beginTransaction();
         realm.copyToRealm(categoryData);
         realm.commitTransaction();
@@ -80,7 +79,6 @@ public class LuxMeterActivity extends PSLabSensor {
 
     @Override
     public void recordSensorData(RealmObject sensorData) {
-        Log.i("kunalvisualise","recordSensorData");
         realm.beginTransaction();
         realm.copyToRealm((LuxData) sensorData);
         realm.commitTransaction();
@@ -98,7 +96,6 @@ public class LuxMeterActivity extends PSLabSensor {
 
     @Override
     public void getDataFromDataLogger() {
-        Log.i("kunalvisualise","getDataFromDataLogger");
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
             playingData = true;
             recordedLuxData = LocalDataLog.with()
@@ -118,7 +115,6 @@ public class LuxMeterActivity extends PSLabSensor {
     }
 
     private void reinstateConfigurations() {
-        Log.i("kunalvisualise","reinstateConfig");
         SharedPreferences luxMeterConfigurations;
         luxMeterConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         locationEnabled = luxMeterConfigurations.getBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, true);

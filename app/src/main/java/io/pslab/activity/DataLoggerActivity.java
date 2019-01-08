@@ -33,7 +33,6 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i("kunalvisualise","DataLoggerActivity- onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_logger);
         ButterKnife.bind(this);

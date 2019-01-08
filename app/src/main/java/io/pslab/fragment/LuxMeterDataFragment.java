@@ -100,7 +100,6 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     public static void setParameters(int highLimit, int updatePeriod, String type, String gain) {
-        Log.i("kunalvisualise","setParams");
         LuxMeterDataFragment.highLimit = highLimit;
         LuxMeterDataFragment.updatePeriod = updatePeriod;
         LuxMeterDataFragment.sensorType = Integer.valueOf(type);
@@ -109,7 +108,6 @@ public class LuxMeterDataFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i("kunalvisualise","onCreate");
         super.onCreate(savedInstanceState);
         startTime = System.currentTimeMillis();
         entries = new ArrayList<>();
@@ -119,7 +117,6 @@ public class LuxMeterDataFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("kunalvisualise","onCreateView");
         View view = inflater.inflate(R.layout.fragment_lux_meter_data, container, false);
         unbinder = ButterKnife.bind(this, view);
         setupInstruments();
@@ -128,7 +125,6 @@ public class LuxMeterDataFragment extends Fragment {
 
     @Override
     public void onResume() {
-        Log.i("kunalvisualise","onResume");
         super.onResume();
         if (luxSensor.playingData) {
             sensorLabel.setText(getResources().getString(R.string.recorder));
@@ -153,7 +149,6 @@ public class LuxMeterDataFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.i("kunalvisualise","onDestroyView");
         super.onDestroyView();
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -165,7 +160,6 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     private void playRecordedData() {
-        Log.i("kunalvisualise","playRecordedData");
         recordedLuxArray.addAll(luxSensor.recordedLuxData);
         try {
             if (recordedLuxArray.size() > 1) {
@@ -182,7 +176,6 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     private void processRecordedData(long timeGap) {
-        Log.i("kunalvisualise","processRecordedData");
         final Handler handler = new Handler();
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -196,7 +189,6 @@ public class LuxMeterDataFragment extends Fragment {
                     @Override
                     public void run() {
                         try {
-                            Log.i("kunalvisualise","run");
                             playComplete = false;
                             LuxData d = recordedLuxArray.get(turns);
                             turns++;
@@ -242,7 +234,6 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        Log.i("kunalvisualise","saveGraph");
         if (playComplete) {
             mChart.saveToGallery(luxSensor.dateFormat.format(recordedLuxArray.get(0).getTime()), 100);
             Toast.makeText(getActivity(), "Graph saved to gallery", Toast.LENGTH_LONG).show();
@@ -252,7 +243,6 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     private void setupInstruments() {
-        Log.i("kunalvisualise","setUpinstruments");
         lightMeter.setMaxSpeed(10000);
 
         XAxis x = mChart.getXAxis();
@@ -291,7 +281,6 @@ public class LuxMeterDataFragment extends Fragment {
 
     @Override
     public void onPause() {
-        Log.i("kunalvisualise","onPause");
         super.onPause();
         if (graphTimer != null) {
             returningFromPause = true;
@@ -304,7 +293,6 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     private void updateGraphs() {
-        Log.i("kunalvisualise","updateGraphs");
         final Handler handler = new Handler();
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -328,7 +316,6 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     private void writeLogToFile(long timestamp, float sensorReading) {
-        Log.i("kunalvisualise","writeLogToFile");
         if (getActivity() != null && luxSensor.isRecording) {
             if (luxSensor.writeHeaderToFile) {
                 luxSensor.csvLogger.prepareLogFile();
@@ -356,7 +343,6 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     private void visualizeData() {
-        Log.i("kunalvisualise","visualiseData");
         if (currentMax < luxValue) {
             currentMax = luxValue;
             statMax.setText(String.valueOf(luxValue));
@@ -377,12 +363,8 @@ public class LuxMeterDataFragment extends Fragment {
                 lightMeter.setPointerColor(Color.WHITE);
 
             timeElapsed = ((System.currentTimeMillis() - startTime) / updatePeriod);
-            Log.i("kunalvisualiseTime",""+timeElapsed);
-            Log.i("kunalvisualisePrevTime",""+previousTimeElapsed);
             if (timeElapsed != previousTimeElapsed) {
                 previousTimeElapsed = timeElapsed;
-                Log.i("kunalvisualiseTime",""+timeElapsed);
-                Log.i("kunalvisualisePrevTime",""+previousTimeElapsed);
                 Entry entry = new Entry((float) timeElapsed, luxValue);
                 Long currentTime = System.currentTimeMillis();
                 writeLogToFile(currentTime, luxValue);
@@ -414,7 +396,6 @@ public class LuxMeterDataFragment extends Fragment {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            Log.i("kunalvisualise","onSensorChanged");
             if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                 luxValue = event.values[0];
             }
@@ -422,7 +403,6 @@ public class LuxMeterDataFragment extends Fragment {
     };
 
     private void resetInstrumentData() {
-        Log.i("kunalvisualise","resetInstrumentData");
         luxValue = 0;
         count = 0;
         currentMin = 10000;
@@ -442,7 +422,6 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     private void initiateLuxSensor(int type) {
-        Log.i("kunalvisualise","initiate");
         LUX_SENSOR s = LUX_SENSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
