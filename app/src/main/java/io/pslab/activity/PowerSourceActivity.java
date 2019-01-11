@@ -23,19 +23,18 @@ import android.widget.TextView;
 import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
 
-import io.pslab.R;
-import io.pslab.communication.ScienceLab;
-import io.pslab.items.SquareImageButton;
-import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.MathUtils;
-import io.pslab.others.SwipeGestureDetector;
-
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.R;
+import io.pslab.communication.ScienceLab;
+import io.pslab.items.SquareImageButton;
+import io.pslab.others.MathUtils;
+import io.pslab.others.ScienceLabCommon;
+import io.pslab.others.SwipeGestureDetector;
 
 public class PowerSourceActivity extends AppCompatActivity {
 
@@ -641,7 +640,7 @@ public class PowerSourceActivity extends AppCompatActivity {
      */
     private float limitDigits(float number) {
         try {
-            return Float.valueOf(String.format(Locale.getDefault(), "%.2f", number));
+            return Float.valueOf(String.format(Locale.US, "%.2f", number));
         } catch (NumberFormatException e) {
             return 0.00f;
         }
