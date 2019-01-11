@@ -18,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
 import io.pslab.others.NothingSelectedSpinnerAdapter;
@@ -47,7 +48,8 @@ public class ChannelParametersFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_channel_parameters, container, false);
 
-        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
+        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V",
+                "+/-1" + DataFormatter.decSeparator + "5V", "+/-1V", "+/-500mV", "+/-160V"};
         final String[] channels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
         final String[] mics = {"MICROPHONE", "IN-BUILT MIC"};
 
@@ -60,6 +62,7 @@ public class ChannelParametersFragment extends Fragment {
         checkBoxCH1 = v.findViewById(R.id.checkBox_ch1_cp);
         checkBoxCH2 = v.findViewById(R.id.checkBox_ch2_cp);
         checkBoxCH3 = v.findViewById(R.id.checkBox_ch3_cp);
+        checkBoxCH3.setText(getString(R.string.ch3_value, 3.3));
         checkBoxMIC = v.findViewById(R.id.checkBox_mic_cp);
 
         ArrayAdapter<String> rangesAdapter;

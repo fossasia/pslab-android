@@ -1,10 +1,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_custom_border"
-    tools:context="io.pslab.experimentsetup.electronicexperiments.DiodeClippingClampingExperiment">
+    android:background="@drawable/rounded_custom_border">
 
 
     <TextView
@@ -89,7 +87,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/diode_clipping_margin"
         android:layout_marginTop="@dimen/diode_clipping_margin_large"
-        android:text="@string/zero_volts"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_range_diode_clipping" />
 

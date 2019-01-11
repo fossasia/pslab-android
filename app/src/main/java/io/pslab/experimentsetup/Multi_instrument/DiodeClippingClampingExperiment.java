@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
 import io.pslab.communication.ScienceLab;
@@ -40,8 +41,9 @@ public class DiodeClippingClampingExperiment extends Fragment {
         Spinner spinnerRange = v.findViewById(R.id.spinner_diode_clipping);
         final FloatSeekBar floatSeekBarPV1 = v.findViewById(R.id.seekBar_pv1_diodeclipping);
         final TextView progressTextViewPV1 = v.findViewById(R.id.seekBar_progress_diode_clipping);
+        progressTextViewPV1.setText(getString(R.string.value_volts, 0));
         final ScienceLab scienceLab = ScienceLabCommon.scienceLab;
-        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
+        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1"+ DataFormatter.decSeparator +"5V", "+/-1V", "+/-500mV", "+/-160V"};
 
         ArrayAdapter<String> rangesAdapter;
         rangesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, ranges);

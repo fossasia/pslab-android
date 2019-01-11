@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
 
@@ -31,7 +32,7 @@ public class HalfWaveRectifierFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_halfwave_rectifier, container, false);
         Spinner spinnerRangeCh1 = v.findViewById(R.id.spinner_range_h_wave_rectifier);
-        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV", "+/-160V"};
+        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1"+ DataFormatter.decSeparator +"5V", "+/-1V", "+/-500mV", "+/-160V"};
 
         ArrayAdapter<String> rangesAdapter;
         rangesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, ranges);

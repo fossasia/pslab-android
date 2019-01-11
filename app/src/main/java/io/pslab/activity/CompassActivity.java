@@ -25,12 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.others.MathUtils;
 import io.pslab.others.SwipeGestureDetector;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Harsh on 7/17/18.
@@ -184,23 +184,23 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
         setCompassAnimation(degree);
 
-        degreeIndicator.setText(String.valueOf(degree));
+        degreeIndicator.setText(DataFormatter.formatDouble(degree, DataFormatter.MEDIUM_PRECISION_FORMAT));
         currentDegree = -degree;
 
         degree = Math.round(event.values[0]);
         if (degree < 0)
             degree += 360;
-        xAxisMagneticField.setText(String.valueOf(degree));
+        xAxisMagneticField.setText(DataFormatter.formatDouble(degree, DataFormatter.MEDIUM_PRECISION_FORMAT));
 
         degree = Math.round(event.values[1]);
         if (degree < 0)
             degree += 360;
-        yAxisMagneticField.setText(String.valueOf(degree));
+        yAxisMagneticField.setText(DataFormatter.formatDouble(degree, DataFormatter.MEDIUM_PRECISION_FORMAT));
 
         degree = Math.round(event.values[2]);
         if (degree < 0)
             degree += 360;
-        zAxisMagneticField.setText(String.valueOf(degree));
+        zAxisMagneticField.setText(DataFormatter.formatDouble(degree, DataFormatter.MEDIUM_PRECISION_FORMAT));
     }
 
     @Override

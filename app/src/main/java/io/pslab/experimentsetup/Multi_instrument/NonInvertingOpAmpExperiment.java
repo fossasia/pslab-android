@@ -26,13 +26,14 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.experimentsetup.ExperimentErrorStrings;
 import io.pslab.others.ScienceLabCommon;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by asitava on 9/8/17.
@@ -178,7 +179,7 @@ public class NonInvertingOpAmpExperiment extends Fragment{
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            opampGain.setText(String.valueOf(readVoltage/supplyVoltage));
+            opampGain.setText(DataFormatter.formatDouble(readVoltage/supplyVoltage, DataFormatter.LOW_PRECISION_FORMAT));
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {

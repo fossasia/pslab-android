@@ -32,6 +32,13 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
@@ -39,13 +46,6 @@ import io.pslab.communication.sensors.MPU6050;
 import io.pslab.models.DataMPU6050;
 import io.pslab.models.SensorLogged;
 import io.pslab.others.ScienceLabCommon;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -283,13 +283,13 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
             TextView tvGy = customView.findViewById(R.id.tv_sensor_mpu6050_gy);
             TextView tvGz = customView.findViewById(R.id.tv_sensor_mpu6050_gz);
             TextView tvTemp = customView.findViewById(R.id.tv_sensor_mpu6050_temp);
-            tvAx.setText(String.valueOf(dataMPU6050.get(0)));
-            tvAy.setText(String.valueOf(dataMPU6050.get(1)));
-            tvAz.setText(String.valueOf(dataMPU6050.get(2)));
-            tvGx.setText(String.valueOf(dataMPU6050.get(4)));
-            tvGy.setText(String.valueOf(dataMPU6050.get(5)));
-            tvGz.setText(String.valueOf(dataMPU6050.get(6)));
-            tvTemp.setText(String.valueOf(dataMPU6050.get(3)));
+            tvAx.setText(DataFormatter.formatDouble(dataMPU6050.get(0), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvAy.setText(DataFormatter.formatDouble(dataMPU6050.get(1), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvAz.setText(DataFormatter.formatDouble(dataMPU6050.get(2), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvGx.setText(DataFormatter.formatDouble(dataMPU6050.get(4), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvGy.setText(DataFormatter.formatDouble(dataMPU6050.get(5), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvGz.setText(DataFormatter.formatDouble(dataMPU6050.get(6), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvTemp.setText(DataFormatter.formatDouble(dataMPU6050.get(3), DataFormatter.HIGH_PRECISION_FORMAT));
             DataMPU6050 tempObject = new DataMPU6050(dataMPU6050.get(0), dataMPU6050.get(1), dataMPU6050.get(2),
                     dataMPU6050.get(4), dataMPU6050.get(5), dataMPU6050.get(6), dataMPU6050.get(3));
             mpu6050DataList.add(tempObject);
@@ -299,7 +299,6 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
             }
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

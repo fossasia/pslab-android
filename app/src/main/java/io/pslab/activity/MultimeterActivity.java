@@ -32,10 +32,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.CSVLogger;
@@ -260,9 +260,9 @@ public class MultimeterActivity extends AppCompatActivity {
                             if (scienceLab.isConnected()) {
                                 v.setEnabled(false);
                                 Double frequency = scienceLab.getFrequency(knobMarker[knobState], null);
-                                saveAndSetData(String.valueOf(frequency), getString(R.string.frequency_unit));
+                                saveAndSetData(DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.frequency_unit));
                                 if (recordData)
-                                    record(knobMarker[knobState], String.valueOf(frequency) + getString(R.string.frequency_unit));
+                                    record(knobMarker[knobState], DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.frequency_unit));
                                 v.setEnabled(true);
                             }
                         } else {
@@ -270,7 +270,7 @@ public class MultimeterActivity extends AppCompatActivity {
                                 v.setEnabled(false);
                                 scienceLab.countPulses(knobMarker[knobState]);
                                 double pulseCount = scienceLab.readPulseCount();
-                                saveAndSetData(String.valueOf(pulseCount), "");
+                                saveAndSetData(DataFormatter.formatDouble(pulseCount, DataFormatter.LOW_PRECISION_FORMAT), "");
                                 if (recordData)
                                     record(knobMarker[knobState], String.valueOf(pulseCount));
                                 v.setEnabled(true);
@@ -280,9 +280,9 @@ public class MultimeterActivity extends AppCompatActivity {
                     default:
                         if (scienceLab.isConnected()) {
                             v.setEnabled(false);
-                            saveAndSetData(String.valueOf(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1))), getString(R.string.multimeter_voltage_unit));
+                            saveAndSetData(DataFormatter.formatDouble(scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.multimeter_voltage_unit));
                             if (recordData)
-                                record(knobMarker[knobState], String.valueOf(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1))) + getString(R.string.multimeter_voltage_unit));
+                                record(knobMarker[knobState], DataFormatter.formatDouble( scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.multimeter_voltage_unit));
                             v.setEnabled(true);
                         }
                         break;

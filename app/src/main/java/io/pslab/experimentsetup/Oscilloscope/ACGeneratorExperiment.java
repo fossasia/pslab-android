@@ -19,12 +19,13 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.ScienceLabCommon;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Padmal on 8/16/17.
@@ -65,7 +66,7 @@ public class ACGeneratorExperiment extends Fragment {
     }
 
     private void setupRangeSpinner() {
-        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1.5V", "+/-1V", "+/-500mV"};
+        final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V", "+/-1"+ DataFormatter.decSeparator +"5V", "+/-1V", "+/-500mV"};
         ArrayAdapter<String> rangesAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, ranges);
         rangesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         ampSpinner.setAdapter(rangesAdapter);

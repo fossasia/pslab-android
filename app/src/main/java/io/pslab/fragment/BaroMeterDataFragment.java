@@ -36,6 +36,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.BarometerActivity;
 import io.pslab.communication.ScienceLab;
@@ -180,9 +181,9 @@ public class BaroMeterDataFragment extends Fragment {
             y.setAxisMaximum(currentMax);
             y.setAxisMinimum(currentMin);
             y.setLabelCount(10);
-            statMax.setText(String.valueOf(currentMax));
-            statMin.setText(String.valueOf(currentMin));
-            statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / recordedBaroArray.size())));
+            statMax.setText(DataFormatter.formatDouble(currentMax, PSLabSensor.BAROMETER_DATA_FORMAT));
+            statMin.setText(DataFormatter.formatDouble(currentMin, PSLabSensor.BAROMETER_DATA_FORMAT));
+            statMean.setText(DataFormatter.formatDouble(sum / recordedBaroArray.size(), PSLabSensor.BAROMETER_DATA_FORMAT));
 
             LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
             dataSet.setDrawCircles(false);
@@ -233,11 +234,11 @@ public class BaroMeterDataFragment extends Fragment {
                                 turns++;
                                 if (currentMax < d.getBaro()) {
                                     currentMax = d.getBaro();
-                                    statMax.setText(String.valueOf(d.getBaro()));
+                                    statMax.setText(DataFormatter.formatDouble(d.getBaro(), PSLabSensor.BAROMETER_DATA_FORMAT));
                                 }
                                 if (currentMin > d.getBaro()) {
                                     currentMin = d.getBaro();
-                                    statMin.setText(String.valueOf(d.getBaro()));
+                                    statMin.setText(DataFormatter.formatDouble(d.getBaro(), PSLabSensor.BAROMETER_DATA_FORMAT));
                                 }
                                 y.setAxisMaximum(currentMax);
                                 y.setAxisMinimum(currentMin);
@@ -249,7 +250,7 @@ public class BaroMeterDataFragment extends Fragment {
                                 entries.add(entry);
                                 count++;
                                 sum += entry.getY();
-                                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / count)));
+                                statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.BAROMETER_DATA_FORMAT));
 
                                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
                                 dataSet.setDrawCircles(false);
@@ -415,11 +416,11 @@ public class BaroMeterDataFragment extends Fragment {
     private void visualizeData() {
         if (currentMax < baroValue) {
             currentMax = baroValue;
-            statMax.setText(String.valueOf(baroValue));
+            statMax.setText(DataFormatter.formatDouble(baroValue, PSLabSensor.BAROMETER_DATA_FORMAT));
         }
         if (currentMin > baroValue) {
             currentMin = baroValue;
-            statMin.setText(String.valueOf(baroValue));
+            statMin.setText(DataFormatter.formatDouble(baroValue, PSLabSensor.BAROMETER_DATA_FORMAT));
         }
         y.setAxisMaximum(currentMax);
         y.setAxisMinimum(currentMin);
@@ -442,7 +443,7 @@ public class BaroMeterDataFragment extends Fragment {
 
                 count++;
                 sum += entry.getY();
-                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / count)));
+                statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.BAROMETER_DATA_FORMAT));
 
                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
                 dataSet.setDrawCircles(false);
@@ -483,9 +484,9 @@ public class BaroMeterDataFragment extends Fragment {
             sensorManager.unregisterListener(baroSensorEventListener);
         }
         startTime = System.currentTimeMillis();
-        statMax.setText(getResources().getString(R.string.value_null));
-        statMin.setText(getResources().getString(R.string.value_null));
-        statMean.setText(getResources().getString(R.string.value_null));
+        statMax.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        statMin.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        statMean.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
         baroMeter.setSpeedAt(0);
         baroMeter.setWithTremble(false);
         entries.clear();

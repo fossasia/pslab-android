@@ -79,7 +79,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 break;
             case KEY_UPDATE_PERIOD:
                 try {
-                    Integer updatePeriod = Integer.valueOf(updatePeriodPref.getText());
+                    Integer updatePeriod = Integer.parseInt(updatePeriodPref.getText());
                     updatePeriodPref.setSummary(updatePeriod + " ms");
                 } catch (NumberFormatException e) {
                     updatePeriodPref.setSummary("1000 ms");
@@ -91,7 +91,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 break;
             case KEY_LUX_SENSOR_GAIN:
                 try {
-                    Integer gain = Integer.valueOf(sensorGainPref.getText());
+                    Integer gain = Integer.parseInt(sensorGainPref.getText());
                     sensorGainPref.setSummary(String.valueOf(gain));
                 } catch (NumberFormatException e) {
                     sensorGainPref.setSummary("1");
@@ -103,7 +103,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 break;
             case KEY_HIGH_LIMIT:
                 try {
-                    Integer highLimit = Integer.valueOf(higLimitPref.getText());
+                    Integer highLimit = Integer.parseInt(higLimitPref.getText());
                     higLimitPref.setSummary(String.valueOf(highLimit));
                 } catch (NumberFormatException e) {
                     higLimitPref.setSummary("2000 Lx");

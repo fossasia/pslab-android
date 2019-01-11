@@ -36,6 +36,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.communication.ScienceLab;
@@ -183,9 +184,9 @@ public class LuxMeterDataFragment extends Fragment {
             y.setAxisMaximum(currentMax);
             y.setAxisMinimum(currentMin);
             y.setLabelCount(10);
-            statMax.setText(String.valueOf(currentMax));
-            statMin.setText(String.valueOf(currentMin));
-            statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / recordedLuxArray.size())));
+            statMax.setText(DataFormatter.formatDouble(currentMax, PSLabSensor.LUXMETER_DATA_FORMAT));
+            statMin.setText(DataFormatter.formatDouble(currentMin, PSLabSensor.LUXMETER_DATA_FORMAT));
+            statMean.setText(DataFormatter.formatDouble((sum / recordedLuxArray.size()), PSLabSensor.LUXMETER_DATA_FORMAT));
 
             LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
             dataSet.setDrawCircles(false);
@@ -236,11 +237,11 @@ public class LuxMeterDataFragment extends Fragment {
                                 turns++;
                                 if (currentMax < d.getLux()) {
                                     currentMax = d.getLux();
-                                    statMax.setText(String.valueOf(d.getLux()));
+                                    statMax.setText(DataFormatter.formatDouble(d.getLux(), PSLabSensor.LUXMETER_DATA_FORMAT));
                                 }
                                 if (currentMin > d.getLux()) {
                                     currentMin = d.getLux();
-                                    statMin.setText(String.valueOf(d.getLux()));
+                                    statMin.setText(DataFormatter.formatDouble(d.getLux(), PSLabSensor.LUXMETER_DATA_FORMAT));
                                 }
                                 y.setAxisMaximum(currentMax);
                                 y.setAxisMinimum(currentMin);
@@ -252,7 +253,7 @@ public class LuxMeterDataFragment extends Fragment {
                                 entries.add(entry);
                                 count++;
                                 sum += entry.getY();
-                                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / count)));
+                                statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.LUXMETER_DATA_FORMAT));
 
                                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
                                 dataSet.setDrawCircles(false);
@@ -418,11 +419,11 @@ public class LuxMeterDataFragment extends Fragment {
     private void visualizeData() {
         if (currentMax < luxValue) {
             currentMax = luxValue;
-            statMax.setText(String.valueOf(luxValue));
+            statMax.setText(DataFormatter.formatDouble(luxValue, PSLabSensor.LUXMETER_DATA_FORMAT));
         }
         if (currentMin > luxValue) {
             currentMin = luxValue;
-            statMin.setText(String.valueOf(luxValue));
+            statMin.setText(DataFormatter.formatDouble(luxValue, PSLabSensor.LUXMETER_DATA_FORMAT));
         }
         y.setAxisMaximum(currentMax);
         y.setAxisMinimum(currentMin);
@@ -486,9 +487,9 @@ public class LuxMeterDataFragment extends Fragment {
             sensorManager.unregisterListener(lightSensorEventListener);
         }
         startTime = System.currentTimeMillis();
-        statMax.setText(getResources().getString(R.string.value_null));
-        statMin.setText(getResources().getString(R.string.value_null));
-        statMean.setText(getResources().getString(R.string.value_null));
+        statMax.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        statMin.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        statMean.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
         lightMeter.setSpeedAt(0);
         lightMeter.setWithTremble(false);
         entries.clear();

@@ -29,18 +29,18 @@ import android.widget.Toast;
 
 import com.warkiz.widget.IndicatorSeekBar;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
 import io.pslab.others.WaveGeneratorCommon;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class WaveGeneratorActivity extends AppCompatActivity {
 
@@ -183,6 +183,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wave_generator_main);
         ButterKnife.bind(this);
+        waveFreqValue.setText(getString(R.string.freq_value, 5.255));
+        waveMonPropValueSelect.setText(getString(R.string.freq_value, 5.255));
+        pwmFreqValue.setText(getString(R.string.freq_value, 5.255));
+        pwmMonPropSelectValue.setText(getString(R.string.freq_value, 5.255));
+        pwmPhaseValue.setText(getString(R.string.freq_value, 5.255));
 
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -431,7 +436,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
-                String valueText = String.valueOf((float) progress) + " " + unit;
+                String valueText = DataFormatter.formatDouble((float) progress, DataFormatter.MEDIUM_PRECISION_FORMAT) + " " + unit;
                 if (waveMonSelected) {
                     waveMonPropValueSelect.setText(valueText);
                 } else {
@@ -694,7 +699,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         }
 
         Double dValue = (double) value;
-        String valueText = String.valueOf(dValue) + " " + unit;
+        String valueText = DataFormatter.formatDouble(dValue, DataFormatter.MEDIUM_PRECISION_FORMAT) + " " + unit;
         activePropTv.setText(valueText);
 
     }

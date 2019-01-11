@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.ScienceLabCommon;
@@ -78,9 +79,9 @@ public class HumanBodyResistanceExperiment extends Fragment {
     }
 
     private void updateDataBox() {
-        tvVoltage.setText(String.valueOf(voltage));
-        tvCurrent.setText(String.valueOf(current));
-        tvResistance.setText(String.valueOf(resistance));
+        tvVoltage.setText(DataFormatter.formatDouble(voltage, DataFormatter.LOW_PRECISION_FORMAT));
+        tvCurrent.setText(DataFormatter.formatDouble(current, DataFormatter.LOW_PRECISION_FORMAT));
+        tvResistance.setText(DataFormatter.formatDouble(resistance, DataFormatter.LOW_PRECISION_FORMAT));
     }
 
     private class MeasureResistance extends AsyncTask<Void, Void, Void> {

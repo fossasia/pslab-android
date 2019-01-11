@@ -21,13 +21,13 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.ScienceLabCommon;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import static io.pslab.others.MathUtils.map;
 
@@ -49,7 +49,6 @@ public class OhmsLawSetupExperiment extends Fragment {
     private ArrayList<Float> x = new ArrayList<>();
     private ArrayList<Float> y = new ArrayList<>();
     private LineChart outputChart;
-    private DecimalFormat df = new DecimalFormat("0.0000");
 
     public static OhmsLawSetupExperiment newInstance() {
         return new OhmsLawSetupExperiment();
@@ -72,7 +71,7 @@ public class OhmsLawSetupExperiment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 double value = map(progress, 0, 330, 0, 3.3);
-                tvCurrentValue.setText(df.format(value));
+                tvCurrentValue.setText(DataFormatter.formatDouble(value, DataFormatter.MEDIUM_PRECISION_FORMAT));
             }
 
             @Override
@@ -118,7 +117,7 @@ public class OhmsLawSetupExperiment extends Fragment {
     }
 
     private void updateGraph() {
-        tvVoltageValue.setText(df.format(voltageValue));
+        tvVoltageValue.setText(DataFormatter.formatDouble(voltageValue, DataFormatter.MEDIUM_PRECISION_FORMAT));
         List<ILineDataSet> dataSets = new ArrayList<>();
         List<Entry> temp = new ArrayList<>();
         for (int i = 0; i < x.size(); i++) {

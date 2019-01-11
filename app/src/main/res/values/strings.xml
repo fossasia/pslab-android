@@ -562,15 +562,8 @@
     <string name="servo_angles">Servo Angles</string>
     <string name="set_angles">Set Angles</string>
     <string name="reset_angles">Reset Angles</string>
-    <string name="timebase_label_875">875.00 μs</string>
-    <string name="timebase_label_1">1.00 ms</string>
-    <string name="timebase_label_2">2.00 ms</string>
-    <string name="timebase_label_4">4.00 ms</string>
-    <string name="timebase_label_8">8.00 ms</string>
-    <string name="timebase_label_25_60">25.60 ms</string>
-    <string name="timebase_label_38_40">38.40 ms</string>
-    <string name="timebase_label_51_20">51.20 ms</string>
-    <string name="timebase_label_102_40">102.40 ms</string>
+    <string name="timebase_microsec">%1$.2f μs</string>
+    <string name="timebase_milisec">%1$.2f ms</string>
     <string name="time_space">Time </string>
     <string name="unit_μs">(μs)</string>
     <string name="label_ch1">CH1</string>
@@ -589,15 +582,14 @@
     <string name="experiment_setup_aim">AIM : To study Diode I-V charateristics</string>
     <string name="lorem_ipsum_text">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</string>
     <string name="experiment_setup">Experiment Setup</string>
-    <string name="ch3_value">CH3 (+/- 3.3V)</string>
+    <string name="ch3_value">CH3 (+/- %1$.1fV)</string>
     <string name="one_value">1.0</string>
     <string name="fourier_transforms">Fourier Transforms</string>
     <string name="pv1">PV1</string>
-    <string name="zero_volts">0.00 V</string>
+    <string name="value_volts">%1$.2f V</string>
     <string name="aquire_data">Acquire Data</string>
     <string name="ten_hz">10Hz</string>
     <string name="timebase">TimeBase</string>
-    <string name="timebase_trigger_value">875.00 μs</string>
     <string name="text_view">TextView</string>
     <string name="device_status_text">PSLab Device not found</string>
     <string name="select_mic">[SELECT MIC]</string>
@@ -638,8 +630,6 @@
     <string name="no_permission_for_maps">Not sufficient permission to load map</string>
     <string name="no_permission_for_gps">Not sufficient permission to locate device</string>
     <string name="no_permission_for_logs">Not sufficient permission to log data</string>
-
-    <string name="value_null">0.00</string>
 
     <string-array name="export_data_format_list">
         <item>TXT Format</item>
@@ -871,7 +861,7 @@
 
     <string name="wave_name_holder">Triangular</string>
     <string name="freq_text">Frequency :</string>
-    <string name="freq_holder_text">5.255 Hz</string>
+    <string name="freq_value">%1$.3f Hz</string>
     <string name="unit_hz">Hz</string>
     <string name="text_phase_colon">Phase :</string>
     <string name="text_phase">Phase</string>

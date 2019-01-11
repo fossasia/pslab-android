@@ -1,22 +1,16 @@
 package io.pslab.fragment;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -40,15 +34,6 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
-import io.pslab.R;
-import io.pslab.activity.LogicalAnalyzerActivity;
-import io.pslab.communication.ScienceLab;
-import io.pslab.communication.digitalChannel.DigitalChannel;
-import io.pslab.others.LogicAnalyzerAxisFormatter;
-import io.pslab.others.MathUtils;
-import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -56,8 +41,13 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import in.goodiebag.carouselpicker.CarouselPicker;
-
-import static android.content.Context.MODE_PRIVATE;
+import io.pslab.DataFormatter;
+import io.pslab.R;
+import io.pslab.activity.LogicalAnalyzerActivity;
+import io.pslab.communication.ScienceLab;
+import io.pslab.communication.digitalChannel.DigitalChannel;
+import io.pslab.others.LogicAnalyzerAxisFormatter;
+import io.pslab.others.ScienceLabCommon;
 
 /**
  * Created by viveksb007 on 9/6/17.
@@ -447,7 +437,7 @@ public class LALogicLinesFragment extends Fragment {
                             @Override
                             public void onValueSelected(Entry e, Highlight h) {
                                 double result = Math.round(e.getX() * 100.0) / 100.0;
-                                xCoordinateText.setText("Time:  " + String.valueOf(result) + " mS");
+                                xCoordinateText.setText("Time:  " + DataFormatter.formatDouble(result, DataFormatter.LOW_PRECISION_FORMAT) + " mS");
                             }
 
                             @Override
@@ -821,8 +811,8 @@ public class LALogicLinesFragment extends Fragment {
                 StringBuilder stringBuilder1 = new StringBuilder();
                 StringBuilder stringBuilder2 = new StringBuilder();
                 for (int i = 0; i < xaxis.length; i++) {
-                    stringBuilder1.append(String.valueOf(xaxis[i]));
-                    stringBuilder2.append(String.valueOf(yaxis[i]));
+                    stringBuilder1.append(DataFormatter.formatDouble(xaxis[i], DataFormatter.LOW_PRECISION_FORMAT));
+                    stringBuilder2.append(DataFormatter.formatDouble(yaxis[i], DataFormatter.LOW_PRECISION_FORMAT));
                     stringBuilder1.append(" ");
                     stringBuilder2.append(" ");
                 }

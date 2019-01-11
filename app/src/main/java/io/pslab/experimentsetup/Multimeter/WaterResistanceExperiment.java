@@ -20,14 +20,15 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Padmal on 8/15/17.
@@ -187,7 +188,7 @@ public class WaterResistanceExperiment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            tv_resistance.setText(String.valueOf(resistance));
+            tv_resistance.setText(DataFormatter.formatDouble(resistance, DataFormatter.LOW_PRECISION_FORMAT));
 
             LineDataSet dataset1 = new LineDataSet(ch1Data, "CH1");
             LineDataSet dataSet2 = new LineDataSet(ch2Data, "CH2");
@@ -236,7 +237,7 @@ public class WaterResistanceExperiment extends Fragment {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    tv_resistance.setText(String.valueOf(resistance));
+                    tv_resistance.setText(DataFormatter.formatDouble(resistance, DataFormatter.LOW_PRECISION_FORMAT));
                     updateChart();
                 }
             });
