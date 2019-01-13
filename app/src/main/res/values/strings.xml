@@ -844,6 +844,7 @@
     <string name="ok_button_text">OK</string>
 
     <string name="multimeter_dialog_heading">Multimeter</string>
+    <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">Multimeter Configurations</string>
     <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element.</string>
     <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.\n\n
