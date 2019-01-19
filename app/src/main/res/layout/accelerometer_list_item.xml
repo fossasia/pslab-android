@@ -105,7 +105,6 @@
             android:id="@+id/chart_yaxis_layout_hmc"
             android:layout_width="@dimen/tv_chart_height"
             android:layout_height="match_parent"
-            android:layout_below="@id/app_bar"
             android:layout_toEndOf="@+id/desc_pane"
             android:layout_toRightOf="@+id/desc_pane"
             android:background="@color/black"

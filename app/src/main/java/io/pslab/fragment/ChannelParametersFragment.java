@@ -178,7 +178,6 @@ public class ChannelParametersFragment extends Fragment {
                     case 0:
                         ((OscilloscopeActivity) getActivity()).setLeftYAxisLabel(spinnerChannelSelect.getSelectedItem().toString());
                         spinnerRangeCh1.setEnabled(true);
-                        spinnerRangeCh1.performClick();
                         break;
                     case 1:
                         ((OscilloscopeActivity) getActivity()).setLeftYAxisScale(16, -16);

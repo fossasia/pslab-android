@@ -10,8 +10,6 @@ import android.util.AttributeSet;
 
 import io.pslab.R;
 
-import java.text.DecimalFormat;
-
 
 /**
  * Created by akarshan on 4/10/17.
@@ -36,9 +34,8 @@ public class FloatSeekBar extends android.support.v7.widget.AppCompatSeekBar {
     }
 
     public double getValue() {
-        DecimalFormat df = new DecimalFormat("#.##");
         Double value = (max - min) * ((float) getProgress() / (float) getMax()) + min;
-        value = Double.valueOf(df.format(value));
+        value = (double) Math.round(value * 100) / 100;
         return value;
     }
 

@@ -467,7 +467,7 @@ public class BaroMeterDataFragment extends Fragment {
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
-                baroValue = Float.valueOf(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, event.values[0] / 1000));
+                baroValue = Float.valueOf(String.format(Locale.US, PSLabSensor.BAROMETER_DATA_FORMAT, event.values[0] / 1000));
             }
         }
     };
