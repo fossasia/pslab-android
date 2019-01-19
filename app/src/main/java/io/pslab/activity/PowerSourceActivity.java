@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
@@ -125,7 +124,7 @@ public class PowerSourceActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         powerPreferences = getSharedPreferences(POWER_PREFERENCES, MODE_PRIVATE);

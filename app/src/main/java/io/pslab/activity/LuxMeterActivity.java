@@ -3,7 +3,6 @@ package io.pslab.activity;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
-
 import io.pslab.R;
 import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.fragment.LuxMeterSettingFragment;
@@ -17,12 +16,16 @@ import io.realm.RealmResults;
 public class LuxMeterActivity extends PSLabSensor {
 
     private static final String PREF_NAME = "customDialogPreference";
-    public final String LUXMETER_LIMIT = "luxmeter_limit";
     public RealmResults<LuxData> recordedLuxData;
 
     @Override
+    public int getLayout() {
+        return R.layout.activity_generic_sensor;
+    }
+
+    @Override
     public int getMenu() {
-        return R.menu.sensor_data_log_menu;
+        return R.menu.lux_data_log_menu;
     }
 
     @Override
@@ -92,8 +95,7 @@ public class LuxMeterActivity extends PSLabSensor {
     @Override
     public void getDataFromDataLogger() {
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
-            //playingData = true;
-            viewingData = true;
+            playingData = true;
             recordedLuxData = LocalDataLog.with()
                     .getBlockOfLuxRecords(getIntent().getExtras().getLong(DATA_BLOCK));
             String title = titleFormat.format(recordedLuxData.get(0).getTime());
@@ -103,7 +105,6 @@ public class LuxMeterActivity extends PSLabSensor {
 
     /**
      * Once settings have been changed, those changes can be captured from onResume method.
-     * reinstateConfigurations() will update the logs with new settings
      */
     @Override
     protected void onResume() {

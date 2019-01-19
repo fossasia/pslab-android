@@ -58,7 +58,9 @@ public class MapsActivity extends AppCompatActivity {
         for (int i = 0; i < markers.length(); i++) {
             JSONObject marker = markers.getJSONObject(i);
             m.setPosition(new GeoPoint(marker.getDouble("lat"), marker.getDouble("lon")));
-            m.setTitle(marker.getString("data") + " @ " + marker.getString("date"));
+            m.setTitle(marker.getString("data_x") + " @ " + marker.getString("date"));
+            m.setTitle(marker.getString("data_y") + " @ " + marker.getString("date"));
+            m.setTitle(marker.getString("data_z") + " @ " + marker.getString("date"));
             m.setIcon(getResources().getDrawable(R.drawable.action_item_read));
             m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
             map.getOverlays().add(m);

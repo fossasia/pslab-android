@@ -13,37 +13,39 @@ import io.pslab.R;
 import io.pslab.others.PSLabPermission;
 
 /**
- * Created by Padmal on 12/13/18.
+ * Created by Kunal on 18-12-2018.
  */
-
-public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AccelerometerSettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
-    public static final String KEY_UPDATE_PERIOD = "setting_baro_update_period";
-    public static final String KEY_HIGH_LIMIT = "setting_baro_high_limit";
-    public static final String KEY_BARO_SENSOR_TYPE = "setting_baro_sensor_type";
+    public static final String KEY_UPDATE_PERIOD = "setting_lux_update_period";
+    public static final String KEY_HIGH_LIMIT = "setting_lux_high_limit";
+    public static final String KEY_ACCELEROMETER_SENSOR_TYPE = "setting_lux_sensor_type";
+    public static final String KEY_ACCELEROMETER_SENSOR_GAIN = "setting_lux_sensor_gain";
 
     private PSLabPermission psLabPermission;
 
     private EditTextPreference updatePeriodPref;
-    private EditTextPreference highLimitPref;
+    private EditTextPreference higLimitPref;
+    private EditTextPreference sensorGainPref;
     private CheckBoxPreference locationPreference;
     private ListPreference sensorTypePreference;
     private SharedPreferences sharedPref;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.baro_meter_settings, rootKey);
+        setPreferencesFromResource(R.xml.lux_meter_settings, rootKey);
         updatePeriodPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_UPDATE_PERIOD);
-        highLimitPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_HIGH_LIMIT);
+        higLimitPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_HIGH_LIMIT);
+        sensorGainPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_ACCELEROMETER_SENSOR_GAIN);
         locationPreference = (CheckBoxPreference) getPreferenceScreen().findPreference(KEY_INCLUDE_LOCATION);
-        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_BARO_SENSOR_TYPE);
+        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_ACCELEROMETER_SENSOR_TYPE);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         psLabPermission = PSLabPermission.getInstance();
         if (!psLabPermission.checkPermissions(getActivity(), PSLabPermission.MAP_PERMISSION)) {
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(BaroMeterSettingsFragment.KEY_INCLUDE_LOCATION, true);
+            editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, true);
             editor.apply();
         }
     }
@@ -53,8 +55,9 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
         super.onResume();
         locationPreference.setChecked(sharedPref.getBoolean(KEY_INCLUDE_LOCATION, true));
         updatePeriodPref.setSummary(updatePeriodPref.getText() + " ms");
-        highLimitPref.setSummary(highLimitPref.getText() + " atm");
+        higLimitPref.setSummary(higLimitPref.getText() + " Lx");
         sensorTypePreference.setSummary(sensorTypePreference.getEntry());
+        sensorGainPref.setSummary(sensorGainPref.getText());
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -77,11 +80,6 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
             case KEY_UPDATE_PERIOD:
                 try {
                     Integer updatePeriod = Integer.valueOf(updatePeriodPref.getText());
-                    if (updatePeriod > 2000 || updatePeriod < 100) {
-                        throw new NumberFormatException();
-                    } else {
-                        updatePeriodPref.setSummary(String.valueOf(updatePeriod));
-                    }
                     updatePeriodPref.setSummary(updatePeriod + " ms");
                 } catch (NumberFormatException e) {
                     updatePeriodPref.setSummary("1000 ms");
@@ -91,23 +89,31 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                     editor.commit();
                 }
                 break;
-            case KEY_HIGH_LIMIT:
+            case KEY_ACCELEROMETER_SENSOR_GAIN:
                 try {
-                    Float highLimit = Float.valueOf(highLimitPref.getText());
-                    if (highLimit > 1.1 || highLimit < 0.0) {
-                        throw new NumberFormatException();
-                    } else {
-                        highLimitPref.setSummary(String.valueOf(highLimit));
-                    }
+                    Integer gain = Integer.valueOf(sensorGainPref.getText());
+                    sensorGainPref.setSummary(String.valueOf(gain));
                 } catch (NumberFormatException e) {
-                    highLimitPref.setSummary("1.1 atm");
-                    highLimitPref.setText("1.1");
+                    sensorGainPref.setSummary("1");
+                    sensorGainPref.setText("1");
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(KEY_HIGH_LIMIT, "1.1");
+                    editor.putString(KEY_ACCELEROMETER_SENSOR_GAIN, "1");
                     editor.commit();
                 }
                 break;
-            case KEY_BARO_SENSOR_TYPE:
+            case KEY_HIGH_LIMIT:
+                try {
+                    Integer highLimit = Integer.valueOf(higLimitPref.getText());
+                    higLimitPref.setSummary(String.valueOf(highLimit));
+                } catch (NumberFormatException e) {
+                    higLimitPref.setSummary("2000 Lx");
+                    higLimitPref.setText("2000");
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(KEY_HIGH_LIMIT, "2000");
+                    editor.commit();
+                }
+                break;
+            case KEY_ACCELEROMETER_SENSOR_TYPE:
                 sensorTypePreference.setSummary(sensorTypePreference.getEntry());
                 break;
             default:

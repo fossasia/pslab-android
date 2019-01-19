@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 
 import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
-import io.pslab.activity.BarometerActivity;
 import io.pslab.activity.CompassActivity;
 import io.pslab.activity.LogicalAnalyzerActivity;
 import io.pslab.activity.LuxMeterActivity;
@@ -27,7 +26,7 @@ import io.pslab.activity.SensorActivity;
 import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.adapters.ApplicationAdapter;
 import io.pslab.items.ApplicationItem;
-import io.pslab.models.PSLabSensor;
+import io.pslab.activity.BarometerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +84,7 @@ public class InstrumentsFragment extends Fragment {
                                 intent = new Intent(context, PowerSourceActivity.class);
                                 startActivity(intent);
                                 break;
-                            case PSLabSensor.LUXMETER:
+                            case "Lux Meter":
                                 intent = new Intent(context, LuxMeterActivity.class);
                                 startActivity(intent);
                                 break;
@@ -93,7 +92,7 @@ public class InstrumentsFragment extends Fragment {
                                 intent = new Intent(context, AccelerometerActivity.class);
                                 startActivity(intent);
                                 break;
-                            case PSLabSensor.BAROMETER:
+                            case "Barometer":
                                 intent = new Intent(context, BarometerActivity.class);
                                 startActivity(intent);
                                 break;
@@ -142,7 +141,7 @@ public class InstrumentsFragment extends Fragment {
                     R.string.power_source_description,
                     R.string.lux_meter_description,
                     R.string.accelerometer_description,
-                    R.string.baro_meter_description,
+                    R.string.barometer_description,
                     R.string.compass_description
             };
 
@@ -171,7 +170,7 @@ public class InstrumentsFragment extends Fragment {
                     getResources().getString(R.string.accelerometer), R.drawable.tile_icon_accelerometer, getResources().getString(descriptions[7]))
             );
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.baro_meter), R.drawable.tile_icon_barometer, getResources().getString(descriptions[8])
+                    getResources().getString(R.string.barometer), R.drawable.tile_icon_barometer, getResources().getString(descriptions[8])
             ));
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.compass), R.drawable.tile_icon_compass, getResources().getString(descriptions[9])

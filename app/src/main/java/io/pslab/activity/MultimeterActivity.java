@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -404,7 +403,7 @@ public class MultimeterActivity extends AppCompatActivity {
                     if (recordData) {
                         item.setIcon(R.drawable.ic_record_white);
                         recordData = false;
-                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null, Snackbar.LENGTH_LONG);
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null);
                     } else {
                         isDataRecorded = true;
                         item.setIcon(R.drawable.pause_icon);
@@ -412,15 +411,14 @@ public class MultimeterActivity extends AppCompatActivity {
                             multimeterLogger = new CSVLogger(getString(R.string.multimeter));
                             isRecordingStarted = true;
                             recordData = true;
-                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_LONG);
+                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null);
                         }
                     }
                 } else {
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.device_not_found), null, null, Snackbar.LENGTH_LONG);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.device_not_found), null, null);
                 }
                 break;
-            case R.id.record_csv_data:
-                if (isDataRecorded) {
+            case R.id.record_csv_data: if (isDataRecorded) {
                     MenuItem item1 = menu.findItem(R.id.record_pause_data);
                     item1.setIcon(R.drawable.ic_record_white);
                     multimeterLogger.writeCSVFile(dataRecorded + "\n" + valueRecorded + "\n");
@@ -445,11 +443,11 @@ public class MultimeterActivity extends AppCompatActivity {
                                             .create()
                                             .show();
                                 }
-                            }, Snackbar.LENGTH_LONG);
+                            });
                     isRecordingStarted = false;
                     recordData = false;
                 } else {
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null, Snackbar.LENGTH_LONG);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null);
                 }
                 break;
             case R.id.delete_csv_data:
@@ -460,9 +458,9 @@ public class MultimeterActivity extends AppCompatActivity {
                     isRecordingStarted = false;
                     isDataRecorded = false;
                     multimeterLogger.deleteFile();
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null, Snackbar.LENGTH_LONG);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null);
                 } else
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null, Snackbar.LENGTH_LONG);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null);
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);

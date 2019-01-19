@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -254,7 +253,7 @@ public class SensorGraphViewActivity extends AppCompatActivity {
             }
             luxLogger.writeCSVFile(data);
         }
-        CustomSnackBar.showSnackBar(cl, getResources().getString(R.string.csv_store_text) + luxLogger.getCurrentFilePath(), null, null, Snackbar.LENGTH_LONG);
+        CustomSnackBar.showSnackBar(cl, getResources().getString(R.string.csv_store_text) + luxLogger.getCurrentFilePath(), null, null);
     }
 
     private void simulateData() {

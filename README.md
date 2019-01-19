@@ -24,51 +24,30 @@ Please join us on the following channels:
 ## Screenshots
 
   <table>
-      <tr>
-       <td><img src="/docs/images/view_device_not_found.png"></td>
-       <td><img src="/docs/images/view_initialization.png"></td>
-       <td><img src="/docs/images/view_home_screen.png"></td>
-       <td><img src="/docs/images/view_instrument_panel.png"></td>
-      </tr>
-  </table>
-  <table>
-      <tr>
-       <td><img src="/docs/images/instrument_oscilloscope_guide.png"></td>
-       <td><img src="/docs/images/instrument_logic_analyzer_guide.png"></td>
-      </tr>
-    </table>
-  <table>
     <tr>
-     <td><img src="/docs/images/view_about_us.png"></td>
+     <td><img src="/docs/images/view_home_screen.png"></td>
      <td><img src="/docs/images/view_navigation_drawer.png"></td>
-     <td><img src="/docs/images/view_pin_layout_front.png"></td>
-     <td><img src="/docs/images/view_pin_layout_back.png"></td>
+     <td><img src="/docs/images/view_instruement_panel.png"></td>
+     <td><img src="/docs/images/view_pin_layout.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/images/instrument_oscilloscope_channelparam.png"></td>
-     <td><img src="/docs/images/instrument_oscilloscope_audiojack.png"></td>
+     <td><img src="/docs/images/screenshot_3.png"></td>
+     <td><img src="/docs/images/screenshot_audio_jack.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/images/instrument_wavegenerator_view.png"></td>
-     <td><img src="/docs/images/instrument_logic_analyzer_view.png"></td>
+     <td><img src="/docs/images/wave_generator_view.png"></td>
+     <td><img src="/docs/images/view_logic_analyzer.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/images/instrument_power_source_view.png"></td>
-     <td><img src="/docs/images/instrument_luxmeter_guide.png"></td>
-     <td><img src="/docs/images/instrument_multimeter_view.png"></td>
-    </tr>
-  </table>
-  <table>
-    <tr>
-     <td><img src="/docs/images/instrument_barometer_view.png"></td>
-     <td><img src="/docs/images/view_log_map_location.png"></td>
-     <td><img src="/docs/images/view_data_logger.png"></td>
+     <td><img src="/docs/images/view_power_source.png"></td>
+     <td><img src="/docs/images/view_guide_box.png"></td>
+     <td><img src="/docs/images/view_lux_meter.png"></td>
     </tr>
   </table>
 
@@ -81,14 +60,14 @@ Please join us on the following channels:
 ## Features
 |   **Feature**    |                    **Description**                    |   **Status**    |
 |------------------|-------------------------------------------------------|-----------------|
-|   Home Screen    | Show status and version of PSLab device               |  		 ✓       |
-|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      | 		 ✓       |
-|  Oscilloscope    | Shows variation of analog signals                     | 		 ✓       |
-|   Multimeter     | Measures voltage, current, resistance and capacitance | 		 ✓       |
-| Logical Analyzer | Captures and displays signals from digital system     | 		 ✓       |
-|  Wave Generator  | Generates arbitrary analog and digital waveforms      | 		 ✓       |
-|   Power Source   | Generates programmable voltage and currents	       | 		 ✓       |
-|    Lux Meter     | Measures the ambient light intensity                  | 		 ✓       |
+|   Home Screen    | Show status and version of PSLab device               |   Established   |
+|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      |   Established   |
+|  Oscilloscope    | Shows variation of analog signals                     |   Established   |
+|   Multimeter     | Measures voltage, current, resistance and capacitance |   Established   |
+| Logical Analyzer | Captures and displays signals from digital system     |   In Progress   |
+|  Wave Generator  | Generates arbitrary analog and digital waveforms      |   In Progress   |
+|   Power Source   | Generates programmable voltage and currents	   |   Established   |
+|    Lux Meter     | Measures the ambient light intensity                  |   Established   |
 
 
 ## How to set up the Android app in your development environment
@@ -143,39 +122,6 @@ Please help us follow the best practice to make it easy for the reviewer as well
  * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
  * If the PR is related to any front end change, please attach relevant screenshots in the pull request description.
 
-#### How to `git squash`?
-
-As a tip for new developers those who struggle with squashing commits into one, multiple commits may appear in your pull request mostly due to following reasons.
-
- * Intentionally adding multiple commit messages after each change without just `git add`ing.
- * Updating the current branch with the remote so a merge commit takes place.
-
-Despite any reason, follow the steps given below to squash all commits into one adhering to our best practices.
-
- * Setup remote to upstream branch if not set before;
-
-`$ git remote add upstream https://github.com/fossasia/pslab-android.git`
-
- * Check into the branch related to the pull request
-
-`$ git checkout <branch-name>`
-
- * Perform a soft reset to retain the changes while removing all the commit details
-
-`$ git reset --soft upstream/development`
-
- * Add files to the staging area
-
-`$ git add <file paths or "." to add everything>`
-
- * Create a new commit with a proper message following commit message guidelines
-
-`$ git commit -m "tag: commit message"`
-
- * If you have already made a pull request,
-
-`$ git push -f origin <branch-name>`
-
 ### Branch Policy
 
 We have the following branches
@@ -206,19 +152,11 @@ This project is currently licensed under the Apache License 2.0. A copy of [LICE
 
 ## Maintainers
 The project is maintained by
-- Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal))
+- Praveen Patil ([@wavicles](https://github.com/wavicles))
 - Mario Behling ([@mariobehling](http://github.com/mariobehling))
 - Lorenz Gerber ([@lorenzgerber](https://github.com/lorenzgerber))
 - Wei Tat ([@cweitat](https://github.com/cweitat))
 - Wai Gie ([@woshikie](https://github.com/woshikie))
-
-## Alumni
-- Praveen Patil ([@wavicles](https://github.com/wavicles))
 - Jithin ([@jithinbp](https://github.com/jithinbp))
-- Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96))
-- Asitava Sarkar ([@asitava1998](https://github.com/asitava1998))
-- Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))
-- Avjeet ([@Avjeet](https://github.com/Avjeet))
-- Abhinav ([@abhinavraj23](https://github.com/abhinavraj23))
-- Harsh ([@harsh-2711](https://github.com/harsh-2711))
-- Yatri ([@yatri1609](https://github.com/yatri1609))
+- Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96)), Asitava Sarkar ([@asitava1998](https://github.com/asitava1998)), Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal)), Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))
+- Avjeet ([@Avjeet](https://github.com/Avjeet)), Abhinav ([@abhinavraj23](https://github.com/abhinavraj23)), Harsh ([@harsh-2711](https://github.com/harsh-2711)), Yatri ([@yatri1609](https://github.com/yatri1609))

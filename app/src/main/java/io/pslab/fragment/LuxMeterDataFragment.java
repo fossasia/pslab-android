@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +42,7 @@ import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.BH1750;
 import io.pslab.communication.sensors.TSL2561;
 import io.pslab.models.LuxData;
-import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
-import io.pslab.others.CSVLogger;
 import io.pslab.others.ScienceLabCommon;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -91,6 +88,7 @@ public class LuxMeterDataFragment extends Fragment {
     private LuxData sensorData;
     private float currentMin = 10000;
     private float currentMax = 0;
+    private boolean playComplete = false;
     private YAxis y;
     private Unbinder unbinder;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
@@ -128,15 +126,11 @@ public class LuxMeterDataFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (luxSensor.playingData) {
-            sensorLabel.setText(getResources().getString(R.string.lux_meter));
+            sensorLabel.setText(getResources().getString(R.string.recorder));
             recordedLuxArray = new ArrayList<>();
             resetInstrumentData();
             playRecordedData();
-        } else if (luxSensor.viewingData) {
-            sensorLabel.setText(getResources().getString(R.string.lux_meter));
-            recordedLuxArray = new ArrayList<>();
-            resetInstrumentData();
-            plotAllRecordedData();
+
         } else if (!luxSensor.isRecording) {
             updateGraphs();
             sum = 0;
@@ -162,43 +156,6 @@ public class LuxMeterDataFragment extends Fragment {
             sensorManager.unregisterListener(lightSensorEventListener);
         }
         unbinder.unbind();
-    }
-
-    private void plotAllRecordedData() {
-        recordedLuxArray.addAll(luxSensor.recordedLuxData);
-        if (recordedLuxArray.size() != 0) {
-            for (LuxData d: recordedLuxArray) {
-                if (currentMax < d.getLux()) {
-                    currentMax = d.getLux();
-                }
-                if (currentMin > d.getLux()) {
-                    currentMin = d.getLux();
-                }
-                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
-                entries.add(entry);
-                lightMeter.setWithTremble(false);
-                lightMeter.setSpeedAt(d.getLux());
-                sum += entry.getY();
-            }
-            y.setAxisMaximum(currentMax);
-            y.setAxisMinimum(currentMin);
-            y.setLabelCount(10);
-            statMax.setText(String.valueOf(currentMax));
-            statMin.setText(String.valueOf(currentMin));
-            statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / recordedLuxArray.size())));
-
-            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
-            dataSet.setDrawCircles(false);
-            dataSet.setDrawValues(false);
-            dataSet.setLineWidth(2);
-            LineData data = new LineData(dataSet);
-
-            mChart.setData(data);
-            mChart.notifyDataSetChanged();
-            mChart.setVisibleXRangeMaximum(80);
-            mChart.moveViewToX(data.getEntryCount());
-            mChart.invalidate();
-        }
     }
 
     private void playRecordedData() {
@@ -230,49 +187,44 @@ public class LuxMeterDataFragment extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (luxSensor.playingData) {
-                            try {
-                                LuxData d = recordedLuxArray.get(turns);
-                                turns++;
-                                if (currentMax < d.getLux()) {
-                                    currentMax = d.getLux();
-                                    statMax.setText(String.valueOf(d.getLux()));
-                                }
-                                if (currentMin > d.getLux()) {
-                                    currentMin = d.getLux();
-                                    statMin.setText(String.valueOf(d.getLux()));
-                                }
-                                y.setAxisMaximum(currentMax);
-                                y.setAxisMinimum(currentMin);
-                                y.setLabelCount(10);
-                                lightMeter.setWithTremble(false);
-                                lightMeter.setSpeedAt(d.getLux());
-
-                                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
-                                entries.add(entry);
-                                count++;
-                                sum += entry.getY();
-                                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / count)));
-
-                                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
-                                dataSet.setDrawCircles(false);
-                                dataSet.setDrawValues(false);
-                                dataSet.setLineWidth(2);
-                                LineData data = new LineData(dataSet);
-
-                                mChart.setData(data);
-                                mChart.notifyDataSetChanged();
-                                mChart.setVisibleXRangeMaximum(80);
-                                mChart.moveViewToX(data.getEntryCount());
-                                mChart.invalidate();
-                            } catch (IndexOutOfBoundsException e) {
-                                graphTimer.cancel();
-                                graphTimer = null;
-                                turns = 0;
-                                luxSensor.playingData = false;
-                                luxSensor.startedPlay = false;
-                                luxSensor.invalidateOptionsMenu();
+                        try {
+                            playComplete = false;
+                            LuxData d = recordedLuxArray.get(turns);
+                            turns++;
+                            if (currentMax < d.getLux()) {
+                                currentMax = d.getLux();
+                                statMax.setText(String.valueOf(d.getLux()));
                             }
+                            if (currentMin > d.getLux()) {
+                                currentMin = d.getLux();
+                                statMin.setText(String.valueOf(d.getLux()));
+                            }
+                            y.setAxisMaximum(currentMax);
+                            y.setAxisMinimum(currentMin);
+                            y.setLabelCount(10);
+                            lightMeter.setWithTremble(false);
+                            lightMeter.setSpeedAt(d.getLux());
+
+                            Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
+                            entries.add(entry);
+                            count++;
+                            sum += entry.getY();
+                            statMean.setText(String.format(Locale.getDefault(), "%.2f", (sum / count)));
+
+                            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
+                            dataSet.setDrawCircles(false);
+                            dataSet.setDrawValues(false);
+                            dataSet.setLineWidth(2);
+                            LineData data = new LineData(dataSet);
+
+                            mChart.setData(data);
+                            mChart.notifyDataSetChanged();
+                            mChart.setVisibleXRangeMaximum(80);
+                            mChart.moveViewToX(data.getEntryCount());
+                            mChart.invalidate();
+                        } catch (IndexOutOfBoundsException e) {
+                            graphTimer.cancel();
+                            playComplete = true;
                         }
                     }
                 });
@@ -280,43 +232,17 @@ public class LuxMeterDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
-    public void stopData() {
-        if (graphTimer != null) {
-            graphTimer.cancel();
-            graphTimer = null;
-        }
-        recordedLuxArray.clear();
-        entries.clear();
-        plotAllRecordedData();
-        luxSensor.startedPlay = false;
-        luxSensor.playingData = false;
-        turns = 0;
-        luxSensor.invalidateOptionsMenu();
-    }
-
-    public void playData() {
-        resetInstrumentData();
-        luxSensor.startedPlay = true;
-        try {
-            if (recordedLuxArray.size() > 1) {
-                LuxData i = recordedLuxArray.get(1);
-                long timeGap = i.getTime() - i.getBlock();
-                processRecordedData(timeGap);
-            } else {
-                processRecordedData(0);
-            }
-        } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void saveGraph() {
-        // Todo: Save graph view to gallery
+        if (playComplete) {
+            mChart.saveToGallery(luxSensor.dateFormat.format(recordedLuxArray.get(0).getTime()), 100);
+            Toast.makeText(getActivity(), "Graph saved to gallery", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getActivity(), "Wait until the play is complete", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setupInstruments() {
-        lightMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(luxSensor.LUXMETER_LIMIT, 10000));
+        lightMeter.setMaxSpeed(10000);
 
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();
@@ -398,13 +324,13 @@ public class LuxMeterDataFragment extends Fragment {
                 luxSensor.writeHeaderToFile = !luxSensor.writeHeaderToFile;
             }
             if (luxSensor.addLocation && luxSensor.gpsLogger.isGPSEnabled()) {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+                String dateTime = luxSensor.dateFormat.format(new Date(timestamp));
                 Location location = luxSensor.gpsLogger.getDeviceLocation();
                 luxSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + sensorReading + "," + location.getLatitude() + "," + location.getLongitude());
                 sensorData = new LuxData(timestamp, block, luxValue, location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+                String dateTime = luxSensor.dateFormat.format(new Date(timestamp));
                 luxSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + sensorReading + ",0.0,0.0");
                 sensorData = new LuxData(timestamp, block, luxValue, 0.0, 0.0);
@@ -445,7 +371,7 @@ public class LuxMeterDataFragment extends Fragment {
 
                 count++;
                 sum += entry.getY();
-                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / count)));
+                statMean.setText(String.format(Locale.getDefault(), "%.2f", (sum / count)));
 
                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
                 dataSet.setDrawCircles(false);
@@ -507,7 +433,6 @@ public class LuxMeterDataFragment extends Fragment {
                     Toast.makeText(getContext(), getResources().getString(R.string.no_lux_sensor), Toast.LENGTH_LONG).show();
                 } else {
                     float max = sensor.getMaximumRange();
-                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(luxSensor.LUXMETER_LIMIT, max).apply();
                     lightMeter.setMaxSpeed(max);
                     sensorManager.registerListener(lightSensorEventListener,
                             sensor, SensorManager.SENSOR_DELAY_FASTEST);

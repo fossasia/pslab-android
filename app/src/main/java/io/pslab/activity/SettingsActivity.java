@@ -17,10 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.pslab.R;
-import io.pslab.fragment.BaroMeterSettingsFragment;
 import io.pslab.fragment.LuxMeterSettingFragment;
 import io.pslab.fragment.SettingsFragment;
-import io.pslab.models.PSLabSensor;
 import io.pslab.others.GPSLogger;
 
 /**
@@ -54,11 +52,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         Fragment fragment;
         switch (title) {
-            case PSLabSensor.LUXMETER:
+            case "Lux Meter":
                 fragment = new LuxMeterSettingFragment();
-                break;
-            case PSLabSensor.BAROMETER:
-                fragment = new BaroMeterSettingsFragment();
                 break;
             default:
                 fragment = new SettingsFragment();

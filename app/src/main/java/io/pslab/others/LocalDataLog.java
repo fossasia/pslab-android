@@ -1,9 +1,9 @@
 package io.pslab.others;
 
-import io.pslab.interfaces.sensorloggers.BaroMeterRecordables;
+import io.pslab.interfaces.sensorloggers.AccelerometerRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
-import io.pslab.models.BaroData;
+import io.pslab.models.AccelerometerData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
 import io.realm.Realm;
@@ -14,7 +14,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables {
+public class LocalDataLog implements LuxMeterRecordables, SensorRecordables,AccelerometerRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -122,36 +122,36 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     }
 
     /***********************************************************************************************
-     * Baro Sensor Section
+     * Accelerometer Sensor Section
      ***********************************************************************************************/
     @Override
-    public BaroData getBaroData(long timestamp) {
-        return realm.where(BaroData.class).equalTo("time", timestamp).findFirst();
+    public AccelerometerData getAccelerometerData(long timestamp) {
+        return realm.where(AccelerometerData.class).equalTo("time", timestamp).findFirst();
     }
 
     @Override
-    public void clearAllBaroRecords() {
+    public void clearAllAccelerometerRecords() {
         realm.beginTransaction();
-        realm.delete(BaroData.class);
+        realm.delete(AccelerometerData.class);
         realm.commitTransaction();
     }
 
     @Override
-    public void clearBlockOfBaroRecords(long block) {
+    public void clearBlockOfAccelerometerRecords(long block) {
         realm.beginTransaction();
-        RealmResults<BaroData> data = getBlockOfBaroRecords(block);
+        RealmResults<AccelerometerData> data = getBlockOfAccelerometerRecords(block);
         data.deleteAllFromRealm();
         realm.commitTransaction();
     }
 
     @Override
-    public RealmResults<BaroData> getAllBaroRecords() {
-        return realm.where(BaroData.class).findAll();
+    public RealmResults<AccelerometerData> getAllAccelerometerRecords() {
+        return realm.where(AccelerometerData.class).findAll();
     }
 
     @Override
-    public RealmResults<BaroData> getBlockOfBaroRecords(long block) {
-        return realm.where(BaroData.class)
+    public RealmResults<AccelerometerData> getBlockOfAccelerometerRecords(long block) {
+        return realm.where(AccelerometerData.class)
                 .equalTo("block", block)
                 .findAll();
     }

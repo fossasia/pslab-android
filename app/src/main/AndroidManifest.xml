@@ -10,7 +10,7 @@
 
     <uses-feature
         android:name="android.hardware.sensor.light"
-        android:required="false" />
+        android:required="true" />
     <uses-feature android:name="android.hardware.usb.host" />
 
     <application
@@ -65,8 +65,7 @@
             android:name=".activity.PowerSourceActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".activity.LuxMeterActivity"
+        <activity android:name=".activity.LuxMeterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WaveGeneratorActivity"
