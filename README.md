@@ -128,6 +128,13 @@ To debug over Wi-Fi: http://blog.fossasia.org/android-app-debugging-over-wifi-fo
 Note :
 1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/org/fossasia/pslab/communication/CommunicationHandler.java)
 
+### Permissions Required
+
+1. Record_Audio : It is required for oscilloscope to accept inputs from the phone inbuilt microphone. You can find its implementation in [AudioJack.java](https://github.com/fossasia/pslab-android/blob/development/app/src/main/java/io/pslab/others/AudioJack.java).
+2. Access_Fine_Location and Internet : It is required for use in lux meter and compass to get the coordinates for tagging the data on the map. You can find its implementation in [GPSLogger.java](https://github.com/fossasia/pslab-android/blob/development/app/src/main/java/io/pslab/others/GPSLogger.java).
+3. Write_External_Storage : It is required for storing log files from instruments that can be transferred out for future analysis.
+4. Read_External_Storage : While writing logs in the storage, [CSVLogger.java](https://github.com/fossasia/pslab-android/blob/development/app/src/main/java/io/pslab/others/CSVLogger.java) first checks whether there is any CSVLogger directory exist or not and that require this read permission.  
+
 ## Setup to use PSLab with Android App
 To use PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ) and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.
 
