@@ -96,6 +96,7 @@ public class MultimeterActivity extends AppCompatActivity {
     private int knobState;
     private String dataRecorded;
     private String valueRecorded;
+    private String defaultValue = getString(R.string.multimeter_default_value);
     private Menu menu;
     private Boolean switchIsChecked;
     private String[] knobMarker;
@@ -133,7 +134,7 @@ public class MultimeterActivity extends AppCompatActivity {
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/digital-7 (italic).ttf");
         quantity.setTypeface(tf);
 
-        String text_quantity = multimeter_data.getString("TextBox", null);
+        String text_quantity = multimeter_data.getString("TextBox", defaultValue);
         String text_unit = multimeter_data.getString("TextBoxUnit", null);
         knob.setState(knobState);
         quantity.setText(text_quantity);
@@ -163,7 +164,7 @@ public class MultimeterActivity extends AppCompatActivity {
                 aSwitch.setChecked(false);
                 knobState = 2;
                 knob.setState(knobState);
-                quantity.setText("");
+                quantity.setText(defaultValue);
                 unit.setText("");
             }
         });
