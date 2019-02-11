@@ -4,5 +4,5 @@
     <item
         android:id="@+id/action_config"
         android:icon="@drawable/action_item_config"
-        android:title="@string/navigation_lux_meter_configure" />
+        android:title="Settings" />
 </menu>
