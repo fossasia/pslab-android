@@ -184,6 +184,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wave_generator_main);
         ButterKnife.bind(this);
 
+
+        waveMonWave1.setEnabled(true);
+        waveMonWave2.setEnabled(true);
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -228,7 +231,16 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 }
             }
         });
-
+        //wave1 label clickable
+        waveMonWave1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!waveBtnActive.equals(WaveConst.WAVE1)) {
+                    waveMonSelected = true;
+                    selectBtn(WaveConst.WAVE1);
+                }
+            }
+        });
         btnCtrlWave2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,7 +250,16 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 }
             }
         });
-
+        //wave2 label clickable
+        waveMonWave2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!waveBtnActive.equals(WaveConst.WAVE2)) {
+                    waveMonSelected = true;
+                    selectBtn(WaveConst.WAVE2);
+                }
+            }
+        });
         imgBtnSin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -455,7 +476,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
         });
     }
-
     public void selectBtn(WaveConst btn_selected) {
 
         switch (btn_selected) {
@@ -463,8 +483,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case WAVE1:
 
                 waveBtnActive = WaveConst.WAVE1;
-                waveMonWave1.setEnabled(true);
-                waveMonWave2.setEnabled(false);
+
+                waveMonWave1.setTextColor(getResources().getColor(R.color.orange));
+                waveMonWave2.setTextColor(getResources().getColor(R.color.dark_grey));
 
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
@@ -477,8 +498,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case WAVE2:
 
                 waveBtnActive = WaveConst.WAVE2;
-                waveMonWave1.setEnabled(false);
-                waveMonWave2.setEnabled(true);
+
+                waveMonWave2.setTextColor(getResources().getColor(R.color.orange));
+                waveMonWave1.setTextColor(getResources().getColor(R.color.dark_grey));
 
                 btnCtrlPhase.setEnabled(true); // enable phase for wave2
 
@@ -535,8 +557,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
             default:
                 waveBtnActive = WaveConst.WAVE1;
-                waveMonWave1.setEnabled(true);
-                waveMonWave2.setEnabled(false);
+                waveMonWave1.setTextColor(getResources().getColor(R.color.orange));
+                waveMonWave2.setTextColor(getResources().getColor(R.color.dark_grey));
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
                 selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
