@@ -88,8 +88,10 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public final String DATA_BLOCK = "data_block";
 
     public static final String LUXMETER = "Lux Meter";
+    public static final String LUXMETER_CONFIGURATIONS = "Lux Meter Configurations";
     public static final String LUXMETER_DATA_FORMAT = "%.2f";
     public static final String BAROMETER = "Barometer";
+    public static final String BAROMETER_CONFIGURATIONS = "Barometer Configurations";
     public static final String BAROMETER_DATA_FORMAT = "%.5f";
 
     @BindView(R.id.sensor_toolbar)
@@ -333,7 +335,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
-                settingIntent.putExtra("title", getSensorName());
+                settingIntent.putExtra("title", getSensorName() + " Configurations");
                 startActivity(settingIntent);
                 break;
             case R.id.show_logged_data:
