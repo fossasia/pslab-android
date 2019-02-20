@@ -20,6 +20,8 @@ import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -161,6 +163,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_oscilloscope);
         ButterKnife.bind(this);
 
@@ -395,6 +399,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         monitorThread = new Thread(runnable);
         monitorThread.start();
     }
+
+
 
     @Override
     public void onClick(View v) {
