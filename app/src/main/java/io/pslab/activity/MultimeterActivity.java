@@ -96,7 +96,7 @@ public class MultimeterActivity extends AppCompatActivity {
     private int knobState;
     private String dataRecorded;
     private String valueRecorded;
-    private String defaultValue = getString(R.string.multimeter_default_value);
+    private String defaultValue;
     private Menu menu;
     private Boolean switchIsChecked;
     private String[] knobMarker;
@@ -107,6 +107,7 @@ public class MultimeterActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multimeter_main);
+        defaultValue = getString(R.string.multimeter_default_value);
         ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.scienceLab;
         knobMarker = getResources().getStringArray(io.pslab.R.array.multimeter_knob_states);
