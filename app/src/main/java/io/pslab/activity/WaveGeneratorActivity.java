@@ -184,9 +184,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wave_generator_main);
         ButterKnife.bind(this);
 
-
-        waveMonWave1.setEnabled(true);
-        waveMonWave2.setEnabled(true);
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -231,7 +228,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 }
             }
         });
-        //wave1 label clickable
         waveMonWave1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -250,7 +246,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 }
             }
         });
-        //wave2 label clickable
         waveMonWave2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
