@@ -400,8 +400,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         monitorThread.start();
     }
 
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
