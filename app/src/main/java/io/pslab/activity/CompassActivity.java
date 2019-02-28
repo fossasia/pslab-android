@@ -1,5 +1,7 @@
 package io.pslab.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,6 +11,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +29,12 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import io.pslab.R;
+import io.pslab.models.CompassData;
+import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.MathUtils;
 import io.pslab.others.SwipeGestureDetector;
 
@@ -39,6 +48,7 @@ import butterknife.ButterKnife;
 public class CompassActivity extends AppCompatActivity implements SensorEventListener {
 
     private static final String PREFS_NAME = "CompassPreference";
+    public CSVLogger compassLogger = null;
 
     @BindView(R.id.compass)
     ImageView compass;
@@ -61,6 +71,8 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
     @BindView(R.id.compass_toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.compass_coordinator_layout)
+    CoordinatorLayout coordinatorLayout;
 
     @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
@@ -81,8 +93,10 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
+    CompassData compassData = new CompassData();
     private SharedPreferences compassPreference;
     private float currentDegree = 0f;
+    public Boolean writeHeaderToFile = true;
     private int direction; // 0 for X-axis, 1 for Y-axis and 2 for Z-axis
     private SensorManager mSensorManager;
 
@@ -136,7 +150,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         tvShadow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 tvShadow.setVisibility(View.GONE);
             }
@@ -190,16 +204,19 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         degree = Math.round(event.values[0]);
         if (degree < 0)
             degree += 360;
+        compassData.setBx(String.valueOf(degree));
         xAxisMagneticField.setText(String.valueOf(degree));
 
         degree = Math.round(event.values[1]);
         if (degree < 0)
             degree += 360;
+        compassData.setBy(String.valueOf(degree));
         yAxisMagneticField.setText(String.valueOf(degree));
 
         degree = Math.round(event.values[2]);
         if (degree < 0)
             degree += 360;
+        compassData.setBz(String.valueOf(degree));
         zAxisMagneticField.setText(String.valueOf(degree));
     }
 
@@ -308,12 +325,48 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         return true;
     }
 
+    private void recordData() {
+        String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(System.currentTimeMillis()));
+        compassLogger.writeCSVFile(System.currentTimeMillis() + "," + dateTime + "," + compassData.getBx()
+                + "," + compassData.getBy() + "," + compassData.getBz());
+        CustomSnackBar.showSnackBar(coordinatorLayout,
+                getString(R.string.csv_store_text) + " " + compassLogger.getCurrentFilePath()
+                , getString(R.string.delete_capital), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog.Builder(CompassActivity.this, R.style.AlertDialogStyle)
+                                .setTitle(R.string.delete_file)
+                                .setMessage(R.string.delete_warning)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        compassLogger.deleteFile();
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, null)
+                                .create()
+                                .show();
+                    }
+                }, Snackbar.LENGTH_LONG);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.compass_help_icon:
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.compass_record_data:
+                if (writeHeaderToFile) {
+                    compassLogger = new CSVLogger(getString(R.string.compass));
+                    compassLogger.prepareLogFile();
+                    compassLogger.writeCSVFile("Timestamp,DateTime,Bx,By,Bz");
+                    recordData();
+                    writeHeaderToFile = !writeHeaderToFile;
+                } else {
+                    recordData();
+                }
                 break;
             case android.R.id.home:
                 this.finish();
