@@ -133,6 +133,12 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
                         dialog.dismiss();
+                        if (LocalDataLog.with().getAllSensorBlocks().size() <= 0){
+                            context.findViewById(R.id.data_logger_blank_view).setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            context.findViewById(R.id.data_logger_blank_view).setVisibility(View.GONE);
+                        }
                     }
                 })
                 .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
