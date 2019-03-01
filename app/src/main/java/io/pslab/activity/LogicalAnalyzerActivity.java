@@ -81,6 +81,21 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
             }
         });
 
+        removeStatusBar();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, LALogicLinesFragment.newInstance(this)).commit();
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        removeStatusBar();
+    }
+    private void removeStatusBar() {
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -96,14 +111,7 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY));
         }
-
-        getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, LALogicLinesFragment.newInstance(this)).commit();
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
