@@ -9,20 +9,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginEnd="@dimen/sensor_params_top"
+        android:layout_marginLeft="@dimen/sensor_params_top"
+        android:layout_marginRight="@dimen/sensor_params_top"
+        android:layout_marginStart="@dimen/sensor_params_top"
+        android:layout_marginBottom="@dimen/sensor_params_top"
         android:orientation="vertical">
 
         <Button
             android:id="@+id/button_sensor_autoscan"
-            android:layout_width="150dp"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dialog_space_width"
             android:background="@color/colorPrimaryDark"
-            android:padding="10dp"
+            android:padding="@dimen/sensor_params_top"
             android:text="@string/autoscan"
             android:textAllCaps="true"
             android:textColor="@color/white"
@@ -31,11 +32,11 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp">
+            android:layout_marginEnd="@dimen/sensor_params_top"
+            android:layout_marginLeft="@dimen/sensor_params_top"
+            android:layout_marginRight="@dimen/sensor_params_top"
+            android:layout_marginStart="@dimen/sensor_params_top"
+            android:layout_marginTop="@dimen/dialog_space_width">
 
             <TextView
                 android:id="@+id/tv_sensor_scan"
@@ -63,6 +64,8 @@
             android:id="@+id/lv_sensor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="@dimen/sensor_params_top" />
     </LinearLayout>
+    <include layout="@layout/bottom_sheet_custom" />
+
 </android.support.design.widget.CoordinatorLayout>
