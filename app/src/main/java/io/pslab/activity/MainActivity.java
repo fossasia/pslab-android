@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
     private static final int TIME_INTERVAL = 2000;
     private long mBackPressed;
+    private boolean homeScreen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
             navItemIndex = 0;
             CURRENT_TAG = TAG_INSTRUMENTS;
             loadHomeFragment();
+        }
+        if(homescreen)
+        {
+            Toast.makeText(this, "Tap on the desired device to start", Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
