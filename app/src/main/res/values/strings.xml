@@ -1015,7 +1015,7 @@
         \u2022 Set the duty and phase for all the SQ pins\n\n
         \u2022 Press View button to generate the PWM signals </string>
 
-    <string name="gen_sine_wave_text">To generate Sine wave or Saw-Tooth wave:</string>
+    <string name="gen_sine_wave_text">To generate Sine wave or Saw-Tooth wave(Trinagular):</string>
     <string name="gen_sq_text">To generate Square wave</string>
     <string name="gen_pwm_text">Similarly, to produce four different PWM signal</string>
 
