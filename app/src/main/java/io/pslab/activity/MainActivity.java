@@ -146,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_INSTRUMENTS;
             loadHomeFragment();
         }
+        Toast.makeText(this, "Tap on the desired device to start", Toast.LENGTH_SHORT)
+                    .show();
     }
 
     private void loadHomeFragment() {
