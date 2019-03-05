@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG_DEVICE = "device";
     private static final String TAG_INSTRUMENTS = "instruments";
-    private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
     private static final String TAG_PINLAYOUT = "pinLayout";
     private static final String TAG_FAQ = "faq";
@@ -180,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Fragment getHomeFragment() throws IOException {
+    private Fragment getHomeFragment() throws IOException{
         switch (navItemIndex) {
             case 1:
                 return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
