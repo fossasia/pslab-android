@@ -146,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_INSTRUMENTS;
             loadHomeFragment();
         }
+        Toast.makeText(getApplicationContext(),getString(R.string.Toast_guide), Toast.LENGTH_SHORT)
+                    .show();
     }
 
     private void loadHomeFragment() {
