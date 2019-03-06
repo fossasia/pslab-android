@@ -6,6 +6,10 @@
     <string name="closeDrawer">close_drawer</string>
 
     <string name="Toast_double_tap">Press again to close PSLab</string>
+    
+    <string name="rec_msg">Tap on REC to start data recording</string>
+    <string name="stoprec_msg">Tap on STOP to stop data recording</string>
+
 
     <string name="nav_device">Device</string>
     <string name="nav_instruments">Instruments</string>

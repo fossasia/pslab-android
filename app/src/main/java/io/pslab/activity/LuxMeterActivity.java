@@ -1,8 +1,10 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
+import android.widget.Toast;
 
 import io.pslab.R;
 import io.pslab.fragment.LuxMeterDataFragment;
@@ -19,6 +21,13 @@ public class LuxMeterActivity extends PSLabSensor {
     private static final String PREF_NAME = "customDialogPreference";
     public final String LUXMETER_LIMIT = "luxmeter_limit";
     public RealmResults<LuxData> recordedLuxData;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Toast.makeText(getApplicationContext(), getString(R.string.rec_msg), Toast.LENGTH_SHORT)
+                .show();
+    }
 
     @Override
     public int getMenu() {
@@ -77,6 +86,8 @@ public class LuxMeterActivity extends PSLabSensor {
         realm.beginTransaction();
         realm.copyToRealm((LuxData) sensorData);
         realm.commitTransaction();
+         Toast.makeText(getApplicationContext(), getString(R.string.stoprec_msg), Toast.LENGTH_SHORT)
+                .show();
     }
 
     @Override
