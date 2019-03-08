@@ -474,6 +474,11 @@ public class MultimeterActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 break;
+            case R.id.multimeter_show_data:
+                Intent intent = new Intent(this, DataLoggerActivity.class);
+                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.multimeter));
+                startActivity(intent);
+                break;
             default:
                 break;
         }
