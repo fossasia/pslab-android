@@ -28,6 +28,12 @@
         android:alpha="0"
         android:background="@color/black" />
 
+    <ImageView
+        android:id="@+id/logic_analyzer_guide_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/menu_icon_guide"
+        />
     <include layout="@layout/bottom_sheet_custom" />
 
 </android.support.design.widget.CoordinatorLayout>
