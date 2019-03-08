@@ -1093,5 +1093,6 @@
     <string name="no_data_fetched">No Data Fetched</string>
     <string name="recorder">Recorder</string>
     <string name="save_graph">Save Graph</string>
-
+    <string name="expand_all_label">Expand All</string>
+    <string name="collapse_all_label">Collapse All</string>
 </resources>

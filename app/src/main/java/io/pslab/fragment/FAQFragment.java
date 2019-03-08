@@ -45,11 +45,28 @@ public class FAQFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ExpandableListView listView;
-
+        TextView expandAllLabel;
+        expandAllLabel = view.findViewById(R.id.faq_expand_label);
         listView = (ExpandableListView) view.findViewById(R.id.expListView);
         listView.setAdapter(new ExpandableListAdapter(questions, answers));
         listView.setGroupIndicator(null);
-
+        expandAllLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (expandAllLabel.getText().equals(getString(R.string.expand_all_label))) {
+                    for (int i = 0; i < questions.length; i++) {
+                        listView.expandGroup(i);
+                    }
+                    expandAllLabel.setText(getString(R.string.collapse_all_label));
+                }
+                else {
+                    for (int i = 0; i < questions.length; i++) {
+                        listView.collapseGroup(i);
+                    }
+                    expandAllLabel.setText(getString(R.string.expand_all_label));
+                }
+            }
+        });
     }
 
     public class ExpandableListAdapter extends BaseExpandableListAdapter {

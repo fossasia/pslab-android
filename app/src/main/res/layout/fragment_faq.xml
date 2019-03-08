@@ -5,7 +5,17 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
-
+    <TextView
+        android:id="@+id/faq_expand_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/expand_all_label"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="end"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginRight="@dimen/faq_answer_margin"
+        />
     <ExpandableListView
         android:id="@+id/expListView"
         android:layout_width="match_parent"
