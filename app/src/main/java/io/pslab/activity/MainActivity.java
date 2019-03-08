@@ -428,6 +428,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_pslab_layout_back).setVisible(!(navItemIndex == 3 || navItemIndex == 4));
+        menu.findItem(R.id.menu_pslab_layout_front).setVisible(!(navItemIndex == 3 || navItemIndex == 4));
         menu.getItem(0).setVisible(PSLabisConnected);
         menu.getItem(1).setVisible(!PSLabisConnected);
         setPSLabVersionIDs();
