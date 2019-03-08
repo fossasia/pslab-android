@@ -16,15 +16,13 @@
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/img_profile"
             android:layout_width="@dimen/profile_width"
             android:layout_height="@dimen/profile_height"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:src="@drawable/logo"
-            app:civ_border_width="2dp"
-            app:civ_border_color="#FF000000"/>
-
+            android:src="@drawable/nav_header_logo"
+            android:contentDescription="@string/app_name"
+            />
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
