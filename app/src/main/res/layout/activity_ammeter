@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/top_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/multimeter_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="@string/appbar_ammeter" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_app_bar_layout">
+
+        <TextView
+            android:id="@+id/display_box"
+            android:layout_width="@dimen/ammeter_length_0"
+            android:layout_height="@dimen/ammeter_textbox_height"
+            android:layout_marginStart="@dimen/ammeter_layout_margin_2"
+            android:layout_marginLeft="@dimen/ammeter_layout_margin_2"
+            android:layout_marginEnd="@dimen/ammeter_layout_margin_2"
+            android:layout_marginRight="@dimen/ammeter_layout_margin_2"
+            android:background="@drawable/tv_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/ammeter_length_0"
+            android:layout_marginTop="@dimen/ammeter_constraint_2"
+            android:layout_marginEnd="@dimen/ammeter_layout_margin"
+            android:layout_marginRight="@dimen/ammeter_layout_margin"
+            android:textSize="@dimen/ammeter_quantity_dimen"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="@+id/display_box"
+            app:layout_constraintTop_toTopOf="@+id/display_box" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ammeter_line_width"
+            android:layout_marginStart="@dimen/ammeter_layout_margin_2"
+            android:layout_marginLeft="@dimen/ammeter_layout_margin_2"
+            android:layout_marginEnd="@dimen/ammeter_layout_margin_2"
+            android:layout_marginRight="@dimen/ammeter_layout_margin_2"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toTopOf="@+id/unit"
+            app:layout_constraintEnd_toEndOf="@+id/display_box"
+            app:layout_constraintStart_toStartOf="@+id/display_box" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/reset"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/display_box">
+
+            <TextView
+                android:id="@+id/upper_box_title"
+                android:layout_width="@dimen/ammeter_length_0"
+                android:layout_height="33dp"
+                android:layout_marginStart="@dimen/ammeter_constraint_1"
+                android:layout_marginLeft="@dimen/ammeter_constraint_1"
+                android:layout_marginEnd="@dimen/ammeter_constraint_1"
+                android:layout_marginRight="@dimen/ammeter_button_height"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingTop="@dimen/ammeter_button_text_padding"
+                android:paddingBottom="@dimen/ammeter_button_text_padding"
+                android:text="Current mA"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/ammeter_bottombutton_textsize"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="105dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="140dp"
+            android:layout_marginLeft="140dp"
+            android:layout_marginEnd="@dimen/ammeter_left_button_margin_right"
+            android:layout_marginRight="@dimen/ammeter_left_button_margin_right"
+            android:background="@color/colorPrimary"
+            android:text="@string/reset"
+            android:textColor="@color/white"
+            android:textSize="@dimen/ammeter_bottombutton_textsize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/read"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

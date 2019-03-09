@@ -398,5 +398,18 @@
     <dimen name="splash_screen_logo_height">314dp</dimen>
     <dimen name="splash_screen_name_width">271dp</dimen>
     <dimen name="splash_screen_name_height">95dp</dimen>
+    
+    <dimen name="ammeter_length_0">0dp</dimen>
+    <dimen name="ammeter_textbox_height">110dp</dimen>
+    <dimen name="ammeter_layout_margin_2">10dp</dimen>
+    <dimen name="ammeter_constraint_2">16dp</dimen>
+    <dimen name="ammeter_layout_margin">20dp</dimen>
+    <dimen name="ammeter_quantity_dimen">50dp</dimen>
+    <dimen name="ammeter_line_width">1dp</dimen>
+    <dimen name="ammeter_constraint_1">8dp</dimen>
+    <dimen name="ammeter_button_height">40dp</dimen>
+    <dimen name="ammeter_button_text_padding">4dp</dimen>
+    <dimen name="ammeter_bottombutton_textsize">18dp</dimen>
+    <dimen name="ammeter_left_button_margin_right">5dp</dimen>
 
 </resources>
