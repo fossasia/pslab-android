@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/ly_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:layout_margin="8dp"
+    android:padding="25dp"
+    android:elevation="25dp"
+    app:cardCornerRadius="10dp">
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,7 +30,7 @@
             android:layout_marginTop="@dimen/faq_question_margin_top"
             android:text="@string/answer"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="@dimen/faq_question_text_size" />
 
         <TextView
@@ -29,8 +43,10 @@
             android:paddingLeft="@dimen/text_padding_top"
             android:paddingRight="@dimen/text_padding_top"
             android:paddingTop="@dimen/list_item_padding"
-            android:textSize="@dimen/text_size_wavegen" />
+            android:textSize="@dimen/text_size_wavegen"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 
 </LinearLayout>
+</android.support.v7.widget.CardView>
