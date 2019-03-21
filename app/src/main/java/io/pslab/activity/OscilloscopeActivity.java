@@ -380,6 +380,15 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         };
         monitorThread = new Thread(runnable);
         monitorThread.start();
+
+        ImageView guideImageView = findViewById(R.id.oscilloscope_guide_button);
+        guideImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
+                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
     }
 
     @Override
