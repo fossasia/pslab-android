@@ -406,12 +406,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Uri selectedUri = Uri.parse(logDirectory.getAbsolutePath());
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(selectedUri, "resource/folder");
-                        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
-                            startActivity(intent);
-                        }
+                        Intent intent = new Intent(PSLabSensor.this, DataLoggerActivity.class);
+                        startActivity(intent);
                     }
                 }, Snackbar.LENGTH_INDEFINITE);
     }
