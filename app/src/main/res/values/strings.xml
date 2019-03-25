@@ -930,6 +930,24 @@
     <string name="no_lux_sensor">Device does not have a Lux sensor</string>
     <string name="light_meter">Light Meter</string>
     <string name="select_light_sensor">Select Sensor</string>
+    <string name="active_sensor">Active Sensor</string>
+    <string name="setting_baro">setting_baro_sensor_type</string>
+    <string name="include_location">Include the location data in the logged file</string>
+    <string name="location_sensor">include_location_sensor_data</string>
+    <string name="include_cap">Include Location Data</string>
+    <string name="time_string">Please provide time interval(in ms) at which data will be updated</string>
+    <string name="setting_baro_update">setting_baro_update_period</string>
+    <string name="setting_lux_update">setting_lux_update_period</string>
+    <string name="default_value_baro">1.1</string>
+    <string name="default_value_lux">1</string>
+    <string name="dialogue_msg_atm">Please provide maximum limit of atm value to be recorded</string>
+    <string name="dialogue_msg_lux">Please provide maximum limit of Lux value to be recorded</string>
+    <string name="high_limit_baro">setting_baro_high_limit</string>
+    <string name="high_limit_lux">setting_lux_high_limit</string>
+    <string name="setting_lux_type">setting_lux_sensor_type</string>
+    <string name="setting_lux_sensor_gain">setting_lux_sensor_gain</string>
+    <string name="set_gain_sensor">Please set gain of the sensor</string>
+    <string name="sensor_gain">Sensor Gain</string>
     <string-array name="lux_sensors">
         <item>Built-In</item>
         <item>BH1750</item>
@@ -1080,6 +1098,10 @@
     \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
 
     <string name="lux_meter">Lux Meter</string>
+    <string name="lux_default_1000">1000</string>
+    <string name="lux_default_2000">2000</string>
+    <string name="lux_default_0">0</string>
+    <string name="lux_summary">1000 ms</string>
     <string name="log_saved_directory">Log saved in\n</string>
     <string name="log_saved_failed">Could not save the log. Please check storage permission.</string>
     <string name="open">Open</string>
