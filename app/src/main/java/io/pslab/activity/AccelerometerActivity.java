@@ -244,6 +244,8 @@ public class AccelerometerActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 break;
+            case R.id.show_guide:
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             default:
                 break;
         }
