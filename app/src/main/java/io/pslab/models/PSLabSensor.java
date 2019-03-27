@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -16,8 +15,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,6 +36,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.activity.DrawerActivity;
 import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
@@ -59,7 +57,7 @@ import io.realm.RealmObject;
  * Created by Padmal on 10/20/18.
  */
 
-public abstract class PSLabSensor extends AppCompatActivity {
+public abstract class PSLabSensor extends DrawerActivity {
 
     public boolean isRecording = false;
     public boolean locationEnabled = true;
@@ -94,8 +92,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String BAROMETER_CONFIGURATIONS = "Barometer Configurations";
     public static final String BAROMETER_DATA_FORMAT = "%.5f";
 
-    @BindView(R.id.sensor_toolbar)
-    Toolbar sensorToolBar;
     @BindView(R.id.sensor_cl)
     CoordinatorLayout coordinatorLayout;
 
@@ -215,7 +211,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generic_sensor);
         ButterKnife.bind(this);
-        setSupportActionBar(sensorToolBar);
         getSupportActionBar().setTitle(getSensorName());
         markers = new JSONArray();
         psLabPermission = PSLabPermission.getInstance();
