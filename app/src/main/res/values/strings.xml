@@ -846,7 +846,7 @@
     <string name="multimeter_dialog_heading">Multimeter</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">Multimeter Configurations</string>
-    <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element.</string>
+    <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element. \n\n\u2022 CH1 and CH2 can read a free range of voltage. CH3, SEN, CAP, AN8 can only read from 0V to 3.30V</string>
     <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.\n\n
         <b>Different Sections</b>\n\n
         <b>Resistance:</b> Measures the resistance of the element connected between the SEN and GND pin of the PSLab device.\n\n
