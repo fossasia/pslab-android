@@ -34,6 +34,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.BuildConfig;
 import io.pslab.R;
 import io.pslab.communication.CommunicationHandler;
 import io.pslab.fragment.AboutUsFragment;
@@ -279,6 +280,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                         startActivity(new Intent(MainActivity.this, DataLoggerActivity.class));
                         break;
+                    case R.id.nav_share_app:
+                        try {
+                            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                            shareIntent.setType("text/plain");
+                            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
+                            String shareMessage = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                            startActivity(shareIntent);
+                        } catch(Exception e) {
+                            //e.toString();
+                        }
                     default:
                         navItemIndex = 0;
                 }
