@@ -4,35 +4,23 @@
     <item
         android:id="@+id/record_data"
         android:icon="@drawable/ic_record_white"
-        android:orderInCategory="1"
         android:title="@string/record_csv_data"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/stop_data"
-        android:icon="@drawable/ic_stop_white_24dp"
-        android:orderInCategory="2"
-        android:title="@string/stop"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/play_data"
-        android:icon="@drawable/ic_play_arrow_white_24dp"
-        android:orderInCategory="3"
-        android:title="@string/play"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/show_guide"
-        android:orderInCategory="5"
         android:title="@string/show_guide"
         app:showAsAction="never" />
     <item
         android:id="@+id/show_logged_data"
-        android:orderInCategory="6"
         android:title="@string/show_logged_data"
         app:showAsAction="never" />
+    <!--<item
+        android:id="@+id/show_map"
+        android:icon="@drawable/menu_icon_map"
+        android:title="@string/view_map"
+        app:showAsAction="never" />-->
     <item
         android:id="@+id/settings"
-        android:orderInCategory="7"
-        android:title=""
+        android:title="@string/accelerometer_configurations"
         app:showAsAction="never" />
 </menu>
-
