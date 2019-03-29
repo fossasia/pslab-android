@@ -15,6 +15,7 @@ public class FAQFragment extends Fragment {
 
     private String[] questions;
     private String[][] answers;
+    private int lastExpandedPosition = -1;
 
     public static FAQFragment newInstance() {
         return new FAQFragment();
@@ -49,7 +50,15 @@ public class FAQFragment extends Fragment {
         listView = (ExpandableListView) view.findViewById(R.id.expListView);
         listView.setAdapter(new ExpandableListAdapter(questions, answers));
         listView.setGroupIndicator(null);
-
+        listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if(lastExpandedPosition != -1 && groupPosition != lastExpandedPosition){
+                    listView.collapseGroup(lastExpandedPosition);
+                }
+                lastExpandedPosition = groupPosition;
+            }
+        });
     }
 
     public class ExpandableListAdapter extends BaseExpandableListAdapter {
