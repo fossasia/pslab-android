@@ -153,6 +153,7 @@
     <string name="accelerometer_intro">Accelerometer is used to measure acceleration of a body along the X, Y and Z axis.\n</string>
     <string name="accelerometer_description_text">\n\nThe figure above shows the direction of all the three axis when the mobile is held straight.\n\nSteps to measure acceleration in PSLab app:\n\n\u2022 Hold the device as shown in the above figure.\n\n\u2022 Accelerate the device along any one or multiple axis.\n\n\u2022 Observe the values in the cards or the plotted graph of any particular axis.\n\nThe Accelerometer instrument can also be used to measure the acceleration of a moving body by placing the device on/inside the body and then accelerating the body.\n\nNOTE: Don\'t accelerate the body if the device isn\'t properly attached else the device could be damaged. </string>
     <string name="accelerometer_configurations">Accelerometer Configurations</string>
+    <string name="no_accelerometer_sensor">Device does not have a Accelerometer sensor</string>
 
     <string name="set_triggers">Set Triggers</string>
     <string name="remove">Remove</string>
@@ -1082,6 +1083,7 @@
     <string name="lux_meter">Lux Meter</string>
     <string name="log_saved_directory">Log saved in\n</string>
     <string name="log_saved_failed">Could not save the log. Please check storage permission.</string>
+    <string name="no_sensor_message">Recording is disabled as required sensor is not present in device</string>
     <string name="open">Open</string>
     <string name="play">Play</string>
     <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
@@ -1091,7 +1093,9 @@
     GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
     \u2022 Select sensor by going to the Configure tab from the bottom navigation bar and choose BHT-1750 in the drop down menu under Select Sensor.\n</string>
     <string name="no_data_fetched">No Data Fetched</string>
-    <string name="recorder">Recorder</string>
-    <string name="save_graph">Save Graph</string>
+    <!--<string name="save_graph">Save Graph</string>-->
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
