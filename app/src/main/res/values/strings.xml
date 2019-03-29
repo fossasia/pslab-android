@@ -6,6 +6,7 @@
     <string name="closeDrawer">close_drawer</string>
 
     <string name="Toast_double_tap">Press again to close PSLab</string>
+    <string name="Toast_magnetic_not_present">"The sensor required for this instrument is not present in your device"</string>
 
     <string name="nav_device">Device</string>
     <string name="nav_instruments">Instruments</string>
@@ -792,7 +793,7 @@
     <string name="text_parallel_axes">Select axes parallel to ground</string>
     <string name="unit_degree">°</string>
     <string name="compass_test_value">360°</string>
-    <string name="show_axis_help">Show Guide</string>
+    <string name="show_axis_help">Get current axis</string>
 
     <string name="compass_bottom_sheet_heading">Compass</string>
     <string name="compass_bottom_sheet_text">Compass instrument is used to navigate and to find magnetic field along axis. Compass instrument in PSLab app can be used with built-in mobile sensors or with sensor HMC5883L.</string>
