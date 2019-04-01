@@ -24,9 +24,11 @@ import java.util.Date;
 
 import io.pslab.R;
 import io.pslab.activity.BarometerActivity;
+import io.pslab.activity.GyroscopeActivity;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.models.BaroData;
+import io.pslab.models.GyroData;
 import io.pslab.models.LuxData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
@@ -72,6 +74,10 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 holder.sensor.setText(context.getResources().getString(R.string.baro_meter));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_barometer_log));
                 break;
+            case PSLabSensor.GYROSCOPE:
+                holder.sensor.setText(context.getResources().getString(R.string.gyroscope));
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logdata_logo));
+                break;
             default:
                 break;
         }
@@ -107,6 +113,11 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             BaroMeter.putExtra(KEY_LOG, true);
             BaroMeter.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(BaroMeter);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.gyroscope))) {
+            Intent Gyroscope = new Intent(context, GyroscopeActivity.class);
+            Gyroscope.putExtra(KEY_LOG, true);
+            Gyroscope.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(Gyroscope);
         }
     }
 
@@ -129,6 +140,8 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                         if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LUXMETER)) {
                             LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.BAROMETER)) {
+                            LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GYROSCOPE)) {
                             LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
@@ -174,6 +187,24 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     JSONObject i = new JSONObject();
                     i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
                     i.put("data", d.getBaro());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GYROSCOPE)) {
+            RealmResults<GyroData> data = LocalDataLog.with().getBlockOfGyroRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (GyroData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("dataX", d.getGyroX());
+                    i.put("dataY", d.getGyroY());
+                    i.put("dataZ", d.getGyroZ());
                     i.put("lon", d.getLon());
                     i.put("lat", d.getLat());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);

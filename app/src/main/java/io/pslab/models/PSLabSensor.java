@@ -44,6 +44,7 @@ import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
 import io.pslab.fragment.BaroMeterDataFragment;
+import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
@@ -93,6 +94,10 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String BAROMETER = "Barometer";
     public static final String BAROMETER_CONFIGURATIONS = "Barometer Configurations";
     public static final String BAROMETER_DATA_FORMAT = "%.5f";
+    public static final String GYROSCOPE = "Gyroscope";
+    public static final String GYROSCOPE_DATA_FORMAT = "%.2f";
+    public static final String GYROSCOPE_CONFIGURATIONS = "Gyroscope Configurations";
+
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -314,6 +319,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
                         ((BaroMeterDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
+                    } else if (getSensorFragment() instanceof GyroscopeDataFragment) {
+                        ((GyroscopeDataFragment) getSupportFragmentManager()
+                                .findFragmentByTag(getSensorName())).playData();
                     }
                 }
                 invalidateOptionsMenu();
@@ -324,6 +332,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                             .findFragmentByTag(getSensorName())).stopData();
                 } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
                     ((BaroMeterDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
+                } else if (getSensorFragment() instanceof GyroscopeDataFragment) {
+                    ((GyroscopeDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
                 }
                 break;

@@ -66,6 +66,7 @@
 
     <dimen name="accel_textsize_large">15sp</dimen>
     <dimen name="accel_textsize_small">9sp</dimen>
+    <dimen name="gyro_textsize_small">8sp</dimen>
     <dimen name="accel_textsize_medium">12sp</dimen>
     <dimen name="accel_value_width">55dp</dimen>
     <dimen name="accel_minmax_text_width">35dp</dimen>

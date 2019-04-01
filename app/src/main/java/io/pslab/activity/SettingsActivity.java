@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.pslab.R;
 import io.pslab.fragment.BaroMeterSettingsFragment;
+import io.pslab.fragment.GyroscopeSettingsFragment;
 import io.pslab.fragment.LuxMeterSettingFragment;
 import io.pslab.fragment.SettingsFragment;
 import io.pslab.models.PSLabSensor;
@@ -59,6 +60,9 @@ public class SettingsActivity extends AppCompatActivity {
                 break;
             case PSLabSensor.BAROMETER_CONFIGURATIONS:
                 fragment = new BaroMeterSettingsFragment();
+                break;
+            case PSLabSensor.GYROSCOPE_CONFIGURATIONS:
+                fragment = new GyroscopeSettingsFragment();
                 break;
             default:
                 fragment = new SettingsFragment();
