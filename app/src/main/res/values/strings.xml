@@ -1093,5 +1093,6 @@
     <string name="no_data_fetched">No Data Fetched</string>
     <string name="recorder">Recorder</string>
     <string name="save_graph">Save Graph</string>
-
+    <string name="delete_all">Delete All Data</string>
+    <string name="delete_all_message">Are You Sure?</string>
 </resources>
