@@ -34,8 +34,6 @@ public class GPSLogger {
     private String provider = LocationManager.GPS_PROVIDER;
     public AlertDialog gpsAlert;
 
-    private boolean locationReady = false;
-
     public GPSLogger(Context context, LocationManager locationManager) {
         this.context = context;
         this.locationManager = locationManager;
@@ -81,7 +79,6 @@ public class GPSLogger {
         @Override
         public void onLocationChanged(Location location) {
             bestLocation = location;
-            locationReady = true;
         }
 
         @Override
@@ -106,7 +103,6 @@ public class GPSLogger {
      * Stop requesting updates
      */
     public void removeUpdate() {
-        locationReady = false;
         locationManager.removeUpdates(locationListener);
     }
 
@@ -120,11 +116,7 @@ public class GPSLogger {
                 locationManager.requestLocationUpdates(provider,
                         UPDATE_INTERVAL_IN_MILLISECONDS, MIN_DISTANCE_CHANGE_FOR_UPDATES,
                         locationListener);
-                if (locationReady) {
-                    return locationManager.getLastKnownLocation(provider);
-                } else {
-                    return dummyLocation();
-                }
+                return locationManager.getLastKnownLocation(provider);
             } else {
                 return dummyLocation();
             }
