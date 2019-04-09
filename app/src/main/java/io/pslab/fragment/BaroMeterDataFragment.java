@@ -180,8 +180,8 @@ public class BaroMeterDataFragment extends Fragment {
             y.setAxisMaximum(currentMax);
             y.setAxisMinimum(currentMin);
             y.setLabelCount(10);
-            statMax.setText(String.valueOf(currentMax));
-            statMin.setText(String.valueOf(currentMin));
+            statMax.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, currentMax));
+            statMin.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, currentMin));
             statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / recordedBaroArray.size())));
 
             LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
@@ -233,11 +233,11 @@ public class BaroMeterDataFragment extends Fragment {
                                 turns++;
                                 if (currentMax < d.getBaro()) {
                                     currentMax = d.getBaro();
-                                    statMax.setText(String.valueOf(d.getBaro()));
+                                    statMax.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, d.getBaro()));
                                 }
                                 if (currentMin > d.getBaro()) {
                                     currentMin = d.getBaro();
-                                    statMin.setText(String.valueOf(d.getBaro()));
+                                    statMin.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, d.getBaro()));
                                 }
                                 y.setAxisMaximum(currentMax);
                                 y.setAxisMinimum(currentMin);
@@ -415,11 +415,11 @@ public class BaroMeterDataFragment extends Fragment {
     private void visualizeData() {
         if (currentMax < baroValue) {
             currentMax = baroValue;
-            statMax.setText(String.valueOf(baroValue));
+            statMax.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, baroValue));
         }
         if (currentMin > baroValue) {
             currentMin = baroValue;
-            statMin.setText(String.valueOf(baroValue));
+            statMin.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, baroValue));
         }
         y.setAxisMaximum(currentMax);
         y.setAxisMinimum(currentMin);
