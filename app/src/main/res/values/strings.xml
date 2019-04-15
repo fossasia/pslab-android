@@ -1116,5 +1116,6 @@
     <string name="no_data_fetched">No Data Fetched</string>
     <string name="recorder">Recorder</string>
     <string name="save_graph">Save Graph</string>
-
+    <string name="import_log_action">Import Log</string>
+    <string name="import_data_log_no_selection_error">Kindly select one of the devices</string>
 </resources>
