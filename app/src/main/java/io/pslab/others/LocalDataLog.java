@@ -1,8 +1,10 @@
 package io.pslab.others;
 
+import io.pslab.interfaces.sensorloggers.AccelerometerRecordables;
 import io.pslab.interfaces.sensorloggers.BaroMeterRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
+import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
@@ -14,7 +16,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables {
+public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, AccelerometerRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -117,6 +119,41 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     @Override
     public RealmResults<LuxData> getBlockOfLuxRecords(long block) {
         return realm.where(LuxData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Accelerometer Sensor Section
+     ***********************************************************************************************/
+    @Override
+    public AccelerometerData getAccelerometerData(long timestamp) {
+        return realm.where(AccelerometerData.class).equalTo("time", timestamp).findFirst();
+    }
+
+    @Override
+    public void clearAllAccelerometerRecords() {
+        realm.beginTransaction();
+        realm.delete(AccelerometerData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfAccelerometerRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<AccelerometerData> data = getBlockOfAccelerometerRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<AccelerometerData> getAllAccelerometerRecords() {
+        return realm.where(AccelerometerData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<AccelerometerData> getBlockOfAccelerometerRecords(long block) {
+        return realm.where(AccelerometerData.class)
                 .equalTo("block", block)
                 .findAll();
     }

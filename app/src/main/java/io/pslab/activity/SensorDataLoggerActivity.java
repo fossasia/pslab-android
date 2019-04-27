@@ -237,13 +237,6 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                                 realm.commitTransaction();
                                 Toast.makeText(SensorDataLoggerActivity.this, "Data Logged Successfully", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
-                                /*
-                                Log.v("Realm Transaction", "Successful");
-                                RealmResults<DataMPU6050> results = realm.where(DataMPU6050.class).findAll();
-                                for (int i = 0; i < results.size(); i++) {
-                                    Log.v("Realm Saved Data ", results.get(i).toString());
-                                }
-                                */
                             }
                         })
                         .autoDismiss(false)
@@ -299,7 +292,6 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
             }
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

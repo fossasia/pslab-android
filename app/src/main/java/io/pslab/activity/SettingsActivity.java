@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.pslab.R;
+import io.pslab.fragment.AccelerometerSettingsFragment;
 import io.pslab.fragment.BaroMeterSettingsFragment;
 import io.pslab.fragment.LuxMeterSettingFragment;
 import io.pslab.fragment.SettingsFragment;
@@ -60,6 +61,8 @@ public class SettingsActivity extends AppCompatActivity {
             case PSLabSensor.BAROMETER_CONFIGURATIONS:
                 fragment = new BaroMeterSettingsFragment();
                 break;
+            case PSLabSensor.ACCELEROMETER:
+                fragment = new AccelerometerSettingsFragment();
             default:
                 fragment = new SettingsFragment();
                 break;
