@@ -86,7 +86,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(s, "1000");
-                    editor.commit();
+                    editor.apply();
                 }
                 break;
             case KEY_LUX_SENSOR_GAIN:
@@ -98,7 +98,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                     sensorGainPref.setText("1");
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(KEY_LUX_SENSOR_GAIN, "1");
-                    editor.commit();
+                    editor.apply();
                 }
                 break;
             case KEY_HIGH_LIMIT:
@@ -110,7 +110,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                     higLimitPref.setText("2000");
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(KEY_HIGH_LIMIT, "2000");
-                    editor.commit();
+                    editor.apply();
                 }
                 break;
             case KEY_LUX_SENSOR_TYPE:

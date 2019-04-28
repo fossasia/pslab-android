@@ -154,13 +154,13 @@ public class MultimeterActivity extends AppCompatActivity {
                 switchIsChecked = isChecked;
                 SharedPreferences.Editor editor = multimeter_data.edit();
                 editor.putBoolean("SwitchState", switchIsChecked);
-                editor.commit();
+                editor.apply();
             }
         });
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                multimeter_data.edit().clear().commit();
+                multimeter_data.edit().clear().apply();
                 switchIsChecked = false;
                 aSwitch.setChecked(false);
                 knobState = 2;
@@ -367,7 +367,7 @@ public class MultimeterActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = multimeter_data.edit();
         editor.putString("TextBox", Quantity);
         editor.putString("TextBoxUnit", Unit);
-        editor.commit();
+        editor.apply();
         quantity.setText(Quantity);
         unit.setText(Unit);
     }
@@ -380,7 +380,7 @@ public class MultimeterActivity extends AppCompatActivity {
     private void saveKnobState(int state) {
         SharedPreferences.Editor editor = multimeter_data.edit();
         editor.putInt("KnobState", state);
-        editor.commit();
+        editor.apply();
     }
 
     @Override

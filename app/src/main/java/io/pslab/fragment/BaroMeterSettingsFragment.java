@@ -88,7 +88,7 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(s, "1000");
-                    editor.commit();
+                    editor.apply();
                 }
                 break;
             case KEY_HIGH_LIMIT:
@@ -104,7 +104,7 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                     highLimitPref.setText("1.1");
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(KEY_HIGH_LIMIT, "1.1");
-                    editor.commit();
+                    editor.apply();
                 }
                 break;
             case KEY_BARO_SENSOR_TYPE:
