@@ -92,7 +92,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String LUXMETER_DATA_FORMAT = "%.2f";
     public static final String BAROMETER = "Barometer";
     public static final String BAROMETER_CONFIGURATIONS = "Barometer Configurations";
-    public static final String BAROMETER_DATA_FORMAT = "%.5f";
+    public static final String BAROMETER_DATA_FORMAT = "%.2f";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
