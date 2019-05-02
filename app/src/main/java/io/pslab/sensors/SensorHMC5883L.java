@@ -22,6 +22,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
@@ -260,9 +261,9 @@ public class SensorHMC5883L extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            tvSensorHMC5883Lbx.setText(String.valueOf(dataHMC5883L.get(0)));
-            tvSensorHMC5883Lby.setText(String.valueOf(dataHMC5883L.get(1)));
-            tvSensorHMC5883Lbz.setText(String.valueOf(dataHMC5883L.get(2)));
+            tvSensorHMC5883Lbx.setText(DataFormatter.formatDouble(dataHMC5883L.get(0), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorHMC5883Lby.setText(DataFormatter.formatDouble(dataHMC5883L.get(1), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorHMC5883Lbz.setText(DataFormatter.formatDouble(dataHMC5883L.get(2), DataFormatter.HIGH_PRECISION_FORMAT));
 
             LineDataSet dataset1 = new LineDataSet(entriesBx, getString(R.string.bx));
             LineDataSet dataSet2 = new LineDataSet(entriesBy, getString(R.string.by));

@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
@@ -344,14 +345,13 @@ public class SensorMPU925X extends AppCompatActivity {
 
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            tvSensorMPU925Xax.setText(String.valueOf(dataAccel[0]));
-            tvSensorMPU925Xay.setText(String.valueOf(dataAccel[1]));
-            tvSensorMPU925Xaz.setText(String.valueOf(dataAccel[2]));
-            tvSensorMPU925Xgx.setText(String.valueOf(dataGyro[0]));
-            tvSensorMPU925Xgy.setText(String.valueOf(dataGyro[1]));
-            tvSensorMPU925Xgz.setText(String.valueOf(dataGyro[2]));
-            tvSensorMPU925Xtemp.setText(String.valueOf(dataTemp));
-
+            tvSensorMPU925Xax.setText(DataFormatter.formatDouble(dataAccel[0], DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU925Xay.setText(DataFormatter.formatDouble(dataAccel[1], DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU925Xaz.setText(DataFormatter.formatDouble(dataAccel[2], DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU925Xgx.setText(DataFormatter.formatDouble(dataGyro[0], DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU925Xgy.setText(DataFormatter.formatDouble(dataGyro[1], DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU925Xgz.setText(DataFormatter.formatDouble(dataGyro[2], DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU925Xtemp.setText(DataFormatter.formatDouble(dataTemp, DataFormatter.HIGH_PRECISION_FORMAT));
             LineDataSet dataSet1 = new LineDataSet(entriesax, getString(R.string.ax));
             LineDataSet dataSet2 = new LineDataSet(entriesay, getString(R.string.ay));
             LineDataSet dataSet3 = new LineDataSet(entriesaz, getString(R.string.az));

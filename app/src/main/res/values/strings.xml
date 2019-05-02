@@ -14,7 +14,6 @@
     <string name="nav_report">Feedback &amp; Bugs</string>
     <string name="nav_help_feedback">FAQs</string>
     <string name="nav_share">Share App</string>
-
     <string name="pslab_pinlayout">Pin Layout</string>
     <string name="pslab_pinlayout_front">Pin Layout Front</string>
     <string name="pslab_pinlayout_back">Pin Layout Back</string>
@@ -154,6 +153,7 @@
     <string name="accelerometer_intro">Accelerometer is used to measure acceleration of a body along the X, Y and Z axis.\n</string>
     <string name="accelerometer_description_text">\n\nThe figure above shows the direction of all the three axis when the mobile is held straight.\n\nSteps to measure acceleration in PSLab app:\n\n\u2022 Hold the device as shown in the above figure.\n\n\u2022 Accelerate the device along any one or multiple axis.\n\n\u2022 Observe the values in the cards or the plotted graph of any particular axis.\n\nThe Accelerometer instrument can also be used to measure the acceleration of a moving body by placing the device on/inside the body and then accelerating the body.\n\nNOTE: Don\'t accelerate the body if the device isn\'t properly attached else the device could be damaged. </string>
     <string name="accelerometer_configurations">Accelerometer Configurations</string>
+    <string name="no_accelerometer_sensor">Device does not have any accelerometer sensor</string>
 
     <string name="set_triggers">Set Triggers</string>
     <string name="remove">Remove</string>
@@ -563,15 +563,8 @@
     <string name="servo_angles">Servo Angles</string>
     <string name="set_angles">Set Angles</string>
     <string name="reset_angles">Reset Angles</string>
-    <string name="timebase_label_875">875.00 μs</string>
-    <string name="timebase_label_1">1.00 ms</string>
-    <string name="timebase_label_2">2.00 ms</string>
-    <string name="timebase_label_4">4.00 ms</string>
-    <string name="timebase_label_8">8.00 ms</string>
-    <string name="timebase_label_25_60">25.60 ms</string>
-    <string name="timebase_label_38_40">38.40 ms</string>
-    <string name="timebase_label_51_20">51.20 ms</string>
-    <string name="timebase_label_102_40">102.40 ms</string>
+    <string name="timebase_microsec">%1$.2f μs</string>
+    <string name="timebase_milisec">%1$.2f ms</string>
     <string name="time_space">Time </string>
     <string name="unit_μs">(μs)</string>
     <string name="label_ch1">CH1</string>
@@ -590,15 +583,14 @@
     <string name="experiment_setup_aim">AIM : To study Diode I-V charateristics</string>
     <string name="lorem_ipsum_text">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</string>
     <string name="experiment_setup">Experiment Setup</string>
-    <string name="ch3_value">CH3 (+/- 3.3V)</string>
+    <string name="ch3_value">CH3 (+/- %1$.1fV)</string>
     <string name="one_value">1.0</string>
     <string name="fourier_transforms">Fourier Transforms</string>
     <string name="pv1">PV1</string>
-    <string name="zero_volts">0.00 V</string>
+    <string name="value_volts">%1$.2f V</string>
     <string name="aquire_data">Acquire Data</string>
     <string name="ten_hz">10Hz</string>
     <string name="timebase">TimeBase</string>
-    <string name="timebase_trigger_value">875.00 μs</string>
     <string name="text_view">TextView</string>
     <string name="device_status_text">PSLab Device not found</string>
     <string name="select_mic">[SELECT MIC]</string>
@@ -639,8 +631,6 @@
     <string name="no_permission_for_maps">Not sufficient permission to load map</string>
     <string name="no_permission_for_gps">Not sufficient permission to locate device</string>
     <string name="no_permission_for_logs">Not sufficient permission to log data</string>
-
-    <string name="value_null">0.00</string>
 
     <string-array name="export_data_format_list">
         <item>TXT Format</item>
@@ -793,7 +783,7 @@
     <string name="text_parallel_axes">Select axes parallel to ground</string>
     <string name="unit_degree">°</string>
     <string name="compass_test_value">360°</string>
-    <string name="show_axis_help">Show Guide</string>
+    <string name="show_axis_help">Get current axis</string>
 
     <string name="compass_bottom_sheet_heading">Compass</string>
     <string name="compass_bottom_sheet_text">Compass instrument is used to navigate and to find magnetic field along axis. Compass instrument in PSLab app can be used with built-in mobile sensors or with sensor HMC5883L.</string>
@@ -873,7 +863,7 @@
 
     <string name="wave_name_holder">Triangular</string>
     <string name="freq_text">Frequency :</string>
-    <string name="freq_holder_text">5.255 Hz</string>
+    <string name="freq_value">%1$.3f Hz</string>
     <string name="unit_hz">Hz</string>
     <string name="text_phase_colon">Phase :</string>
     <string name="text_phase">Phase</string>
