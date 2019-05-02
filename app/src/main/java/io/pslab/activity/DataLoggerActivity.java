@@ -45,6 +45,7 @@ public class DataLoggerActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     private ProgressBar deleteAllProgressBar;
+    private RealmResults<SensorDataBlock> categoryData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,6 @@ public class DataLoggerActivity extends AppCompatActivity {
         }
         if (caller == null) caller = "";
 
-        RealmResults<SensorDataBlock> categoryData;
 
         switch (caller) {
             case "Lux Meter":
@@ -116,12 +116,16 @@ public class DataLoggerActivity extends AppCompatActivity {
                 }
             }).create().show();
         }
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.log_activity_menu, menu);
+        menu.findItem(R.id.delete_all).setVisible(categoryData.size() > 0);
         return super.onCreateOptionsMenu(menu);
     }
     private class DeleteAllTask extends AsyncTask<Void, Void, Void>{
@@ -153,6 +157,7 @@ public class DataLoggerActivity extends AppCompatActivity {
             if (LocalDataLog.with().getAllSensorBlocks().size() <= 0) {
                 blankView.setVisibility(View.VISIBLE);
             }
+            DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
         }
     }
 }
