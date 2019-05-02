@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import io.pslab.DataFormatter;
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -249,7 +249,7 @@ public class BaroMeterDataFragment extends Fragment {
                                 entries.add(entry);
                                 count++;
                                 sum += entry.getY();
-                                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / count)));
+                                statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.BAROMETER_DATA_FORMAT));
 
                                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
                                 dataSet.setDrawCircles(false);
@@ -442,8 +442,7 @@ public class BaroMeterDataFragment extends Fragment {
 
                 count++;
                 sum += entry.getY();
-                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / count)));
-
+                statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.BAROMETER_DATA_FORMAT));
                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
@@ -483,9 +482,9 @@ public class BaroMeterDataFragment extends Fragment {
             sensorManager.unregisterListener(baroSensorEventListener);
         }
         startTime = System.currentTimeMillis();
-        statMax.setText(getResources().getString(R.string.value_null));
-        statMin.setText(getResources().getString(R.string.value_null));
-        statMean.setText(getResources().getString(R.string.value_null));
+        statMax.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        statMin.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        statMean.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
         baroMeter.setSpeedAt(0);
         baroMeter.setWithTremble(false);
         entries.clear();

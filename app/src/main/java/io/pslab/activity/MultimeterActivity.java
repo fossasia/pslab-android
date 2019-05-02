@@ -32,7 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +43,7 @@ import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
 import it.beppi.knoblibrary.Knob;
+import io.pslab.DataFormatter;
 
 /**
  * Created by Abhinav Raj on 26/5/18.
@@ -154,13 +154,13 @@ public class MultimeterActivity extends AppCompatActivity {
                 switchIsChecked = isChecked;
                 SharedPreferences.Editor editor = multimeter_data.edit();
                 editor.putBoolean("SwitchState", switchIsChecked);
-                editor.apply();
+                editor.commit();
             }
         });
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                multimeter_data.edit().clear().apply();
+                multimeter_data.edit().clear().commit();
                 switchIsChecked = false;
                 aSwitch.setChecked(false);
                 knobState = 2;
@@ -262,9 +262,9 @@ public class MultimeterActivity extends AppCompatActivity {
                             if (scienceLab.isConnected()) {
                                 v.setEnabled(false);
                                 Double frequency = scienceLab.getFrequency(knobMarker[knobState], null);
-                                saveAndSetData(String.valueOf(frequency), getString(R.string.frequency_unit));
+                                saveAndSetData(DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.frequency_unit));
                                 if (recordData)
-                                    record(knobMarker[knobState], String.valueOf(frequency) + getString(R.string.frequency_unit));
+                                    record(knobMarker[knobState], DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.frequency_unit));
                                 v.setEnabled(true);
                             }
                         } else {
@@ -272,7 +272,7 @@ public class MultimeterActivity extends AppCompatActivity {
                                 v.setEnabled(false);
                                 scienceLab.countPulses(knobMarker[knobState]);
                                 double pulseCount = scienceLab.readPulseCount();
-                                saveAndSetData(String.valueOf(pulseCount), "");
+                                saveAndSetData(DataFormatter.formatDouble(pulseCount, DataFormatter.LOW_PRECISION_FORMAT), "");
                                 if (recordData)
                                     record(knobMarker[knobState], String.valueOf(pulseCount));
                                 v.setEnabled(true);
@@ -282,9 +282,9 @@ public class MultimeterActivity extends AppCompatActivity {
                     default:
                         if (scienceLab.isConnected()) {
                             v.setEnabled(false);
-                            saveAndSetData(String.valueOf(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1))), getString(R.string.multimeter_voltage_unit));
+                            saveAndSetData(DataFormatter.formatDouble(scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.multimeter_voltage_unit));
                             if (recordData)
-                                record(knobMarker[knobState], String.valueOf(String.format(Locale.ENGLISH, "%.2f", scienceLab.getVoltage(knobMarker[knobState], 1))) + getString(R.string.multimeter_voltage_unit));
+                                record(knobMarker[knobState], DataFormatter.formatDouble( scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.multimeter_voltage_unit));
                             v.setEnabled(true);
                         }
                         break;
@@ -367,7 +367,7 @@ public class MultimeterActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = multimeter_data.edit();
         editor.putString("TextBox", Quantity);
         editor.putString("TextBoxUnit", Unit);
-        editor.apply();
+        editor.commit();
         quantity.setText(Quantity);
         unit.setText(Unit);
     }
@@ -380,7 +380,7 @@ public class MultimeterActivity extends AppCompatActivity {
     private void saveKnobState(int state) {
         SharedPreferences.Editor editor = multimeter_data.edit();
         editor.putInt("KnobState", state);
-        editor.apply();
+        editor.commit();
     }
 
     @Override

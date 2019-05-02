@@ -40,6 +40,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.LogicalAnalyzerActivity;
 import io.pslab.communication.ScienceLab;
@@ -447,7 +448,7 @@ public class LALogicLinesFragment extends Fragment {
                             @Override
                             public void onValueSelected(Entry e, Highlight h) {
                                 double result = Math.round(e.getX() * 100.0) / 100.0;
-                                xCoordinateText.setText("Time:  " + String.valueOf(result) + " mS");
+                                xCoordinateText.setText("Time:  " + DataFormatter.formatDouble(result, DataFormatter.LOW_PRECISION_FORMAT) + " mS");
                             }
 
                             @Override
@@ -821,8 +822,8 @@ public class LALogicLinesFragment extends Fragment {
                 StringBuilder stringBuilder1 = new StringBuilder();
                 StringBuilder stringBuilder2 = new StringBuilder();
                 for (int i = 0; i < xaxis.length; i++) {
-                    stringBuilder1.append(String.valueOf(xaxis[i]));
-                    stringBuilder2.append(String.valueOf(yaxis[i]));
+                    stringBuilder1.append(DataFormatter.formatDouble(xaxis[i], DataFormatter.LOW_PRECISION_FORMAT));
+                    stringBuilder2.append(DataFormatter.formatDouble(yaxis[i], DataFormatter.LOW_PRECISION_FORMAT));
                     stringBuilder1.append(" ");
                     stringBuilder2.append(" ");
                 }

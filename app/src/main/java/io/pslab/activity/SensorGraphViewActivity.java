@@ -40,6 +40,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
+import io.pslab.DataFormatter;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 
@@ -129,8 +130,8 @@ public class SensorGraphViewActivity extends AppCompatActivity {
         });
 
         if (latitude != 0.0 && longitude != 0.0) {
-            tv_lat.setText(String.valueOf(latitude));
-            tv_long.setText(String.valueOf(longitude));
+            tv_lat.setText(DataFormatter.formatDouble(latitude, DataFormatter.MEDIUM_PRECISION_FORMAT));
+            tv_long.setText(DataFormatter.formatDouble(longitude, DataFormatter.MEDIUM_PRECISION_FORMAT));
             thread.start();
         } else {
             tv_lat.setText("NA");

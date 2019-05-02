@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.EditTextWidget;
@@ -85,18 +86,17 @@ public class ControlFragmentAdvanced extends Fragment {
         etWidgetControlAdvanced10.setInputType(InputType.TYPE_NULL);
         etWidgetControlAdvanced11.setInputType(InputType.TYPE_NULL);
 
-        etWidgetControlAdvanced1.setText("10.0");
-        etWidgetControlAdvanced2.setText("10.0");
-        etWidgetControlAdvanced3.setText("10.0");
-        etWidgetControlAdvanced4.setText("0.0");
-        etWidgetControlAdvanced5.setText("0.0");
-        etWidgetControlAdvanced6.setText("0.0");
-        etWidgetControlAdvanced7.setText("0.0");
-        etWidgetControlAdvanced8.setText("0.0");
-        etWidgetControlAdvanced9.setText("0.0");
-        etWidgetControlAdvanced10.setText("0.0");
-        etWidgetControlAdvanced11.setText("0.0");
-
+        etWidgetControlAdvanced1.setText(DataFormatter.formatDouble(10, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced2.setText(DataFormatter.formatDouble(10, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced3.setText(DataFormatter.formatDouble(10, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced4.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced5.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced6.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced7.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced8.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced9.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced10.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
+        etWidgetControlAdvanced11.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
         etWidgetControlAdvanced1.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -303,9 +303,9 @@ public class ControlFragmentAdvanced extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    Double frequencyW1 = Double.valueOf(etWidgetControlAdvanced1.getText().toString());
-                    Double frequencyW2 = Double.valueOf(etWidgetControlAdvanced2.getText().toString());
-                    float phase = Float.valueOf(etWidgetControlAdvanced3.getText().toString());
+                    Double frequencyW1 = Double.parseDouble(etWidgetControlAdvanced1.getText().toString());
+                    Double frequencyW2 = Double.parseDouble(etWidgetControlAdvanced2.getText().toString());
+                    float phase = Float.parseFloat(etWidgetControlAdvanced3.getText().toString());
 
                     String wavetypeW1 = spinnerControlAdvanced1.getSelectedItem().toString();
                     String wavetypeW2 = spinnerControlAdvanced2.getSelectedItem().toString();
@@ -331,16 +331,16 @@ public class ControlFragmentAdvanced extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    double phase2 = Double.valueOf(etWidgetControlAdvanced5.getText().toString());
-                    double phase3 = Double.valueOf(etWidgetControlAdvanced7.getText().toString());
-                    double phase4 = Double.valueOf(etWidgetControlAdvanced9.getText().toString());
+                    double phase2 = Double.parseDouble(etWidgetControlAdvanced5.getText().toString());
+                    double phase3 = Double.parseDouble(etWidgetControlAdvanced7.getText().toString());
+                    double phase4 = Double.parseDouble(etWidgetControlAdvanced9.getText().toString());
 
-                    double dutyCycle1 = Double.valueOf(etWidgetControlAdvanced4.getText().toString());
-                    double dutyCycle2 = Double.valueOf(etWidgetControlAdvanced6.getText().toString());
-                    double dutyCycle3 = Double.valueOf(etWidgetControlAdvanced8.getText().toString());
-                    double dutyCycle4 = Double.valueOf(etWidgetControlAdvanced10.getText().toString());
+                    double dutyCycle1 = Double.parseDouble(etWidgetControlAdvanced4.getText().toString());
+                    double dutyCycle2 = Double.parseDouble(etWidgetControlAdvanced6.getText().toString());
+                    double dutyCycle3 = Double.parseDouble(etWidgetControlAdvanced8.getText().toString());
+                    double dutyCycle4 = Double.parseDouble(etWidgetControlAdvanced10.getText().toString());
 
-                    double frequency = Double.valueOf(etWidgetControlAdvanced11.getText().toString());
+                    double frequency = Double.parseDouble(etWidgetControlAdvanced11.getText().toString());
 
                     if (scienceLab.isConnected())
                         scienceLab.sqrPWM(frequency, dutyCycle1, phase2, dutyCycle2, phase3, dutyCycle3,
@@ -422,12 +422,12 @@ public class ControlFragmentAdvanced extends Fragment {
                                 // edit text
                                 String input = userInput.getText();
 
-                                if (Double.valueOf(input) > maxima) {
-                                    input = String.valueOf(maxima);
+                                if (Double.parseDouble(input) > maxima) {
+                                    input = DataFormatter.formatDouble(maxima, DataFormatter.LOW_PRECISION_FORMAT);
                                     Toast.makeText(getContext(), "The Maximum value for this field is " + maxima, Toast.LENGTH_SHORT).show();
                                 }
-                                if (Double.valueOf(input) < minima) {
-                                    input = String.valueOf(minima);
+                                if (Double.parseDouble(input) < minima) {
+                                    input = DataFormatter.formatDouble(minima, DataFormatter.MEDIUM_PRECISION_FORMAT);
                                     Toast.makeText(getContext(), "The Minimum value for this field is " + minima, Toast.LENGTH_SHORT).show();
                                 }
 

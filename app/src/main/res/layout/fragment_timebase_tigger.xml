@@ -60,8 +60,7 @@
                 android:id="@+id/tv_timebase_values_tt"
                 android:layout_width="85dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/timebase_trigger_value" />
+                android:layout_gravity="center_vertical" />
 
         </TableRow>
 
