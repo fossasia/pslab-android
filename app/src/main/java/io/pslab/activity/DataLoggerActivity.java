@@ -20,7 +20,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,6 +56,7 @@ public class DataLoggerActivity extends AppCompatActivity {
     private String selectedDevice = null;
     private Realm realm;
     private RealmResults<SensorDataBlock> categoryData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +91,7 @@ public class DataLoggerActivity extends AppCompatActivity {
         }
         fillData();
     }
+
     private void fillData() {
         if (categoryData.size() > 0) {
             blankView.setVisibility(View.GONE);
@@ -107,6 +108,7 @@ public class DataLoggerActivity extends AppCompatActivity {
             blankView.setVisibility(View.VISIBLE);
         }
     }
+
     @Override
     public void onBackPressed() {
         finish();
@@ -140,11 +142,11 @@ public class DataLoggerActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 RadioGroup votingAlgoRadioGroup = dialogView.findViewById(R.id.import_log_device_radio_group);
-                try{
+                try {
                     RadioButton selectedRadioButton = dialogView.findViewById(votingAlgoRadioGroup.getCheckedRadioButtonId());
                     selectedDevice = selectedRadioButton.getText().toString();
                     selectFile();
-                }catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(DataLoggerActivity.this, getResources().getString(R.string.import_data_log_no_selection_error), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -178,7 +180,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 String line = reader.readLine();
                 int i = 0;
                 long block = 0, time = 0;
-                while(line != null){
+                while (line != null) {
                     if (i != 0) {
                         String[] data = line.split(",");
                         try {
@@ -187,18 +189,17 @@ public class DataLoggerActivity extends AppCompatActivity {
                             realm.beginTransaction();
                             realm.copyToRealm(baroData);
                             realm.commitTransaction();
-                        }catch (Exception e) {
+                        } catch (Exception e) {
                             Toast.makeText(this, "File format does not match device log format", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    else {
+                    } else {
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
                         realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.baro_meter)));
                         realm.commitTransaction();
                     }
-                    i ++;
+                    i++;
                     line = reader.readLine();
                 }
                 fillData();
@@ -212,7 +213,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 String line = reader.readLine();
                 int i = 0;
                 long block = 0, time = 0;
-                while(line != null){
+                while (line != null) {
                     if (i != 0) {
                         String[] data = line.split(",");
                         try {
@@ -221,18 +222,17 @@ public class DataLoggerActivity extends AppCompatActivity {
                             realm.beginTransaction();
                             realm.copyToRealm(luxData);
                             realm.commitTransaction();
-                        }catch (Exception e) {
+                        } catch (Exception e) {
                             Toast.makeText(this, "File format does not match device log format", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    else {
+                    } else {
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
                         realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.lux_meter)));
                         realm.commitTransaction();
                     }
-                    i ++;
+                    i++;
                     line = reader.readLine();
                 }
                 fillData();
