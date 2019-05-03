@@ -1,5 +1,6 @@
 package io.pslab.fragment;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -7,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -26,7 +28,14 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -50,6 +59,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.ScienceLabCommon;
 
 import static android.content.Context.SENSOR_SERVICE;
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 /**
  * Created by Padmal on 11/2/18.
@@ -96,6 +106,7 @@ public class LuxMeterDataFragment extends Fragment {
     private Unbinder unbinder;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private LuxMeterActivity luxSensor;
+    private View rootView;
 
     public static LuxMeterDataFragment newInstance() {
         return new LuxMeterDataFragment();
@@ -119,10 +130,10 @@ public class LuxMeterDataFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_lux_meter_data, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        rootView = inflater.inflate(R.layout.fragment_lux_meter_data, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
         setupInstruments();
-        return view;
+        return rootView;
     }
 
     @Override
@@ -313,8 +324,40 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        // Todo: Save graph view to gallery
+        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(luxSensor.recordedLuxData.get(0).getTime());
+        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
+                File.separator + fileName + ".csv");
+        if (!csvFile.exists()) {
+            try {
+                csvFile.createNewFile();
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
+                out.write( "Timestamp,DateTime,Readings,Latitude,Longitude" + "\n");
+                for (LuxData luxData : luxSensor.recordedLuxData) {
+                    out.write( luxData.getTime() + ","
+                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(luxData.getTime())) + ","
+                            + luxData.getLux() + ","
+                            + luxData.getLat() + ","
+                            + luxData.getLon() + "," + "\n");
+                }
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        View view = rootView.findViewById(R.id.luxmeter_linearlayout);
+        view.setDrawingCacheEnabled(true);
+        Bitmap b = view.getDrawingCache();
+        try {
+            b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
+                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg" ));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
+
 
     private void setupInstruments() {
         lightMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(luxSensor.LUXMETER_LIMIT, 10000));
