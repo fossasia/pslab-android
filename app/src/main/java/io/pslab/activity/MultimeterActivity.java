@@ -479,6 +479,9 @@ public class MultimeterActivity extends AppCompatActivity {
                 intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.multimeter));
                 startActivity(intent);
                 break;
+            case R.id.show_guide:
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                break;
             default:
                 break;
         }
