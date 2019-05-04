@@ -54,10 +54,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         Fragment fragment;
         switch (title) {
-            case PSLabSensor.LUXMETER:
+            case PSLabSensor.LUXMETER_CONFIGURATIONS:
                 fragment = new LuxMeterSettingFragment();
                 break;
-            case PSLabSensor.BAROMETER:
+            case PSLabSensor.BAROMETER_CONFIGURATIONS:
                 fragment = new BaroMeterSettingsFragment();
                 break;
             default:

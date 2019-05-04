@@ -13,6 +13,7 @@ import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,6 +57,8 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_logic_analyzer);
         scienceLab = ScienceLabCommon.scienceLab;
         ButterKnife.bind(this);
@@ -81,6 +84,30 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
             }
         });
 
+        removeStatusBar();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, LALogicLinesFragment.newInstance(this)).commit();
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        ImageView guideImageView = findViewById(R.id.logic_analyzer_guide_button);
+        guideImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
+                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        removeStatusBar();
+    }
+    private void removeStatusBar() {
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -96,14 +123,7 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY));
         }
-
-        getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, LALogicLinesFragment.newInstance(this)).commit();
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

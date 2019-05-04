@@ -11,7 +11,13 @@
         android:layout_height="match_parent"
         android:background="@color/black"
         android:alpha="0"/>
-
+    <ImageView
+        android:id="@+id/wave_generator_guide_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/menu_icon_guide"
+        android:layout_margin="@dimen/body_resistance_margin"
+        />
     <include layout="@layout/btm_sheet_wavegen_custom" />
 
 </android.support.design.widget.CoordinatorLayout>

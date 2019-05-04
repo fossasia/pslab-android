@@ -88,9 +88,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public final String DATA_BLOCK = "data_block";
 
     public static final String LUXMETER = "Lux Meter";
+    public static final String LUXMETER_CONFIGURATIONS = "Lux Meter Configurations";
     public static final String LUXMETER_DATA_FORMAT = "%.2f";
     public static final String BAROMETER = "Barometer";
-    public static final String BAROMETER_DATA_FORMAT = "%.5f";
+    public static final String BAROMETER_CONFIGURATIONS = "Barometer Configurations";
+    public static final String BAROMETER_DATA_FORMAT = "%.2f";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -333,7 +335,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
-                settingIntent.putExtra("title", getSensorName());
+                settingIntent.putExtra("title", getSensorName() + " Configurations");
                 startActivity(settingIntent);
                 break;
             case R.id.show_logged_data:
@@ -404,12 +406,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Uri selectedUri = Uri.parse(logDirectory.getAbsolutePath());
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(selectedUri, "resource/folder");
-                        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
-                            startActivity(intent);
-                        }
+                        Intent intent = new Intent(PSLabSensor.this, DataLoggerActivity.class);
+                        startActivity(intent);
                     }
                 }, Snackbar.LENGTH_INDEFINITE);
     }

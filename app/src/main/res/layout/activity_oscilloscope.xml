@@ -175,6 +175,12 @@
                     app:srcCompat="@drawable/red_led" />
             </android.support.constraint.ConstraintLayout>
 
+            <ImageView
+                android:id="@+id/oscilloscope_guide_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/menu_icon_guide"
+                />
         </RelativeLayout>
 
         <LinearLayout

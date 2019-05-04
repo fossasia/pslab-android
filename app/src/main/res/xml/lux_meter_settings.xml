@@ -2,47 +2,47 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditTextPreference
-        android:defaultValue="1000"
-        android:dialogMessage="Please provide time interval(in ms) at which data will be updated"
+        android:defaultValue="@string/lux_default_1000"
+        android:dialogMessage="@string/time_string"
         android:dialogTitle="@string/update_period"
         android:inputType="numberDecimal"
-        android:key="setting_lux_update_period"
-        android:summary="1000 ms"
+        android:key="@string/setting_lux_update"
+        android:summary="@string/lux_summary"
         android:title="@string/update_period"
         app:iconSpaceReserved="false" />
 
     <EditTextPreference
-        android:defaultValue="2000"
-        android:dialogMessage="Please provide maximum limit of Lux value to be recorded"
-        android:dialogTitle="High Limit"
+        android:defaultValue="@string/lux_default_2000"
+        android:dialogMessage="@string/dialogue_msg_lux"
+        android:dialogTitle="@string/high_limit"
         android:inputType="numberDecimal"
-        android:key="setting_lux_high_limit"
-        android:summary="2000"
-        android:title="High Limit"
+        android:key="@string/high_limit_lux"
+        android:summary="@string/lux_default_2000"
+        android:title="@string/high_limit"
         app:iconSpaceReserved="false" />
 
     <ListPreference
-        android:defaultValue="0"
+        android:defaultValue="@string/lux_default_0"
         android:entries="@array/lux_sensor_list"
         android:entryValues="@array/lux_sensor_list_values"
-        android:key="setting_lux_sensor_type"
-        android:title="Active Sensor"
+        android:key="@string/setting_lux_type"
+        android:title="@string/active_sensor"
         app:iconSpaceReserved="false" />
 
     <EditTextPreference
-        android:defaultValue="1"
-        android:dialogMessage="Please set gain of the sensor"
-        android:dialogTitle="Sensor Gain"
+        android:defaultValue="@string/default_value_lux"
+        android:dialogMessage="@string/set_gain_sensor"
+        android:dialogTitle="@string/sensor_gain"
         android:inputType="numberDecimal"
-        android:key="setting_lux_sensor_gain"
-        android:summary="1"
-        android:title="Sensor Gain"
+        android:key="@string/setting_lux_sensor_gain"
+        android:summary="@string/default_value_lux"
+        android:title="@string/sensor_gain"
         app:iconSpaceReserved="false" />
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="include_location_sensor_data"
-        android:summary="Include the location data in the logged file"
-        android:title="Include Location Data"
+        android:key="@string/location_sensor"
+        android:summary="@string/include_location"
+        android:title="@string/include_cap"
         app:iconSpaceReserved="false" />
 </PreferenceScreen>
