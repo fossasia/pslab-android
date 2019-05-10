@@ -8,32 +8,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:padding="50dp"
-        >
+        android:padding="50dp">
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/baro_meter"
-            />
+            android:text="@string/baro_meter" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/lux_meter"
-            />
+            android:text="@string/lux_meter" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/multimeter"
-            />
+            android:text="@string/multimeter" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/accelerometer"
-            />
+            android:text="@string/accelerometer" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/compass"
-            />
+            android:text="@string/compass" />
     </RadioGroup>
 </RelativeLayout>

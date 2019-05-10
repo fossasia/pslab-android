@@ -138,12 +138,12 @@ public class DataLoggerActivity extends AppCompatActivity {
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.import_log_device_type_alert_layout, null);
         dialogBuilder.setView(dialogView);
-        dialogBuilder.setPositiveButton("Select", new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getResources().getString(R.string.import_log_positive_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                RadioGroup votingAlgoRadioGroup = dialogView.findViewById(R.id.import_log_device_radio_group);
+                RadioGroup importLogRadioGroup = dialogView.findViewById(R.id.import_log_device_radio_group);
                 try {
-                    RadioButton selectedRadioButton = dialogView.findViewById(votingAlgoRadioGroup.getCheckedRadioButtonId());
+                    RadioButton selectedRadioButton = dialogView.findViewById(importLogRadioGroup.getCheckedRadioButtonId());
                     selectedDevice = selectedRadioButton.getText().toString();
                     selectFile();
                 } catch (Exception e) {
@@ -190,7 +190,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                             realm.copyToRealm(baroData);
                             realm.commitTransaction();
                         } catch (Exception e) {
-                            Toast.makeText(this, "File format does not match device log format", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         block = System.currentTimeMillis();
@@ -223,7 +223,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                             realm.copyToRealm(luxData);
                             realm.commitTransaction();
                         } catch (Exception e) {
-                            Toast.makeText(this, "File format does not match device log format", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         block = System.currentTimeMillis();
