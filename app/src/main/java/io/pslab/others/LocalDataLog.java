@@ -1,9 +1,11 @@
 package io.pslab.others;
 
 import io.pslab.interfaces.sensorloggers.BaroMeterRecordables;
+import io.pslab.interfaces.sensorloggers.CompassRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
 import io.pslab.models.BaroData;
+import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
 import io.realm.Realm;
@@ -14,7 +16,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables {
+public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -152,6 +154,41 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     @Override
     public RealmResults<BaroData> getBlockOfBaroRecords(long block) {
         return realm.where(BaroData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Compass Section
+     ***********************************************************************************************/
+    @Override
+    public CompassData getCompassData(long timeStamp) {
+        return realm.where(CompassData.class).equalTo("time", timeStamp).findFirst();
+    }
+
+    @Override
+    public void clearAllCompassRecords() {
+        realm.beginTransaction();
+        realm.delete(CompassData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfCompassRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<CompassData> data = getBlockOfCompassRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<CompassData> getAllCompassRecords() {
+        return realm.where(CompassData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<CompassData> getBlockOfCompassRecords(long block) {
+        return realm.where(CompassData.class)
                 .equalTo("block", block)
                 .findAll();
     }

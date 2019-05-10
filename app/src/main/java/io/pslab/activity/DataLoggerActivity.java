@@ -48,19 +48,19 @@ public class DataLoggerActivity extends AppCompatActivity {
         if (caller == null) caller = "";
 
         RealmResults<SensorDataBlock> categoryData;
-
+        getSupportActionBar().setTitle(caller);
         switch (caller) {
             case "Lux Meter":
-                getSupportActionBar().setTitle(caller);
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.lux_meter));
                 break;
             case "Baro Meter":
-                getSupportActionBar().setTitle(caller);
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.baro_meter));
                 break;
             case "Multimeter":
-                getSupportActionBar().setTitle(caller);
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.multimeter));
+                break;
+            case "Compass":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.compass));
                 break;
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();

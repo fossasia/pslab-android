@@ -26,7 +26,9 @@ import io.pslab.R;
 import io.pslab.activity.BarometerActivity;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.activity.MapsActivity;
+import io.pslab.activity.CompassActivity;
 import io.pslab.models.BaroData;
+import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
@@ -72,6 +74,10 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 holder.sensor.setText(context.getResources().getString(R.string.baro_meter));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_barometer_log));
                 break;
+            case PSLabSensor.COMPASS:
+                holder.sensor.setText(context.getResources().getString(R.string.compass));
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_compass_log));
+                break;
             default:
                 break;
         }
@@ -107,6 +113,11 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             BaroMeter.putExtra(KEY_LOG, true);
             BaroMeter.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(BaroMeter);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.compass))) {
+            Intent Compass = new Intent(context, CompassActivity.class);
+            Compass.putExtra(KEY_LOG, true);
+            Compass.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(Compass);
         }
     }
 
@@ -130,6 +141,8 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.BAROMETER)) {
                             LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.COMPASS)) {
+                            LocalDataLog.with().clearBlockOfCompassRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
                         dialog.dismiss();
@@ -174,6 +187,25 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     JSONObject i = new JSONObject();
                     i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
                     i.put("data", d.getBaro());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.COMPASS)) {
+            RealmResults<CompassData> data = LocalDataLog.with().getBlockOfCompassRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (CompassData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("dataX", d.getBx());
+                    i.put("dataY", d.getBy());
+                    i.put("dataZ", d.getBz());
+                    i.put("Axis", d.getAxis());
                     i.put("lon", d.getLon());
                     i.put("lat", d.getLat());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
