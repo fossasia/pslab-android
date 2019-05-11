@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Logical Analyzer" />
+        app:title="@string/logical_analyzer" />
 
     <LinearLayout
         android:id="@+id/la_frame_layout"
@@ -27,6 +27,24 @@
         android:layout_height="match_parent"
         android:alpha="0"
         android:background="@color/black" />
+
+    <ImageView
+        android:id="@+id/logic_analyzer_guide_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/menu_icon_guide"
+        android:contentDescription="@string/show_guide_text"
+        />
+
+    <TextView
+        android:layout_marginTop="@dimen/top_margin_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/show_guide_text"
+        android:id="@+id/show_guide_logic_analyzer"
+        android:background="#fff"
+        android:textColor="#000"
+        android:visibility="gone"/>
 
     <include layout="@layout/bottom_sheet_custom" />
 

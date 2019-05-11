@@ -175,6 +175,23 @@
                     app:srcCompat="@drawable/red_led" />
             </android.support.constraint.ConstraintLayout>
 
+            <ImageView
+                android:id="@+id/oscilloscope_guide_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/menu_icon_guide"
+                android:contentDescription="@string/show_guide_text" />
+
+            <TextView
+                android:layout_marginTop="@dimen/top_margin_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show_guide_text"
+                android:background="#fff"
+                android:textColor="#000"
+                android:id="@+id/show_guide_oscilloscope"
+                android:visibility="gone"/>
+
         </RelativeLayout>
 
         <LinearLayout

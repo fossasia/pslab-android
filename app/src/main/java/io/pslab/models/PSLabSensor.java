@@ -43,6 +43,7 @@ import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
+import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.BaroMeterDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.others.CSVLogger;
@@ -88,9 +89,13 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public final String DATA_BLOCK = "data_block";
 
     public static final String LUXMETER = "Lux Meter";
+    public static final String LUXMETER_CONFIGURATIONS = "Lux Meter Configurations";
     public static final String LUXMETER_DATA_FORMAT = "%.2f";
     public static final String BAROMETER = "Barometer";
+    public static final String BAROMETER_CONFIGURATIONS = "Barometer Configurations";
     public static final String BAROMETER_DATA_FORMAT = "%.5f";
+    public static final String ACCELEROMETER = "Accelerometer";
+    public static final String ACCELEROMETER_DATA_FORMAT = "%.2f";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -249,9 +254,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 menu.getItem(i).setVisible(false);
             }
         }
-        menu.findItem(R.id.save_graph).setVisible(viewingData || playingData);
         menu.findItem(R.id.play_data).setVisible(viewingData || playingData);
-        menu.findItem(R.id.settings).setTitle(getSensorName() + " Configurations");
+        menu.findItem(R.id.settings).setTitle(getSensorName() + "Configurations");
         menu.findItem(R.id.stop_data).setVisible(viewingData).setEnabled(startedPlay);
     }
 
@@ -312,6 +316,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
                         ((BaroMeterDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
+                    }else if(getSensorFragment() instanceof AccelerometerDataFragment){
+                        ((AccelerometerDataFragment) getSupportFragmentManager()
+                                .findFragmentByTag(getSensorName())).playData();
                     }
                 }
                 invalidateOptionsMenu();
@@ -323,6 +330,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
                     ((BaroMeterDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
+                }else if (getSensorFragment() instanceof AccelerometerDataFragment) {
+                    ((AccelerometerDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
                 }
                 break;
             case R.id.show_map:
@@ -333,7 +343,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
-                settingIntent.putExtra("title", getSensorName());
+                settingIntent.putExtra("title", getSensorName() + " Configurations");
                 startActivity(settingIntent);
                 break;
             case R.id.show_logged_data:
@@ -346,16 +356,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 break;
             case R.id.show_guide:
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                break;
-            case R.id.save_graph:
-                displayLogLocationOnSnackBar();
-                if (getSensorFragment() instanceof LuxMeterDataFragment) {
-                    ((LuxMeterDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
-                    ((BaroMeterDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                }
                 break;
             default:
                 break;
@@ -404,12 +404,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Uri selectedUri = Uri.parse(logDirectory.getAbsolutePath());
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(selectedUri, "resource/folder");
-                        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
-                            startActivity(intent);
-                        }
+                        Intent intent = new Intent(PSLabSensor.this, DataLoggerActivity.class);
+                        startActivity(intent);
                     }
                 }, Snackbar.LENGTH_INDEFINITE);
     }

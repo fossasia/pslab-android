@@ -8,7 +8,9 @@ import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
+import android.widget.Toast;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.others.PSLabPermission;
 
@@ -76,14 +78,14 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                 break;
             case KEY_UPDATE_PERIOD:
                 try {
-                    Integer updatePeriod = Integer.valueOf(updatePeriodPref.getText());
+                    Integer updatePeriod = Integer.parseInt(updatePeriodPref.getText());
                     if (updatePeriod > 2000 || updatePeriod < 100) {
                         throw new NumberFormatException();
                     } else {
-                        updatePeriodPref.setSummary(String.valueOf(updatePeriod));
+                        updatePeriodPref.setSummary(String.valueOf(updatePeriod) + " ms");
                     }
-                    updatePeriodPref.setSummary(updatePeriod + " ms");
                 } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.update_period_msg), Toast.LENGTH_SHORT).show();
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -93,17 +95,18 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                 break;
             case KEY_HIGH_LIMIT:
                 try {
-                    Float highLimit = Float.valueOf(highLimitPref.getText());
-                    if (highLimit > 1.1 || highLimit < 0.0) {
+                    double highLimit = Double.parseDouble(highLimitPref.getText());
+                    if (highLimit > 1.10 || highLimit < 0.00) {
                         throw new NumberFormatException();
                     } else {
-                        highLimitPref.setSummary(String.valueOf(highLimit));
+                        highLimitPref.setSummary(DataFormatter.formatDouble(highLimit, DataFormatter.LOW_PRECISION_FORMAT) + " atm");
                     }
                 } catch (NumberFormatException e) {
-                    highLimitPref.setSummary("1.1 atm");
-                    highLimitPref.setText("1.1");
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.high_limit_msg), Toast.LENGTH_SHORT).show();
+                    highLimitPref.setSummary("1.10 atm");
+                    highLimitPref.setText("1.10");
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(KEY_HIGH_LIMIT, "1.1");
+                    editor.putString(KEY_HIGH_LIMIT, "1.10");
                     editor.commit();
                 }
                 break;

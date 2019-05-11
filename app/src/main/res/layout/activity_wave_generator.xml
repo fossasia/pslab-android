@@ -86,15 +86,17 @@
                 android:layout_marginEnd="@dimen/mon_title_sep_margin"
                 android:layout_marginRight="@dimen/mon_title_sep_margin"
                 android:text="@string/wave1"
-                android:textColor="@drawable/text_color_selector"
+                android:textColor="@color/dark_grey"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
-                android:enabled="false"
                 app:layout_constraintBottom_toTopOf="@+id/fguideline3"
                 app:layout_constraintEnd_toStartOf="@+id/fguideline2"
                 app:layout_constraintHorizontal_bias="0.9"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:clickable="true"
+                android:focusable="true"
+                />
 
             <TextView
                 android:id="@+id/wave_mon_wave2"
@@ -103,15 +105,17 @@
                 android:layout_marginLeft="@dimen/mon_title_sep_margin"
                 android:layout_marginStart="@dimen/mon_title_sep_margin"
                 android:text="@string/wave2"
-                android:textColor="@drawable/text_color_selector"
+                android:textColor="@color/dark_grey"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
-                android:enabled="false"
                 app:layout_constraintBottom_toBottomOf="@+id/wave_mon_wave1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.10"
                 app:layout_constraintStart_toStartOf="@+id/fguideline2"
-                app:layout_constraintTop_toTopOf="@+id/wave_mon_wave1" />
+                app:layout_constraintTop_toTopOf="@+id/wave_mon_wave1"
+                android:clickable="true"
+                android:focusable="true"
+                />
 
             <TextView
                 android:id="@+id/wave_mon_select_wave"
@@ -149,7 +153,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
-                android:text="@string/freq_holder_text"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
                 app:layout_constraintBottom_toBottomOf="@+id/wave_freq"
@@ -207,7 +210,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
-                android:text="@string/freq_holder_text"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/mon_selected_text"
                 app:layout_constraintBottom_toBottomOf="@+id/wave_mon_select_prop"
@@ -407,7 +409,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
-                android:text="@string/freq_holder_text"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
                 app:layout_constraintBottom_toBottomOf="@+id/pwm_freq"
@@ -463,7 +464,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
-                android:text="@string/freq_holder_text"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/mon_selected_text"
                 app:layout_constraintBottom_toBottomOf="@+id/pwm_mon_select_prop"
@@ -497,7 +497,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/prop_text_end_margin"
                 android:layout_marginRight="@dimen/prop_text_end_margin"
-                android:text="@string/freq_holder_text"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/pwm_phase"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -535,7 +534,6 @@
                 app:layout_constraintVertical_bias="0.70" />
 
         </android.support.constraint.ConstraintLayout>
-
     </android.support.constraint.ConstraintLayout>
 
     <RelativeLayout

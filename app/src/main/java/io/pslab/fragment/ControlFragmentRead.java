@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.ScienceLabCommon;
@@ -109,7 +110,7 @@ public class ControlFragmentRead extends Fragment {
                 String channel = spinnerControlRead1.getSelectedItem().toString();
                 if (scienceLab.isConnected()) {
                     Double frequency = scienceLab.getFrequency(channel, null);
-                    tvControlRead3.setText(String.valueOf(frequency));
+                    tvControlRead3.setText(DataFormatter.formatDouble(frequency, DataFormatter.MEDIUM_PRECISION_FORMAT));
                 }
             }
         });
@@ -120,7 +121,7 @@ public class ControlFragmentRead extends Fragment {
                 if (scienceLab.isConnected()) {
                     scienceLab.countPulses(channel);
                     double pulseCount = scienceLab.readPulseCount();
-                    tvControlRead4.setText(String.valueOf(pulseCount));
+                    tvControlRead4.setText(DataFormatter.formatDouble(pulseCount, DataFormatter.MEDIUM_PRECISION_FORMAT));
                 }
             }
         });
@@ -137,12 +138,12 @@ public class ControlFragmentRead extends Fragment {
             @Override
             public void onClick(View view) {
                 if (scienceLab.isConnected()) {
-                    tvControlRead5.setText(String.valueOf(scienceLab.getVoltage("CH1", 1)));
-                    tvControlRead6.setText(String.valueOf(scienceLab.getVoltage("CAP", 1)));
-                    tvControlRead7.setText(String.valueOf(scienceLab.getVoltage("CH2", 1)));
-                    tvControlRead8.setText(String.valueOf(scienceLab.getVoltage("SEN", 1)));
-                    tvControlRead9.setText(String.valueOf(scienceLab.getVoltage("CH3", 1)));
-                    tvControlRead10.setText(String.valueOf(scienceLab.getVoltage("AN8", 1)));
+                    tvControlRead5.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH1", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                    tvControlRead6.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CAP", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                    tvControlRead7.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH2", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                    tvControlRead8.setText(DataFormatter.formatDouble(scienceLab.getVoltage("SEN", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                    tvControlRead9.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH3", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                    tvControlRead10.setText(DataFormatter.formatDouble(scienceLab.getVoltage("AN8", 1), DataFormatter.LOW_PRECISION_FORMAT));
                 }
 
             }

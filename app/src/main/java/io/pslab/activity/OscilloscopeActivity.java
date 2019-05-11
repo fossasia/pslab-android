@@ -15,11 +15,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.TooltipCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -138,6 +141,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     Fragment xyPlotFragment;
     @BindView(R.id.imageView_led_os)
     ImageView ledImageView;
+    @BindView(R.id.show_guide_oscilloscope)
+    TextView showText;
     private ScienceLab scienceLab;
     private int height;
     private int width;
@@ -155,34 +160,20 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private volatile boolean monitor = true;
     private BottomSheetBehavior bottomSheetBehavior;
     private GestureDetector gestureDetector;
+    private boolean btnLongpressed;
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_oscilloscope);
         ButterKnife.bind(this);
 
-        View decorView = getWindow().getDecorView();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            decorView.setSystemUiVisibility((View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY));
-        } else {
-            decorView.setSystemUiVisibility((View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN));
-        }
-
+        removeStatusBar();
         setUpBottomSheet();
         parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -394,8 +385,61 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         };
         monitorThread = new Thread(runnable);
         monitorThread.start();
+
+        ImageView guideImageView = findViewById(R.id.oscilloscope_guide_button);
+        guideImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
+                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
+        guideImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showText.setVisibility(View.VISIBLE);
+                btnLongpressed = true;
+                return true;
+            }
+        });
+        guideImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.onTouchEvent(event);
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    if(btnLongpressed){
+                        showText.setVisibility(View.GONE);
+                        btnLongpressed = false;
+                    }
+                }
+                return true;
+            }
+        });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        removeStatusBar();
+    }
+
+    private void removeStatusBar() {
+        if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+        else {
+            View decorView = getWindow().getDecorView();
+
+            decorView.setSystemUiVisibility((View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY));
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

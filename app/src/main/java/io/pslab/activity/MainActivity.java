@@ -34,6 +34,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.BuildConfig;
 import io.pslab.R;
 import io.pslab.communication.CommunicationHandler;
 import io.pslab.fragment.AboutUsFragment;
@@ -73,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG_DEVICE = "device";
     private static final String TAG_INSTRUMENTS = "instruments";
-    private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
     private static final String TAG_PINLAYOUT = "pinLayout";
     private static final String TAG_FAQ = "faq";
@@ -224,10 +224,10 @@ public class MainActivity extends AppCompatActivity {
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             case 3:
-                navigationView.getMenu().getItem(4).getSubMenu().getItem(1).setChecked(true);
+                navigationView.getMenu().getItem(size_menu-1).getSubMenu().getItem(1).setChecked(true);
                 break;
             case 4:
-                navigationView.getMenu().getItem(4).getSubMenu().getItem(0).setChecked(true);
+                navigationView.getMenu().getItem(size_menu-1).getSubMenu().getItem(0).setChecked(true);
                 break;
             default:
                 navigationView.getMenu().getItem(0).setChecked(true);
@@ -279,6 +279,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                         startActivity(new Intent(MainActivity.this, DataLoggerActivity.class));
                         break;
+                    case R.id.nav_share_app:
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("text/plain");
+                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
+                        String shareMessage = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                        startActivity(shareIntent);
+                        return true;
                     default:
                         navItemIndex = 0;
                 }

@@ -167,7 +167,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_compass_raw_values"
-                android:layout_marginBottom="@dimen/card_margin"
+                android:layout_marginBottom="@dimen/header_padding_top"
                 android:layout_marginEnd="@dimen/card_margin"
                 android:layout_marginLeft="@dimen/card_margin"
                 android:layout_marginRight="@dimen/card_margin"
