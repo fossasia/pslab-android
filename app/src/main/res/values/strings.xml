@@ -968,6 +968,11 @@
     <string name="pause_recording_data">Pause Recording</string>
     <string name="view_map">View Map</string>
 
+    <string name="incorrect_import_format">File format does not match device log format</string>
+    <string name="import_log_action">Import Log</string>
+    <string name="import_data_log_no_selection_error">Kindly select one of the devices</string>
+    <string name="import_log_positive_button">Select</string>
+
     <string name="data_recording_with_location">Data recording started with location</string>
     <string name="data_recording_with_nogps">Data recording started but GPS is off</string>
     <string name="data_recording_with_gps_off">Recorded data will not contain location</string>
@@ -1109,5 +1114,4 @@
     <string name="no_data_fetched">No Data Fetched</string>
     <string name="recorder">Recorder</string>
     <string name="save_graph">Save Graph</string>
-
 </resources>
