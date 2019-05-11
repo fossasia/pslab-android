@@ -1,11 +1,15 @@
 package io.pslab.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +37,9 @@ import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.items.SquareImageButton;
+import io.pslab.models.PowerSourceData;
+import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
@@ -47,6 +55,8 @@ public class PowerSourceActivity extends AppCompatActivity {
     private final int PCS_CONTROLLER_MAX = 331;
     
     private final long LONG_CLICK_DELAY = 100;
+    private CSVLogger compassLogger = null;
+    private Boolean writeHeaderToFile = true;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -59,6 +69,9 @@ public class PowerSourceActivity extends AppCompatActivity {
     SquareImageButton upPV1;
     @BindView(R.id.power_card_pv1_down)
     SquareImageButton downPV1;
+
+    @BindView(R.id.power_source_coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
 
     @BindView(R.id.power_card_pv2_controller)
     Croller controllerPV2;
@@ -103,7 +116,7 @@ public class PowerSourceActivity extends AppCompatActivity {
     ImageView bottomSheetSchematic;
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
-
+    private PowerSourceData powerSourceData;
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
     private SharedPreferences powerPreferences;
@@ -127,7 +140,7 @@ public class PowerSourceActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        powerSourceData = new PowerSourceData();
         powerPreferences = getSharedPreferences(POWER_PREFERENCES, MODE_PRIVATE);
 
         setUpBottomSheet();
@@ -264,6 +277,17 @@ public class PowerSourceActivity extends AppCompatActivity {
             case R.id.show_guide:
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.power_source_record_data:
+                if (writeHeaderToFile) {
+                    compassLogger = new CSVLogger(getString(R.string.compass));
+                    compassLogger.prepareLogFile();
+                    compassLogger.writeCSVFile("Timestamp,DateTime,Bx,By,Bz");
+                    recordData();
+                    writeHeaderToFile = !writeHeaderToFile;
+                } else {
+                    recordData();
+                }
                 break;
             case android.R.id.home:
                 this.finish();
@@ -678,6 +702,31 @@ public class PowerSourceActivity extends AppCompatActivity {
             }
         };
         powerCounter.schedule(task, 1, LONG_CLICK_DELAY);
+    }
+
+    private void recordData() {
+        String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(System.currentTimeMillis()));
+        compassLogger.writeCSVFile(System.currentTimeMillis() + "," + dateTime + "," + powerSourceData.getPv1()
+                + "," + powerSourceData.getPv2() + "," + powerSourceData.getPv3() + "," + powerSourceData.getPcs());
+        CustomSnackBar.showSnackBar(coordinatorLayout,
+                getString(R.string.csv_store_text) + " " + compassLogger.getCurrentFilePath()
+                , getString(R.string.delete_capital), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog.Builder(PowerSourceActivity.this, R.style.AlertDialogStyle)
+                                .setTitle(R.string.delete_file)
+                                .setMessage(R.string.delete_warning)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        compassLogger.deleteFile();
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, null)
+                                .create()
+                                .show();
+                    }
+                }, Snackbar.LENGTH_LONG);
     }
 
     private enum Pin {

@@ -26,6 +26,7 @@
     <string name="sensors">Sensors</string>
     <string name="power_source">Power Source</string>
     <string name="coming_soon">Coming Soon!</string>
+    <string name="record_title">Record current data</string>
 
     <string name="setting_auto_start_key">setting_auto_start</string>
     <string name="setting_auto_start_summary">Auto start app when PSLab device is connected</string>
