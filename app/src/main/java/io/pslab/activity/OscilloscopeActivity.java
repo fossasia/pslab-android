@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.TooltipCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -140,6 +141,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     Fragment xyPlotFragment;
     @BindView(R.id.imageView_led_os)
     ImageView ledImageView;
+    @BindView(R.id.show_guide_oscilloscope)
+    TextView showText;
     private ScienceLab scienceLab;
     private int height;
     private int width;
@@ -157,9 +160,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private volatile boolean monitor = true;
     private BottomSheetBehavior bottomSheetBehavior;
     private GestureDetector gestureDetector;
+    private boolean btnLongpressed;
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -387,6 +392,27 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             public void onClick(View v) {
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
+        guideImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showText.setVisibility(View.VISIBLE);
+                btnLongpressed = true;
+                return true;
+            }
+        });
+        guideImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.onTouchEvent(event);
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    if(btnLongpressed){
+                        showText.setVisibility(View.GONE);
+                        btnLongpressed = false;
+                    }
+                }
+                return true;
             }
         });
     }
