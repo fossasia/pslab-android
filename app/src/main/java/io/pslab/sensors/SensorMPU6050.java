@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
@@ -341,13 +342,13 @@ public class SensorMPU6050 extends AppCompatActivity {
 
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            tvSensorMPU6050ax.setText(String.valueOf(dataMPU6050.get(0)));
-            tvSensorMPU6050ay.setText(String.valueOf(dataMPU6050.get(1)));
-            tvSensorMPU6050az.setText(String.valueOf(dataMPU6050.get(2)));
-            tvSensorMPU6050gx.setText(String.valueOf(dataMPU6050.get(4)));
-            tvSensorMPU6050gy.setText(String.valueOf(dataMPU6050.get(5)));
-            tvSensorMPU6050gz.setText(String.valueOf(dataMPU6050.get(6)));
-            tvSensorMPU6050temp.setText(String.valueOf(dataMPU6050.get(3)));
+            tvSensorMPU6050ax.setText(DataFormatter.formatDouble(dataMPU6050.get(0), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU6050ay.setText(DataFormatter.formatDouble(dataMPU6050.get(1), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU6050az.setText(DataFormatter.formatDouble(dataMPU6050.get(2), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU6050gx.setText(DataFormatter.formatDouble(dataMPU6050.get(4), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU6050gy.setText(DataFormatter.formatDouble(dataMPU6050.get(5), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU6050gz.setText(DataFormatter.formatDouble(dataMPU6050.get(6), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorMPU6050temp.setText(DataFormatter.formatDouble(dataMPU6050.get(3), DataFormatter.HIGH_PRECISION_FORMAT));
 
             LineDataSet dataset1 = new LineDataSet(entriesAx, getString(R.string.ax));
             LineDataSet dataSet2 = new LineDataSet(entriesAy, getString(R.string.ay));

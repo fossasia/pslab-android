@@ -111,12 +111,12 @@ public class BarometerActivity extends PSLabSensor {
     }
 
     private void reinstateConfigurations() {
-        SharedPreferences luxMeterConfigurations;
-        luxMeterConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        locationEnabled = luxMeterConfigurations.getBoolean(BaroMeterSettingsFragment.KEY_INCLUDE_LOCATION, true);
+        SharedPreferences BaroMeterConfigurations;
+        BaroMeterConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        locationEnabled = BaroMeterConfigurations.getBoolean(BaroMeterSettingsFragment.KEY_INCLUDE_LOCATION, true);
         BaroMeterDataFragment.setParameters(
-                Float.valueOf(luxMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_HIGH_LIMIT, "1.1")),
-                Integer.valueOf(luxMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_UPDATE_PERIOD, "1000")),
-                luxMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_BARO_SENSOR_TYPE, "0"));
+                Float.valueOf(BaroMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_HIGH_LIMIT, "1.1")),
+                Integer.valueOf(BaroMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_UPDATE_PERIOD, "1000")),
+                BaroMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_BARO_SENSOR_TYPE, "0"));
     }
 }

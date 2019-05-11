@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import io.pslab.R;
+import io.pslab.DataFormatter;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
@@ -435,7 +436,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
-                String valueText = String.valueOf((float) progress) + " " + unit;
+                String valueText = DataFormatter.formatDouble((float) progress, DataFormatter.MEDIUM_PRECISION_FORMAT) + " " + unit;
                 if (waveMonSelected) {
                     waveMonPropValueSelect.setText(valueText);
                 } else {
@@ -730,7 +731,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         }
 
         Double dValue = (double) value;
-        String valueText = String.valueOf(dValue) + " " + unit;
+        String valueText = DataFormatter.formatDouble(dValue, DataFormatter.MEDIUM_PRECISION_FORMAT) + " " + unit;
         activePropTv.setText(valueText);
 
     }

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Logical Analyzer" />
+        app:title="@string/logical_analyzer" />
 
     <LinearLayout
         android:id="@+id/la_frame_layout"
