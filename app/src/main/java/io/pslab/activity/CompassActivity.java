@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -110,11 +111,15 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        if((mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD))==null){
+            Toast.makeText(this, R.string.Toast_magnetic_not_present, Toast.LENGTH_SHORT).show();
+        }
 
         compassPreference = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         setUpBottomSheet();
 
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
         xAxisRadioButton.setChecked(true);
         direction = 0;
 
@@ -162,14 +167,21 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     protected void onResume() {
         super.onResume();
 
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
+        if((mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD))==null){
+            Toast.makeText(this, R.string.Toast_magnetic_not_present, Toast.LENGTH_SHORT).show();
+        }else {
+            mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        mSensorManager.unregisterListener(this);
+        if((mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD))==null){
+            Toast.makeText(this, R.string.Toast_magnetic_not_present, Toast.LENGTH_SHORT).show();
+        }else {
+            mSensorManager.unregisterListener(this);
+        }
     }
 
     @Override
