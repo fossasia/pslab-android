@@ -49,7 +49,6 @@ public class DataLoggerActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     @BindView(R.id.data_logger_blank_view)
     TextView blankView;
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -81,6 +80,10 @@ public class DataLoggerActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(caller);
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.baro_meter));
                 break;
+            case "Accelerometer":
+                getSupportActionBar().setTitle(caller);
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.accelerometer));
+                break;
             case "Multimeter":
                 getSupportActionBar().setTitle(caller);
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.multimeter));
@@ -99,7 +102,6 @@ public class DataLoggerActivity extends AppCompatActivity {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                     this, LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(linearLayoutManager);
-
             DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
             recyclerView.addItemDecoration(itemDecor);
             recyclerView.setAdapter(adapter);
