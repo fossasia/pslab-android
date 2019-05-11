@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG_DEVICE = "device";
     private static final String TAG_INSTRUMENTS = "instruments";
-    private static final String TAG_SETTINGS = "settings";
     private static final String TAG_ABOUTUS = "aboutUs";
     private static final String TAG_PINLAYOUT = "pinLayout";
     private static final String TAG_FAQ = "faq";
@@ -225,10 +224,10 @@ public class MainActivity extends AppCompatActivity {
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             case 3:
-                navigationView.getMenu().getItem(5).getSubMenu().getItem(1).setChecked(true);
+                navigationView.getMenu().getItem(size_menu-1).getSubMenu().getItem(1).setChecked(true);
                 break;
             case 4:
-                navigationView.getMenu().getItem(5).getSubMenu().getItem(0).setChecked(true);
+                navigationView.getMenu().getItem(size_menu-1).getSubMenu().getItem(0).setChecked(true);
                 break;
             default:
                 navigationView.getMenu().getItem(0).setChecked(true);

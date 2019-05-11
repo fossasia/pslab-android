@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
@@ -295,8 +296,8 @@ public class SensorSHT21 extends AppCompatActivity {
 
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            tvSensorSHT21Temp.setText(String.valueOf(dataSHT21Temp.get(0)));
-            tvSensorSHT21Humidity.setText(String.valueOf(dataSHT21Humidity.get(0)));
+            tvSensorSHT21Temp.setText(DataFormatter.formatDouble(dataSHT21Temp.get(0), DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorSHT21Humidity.setText(DataFormatter.formatDouble(dataSHT21Humidity.get(0), DataFormatter.HIGH_PRECISION_FORMAT));
 
             LineDataSet dataSet1 = new LineDataSet(entriesTemperature, getString(R.string.temperature));
             LineDataSet dataSet2 = new LineDataSet(entriesHumidity, getString(R.string.humidity));

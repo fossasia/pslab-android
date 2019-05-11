@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
@@ -333,9 +334,9 @@ public class SensorBMP180 extends AppCompatActivity {
 
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            tvSensorBMP180Temp.setText(String.valueOf(dataBMP180[0]));
-            tvSensorBMP180Altitude.setText(String.valueOf(dataBMP180[1]));
-            tvSensorBMP180Pressure.setText(String.valueOf(dataBMP180[2]));
+            tvSensorBMP180Temp.setText(DataFormatter.formatDouble(dataBMP180[0], DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorBMP180Altitude.setText(DataFormatter.formatDouble(dataBMP180[1], DataFormatter.HIGH_PRECISION_FORMAT));
+            tvSensorBMP180Pressure.setText(DataFormatter.formatDouble(dataBMP180[2], DataFormatter.HIGH_PRECISION_FORMAT));
 
             LineDataSet dataSet1 = new LineDataSet(entriesTemperature, getString(R.string.temperature));
             LineDataSet dataSet2 = new LineDataSet(entriesAltitude, getString(R.string.altitude));

@@ -32,6 +32,7 @@ import android.widget.TextView;
 import java.util.Date;
 
 import io.pslab.R;
+import io.pslab.DataFormatter;
 import io.pslab.models.CompassData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
@@ -198,27 +199,24 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
         setCompassAnimation(degree);
 
-        degreeIndicator.setText(String.valueOf(degree));
+        degreeIndicator.setText(DataFormatter.formatDouble(degree, DataFormatter.MEDIUM_PRECISION_FORMAT));
         currentDegree = -degree;
 
         degree = Math.round(event.values[0]);
         if (degree < 0)
             degree += 360;
         compassData.setBx(String.valueOf(degree));
-        xAxisMagneticField.setText(String.valueOf(degree));
-
+        xAxisMagneticField.setText(DataFormatter.formatDouble(degree, DataFormatter.MEDIUM_PRECISION_FORMAT));
         degree = Math.round(event.values[1]);
         if (degree < 0)
             degree += 360;
         compassData.setBy(String.valueOf(degree));
-        yAxisMagneticField.setText(String.valueOf(degree));
-
+        yAxisMagneticField.setText(DataFormatter.formatDouble(degree, DataFormatter.MEDIUM_PRECISION_FORMAT));
         degree = Math.round(event.values[2]);
         if (degree < 0)
             degree += 360;
         compassData.setBz(String.valueOf(degree));
-        zAxisMagneticField.setText(String.valueOf(degree));
-    }
+        zAxisMagneticField.setText(DataFormatter.formatDouble(degree, DataFormatter.MEDIUM_PRECISION_FORMAT));    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

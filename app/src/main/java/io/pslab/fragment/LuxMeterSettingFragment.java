@@ -8,6 +8,7 @@ import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
+import android.widget.Toast;
 
 import io.pslab.R;
 import io.pslab.others.PSLabPermission;
@@ -79,9 +80,14 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 break;
             case KEY_UPDATE_PERIOD:
                 try {
-                    Integer updatePeriod = Integer.valueOf(updatePeriodPref.getText());
-                    updatePeriodPref.setSummary(updatePeriod + " ms");
+                    Integer updatePeriod = Integer.parseInt(updatePeriodPref.getText());
+                    if (updatePeriod > 1000 || updatePeriod < 100) {
+                        throw new NumberFormatException();
+                    } else {
+                        updatePeriodPref.setSummary(updatePeriod + " ms");
+                    }
                 } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.update_period_msg), Toast.LENGTH_SHORT).show();
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -91,7 +97,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 break;
             case KEY_LUX_SENSOR_GAIN:
                 try {
-                    Integer gain = Integer.valueOf(sensorGainPref.getText());
+                    Integer gain = Integer.parseInt(sensorGainPref.getText());
                     sensorGainPref.setSummary(String.valueOf(gain));
                 } catch (NumberFormatException e) {
                     sensorGainPref.setSummary("1");
@@ -103,9 +109,14 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 break;
             case KEY_HIGH_LIMIT:
                 try {
-                    Integer highLimit = Integer.valueOf(higLimitPref.getText());
-                    higLimitPref.setSummary(String.valueOf(highLimit));
+                    Integer highLimit = Integer.parseInt(higLimitPref.getText());
+                    if (highLimit > 10000 || highLimit < 10) {
+                        throw new NumberFormatException();
+                    } else {
+                        higLimitPref.setSummary(String.valueOf(highLimit) + " Lx");
+                    }
                 } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.high_limit_msg), Toast.LENGTH_SHORT).show();
                     higLimitPref.setSummary("2000 Lx");
                     higLimitPref.setText("2000");
                     SharedPreferences.Editor editor = sharedPref.edit();
