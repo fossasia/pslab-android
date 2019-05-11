@@ -1,9 +1,12 @@
 package io.pslab.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,10 +14,11 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.view.LayoutInflater;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -33,6 +37,7 @@ import io.pslab.adapters.SensorLoggerListAdapter;
 import io.pslab.models.BaroData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -52,9 +57,10 @@ public class DataLoggerActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    private ProgressBar deleteAllProgressBar;
+    private RealmResults<SensorDataBlock> categoryData;
     private String selectedDevice = null;
     private Realm realm;
-    private RealmResults<SensorDataBlock> categoryData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,8 @@ public class DataLoggerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_data_logger);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        deleteAllProgressBar = findViewById(R.id.delete_all_progbar);
+        deleteAllProgressBar.setVisibility(View.GONE);
         realm = LocalDataLog.with().getRealm();
         String caller = getIntent().getStringExtra(CALLER_ACTIVITY);
         if (getSupportActionBar() != null) {
@@ -70,22 +78,18 @@ public class DataLoggerActivity extends AppCompatActivity {
         }
         if (caller == null) caller = "";
 
-
+        getSupportActionBar().setTitle(caller);
         switch (caller) {
             case "Lux Meter":
-                getSupportActionBar().setTitle(caller);
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.lux_meter));
                 break;
             case "Barometer":
-                getSupportActionBar().setTitle(caller);
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.baro_meter));
                 break;
             case "Accelerometer":
-                getSupportActionBar().setTitle(caller);
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.accelerometer));
                 break;
             case "Multimeter":
-                getSupportActionBar().setTitle(caller);
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.multimeter));
                 break;
             default:
@@ -121,17 +125,68 @@ public class DataLoggerActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
+                break;
             case R.id.action_import_log:
                 importLog();
+                break;
+            case R.id.delete_all:
+                Context context = DataLoggerActivity.this;
+                new AlertDialog.Builder(context)
+                        .setTitle(context.getString(R.string.delete))
+                        .setMessage(context.getString(R.string.delete_all_message))
+                        .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteAllProgressBar.setVisibility(View.VISIBLE);
+                                new DeleteAllTask().execute();
+                            }
+                        }).setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_data_logger_menu, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.log_activity_menu, menu);
+        menu.findItem(R.id.delete_all).setVisible(categoryData.size() > 0);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private class DeleteAllTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Realm realm = Realm.getDefaultInstance();
+            for (SensorDataBlock data : realm.where(SensorDataBlock.class)
+                    .findAll()) {
+                File logDirectory = new File(
+                        Environment.getExternalStorageDirectory().getAbsolutePath() +
+                                File.separator + CSVLogger.CSV_DIRECTORY +
+                                File.separator + data.getSensorType() +
+                                File.separator + CSVLogger.FILE_NAME_FORMAT.format(data.getBlock()) + ".csv");
+                logDirectory.delete();
+                realm.beginTransaction();
+                realm.where(SensorDataBlock.class)
+                        .equalTo("block", data.getBlock())
+                        .findFirst().deleteFromRealm();
+                realm.commitTransaction();
+            }
+            realm.close();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            deleteAllProgressBar.setVisibility(View.GONE);
+            if (LocalDataLog.with().getAllSensorBlocks().size() <= 0) {
+                blankView.setVisibility(View.VISIBLE);
+            }
+            DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
+        }
     }
 
     private void importLog() {
@@ -205,6 +260,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                     line = reader.readLine();
                 }
                 fillData();
+                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -238,6 +294,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                     line = reader.readLine();
                 }
                 fillData();
+                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
