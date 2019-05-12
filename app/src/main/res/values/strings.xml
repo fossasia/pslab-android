@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">PSLab</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
 
@@ -25,7 +23,6 @@
     <string name="wave_generator">Wave Generator</string>
     <string name="sensors">Sensors</string>
     <string name="power_source">Power Source</string>
-    <string name="coming_soon">Coming Soon!</string>
     <string name="record_title">Record current data</string>
 
     <string name="setting_auto_start_key">setting_auto_start</string>
@@ -48,16 +45,7 @@
         <item>FAQs</item>
     </string-array>
 
-    <string name="activity_title_about_us">About Us</string>
-    <string name="activity_title_privacy_policy">Privacy Policy</string>
     <string name="application_icon">Application Icon</string>
-
-    <string-array name="select_channel_mode_la">
-        <item>Single Channel Mode</item>
-        <item>Two Channel Mode</item>
-        <item>Three Channel Mode</item>
-        <item>Four Channel Mode</item>
-    </string-array>
 
     <string-array name="multimeter_knob_states">
         <item>CH1</item>
@@ -82,13 +70,10 @@
     <string name="frequency_unit">Hz</string>
     <string name="multimeter_voltage_unit">Volts</string>
     <string name="voltage_channels">Voltage</string>
-    <string name="voltage_elements">Voltage at Elements</string>
     <string name="resistance_abbreviation">\u2126</string>
-    <string name="capacitance_abbreviation">C</string>
     <string name="multimeter_measure">Measure</string>
 
     <string name="multimeter_angle_1">33</string>
-    <string name="multimeter_angle_2">0</string>
     <string name="multimeter_angle_3">65</string>
     <string name="multimeter_angle_4">98</string>
     <string name="multimeter_angle_5">131</string>
@@ -131,7 +116,6 @@
     <string name="sqr4">SQR4</string>
     <string name="freq_range">10Hz-5kHz</string>
     <string name="zero">0</string>
-    <string name="gain">Gain</string>
     <string-array name="wave_type">
         <item>SINE</item>
         <item>SQUARE</item>
@@ -141,7 +125,6 @@
     <string name="waveform_generator">Arbitrary Waveform Generator</string>
     <string name="autoscan">Autoscan</string>
     <string name="select_sensor">Select Sensor</string>
-    <string name="get_raw">Get Raw</string>
 
     <string name="accelerometer">Accelerometer</string>
     <string name="x_axis">X axis</string>
@@ -154,130 +137,20 @@
     <string name="time_seconds">Time (s)</string>
     <string name="accelerometer_intro">Accelerometer is used to measure acceleration of a body along the X, Y and Z axis.\n</string>
     <string name="accelerometer_description_text">\n\nThe figure above shows the direction of all the three axis when the mobile is held straight.\n\nSteps to measure acceleration in PSLab app:\n\n\u2022 Hold the device as shown in the above figure.\n\n\u2022 Accelerate the device along any one or multiple axis.\n\n\u2022 Observe the values in the cards or the plotted graph of any particular axis.\n\nThe Accelerometer instrument can also be used to measure the acceleration of a moving body by placing the device on/inside the body and then accelerating the body.\n\nNOTE: Don\'t accelerate the body if the device isn\'t properly attached else the device could be damaged. </string>
-    <string name="accelerometer_configurations">Accelerometer Configurations</string>
     <string name="no_accelerometer_sensor">Device does not have any accelerometer sensor</string>
 
-    <string name="set_triggers">Set Triggers</string>
-    <string name="remove">Remove</string>
-    <string name="built_in">Built-In</string>
-    <string name="MPU6050">MPU6050</string>
-
     <string name="not_connected">Not Connected</string>
-    <string name="initialisation_completed">Initialisation Completed</string>
     <string name="initialising_wait">Initialising Wait…</string>
     <string name="device_connected_successfully">Device Connected Successfully</string>
     <string name="device_not_found">Device Not Found</string>
     <string name="sensor_not_connected_tls">Sensor not connected</string>
 
     <string name="time_unit_la">Time (ms)</string>
-    <string name="analyze">Analyze</string>
     <string name="view">VIEW</string>
 
-    <string-array name="tab_titles">
-        <item>Experiment Doc</item>
-        <item>Experiment Setup</item>
-    </string-array>
-
-    <string name="configure_experiment">Configure Experiment</string>
-
     <!-- Experiment Headers -->
-    <string name="electronics_experiments">Electronics Experiments</string>
-    <string name="bjts_and_fets">BJTs and FETs</string>
-    <string name="diode_circuits">Diode Circuits</string>
-    <string name="opamp_circuits">OpAmp Circuits</string>
-    <string name="oscillators">Oscillators</string>
-    <string name="communication">Communication</string>
     <!-- Experiments -->
-    <string name="nfet_output_characteristics">N-FET Output Characteristics</string>
-    <string name="nfet_transfer_characteristics">N-FET Transfer Characteristics</string>
-    <string name="transistor_cb">BJT CB Characteristics</string>
-    <string name="transistor_ce">BJT Output Characteristics</string>
-    <string name="bjt_input_characteristics">BJT Input Characteristics</string>
-    <string name="bjt_transfer_characteristics">BJT Transfer Characteristics</string>
-    <string name="bjt_ce_backup">BJT CE Backup</string>
-    <string name="bjt_amplifer">BJT Amplifier</string>
 
-    <string name="zener_iv">Zener IV Characteristics</string>
-    <string name="diode_iv">Diode IV Characteristics</string>
-    <string name="diode_clamping">Diode Clamping</string>
-    <string name="diode_clipping">Diode Clipping</string>
-    <string name="half_wave_rectifier">Half Wave Rectifier</string>
-    <string name="full_wave_rectifier">Full Wave Rectifier</string>
-
-    <string name="inverting_opamp">Inverting Op-Amp</string>
-    <string name="ramp_generator">Ramp Generator</string>
-    <string name="non_inverting_opamp">Non Inverting Op-Amp</string>
-    <string name="summing_junction">Summing Junction</string>
-    <string name="precision_rectifier">Precision Rectifier</string>
-
-    <string name="astable_multivibrator">Astable Multivibrator</string>
-    <string name="colpitts_oscillator">Colpitts Oscillator</string>
-    <string name="phase_shift_oscillator">Phase Shift Oscillator</string>
-    <string name="wien_bridge_oscillator">Wien Bridge Oscillator</string>
-    <string name="monostable_multivibrator">Monostable Multivibrator</string>
-
-    <string name="amplitude_modulation">Amplitude Modulation</string>
-
-    <string name="temporary_toast">Will be available soon</string>
-
-    <string name="electrical_experiments">Electrical Experiments</string>
-    <string name="transient_rlc">Transients RLC Response</string>
-    <string name="filter_characteristics">Filter Characteristics</string>
-    <string name="capacitive_reactance">Capacitive Reactance</string>
-    <string name="inductive_reactance">Inductive Reactance</string>
-    <string name="ohms_law">Ohms Law</string>
-    <string name="rc_phase_shift">RC Phase Shift</string>
-    <string name="lr_phase_shift">LR Phase Shift</string>
-    <string name="lcr_steady_state">LCR Steady State</string>
-    <string name="rc_integrals_derivatives">RC Integrals, Derivatives</string>
-    <string name="voltage_controlled_low_pass_filter">Voltage Controlled Low Pass Filter</string>
-
-    <string name="physics_experiments">Physics Experiments</string>
-    <string name="speed_of_sound">Speed of Sound</string>
-    <string name="pendulum_time">Pendulum Time Period</string>
-    <string name="random_sampling">Random Sampling</string>
-    <string name="simple_pendulum">Simple Pendulum</string>
-    <string name="piezo_bandwidth_characteristics">Piezo Bandwidth Characteristics</string>
-    <string name="mpu6050_imu_pendulum">MPU6050 IMU Pendulum</string>
-
-    <string name="add_on_modules">Add-On Modules</string>
-    <string name="various_utilities">Various Utilities</string>
-    <string name="dust_sensor">Dust Sensor DSM501</string>
-    <string name="oled_display">OLED Display</string>
-    <string name="wireless_rgb_lights">Wireless RGB Lights</string>
-    <string name="sensor_tmp_logger">Sensor TMP Logger</string>
-    <string name="rfid_reader_mf522">RFID Reader MF522</string>
-    <string name="rgb_led_ws2812b">RGB LED WS2812B</string>
-
-    <string name="ads1115_based_calibrator">ADS1115 Based Calibrator</string>
-    <string name="device_testing">Device Testing</string>
-    <string name="servo_motors">Servo Motors</string>
-    <string name="stepper_motors">Stepper Motors</string>
-    <string name="make_a_flow_chart">Make a Flow Chart</string>
-    <string name="calibration_loader">Calibration Loader</string>
-    <string name="device_calibrator">Device Calibrator</string>
-    <string name="remote_access">Remote Access</string>
-
-    <string name="school_level">School Level</string>
-    <string name="measure_voltages">Measure Voltages</string>
-    <string name="lemon_cell">Lemon Cell</string>
-    <string name="ac_generator">AC Generator</string>
-    <string name="resistance_measurement">Resistance Measurement</string>
-    <string name="human_body_resistance">Human Body Resistance</string>
-    <string name="em_induction">Electromagnetic Induction</string>
-    <string name="resistance_of_water">Resistance of Water</string>
-    <string name="frequency_of_sound">Frequency of Sound</string>
-    <string name="piezo_buzzer">Piezo Buzzer</string>
-    <string name="sound_beats">Sound Beats Phenomenon</string>
-    <string name="capacitance_measurement">Capacitance Measurement</string>
-    <string name="semiconductor_diode">Semiconductor Diode</string>
-    <string name="light_dependent_resistor">Light Dependent Resistor</string>
-    <string name="capacitor_discharge">Capacitor Discharge</string>
-    <string name="ultrasonic_range_finder">Ultrasonic Range Finder</string>
-
-
-    <string name="bode_plots">Bode Plots</string>
-    <string name="ac_and_dc">AC and DC</string>
 
     <string name="hmc5883l">hmc5883l</string>
     <string name="mpu6050">mpu6050</string>
@@ -286,7 +159,6 @@
     <string name="ads1115">ads1115</string>
     <string name="mlx90614">mlx90614</string>
     <string name="bmp180">bmp180</string>
-    <string name="bh1750">bh1750</string>
     <string name="mpu925x">mpu925x</string>
 
     <string name="raw_data">Raw Data</string>
@@ -322,7 +194,6 @@
     <string name="set_timing">Set Timing</string>
     <string name="set_channel">Set Channel</string>
     <string name="set_rate">Set Rate</string>
-    <string name="gain_range">Gain Range</string>
     <string name="plot_accelerometer">Plot - Accelerometer</string>
     <string name="plot_gyroscope">Plot - Gyroscope</string>
     <string name="rad">(rad)</string>
@@ -335,9 +206,6 @@
     <string name="alt">Alt.</string>
     <string name="meter">(m)</string>
     <string name="pascal">(Pa)</string>
-
-    <string name="voltage_label">Voltage (V)</string>
-    <string name="current_label">Current (mA)</string>
 
     <string-array name="tsl2561_gain_spinner">
         <item>No gain</item>
@@ -434,43 +302,6 @@
         <item>860</item>
     </string-array>
 
-    <string-array name="bh1750_gain_spinner">
-        <item>500mLx</item>
-        <item>1000mLx</item>
-        <item>4000mLx</item>
-    </string-array>
-
-    <string-array name="opamp_timebase">
-        <item>4</item>
-        <item>8</item>
-        <item>16</item>
-        <item>32</item>
-        <item>102.4</item>
-        <item>204.8</item>
-        <item>409.6</item>
-    </string-array>
-
-    <string-array name="opamp_range">
-        <item>+/- 16</item>
-        <item>+/- 8</item>
-        <item>+/- 4</item>
-        <item>+/- 2</item>
-        <item>+/- 1</item>
-        <item>+/- 0.5</item>
-    </string-array>
-
-    <string-array name="wave_generator">
-        <item>W1</item>
-        <item>W2</item>
-    </string-array>
-
-    <string-array name="source_pins">
-        <item>PV1</item>
-        <item>PV2</item>
-        <item>PV3</item>
-        <item>PCS</item>
-    </string-array>
-
     <string-array name="lux_sensor_list">
         <item>In-built Sensor</item>
         <item>BH1750</item>
@@ -489,14 +320,10 @@
         list and learn how to use Inter-Integrated Circuit (I2C) bus. After connecting, click Autoscan</string>
     <string name="scanning">Scanning...</string>
 
-    <string name="experiment_icon">Experiment Icon</string>
-    <string name="drop_down_arrow">Drop down arrow</string>
     <string name="voltage_unit">(V)</string>
     <string name="volts">volts</string>
     <string name="seconds">(s)</string>
-    <string name="mili_seconds">(ms)</string>
     <string name="lux">Lx</string>
-    <string name="lux_graph_y_label">Intensity (Lx)</string>
     <string name="pressure2">Press.</string>
     <string name="plot_altitude">Plot - Altitude</string>
     <string name="celcius">(°C)</string>
@@ -510,26 +337,10 @@
     <string name="lux2">(Lux)</string>
     <string name="acceleration">Acc.</string>
     <string name="acceleration_unit">(m/s²)</string>
-    <string name="initial_voltage_v">Initial Voltage (V)</string>
-    <string name="final_voltage_v">Final Voltage (V)</string>
-    <string name="step_size_v">Step Size (V)</string>
-    <string name="gate_voltage_v">Gate Voltage (V)</string>
-    <string name="collector_sweep_pv1">Collector Sweep (PV1)</string>
-    <string name="emitter_voltage_pv2">Emitter Voltage (PV2)</string>
-    <string name="total_steps">Total Steps</string>
-    <string name="base_voltage_pv2">Base Voltage (PV2)</string>
-    <string name="initial_frequency_hz">Initial Frequency (Hz)</string>
-    <string name="voltage_v">Voltage (V)</string>
     <string name="range">Range</string>
     <string name="wave1">Wave1</string>
-    <string name="start_experiment">Start Experiment</string>
-    <string name="discharge">Discharge</string>
-    <string name="charge">Charge</string>
     <string name="wave2">Wave2</string>
-    <string name="label_5000hz">5000Hz</string>
-    <string name="label_180">180°</string>
 
-    <string name="data_logger">Data Logger</string>
     <string name="start_logging">Start Logging</string>
     <string name="stop_logging">Stop Logging</string>
     <string name="stop">Stop</string>
@@ -539,32 +350,11 @@
     <string name="view_logged_data">View Logged Data</string>
     <string name="export_logged_data">Export Logged Data</string>
     <string name="sensor_logged_data">Sensor Logged Data</string>
-    <string name="begin_experiment">Begin Experiment</string>
-    <string name="current">Current</string>
-    <string name="analyse_ch1">Analyse CH1</string>
-    <string name="analyse_ch2">Analyse CH2</string>
-    <string name="result">Result</string>
-    <string name="acquire_data">Acquire Data</string>
-    <string name="done">Done</string>
-    <string name="fit_failed">fit failed</string>
 
     <string name="full">Full</string>
-    <string name="ac_voltage">AC Voltage</string>
-    <string name="dc_voltage">DC Voltage</string>
-    <string name="amplitude_range">Amplitude Range</string>
-
-    <string name="steps">Steps</string>
-    <string name="set_steps">Set Steps</string>
 
     <string name="pocket_science_logo">Pocket Science Logo</string>
 
-    <string name="servo_4">Servo 4</string>
-    <string name="servo_3">Servo 3</string>
-    <string name="servo_2">Servo 2</string>
-    <string name="servo_1">Servo 1</string>
-    <string name="servo_angles">Servo Angles</string>
-    <string name="set_angles">Set Angles</string>
-    <string name="reset_angles">Reset Angles</string>
     <string name="timebase_microsec">%1$.2f μs</string>
     <string name="timebase_milisec">%1$.2f ms</string>
     <string name="time_space">Time </string>
@@ -577,21 +367,12 @@
     <string name="data_analysis">Data Analysis</string>
     <string name="xy_plot">XY Plot</string>
     <string name="hundred_ms">100ms</string>
-    <string name="step_size">Step Size</string>
-    <string name="collector_voltage_v">Collector Voltage (V)</string>
     <string name="hyphen">-</string>
     <string name="plus">+</string>
     <string name="select_a_value">Select a Value </string>
-    <string name="experiment_setup_aim">AIM : To study Diode I-V charateristics</string>
-    <string name="lorem_ipsum_text">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</string>
-    <string name="experiment_setup">Experiment Setup</string>
     <string name="ch3_value">CH3 (+/- %1$.1fV)</string>
     <string name="one_value">1.0</string>
     <string name="fourier_transforms">Fourier Transforms</string>
-    <string name="pv1">PV1</string>
-    <string name="value_volts">%1$.2f V</string>
-    <string name="aquire_data">Acquire Data</string>
-    <string name="ten_hz">10Hz</string>
     <string name="timebase">TimeBase</string>
     <string name="text_view">TextView</string>
     <string name="device_status_text">PSLab Device not found</string>
@@ -631,8 +412,6 @@
     </string-array>
 
     <string name="no_permission_for_maps">Not sufficient permission to load map</string>
-    <string name="no_permission_for_gps">Not sufficient permission to locate device</string>
-    <string name="no_permission_for_logs">Not sufficient permission to log data</string>
 
     <string-array name="export_data_format_list">
         <item>TXT Format</item>
@@ -646,118 +425,11 @@
     <string name="other">Other</string>
     <string name="trigger">Trigger</string>
     <string name="enable_xy_plot">Enable XY plot</string>
-    <string name="source_voltage_v">Source Voltage (V)</string>
     <string name="plot_hyphen_pressure">Plot - Pressure</string>
     <string name="plot_object_temperature">Plot - Object Temperature</string>
     <string name="plot_ambient_temperature">Plot - Ambient Temperature</string>
 
-    <string name="dialog_yes">Yes</string>
-    <string name="dialog_no">No</string>
-    <string name="work_in_progress">The experiment setup is under development, Will be available soon!!!</string>
-
-    <string-array name="experiments_list">
-
-        // Electronics Experiment -> root
-        // *BJTs and FETs
-        <item>N-FET Output Characteristics</item>
-        <item>N-FET Transfer Characteristics</item>
-        <item>BJT CB Characteristics</item>
-        <item>BJT Output Characteristics</item>
-        <item>BJT Input Characteristics</item>
-        <item>BJT Transfer Characteristics</item>
-        <item>BJT CE Backup</item>
-        <item>BJT Amplifier</item>
-
-        // *Diode Circuits
-        <item>Zener IV Characteristics</item>
-        <item>Diode IV Characteristics</item>
-        <item>Diode Clamping</item>
-        <item>Diode Clipping</item>
-        <item>Half Wave Rectifier</item>
-        <item>Full Wave Rectifier</item>
-
-        // *OpAmp Circuits
-        <item>Inverting Op-Amp</item>
-        <item>Ramp Generator</item>
-        <item>Non Inverting Op-Amp</item>
-        <item>Summing Junction</item>
-        <item>Precision Rectifier</item>
-
-        // *Oscillators
-        <item>Astable Multivibrator</item>
-        <item>Colpitts Oscillator</item>
-        <item>Phase Shift Oscillator</item>
-        <item>Wien Bridge Oscillator</item>
-        <item>Monostable Multivibrator</item>
-
-        // *Communication
-        <item>Amplitude Modulation</item>
-
-
-        // Electrical Experiments -> root
-        <item>Transients RLC Response</item>
-        <item>Filter Characteristics</item>
-        <item>Capacitive Reactance</item>
-        <item>Inductive Reactance</item>
-        <item>Ohms Law</item>
-        <item>RC Phase Shift</item>
-        <item>LR Phase Shift</item>
-        <item>LCR Steady State</item>
-        <item>RC Integrals, Derivatives</item>
-        <item>Voltage Controlled Low Pass Filter</item>
-
-
-        //Physics Experiments -> root
-        <item>Speed of Sound</item>
-        <item>Pendulum Time Period</item>
-        <item>Random Sampling</item>
-        <item>Simple Pendulum</item>
-        <item>Piezo Bandwidth Characteristics</item>
-        <item>MPU6050 IMU Pendulum</item>
-
-        // Add-On Modules -> root
-        // *Add-On Modules
-        <item>Dust Sensor DSM501</item>
-        <item>OLED Display</item>
-        <item>Wirelsess RGB Lights</item>
-        <item>Sensor TMP Logger</item>
-        <item>RFID Reader MF522</item>
-        <item>RGB LED WS2812B</item>
-
-        // *Various Utilities
-        <item>ADS1115 Based Calibrator</item>
-        <item>Device Testing</item>
-        <item>Servo Motors</item>
-        <item>Stepper Motors</item>
-        <item>Make a Flow Chart</item>
-        <item>Calibration Loader</item>
-        <item>Device Calibrator</item>
-        <item>Remote Access</item>
-
-
-        // School Level -> root
-        <item>Measure Voltages</item>
-        <item>Lemon Cell</item>
-        <item>AC Generator</item>
-        <item>Resistance Measurement</item>
-        <item>Human Body Resistance</item>
-        <item>Electromagnetic Induction</item>
-        <item>Resistance of Water</item>
-        <item>Frequency of Sound</item>
-        <item>Piezo Buzzer</item>
-        <item>Sound Beats Phenomenon</item>
-        <item>Capacitance Measurement</item>
-        <item>Semiconductor Diode</item>
-        <item>Light Dependent Resistor</item>
-        <item>Capacitor Discharge</item>
-        <item>Ultrasonic Range Finder</item>
-    </string-array>
-
-    <string name="Search_Bar_Title">Search Experiments</string>
-    <string name="Search_Bar_Hint_Text">Search..</string>
     <string name="search_menu_title">Search</string>
-
-    <string name="learn_more">Learn More</string>
 
     <string name="oscilloscope_description">Allows observation of varying signal voltages</string>
     <string name="multimeter_description">Measure voltage, current, resistance and capacitance</string>
@@ -783,7 +455,6 @@
 
     <string name="compass">Compass</string>
     <string name="text_parallel_axes">Select axes parallel to ground</string>
-    <string name="unit_degree">°</string>
     <string name="compass_test_value">360°</string>
     <string name="show_axis_help">Get current axis</string>
 
@@ -812,20 +483,11 @@
         <item>ID4</item>
     </string-array>
 
-    <string-array name="measurement_choices">
-        <item>FALLING EDGE</item>
-        <item>RISING EDGE</item>
-        <item>FOURTH RISING EDGE</item>
-    </string-array>
-
     <string name="no_data_generated">No Data Generated</string>
     <string name="needs_implementation">Yet to be implemented</string>
 
     <string name="analyze_input">Analyze</string>
     <string name="channel_selection_heading">Channel Selection</string>
-    <string name="channel_selection_description_text">Swipe right to select channels</string>
-
-    <string name="limit_cards_message">Can\'t add more cards</string>
 
     <string name="power_card_pv1">PV1</string>
     <string name="power_card_pv2">PV2</string>
@@ -859,13 +521,11 @@
         \u2022 PCS pin is used to supply a constant current between PCS pin and a GND pin in a range of 3.3mA
     </string>
 
-    <string name="logic_analyzer_dialog_heading">Logic Analyzer</string>
     <string name="logic_analyzer_dialog_text">Logic Analyzer is an instrument used to find out the time relationship between different digital pulses. The Logic Analyzer available in the PSLab app can be operated as follows :\n</string>
     <string name="logic_analyzer_dialog_description">\n\u2022 First step is to connect the source/s producing digital pulses with the measuring pin/s i.e. ID1, ID2, ID3 and/or ID4.\n\n\u2022 As shown in the figure, square wave pins SQR1, SQR2, SQR3 and/or SQR4 can be used if no other source is available for generating digital pulses.\n\n\u2022 Next step is to select the channel mode i.e. the number of IDx pins in use.\n\n\u2022 The last step is to select proper channel and edges (that needs to be analyzed) combination from the list provided for each pin in use.\n\n\u2022 Now press "Analyze" button and wait for the data to be fetched from the device. Once the data is fetched, the data will be plotted to analyze.</string>
 
     <string name="wave_name_holder">Triangular</string>
     <string name="freq_text">Frequency :</string>
-    <string name="freq_value">%1$.3f Hz</string>
     <string name="unit_hz">Hz</string>
     <string name="text_phase_colon">Phase :</string>
     <string name="text_phase">Phase</string>
@@ -877,8 +537,6 @@
     <string name="text_sq4">SQR4</string>
     <string name="text_duty_colon">Duty :</string>
     <string name="text_duty">Duty</string>
-    <string name="unit_v">V</string>
-    <string name="waveform_frequecy">WaveForm Frequecy :</string>
     <string name="frequecy_colon">Frequency :</string>
     <string name="set_lowercase">Set</string>
     <string name="unit_percent">%</string>
@@ -899,8 +557,6 @@
     <string name="duty_cycle">Duty Cycle:</string>
     <string name="mode">Mode</string>
     <string name="text_digital">Digital</string>
-    <string name="max_val_warning">Cannot increase more</string>
-    <string name="min_val_warning">Cannot decrease more</string>
 
     <string name="text_connected">Connected</string>
     <string name="text_disconnected">Disconnected</string>
@@ -912,17 +568,12 @@
     <string name="ir_thermometer_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. You can use any of the PSLab device GND pins.\n</string>
 
-    <string name="navigation_lux_meter_data">Data Plot</string>
-    <string name="navigation_lux_meter_configure">Configure</string>
     <string name="high_limit">High Limit</string>
     <string name="update_period">Update Period</string>
-    <string name="statistics">Statistics</string>
     <string name="max_lx">Max (Lx)</string>
     <string name="min_lx">Min (Lx)</string>
     <string name="avg_lx">Avg (Lx)</string>
     <string name="no_lux_sensor">Device does not have a Lux sensor</string>
-    <string name="light_meter">Light Meter</string>
-    <string name="select_light_sensor">Select Sensor</string>
     <string name="active_sensor">Active Sensor</string>
     <string name="setting_baro">setting_baro_sensor_type</string>
     <string name="include_location">Include the location data in the logged file</string>
@@ -949,26 +600,10 @@
         <item>BH1750</item>
         <item>TSL2561</item>
     </string-array>
-    <string-array name="select_light_sensor_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="select_lux_gain">
-        <item>No gain</item>
-        <item>1</item>
-        <item>16</item>
-        <item>500</item>
-        <item>1000</item>
-        <item>4000</item>
-    </string-array>
-    <string name="lux_meter_none">None</string>
 
     <string name="save_csv_data">Export Data</string>
     <string name="delete_csv_data">Delete CSV Data</string>
     <string name="record_csv_data">Record Data</string>
-    <string name="pause_recording_data">Pause Recording</string>
-    <string name="view_map">View Map</string>
 
     <string name="incorrect_import_format">File format does not match device log format</string>
     <string name="import_log_action">Import Log</string>
@@ -979,7 +614,6 @@
     <string name="data_recording_with_nogps">Data recording started but GPS is off</string>
     <string name="data_recording_with_gps_off">Recorded data will not contain location</string>
     <string name="data_recording_without_location">Data recording started without location</string>
-    <string name="data_recording_stopped">Data recording stopped</string>
     <string name="no_location_data">No location data in this log</string>
 
     <string name="data_recording_start">Data Recording: Started</string>
@@ -996,11 +630,8 @@
     <string name="delete">Delete</string>
     <string name="delete_confirmation">Are you sure you want to delete this log</string>
 
-    <string name="gps_not_enabled">GPS not enabled</string>
     <string name="allow_gps">Allow GPS</string>
     <string name="allow_gps_info">Please turn on GPS to include the current location in the logged file</string>
-    <string name="location_enabled">Location: Enabled </string>
-    <string name="location_disabled">Location: Disabled </string>
     <string name="prmsn_denied_storage">Permission denied for storage</string>
 
     <string name="show_guide_text">Show Guide</string>
@@ -1055,7 +686,6 @@
     <string name="date_of_recording">DATE OF RECORDING</string>
     <string name="time_of_recording">TIME OF RECORDING</string>
     <string name="date_of_rec">Date of Rec</string>
-    <string name="time_of_rec">Time of Rec</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="location">Location</string>
@@ -1071,7 +701,6 @@
     <string name="no_logs_to_display">There are no data logs to display</string>
     <string name="show_logged_data">Show Logged Data</string>
     <string name="time_elapsed">Time Elapsed</string>
-    <string name="exp_data_saved">Experiment Logged Data Saved</string>
 
     <string name="no_baro_sensor">Device does not have a barometer</string>
 
@@ -1090,7 +719,6 @@
     <string name="avg_baro">Avg (atm)</string>
     <string name="min_baro">Min (atm)</string>
     <string name="max_baro">Max (atm)</string>
-    <string name="baro_meter_alert_description">Connect a BMP180 sensor using I2C pins on PSLab to use this instrument</string>
     <string name="baro_meter_description">Measures the atmospheric pressure</string>
     <string name="baro_meter_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
     is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n
@@ -1115,6 +743,6 @@
     GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
     \u2022 Select sensor by going to the Configure tab from the bottom navigation bar and choose BHT-1750 in the drop down menu under Select Sensor.\n</string>
     <string name="no_data_fetched">No Data Fetched</string>
-    <string name="recorder">Recorder</string>
-    <string name="save_graph">Save Graph</string>
+    <string name="accelerometer_configurations">Accelerometer Configurations</string>
+    <string name="view_map">View Map</string>
 </resources>
