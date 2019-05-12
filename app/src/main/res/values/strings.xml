@@ -794,7 +794,11 @@
         \u2022 Now, choose the axis along which the compass should work.\n\n
         \u2022 Finally, go to Compass instrument and select the radio button next to the axis chosen.\n\n
         \u2022 Move the device around the chosen axis and see the compass rotating showing the angle made by the device with the actual axis.</string>
-
+    <string name="no_compass_sensor">Your device does not have sensor to support Compass</string>
+    <string name="compass_X_axis">X-axis</string>
+    <string name="compass_Y_axis">Y-axis</string>
+    <string name="compass_Z_axis">Z-axis</string>
+    <string name="value_null">0</string>
     <string name="indicator_description">Indicates device connection</string>
 
     <string-array name="edge_choices">

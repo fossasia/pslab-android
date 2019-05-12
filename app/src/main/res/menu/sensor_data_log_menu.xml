@@ -20,6 +20,12 @@
         android:title="@string/play"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/save_graph"
+        android:icon="@drawable/menu_icon_save"
+        android:orderInCategory="4"
+        android:title="@string/save_graph"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/show_guide"
         android:orderInCategory="5"
         android:title="@string/show_guide"
