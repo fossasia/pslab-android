@@ -5,7 +5,7 @@
     android:layout_width="wrap_content">
     <EditTextPreference
         android:defaultValue="@string/lux_default_1000"
-        android:dialogMessage="@string/time_string"
+        android:dialogMessage="@string/time_string_lux"
         android:dialogTitle="@string/update_period"
         android:inputType="numberDecimal"
         android:key="@string/setting_lux_update"

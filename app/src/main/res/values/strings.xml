@@ -6,6 +6,7 @@
     <string name="closeDrawer">close_drawer</string>
 
     <string name="Toast_double_tap">Press again to close PSLab</string>
+    <string name="Toast_magnetic_not_present">"The sensor required for this instrument is not present in your device"</string>
 
     <string name="nav_device">Device</string>
     <string name="nav_instruments">Instruments</string>
@@ -14,7 +15,6 @@
     <string name="nav_report">Feedback &amp; Bugs</string>
     <string name="nav_help_feedback">FAQs</string>
     <string name="nav_share">Share App</string>
-
     <string name="pslab_pinlayout">Pin Layout</string>
     <string name="pslab_pinlayout_front">Pin Layout Front</string>
     <string name="pslab_pinlayout_back">Pin Layout Back</string>
@@ -26,6 +26,7 @@
     <string name="sensors">Sensors</string>
     <string name="power_source">Power Source</string>
     <string name="coming_soon">Coming Soon!</string>
+    <string name="record_title">Record current data</string>
 
     <string name="setting_auto_start_key">setting_auto_start</string>
     <string name="setting_auto_start_summary">Auto start app when PSLab device is connected</string>
@@ -156,6 +157,7 @@
     <string name="accelerometer_intro">Accelerometer is used to measure acceleration of a body along the X, Y and Z axis.\n</string>
     <string name="accelerometer_description_text">\n\nThe figure above shows the direction of all the three axis when the mobile is held straight.\n\nSteps to measure acceleration in PSLab app:\n\n\u2022 Hold the device as shown in the above figure.\n\n\u2022 Accelerate the device along any one or multiple axis.\n\n\u2022 Observe the values in the cards or the plotted graph of any particular axis.\n\nThe Accelerometer instrument can also be used to measure the acceleration of a moving body by placing the device on/inside the body and then accelerating the body.\n\nNOTE: Don\'t accelerate the body if the device isn\'t properly attached else the device could be damaged. </string>
     <string name="accelerometer_configurations">Accelerometer Configurations</string>
+    <string name="no_accelerometer_sensor">Device does not have any accelerometer sensor</string>
 
     <string name="set_triggers">Set Triggers</string>
     <string name="remove">Remove</string>
@@ -565,15 +567,8 @@
     <string name="servo_angles">Servo Angles</string>
     <string name="set_angles">Set Angles</string>
     <string name="reset_angles">Reset Angles</string>
-    <string name="timebase_label_875">875.00 μs</string>
-    <string name="timebase_label_1">1.00 ms</string>
-    <string name="timebase_label_2">2.00 ms</string>
-    <string name="timebase_label_4">4.00 ms</string>
-    <string name="timebase_label_8">8.00 ms</string>
-    <string name="timebase_label_25_60">25.60 ms</string>
-    <string name="timebase_label_38_40">38.40 ms</string>
-    <string name="timebase_label_51_20">51.20 ms</string>
-    <string name="timebase_label_102_40">102.40 ms</string>
+    <string name="timebase_microsec">%1$.2f μs</string>
+    <string name="timebase_milisec">%1$.2f ms</string>
     <string name="time_space">Time </string>
     <string name="unit_μs">(μs)</string>
     <string name="label_ch1">CH1</string>
@@ -592,15 +587,14 @@
     <string name="experiment_setup_aim">AIM : To study Diode I-V charateristics</string>
     <string name="lorem_ipsum_text">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</string>
     <string name="experiment_setup">Experiment Setup</string>
-    <string name="ch3_value">CH3 (+/- 3.3V)</string>
+    <string name="ch3_value">CH3 (+/- %1$.1fV)</string>
     <string name="one_value">1.0</string>
     <string name="fourier_transforms">Fourier Transforms</string>
     <string name="pv1">PV1</string>
-    <string name="zero_volts">0.00 V</string>
+    <string name="value_volts">%1$.2f V</string>
     <string name="aquire_data">Acquire Data</string>
     <string name="ten_hz">10Hz</string>
     <string name="timebase">TimeBase</string>
-    <string name="timebase_trigger_value">875.00 μs</string>
     <string name="text_view">TextView</string>
     <string name="device_status_text">PSLab Device not found</string>
     <string name="select_mic">[SELECT MIC]</string>
@@ -641,8 +635,6 @@
     <string name="no_permission_for_maps">Not sufficient permission to load map</string>
     <string name="no_permission_for_gps">Not sufficient permission to locate device</string>
     <string name="no_permission_for_logs">Not sufficient permission to log data</string>
-
-    <string name="value_null">0.00</string>
 
     <string-array name="export_data_format_list">
         <item>TXT Format</item>
@@ -795,7 +787,7 @@
     <string name="text_parallel_axes">Select axes parallel to ground</string>
     <string name="unit_degree">°</string>
     <string name="compass_test_value">360°</string>
-    <string name="show_axis_help">Show Guide</string>
+    <string name="show_axis_help">Get current axis</string>
 
     <string name="compass_bottom_sheet_heading">Compass</string>
     <string name="compass_bottom_sheet_text">Compass instrument is used to navigate and to find magnetic field along axis. Compass instrument in PSLab app can be used with built-in mobile sensors or with sensor HMC5883L.</string>
@@ -804,7 +796,11 @@
         \u2022 Now, choose the axis along which the compass should work.\n\n
         \u2022 Finally, go to Compass instrument and select the radio button next to the axis chosen.\n\n
         \u2022 Move the device around the chosen axis and see the compass rotating showing the angle made by the device with the actual axis.</string>
-
+    <string name="no_compass_sensor">Your device does not have sensor to support Compass</string>
+    <string name="compass_X_axis">X-axis</string>
+    <string name="compass_Y_axis">Y-axis</string>
+    <string name="compass_Z_axis">Z-axis</string>
+    <string name="value_null">0</string>
     <string name="indicator_description">Indicates device connection</string>
 
     <string-array name="edge_choices">
@@ -875,7 +871,7 @@
 
     <string name="wave_name_holder">Triangular</string>
     <string name="freq_text">Frequency :</string>
-    <string name="freq_holder_text">5.255 Hz</string>
+    <string name="freq_value">%1$.3f Hz</string>
     <string name="unit_hz">Hz</string>
     <string name="text_phase_colon">Phase :</string>
     <string name="text_phase">Phase</string>
@@ -938,13 +934,16 @@
     <string name="include_location">Include the location data in the logged file</string>
     <string name="location_sensor">include_location_sensor_data</string>
     <string name="include_cap">Include Location Data</string>
-    <string name="time_string">Please provide time interval(in ms) at which data will be updated</string>
+    <string name="time_string_lux">Please provide time interval at which data will be updated (100 ms to 1000 ms)</string>
+    <string name="time_string_baro">Please provide time interval at which data will be updated (100 ms to 2000 ms)</string>
     <string name="setting_baro_update">setting_baro_update_period</string>
     <string name="setting_lux_update">setting_lux_update_period</string>
-    <string name="default_value_baro">1.1</string>
+    <string name="default_value_baro">1.10</string>
     <string name="default_value_lux">1</string>
     <string name="dialogue_msg_atm">Please provide maximum limit of atm value to be recorded</string>
-    <string name="dialogue_msg_lux">Please provide maximum limit of Lux value to be recorded</string>
+    <string name="dialogue_msg_lux">Please provide maximum limit of Lux value to be recorded (10 Lx to 10000 Lx)</string>
+    <string name="update_period_msg">Entered Update Period is not within the limits!</string>
+    <string name="high_limit_msg">Entered High Limit is not within the limits!</string>
     <string name="high_limit_baro">setting_baro_high_limit</string>
     <string name="high_limit_lux">setting_lux_high_limit</string>
     <string name="setting_lux_type">setting_lux_sensor_type</string>
@@ -976,6 +975,11 @@
     <string name="record_csv_data">Record Data</string>
     <string name="pause_recording_data">Pause Recording</string>
     <string name="view_map">View Map</string>
+
+    <string name="incorrect_import_format">File format does not match device log format</string>
+    <string name="import_log_action">Import Log</string>
+    <string name="import_data_log_no_selection_error">Kindly select one of the devices</string>
+    <string name="import_log_positive_button">Select</string>
 
     <string name="data_recording_with_location">Data recording started with location</string>
     <string name="data_recording_with_nogps">Data recording started but GPS is off</string>
@@ -1085,7 +1089,8 @@
         <item>0</item>
         <item>1</item>
     </string-array>
-
+    <string name="delete_all">Delete All Data</string>
+    <string name="delete_all_message">Are You Sure?</string>
     <string name="baro_meter">Barometer</string>
     <string name="baro_unit">atm</string>
     <string name="avg_baro">Avg (atm)</string>
@@ -1099,7 +1104,12 @@
     <string name="baro_meter_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
     \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
-
+    <string name="gyroscope">Gyroscope</string>
+    <string name="gyroscope_description">Measures rate of rotation about XYZ axis</string>
+    <string name="gyroscope_intro">Gyroscope is used to measure rate of roatation of a body along X, Y and Z axis</string>
+    <string name="gyroscope_description_text">Some text</string>
+    <string name="gyroscope_config">Gyroscope Configuration</string>
+    <string name="no_gyroscope_sensor">Your device does not have sensor required for this functionality</string>
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_default_1000">1000</string>
     <string name="lux_default_2000">2000</string>
@@ -1118,11 +1128,4 @@
     <string name="no_data_fetched">No Data Fetched</string>
     <string name="recorder">Recorder</string>
     <string name="save_graph">Save Graph</string>
-
-    <string name="gyroscope">Gyroscope</string>
-    <string name="gyroscope_description">Measures rate of rotation about XYZ axis</string>
-    <string name="gyroscope_intro">Gyroscope is used to measure rate of roatation of a body along X, Y and Z axis</string>
-    <string name="gyroscope_description_text">Some text</string>
-    <string name="gyroscope_config">Gyroscope Configuration</string>
-    <string name="no_gyroscope_sensor">Your device does not have sensor required for this functionality</string>
 </resources>

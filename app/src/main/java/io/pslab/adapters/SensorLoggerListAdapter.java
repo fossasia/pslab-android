@@ -23,12 +23,16 @@ import java.io.File;
 import java.util.Date;
 
 import io.pslab.R;
+import io.pslab.activity.AccelerometerActivity;
 import io.pslab.activity.BarometerActivity;
 import io.pslab.activity.GyroscopeActivity;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.activity.MapsActivity;
+import io.pslab.activity.CompassActivity;
+import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.GyroData;
+import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
@@ -40,7 +44,6 @@ import io.realm.RealmResults;
 /**
  * Created by Avjeet on 03-08-2018.
  */
-
 public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorDataBlock, SensorLoggerListAdapter.ViewHolder> {
 
 
@@ -77,6 +80,14 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             case PSLabSensor.GYROSCOPE:
                 holder.sensor.setText(context.getResources().getString(R.string.gyroscope));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logdata_logo));
+                break;
+            case PSLabSensor.COMPASS:
+                holder.sensor.setText(context.getResources().getString(R.string.compass));
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_compass_log));
+                break;
+            case PSLabSensor.ACCELEROMETER:
+                holder.sensor.setText(context.getResources().getString(R.string.accelerometer));
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_accelerometer));
                 break;
             default:
                 break;
@@ -118,6 +129,16 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             Gyroscope.putExtra(KEY_LOG, true);
             Gyroscope.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(Gyroscope);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.compass))) {
+            Intent Compass = new Intent(context, CompassActivity.class);
+            Compass.putExtra(KEY_LOG, true);
+            Compass.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(Compass);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.accelerometer))) {
+            Intent Accelerometer = new Intent(context, AccelerometerActivity.class);
+            Accelerometer.putExtra(KEY_LOG, true);
+            Accelerometer.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(Accelerometer);
         }
     }
 
@@ -143,13 +164,16 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GYROSCOPE)) {
                             LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.COMPASS)) {
+                            LocalDataLog.with().clearBlockOfCompassRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER)) {
+                            LocalDataLog.with().clearBlockOfAccelerometerRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
                         dialog.dismiss();
-                        if (LocalDataLog.with().getAllSensorBlocks().size() <= 0){
+                        if (LocalDataLog.with().getAllSensorBlocks().size() <= 0) {
                             context.findViewById(R.id.data_logger_blank_view).setVisibility(View.VISIBLE);
-                        }
-                        else{
+                        } else {
                             context.findViewById(R.id.data_logger_blank_view).setVisibility(View.GONE);
                         }
                     }
@@ -205,6 +229,42 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     i.put("dataX", d.getGyroX());
                     i.put("dataY", d.getGyroY());
                     i.put("dataZ", d.getGyroZ());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.COMPASS)) {
+            RealmResults<CompassData> data = LocalDataLog.with().getBlockOfCompassRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (CompassData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("dataX", d.getBx());
+                    i.put("dataY", d.getBy());
+                    i.put("dataZ", d.getBz());
+                    i.put("Axis", d.getAxis());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER)) {
+            RealmResults<AccelerometerData> data = LocalDataLog.with().getBlockOfAccelerometerRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (AccelerometerData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("dataX", d.getAccelerometerX());
+                    i.put("dataY", d.getAccelerometerY());
+                    i.put("dataZ", d.getAccelerometerZ());
                     i.put("lon", d.getLon());
                     i.put("lat", d.getLat());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);

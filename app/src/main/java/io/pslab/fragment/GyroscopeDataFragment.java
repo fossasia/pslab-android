@@ -275,9 +275,9 @@ public class GyroscopeDataFragment extends Fragment {
         turns = 0;
         gyroSensor.invalidateOptionsMenu();
     }
-//    public void saveGraph() {
-//        // Todo: Save graph view to gallery
-//    }
+    public void saveGraph() {
+        // Todo: Save graph view to gallery
+    }
     private void setupInstruments() {
         for (GyroscopeViewFragment fragment : gyroscopeViewFragments) {
             fragment.setUp();

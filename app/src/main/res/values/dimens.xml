@@ -399,5 +399,6 @@
     <dimen name="splash_screen_logo_height">314dp</dimen>
     <dimen name="splash_screen_name_width">271dp</dimen>
     <dimen name="splash_screen_name_height">95dp</dimen>
+    <dimen name="top_margin_text">30dp</dimen>
 
 </resources>

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 
 
@@ -70,13 +71,14 @@ public class EditTextWidget extends LinearLayout{
             @Override
             public void onClick(View v) {
                 try {
-                    Double data = Double.valueOf(editText.getText().toString());
+                    Double data = Double.parseDouble(editText.getText().toString());
                     data = data - leastCount;
                     data = Math.round(data*100.0)/100.0;
                     data = data > maxima ? maxima : data;
                     data = data < minima ? minima : data;
-                    editText.setText(String.valueOf(data));
-                    editText.setSelection(String.valueOf(data).length());
+                    String editTextValue = DataFormatter.formatDouble(data, DataFormatter.MEDIUM_PRECISION_FORMAT);
+                    editText.setText(editTextValue);
+                    editText.setSelection(editTextValue.length());
                 } catch (Exception e) {
                     editText.setText("0");
                     editText.setSelection(1);
@@ -93,8 +95,9 @@ public class EditTextWidget extends LinearLayout{
                     data = Math.round(data*100.0)/100.0;
                     data = data > maxima ? maxima : data;
                     data = data < minima ? minima : data;
-                    editText.setText(String.valueOf(data));
-                    editText.setSelection(String.valueOf(data).length());
+                    String editTextValue = DataFormatter.formatDouble(data, DataFormatter.MEDIUM_PRECISION_FORMAT);
+                    editText.setText(editTextValue);
+                    editText.setSelection(editTextValue.length());
                 } catch (Exception e) {
                     editText.setText("0");
                     editText.setSelection(1);
