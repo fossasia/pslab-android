@@ -72,7 +72,8 @@
         <activity
             android:name=".activity.WaveGeneratorActivity"
             android:screenOrientation="userLandscape" />
-        <activity android:name=".activity.AccelerometerActivity" />
+        <activity android:name=".activity.AccelerometerActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.DataLoggerActivity" />
         <activity
             android:name=".activity.BarometerActivity"

@@ -8,21 +8,20 @@ import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
-import android.widget.Toast;
 
 import io.pslab.R;
 import io.pslab.others.PSLabPermission;
 
 /**
- * Created by Avjeet on 10-08-2018.
+ * Created by Kunal on 18-12-2018.
  */
-public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AccelerometerSettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
     public static final String KEY_UPDATE_PERIOD = "setting_lux_update_period";
     public static final String KEY_HIGH_LIMIT = "setting_lux_high_limit";
-    public static final String KEY_LUX_SENSOR_TYPE = "setting_lux_sensor_type";
-    public static final String KEY_LUX_SENSOR_GAIN = "setting_lux_sensor_gain";
+    public static final String KEY_ACCELEROMETER_SENSOR_TYPE = "setting_lux_sensor_type";
+    public static final String KEY_ACCELEROMETER_SENSOR_GAIN = "setting_lux_sensor_gain";
 
     private PSLabPermission psLabPermission;
 
@@ -38,9 +37,9 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
         setPreferencesFromResource(R.xml.lux_meter_settings, rootKey);
         updatePeriodPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_UPDATE_PERIOD);
         higLimitPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_HIGH_LIMIT);
-        sensorGainPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_LUX_SENSOR_GAIN);
+        sensorGainPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_ACCELEROMETER_SENSOR_GAIN);
         locationPreference = (CheckBoxPreference) getPreferenceScreen().findPreference(KEY_INCLUDE_LOCATION);
-        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_LUX_SENSOR_TYPE);
+        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_ACCELEROMETER_SENSOR_TYPE);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         psLabPermission = PSLabPermission.getInstance();
@@ -80,14 +79,9 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 break;
             case KEY_UPDATE_PERIOD:
                 try {
-                    Integer updatePeriod = Integer.parseInt(updatePeriodPref.getText());
-                    if (updatePeriod > 1000 || updatePeriod < 100) {
-                        throw new NumberFormatException();
-                    } else {
-                        updatePeriodPref.setSummary(updatePeriod + " ms");
-                    }
+                    Integer updatePeriod = Integer.valueOf(updatePeriodPref.getText());
+                    updatePeriodPref.setSummary(updatePeriod + " ms");
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.update_period_msg), Toast.LENGTH_SHORT).show();
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -95,28 +89,23 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                     editor.commit();
                 }
                 break;
-            case KEY_LUX_SENSOR_GAIN:
+            case KEY_ACCELEROMETER_SENSOR_GAIN:
                 try {
-                    Integer gain = Integer.parseInt(sensorGainPref.getText());
+                    Integer gain = Integer.valueOf(sensorGainPref.getText());
                     sensorGainPref.setSummary(String.valueOf(gain));
                 } catch (NumberFormatException e) {
                     sensorGainPref.setSummary("1");
                     sensorGainPref.setText("1");
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(KEY_LUX_SENSOR_GAIN, "1");
+                    editor.putString(KEY_ACCELEROMETER_SENSOR_GAIN, "1");
                     editor.commit();
                 }
                 break;
             case KEY_HIGH_LIMIT:
                 try {
-                    Integer highLimit = Integer.parseInt(higLimitPref.getText());
-                    if (highLimit > 10000 || highLimit < 10) {
-                        throw new NumberFormatException();
-                    } else {
-                        higLimitPref.setSummary(String.valueOf(highLimit) + " Lx");
-                    }
+                    Integer highLimit = Integer.valueOf(higLimitPref.getText());
+                    higLimitPref.setSummary(String.valueOf(highLimit));
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.high_limit_msg), Toast.LENGTH_SHORT).show();
                     higLimitPref.setSummary("2000 Lx");
                     higLimitPref.setText("2000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -124,7 +113,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                     editor.commit();
                 }
                 break;
-            case KEY_LUX_SENSOR_TYPE:
+            case KEY_ACCELEROMETER_SENSOR_TYPE:
                 sensorTypePreference.setSummary(sensorTypePreference.getEntry());
                 break;
             default:

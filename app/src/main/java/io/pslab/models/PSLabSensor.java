@@ -42,6 +42,7 @@ import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
+import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.BaroMeterDataFragment;
 import io.pslab.fragment.CompassDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
@@ -95,6 +96,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String BAROMETER_DATA_FORMAT = "%.2f";
     public static final String COMPASS = "Compass";
     public static final String COMPASS_CONFIGURATIONS = "Compass Configurations";
+    public static final String ACCELEROMETER = "Accelerometer";
+    public static final String ACCELEROMETER_DATA_FORMAT = "%.2f";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -255,7 +258,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         }
         menu.findItem(R.id.save_graph).setVisible(viewingData || playingData);
         menu.findItem(R.id.play_data).setVisible(viewingData || playingData);
-        menu.findItem(R.id.settings).setTitle(getSensorName() + " Configurations");
+        menu.findItem(R.id.settings).setTitle(getSensorName() + "Configurations");
         menu.findItem(R.id.stop_data).setVisible(viewingData).setEnabled(startedPlay);
     }
 
@@ -322,6 +325,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     } else if (getSensorFragment() instanceof CompassDataFragment) {
                         ((CompassDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
+                    }else if(getSensorFragment() instanceof AccelerometerDataFragment){
+                        ((AccelerometerDataFragment) getSupportFragmentManager()
+                                .findFragmentByTag(getSensorName())).playData();
                     }
                 }
                 invalidateOptionsMenu();
@@ -335,6 +341,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                             .findFragmentByTag(getSensorName())).stopData();
                 }  else if (getSensorFragment() instanceof CompassDataFragment) {
                     ((CompassDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
+                }else if (getSensorFragment() instanceof AccelerometerDataFragment) {
+                    ((AccelerometerDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
                 }
                 break;
@@ -370,6 +379,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                             .findFragmentByTag(getSensorName())).saveGraph();
                 }  else if (getSensorFragment() instanceof CompassDataFragment) {
                     ((CompassDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).saveGraph();
+                } else if (getSensorFragment() instanceof AccelerometerDataFragment) {
+                    ((AccelerometerDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
                 }
                 break;

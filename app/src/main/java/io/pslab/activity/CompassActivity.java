@@ -2,7 +2,6 @@ package io.pslab.activity;
 
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
-
 import io.pslab.R;
 import io.pslab.fragment.CompassDataFragment;
 import io.pslab.models.CompassData;

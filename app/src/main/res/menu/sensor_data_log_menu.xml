@@ -29,7 +29,8 @@
         android:id="@+id/show_guide"
         android:orderInCategory="5"
         android:title="@string/show_guide"
-        app:showAsAction="never" />
+        android:icon="@drawable/menu_icon_guide"
+        app:showAsAction="always" />
     <item
         android:id="@+id/show_logged_data"
         android:orderInCategory="6"
