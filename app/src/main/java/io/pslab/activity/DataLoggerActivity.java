@@ -227,11 +227,14 @@ public class DataLoggerActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 100) {
-            Uri uri = data.getData();
-            String path = uri.getPath();
-            path = path.replace("/root_path/", "/");
-            File file = new File(path);
-            getFileData(file);
+            if (resultCode == RESULT_OK) {
+                Uri uri = data.getData();
+                String path = uri.getPath();
+                path = path.replace("/root_path/", "/");
+                File file = new File(path);
+                getFileData(file);
+            }
+            else Toast.makeText(this, this.getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
         }
     }
 

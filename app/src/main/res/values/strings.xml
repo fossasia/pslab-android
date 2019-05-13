@@ -598,6 +598,7 @@
     <string name="high_limit_baro">setting_baro_high_limit</string>
     <string name="high_limit_lux">setting_lux_high_limit</string>
     <string name="setting_lux_type">setting_lux_sensor_type</string>
+    <string name="no_file_selected">No file was selected</string>
     <string name="setting_lux_sensor_gain">setting_lux_sensor_gain</string>
     <string name="set_gain_sensor">Please set gain of the sensor</string>
     <string name="sensor_gain">Sensor Gain</string>
