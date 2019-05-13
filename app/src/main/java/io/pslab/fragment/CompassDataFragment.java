@@ -237,6 +237,22 @@ public class CompassDataFragment extends Fragment{
                         if (compassActivity.playingData) {
                             try {
                                 CompassData d = recordedCompassArray.get(turns);
+                                if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_X_axis))){
+                                    direction = 0;
+                                    xAxisRadioButton.setChecked(true);
+                                    yAxisRadioButton.setChecked(false);
+                                    zAxisRadioButton.setChecked(false);
+                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Y_axis))){
+                                    direction = 1;
+                                    xAxisRadioButton.setChecked(false);
+                                    yAxisRadioButton.setChecked(true);
+                                    zAxisRadioButton.setChecked(false);
+                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Z_axis))){
+                                    direction = 2;
+                                    xAxisRadioButton.setChecked(false);
+                                    yAxisRadioButton.setChecked(false);
+                                    zAxisRadioButton.setChecked(true);
+                                }
                                 turns++;
                                 float degree = 0;
                                 switch (direction) {
@@ -297,19 +313,7 @@ public class CompassDataFragment extends Fragment{
                                 compassData.setBz(String.valueOf(degree));
                                 zAxisMagneticField.setText(String.valueOf(degree));
 
-                                if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_X_axis))){
-                                    xAxisRadioButton.setChecked(true);
-                                    yAxisRadioButton.setChecked(false);
-                                    zAxisRadioButton.setChecked(false);
-                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Y_axis))){
-                                    xAxisRadioButton.setChecked(false);
-                                    yAxisRadioButton.setChecked(true);
-                                    zAxisRadioButton.setChecked(false);
-                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Z_axis))){
-                                    xAxisRadioButton.setChecked(false);
-                                    yAxisRadioButton.setChecked(false);
-                                    zAxisRadioButton.setChecked(true);
-                                }
+
 
                             } catch (IndexOutOfBoundsException e) {
                                 graphTimer.cancel();
