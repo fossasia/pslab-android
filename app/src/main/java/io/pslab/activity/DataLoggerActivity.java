@@ -92,6 +92,9 @@ public class DataLoggerActivity extends AppCompatActivity {
             case "Multimeter":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.multimeter));
                 break;
+            case "Gyroscope":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.gyroscope));
+                break;
             case "Compass":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.compass));
                 break;

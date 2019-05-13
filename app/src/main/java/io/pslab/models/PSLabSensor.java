@@ -44,6 +44,7 @@ import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
 import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.BaroMeterDataFragment;
+import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.CompassDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.others.CSVLogger;
@@ -94,6 +95,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String BAROMETER = "Barometer";
     public static final String BAROMETER_CONFIGURATIONS = "Barometer Configurations";
     public static final String BAROMETER_DATA_FORMAT = "%.2f";
+    public static final String GYROSCOPE = "Gyroscope";
+    public static final String GYROSCOPE_DATA_FORMAT = "%.2f";
+    public static final String GYROSCOPE_CONFIGURATIONS = "Gyroscope Configurations";
     public static final String COMPASS = "Compass";
     public static final String COMPASS_CONFIGURATIONS = "Compass Configurations";
     public static final String ACCELEROMETER = "Accelerometer";
@@ -323,10 +327,13 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
                         ((BaroMeterDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
+                    } else if (getSensorFragment() instanceof GyroscopeDataFragment) {
+                        ((GyroscopeDataFragment) getSupportFragmentManager()
+                                .findFragmentByTag(getSensorName())).playData();
                     } else if (getSensorFragment() instanceof CompassDataFragment) {
                         ((CompassDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
-                    }else if(getSensorFragment() instanceof AccelerometerDataFragment){
+                    } else if (getSensorFragment() instanceof AccelerometerDataFragment) {
                         ((AccelerometerDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
                     }
@@ -340,10 +347,13 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
                     ((BaroMeterDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
-                }  else if (getSensorFragment() instanceof CompassDataFragment) {
+                } else if (getSensorFragment() instanceof GyroscopeDataFragment) {
+                    ((GyroscopeDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
+                } else if (getSensorFragment() instanceof CompassDataFragment) {
                     ((CompassDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
-                }else if (getSensorFragment() instanceof AccelerometerDataFragment) {
+                } else if (getSensorFragment() instanceof AccelerometerDataFragment) {
                     ((AccelerometerDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
                 }
@@ -378,7 +388,10 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
                     ((BaroMeterDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
-                }  else if (getSensorFragment() instanceof CompassDataFragment) {
+                } else if (getSensorFragment() instanceof GyroscopeDataFragment) {
+                    ((GyroscopeDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).saveGraph();
+                } else if (getSensorFragment() instanceof CompassDataFragment) {
                     ((CompassDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
                 } else if (getSensorFragment() instanceof AccelerometerDataFragment) {

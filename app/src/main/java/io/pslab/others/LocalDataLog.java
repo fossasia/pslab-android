@@ -2,11 +2,13 @@ package io.pslab.others;
 
 import io.pslab.interfaces.sensorloggers.AccelerometerRecordables;
 import io.pslab.interfaces.sensorloggers.BaroMeterRecordables;
+import io.pslab.interfaces.sensorloggers.GyroscopeRecordables;
 import io.pslab.interfaces.sensorloggers.CompassRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
+import io.pslab.models.GyroData;
 import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
@@ -18,7 +20,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables {
+public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -91,8 +93,8 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     }
 
     /***********************************************************************************************
-    * Lux Sensor Section
-    ***********************************************************************************************/
+     * Lux Sensor Section
+     ***********************************************************************************************/
     @Override
     public LuxData getLuxData(long timestamp) {
         return realm.where(LuxData.class).equalTo("time", timestamp).findFirst();
@@ -196,11 +198,46 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     }
 
     /***********************************************************************************************
+     * Gyroscope Section
+     ***********************************************************************************************/
+    @Override
+    public GyroData getGyroData(long timeStamp) {
+        return realm.where(GyroData.class).equalTo("time", timeStamp).findFirst();
+    }
+
+    @Override
+    public void clearAllGyroRecords() {
+        realm.beginTransaction();
+        realm.delete(GyroData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfGyroRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<GyroData> data = getBlockOfGyroRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<GyroData> getAllGyroRecords() {
+        return realm.where(GyroData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<GyroData> getBlockOfGyroRecords(long block) {
+        return realm.where(GyroData.class).equalTo("block", block).findAll();
+    }
+
+    /***********************************************************************************************
      * Compass Section
      ***********************************************************************************************/
     @Override
     public CompassData getCompassData(long timeStamp) {
-        return realm.where(CompassData.class).equalTo("time", timeStamp).findFirst();
+        return realm.where(CompassData.class)
+                .equalTo("time", timeStamp)
+                .findFirst();
     }
 
     @Override
@@ -210,7 +247,6 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
         realm.commitTransaction();
     }
 
-    @Override
     public void clearBlockOfCompassRecords(long block) {
         realm.beginTransaction();
         RealmResults<CompassData> data = getBlockOfCompassRecords(block);
@@ -218,7 +254,6 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
         realm.commitTransaction();
     }
 
-    @Override
     public RealmResults<CompassData> getAllCompassRecords() {
         return realm.where(CompassData.class).findAll();
     }
