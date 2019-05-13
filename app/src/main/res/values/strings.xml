@@ -748,6 +748,7 @@
     <string name="log_saved_failed">Could not save the log. Please check storage permission.</string>
     <string name="open">Open</string>
     <string name="play">Play</string>
+    <string name="save_graph">Save Graph</string>
     <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
     is compatible with either the built in light sensor on any android device or the BH-1750 light sensor.\n\n
     \u2022 If you want to use the sensor BH-1750, connect the sensor to PSLab device as shown below</string>
