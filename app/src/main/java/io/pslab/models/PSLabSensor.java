@@ -222,6 +222,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(sensorToolBar);
         getSupportActionBar().setTitle(getSensorName());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         markers = new JSONArray();
         psLabPermission = PSLabPermission.getInstance();
         gpsLogger = new GPSLogger(this,
@@ -384,6 +385,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     ((AccelerometerDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
                 }
+                break;
+            case android.R.id.home:
+                this.finish();
                 break;
             default:
                 break;
