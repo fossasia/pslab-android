@@ -14,10 +14,6 @@
         <item name="colorPrimaryDark">@color/darkWhite</item>
     </style>
 
-    <style name="AppTheme.Bottomnavigationbar" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@color/black</item>
-    </style>
-
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>

@@ -44,10 +44,6 @@
         <item name="colorControlNormal">@color/grey</item>
     </style>
 
-    <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:background">@drawable/rounded_shape</item>
-    </style>
-
     <style name="lux_meter_stat_display">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
