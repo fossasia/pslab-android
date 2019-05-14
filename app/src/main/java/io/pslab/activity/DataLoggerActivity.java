@@ -34,7 +34,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.adapters.SensorLoggerListAdapter;
-import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.CompassData;
 import io.pslab.models.GyroData;
