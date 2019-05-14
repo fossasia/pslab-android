@@ -642,11 +642,11 @@ public class AccelerometerDataFragment extends Fragment {
         }, 0, updatePeriod);
     }
 
-    private void writeLogToFile(long timestamp, float sensorReading) {
+    private void writeLogToFile(long timestamp, float readingX, float readingY, float readingZ) {
         if (getActivity() != null && accelerometerSensor.isRecording) {
             if (accelerometerSensor.writeHeaderToFile) {
                 accelerometerSensor.csvLogger.prepareLogFile();
-                accelerometerSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+                accelerometerSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
                 block = timestamp;
                 accelerometerSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, accelerometerSensor.getSensorName()));
                 accelerometerSensor.writeHeaderToFile = !accelerometerSensor.writeHeaderToFile;
@@ -655,12 +655,12 @@ public class AccelerometerDataFragment extends Fragment {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = accelerometerSensor.gpsLogger.getDeviceLocation();
                 accelerometerSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + "," + location.getLatitude() + "," + location.getLongitude());
+                        + readingX + "," + readingY + "," + readingZ + "," + location.getLatitude() + "," + location.getLongitude());
                 sensorData = new AccelerometerData(timestamp, block, accelerometerValue_X,accelerometerValue_Y,accelerometerValue_Z, location.getLatitude(), location.getLongitude());
             } else {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 accelerometerSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + ",0.0,0.0");
+                        + readingX + "," + readingY + "," + readingZ + ",0.0,0.0");
                 sensorData = new AccelerometerData(timestamp, block, accelerometerValue_X,accelerometerValue_Y,accelerometerValue_Z, 0.0, 0.0);
             }
             accelerometerSensor.recordSensorData(sensorData);
@@ -670,11 +670,11 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     private void visualizeData() {
+        boolean toWrite = false;
         long timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
         if (timeElapsed != previousTimeElapsed_X) {
+            toWrite = true;
             previousTimeElapsed_X = timeElapsed;
-            Long currentTime = System.currentTimeMillis();
-            writeLogToFile(currentTime, accelerometerValue_X);
             entriesX.add(new Entry((float) timeElapsed, accelerometerValue_X));
 
             LineDataSet dataSet = new LineDataSet(entriesX, getString(R.string.accelerometer));
@@ -694,9 +694,8 @@ public class AccelerometerDataFragment extends Fragment {
 
         timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
         if (timeElapsed != previousTimeElapsed_Y) {
+            toWrite = true;
             previousTimeElapsed_Y = timeElapsed;
-            Long currentTime = System.currentTimeMillis();
-            writeLogToFile(currentTime, accelerometerValue_Y);
             entriesY.add(new Entry((float) timeElapsed, accelerometerValue_Y));
 
             LineDataSet dataSet = new LineDataSet(entriesY, getString(R.string.accelerometer));
@@ -715,9 +714,8 @@ public class AccelerometerDataFragment extends Fragment {
         }
         timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
         if (timeElapsed != previousTimeElapsed_Z) {
+            toWrite = true;
             previousTimeElapsed_Z = timeElapsed;
-            Long currentTime = System.currentTimeMillis();
-            writeLogToFile(currentTime, accelerometerValue_Z);
             entriesZ.add(new Entry((float) timeElapsed, accelerometerValue_Z));
 
             LineDataSet dataSet = new LineDataSet(entriesZ, getString(R.string.accelerometer));
@@ -733,6 +731,10 @@ public class AccelerometerDataFragment extends Fragment {
             z_chart_accelerometer.setVisibleXRangeMaximum(3);
             z_chart_accelerometer.moveViewToX(data.getEntryCount());
             z_chart_accelerometer.invalidate();
+        }
+        if (toWrite) {
+            long curretTime = System.currentTimeMillis();
+            writeLogToFile(curretTime, accelerometerValue_X, accelerometerValue_Y, accelerometerValue_Z);
         }
         y.setAxisMaximum(20);
         y.setAxisMinimum(-20);
