@@ -1,5 +1,6 @@
 package io.pslab.fragment;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -7,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -26,10 +28,18 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,6 +58,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.ScienceLabCommon;
 
 import static android.content.Context.SENSOR_SERVICE;
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 /**
  * Created by Kunal on 18-12-18
@@ -118,7 +129,7 @@ public class AccelerometerDataFragment extends Fragment {
     private SensorManager sensorManager;
     private Sensor sensor;
     private long startTime, block;
-    private ArrayList<Entry> entriesX,entriesY,entriesZ;
+    private ArrayList<Entry> entriesX, entriesY, entriesZ;
     private ArrayList<AccelerometerData> recordedAccelerometerArray;
     private AccelerometerData sensorData;
     private float currentMinX = Integer.MAX_VALUE;
@@ -134,6 +145,7 @@ public class AccelerometerDataFragment extends Fragment {
     private long previousTimeElapsed_Z = (System.currentTimeMillis() - startTime) / updatePeriod;
     private AccelerometerActivity accelerometerSensor;
     private DecimalFormat df = new DecimalFormat("+#0.0;-#0.0");
+    private View rootView;
 
     public static AccelerometerDataFragment newInstance() {
         return new AccelerometerDataFragment();
@@ -159,10 +171,10 @@ public class AccelerometerDataFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_accelerometer_data, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        rootView = inflater.inflate(R.layout.fragment_accelerometer_data, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
         setupInstruments();
-        return view;
+        return rootView;
     }
 
     @Override
@@ -172,7 +184,7 @@ public class AccelerometerDataFragment extends Fragment {
             recordedAccelerometerArray = new ArrayList<>();
             resetInstrumentData();
             playRecordedData();
-        }else if (accelerometerSensor.viewingData) {
+        } else if (accelerometerSensor.viewingData) {
             recordedAccelerometerArray = new ArrayList<>();
             resetInstrumentData();
             plotAllRecordedData();
@@ -208,7 +220,7 @@ public class AccelerometerDataFragment extends Fragment {
     private void plotAllRecordedData() {
         recordedAccelerometerArray.addAll(accelerometerSensor.recordedAccelerometerData);
         if (recordedAccelerometerArray.size() != 0) {
-            for (AccelerometerData d: recordedAccelerometerArray) {
+            for (AccelerometerData d : recordedAccelerometerArray) {
                 if (currentMaxX < d.getAccelerometerX()) {
                     currentMaxX = d.getAccelerometerX();
                 }
@@ -481,7 +493,40 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        // Todo: Save graph view to gallery
+        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(accelerometerSensor.recordedAccelerometerData.get(0).getTime());
+        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                File.separator + CSV_DIRECTORY + File.separator + accelerometerSensor.getSensorName() +
+                File.separator + fileName + ".csv");
+        if (!csvFile.exists()) {
+            try {
+                csvFile.createNewFile();
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
+                out.write("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude\n");
+                for (AccelerometerData accelerometerData : accelerometerSensor.recordedAccelerometerData) {
+                    out.write(accelerometerData.getTime() + ","
+                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(accelerometerData.getTime())) + ","
+                            + accelerometerData.getAccelerometerX() + ","
+                            + accelerometerData.getAccelerometerY() + ","
+                            + accelerometerData.getAccelerometerZ() + ","
+                            + accelerometerData.getLat() + ","
+                            + accelerometerData.getLon() + "," + "\n");
+                }
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        View view = rootView.findViewById(R.id.accelerometer_linearlayout);
+        view.setDrawingCacheEnabled(true);
+        Bitmap b = view.getDrawingCache();
+        try {
+            b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + CSV_DIRECTORY + File.separator + accelerometerSensor.getSensorName() +
+                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -656,12 +701,12 @@ public class AccelerometerDataFragment extends Fragment {
                 Location location = accelerometerSensor.gpsLogger.getDeviceLocation();
                 accelerometerSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + readingX + "," + readingY + "," + readingZ + "," + location.getLatitude() + "," + location.getLongitude());
-                sensorData = new AccelerometerData(timestamp, block, accelerometerValue_X,accelerometerValue_Y,accelerometerValue_Z, location.getLatitude(), location.getLongitude());
+                sensorData = new AccelerometerData(timestamp, block, accelerometerValue_X, accelerometerValue_Y, accelerometerValue_Z, location.getLatitude(), location.getLongitude());
             } else {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 accelerometerSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + readingX + "," + readingY + "," + readingZ + ",0.0,0.0");
-                sensorData = new AccelerometerData(timestamp, block, accelerometerValue_X,accelerometerValue_Y,accelerometerValue_Z, 0.0, 0.0);
+                sensorData = new AccelerometerData(timestamp, block, accelerometerValue_X, accelerometerValue_Y, accelerometerValue_Z, 0.0, 0.0);
             }
             accelerometerSensor.recordSensorData(sensorData);
         } else {
@@ -805,7 +850,7 @@ public class AccelerometerDataFragment extends Fragment {
         }
     };
 
-    private void resetInstrumentData(){
+    private void resetInstrumentData() {
         accelerometerValue_X = 0;
         accelerometerValue_Y = 0;
         accelerometerValue_Z = 0;

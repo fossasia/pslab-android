@@ -1,5 +1,6 @@
 package io.pslab.fragment;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -7,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -21,9 +23,18 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,6 +45,7 @@ import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
 
 import static android.content.Context.SENSOR_SERVICE;
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class GyroscopeDataFragment extends Fragment {
 
@@ -52,6 +64,7 @@ public class GyroscopeDataFragment extends Fragment {
     private ArrayList<GyroscopeViewFragment> gyroscopeViewFragments = new ArrayList<>();
     private int[] colors = {Color.YELLOW, Color.MAGENTA, Color.GREEN};
     private DecimalFormat df = new DecimalFormat("+#0.0;-#0.0");
+    private View rootView;
 
     public static GyroscopeDataFragment newInstance() {
         return new GyroscopeDataFragment();
@@ -62,15 +75,17 @@ public class GyroscopeDataFragment extends Fragment {
         GyroscopeDataFragment.updatePeriod = updatePeriod;
         GyroscopeDataFragment.gain = Integer.valueOf(gain);
     }
-    public static Pair<Integer, Pair<Float, Float>> getParameters(){
+
+    public static Pair<Integer, Pair<Float, Float>> getParameters() {
         return new Pair<>(updatePeriod, new Pair<>(highLimit, gain));
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startTime = System.currentTimeMillis();
         gyroSensor = (GyroscopeActivity) getActivity();
-        for (GyroscopeViewFragment fragment : gyroscopeViewFragments){
+        for (GyroscopeViewFragment fragment : gyroscopeViewFragments) {
             fragment.clear();
         }
     }
@@ -78,17 +93,17 @@ public class GyroscopeDataFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gyroscope_data, container, false);
+        rootView = inflater.inflate(R.layout.fragment_gyroscope_data, container, false);
         gyroscopeViewFragments.clear();
-        gyroscopeViewFragments.add((GyroscopeViewFragment)getChildFragmentManager().findFragmentById(R.id.gyroscope_x_axis_fragment));
-        gyroscopeViewFragments.add((GyroscopeViewFragment)getChildFragmentManager().findFragmentById(R.id.gyroscope_y_axis_fragment));
-        gyroscopeViewFragments.add((GyroscopeViewFragment)getChildFragmentManager().findFragmentById(R.id.gyroscope_z_axis_fragment));
+        gyroscopeViewFragments.add((GyroscopeViewFragment) getChildFragmentManager().findFragmentById(R.id.gyroscope_x_axis_fragment));
+        gyroscopeViewFragments.add((GyroscopeViewFragment) getChildFragmentManager().findFragmentById(R.id.gyroscope_y_axis_fragment));
+        gyroscopeViewFragments.add((GyroscopeViewFragment) getChildFragmentManager().findFragmentById(R.id.gyroscope_z_axis_fragment));
 
         gyroscopeViewFragments.get(1).getGyroAxisImage().setImageResource(R.drawable.phone_y_axis);
         gyroscopeViewFragments.get(2).getGyroAxisImage().setImageResource(R.drawable.phone_z_axis);
 
         setupInstruments();
-        return view;
+        return rootView;
     }
 
     @Override
@@ -124,11 +139,11 @@ public class GyroscopeDataFragment extends Fragment {
     private void plotAllRecordedData() {
         recordedGyroArray.addAll(gyroSensor.recordedGyroData);
         if (recordedGyroArray.size() != 0) {
-            for (int i = 0; i < gyroscopeViewFragments.size(); i ++) {
+            for (int i = 0; i < gyroscopeViewFragments.size(); i++) {
                 GyroscopeViewFragment fragment = gyroscopeViewFragments.get(i);
                 for (GyroData d : recordedGyroArray) {
                     if (fragment.getCurrentMax() < d.getGyro()[i]) {
-                         fragment.setCurrentMax(d.getGyro()[i]);
+                        fragment.setCurrentMax(d.getGyro()[i]);
                     }
                     if (fragment.getCurrentMin() < d.getGyro()[i]) {
                         fragment.setCurrentMin(d.getGyro()[i]);
@@ -170,7 +185,8 @@ public class GyroscopeDataFragment extends Fragment {
                     getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
         }
     }
- private void processRecordedData(long timeGap) {
+
+    private void processRecordedData(long timeGap) {
         final Handler handler = new Handler();
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -187,7 +203,7 @@ public class GyroscopeDataFragment extends Fragment {
                             try {
                                 GyroData d = recordedGyroArray.get(turns);
                                 turns++;
-                                for (int i = 0; i < gyroscopeViewFragments.size(); i ++ ) {
+                                for (int i = 0; i < gyroscopeViewFragments.size(); i++) {
                                     GyroscopeViewFragment fragment = gyroscopeViewFragments.get(i);
                                     StringBuilder builder = new StringBuilder();
                                     builder.append(df.format(d.getGyro()[i]));
@@ -243,6 +259,7 @@ public class GyroscopeDataFragment extends Fragment {
             }
         }, 0, timeGap);
     }
+
     public void playData() {
         resetInstrumentData();
         gyroSensor.startedPlay = true;
@@ -275,14 +292,50 @@ public class GyroscopeDataFragment extends Fragment {
         turns = 0;
         gyroSensor.invalidateOptionsMenu();
     }
+
     public void saveGraph() {
-        // Todo: Save graph view to gallery
+        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(gyroSensor.recordedGyroData.get(0).getTime());
+        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                File.separator + CSV_DIRECTORY + File.separator + gyroSensor.getSensorName() +
+                File.separator + fileName + ".csv");
+        if (!csvFile.exists()) {
+            try {
+                csvFile.createNewFile();
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
+                out.write("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude\n");
+                for (GyroData gyroData : gyroSensor.recordedGyroData) {
+                    out.write(gyroData.getTime() + ","
+                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(gyroData.getTime())) + ","
+                            + gyroData.getGyroX() + ","
+                            + gyroData.getGyroY() + ","
+                            + gyroData.getGyroZ() + ","
+                            + gyroData.getLat() + ","
+                            + gyroData.getLon() + "," + "\n");
+                }
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        View view = rootView.findViewById(R.id.gyro_linearlayout);
+        view.setDrawingCacheEnabled(true);
+        Bitmap b = view.getDrawingCache();
+        try {
+            b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + CSV_DIRECTORY + File.separator + gyroSensor.getSensorName() +
+                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
+
     private void setupInstruments() {
         for (GyroscopeViewFragment fragment : gyroscopeViewFragments) {
             fragment.setUp();
         }
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -295,7 +348,7 @@ public class GyroscopeDataFragment extends Fragment {
             }
         }
     }
-//
+
     private void updateGraphs() {
         final Handler handler = new Handler();
         if (graphTimer != null) {
@@ -318,6 +371,7 @@ public class GyroscopeDataFragment extends Fragment {
             }
         }, 0, updatePeriod);
     }
+
     private void writeLogToFile(long timestamp, float readingX, float readingY, float readingZ) {
         if (getActivity() != null && gyroSensor.isRecording) {
             if (gyroSensor.writeHeaderToFile) {
@@ -344,8 +398,9 @@ public class GyroscopeDataFragment extends Fragment {
             gyroSensor.writeHeaderToFile = true;
         }
     }
+
     private void visualizeData() {
-        for (int i = 0; i < gyroscopeViewFragments.size(); i ++) {
+        for (int i = 0; i < gyroscopeViewFragments.size(); i++) {
             GyroscopeViewFragment fragment = gyroscopeViewFragments.get(i);
             long timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
             if (timeElapsed != fragment.getPreviousTimeElapsed()) {
@@ -367,6 +422,7 @@ public class GyroscopeDataFragment extends Fragment {
         Long currentTime = System.currentTimeMillis();
         writeLogToFile(currentTime, gyroscopeViewFragments.get(0).getCurrentValue(), gyroscopeViewFragments.get(1).getCurrentValue(), gyroscopeViewFragments.get(2).getCurrentValue());
     }
+
     private SensorEventListener gyroScopeSensorEventListener = new SensorEventListener() {
 
         @Override
@@ -375,7 +431,7 @@ public class GyroscopeDataFragment extends Fragment {
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-                for (int i = 0; i < gyroscopeViewFragments.size(); i ++) {
+                for (int i = 0; i < gyroscopeViewFragments.size(); i++) {
                     GyroscopeViewFragment fragment = gyroscopeViewFragments.get(i);
                     fragment.setCurrentValue(event.values[i]);
                     StringBuilder builder = new StringBuilder();
@@ -389,8 +445,7 @@ public class GyroscopeDataFragment extends Fragment {
                         builder.insert(3, " ");
                         fragment.setGyroMax(String.valueOf(Html.fromHtml(builder.toString())));
                         fragment.setCurrentMax(fragment.getCurrentValue());
-                    }
-                    else if (fragment.getCurrentValue() < fragment.getCurrentMin()) {
+                    } else if (fragment.getCurrentValue() < fragment.getCurrentMin()) {
                         builder.insert(0, getResources().getString(R.string.text_min));
                         builder.insert(3, " ");
                         fragment.setGyroMin(String.valueOf(Html.fromHtml(builder.toString())));
@@ -400,8 +455,9 @@ public class GyroscopeDataFragment extends Fragment {
             }
         }
     };
+
     private void resetInstrumentData() {
-        for (GyroscopeViewFragment fragment : gyroscopeViewFragments){
+        for (GyroscopeViewFragment fragment : gyroscopeViewFragments) {
             fragment.clear();
         }
     }
