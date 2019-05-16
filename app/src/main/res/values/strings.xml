@@ -593,6 +593,7 @@
     <string name="default_value_lux">1</string>
     <string name="dialogue_msg_atm">Please provide maximum limit of atm value to be recorded</string>
     <string name="dialogue_msg_lux">Please provide maximum limit of Lux value to be recorded (10 Lx to 10000 Lx)</string>
+    <string name="dialogue_msg_gyro">Please provide maximum limit of angular velocity to be recorded (0 rad/s to 1000 rad/s)</string>
     <string name="update_period_msg">Entered Update Period is not within the limits!</string>
     <string name="high_limit_msg">Entered High Limit is not within the limits!</string>
     <string name="high_limit_baro">setting_baro_high_limit</string>
@@ -735,13 +736,14 @@
     \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
     <string name="gyroscope">Gyroscope</string>
     <string name="gyroscope_description">Measures rate of rotation about XYZ axis</string>
-    <string name="gyroscope_intro">Gyroscope is used to measure rate of roatation of a body along X, Y and Z axis</string>
-    <string name="gyroscope_description_text">Some text</string>
+    <string name="gyroscope_intro">Gyroscope is used to measure rate of rotation of a body along X, Y and Z axis.</string>
+    <string name="gyroscope_description_text">Orientation of the positive X, Y, and Z axes. For any positive axis on the device, clockwise rotation outputs negative values, and counterclockwise rotation outputs positive values.</string>
     <string name="gyroscope_config">Gyroscope Configuration</string>
     <string name="no_gyroscope_sensor">Your device does not have sensor required for this functionality</string>
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_default_1000">1000</string>
     <string name="lux_default_2000">2000</string>
+    <string name="gyro_default_20">20</string>
     <string name="lux_default_0">0</string>
     <string name="lux_summary">1000 ms</string>
     <string name="log_saved_directory">Log saved in\n</string>

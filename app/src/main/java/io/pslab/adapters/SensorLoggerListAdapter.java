@@ -236,6 +236,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     e.printStackTrace();
                 }
             }
+            setMapDataToIntent(array);
         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.COMPASS)) {
             RealmResults<CompassData> data = LocalDataLog.with().getBlockOfCompassRecords(block.getBlock());
             JSONArray array = new JSONArray();

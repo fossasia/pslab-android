@@ -3,6 +3,7 @@ package io.pslab.activity;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
+
 import io.pslab.R;
 import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.GyroscopeSettingsFragment;
@@ -51,7 +52,7 @@ public class GyroscopeActivity extends PSLabSensor {
 
     @Override
     public int getGuideSchematics() {
-        return R.drawable.find_mobile_axis;
+        return R.drawable.gyroscope_axes_orientation;
     }
 
     @Override
@@ -110,7 +111,7 @@ public class GyroscopeActivity extends PSLabSensor {
         accelerometerConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         locationEnabled = accelerometerConfigurations.getBoolean(GyroscopeSettingsFragment.KEY_INCLUDE_LOCATION, true);
         GyroscopeDataFragment.setParameters(
-                Float.valueOf(accelerometerConfigurations.getString(GyroscopeSettingsFragment.KEY_HIGH_LIMIT, "2000")),
+                Float.valueOf(accelerometerConfigurations.getString(GyroscopeSettingsFragment.KEY_HIGH_LIMIT, "20")),
                 Integer.valueOf(accelerometerConfigurations.getString(GyroscopeSettingsFragment.KEY_UPDATE_PERIOD, "1000")),
                 accelerometerConfigurations.getString(GyroscopeSettingsFragment.KEY_GYROSCOPE_SENSOR_GAIN, "1"));
     }
