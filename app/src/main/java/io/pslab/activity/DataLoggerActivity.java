@@ -35,6 +35,8 @@ import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.adapters.SensorLoggerListAdapter;
 import io.pslab.models.BaroData;
+import io.pslab.models.CompassData;
+import io.pslab.models.GyroData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
@@ -233,8 +235,8 @@ public class DataLoggerActivity extends AppCompatActivity {
                 path = path.replace("/root_path/", "/");
                 File file = new File(path);
                 getFileData(file);
-            }
-            else Toast.makeText(this, this.getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(this, this.getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -297,6 +299,74 @@ public class DataLoggerActivity extends AppCompatActivity {
                         time = block;
                         realm.beginTransaction();
                         realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.lux_meter)));
+                        realm.commitTransaction();
+                    }
+                    i++;
+                    line = reader.readLine();
+                }
+                fillData();
+                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.compass))) {
+            try {
+                FileInputStream is = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                String line = reader.readLine();
+                int i = 0;
+                long block = 0, time = 0;
+                while (line != null) {
+                    if (i != 0) {
+                        String[] data = line.split(",");
+                        try {
+                            time += 1000;
+                            CompassData compassData = new CompassData(time, block, data[2].equals("null")?"0":data[2], data[3].equals("null")?"0":data[3], data[4].equals("null")?"0":data[4], data[5], Double.valueOf(data[6]), Double.valueOf(data[7]));
+                            realm.beginTransaction();
+                            realm.copyToRealm(compassData);
+                            realm.commitTransaction();
+                        } catch (Exception e) {
+                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        block = System.currentTimeMillis();
+                        time = block;
+                        realm.beginTransaction();
+                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.compass)));
+                        realm.commitTransaction();
+                    }
+                    i++;
+                    line = reader.readLine();
+                }
+                fillData();
+                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.gyroscope))) {
+            try {
+                FileInputStream is = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                String line = reader.readLine();
+                int i = 0;
+                long block = 0, time = 0;
+                while (line != null) {
+                    if (i != 0) {
+                        String[] data = line.split(",");
+                        try {
+                            time += 1000;
+                            GyroData gyroData = new GyroData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
+                            realm.beginTransaction();
+                            realm.copyToRealm(gyroData);
+                            realm.commitTransaction();
+                        } catch (Exception e) {
+                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        block = System.currentTimeMillis();
+                        time = block;
+                        realm.beginTransaction();
+                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.gyroscope)));
                         realm.commitTransaction();
                     }
                     i++;
