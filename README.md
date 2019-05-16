@@ -41,7 +41,7 @@ Please join us on the following channels:
   <table>
     <tr>
      <td><img src="/docs/images/view_about_us.png"></td>
-     <td><img src="/docs/images/view_navigation_drawer.png"></td>
+     <td><img src="/docs/images/view_not_connected_nav_menu.png" width = "500"></td>
      <td><img src="/docs/images/view_pin_layout_front.png"></td>
      <td><img src="/docs/images/view_pin_layout_back.png"></td>
     </tr>
@@ -72,6 +72,12 @@ Please join us on the following channels:
      <td><img src="/docs/images/view_data_logger.png"></td>
     </tr>
   </table>
+  <table>
+    <tr>
+     <td><img src="/docs/images/instrument_accelerometer_view.png" width = "500"></td>
+     <td><img src="/docs/images/instrument_compass_view.png" width = "500"></td>
+    </tr>
+  </table>
 
 ## Video Demo
 - [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k)
@@ -90,12 +96,14 @@ Please join us on the following channels:
 |  Wave Generator  | Generates arbitrary analog and digital waveforms      | 		 ✓       |
 |   Power Source   | Generates programmable voltage and currents	       | 		 ✓       |
 |    Lux Meter     | Measures the ambient light intensity                  | 		 ✓       |
-
-
+|    Baro Meter     | Measures the Pressure                  | 		 ✓       |
+|    AcceleroMeter     | Measures the acceleration of the device                  | 		 ✓       |
+|     Gyro Meter     | Measures the rate of rotation                  | 		 ✓       |
+|    Compass     | Measures the absolute rotation relative to earth magnetic poles                  | 		 ✓       |
 ## How to set up the Android app in your development environment
 
   Minimum Android version 4.1 (API Level 16)
-  
+
   Maximum Android version 8.1 (API Level 27)
 
 ### Development Setup
