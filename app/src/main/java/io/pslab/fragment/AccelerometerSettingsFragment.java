@@ -18,10 +18,10 @@ import io.pslab.others.PSLabPermission;
 public class AccelerometerSettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
-    public static final String KEY_UPDATE_PERIOD = "setting_lux_update_period";
-    public static final String KEY_HIGH_LIMIT = "setting_lux_high_limit";
-    public static final String KEY_ACCELEROMETER_SENSOR_TYPE = "setting_lux_sensor_type";
-    public static final String KEY_ACCELEROMETER_SENSOR_GAIN = "setting_lux_sensor_gain";
+    public static final String KEY_UPDATE_PERIOD = "setting_accelerometer_update_period";
+    public static final String KEY_HIGH_LIMIT = "setting_accelerometer_high_limit";
+    public static final String KEY_ACCELEROMETER_SENSOR_TYPE = "setting_accelerometer_sensor_type";
+    public static final String KEY_ACCELEROMETER_SENSOR_GAIN = "setting_accelerometer_sensor_gain";
 
     private PSLabPermission psLabPermission;
 
@@ -34,7 +34,7 @@ public class AccelerometerSettingsFragment extends PreferenceFragmentCompat impl
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.lux_meter_settings, rootKey);
+        setPreferencesFromResource(R.xml.accelerometer_settings, rootKey);
         updatePeriodPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_UPDATE_PERIOD);
         higLimitPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_HIGH_LIMIT);
         sensorGainPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_ACCELEROMETER_SENSOR_GAIN);
@@ -55,7 +55,7 @@ public class AccelerometerSettingsFragment extends PreferenceFragmentCompat impl
         super.onResume();
         locationPreference.setChecked(sharedPref.getBoolean(KEY_INCLUDE_LOCATION, true));
         updatePeriodPref.setSummary(updatePeriodPref.getText() + " ms");
-        higLimitPref.setSummary(higLimitPref.getText() + " Lx");
+        higLimitPref.setSummary(higLimitPref.getText() + " m/s²");
         sensorTypePreference.setSummary(sensorTypePreference.getEntry());
         sensorGainPref.setSummary(sensorGainPref.getText());
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);

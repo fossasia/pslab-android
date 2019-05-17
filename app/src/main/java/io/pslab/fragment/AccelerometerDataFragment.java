@@ -833,20 +833,17 @@ public class AccelerometerDataFragment extends Fragment {
         ScienceLab scienceLab;
         switch (s) {
             case INBUILT_SENSOR:
-                //z_accel_max_text.setText(getResources().getStringArray(R.array.lux_sensors)[0]);
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
                 if (sensor == null) {
                     Toast.makeText(getContext(), getResources().getString(R.string.no_accelerometer_sensor), Toast.LENGTH_LONG).show();
                 } else {
                     float max = sensor.getMaximumRange();
-                    //z_tv_label_left_yaxis_hmc.setMaxSpeed(max);
                     sensorManager.registerListener(accelerometerSensorEventListener,
                             sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
             case BH1750_SENSOR:
-                //z_accel_max_text.setText(getResources().getStringArray(R.array.lux_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {
                     ArrayList<Integer> data;
