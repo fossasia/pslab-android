@@ -7,11 +7,12 @@ import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
+import android.widget.Toast;
 
 import io.pslab.R;
 import io.pslab.others.PSLabPermission;
 
-public class GyroscopeSettingsFragment  extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class GyroscopeSettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
     public static final String KEY_UPDATE_PERIOD = "setting_lux_update_period";
@@ -48,7 +49,7 @@ public class GyroscopeSettingsFragment  extends PreferenceFragmentCompat impleme
         super.onResume();
         locationPreference.setChecked(sharedPref.getBoolean(KEY_INCLUDE_LOCATION, true));
         updatePeriodPref.setSummary(updatePeriodPref.getText() + " ms");
-        higLimitPref.setSummary(higLimitPref.getText() + " rads-1");
+        higLimitPref.setSummary(higLimitPref.getText() + " rad/s");
         sensorGainPref.setSummary(sensorGainPref.getText());
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
@@ -71,9 +72,14 @@ public class GyroscopeSettingsFragment  extends PreferenceFragmentCompat impleme
                 break;
             case KEY_UPDATE_PERIOD:
                 try {
-                    Integer updatePeriod = Integer.valueOf(updatePeriodPref.getText());
-                    updatePeriodPref.setSummary(updatePeriod + " ms");
+                    Integer updatePeriod = Integer.parseInt(updatePeriodPref.getText());
+                    if (updatePeriod > 2000 || updatePeriod < 100) {
+                        throw new NumberFormatException();
+                    } else {
+                        updatePeriodPref.setSummary(updatePeriod + " ms");
+                    }
                 } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.update_period_msg), Toast.LENGTH_SHORT).show();
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -95,13 +101,18 @@ public class GyroscopeSettingsFragment  extends PreferenceFragmentCompat impleme
                 break;
             case KEY_HIGH_LIMIT:
                 try {
-                    Integer highLimit = Integer.valueOf(higLimitPref.getText());
-                    higLimitPref.setSummary(String.valueOf(highLimit));
+                    Integer highLimit = Integer.parseInt(higLimitPref.getText());
+                    if (highLimit > 1000 || highLimit < 0) {
+                        throw new NumberFormatException();
+                    } else {
+                        higLimitPref.setSummary(String.valueOf(highLimit) + " rad/s");
+                    }
                 } catch (NumberFormatException e) {
-                    higLimitPref.setSummary("2000 Lx");
-                    higLimitPref.setText("2000");
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.high_limit_msg), Toast.LENGTH_SHORT).show();
+                    higLimitPref.setSummary("20 " + "rad/s");
+                    higLimitPref.setText("20");
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(KEY_HIGH_LIMIT, "2000");
+                    editor.putString(KEY_HIGH_LIMIT, "20");
                     editor.commit();
                 }
                 break;

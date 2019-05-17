@@ -35,6 +35,7 @@ public class GyroscopeViewFragment extends Fragment {
     private long startTime;
     private static int updatePeriod = 100;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class GyroscopeViewFragment extends Fragment {
         this.gyroChart = rootView.findViewById(R.id.chart_gyroscope);
         this.gyroAxisImage = rootView.findViewById(R.id.axis_image);
         this.entries = new ArrayList<>();
-        return  rootView;
+        return rootView;
     }
 
     public ImageView getGyroAxisImage() {
@@ -130,7 +131,7 @@ public class GyroscopeViewFragment extends Fragment {
         return this.currentValue;
     }
 
-    public void addEntry(Entry entry){
+    public void addEntry(Entry entry) {
         this.entries.add(entry);
     }
 
@@ -138,24 +139,25 @@ public class GyroscopeViewFragment extends Fragment {
         return this.entries;
     }
 
-    public void clearEntry(){
+    public void clearEntry() {
         this.entries.clear();
     }
 
-    public void setGyroValue(String value) {
+    public void setGyroValue(CharSequence value) {
         this.gyroValue.setText(value);
     }
 
-    public void setGyroMax(String value) {
+    public void setGyroMax(CharSequence value) {
         this.gyroMax.setText(value);
     }
-    public void setGyroMin(String value) {
+
+    public void setGyroMin(CharSequence value) {
         this.gyroMin.setText(value);
     }
 
-    public void setYaxis() {
-        this.y.setAxisMaximum(20);
-        this.y.setAxisMinimum(-20);
+    public void setYaxis(float maxLimit) {
+        this.y.setAxisMaximum(maxLimit);
+        this.y.setAxisMinimum(-maxLimit);
         this.y.setLabelCount(5);
     }
 

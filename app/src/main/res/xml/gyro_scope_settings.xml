@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
     <EditTextPreference
         android:defaultValue="@string/lux_default_1000"
-        android:dialogMessage="@string/time_string_lux"
+        android:dialogMessage="@string/time_string_baro"
         android:dialogTitle="@string/update_period"
         android:inputType="numberDecimal"
         android:key="@string/setting_lux_update"
         android:summary="@string/lux_summary"
         android:title="@string/update_period"
-        android:iconSpaceReserved="false" />
+        app:iconSpaceReserved="false" />
 
     <EditTextPreference
-        android:defaultValue="@string/lux_default_2000"
-        android:dialogMessage="@string/dialogue_msg_lux"
+        android:defaultValue="@string/gyro_default_20"
+        android:dialogMessage="@string/dialogue_msg_gyro"
         android:dialogTitle="@string/high_limit"
         android:inputType="numberDecimal"
         android:key="@string/high_limit_lux"
-        android:summary="@string/lux_default_2000"
+        android:summary="@string/gyro_default_20"
         android:title="@string/high_limit"
-        android:iconSpaceReserved="false" />
+        app:iconSpaceReserved="false" />
 
 
     <EditTextPreference
@@ -32,12 +32,12 @@
         android:key="@string/setting_lux_sensor_gain"
         android:summary="@string/default_value_lux"
         android:title="@string/sensor_gain"
-        android:iconSpaceReserved="false" />
+        app:iconSpaceReserved="false" />
 
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="@string/location_sensor"
         android:summary="@string/include_location"
         android:title="@string/include_cap"
-        android:iconSpaceReserved="false" />
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>
