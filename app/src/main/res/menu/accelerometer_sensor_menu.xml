@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/sensor_built_in"
-        android:title="@string/built_in" />
-    <item
-        android:id="@+id/sensor_mpu6050"
-        android:title="@string/MPU6050" />
-</menu>

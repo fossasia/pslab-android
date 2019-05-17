@@ -71,15 +71,20 @@
         <activity
             android:name=".activity.WaveGeneratorActivity"
             android:screenOrientation="userLandscape" />
-        <activity android:name=".activity.AccelerometerActivity" />
+        <activity android:name=".activity.AccelerometerActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.DataLoggerActivity" />
         <activity
             android:name=".activity.BarometerActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CompassActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.GyroscopeActivity"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".activity.MapsActivity" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.TooltipCompat;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -53,6 +54,8 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
     private TextView bottomSheetDesc;
     private BottomSheetBehavior bottomSheetBehavior;
     private GestureDetector gestureDetector;
+    private TextView showText;
+    private boolean btnLongpressed;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +75,7 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
         bottomSheetText = findViewById(R.id.custom_dialog_text);
         bottomSheetSchematic = findViewById(R.id.custom_dialog_schematic);
         bottomSheetDesc = findViewById(R.id.custom_dialog_desc);
-
+        showText = findViewById(R.id.show_guide_logic_analyzer);
         // Inflating bottom sheet dialog on how to use Logic Analyzer
         setUpBottomSheet();
         tvShadow.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +101,27 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
+        guideImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showText.setVisibility(View.VISIBLE);
+                btnLongpressed = true;
+                return true;
+            }
+        });
+        guideImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.onTouchEvent(event);
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    if(btnLongpressed){
+                        showText.setVisibility(View.GONE);
+                        btnLongpressed = false;
+                    }
+                }
+                return true;
             }
         });
     }

@@ -8,6 +8,7 @@ import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
+import android.widget.Toast;
 
 import io.pslab.R;
 import io.pslab.others.PSLabPermission;
@@ -80,8 +81,13 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
             case KEY_UPDATE_PERIOD:
                 try {
                     Integer updatePeriod = Integer.parseInt(updatePeriodPref.getText());
-                    updatePeriodPref.setSummary(updatePeriod + " ms");
+                    if (updatePeriod > 1000 || updatePeriod < 100) {
+                        throw new NumberFormatException();
+                    } else {
+                        updatePeriodPref.setSummary(updatePeriod + " ms");
+                    }
                 } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.update_period_msg), Toast.LENGTH_SHORT).show();
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -104,8 +110,13 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
             case KEY_HIGH_LIMIT:
                 try {
                     Integer highLimit = Integer.parseInt(higLimitPref.getText());
-                    higLimitPref.setSummary(String.valueOf(highLimit));
+                    if (highLimit > 10000 || highLimit < 10) {
+                        throw new NumberFormatException();
+                    } else {
+                        higLimitPref.setSummary(String.valueOf(highLimit) + " Lx");
+                    }
                 } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.high_limit_msg), Toast.LENGTH_SHORT).show();
                     higLimitPref.setSummary("2000 Lx");
                     higLimitPref.setText("2000");
                     SharedPreferences.Editor editor = sharedPref.edit();

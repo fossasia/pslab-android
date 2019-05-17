@@ -15,14 +15,12 @@
     <color name="progress_secondary_color">#EEEEEE</color>
 
     <!-- Compass Colors -->
-    <color name="compass_gray">#e6e6e6</color>
 
     <color name="outline">#B1BCBE</color>
     <color name="customBorderFill">#7A7A7A</color>
     <color name="grey_light">#bdbdbd</color>
     <color name="golden">#FFD700</color>
     <color name="grey">#2D2F31</color>
-    <color name="white_grey">#9ea7aa</color>
     <color name="dark_grey">#757575</color>
     <color name="orange">#ff7043</color>
     <color name="theme_red_light">#40c72c2c</color>

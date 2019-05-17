@@ -13,6 +13,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.TooltipCompat;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -141,12 +142,16 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     @BindView(R.id.sheet_slide_text)
     TextView bottomSheetSlideText;
 
+    @BindView(R.id.show_guide_wave_generator)
+    TextView showText;
+
     private int leastCount, seekMax, seekMin;
     private String unit;
     private Timer waveGenCounter;
     private Handler wavegenHandler = new Handler();
     private final long LONG_CLICK_DELAY = 100;
     private AlertDialog waveDialog;
+    private boolean btnLongpressed;
 
     public enum WaveConst {WAVETYPE, WAVE1, WAVE2, SQR1, SQR2, SQR3, SQR4, FREQUENCY, PHASE, DUTY, SQUARE, PWM}
 
@@ -179,6 +184,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "customDialogPreference";
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -466,6 +472,27 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             public void onClick(View v) {
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
+        guideImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showText.setVisibility(View.VISIBLE);
+                btnLongpressed = true;
+                return true;
+            }
+        });
+        guideImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.onTouchEvent(event);
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    if(btnLongpressed){
+                        showText.setVisibility(View.GONE);
+                        btnLongpressed = false;
+                    }
+                }
+                return true;
             }
         });
     }

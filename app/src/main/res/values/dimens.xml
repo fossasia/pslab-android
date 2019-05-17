@@ -5,7 +5,6 @@
     <dimen name="nav_header_height">175dp</dimen>
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="profile_width">80dp</dimen>
     <dimen name="profile_height">80dp</dimen>
@@ -13,11 +12,6 @@
     <dimen name="card_margin">10dp</dimen>
     <dimen name="card_radius">10dp</dimen>
     <dimen name="title_padding">10dp</dimen>
-    <dimen name="image_padding_around">30dp</dimen>
-    <dimen name="image_padding_top">50dp</dimen>
-    <dimen name="text_height">40dp</dimen>
-    <dimen name="total_height_card">250dp</dimen>
-    <dimen name="image_height">250dp</dimen>
     <dimen name="text_size">17sp</dimen>
     <dimen name="header_size">22sp</dimen>
     <dimen name="header_padding_top">20dp</dimen>
@@ -34,10 +28,7 @@
     <dimen name="control_margin">10dp</dimen>
     <dimen name="control_margin_small">5dp</dimen>
     <dimen name="control_margin_medium">15dp</dimen>
-    <dimen name="control_margin_large">20dp</dimen>
-    <dimen name="control_card_height">110dp</dimen>
     <dimen name="control_card_radius">18dp</dimen>
-    <dimen name="control_text_padding">5dp</dimen>
     <dimen name="control_textsize_tiny">12sp</dimen>
     <dimen name="control_textsize_small">16sp</dimen>
     <dimen name="control_textsize_medium">18sp</dimen>
@@ -49,7 +40,6 @@
 
     <dimen name="power_source_card_corner">4dp</dimen>
     <dimen name="power_source_card_margin">5dp</dimen>
-    <dimen name="power_source_card_height">200dp</dimen>
     <dimen name="weight_scale">0dp</dimen>
     <dimen name="power_card_big_margin">15dp</dimen>
     <dimen name="power_card_medium_margin">10dp</dimen>
@@ -66,10 +56,8 @@
 
     <dimen name="accel_textsize_large">15sp</dimen>
     <dimen name="accel_textsize_small">9sp</dimen>
+    <dimen name="gyro_textsize_small">8sp</dimen>
     <dimen name="accel_textsize_medium">12sp</dimen>
-    <dimen name="accel_value_width">55dp</dimen>
-    <dimen name="accel_minmax_text_width">35dp</dimen>
-    <dimen name="accel_minmax_value_width">33dp</dimen>
     <dimen name="accel_min_text_padding_top">12dp</dimen>
     <dimen name="tv_chart_height">24dp</dimen>
     <dimen name="tv_chart_padding">4dp</dimen>
@@ -79,61 +67,22 @@
     <dimen name="accel_card_radius">4dp</dimen>
     <dimen name="editor_absolute_x">288dp</dimen>
 
-    <dimen name="reading_box_height">40dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_title_margin">16dp</dimen>
     <dimen name="navigation_drawer_width">300dp</dimen>
 
     <dimen name="dimen_zero_dp">0dp</dimen>
-    <dimen name="appbar_layout_height">200dp</dimen>
     <dimen name="sensor_control_doc_height">90dp</dimen>
     <dimen name="custom_spinner_textsize">14sp</dimen>
-    <dimen name="diode_edit_text_margin">8dp</dimen>
-    <dimen name="nav_tab_strip_height">50dp</dimen>
-    <dimen name="exp_list_item_padding">8dp</dimen>
-    <dimen name="exp_list_item_textsize">15sp</dimen>
-    <dimen name="exp_setup_textsize">26sp</dimen>
     <dimen name="recycler_view_margin">4dp</dimen>
-    <dimen name="diode_clipping_margin">8dp</dimen>
-    <dimen name="diode_clipping_margin_small">6dp</dimen>
-    <dimen name="diode_clipping_margin_large">10dp</dimen>
-    <dimen name="diode_seekbar_height">18dp</dimen>
-
-    <dimen name="fullwave_rectifier_margin">8dp</dimen>
-    <dimen name="fullwave_rectifier_margin_large">16dp</dimen>
-
-    <dimen name="halfwave_rectifier_margin">16dp</dimen>
-    <dimen name="halfwave_rectifier_margin_large">24dp</dimen>
-
-    <dimen name="oscillator_exp_margin">8dp</dimen>
-    <dimen name="oscillator_exp_margin_small">4dp</dimen>
-    <dimen name="oscillator_exp_margin_large">14dp</dimen>
-    <dimen name="oscillator_exp_button_width">86dp</dimen>
-    <dimen name="oscillator_exp_button_height">33dp</dimen>
-    <dimen name="oscillator_exp_button_textsize">10sp</dimen>
-
-    <dimen name="fragment_speed_of_sound_margin">8dp</dimen>
-    <dimen name="ragment_speed_of_sound_margin_small">2dp</dimen>
-    <dimen name="read_button_width">87dp</dimen>
-    <dimen name="read_button_height">34dp</dimen>
-    <dimen name="read_button_text_size">13sp</dimen>
-    <dimen name="spinner_height">18dp</dimen>
-    <dimen name="spinner_margin">9dp</dimen>
-    <dimen name="seekbar_height">16dp</dimen>
 
     <dimen name="home_fragment_padding">10dp</dimen>
-    <dimen name="home_fragment_margin">30dp</dimen>
     <dimen name="device_status_width">80dp</dimen>
     <dimen name="device_status_height">80dp</dimen>
     <dimen name="device_status_textsize">20sp</dimen>
-    <dimen name="home_fragment_textview_margin">20dp</dimen>
 
     <dimen name="multimeter_layout_margin">20dp</dimen>
     <dimen name="multimeter_line_width">1dp</dimen>
-    <dimen name="multimeter_line_margin_left">5dp</dimen>
-    <dimen name="multimeter_line_margin_right">5dp</dimen>
-    <dimen name="multimeter_line_margin_top">90dp</dimen>
-    <dimen name="multimeter_unitbox_margin_top">95dp</dimen>
     <dimen name="multimeter_symol_width">25dp</dimen>
     <dimen name="multimeter_symbol_height">20dp</dimen>
     <dimen name="multimeter_textsize">24sp</dimen>
@@ -141,11 +90,7 @@
     <dimen name="multimeter_button_text_padding">4dp</dimen>
     <dimen name="multimeter_heading_ll_text_size">16sp</dimen>
     <dimen name="multimeter_textbox_height">110dp</dimen>
-    <dimen name="multimeter_textbox_margin_left">5dp</dimen>
-    <dimen name="multimeter_textbox_margin_right">5dp</dimen>
     <dimen name="multimeter_textbox_margin_top">10dp</dimen>
-    <dimen name="multimeter_valuebox_height">60dp</dimen>
-    <dimen name="multimeter_valuebox_margin_top">32dp</dimen>
     <dimen name="multimeter_button_width">0dp</dimen>
     <dimen name="multimeter_button_height">40dp</dimen>
     <dimen name="multimeter_left_button_margin_left">5dp</dimen>
@@ -155,12 +100,10 @@
     <dimen name="multimeter_right_button_margin_right">5dp</dimen>
     <dimen name="multimeter_right_button_margin_bottom">5dp</dimen>
     <dimen name="multimeter_quantity_dimen">50sp</dimen>
-    <dimen name="multimeter_card_radius">4dp</dimen>
     <dimen name="multimeter_constraint_1">8dp</dimen>
     <dimen name="multimeter_constraint_2">16dp</dimen>
     <dimen name="multimeter_margin_2">5dp</dimen>
     <dimen name="multimeter_margin_3">7dp</dimen>
-    <dimen name="multimeter_topline_topmargin">10dp</dimen>
     <dimen name="multimeter_knob_width">185dp</dimen>
     <dimen name="multimeter_knob_height">183dp</dimen>
     <dimen name="multimeter_knobcircle_radius_1">120dp</dimen>
@@ -171,27 +114,15 @@
     <dimen name="multimeter_knobcircle_radius_3_xl">117dp</dimen>
     <dimen name="multimeter_left_box_endmargin">4dp</dimen>
     <dimen name="multimeter_end_box_rightmargin">12dp</dimen>
-    <dimen name="multimeter_knob_topmargin">40dp</dimen>
     <dimen name="multimeter_layout_margin_2">10dp</dimen>
-    <dimen name="multimeter_knob_width_xl">210dp</dimen>
-    <dimen name="multimeter_knob_height_xl">208dp</dimen>
-    <dimen name="multimeter_cardview_bottommargin">32dp</dimen>
-    <dimen name="multimeter_constraint_3">24dp</dimen>
     <dimen name="multimeter_constraint_4">15dp</dimen>
     <dimen name="multimeter_length_0">0dp</dimen>
 
     <dimen name="body_resistance_margin">10dp</dimen>
-    <dimen name="resistance_text_height">40dp</dimen>
-    <dimen name="stepper_motor_constraint_padding">5dp</dimen>
-    <dimen name="stepper_motor_text_view_height">40dp</dimen>
-    <dimen name="stepper_motor_btn_height">100dp</dimen>
-    <dimen name="stepper_motor_margin">5dp</dimen>
-    <dimen name="stepper_motor_text_size">16sp</dimen>
 
     <dimen name="osc_chart_width">600dp</dimen>
     <dimen name="osc_chart_height">300dp</dimen>
     <dimen name="osc_axis_text_size">9sp</dimen>
-    <dimen name="osc_absolute_x">288dp</dimen>
     <dimen name="osc_tv_unit_margin">8dp</dimen>
     <dimen name="osc_text_margin">4dp</dimen>
     <dimen name="osc_tv_left_axis_height">9dp</dimen>
@@ -219,7 +150,6 @@
     <dimen name="button_text">15sp</dimen>
     <dimen name="button_text_height">5dp</dimen>
     <dimen name="analyze_button_height">40dp</dimen>
-    <dimen name="analyze_button_margin_top">5dp</dimen>
     <dimen name="units_indicator_padding_top">3dp</dimen>
     <dimen name="x_coordinate_padding_right">50dp</dimen>
     <dimen name="x_coordinate_padding_bottom">3dp</dimen>
@@ -228,8 +158,6 @@
     <dimen name="spinner_margin_top">5dp</dimen>
     <dimen name="carousel_margin_top">10dp</dimen>
     <dimen name="carousel_margin_bottom">5dp</dimen>
-    <dimen name="select_channel_description_text_padding_top">30dp</dimen>
-    <dimen name="select_channel_description_text_size">15sp</dimen>
 
     <dimen name="pin_description_title_text">20sp</dimen>
     <dimen name="pin_description_content_text">15sp</dimen>
@@ -261,12 +189,10 @@
     <dimen name="card_separation_offset">5dp</dimen>
     <dimen name="monitors_layout_padding">5dp</dimen>
     <dimen name="lower_ll_margin">5dp</dimen>
-    <dimen name="card_corner_radius">5dp</dimen>
     <dimen name="pin_name_margin_top">8dp</dimen>
     <dimen name="prop_text_offset_margin">15dp</dimen>
     <dimen name="value_text_offset_margin">8dp</dimen>
     <dimen name="prop_sepration_margin_top">16dp</dimen>
-    <dimen name="ctrl_panel_margin_bottom">5dp</dimen>
     <dimen name="ctrl_sepration_margin">5dp</dimen>
     <dimen name="back_margin_top">10dp</dimen>
     <dimen name="ctrl_inside_rl_padding">5dp</dimen>
@@ -296,14 +222,9 @@
     <dimen name="connect_instruction_text_header">18sp</dimen>
 
     <dimen name="compass_padding">4dp</dimen>
-    <dimen name="compass_tv_axis_margin">8dp</dimen>
     <dimen name="compass_tv_height">30dp</dimen>
     <dimen name="compass_tv_value_margin">20dp</dimen>
     <dimen name="compass_select_axes_text_size">18sp</dimen>
-    <dimen name="compass_start_degree">270</dimen>
-    <dimen name="compass_end_degree">630</dimen>
-    <dimen name="compass_max_value">360</dimen>
-    <dimen name="compass_ticks">5</dimen>
     <dimen name="compass_text_size_large">25sp</dimen>
     <dimen name="compass_space_top">120dp</dimen>
 
@@ -318,85 +239,54 @@
     <dimen name="extra_space_top">20dp</dimen>
     <dimen name="power_source_space_top">120dp</dimen>
 
-    <dimen name="sensor_schematic_height">250dp</dimen>
-
-    <dimen name="weight_1">1</dimen>
-    <dimen name="weight_2">2</dimen>
-
-    <dimen name="barometer_margin_top">81dp</dimen>
-
-    <dimen name="sensor_params_left">30dp</dimen>
-    <dimen name="sensor_params_start">30dp</dimen>
     <dimen name="sensor_params_top">10dp</dimen>
-    <dimen name="sensor_params_end">30dp</dimen>
-    <dimen name="bh1750_config_padding_left">35dp</dimen>
 
     <dimen name="list_group_layout_height">52dp</dimen>
     <dimen name="list_group_layout_width">52dp</dimen>
-    <dimen name="list_item_layout_height">120dp</dimen>
     <dimen name="list_item_padding">5dp</dimen>
     <dimen name="faq_question_text_size">20dp</dimen>
     <dimen name="faq_question_margin_top">10dp</dimen>
     <dimen name="faq_answer_margin">20dp</dimen>
     <dimen name="faq_answer_margin_start">15dp</dimen>
 
-    <dimen name="padding_title_dialog_wave">10dp</dimen>
     <dimen name="btn_title_side_padding">5dp</dimen>
     <dimen name="btn_padding">5dp</dimen>
     <dimen name="btn_margin">10dp</dimen>
-    <dimen name="btn_width">120dp</dimen>
     <dimen name="dialog_space_width">20dp</dimen>
     <dimen name="dialog_sep_margin_top">40dp</dimen>
 
-    <dimen name="sensor_lable_height">40dp</dimen>
-    <dimen name="luxmeter_config_text_padding">5dp</dimen>
-    <dimen name="luxmeter_text_padding">5dp</dimen>
-    <dimen name="stat_card_margin_top">20dp</dimen>
     <dimen name="stat_card_height">150dp</dimen>
     <dimen name="tv_lux_height">10dp</dimen>
-    <dimen name="tv_stat_height">30dp</dimen>
-    <dimen name="tv_top_margin">8dp</dimen>
-    <dimen name="lux_card_margin_top">20dp</dimen>
     <dimen name="lux_chart_height">200dp</dimen>
     <dimen name="lux_display_font_size">16sp</dimen>
     <dimen name="lux_guage_font_size">8sp</dimen>
     <dimen name="lux_sensor_label_title_size">16sp</dimen>
 
-    <dimen name="barometer_config_text_padding">5dp</dimen>
-    <dimen name="barometer_text_padding">5dp</dimen>
-    <dimen name="tv_baro_height">10dp</dimen>
-    <dimen name="baro_card_margin_top">20dp</dimen>
-    <dimen name="baro_chart_height">200dp</dimen>
     <dimen name="baro_display_font_size">16sp</dimen>
     <dimen name="baro_guage_font_size">8sp</dimen>
     <dimen name="baro_sensor_label_title_size">16sp</dimen>
 
-    <dimen name="sensor_card_view_rad">5dp</dimen>
     <dimen name="item_text_size">18sp</dimen>
-    <dimen name="exp_icn_padding">3dp</dimen>
     <dimen name="view_data_loc_middle">20dp</dimen>
     <dimen name="lux_chart_axis_text">9sp</dimen>
     <dimen name="item_margin">10dp</dimen>
     <dimen name="logger_card_margin">5dp</dimen>
     <dimen name="logger_card_corner_rad">5dp</dimen>
     <dimen name="content_left_margin">10dp</dimen>
-    <dimen name="icn_btn_left_margin">10dp</dimen>
     <dimen name="view_data_rl_left">10dp</dimen>
     <dimen name="view_data_rl_right">15dp</dimen>
     <dimen name="view_data_sep_margin">5dp</dimen>
     <dimen name="view_data_rl_top">10dp</dimen>
     <dimen name="view_data_ll_margin">5dp</dimen>
-    <dimen name="view_data_card_corner">5dp</dimen>
     <dimen name="view_data_graph_bottom">20dp</dimen>
     <dimen name="view_data_info_bottom">20dp</dimen>
     <dimen name="view_data_loc_height">40dp</dimen>
     <dimen name="view_data_loc_padding">10dp</dimen>
     <dimen name="view_data_map_rl_margin">10dp</dimen>
-    <dimen name="range_card_margin">5dp</dimen>
     <dimen name="speedometer_height">200dp</dimen>
-    <dimen name="select_sensor_margin">5dp</dimen>
     <dimen name="splash_screen_logo_height">314dp</dimen>
     <dimen name="splash_screen_name_width">271dp</dimen>
     <dimen name="splash_screen_name_height">95dp</dimen>
+    <dimen name="top_margin_text">30dp</dimen>
 
 </resources>

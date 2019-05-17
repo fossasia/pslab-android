@@ -34,7 +34,7 @@
                 android:src="@drawable/phone_x_axis" />
 
             <TextView
-                android:id="@+id/accel_value"
+                android:id="@+id/gyro_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -48,10 +48,10 @@
                 android:textSize="@dimen/accel_textsize_large" />
 
             <TextView
-                android:id="@+id/accel_min_text"
+                android:id="@+id/gyro_min_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/accel_value"
+                android:layout_below="@+id/gyro_value"
                 android:gravity="left"
                 android:paddingLeft="@dimen/card_margin"
                 android:paddingStart="@dimen/card_margin"
@@ -60,10 +60,10 @@
                 android:textSize="@dimen/accel_textsize_medium" />
 
             <TextView
-                android:id="@+id/accel_max_text"
+                android:id="@+id/gyro_max_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/accel_min_text"
+                android:layout_below="@+id/gyro_min_text"
                 android:gravity="left"
                 android:paddingBottom="@dimen/card_margin"
                 android:paddingLeft="@dimen/card_margin"
@@ -119,11 +119,10 @@
                 android:layout_gravity="bottom"
                 android:foregroundGravity="center_horizontal"
                 android:gravity="top|center_horizontal"
-                android:paddingTop="@dimen/tv_chart_padding"
                 android:rotation="-90"
-                android:text="@string/meters_per_sec_html"
+                android:text="@string/radian_per_sec_html"
                 android:textColor="@color/white"
-                android:textSize="@dimen/accel_textsize_small"
+                android:textSize="@dimen/gyro_textsize_small"
                 android:textStyle="normal|bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -133,7 +132,7 @@
         </android.support.constraint.ConstraintLayout>
 
         <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart_accelerometer"
+            android:id="@+id/chart_gyroscope"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/chart_xaxis_layout"
