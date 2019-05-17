@@ -712,6 +712,12 @@
 
     <string name="no_baro_sensor">Device does not have a barometer</string>
 
+    <string name="robotic_arm">Robotic Arm</string>
+    <string name="robotic_arm_descriptoin">Controls servos of a robotic arm</string>
+    <string name="servo1_title">Servo 1</string>
+    <string name="servo2_title">Servo 2</string>
+    <string name="servo3_title">Servo 3</string>
+    <string name="servo4_title">Servo 4</string>
     <string-array name="baro_sensors">
         <item>Built-In</item>
         <item>BMP180</item>

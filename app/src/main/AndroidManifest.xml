@@ -21,6 +21,8 @@
         android:roundIcon="@drawable/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.RoboticArmActivity"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
@@ -71,8 +73,9 @@
         <activity
             android:name=".activity.WaveGeneratorActivity"
             android:screenOrientation="userLandscape" />
-        <activity android:name=".activity.AccelerometerActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.AccelerometerActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.DataLoggerActivity" />
         <activity
             android:name=".activity.BarometerActivity"
@@ -84,7 +87,6 @@
         <activity
             android:name=".activity.GyroscopeActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name=".activity.MapsActivity" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />

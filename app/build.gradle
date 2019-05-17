@@ -65,6 +65,7 @@ dependencies {
     implementation "org.apache.commons:commons-math3:$rootProject.commonMathVersion"
     implementation "org.apache.commons:commons-lang3:$rootProject.commonLangVersion"
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+    implementation 'com.github.GoodieBag:ProtractorView:v1.2'
 
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
