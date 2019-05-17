@@ -50,6 +50,7 @@
                     android:paddingBottom="@dimen/card_margin"
                     android:paddingLeft="@dimen/card_margin"
                     android:paddingTop="@dimen/card_margin"
+                    android:text="@string/multimeter_default_value"
                     android:textAlignment="center"
                     android:textSize="@dimen/accel_textsize_large" />
 
