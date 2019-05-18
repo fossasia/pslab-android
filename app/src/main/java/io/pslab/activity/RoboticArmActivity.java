@@ -2,17 +2,19 @@ package io.pslab.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.goodiebag.protractorview.ProtractorView;
+import com.triggertrap.seekarc.SeekArc;
 
 import io.pslab.R;
 
 public class RoboticArmActivity extends AppCompatActivity {
 
-    ProtractorView protractorView1, protractorView2, protractorView3, protractorView4;
     TextView degreeText1, degreeText2, degreeText3, degreeText4;
+    SeekArc seekArc1, seekArc2, seekArc3, seekArc4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,80 +37,79 @@ public class RoboticArmActivity extends AppCompatActivity {
         TextView servo4Title = servo4Layout.findViewById(R.id.servo_title);
         servo4Title.setText(getResources().getString(R.string.servo4_title));
 
-        protractorView1 = servo1Layout.findViewById(R.id.protractorView);
-        protractorView2 = servo2Layout.findViewById(R.id.protractorView);
-        protractorView3 = servo3Layout.findViewById(R.id.protractorView);
-        protractorView4 = servo4Layout.findViewById(R.id.protractorView);
         degreeText1 = servo1Layout.findViewById(R.id.degreeText);
         degreeText2 = servo2Layout.findViewById(R.id.degreeText);
         degreeText3 = servo3Layout.findViewById(R.id.degreeText);
         degreeText4 = servo4Layout.findViewById(R.id.degreeText);
-        protractorView1.setTickIntervals(15);
-        protractorView2.setTickIntervals(15);
-        protractorView3.setTickIntervals(15);
-        protractorView4.setTickIntervals(15);
+        seekArc1 = servo1Layout.findViewById(R.id.seek_arc);
+        seekArc2 = servo2Layout.findViewById(R.id.seek_arc);
+        seekArc3 = servo3Layout.findViewById(R.id.seek_arc);
+        seekArc4 = servo4Layout.findViewById(R.id.seek_arc);
 
-        protractorView1.setOnProtractorViewChangeListener(new ProtractorView.OnProtractorViewChangeListener() {
+        seekArc1.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
             @Override
-            public void onProgressChanged(ProtractorView protractorView, int i, boolean b) {
-                degreeText1.setText(String.valueOf(i));
+            public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
+                degreeText1.setText(String.valueOf(Math.round(i*3.6)));
             }
 
             @Override
-            public void onStartTrackingTouch(ProtractorView protractorView) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(ProtractorView protractorView) {
-
-            }
-        });
-        protractorView2.setOnProtractorViewChangeListener(new ProtractorView.OnProtractorViewChangeListener() {
-            @Override
-            public void onProgressChanged(ProtractorView protractorView, int i, boolean b) {
-                degreeText2.setText(String.valueOf(i));
-            }
-
-            @Override
-            public void onStartTrackingTouch(ProtractorView protractorView) {
+            public void onStartTrackingTouch(SeekArc seekArc) {
 
             }
 
             @Override
-            public void onStopTrackingTouch(ProtractorView protractorView) {
+            public void onStopTrackingTouch(SeekArc seekArc) {
 
             }
         });
-        protractorView3.setOnProtractorViewChangeListener(new ProtractorView.OnProtractorViewChangeListener() {
+
+        seekArc2.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
             @Override
-            public void onProgressChanged(ProtractorView protractorView, int i, boolean b) {
-                degreeText3.setText(String.valueOf(i));
+            public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
+                degreeText2.setText(String.valueOf(Math.round(i*3.6)));
             }
 
             @Override
-            public void onStartTrackingTouch(ProtractorView protractorView) {
+            public void onStartTrackingTouch(SeekArc seekArc) {
 
             }
 
             @Override
-            public void onStopTrackingTouch(ProtractorView protractorView) {
+            public void onStopTrackingTouch(SeekArc seekArc) {
 
             }
         });
-        protractorView4.setOnProtractorViewChangeListener(new ProtractorView.OnProtractorViewChangeListener() {
+
+        seekArc3.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
             @Override
-            public void onProgressChanged(ProtractorView protractorView, int i, boolean b) {
-                degreeText4.setText(String.valueOf(i));
+            public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
+                degreeText3.setText(String.valueOf(Math.round(i*3.6)));
             }
 
             @Override
-            public void onStartTrackingTouch(ProtractorView protractorView) {
+            public void onStartTrackingTouch(SeekArc seekArc) {
 
             }
 
             @Override
-            public void onStopTrackingTouch(ProtractorView protractorView) {
+            public void onStopTrackingTouch(SeekArc seekArc) {
+
+            }
+        });
+
+        seekArc4.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
+            @Override
+            public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
+                degreeText4.setText(String.valueOf(Math.round(i*3.6)));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekArc seekArc) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekArc seekArc) {
 
             }
         });

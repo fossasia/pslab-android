@@ -3,27 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:seekarc="http://schemas.android.com/tools"
     android:background="@color/white">
     <TextView
         android:id="@+id/servo_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         />
-    <com.goodiebag.protractorview.ProtractorView
-        android:id="@+id/protractorView"
-        android:layout_width="wrap_content"
+    <com.triggertrap.seekarc.SeekArc
+        android:id="@+id/seek_arc"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:arcColor="@color/colorPrimary"
-        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:padding="30dp"
+        seekarc:rotation="180"
+        seekarc:startAngle="0"
+        seekarc:sweepAngle="360"
+        seekarc:touchInside="true"
+        app:progressColor="@color/colorPrimary"
         />
     <TextView
         android:id="@+id/degreeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/protractorView"
-        android:layout_centerHorizontal="true"
         android:textSize="36sp"
         android:text="@string/value_null"
+        android:layout_centerInParent="true"
         />
 </RelativeLayout>
