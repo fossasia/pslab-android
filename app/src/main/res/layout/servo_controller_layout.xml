@@ -12,18 +12,17 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         />
-    <com.triggertrap.seekarc.SeekArc
-        android:id="@+id/seek_arc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="30dp"
-        seekarc:rotation="180"
-        seekarc:startAngle="0"
-        seekarc:sweepAngle="360"
-        seekarc:touchInside="true"
-        app:progressColor="@color/colorPrimary"
-        />
+    <!--<com.triggertrap.seekarc.SeekArc-->
+        <!--android:id="@+id/seek_arc"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:padding="30dp"-->
+        <!--seekarc:rotation="180"-->
+        <!--seekarc:startAngle="0"-->
+        <!--seekarc:sweepAngle="360"-->
+        <!--app:progressColor="@color/colorPrimary"-->
+        <!--/>-->
     <TextView
         android:id="@+id/degreeText"
         android:layout_width="wrap_content"

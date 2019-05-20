@@ -6,7 +6,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/grey_light"
         android:padding="5dp"
         android:gravity="center_horizontal"
@@ -25,7 +25,8 @@
             layout="@layout/servo_controller_layout"
             android:layout_width="250dp"
             android:layout_height="175dp"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:visibility="gone"/>
 
         <include
             android:id="@+id/servo_3"
@@ -34,7 +35,7 @@
             android:layout_height="175dp"
             android:layout_margin="5dp"
             android:layout_below="@+id/servo_1"
-            />
+            android:visibility="gone"/>
 
         <include
             android:id="@+id/servo_4"
@@ -44,6 +45,6 @@
             android:layout_margin="5dp"
             android:layout_below="@id/servo_1"
             android:layout_toEndOf="@id/servo_3"
-            />
+            android:visibility="gone"/>
     </RelativeLayout>
 </ScrollView>
