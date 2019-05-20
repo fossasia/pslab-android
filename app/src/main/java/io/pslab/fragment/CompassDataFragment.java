@@ -85,12 +85,11 @@ public class CompassDataFragment extends Fragment {
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private int turns = 0;
     private boolean returningFromPause = false;
+    private View rootView;
 
     public static CompassDataFragment newInstance() {
         return new CompassDataFragment();
     }
-
-    private View rootView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
