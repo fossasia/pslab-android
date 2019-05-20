@@ -32,7 +32,7 @@
         android:id="@+id/gyroscope_z_axis_fragment"
         android:name="io.pslab.fragment.GyroscopeViewFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/accel_card_height"
         android:layout_margin="5dp"
         />
 </LinearLayout>
