@@ -6,45 +6,87 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/grey_light"
-        android:padding="5dp"
         android:gravity="center_horizontal"
+        android:padding="5dp"
         tools:context=".activity.RoboticArmActivity">
 
-        <include
-            android:id="@+id/servo_1"
-            layout="@layout/servo_controller_layout"
-            android:layout_width="250dp"
-            android:layout_height="175dp"
-            android:layout_margin="5dp" />
+        <HorizontalScrollView
+            android:id="@+id/servo_controller_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <include
-            android:id="@+id/servo_2"
-            android:layout_toEndOf="@id/servo_1"
-            layout="@layout/servo_controller_layout"
-            android:layout_width="250dp"
-            android:layout_height="175dp"
-            android:layout_margin="5dp"
-            android:visibility="gone"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:scrollbars="horizontal">
 
-        <include
-            android:id="@+id/servo_3"
-            layout="@layout/servo_controller_layout"
-            android:layout_width="250dp"
-            android:layout_height="175dp"
-            android:layout_margin="5dp"
-            android:layout_below="@+id/servo_1"
-            android:visibility="gone"/>
+                <include
+                    android:id="@+id/servo_1"
+                    layout="@layout/servo_controller_layout"
+                    android:layout_width="250dp"
+                    android:layout_height="175dp"
+                    android:layout_margin="5dp" />
 
-        <include
-            android:id="@+id/servo_4"
-            layout="@layout/servo_controller_layout"
-            android:layout_width="250dp"
-            android:layout_height="175dp"
-            android:layout_margin="5dp"
-            android:layout_below="@id/servo_1"
-            android:layout_toEndOf="@id/servo_3"
-            android:visibility="gone"/>
+                <include
+                    android:id="@+id/servo_2"
+                    layout="@layout/servo_controller_layout"
+                    android:layout_width="250dp"
+                    android:layout_height="175dp"
+                    android:layout_margin="5dp" />
+
+                <include
+                    android:id="@+id/servo_3"
+                    layout="@layout/servo_controller_layout"
+                    android:layout_width="250dp"
+                    android:layout_height="175dp"
+                    android:layout_margin="5dp" />
+
+                <include
+                    android:id="@+id/servo_4"
+                    layout="@layout/servo_controller_layout"
+                    android:layout_width="250dp"
+                    android:layout_height="175dp"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/servo1_timeline"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/servo_controller_view"
+            android:background="@color/dark_grey"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"/>
+        <LinearLayout
+            android:id="@+id/servo2_timeline"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/servo1_timeline"
+            android:background="@color/dark_grey"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            />
+        <LinearLayout
+            android:id="@+id/servo3_timeline"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/servo2_timeline"
+            android:background="@color/dark_grey"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            />
+        <LinearLayout
+            android:id="@+id/servo4_timeline"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/servo3_timeline"
+            android:background="@color/dark_grey"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            />
     </RelativeLayout>
 </ScrollView>
