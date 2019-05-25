@@ -322,37 +322,39 @@ public class BaroMeterDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(baroSensor.recordedBaroData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + baroSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write( "Timestamp,DateTime,Readings,Latitude,Longitude" + "\n");
-                for (BaroData baroData : baroSensor.recordedBaroData) {
-                    out.write( baroData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())) + ","
-                            + baroData.getBaro() + ","
-                            + baroData.getLat() + ","
-                            + baroData.getLon() + "," + "\n");
+        if (sensor != null) {
+            String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(baroSensor.recordedBaroData.get(0).getTime());
+            File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + CSV_DIRECTORY + File.separator + baroSensor.getSensorName() +
+                    File.separator + fileName + ".csv");
+            if (!csvFile.exists()) {
+                try {
+                    csvFile.createNewFile();
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
+                    out.write("Timestamp,DateTime,Readings,Latitude,Longitude" + "\n");
+                    for (BaroData baroData : baroSensor.recordedBaroData) {
+                        out.write(baroData.getTime() + ","
+                                + CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())) + ","
+                                + baroData.getBaro() + ","
+                                + baroData.getLat() + ","
+                                + baroData.getLon() + "," + "\n");
+                    }
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
+            }
+            View view = rootView.findViewById(R.id.barometer_linearlayout);
+            view.setDrawingCacheEnabled(true);
+            Bitmap b = view.getDrawingCache();
+            try {
+                b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        File.separator + CSV_DIRECTORY + File.separator + baroSensor.getSensorName() +
+                        File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        }
-        View view = rootView.findViewById(R.id.barometer_linearlayout);
-        view.setDrawingCacheEnabled(true);
-        Bitmap b = view.getDrawingCache();
-        try {
-            b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                    File.separator + CSV_DIRECTORY + File.separator + baroSensor.getSensorName() +
-                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg" ));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
     }
     private void setupInstruments() {

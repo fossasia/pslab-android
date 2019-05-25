@@ -324,40 +324,41 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(luxSensor.recordedLuxData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write( "Timestamp,DateTime,Readings,Latitude,Longitude" + "\n");
-                for (LuxData luxData : luxSensor.recordedLuxData) {
-                    out.write( luxData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(luxData.getTime())) + ","
-                            + luxData.getLux() + ","
-                            + luxData.getLat() + ","
-                            + luxData.getLon() + "," + "\n");
+        if (sensor != null) {
+            String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(luxSensor.recordedLuxData.get(0).getTime());
+            File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
+                    File.separator + fileName + ".csv");
+            if (!csvFile.exists()) {
+                try {
+                    csvFile.createNewFile();
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
+                    out.write("Timestamp,DateTime,Readings,Latitude,Longitude" + "\n");
+                    for (LuxData luxData : luxSensor.recordedLuxData) {
+                        out.write(luxData.getTime() + ","
+                                + CSVLogger.FILE_NAME_FORMAT.format(new Date(luxData.getTime())) + ","
+                                + luxData.getLux() + ","
+                                + luxData.getLat() + ","
+                                + luxData.getLon() + "," + "\n");
+                    }
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
+            }
+            View view = rootView.findViewById(R.id.luxmeter_linearlayout);
+            view.setDrawingCacheEnabled(true);
+            Bitmap b = view.getDrawingCache();
+            try {
+                b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
+                        File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        View view = rootView.findViewById(R.id.luxmeter_linearlayout);
-        view.setDrawingCacheEnabled(true);
-        Bitmap b = view.getDrawingCache();
-        try {
-            b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                    File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
-                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg" ));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
-
 
     private void setupInstruments() {
         lightMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(luxSensor.LUXMETER_LIMIT, 10000));

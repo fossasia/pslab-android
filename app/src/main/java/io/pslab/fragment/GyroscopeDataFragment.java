@@ -293,39 +293,41 @@ public class GyroscopeDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(gyroSensor.recordedGyroData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + gyroSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude\n");
-                for (GyroData gyroData : gyroSensor.recordedGyroData) {
-                    out.write(gyroData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(gyroData.getTime())) + ","
-                            + gyroData.getGyroX() + ","
-                            + gyroData.getGyroY() + ","
-                            + gyroData.getGyroZ() + ","
-                            + gyroData.getLat() + ","
-                            + gyroData.getLon() + "," + "\n");
+        if (sensor != null) {
+            String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(gyroSensor.recordedGyroData.get(0).getTime());
+            File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + CSV_DIRECTORY + File.separator + gyroSensor.getSensorName() +
+                    File.separator + fileName + ".csv");
+            if (!csvFile.exists()) {
+                try {
+                    csvFile.createNewFile();
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
+                    out.write("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude\n");
+                    for (GyroData gyroData : gyroSensor.recordedGyroData) {
+                        out.write(gyroData.getTime() + ","
+                                + CSVLogger.FILE_NAME_FORMAT.format(new Date(gyroData.getTime())) + ","
+                                + gyroData.getGyroX() + ","
+                                + gyroData.getGyroY() + ","
+                                + gyroData.getGyroZ() + ","
+                                + gyroData.getLat() + ","
+                                + gyroData.getLon() + "," + "\n");
+                    }
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
+            }
+            View view = rootView.findViewById(R.id.gyro_linearlayout);
+            view.setDrawingCacheEnabled(true);
+            Bitmap b = view.getDrawingCache();
+            try {
+                b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        File.separator + CSV_DIRECTORY + File.separator + gyroSensor.getSensorName() +
+                        File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        }
-        View view = rootView.findViewById(R.id.gyro_linearlayout);
-        view.setDrawingCacheEnabled(true);
-        Bitmap b = view.getDrawingCache();
-        try {
-            b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                    File.separator + CSV_DIRECTORY + File.separator + gyroSensor.getSensorName() +
-                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
     }
 

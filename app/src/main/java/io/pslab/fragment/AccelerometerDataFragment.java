@@ -493,42 +493,43 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(accelerometerSensor.recordedAccelerometerData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + accelerometerSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude\n");
-                for (AccelerometerData accelerometerData : accelerometerSensor.recordedAccelerometerData) {
-                    out.write(accelerometerData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(accelerometerData.getTime())) + ","
-                            + accelerometerData.getAccelerometerX() + ","
-                            + accelerometerData.getAccelerometerY() + ","
-                            + accelerometerData.getAccelerometerZ() + ","
-                            + accelerometerData.getLat() + ","
-                            + accelerometerData.getLon() + "," + "\n");
+        if (sensor != null) {
+            String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(accelerometerSensor.recordedAccelerometerData.get(0).getTime());
+            File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + CSV_DIRECTORY + File.separator + accelerometerSensor.getSensorName() +
+                    File.separator + fileName + ".csv");
+            if (!csvFile.exists()) {
+                try {
+                    csvFile.createNewFile();
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
+                    out.write("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude\n");
+                    for (AccelerometerData accelerometerData : accelerometerSensor.recordedAccelerometerData) {
+                        out.write(accelerometerData.getTime() + ","
+                                + CSVLogger.FILE_NAME_FORMAT.format(new Date(accelerometerData.getTime())) + ","
+                                + accelerometerData.getAccelerometerX() + ","
+                                + accelerometerData.getAccelerometerY() + ","
+                                + accelerometerData.getAccelerometerZ() + ","
+                                + accelerometerData.getLat() + ","
+                                + accelerometerData.getLon() + "," + "\n");
+                    }
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
+            }
+            View view = rootView.findViewById(R.id.accelerometer_linearlayout);
+            view.setDrawingCacheEnabled(true);
+            Bitmap b = view.getDrawingCache();
+            try {
+                b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        File.separator + CSV_DIRECTORY + File.separator + accelerometerSensor.getSensorName() +
+                        File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        View view = rootView.findViewById(R.id.accelerometer_linearlayout);
-        view.setDrawingCacheEnabled(true);
-        Bitmap b = view.getDrawingCache();
-        try {
-            b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                    File.separator + CSV_DIRECTORY + File.separator + accelerometerSensor.getSensorName() +
-                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
-
 
     public void playData() {
         resetInstrumentData();
