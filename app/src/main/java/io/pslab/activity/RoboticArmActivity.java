@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.triggertrap.seekarc.SeekArc;
@@ -63,8 +64,8 @@ public class RoboticArmActivity extends AppCompatActivity {
         servo3Layout.setLayoutParams(servoControllerParams);
         servo4Layout.setLayoutParams(servoControllerParams);
 
-        LinearLayout.LayoutParams servoTimeLineParams = new LinearLayout.LayoutParams(screen_width - 4 - screen_width / 15, screen_height / 8 - 2);
-        servoTimeLineParams.setMargins(2, 2, 2, 0);
+        LinearLayout.LayoutParams servoTimeLineParams = new LinearLayout.LayoutParams(screen_width * 10, screen_height / 8);
+        servoTimeLineParams.setMargins(2, 0, 2, 4);
 
         servo1TimeLine.setLayoutParams(servoTimeLineParams);
         servo2TimeLine.setLayoutParams(servoTimeLineParams);
@@ -73,6 +74,49 @@ public class RoboticArmActivity extends AppCompatActivity {
 
         LinearLayout.LayoutParams timeLineControlsParams = new LinearLayout.LayoutParams(screen_width / 15, screen_height / 2);
         timeLineControlsLayout.setLayoutParams(timeLineControlsParams);
+
+        LinearLayout.LayoutParams servoTimeLineBoxParams = new LinearLayout.LayoutParams(screen_width / 6 - 2, screen_height / 8 - 2);
+        servoTimeLineBoxParams.setMargins(2, 0, 0, 0);
+
+        for (int i = 0; i < 60; i++) {
+            RelativeLayout timeLineBox = (RelativeLayout) LayoutInflater.from(RoboticArmActivity.this).inflate(R.layout.robotic_arm_timeline_textview, null);
+            timeLineBox.setLayoutParams(servoTimeLineBoxParams);
+            timeLineBox.setPadding(5, 5, 5, 5);
+            TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
+            timeText.setText(String.valueOf(i + 1));
+            timeLineBox.setOnDragListener(servo1DragListener);
+            servo1TimeLine.addView(timeLineBox, i);
+        }
+
+        for (int i = 0; i < 60; i++) {
+            RelativeLayout timeLineBox = (RelativeLayout) LayoutInflater.from(RoboticArmActivity.this).inflate(R.layout.robotic_arm_timeline_textview, null);
+            timeLineBox.setLayoutParams(servoTimeLineBoxParams);
+            timeLineBox.setPadding(5, 5, 5, 5);
+            TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
+            timeText.setText(String.valueOf(i + 1));
+            timeLineBox.setOnDragListener(servo2DragListener);
+            servo2TimeLine.addView(timeLineBox, i);
+        }
+
+        for (int i = 0; i < 60; i++) {
+            RelativeLayout timeLineBox = (RelativeLayout) LayoutInflater.from(RoboticArmActivity.this).inflate(R.layout.robotic_arm_timeline_textview, null);
+            timeLineBox.setLayoutParams(servoTimeLineBoxParams);
+            timeLineBox.setPadding(5, 5, 5, 5);
+            TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
+            timeText.setText(String.valueOf(i + 1));
+            timeLineBox.setOnDragListener(servo3DragListener);
+            servo3TimeLine.addView(timeLineBox, i);
+        }
+
+        for (int i = 0; i < 60; i++) {
+            RelativeLayout timeLineBox = (RelativeLayout) LayoutInflater.from(RoboticArmActivity.this).inflate(R.layout.robotic_arm_timeline_textview, null);
+            timeLineBox.setLayoutParams(servoTimeLineBoxParams);
+            timeLineBox.setPadding(5, 5, 5, 5);
+            TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
+            timeText.setText(String.valueOf(i + 1));
+            timeLineBox.setOnDragListener(servo4DragListener);
+            servo4TimeLine.addView(timeLineBox, i);
+        }
 
         TextView servo1Title = servo1Layout.findViewById(R.id.servo_title);
         servo1Title.setText(getResources().getString(R.string.servo1_title));
@@ -185,49 +229,12 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
         });
 
-        servo1TimeLine.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                    View view = (View) event.getLocalState();
-                    TextView text = view.findViewById(R.id.degreeText);
-                    TextView new_text = (TextView) LayoutInflater.from(RoboticArmActivity.this).inflate(R.layout.robotic_arm_timeline_textview, null);
-                    LinearLayout.LayoutParams timeLineTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    timeLineTextParams.setMargins(5, 1, 1, 1);
-                    new_text.setLayoutParams(timeLineTextParams);
-                    new_text.setText(text.getText());
-                    if (view.getId() == R.id.servo_1) {
-                        servo1TimeLine.addView(new_text, servo1TimeLine.getChildCount());
-                    }
-                }
-                return true;
-            }
-        });
 
         servo2Layout.findViewById(R.id.drag_handle).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo2Layout);
                 v.startDrag(null, myShadow, servo2Layout, 0);
-                return true;
-            }
-        });
-
-        servo2TimeLine.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                    View view = (View) event.getLocalState();
-                    TextView text = view.findViewById(R.id.degreeText);
-                    TextView new_text = (TextView) LayoutInflater.from(RoboticArmActivity.this).inflate(R.layout.robotic_arm_timeline_textview, null);
-                    LinearLayout.LayoutParams timeLineTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    timeLineTextParams.setMargins(5, 1, 1, 1);
-                    new_text.setLayoutParams(timeLineTextParams);
-                    new_text.setText(text.getText());
-                    if (view.getId() == R.id.servo_2) {
-                        servo2TimeLine.addView(new_text, servo2TimeLine.getChildCount());
-                    }
-                }
                 return true;
             }
         });
@@ -241,49 +248,11 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
         });
 
-        servo3TimeLine.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                    View view = (View) event.getLocalState();
-                    TextView text = view.findViewById(R.id.degreeText);
-                    TextView new_text = (TextView) LayoutInflater.from(RoboticArmActivity.this).inflate(R.layout.robotic_arm_timeline_textview, null);
-                    LinearLayout.LayoutParams timeLineTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    timeLineTextParams.setMargins(5, 1, 1, 1);
-                    new_text.setLayoutParams(timeLineTextParams);
-                    new_text.setText(text.getText());
-                    if (view.getId() == R.id.servo_3) {
-                        servo3TimeLine.addView(new_text, servo3TimeLine.getChildCount());
-                    }
-                }
-                return true;
-            }
-        });
-
         servo4Layout.findViewById(R.id.drag_handle).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo4Layout);
                 v.startDrag(null, myShadow, servo4Layout, 0);
-                return true;
-            }
-        });
-
-        servo4TimeLine.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                    View view = (View) event.getLocalState();
-                    TextView text = view.findViewById(R.id.degreeText);
-                    TextView new_text = (TextView) LayoutInflater.from(RoboticArmActivity.this).inflate(R.layout.robotic_arm_timeline_textview, null);
-                    LinearLayout.LayoutParams timeLineTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    timeLineTextParams.setMargins(5, 1, 1, 1);
-                    new_text.setLayoutParams(timeLineTextParams);
-                    new_text.setText(text.getText());
-                    if (view.getId() == R.id.servo_4) {
-                        servo4TimeLine.addView(new_text, servo4TimeLine.getChildCount());
-                    }
-                }
                 return true;
             }
         });
@@ -339,8 +308,60 @@ public class RoboticArmActivity extends AppCompatActivity {
                 return false;
             }
         });
-
     }
+
+    View.OnDragListener servo1DragListener = new View.OnDragListener() {
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+                View view = (View) event.getLocalState();
+                TextView text = view.findViewById(R.id.degreeText);
+                if (view.getId() == R.id.servo_1) {
+                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText());
+                }
+            }
+            return true;
+        }
+    };
+    View.OnDragListener servo2DragListener = new View.OnDragListener() {
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+                View view = (View) event.getLocalState();
+                TextView text = view.findViewById(R.id.degreeText);
+                if (view.getId() == R.id.servo_2) {
+                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText());
+                }
+            }
+            return true;
+        }
+    };
+    View.OnDragListener servo3DragListener = new View.OnDragListener() {
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+                View view = (View) event.getLocalState();
+                TextView text = view.findViewById(R.id.degreeText);
+                if (view.getId() == R.id.servo_3) {
+                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText());
+                }
+            }
+            return true;
+        }
+    };
+    View.OnDragListener servo4DragListener = new View.OnDragListener() {
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+                View view = (View) event.getLocalState();
+                TextView text = view.findViewById(R.id.degreeText);
+                if (view.getId() == R.id.servo_4) {
+                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText());
+                }
+            }
+            return true;
+        }
+    };
 
     @Override
     protected void onResume() {
