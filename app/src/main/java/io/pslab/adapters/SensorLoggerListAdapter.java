@@ -85,7 +85,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 holder.sensor.setText(context.getResources().getString(R.string.compass));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_compass_log));
                 break;
-            case PSLabSensor.ACCELEROMETER_CONFIGURATIONS:
+            case PSLabSensor.ACCELEROMETER:
                 holder.sensor.setText(context.getResources().getString(R.string.accelerometer));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_accelerometer));
                 break;
