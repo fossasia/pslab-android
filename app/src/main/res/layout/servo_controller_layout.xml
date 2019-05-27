@@ -38,12 +38,16 @@
             seekarc:startAngle="0"
             seekarc:sweepAngle="360" />
 
-        <TextView
+        <EditText
             android:id="@+id/degreeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/value_null"
-            android:textSize="36sp" />
+            android:textSize="36sp"
+            android:inputType="number"
+            android:maxLines="1"
+            android:imeOptions="flagNoExtractUi"
+            />
     </RelativeLayout>
 </RelativeLayout>

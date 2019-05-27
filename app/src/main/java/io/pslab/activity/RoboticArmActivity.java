@@ -6,9 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.DragEvent;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,9 +21,11 @@ import io.pslab.R;
 
 public class RoboticArmActivity extends AppCompatActivity {
 
-    private TextView degreeText1, degreeText2, degreeText3, degreeText4;
+    private EditText degreeText1, degreeText2, degreeText3, degreeText4;
     private SeekArc seekArc1, seekArc2, seekArc3, seekArc4;
     private LinearLayout servo1TimeLine, servo2TimeLine, servo3TimeLine, servo4TimeLine;
+    private int degree;
+    private boolean editEnter = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +86,17 @@ public class RoboticArmActivity extends AppCompatActivity {
         TextView servo4Title = servo4Layout.findViewById(R.id.servo_title);
         servo4Title.setText(getResources().getString(R.string.servo4_title));
 
+        removeStatusBar();
 
         seekArc1.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
-                degreeText1.setText(String.valueOf(Math.round(i * 3.6)));
+                if (editEnter) {
+                    degreeText1.setText(String.valueOf(degree));
+                    editEnter = false;
+                } else {
+                    degreeText1.setText(String.valueOf((int) (i * 3.6)));
+                }
             }
 
             @Override
@@ -102,7 +113,12 @@ public class RoboticArmActivity extends AppCompatActivity {
         seekArc2.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
-                degreeText2.setText(String.valueOf(Math.round(i * 3.6)));
+                if (editEnter) {
+                    degreeText2.setText(String.valueOf(degree));
+                    editEnter = false;
+                } else {
+                    degreeText2.setText(String.valueOf((int) (i * 3.6)));
+                }
             }
 
             @Override
@@ -119,7 +135,12 @@ public class RoboticArmActivity extends AppCompatActivity {
         seekArc3.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
-                degreeText3.setText(String.valueOf(Math.round(i * 3.6)));
+                if (editEnter) {
+                    degreeText3.setText(String.valueOf(degree));
+                    editEnter = false;
+                } else {
+                    degreeText3.setText(String.valueOf((int) (i * 3.6)));
+                }
             }
 
             @Override
@@ -136,7 +157,12 @@ public class RoboticArmActivity extends AppCompatActivity {
         seekArc4.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
-                degreeText4.setText(String.valueOf(Math.round(i * 3.6)));
+                if (editEnter) {
+                    degreeText4.setText(String.valueOf(degree));
+                    editEnter = false;
+                } else {
+                    degreeText4.setText(String.valueOf((int) (i * 3.6)));
+                }
             }
 
             @Override
@@ -261,6 +287,59 @@ public class RoboticArmActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        degreeText1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                removeStatusBar();
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    degree = Integer.valueOf(degreeText1.getText().toString());
+                    seekArc1.setProgress((int) (degree / 3.6));
+                    editEnter = true;
+                }
+                return false;
+            }
+        });
+
+        degreeText2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                removeStatusBar();
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    degree = Integer.valueOf(degreeText2.getText().toString());
+                    seekArc2.setProgress((int) (degree / 3.6));
+                    editEnter = true;
+                }
+                return false;
+            }
+        });
+
+        degreeText3.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                removeStatusBar();
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    degree = Integer.valueOf(degreeText3.getText().toString());
+                    seekArc3.setProgress((int) (degree / 3.6));
+                    editEnter = true;
+                }
+                return false;
+            }
+        });
+
+        degreeText4.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                removeStatusBar();
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    degree = Integer.valueOf(degreeText4.getText().toString());
+                    seekArc4.setProgress((int) (degree / 3.6));
+                    editEnter = true;
+                }
+                return false;
+            }
+        });
+
     }
 
     @Override
