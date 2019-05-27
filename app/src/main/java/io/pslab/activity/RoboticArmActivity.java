@@ -310,7 +310,7 @@ public class RoboticArmActivity extends AppCompatActivity {
         });
     }
 
-    View.OnDragListener servo1DragListener = new View.OnDragListener() {
+    private View.OnDragListener servo1DragListener = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
@@ -323,7 +323,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             return true;
         }
     };
-    View.OnDragListener servo2DragListener = new View.OnDragListener() {
+    private View.OnDragListener servo2DragListener = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
@@ -336,7 +336,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             return true;
         }
     };
-    View.OnDragListener servo3DragListener = new View.OnDragListener() {
+    private View.OnDragListener servo3DragListener = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
@@ -349,7 +349,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             return true;
         }
     };
-    View.OnDragListener servo4DragListener = new View.OnDragListener() {
+    private View.OnDragListener servo4DragListener = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
