@@ -65,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
             case PSLabSensor.GYROSCOPE_CONFIGURATIONS:
                 fragment = new GyroscopeSettingsFragment();
                 break;
-            case PSLabSensor.ACCELEROMETER:
+            case PSLabSensor.ACCELEROMETER_CONFIGURATIONS:
                 fragment = new AccelerometerSettingsFragment();
                 break;
             default:

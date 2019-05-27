@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -17,11 +16,11 @@
                 android:id="@+id/compass_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
                 android:layout_marginStart="@dimen/card_margin"
-                android:layout_marginTop="@dimen/card_margin">
+                android:layout_marginLeft="@dimen/card_margin"
+                android:layout_marginTop="@dimen/card_margin"
+                android:layout_marginEnd="@dimen/card_margin"
+                android:layout_marginRight="@dimen/card_margin">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -55,17 +54,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/compass_card"
-                android:layout_marginEnd="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
                 android:layout_marginStart="@dimen/card_margin"
-                android:layout_marginTop="@dimen/card_margin">
+                android:layout_marginLeft="@dimen/card_margin"
+                android:layout_marginTop="@dimen/card_margin"
+                android:layout_marginEnd="@dimen/card_margin"
+                android:layout_marginRight="@dimen/card_margin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/card_margin"
                     android:layout_marginTop="@dimen/card_margin"
+                    android:layout_marginBottom="@dimen/card_margin"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -115,10 +114,10 @@
                             android:id="@+id/tv_sensor_hmc5883l_bx"
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
-                            android:layout_marginEnd="@dimen/compass_tv_value_margin"
-                            android:layout_marginLeft="@dimen/compass_tv_value_margin"
-                            android:layout_marginRight="@dimen/compass_tv_value_margin"
                             android:layout_marginStart="@dimen/compass_tv_value_margin"
+                            android:layout_marginLeft="@dimen/compass_tv_value_margin"
+                            android:layout_marginEnd="@dimen/compass_tv_value_margin"
+                            android:layout_marginRight="@dimen/compass_tv_value_margin"
                             android:layout_weight="1"
                             android:background="@drawable/tv_border"
                             android:gravity="center_vertical"
@@ -130,10 +129,10 @@
                             android:id="@+id/tv_sensor_hmc5883l_by"
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
-                            android:layout_marginEnd="@dimen/compass_tv_value_margin"
-                            android:layout_marginLeft="@dimen/compass_tv_value_margin"
-                            android:layout_marginRight="@dimen/compass_tv_value_margin"
                             android:layout_marginStart="@dimen/compass_tv_value_margin"
+                            android:layout_marginLeft="@dimen/compass_tv_value_margin"
+                            android:layout_marginEnd="@dimen/compass_tv_value_margin"
+                            android:layout_marginRight="@dimen/compass_tv_value_margin"
                             android:layout_weight="1"
                             android:background="@drawable/tv_border"
                             android:gravity="center_vertical"
@@ -145,10 +144,10 @@
                             android:id="@+id/tv_sensor_hmc5883l_bz"
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
-                            android:layout_marginEnd="@dimen/compass_tv_value_margin"
-                            android:layout_marginLeft="@dimen/compass_tv_value_margin"
-                            android:layout_marginRight="@dimen/compass_tv_value_margin"
                             android:layout_marginStart="@dimen/compass_tv_value_margin"
+                            android:layout_marginLeft="@dimen/compass_tv_value_margin"
+                            android:layout_marginEnd="@dimen/compass_tv_value_margin"
+                            android:layout_marginRight="@dimen/compass_tv_value_margin"
                             android:layout_weight="1"
                             android:background="@drawable/tv_border"
                             android:gravity="center_vertical"
@@ -167,27 +166,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_compass_raw_values"
-                android:layout_marginBottom="@dimen/header_padding_top"
-                android:layout_marginEnd="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
                 android:layout_marginStart="@dimen/card_margin"
-                android:layout_marginTop="@dimen/card_margin">
+                android:layout_marginLeft="@dimen/card_margin"
+                android:layout_marginTop="@dimen/card_margin"
+                android:layout_marginEnd="@dimen/card_margin"
+                android:layout_marginRight="@dimen/card_margin"
+                android:layout_marginBottom="@dimen/header_padding_top">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/card_margin"
-                    android:layout_marginLeft="@dimen/card_margin"
                     android:layout_marginStart="@dimen/card_margin"
-                    android:layout_marginTop="@dimen/card_margin">
+                    android:layout_marginLeft="@dimen/card_margin"
+                    android:layout_marginTop="@dimen/card_margin"
+                    android:layout_marginBottom="@dimen/card_margin">
 
                     <TextView
                         android:id="@+id/tv_select_axes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/compass_padding"
                         android:layout_marginStart="@dimen/compass_padding"
+                        android:layout_marginLeft="@dimen/compass_padding"
                         android:text="@string/text_parallel_axes"
                         android:textSize="@dimen/compass_select_axes_text_size" />
 

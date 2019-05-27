@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/accelerometer_linearlayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +12,6 @@
         android:id="@+id/first_chart"
         android:layout_width="match_parent"
         android:layout_height="@dimen/accel_card_height"
-        android:layout_below="@+id/top_app_bar_layout"
         android:layout_marginEnd="@dimen/card_margin"
         android:layout_marginLeft="@dimen/card_margin"
         android:layout_marginRight="@dimen/card_margin"
@@ -51,6 +51,7 @@
                     android:paddingBottom="@dimen/card_margin"
                     android:paddingLeft="@dimen/card_margin"
                     android:paddingTop="@dimen/card_margin"
+                    android:text="@string/multimeter_default_value"
                     android:textAlignment="center"
                     android:textSize="@dimen/accel_textsize_large" />
 

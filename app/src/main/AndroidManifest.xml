@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="io.pslab">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -14,6 +15,7 @@
     <uses-feature android:name="android.hardware.usb.host" />
 
     <application
+        tools:replace="android:icon"
         android:name=".PSLabApplication"
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
@@ -21,6 +23,8 @@
         android:roundIcon="@drawable/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.RoboticArmActivity"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
@@ -71,8 +75,9 @@
         <activity
             android:name=".activity.WaveGeneratorActivity"
             android:screenOrientation="userLandscape" />
-        <activity android:name=".activity.AccelerometerActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.AccelerometerActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.DataLoggerActivity" />
         <activity
             android:name=".activity.BarometerActivity"
@@ -84,7 +89,6 @@
         <activity
             android:name=".activity.GyroscopeActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name=".activity.MapsActivity" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />

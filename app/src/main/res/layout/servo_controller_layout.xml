@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:seekarc="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/servo_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp" />
+
+    <ImageView
+        android:id="@+id/drag_handle"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="2dp"
+        android:src="@drawable/servo_drag_handle"
+        android:tint="@color/grey_light" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/drag_handle">
+
+        <com.triggertrap.seekarc.SeekArc
+            android:id="@+id/seek_arc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="30dp"
+            app:progressColor="@color/colorPrimary"
+            seekarc:rotation="180"
+            seekarc:startAngle="0"
+            seekarc:sweepAngle="360" />
+
+        <EditText
+            android:id="@+id/degreeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/value_null"
+            android:textSize="36sp"
+            android:inputType="number"
+            android:maxLines="1"
+            android:imeOptions="flagNoExtractUi"
+            />
+    </RelativeLayout>
+</RelativeLayout>

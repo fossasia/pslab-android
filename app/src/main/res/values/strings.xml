@@ -582,15 +582,20 @@
     <string name="no_lux_sensor">Device does not have a Lux sensor</string>
     <string name="active_sensor">Active Sensor</string>
     <string name="setting_baro">setting_baro_sensor_type</string>
+    <string name="setting_accelerometer">setting_accelerometer_sensor_type</string>
     <string name="include_location">Include the location data in the logged file</string>
     <string name="location_sensor">include_location_sensor_data</string>
     <string name="include_cap">Include Location Data</string>
+    <string name="time_string_accelerometer">Please provide time interval at which data will be updated</string>
     <string name="time_string_lux">Please provide time interval at which data will be updated (100 ms to 1000 ms)</string>
     <string name="time_string_baro">Please provide time interval at which data will be updated (100 ms to 2000 ms)</string>
     <string name="setting_baro_update">setting_baro_update_period</string>
     <string name="setting_lux_update">setting_lux_update_period</string>
+    <string name="setting_accelerometer_update">setting_accelerometer_update_period</string>
     <string name="default_value_baro">1.10</string>
     <string name="default_value_lux">1</string>
+    <string name="default_value_acceleration">10</string>
+    <string name="dialogue_msg_acceleration">Please provide maximum limit of acceleration value to be recorded</string>
     <string name="dialogue_msg_atm">Please provide maximum limit of atm value to be recorded</string>
     <string name="dialogue_msg_lux">Please provide maximum limit of Lux value to be recorded (10 Lx to 10000 Lx)</string>
     <string name="dialogue_msg_gyro">Please provide maximum limit of angular velocity to be recorded (0 rad/s to 1000 rad/s)</string>
@@ -598,9 +603,11 @@
     <string name="high_limit_msg">Entered High Limit is not within the limits!</string>
     <string name="high_limit_baro">setting_baro_high_limit</string>
     <string name="high_limit_lux">setting_lux_high_limit</string>
+    <string name="high_limit_acceleration">setting_accelerometer_high_limit</string>
     <string name="setting_lux_type">setting_lux_sensor_type</string>
     <string name="no_file_selected">No file was selected</string>
     <string name="setting_lux_sensor_gain">setting_lux_sensor_gain</string>
+    <string name="setting_accelerometer_sensor_gain">setting_accelerometer_sensor_gain</string>
     <string name="set_gain_sensor">Please set gain of the sensor</string>
     <string name="sensor_gain">Sensor Gain</string>
     <string-array name="lux_sensors">
@@ -712,6 +719,12 @@
 
     <string name="no_baro_sensor">Device does not have a barometer</string>
 
+    <string name="robotic_arm">Robotic Arm</string>
+    <string name="robotic_arm_descriptoin">Controls servos of a robotic arm</string>
+    <string name="servo1_title">Servo 1</string>
+    <string name="servo2_title">Servo 2</string>
+    <string name="servo3_title">Servo 3</string>
+    <string name="servo4_title">Servo 4</string>
     <string-array name="baro_sensors">
         <item>Built-In</item>
         <item>BMP180</item>
@@ -720,6 +733,15 @@
         <item>0</item>
         <item>1</item>
     </string-array>
+    <string-array name="accelerometer_sensors">
+        <item>Built-In</item>
+        <item>MPU6050</item>
+    </string-array>
+    <string-array name="accelerometer_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <string name="delete_all">Delete All Data</string>
     <string name="delete_all_message">Are You Sure?</string>
     <string name="baro_meter">Barometer</string>

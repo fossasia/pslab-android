@@ -100,7 +100,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String GYROSCOPE_CONFIGURATIONS = "Gyroscope Configurations";
     public static final String COMPASS = "Compass";
     public static final String COMPASS_CONFIGURATIONS = "Compass Configurations";
-    public static final String ACCELEROMETER = "Accelerometer";
+    public static final String ACCELEROMETER_CONFIGURATIONS = "Accelerometer Configurations";
     public static final String ACCELEROMETER_DATA_FORMAT = "%.2f";
 
     @BindView(R.id.sensor_toolbar)

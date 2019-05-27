@@ -8,8 +8,8 @@ android {
         applicationId "io.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13
-        versionName "2.0.12"
+        versionCode 14
+        versionName "2.0.13"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -65,6 +65,9 @@ dependencies {
     implementation "org.apache.commons:commons-math3:$rootProject.commonMathVersion"
     implementation "org.apache.commons:commons-lang3:$rootProject.commonLangVersion"
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+
+    implementation 'com.github.GoodieBag:ProtractorView:v1.2'
+    implementation 'com.github.Triggertrap:SeekArc:v1.1'
 
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'

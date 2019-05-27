@@ -85,7 +85,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 holder.sensor.setText(context.getResources().getString(R.string.compass));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_compass_log));
                 break;
-            case PSLabSensor.ACCELEROMETER:
+            case PSLabSensor.ACCELEROMETER_CONFIGURATIONS:
                 holder.sensor.setText(context.getResources().getString(R.string.accelerometer));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_accelerometer));
                 break;
@@ -166,7 +166,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.COMPASS)) {
                             LocalDataLog.with().clearBlockOfCompassRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER)) {
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER_CONFIGURATIONS)) {
                             LocalDataLog.with().clearBlockOfAccelerometerRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
@@ -256,7 +256,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 }
             }
             setMapDataToIntent(array);
-        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER)) {
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER_CONFIGURATIONS)) {
             RealmResults<AccelerometerData> data = LocalDataLog.with().getBlockOfAccelerometerRecords(block.getBlock());
             JSONArray array = new JSONArray();
             for (AccelerometerData d : data) {
