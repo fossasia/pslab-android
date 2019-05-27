@@ -266,6 +266,13 @@
     <dimen name="baro_guage_font_size">8sp</dimen>
     <dimen name="baro_sensor_label_title_size">16sp</dimen>
 
+    <dimen name="thermometer_padding">4dp</dimen>
+    <dimen name="thermometer_tv_height">30dp</dimen>
+    <dimen name="thermometer_tv_value_margin">20dp</dimen>
+    <dimen name="thermometer_select_axes_text_size">18sp</dimen>
+    <dimen name="thermometer_text_size_large">25sp</dimen>
+    <dimen name="thermometer_space_top">120dp</dimen>
+
     <dimen name="item_text_size">18sp</dimen>
     <dimen name="view_data_loc_middle">20dp</dimen>
     <dimen name="lux_chart_axis_text">9sp</dimen>

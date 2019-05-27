@@ -6,12 +6,14 @@ import io.pslab.interfaces.sensorloggers.GyroscopeRecordables;
 import io.pslab.interfaces.sensorloggers.CompassRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
+import io.pslab.interfaces.sensorloggers.ThermometerRecordables;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.GyroData;
 import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.models.ThermometerData;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -20,7 +22,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables {
+public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -261,6 +263,40 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     @Override
     public RealmResults<CompassData> getBlockOfCompassRecords(long block) {
         return realm.where(CompassData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Thermometer Section
+     ***********************************************************************************************/
+    @Override
+    public ThermometerData getThermometerData(long timeStamp) {
+        return realm.where(ThermometerData.class)
+                .equalTo("time", timeStamp)
+                .findFirst();
+    }
+    @Override
+    public void clearAllThermometerRecords() {
+        realm.beginTransaction();
+        realm.delete(CompassData.class);
+        realm.commitTransaction();
+    }
+
+    public void clearBlockOfThermometerRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<ThermometerData> data = getBlockOfThermometerRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    public RealmResults<ThermometerData> getAllThermometerRecords() {
+        return realm.where(ThermometerData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<ThermometerData> getBlockOfThermometerRecords(long block) {
+        return realm.where(ThermometerData.class)
                 .equalTo("block", block)
                 .findAll();
     }
