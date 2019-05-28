@@ -787,4 +787,7 @@
     <string name="thermometer_bottom_sheet_text">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
     <string name="thermometer_bottom_sheet_desc">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
     <string name="no_thermometer_sensor">Device does not have Thermometer Sensor</string>
+    <string name="max_thermo">Max (F)</string>
+    <string name="avg_thermo">Avg (F)</string>
+    <string name="thermo_unit">F</string>
 </resources>
