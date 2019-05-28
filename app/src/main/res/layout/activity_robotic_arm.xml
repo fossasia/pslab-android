@@ -45,40 +45,41 @@
         android:layout_below="@id/servo_controller_view"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:orientation="vertical">
+            android:layout_weight="0.9">
 
             <LinearLayout
-                android:id="@+id/servo1_timeline"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:orientation="horizontal" />
+                android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/servo2_timeline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:orientation="horizontal" />
+                <LinearLayout
+                    android:id="@+id/servo1_timeline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
 
-            <LinearLayout
-                android:id="@+id/servo3_timeline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:orientation="horizontal" />
+                <LinearLayout
+                    android:id="@+id/servo2_timeline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
 
-            <LinearLayout
-                android:id="@+id/servo4_timeline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:orientation="horizontal" />
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/servo3_timeline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+                <LinearLayout
+                    android:id="@+id/servo4_timeline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+        </HorizontalScrollView>
 
         <LinearLayout
             android:id="@+id/servo_timeline_controls"
