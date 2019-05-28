@@ -29,6 +29,7 @@ import io.pslab.activity.GyroscopeActivity;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.CompassActivity;
+import io.pslab.activity.ThermometerActivity;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.GyroData;
@@ -36,6 +37,7 @@ import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.models.ThermometerData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
 import io.realm.RealmRecyclerViewAdapter;
@@ -89,6 +91,10 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 holder.sensor.setText(context.getResources().getString(R.string.accelerometer));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_accelerometer));
                 break;
+            case PSLabSensor.THERMOMETER:
+                holder.sensor.setText(R.string.thermometer);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.thermometer_logo));
+                break;
             default:
                 break;
         }
@@ -139,6 +145,11 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             Accelerometer.putExtra(KEY_LOG, true);
             Accelerometer.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(Accelerometer);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.thermometer))) {
+            Intent Thermometer = new Intent(context, ThermometerActivity.class);
+            Thermometer.putExtra(KEY_LOG, true);
+            Thermometer.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(Thermometer);
         }
     }
 
@@ -266,6 +277,22 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     i.put("dataX", d.getAccelerometerX());
                     i.put("dataY", d.getAccelerometerY());
                     i.put("dataZ", d.getAccelerometerZ());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.THERMOMETER)) {
+            RealmResults<ThermometerData> data = LocalDataLog.with().getBlockOfThermometerRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (ThermometerData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("Axis", d.getTemp());
                     i.put("lon", d.getLon());
                     i.put("lat", d.getLat());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);

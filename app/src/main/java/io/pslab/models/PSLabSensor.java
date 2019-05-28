@@ -47,6 +47,7 @@ import io.pslab.fragment.BaroMeterDataFragment;
 import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.CompassDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
+import io.pslab.fragment.ThermometerDataFragment;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
@@ -102,7 +103,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String COMPASS_CONFIGURATIONS = "Compass Configurations";
     public static final String ACCELEROMETER = "Accelerometer";
     public static final String ACCELEROMETER_CONFIGURATIONS = "Accelerometer Configurations";
-    public static final String ACCELEROMETER_DATA_FORMAT = "%.2f";
+    public static final String THERMOMETER = "Thermometer";
+    public static final String THERMOMETER_CONFIGURATIONS = "Thermometer Configurations";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -286,6 +288,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
         stop.setVisible(startedPlay);
         if (getSensorName().equals(getResources().getString(R.string.compass))) {
             menu.findItem(R.id.settings).setVisible(false);
+        }else if(getSensorName().equals(getResources().getString(R.string.thermometer))){
+            menu.findItem(R.id.settings).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -337,6 +341,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     } else if (getSensorFragment() instanceof AccelerometerDataFragment) {
                         ((AccelerometerDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
+                    } else if (getSensorFragment() instanceof ThermometerDataFragment){
+                        ((ThermometerDataFragment) getSupportFragmentManager()
+                        .findFragmentByTag(getSensorName())).playData();
                     }
                 }
                 invalidateOptionsMenu();
@@ -356,6 +363,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                             .findFragmentByTag(getSensorName())).stopData();
                 } else if (getSensorFragment() instanceof AccelerometerDataFragment) {
                     ((AccelerometerDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
+                } else if (getSensorFragment() instanceof ThermometerDataFragment){
+                    ((ThermometerDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
                 }
                 break;

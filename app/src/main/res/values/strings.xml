@@ -782,4 +782,9 @@
     <string name="no_data_fetched">No Data Fetched</string>
     <string name="accelerometer_configurations">Accelerometer Configurations</string>
     <string name="view_map">View Map</string>
+    <string name="thermometer_desc">To measure the ambient temperature</string>
+    <string name="thermometer">Thermometer</string>
+    <string name="thermometer_bottom_sheet_text">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
+    <string name="thermometer_bottom_sheet_desc">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
+    <string name="no_thermometer_sensor">Device does not have Thermometer Sensor</string>
 </resources>

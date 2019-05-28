@@ -26,6 +26,7 @@ import io.pslab.activity.OscilloscopeActivity;
 import io.pslab.activity.PowerSourceActivity;
 import io.pslab.activity.RoboticArmActivity;
 import io.pslab.activity.SensorActivity;
+import io.pslab.activity.ThermometerActivity;
 import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.adapters.ApplicationAdapter;
 import io.pslab.items.ApplicationItem;
@@ -107,6 +108,10 @@ public class InstrumentsFragment extends Fragment {
                                 intent = new Intent(context, GyroscopeActivity.class);
                                 startActivity(intent);
                                 break;
+                            case "Thermometer":
+                                intent = new Intent(context, ThermometerActivity.class);
+                                startActivity(intent);
+                                break;
                             case "Robotic Arm":
                                 intent = new Intent(context, RoboticArmActivity.class);
                                 startActivity(intent);
@@ -155,7 +160,9 @@ public class InstrumentsFragment extends Fragment {
                     R.string.baro_meter_description,
                     R.string.compass_description,
                     R.string.gyroscope_description,
+                    R.string.thermometer_desc,
                     R.string.robotic_arm_descriptoin
+
             };
 
             applicationItemList.add(new ApplicationItem(
@@ -191,6 +198,9 @@ public class InstrumentsFragment extends Fragment {
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.gyroscope), R.drawable.gyroscope_logo, getResources().getString(descriptions[10])
             ));
+            applicationItemList.add(new ApplicationItem(
+                    getResources().getString(R.string.thermometer), R.drawable.thermometer_logo, getResources().getString(descriptions[11])
+                    ));
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.robotic_arm), R.drawable.gyroscope_logo, getResources().getString(descriptions[11])
             ));
