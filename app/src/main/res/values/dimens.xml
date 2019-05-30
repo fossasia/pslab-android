@@ -295,5 +295,8 @@
     <dimen name="splash_screen_name_width">271dp</dimen>
     <dimen name="splash_screen_name_height">95dp</dimen>
     <dimen name="top_margin_text">30dp</dimen>
+    <dimen name="thermo_guage_font_size">8sp</dimen>
+    <dimen name="thermo_sensor_label_title_size">16sp</dimen>
+    <dimen name="thermo_display_font_size">16sp</dimen>
 
 </resources>

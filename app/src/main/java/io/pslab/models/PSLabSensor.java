@@ -105,6 +105,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String ACCELEROMETER_CONFIGURATIONS = "Accelerometer Configurations";
     public static final String THERMOMETER = "Thermometer";
     public static final String THERMOMETER_CONFIGURATIONS = "Thermometer Configurations";
+    public static final String THERMOMETER_DATA_FORMAT = "%.2f";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -408,8 +409,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 } else if (getSensorFragment() instanceof AccelerometerDataFragment) {
                     ((AccelerometerDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
+                } else if (getSensorFragment() instanceof ThermometerDataFragment) {
+                    ((ThermometerDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).saveGraph();
                 }
-                break;
+                    break;
             case android.R.id.home:
                 this.finish();
                 break;
