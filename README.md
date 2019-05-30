@@ -75,7 +75,14 @@ Please join us on the following channels:
   <table>
     <tr>
      <td><img src="/docs/images/instrument_accelerometer_view.png" width = "500"></td>
+     <td><img src="/docs/images/instrument_gyro_view.png" width = "500"></td>
      <td><img src="/docs/images/instrument_compass_view.png" width = "500"></td>
+     <td><img src="/docs/images/instrument_thermo_view.png" width = "500"></td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+     <td><img src="/docs/images/instrument_robotic_arm_view.png" width = "500"></td>
     </tr>
   </table>
 
@@ -100,9 +107,11 @@ Please join us on the following channels:
 |    AcceleroMeter     | Measures the acceleration of the device                  | 		 ✓       |
 |     Gyro Meter     | Measures the rate of rotation                  | 		 ✓       |
 |    Compass     | Measures the absolute rotation relative to earth magnetic poles                  | 		 ✓       |
+|    Thermometer     | Measures the ambient temperature                  | 		      |
+|    Compass     | Allows to control 4 servo motors of the robotic arm | 		       |
 ## How to set up the Android app in your development environment
 
-  Minimum Android version 4.1 (API Level 16)
+  Minimum Android version 5.0 (API Level 21)
 
   Maximum Android version 8.1 (API Level 27)
 
