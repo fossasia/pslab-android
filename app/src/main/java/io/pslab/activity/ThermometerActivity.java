@@ -16,6 +16,8 @@ public class ThermometerActivity extends PSLabSensor {
 
     private static final String PREF_NAME = "customDialogPreference";
     public RealmResults<ThermometerData> recordedThermometerData;
+    public final String THERMOMETER_MAX_LIMIT = "thermometer_max_limit";
+    public final String THERMOMETER_MIN_LIMIT = "thermometer_min_limit";
 
     @Override
     public int getMenu() {

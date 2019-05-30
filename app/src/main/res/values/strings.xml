@@ -615,6 +615,10 @@
         <item>BH1750</item>
         <item>TSL2561</item>
     </string-array>
+    <string-array name="thermo_sensors">
+        <item>Built-In</item>
+        <item>TSL2561</item>
+    </string-array>
 
     <string name="save_csv_data">Export Data</string>
     <string name="delete_csv_data">Delete CSV Data</string>
@@ -787,4 +791,8 @@
     <string name="thermometer_bottom_sheet_text">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
     <string name="thermometer_bottom_sheet_desc">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
     <string name="no_thermometer_sensor">Device does not have Thermometer Sensor</string>
+    <string name="thermo_unit">°C</string>
+    <string name="avg_thermo">Avg (°C)</string>
+    <string name="max_thermo">Max (°C)</string>
+    <string name="min_thermo">Min (°C)</string>
 </resources>
