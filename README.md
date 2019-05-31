@@ -108,7 +108,7 @@ Please join us on the following channels:
 |     Gyro Meter     | Measures the rate of rotation                  | 		 ✓       |
 |    Compass     | Measures the absolute rotation relative to earth magnetic poles                  | 		 ✓       |
 |    Thermometer     | Measures the ambient temperature                  | 		      |
-|    Compass     | Allows to control 4 servo motors of the robotic arm | 		       |
+|    Robotic Arm Controller     | Allows to control 4 servo motors of the robotic arm | 		       |
 ## How to set up the Android app in your development environment
 
   Minimum Android version 5.0 (API Level 21)
