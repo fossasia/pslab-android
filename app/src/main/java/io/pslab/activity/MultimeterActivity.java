@@ -439,7 +439,7 @@ public class MultimeterActivity extends AppCompatActivity {
                         }
                     } else {
                         isDataRecorded = true;
-                        item.setIcon(R.drawable.ic_stop_white_24dp);
+                        item.setIcon(R.drawable.ic_record_stop_white);
                         if (!isRecordingStarted) {
                             multimeterLogger = new CSVLogger(getString(R.string.multimeter));
                             multimeterLogger.prepareLogFile();
