@@ -154,13 +154,13 @@ public class MultimeterActivity extends AppCompatActivity {
                 switchIsChecked = isChecked;
                 SharedPreferences.Editor editor = multimeter_data.edit();
                 editor.putBoolean("SwitchState", switchIsChecked);
-                editor.commit();
+                editor.apply();
             }
         });
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                multimeter_data.edit().clear().commit();
+                multimeter_data.edit().clear().apply();
                 switchIsChecked = false;
                 aSwitch.setChecked(false);
                 knobState = 2;
@@ -284,7 +284,7 @@ public class MultimeterActivity extends AppCompatActivity {
                             v.setEnabled(false);
                             saveAndSetData(DataFormatter.formatDouble(scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.multimeter_voltage_unit));
                             if (recordData)
-                                record(knobMarker[knobState], DataFormatter.formatDouble( scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.multimeter_voltage_unit));
+                                record(knobMarker[knobState], DataFormatter.formatDouble(scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.multimeter_voltage_unit));
                             v.setEnabled(true);
                         }
                         break;
@@ -367,7 +367,7 @@ public class MultimeterActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = multimeter_data.edit();
         editor.putString("TextBox", Quantity);
         editor.putString("TextBoxUnit", Unit);
-        editor.commit();
+        editor.apply();
         quantity.setText(Quantity);
         unit.setText(Unit);
     }
@@ -380,7 +380,7 @@ public class MultimeterActivity extends AppCompatActivity {
     private void saveKnobState(int state) {
         SharedPreferences.Editor editor = multimeter_data.edit();
         editor.putInt("KnobState", state);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -406,52 +406,50 @@ public class MultimeterActivity extends AppCompatActivity {
                     if (recordData) {
                         item.setIcon(R.drawable.ic_record_white);
                         recordData = false;
-                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_paused), null, null, Snackbar.LENGTH_LONG);
+                        if (isDataRecorded) {
+                            MenuItem item1 = menu.findItem(R.id.record_pause_data);
+                            item1.setIcon(R.drawable.ic_record_white);
+                            multimeterLogger.writeCSVFile(dataRecorded + "\n" + valueRecorded + "\n");
+                            dataRecorded = "Data";
+                            valueRecorded = "Value";
+                            // Export Data
+                            CustomSnackBar.showSnackBar(coordinatorLayout,
+                                    getString(R.string.csv_store_text) + " " + multimeterLogger.getCurrentFilePath()
+                                    , getString(R.string.delete_capital), new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            new AlertDialog.Builder(MultimeterActivity.this, R.style.AlertDialogStyle)
+                                                    .setTitle(R.string.delete_file)
+                                                    .setMessage(R.string.delete_warning)
+                                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            multimeterLogger.deleteFile();
+                                                        }
+                                                    })
+                                                    .setNegativeButton(R.string.cancel, null)
+                                                    .create()
+                                                    .show();
+                                        }
+                                    }, Snackbar.LENGTH_SHORT);
+                            isRecordingStarted = false;
+                            recordData = false;
+                        } else {
+                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null, Snackbar.LENGTH_SHORT);
+                        }
                     } else {
                         isDataRecorded = true;
-                        item.setIcon(R.drawable.pause_icon);
+                        item.setIcon(R.drawable.ic_record_stop_white);
                         if (!isRecordingStarted) {
                             multimeterLogger = new CSVLogger(getString(R.string.multimeter));
+                            multimeterLogger.prepareLogFile();
                             isRecordingStarted = true;
                             recordData = true;
-                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_LONG);
+                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
                         }
                     }
                 } else {
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.device_not_found), null, null, Snackbar.LENGTH_LONG);
-                }
-                break;
-            case R.id.record_csv_data:
-                if (isDataRecorded) {
-                    MenuItem item1 = menu.findItem(R.id.record_pause_data);
-                    item1.setIcon(R.drawable.ic_record_white);
-                    multimeterLogger.writeCSVFile(dataRecorded + "\n" + valueRecorded + "\n");
-                    dataRecorded = "Data";
-                    valueRecorded = "Value";
-                    // Export Data
-                    CustomSnackBar.showSnackBar(coordinatorLayout,
-                            getString(R.string.csv_store_text) + " " + multimeterLogger.getCurrentFilePath()
-                            , getString(R.string.delete_capital), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    new AlertDialog.Builder(MultimeterActivity.this, R.style.AlertDialogStyle)
-                                            .setTitle(R.string.delete_file)
-                                            .setMessage(R.string.delete_warning)
-                                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    multimeterLogger.deleteFile();
-                                                }
-                                            })
-                                            .setNegativeButton(R.string.cancel, null)
-                                            .create()
-                                            .show();
-                                }
-                            }, Snackbar.LENGTH_LONG);
-                    isRecordingStarted = false;
-                    recordData = false;
-                } else {
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_export), null, null, Snackbar.LENGTH_LONG);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                 }
                 break;
             case R.id.delete_csv_data:
@@ -462,9 +460,9 @@ public class MultimeterActivity extends AppCompatActivity {
                     isRecordingStarted = false;
                     isDataRecorded = false;
                     multimeterLogger.deleteFile();
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null, Snackbar.LENGTH_LONG);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null, Snackbar.LENGTH_SHORT);
                 } else
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null, Snackbar.LENGTH_LONG);
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null, Snackbar.LENGTH_SHORT);
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
