@@ -56,6 +56,13 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/time_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:orientation="horizontal" />
+
+                <LinearLayout
                     android:id="@+id/servo1_timeline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -112,4 +119,6 @@
                 android:background="@drawable/ic_stop_white_24dp" />
         </LinearLayout>
     </LinearLayout>
+
+
 </RelativeLayout>

@@ -6,11 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,6 +30,7 @@ public class RoboticArmActivity extends AppCompatActivity {
     private LinearLayout servo1TimeLine, servo2TimeLine, servo3TimeLine, servo4TimeLine;
     private int degree;
     private boolean editEnter = false;
+    private Button playButton, pauseButton, stopButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,9 @@ public class RoboticArmActivity extends AppCompatActivity {
         servo2TimeLine = findViewById(R.id.servo2_timeline);
         servo3TimeLine = findViewById(R.id.servo3_timeline);
         servo4TimeLine = findViewById(R.id.servo4_timeline);
+        playButton = findViewById(R.id.timeline_play_button);
+        pauseButton = findViewById(R.id.timeline_pause_button);
+        stopButton = findViewById(R.id.timeline_stop_button);
         LinearLayout timeLineControlsLayout = findViewById(R.id.servo_timeline_controls);
 
         LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
@@ -64,7 +71,7 @@ public class RoboticArmActivity extends AppCompatActivity {
         servo3Layout.setLayoutParams(servoControllerParams);
         servo4Layout.setLayoutParams(servoControllerParams);
 
-        LinearLayout.LayoutParams servoTimeLineParams = new LinearLayout.LayoutParams(screen_width * 10, screen_height / 8);
+        LinearLayout.LayoutParams servoTimeLineParams = new LinearLayout.LayoutParams(screen_width * 10, screen_height / 8 - 3);
         servoTimeLineParams.setMargins(2, 0, 2, 4);
 
         servo1TimeLine.setLayoutParams(servoTimeLineParams);
@@ -229,7 +236,6 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
         });
 
-
         servo2Layout.findViewById(R.id.drag_handle).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -308,6 +314,11 @@ public class RoboticArmActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        LinearLayout timeIndicatorLayout = findViewById(R.id.time_indicator);
+        LinearLayout.LayoutParams timeIndicatorParams = new LinearLayout.LayoutParams(screen_width / 6 - 2, 12);
+        timeIndicatorParams.setMargins(3, 0, 0, 0);
+        timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
     }
 
     private View.OnDragListener servo1DragListener = new View.OnDragListener() {
