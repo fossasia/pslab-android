@@ -310,10 +310,25 @@
         <item>TSL2561</item>
     </string-array>
 
+    <string-array name="thermo_sensor_list">
+        <item>In-built Sensor</item>
+        <item>SHT21</item>
+    </string-array>
+
+    <string-array name="thermo_unit_list">
+        <item>°F</item>
+        <item>°C</item>
+    </string-array>
+
     <string-array name="lux_sensor_list_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+
+    <string-array name="thermo_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
     </string-array>
 
     <string name="device_not_connected">Device Not Connected</string>
@@ -791,8 +806,23 @@
     <string name="thermometer_bottom_sheet_text">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
     <string name="thermometer_bottom_sheet_desc">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
     <string name="no_thermometer_sensor">Device does not have Thermometer Sensor</string>
-    <string name="thermo_unit">°C</string>
-    <string name="avg_thermo">Avg (°C)</string>
-    <string name="max_thermo">Max (°C)</string>
-    <string name="min_thermo">Min (°C)</string>
+    <string name="thermo_unit_celcius">°C</string>
+    <string name="thermo_unit_fahrenheit">°F</string>
+    <string name="avg_thermo_celcius">Avg (°C)</string>
+    <string name="max_thermo_celcius">Max (°C)</string>
+    <string name="min_thermo_celcius">Min (°C)</string>
+    <string name="avg_thermo_fahrenheit">Avg (°F)</string>
+    <string name="max_thermo_fahrenheit">Max (°F)</string>
+    <string name="min_thermo_fahrenheit">Min (°F)</string>
+    <string name="setting_thermo_type">setting_thermo_sensor_type</string>
+    <string name="select_unit">select_temp_unit</string>
+    <string name="select_temp_unit">Select the temperature unit</string>
+    <string name="unit_select">Unit</string>
+    <string name="thermo_default_1000">1000</string>
+    <string name="time_string_thermo">Please provide time interval at which data will be updated (100 ms to 1000 ms)</string>
+    <string name="setting_thermo_update">setting_thermo_update_period</string>
+    <string name="thermo_summary">1000 ms</string>
+    <string name="setting_thermo_sensor_gain">setting_thermo_sensor_gain</string>
+    <string name="default_value_thermo">0</string>
+    <string name="thermo_default">°C</string>
 </resources>

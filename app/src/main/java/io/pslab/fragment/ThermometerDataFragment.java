@@ -70,7 +70,7 @@ public class ThermometerDataFragment extends Fragment {
     private int count = 0, turns = 0;
     private float sum = 0;
     private boolean returningFromPause = false;
-
+    private static String unit = "°C";
     private float tempValue = -1;
 
     private enum THERMOMETER_SENSOR {INBUILT_SENSOR, SHT21_SENSOR}
@@ -87,6 +87,12 @@ public class ThermometerDataFragment extends Fragment {
     LineChart mChart;
     @BindView(R.id.thermo_meter)
     PointerSpeedometer thermometer;
+    @BindView(R.id.label_thermo_stat_min)
+    TextView label_statMin;
+    @BindView(R.id.label_thermo_stat_avg)
+    TextView label_statAvg;
+    @BindView(R.id.label_thermo_stat_max)
+    TextView label_statMax;
 
     private Timer graphTimer;
     private SensorManager sensorManager;
@@ -101,16 +107,18 @@ public class ThermometerDataFragment extends Fragment {
     private Unbinder unbinder;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private ThermometerActivity thermoSensor;
+    private ThermometerSettingsFragment thermoSettings;
     private View rootView;
 
     public static ThermometerDataFragment newInstance() {
         return new ThermometerDataFragment();
     }
 
-    public static void setParameters(int highLimit, int updatePeriod, String type, String gain) {
-        ThermometerDataFragment.highLimit = highLimit;
+    public static void setParameters(int updatePeriod, String type, String unit) {
         ThermometerDataFragment.updatePeriod = updatePeriod;
         ThermometerDataFragment.sensorType = Integer.valueOf(type);
+        ThermometerDataFragment.unit = unit;
+
     }
 
     @Override
@@ -147,8 +155,7 @@ public class ThermometerDataFragment extends Fragment {
             updateGraphs();
             sum = 0;
             count = 0;
-            currentMin = 125;
-            currentMax = -40;
+            setUnit();
             entries.clear();
             mChart.clear();
             mChart.invalidate();
@@ -193,7 +200,7 @@ public class ThermometerDataFragment extends Fragment {
             statMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, currentMin));
             statMean.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / recordedThermoArray.size())));
 
-            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.thermo_unit));
+            LineDataSet dataSet = new LineDataSet(entries,PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT.toString(),"°C"));
             dataSet.setDrawCircles(false);
             dataSet.setDrawValues(false);
             dataSet.setLineWidth(2);
@@ -260,7 +267,7 @@ public class ThermometerDataFragment extends Fragment {
                                 sum += entry.getY();
                                 statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.THERMOMETER_DATA_FORMAT));
 
-                                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.thermo_unit));
+                                LineDataSet dataSet = new LineDataSet(entries,PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT.toString(),"°C"));
                                 dataSet.setDrawCircles(false);
                                 dataSet.setDrawValues(false);
                                 dataSet.setLineWidth(2);
@@ -268,7 +275,7 @@ public class ThermometerDataFragment extends Fragment {
 
                                 mChart.setData(data);
                                 mChart.notifyDataSetChanged();
-                                mChart.setVisibleXRangeMaximum(80);
+                                mChart.setVisibleXRangeMaximum(800);
                                 mChart.moveViewToX(data.getEntryCount());
                                 mChart.invalidate();
                             } catch (IndexOutOfBoundsException e) {
@@ -354,8 +361,7 @@ public class ThermometerDataFragment extends Fragment {
 
 
     private void setupInstruments() {
-        thermometer.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MAX_LIMIT, 125));
-        thermometer.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT,-40));
+        setUnit();
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();
         YAxis y2 = mChart.getAxisRight();
@@ -484,7 +490,7 @@ public class ThermometerDataFragment extends Fragment {
                 sum += entry.getY();
                 statMean.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / count)));
 
-                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.thermo_unit));
+                LineDataSet dataSet = new LineDataSet(entries,PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT.toString(),"°C"));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
                 dataSet.setLineWidth(2);
@@ -515,8 +521,7 @@ public class ThermometerDataFragment extends Fragment {
     private void resetInstrumentData() {
         tempValue = 0;
         count = 0;
-        currentMin = 125;
-        currentMax = -40;
+        setUnit();
         sum = 0;
         sensor = null;
         if (sensorManager != null) {
@@ -576,6 +581,28 @@ public class ThermometerDataFragment extends Fragment {
                 break;
             default:
                 break;
+        }
+    }
+
+    public void setUnit(){
+        if("°F".equals(ThermometerDataFragment.unit)){
+            currentMax = 257;
+            currentMin = -40;
+            thermometer.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MAX_LIMIT, 257));
+            thermometer.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT,-40));
+            label_statAvg.setText(R.string.avg_thermo_fahrenheit);
+            label_statMax.setText(R.string.max_thermo_fahrenheit);
+            label_statMin.setText(R.string.min_thermo_fahrenheit);
+            thermometer.setUnit("°F");
+        }else{
+            currentMax = 125;
+            currentMin = -40;
+            thermometer.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MAX_LIMIT, 125));
+            thermometer.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT,-40));
+            label_statAvg.setText(R.string.avg_thermo_celcius);
+            label_statMax.setText(R.string.max_thermo_celcius);
+            label_statMin.setText(R.string.min_thermo_celcius);
+            thermometer.setUnit("°C");
         }
     }
 }

@@ -22,6 +22,7 @@ import io.pslab.fragment.BaroMeterSettingsFragment;
 import io.pslab.fragment.GyroscopeSettingsFragment;
 import io.pslab.fragment.LuxMeterSettingFragment;
 import io.pslab.fragment.SettingsFragment;
+import io.pslab.fragment.ThermometerSettingsFragment;
 import io.pslab.models.PSLabSensor;
 import io.pslab.others.GPSLogger;
 
@@ -67,6 +68,9 @@ public class SettingsActivity extends AppCompatActivity {
                 break;
             case PSLabSensor.ACCELEROMETER_CONFIGURATIONS:
                 fragment = new AccelerometerSettingsFragment();
+                break;
+            case PSLabSensor.THERMOMETER_CONFIGURATIONS:
+                fragment = new ThermometerSettingsFragment();
                 break;
             default:
                 fragment = new SettingsFragment();

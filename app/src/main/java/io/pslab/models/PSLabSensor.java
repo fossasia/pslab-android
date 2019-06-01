@@ -289,8 +289,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
         stop.setVisible(startedPlay);
         if (getSensorName().equals(getResources().getString(R.string.compass))) {
             menu.findItem(R.id.settings).setVisible(false);
-        }else if(getSensorName().equals(getResources().getString(R.string.thermometer))){
-            menu.findItem(R.id.settings).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }

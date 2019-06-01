@@ -2,9 +2,11 @@ package io.pslab.activity;
 
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 
 import io.pslab.R;
 import io.pslab.fragment.ThermometerDataFragment;
+import io.pslab.fragment.ThermometerSettingsFragment;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ThermometerData;
@@ -97,5 +99,30 @@ public class ThermometerActivity extends PSLabSensor {
             String title = titleFormat.format(recordedThermometerData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reinstateConfigurations();
+    }
+
+    private void reinstateConfigurations() {
+        SharedPreferences thermometerConfigurations;
+        thermometerConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        locationEnabled = thermometerConfigurations.getBoolean(ThermometerSettingsFragment.KEY_INCLUDE_LOCATION, true);
+        ThermometerDataFragment.setParameters(
+                getValueFromText(thermometerConfigurations.getString(ThermometerSettingsFragment.KEY_UPDATE_PERIOD, "1000"),
+                        100, 1000),
+                thermometerConfigurations.getString(ThermometerSettingsFragment.KEY_THERMO_SENSOR_TYPE, "0"),
+                thermometerConfigurations.getString(ThermometerSettingsFragment.KEY_THERMO_UNIT, "°C"));
+    }
+
+    private int getValueFromText(String strValue, int lowerBound, int upperBound) {
+        if (strValue.isEmpty()) return lowerBound;
+        int value = Integer.parseInt(strValue);
+        if (value > upperBound) return upperBound;
+        else if (value < lowerBound) return lowerBound;
+        else return value;
     }
 }
