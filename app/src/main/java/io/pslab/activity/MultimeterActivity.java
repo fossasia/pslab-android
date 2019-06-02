@@ -2,11 +2,14 @@ package io.pslab.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -32,14 +35,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
+import io.pslab.fragment.MultimeterSettingsFragment;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
+import io.pslab.others.GPSLogger;
 import io.pslab.others.MathUtils;
+
+import android.support.v7.preference.PreferenceManager;
+
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
 import it.beppi.knoblibrary.Knob;
@@ -64,10 +74,6 @@ public class MultimeterActivity extends AppCompatActivity {
     TextView unit;
     @BindView(R.id.knobs)
     Knob knob;
-    @BindView(R.id.reset)
-    Button reset;
-    @BindView(R.id.read)
-    Button read;
     @BindView(R.id.selector)
     SwitchCompat aSwitch;
     @BindView(R.id.multimeter_coordinator_layout)
@@ -95,13 +101,18 @@ public class MultimeterActivity extends AppCompatActivity {
     private ScienceLab scienceLab;
     private int knobState;
     private String dataRecorded;
-    private String valueRecorded;
     private String defaultValue;
     private Menu menu;
     private Boolean switchIsChecked;
     private String[] knobMarker;
     private boolean isRecordingStarted = false;
     private boolean isDataRecorded = false;
+    private Timer recordTimer;
+    private boolean locationEnabled = true;
+    private long recordPeriod;
+    private double lat = 0, lon = 0;
+    private String multimeterCSVheader = "Data,Value,Latitude,Longitude\n";
+    private GPSLogger gpsLogger;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -114,7 +125,10 @@ public class MultimeterActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        checkConfig();
+        logTimer();
 
+        gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
         setUpBottomSheet();
         tvShadow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,8 +140,7 @@ public class MultimeterActivity extends AppCompatActivity {
         });
 
         multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
-        dataRecorded = "Data";
-        valueRecorded = "Value";
+        dataRecorded = multimeterCSVheader;
         knobState = multimeter_data.getInt("KnobState", 2);
         switchIsChecked = multimeter_data.getBoolean("SwitchState", false);
         aSwitch.setChecked(switchIsChecked);
@@ -157,141 +170,161 @@ public class MultimeterActivity extends AppCompatActivity {
                 editor.apply();
             }
         });
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                multimeter_data.edit().clear().apply();
-                switchIsChecked = false;
-                aSwitch.setChecked(false);
-                knobState = 2;
-                knob.setState(knobState);
-                quantity.setText(defaultValue);
-                unit.setText("");
-            }
-        });
-        read.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (knobState) {
-                    case 3:
-                        if (scienceLab.isConnected()) {
-                            v.setEnabled(false);
-                            DecimalFormat resistanceFormat = new DecimalFormat("#.##");
-                            Double resistance;
-                            Double avgResistance = 0.0;
-                            int loops = 20;
-                            for (int i = 0; i < loops; i++) {
-                                resistance = scienceLab.getResistance();
-                                if (resistance == null) {
-                                    avgResistance = null;
-                                    break;
-                                } else {
-                                    avgResistance = avgResistance + resistance / loops;
-                                }
-                            }
-                            String resistanceUnit;
-                            String recordUnit = "";
-                            String Resistance = "";
-                            if (avgResistance == null) {
-                                Resistance = "Infinity";
-                                resistanceUnit = "\u2126";
-                                recordUnit = "Ohms";
-                            } else {
-                                if (avgResistance > 10e5) {
-                                    Resistance = resistanceFormat.format((avgResistance / 10e5));
-                                    resistanceUnit = "M" + "\u2126";
-                                    recordUnit = "MOhms";
-                                } else if (avgResistance > 10e2) {
-                                    Resistance = resistanceFormat.format((avgResistance / 10e2));
-                                    resistanceUnit = "k" + "\u2126";
-                                    recordUnit = "kOhms";
-                                } else if (avgResistance > 1) {
-                                    Resistance = resistanceFormat.format(avgResistance);
-                                    resistanceUnit = "\u2126";
-                                    recordUnit = "Ohms";
-                                } else {
-                                    Resistance = "Cannot measure!";
-                                    resistanceUnit = "";
-                                }
-                            }
-                            saveAndSetData(Resistance, resistanceUnit);
-                            if (recordData)
-                                record("Resistance", Resistance + recordUnit);
-                            v.setEnabled(true);
-                        }
-                        break;
-                    case 4:
-                        if (scienceLab.isConnected()) {
-                            v.setEnabled(false);
-                            Double capacitance = scienceLab.getCapacitance();
-                            DecimalFormat capacitanceFormat = new DecimalFormat("#.##");
-                            String Capacitance;
-                            String capacitanceUnit;
-                            if (capacitance == null) {
-                                Capacitance = "Cannot measure!";
-                                capacitanceUnit = "";
-                            } else {
-                                if (capacitance < 1e-9) {
-                                    Capacitance = capacitanceFormat.format((capacitance / 1e-12));
-                                    capacitanceUnit = "pF";
-                                } else if (capacitance < 1e-6) {
-                                    Capacitance = capacitanceFormat.format((capacitance / 1e-9));
-                                    capacitanceUnit = "nF";
-                                } else if (capacitance < 1e-3) {
-                                    Capacitance = capacitanceFormat.format((capacitance / 1e-6));
-                                    capacitanceUnit = "\u00B5" + "F";
-                                } else if (capacitance < 1e-1) {
-                                    Capacitance = capacitanceFormat.format((capacitance / 1e-3));
-                                    capacitanceUnit = "mF";
-                                } else {
-                                    Capacitance = capacitanceFormat.format(capacitance);
-                                    capacitanceUnit = getString(R.string.capacitance_unit);
-                                }
-                            }
-                            saveAndSetData(Capacitance, capacitanceUnit);
-                            if (recordData)
-                                record("Capacitance", Capacitance + capacitanceUnit);
-                            v.setEnabled(true);
-                        }
-                        break;
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                        if (!switchIsChecked) {
-                            if (scienceLab.isConnected()) {
-                                v.setEnabled(false);
-                                Double frequency = scienceLab.getFrequency(knobMarker[knobState], null);
-                                saveAndSetData(DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.frequency_unit));
-                                if (recordData)
-                                    record(knobMarker[knobState], DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.frequency_unit));
-                                v.setEnabled(true);
-                            }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkConfig();
+    }
+
+    private void logData() {
+        switch (knobState) {
+            case 3: // Resistor
+                if (scienceLab.isConnected()) {
+                    DecimalFormat resistanceFormat = new DecimalFormat("#.##");
+                    Double resistance;
+                    Double avgResistance = 0.0;
+                    int loops = 20;
+                    for (int i = 0; i < loops; i++) {
+                        resistance = scienceLab.getResistance();
+                        if (resistance == null) {
+                            avgResistance = null;
+                            break;
                         } else {
-                            if (scienceLab.isConnected()) {
-                                v.setEnabled(false);
-                                scienceLab.countPulses(knobMarker[knobState]);
-                                double pulseCount = scienceLab.readPulseCount();
-                                saveAndSetData(DataFormatter.formatDouble(pulseCount, DataFormatter.LOW_PRECISION_FORMAT), "");
-                                if (recordData)
-                                    record(knobMarker[knobState], String.valueOf(pulseCount));
-                                v.setEnabled(true);
-                            }
+                            avgResistance = avgResistance + resistance / loops;
                         }
-                        break;
-                    default:
-                        if (scienceLab.isConnected()) {
-                            v.setEnabled(false);
-                            saveAndSetData(DataFormatter.formatDouble(scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.multimeter_voltage_unit));
-                            if (recordData)
-                                record(knobMarker[knobState], DataFormatter.formatDouble(scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.multimeter_voltage_unit));
-                            v.setEnabled(true);
+                    }
+                    String resistanceUnit;
+                    String recordUnit = "";
+                    String Resistance = "";
+                    if (avgResistance == null) {
+                        Resistance = "Infinity";
+                        resistanceUnit = "\u2126";
+                        recordUnit = "Ohms";
+                    } else {
+                        if (avgResistance > 10e5) {
+                            Resistance = resistanceFormat.format((avgResistance / 10e5));
+                            resistanceUnit = "M" + "\u2126";
+                            recordUnit = "MOhms";
+                        } else if (avgResistance > 10e2) {
+                            Resistance = resistanceFormat.format((avgResistance / 10e2));
+                            resistanceUnit = "k" + "\u2126";
+                            recordUnit = "kOhms";
+                        } else if (avgResistance > 1) {
+                            Resistance = resistanceFormat.format(avgResistance);
+                            resistanceUnit = "\u2126";
+                            recordUnit = "Ohms";
+                        } else {
+                            Resistance = "Cannot measure!";
+                            resistanceUnit = "";
                         }
-                        break;
+                    }
+                    saveAndSetData(Resistance, resistanceUnit);
+                    if (recordData)
+                        record("Resistance", Resistance + " " + recordUnit);
+                }
+                break;
+            case 4: //Capacitor
+                if (scienceLab.isConnected()) {
+                    Double capacitance = scienceLab.getCapacitance();
+                    DecimalFormat capacitanceFormat = new DecimalFormat("#.##");
+                    String Capacitance;
+                    String capacitanceUnit;
+                    if (capacitance == null) {
+                        Capacitance = "Cannot measure!";
+                        capacitanceUnit = "";
+                    } else {
+                        if (capacitance < 1e-9) {
+                            Capacitance = capacitanceFormat.format((capacitance / 1e-12));
+                            capacitanceUnit = "pF";
+                        } else if (capacitance < 1e-6) {
+                            Capacitance = capacitanceFormat.format((capacitance / 1e-9));
+                            capacitanceUnit = "nF";
+                        } else if (capacitance < 1e-3) {
+                            Capacitance = capacitanceFormat.format((capacitance / 1e-6));
+                            capacitanceUnit = "\u00B5" + "F";
+                        } else if (capacitance < 1e-1) {
+                            Capacitance = capacitanceFormat.format((capacitance / 1e-3));
+                            capacitanceUnit = "mF";
+                        } else {
+                            Capacitance = capacitanceFormat.format(capacitance);
+                            capacitanceUnit = getString(R.string.capacitance_unit);
+                        }
+                    }
+                    saveAndSetData(Capacitance, capacitanceUnit);
+                    if (recordData)
+                        record("Capacitance", Capacitance + " " + capacitanceUnit);
+                }
+                break;
+            case 5:
+                getIDdata();
+                break;
+            case 6:
+                getIDdata();
+                break;
+            case 7:
+                getIDdata();
+                break;
+            case 8:
+                getIDdata();
+                break;
+            default:
+                if (scienceLab.isConnected()) {
+                    saveAndSetData(DataFormatter.formatDouble(scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.multimeter_voltage_unit));
+                    if (recordData)
+                        record(knobMarker[knobState], DataFormatter.formatDouble(scienceLab.getVoltage(knobMarker[knobState], 1), DataFormatter.LOW_PRECISION_FORMAT) + " " + getString(R.string.multimeter_voltage_unit));
+                }
+                break;
+        }
+    }
+
+    private void logTimer() {
+        if (recordTimer == null) {
+            recordTimer = new Timer();
+        }
+        recordTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        logData();
+                    }
+                });
+            }
+        }, 0, recordPeriod);
+    }
+
+    private void getIDdata() {
+        try {
+            if (!switchIsChecked) {
+                if (scienceLab.isConnected()) {
+                    Double frequency = scienceLab.getFrequency(knobMarker[knobState], null);
+                    saveAndSetData(DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.frequency_unit));
+                    if (recordData)
+                        record(knobMarker[knobState], DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.frequency_unit));
+                }
+            } else {
+                if (scienceLab.isConnected()) {
+                    scienceLab.countPulses(knobMarker[knobState]);
+                    double pulseCount = scienceLab.readPulseCount();
+                    saveAndSetData(DataFormatter.formatDouble(pulseCount, DataFormatter.LOW_PRECISION_FORMAT), "");
+                    if (recordData)
+                        record(knobMarker[knobState], String.valueOf(pulseCount));
                 }
             }
-        });
+        } catch (Exception e) {
+            saveAndSetData("Cannot measure!", "");
+            record(knobMarker[knobState], "null");
+        }
+    }
 
+    private void checkConfig() {
+        SharedPreferences multimeterConfigs = PreferenceManager.getDefaultSharedPreferences(this);
+        recordPeriod = Long.valueOf(multimeterConfigs.getString(MultimeterSettingsFragment.KEY_UPDATE_PERIOD, getResources().getString(R.string.multimeter_default_1000)));
+        locationEnabled = multimeterConfigs.getBoolean(MultimeterSettingsFragment.KEY_INCLUDE_LOCATION, true);
     }
 
     private void setUpBottomSheet() {
@@ -373,8 +406,14 @@ public class MultimeterActivity extends AppCompatActivity {
     }
 
     private void record(String data, String value) {
-        dataRecorded = dataRecorded + "," + data;
-        valueRecorded = valueRecorded + "," + value;
+        if (locationEnabled && gpsLogger.isGPSEnabled()) {
+            Location location = gpsLogger.getDeviceLocation();
+            lat = location.getLatitude();
+            lon = location.getLongitude();
+        } else {
+            lat = lon = 0;
+        }
+        dataRecorded += data + "," + value + "," + lat + "," + lon + "\n";
     }
 
     private void saveKnobState(int state) {
@@ -409,9 +448,8 @@ public class MultimeterActivity extends AppCompatActivity {
                         if (isDataRecorded) {
                             MenuItem item1 = menu.findItem(R.id.record_pause_data);
                             item1.setIcon(R.drawable.ic_record_white);
-                            multimeterLogger.writeCSVFile(dataRecorded + "\n" + valueRecorded + "\n");
-                            dataRecorded = "Data";
-                            valueRecorded = "Value";
+                            multimeterLogger.writeCSVFile(dataRecorded);
+                            dataRecorded = multimeterCSVheader;
                             // Export Data
                             CustomSnackBar.showSnackBar(coordinatorLayout,
                                     getString(R.string.csv_store_text) + " " + multimeterLogger.getCurrentFilePath()
@@ -445,7 +483,7 @@ public class MultimeterActivity extends AppCompatActivity {
                             multimeterLogger.prepareLogFile();
                             isRecordingStarted = true;
                             recordData = true;
-                        CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
+                            CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
                         }
                     }
                 } else {
@@ -489,6 +527,10 @@ public class MultimeterActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (recordTimer != null) {
+            recordTimer.cancel();
+            recordTimer = null;
+        }
         if (isRecordingStarted) {
             if (multimeterLogger != null)
                 multimeterLogger.deleteFile();
