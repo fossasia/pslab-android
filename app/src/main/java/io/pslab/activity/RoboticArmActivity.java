@@ -2,6 +2,7 @@ package io.pslab.activity;
 
 import android.graphics.Point;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -15,6 +16,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,6 +33,8 @@ public class RoboticArmActivity extends AppCompatActivity {
     private int degree;
     private boolean editEnter = false;
     private Button playButton, pauseButton, stopButton;
+    private HorizontalScrollView scrollView;
+    private CountDownTimer timeLine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,7 @@ public class RoboticArmActivity extends AppCompatActivity {
         playButton = findViewById(R.id.timeline_play_button);
         pauseButton = findViewById(R.id.timeline_pause_button);
         stopButton = findViewById(R.id.timeline_stop_button);
+        scrollView = findViewById(R.id.horizontal_scroll_view);
         LinearLayout timeLineControlsLayout = findViewById(R.id.servo_timeline_controls);
 
         LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
@@ -317,8 +322,48 @@ public class RoboticArmActivity extends AppCompatActivity {
 
         LinearLayout timeIndicatorLayout = findViewById(R.id.time_indicator);
         LinearLayout.LayoutParams timeIndicatorParams = new LinearLayout.LayoutParams(screen_width / 6 - 2, 12);
-        timeIndicatorParams.setMargins(3, 0, 0, 0);
+        timeIndicatorParams.setMarginStart(3);
         timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
+
+        timeLine = new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeIndicatorParams.setMarginStart(timeIndicatorParams
+                        .getMarginStart()+screen_width/6);
+                timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
+                scrollView.smoothScrollBy(screen_width/6,0);
+            }
+
+            @Override
+            public void onFinish() {
+                timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
+                cancel();
+            }
+        };
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeLine.start();
+            }
+        });
+
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeLine.onFinish();
+            }
+        });
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeLine.cancel();
+                timeIndicatorParams.setMarginStart(3);
+                timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
+                scrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
+            }
+        });
     }
 
     private View.OnDragListener servo1DragListener = new View.OnDragListener() {
