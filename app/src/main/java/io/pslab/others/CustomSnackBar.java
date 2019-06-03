@@ -17,7 +17,7 @@ public class CustomSnackBar {
 
     public static Snackbar snackbar;
 
-    public static void showSnackBar(@NonNull CoordinatorLayout holderLayout, @NonNull String displayText,
+    public static void showSnackBar(@NonNull View holderLayout, @NonNull String displayText,
                                     String actionText, View.OnClickListener clickListener, int duration) {
         snackbar = Snackbar.make(holderLayout, displayText, duration)
                 .setAction(actionText, clickListener);

@@ -1,8 +1,11 @@
 package io.pslab.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.CountDownTimer;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -24,6 +27,8 @@ import android.widget.TextView;
 import com.triggertrap.seekarc.SeekArc;
 
 import io.pslab.R;
+import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 
 public class RoboticArmActivity extends AppCompatActivity {
 
@@ -32,9 +37,11 @@ public class RoboticArmActivity extends AppCompatActivity {
     private LinearLayout servo1TimeLine, servo2TimeLine, servo3TimeLine, servo4TimeLine;
     private int degree;
     private boolean editEnter = false;
-    private Button playButton, pauseButton, stopButton;
+    private Button playPauseButton, stopButton, saveButton;
     private HorizontalScrollView scrollView;
     private CountDownTimer timeLine;
+    private boolean isPlaying = false;
+    private CSVLogger servoCSVLogger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +70,12 @@ public class RoboticArmActivity extends AppCompatActivity {
         servo2TimeLine = findViewById(R.id.servo2_timeline);
         servo3TimeLine = findViewById(R.id.servo3_timeline);
         servo4TimeLine = findViewById(R.id.servo4_timeline);
-        playButton = findViewById(R.id.timeline_play_button);
-        pauseButton = findViewById(R.id.timeline_pause_button);
+        playPauseButton = findViewById(R.id.timeline_play_pause_button);
         stopButton = findViewById(R.id.timeline_stop_button);
+        saveButton = findViewById(R.id.timeline_save_button);
         scrollView = findViewById(R.id.horizontal_scroll_view);
         LinearLayout timeLineControlsLayout = findViewById(R.id.servo_timeline_controls);
+        servoCSVLogger = new CSVLogger(getResources().getString(R.string.robotic_arm));
 
         LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
         servoControllerParams.setMargins(2, 5, 2, 0);
@@ -341,17 +349,25 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
         };
 
-        playButton.setOnClickListener(new View.OnClickListener() {
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timeLine.start();
+                if (isPlaying) {
+                    isPlaying = false;
+                    playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    timeLine.onFinish();
+                }else {
+                    isPlaying = true;
+                    playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    timeLine.start();
+                }
             }
         });
 
-        pauseButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timeLine.onFinish();
+                saveTimeline();
             }
         });
 
@@ -364,6 +380,48 @@ public class RoboticArmActivity extends AppCompatActivity {
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
             }
         });
+    }
+
+    private void saveTimeline() {
+        servoCSVLogger.prepareLogFile();
+        String data = "Servo1,Servo2,Servo3,Servo4\n";
+        String degree1, degree2, degree3, degree4;
+        for (int i = 0; i < 60; i ++) {
+            degree1 = degree2 = degree3 = degree4 = "0";
+            if (((TextView)servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
+                degree1 = ((TextView) servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+            }
+            if (((TextView)servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
+                degree2 = ((TextView) servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+            }
+            if (((TextView)servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
+                degree3 = ((TextView) servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+            }
+            if (((TextView)servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
+                degree4 = ((TextView) servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+            }
+            data += degree1 + "," + degree2 + "," + degree3 + "," + degree4 + "\n";
+        }
+        servoCSVLogger.writeCSVFile(data);
+        CustomSnackBar.showSnackBar(findViewById(R.id.robotic_arm_relative_view),
+                getString(R.string.csv_store_text) + " " + servoCSVLogger.getCurrentFilePath()
+                , getString(R.string.delete_capital), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog.Builder(RoboticArmActivity.this, R.style.AlertDialogStyle)
+                                .setTitle(R.string.delete_file)
+                                .setMessage(R.string.delete_warning)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        servoCSVLogger.deleteFile();
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, null)
+                                .create()
+                                .show();
+                    }
+                }, Snackbar.LENGTH_SHORT);
     }
 
     private View.OnDragListener servo1DragListener = new View.OnDragListener() {

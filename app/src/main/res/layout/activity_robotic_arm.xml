@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/robotic_arm_relative_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -99,18 +101,11 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/timeline_play_button"
+                android:id="@+id/timeline_play_pause_button"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_margin="5dp"
                 android:background="@drawable/ic_play_arrow_white_24dp" />
-
-            <Button
-                android:id="@+id/timeline_pause_button"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/ic_pause_white_24dp" />
 
             <Button
                 android:id="@+id/timeline_stop_button"
@@ -118,6 +113,13 @@
                 android:layout_height="25dp"
                 android:layout_margin="5dp"
                 android:background="@drawable/ic_stop_white_24dp" />
+
+            <Button
+                android:id="@+id/timeline_save_button"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/menu_icon_save" />
         </LinearLayout>
     </LinearLayout>
 
