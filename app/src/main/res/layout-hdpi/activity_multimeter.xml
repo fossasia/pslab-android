@@ -23,15 +23,15 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="@dimen/dimen_zero_dp"
+        android:layout_marginBottom="@dimen/multimeter_constraint_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_app_bar_layout">
 
         <TextView
             android:id="@+id/display_box"
             android:layout_width="@dimen/multimeter_length_0"
-            android:layout_height="80dp"
+            android:layout_height="@dimen/multimeter_textbox_height_80"
             android:layout_marginStart="@dimen/multimeter_layout_margin_2"
             android:layout_marginLeft="@dimen/multimeter_layout_margin_2"
             android:layout_marginTop="@dimen/multimeter_textbox_margin_top"
@@ -76,7 +76,7 @@
             android:layout_marginEnd="@dimen/multimeter_constraint_1"
             android:layout_marginRight="@dimen/multimeter_constraint_1"
             android:layout_marginBottom="@dimen/multimeter_margin_2"
-            android:textSize="18sp"
+            android:textSize="@dimen/multimeter_bottombutton_textsize"
             app:layout_constraintBottom_toBottomOf="@+id/display_box"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -84,7 +84,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/dimen_zero_dp"
             android:layout_marginBottom="@dimen/multimeter_constraint_1"
             app:layout_constraintBottom_toTopOf="@+id/bottom_view"
             app:layout_constraintEnd_toEndOf="parent"
@@ -144,7 +144,7 @@
                 android:layout_marginLeft="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_constraint_1"
                 android:layout_marginRight="@dimen/multimeter_constraint_1"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/multimeter_constraint_2"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toTopOf="@+id/id4"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -220,7 +220,7 @@
                 android:layout_marginLeft="@dimen/multimeter_constraint_2"
                 android:layout_marginEnd="@dimen/multimeter_constraint_2"
                 android:layout_marginRight="@dimen/multimeter_constraint_2"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/multimeter_left_button_margin_bottom"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@+id/lower_left_box"
                 app:layout_constraintEnd_toEndOf="@+id/lower_left_box"
@@ -248,7 +248,7 @@
                     android:paddingBottom="@dimen/multimeter_button_text_padding"
                     android:text="@string/count_pulse"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/multimeter_measure_textsize"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -416,10 +416,10 @@
                 android:layout_marginLeft="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_constraint_1"
                 android:layout_marginRight="@dimen/multimeter_constraint_1"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/multimeter_constraint_1"
                 android:gravity="center"
                 android:text="@string/multimeter_measure"
-                android:textSize="14sp"
+                android:textSize="@dimen/multimeter_measure_textsize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/lower_right_box"
                 app:layout_constraintEnd_toEndOf="@+id/lower_right_box"
