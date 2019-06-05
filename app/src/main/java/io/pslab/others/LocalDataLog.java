@@ -6,6 +6,7 @@ import io.pslab.interfaces.sensorloggers.GyroscopeRecordables;
 import io.pslab.interfaces.sensorloggers.CompassRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
+import io.pslab.interfaces.sensorloggers.ServoRecordables;
 import io.pslab.interfaces.sensorloggers.ThermometerRecordables;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
@@ -13,6 +14,7 @@ import io.pslab.models.GyroData;
 import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -22,7 +24,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables {
+public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -276,6 +278,7 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
                 .equalTo("time", timeStamp)
                 .findFirst();
     }
+
     @Override
     public void clearAllThermometerRecords() {
         realm.beginTransaction();
@@ -300,4 +303,42 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
                 .equalTo("block", block)
                 .findAll();
     }
+
+    /***********************************************************************************************
+     * Servo Section
+     ***********************************************************************************************/
+    @Override
+    public ServoData getServoData(long timeStamp) {
+        return realm.where(ServoData.class)
+                .equalTo("time", timeStamp)
+                .findFirst();
+    }
+
+    @Override
+    public void clearAllServoRecords() {
+        realm.beginTransaction();
+        realm.delete(ServoData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfServoRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<ServoData> data = getBlockOfServoRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<ServoData> getAllServoRecords() {
+        return realm.where(ServoData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<ServoData> getBlockOfServoRecords(long block) {
+        return realm.where(ServoData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
 }

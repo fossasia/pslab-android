@@ -1,8 +1,10 @@
 package io.pslab.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.design.widget.Snackbar;
@@ -10,11 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.DragEvent;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -26,9 +26,19 @@ import android.widget.TextView;
 
 import com.triggertrap.seekarc.SeekArc;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import io.pslab.R;
+import io.pslab.models.SensorDataBlock;
+import io.pslab.models.ServoData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
+import io.pslab.others.GPSLogger;
+import io.pslab.others.LocalDataLog;
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 public class RoboticArmActivity extends AppCompatActivity {
 
@@ -42,6 +52,11 @@ public class RoboticArmActivity extends AppCompatActivity {
     private CountDownTimer timeLine;
     private boolean isPlaying = false;
     private CSVLogger servoCSVLogger;
+    private Realm realm;
+    private GPSLogger gpsLogger;
+    private RealmResults<ServoData> recordedServoData;
+    private final String KEY_LOG = "has_log";
+    private final String DATA_BLOCK = "data_block";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +68,9 @@ public class RoboticArmActivity extends AppCompatActivity {
         display.getSize(size);
         int screen_width = size.x;
         int screen_height = size.y;
+        realm = LocalDataLog.with().getRealm();
+        gpsLogger = new GPSLogger(this,
+                (LocationManager) getSystemService(Context.LOCATION_SERVICE));
 
         View servo1Layout = findViewById(R.id.servo_1);
         View servo2Layout = findViewById(R.id.servo_2);
@@ -337,9 +355,9 @@ public class RoboticArmActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeIndicatorParams.setMarginStart(timeIndicatorParams
-                        .getMarginStart()+screen_width/6);
+                        .getMarginStart() + screen_width / 6);
                 timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
-                scrollView.smoothScrollBy(screen_width/6,0);
+                scrollView.smoothScrollBy(screen_width / 6, 0);
             }
 
             @Override
@@ -356,7 +374,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                     isPlaying = false;
                     playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
                     timeLine.onFinish();
-                }else {
+                } else {
                     isPlaying = true;
                     playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
                     timeLine.start();
@@ -380,46 +398,70 @@ public class RoboticArmActivity extends AppCompatActivity {
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
             }
         });
+
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+            recordedServoData = LocalDataLog.with()
+                    .getBlockOfServoRecords(getIntent().getExtras().getLong(DATA_BLOCK));
+            setReceivedData();
+        }
+    }
+
+    private void setReceivedData() {
+        ArrayList servoDataList = new ArrayList(recordedServoData);
+        for (int i = 0; i < servoDataList.size(); i++) {
+            ServoData servoData = (ServoData) servoDataList.get(i);
+            ((TextView) servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree1());
+            ((TextView) servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree2());
+            ((TextView) servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree3());
+            ((TextView) servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree4());
+        }
     }
 
     private void saveTimeline() {
+        long block = System.currentTimeMillis();
         servoCSVLogger.prepareLogFile();
-        String data = "Servo1,Servo2,Servo3,Servo4\n";
+        String data = "Timestamp,DateTime,Servo1,Servo2,Servo3,Servo4,Latitude,Longitude\n";
+        long timestamp;
+        recordSensorDataBlockID(new SensorDataBlock(block, getString(R.string.robotic_arm)));
         String degree1, degree2, degree3, degree4;
-        for (int i = 0; i < 60; i ++) {
+        double lat, lon;
+        for (int i = 0; i < 60; i++) {
+            timestamp = System.currentTimeMillis();
             degree1 = degree2 = degree3 = degree4 = "0";
-            if (((TextView)servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
+            if (((TextView) servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
                 degree1 = ((TextView) servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
             }
-            if (((TextView)servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
+            if (((TextView) servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
                 degree2 = ((TextView) servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
             }
-            if (((TextView)servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
+            if (((TextView) servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
                 degree3 = ((TextView) servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
             }
-            if (((TextView)servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
+            if (((TextView) servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
                 degree4 = ((TextView) servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
             }
-            data += degree1 + "," + degree2 + "," + degree3 + "," + degree4 + "\n";
+            if (gpsLogger.isGPSEnabled()) {
+                Location location = gpsLogger.getDeviceLocation();
+                lat = location.getLatitude();
+                lon = location.getLongitude();
+            } else {
+                lat = lon = 0.0;
+            }
+            recordSensorData(new ServoData(timestamp, block, degree1, degree2, degree3, degree4, lat, lon));
+            if (i == 59) {
+                data += timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)) + "," + degree1 + "," + degree2 + "," + degree3 + "," + degree4 + "," + lat + "," + lon;
+            } else {
+                data += timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)) + "," + degree1 + "," + degree2 + "," + degree3 + "," + degree4 + "," + lat + "," + lon + "\n";
+            }
         }
         servoCSVLogger.writeCSVFile(data);
         CustomSnackBar.showSnackBar(findViewById(R.id.robotic_arm_relative_view),
                 getString(R.string.csv_store_text) + " " + servoCSVLogger.getCurrentFilePath()
-                , getString(R.string.delete_capital), new View.OnClickListener() {
+                , getString(R.string.open), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        new AlertDialog.Builder(RoboticArmActivity.this, R.style.AlertDialogStyle)
-                                .setTitle(R.string.delete_file)
-                                .setMessage(R.string.delete_warning)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        servoCSVLogger.deleteFile();
-                                    }
-                                })
-                                .setNegativeButton(R.string.cancel, null)
-                                .create()
-                                .show();
+                        Intent intent = new Intent(RoboticArmActivity.this, DataLoggerActivity.class);
+                        startActivity(intent);
                     }
                 }, Snackbar.LENGTH_SHORT);
     }
@@ -498,5 +540,17 @@ public class RoboticArmActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY));
         }
+    }
+
+    public void recordSensorDataBlockID(SensorDataBlock block) {
+        realm.beginTransaction();
+        realm.copyToRealm(block);
+        realm.commitTransaction();
+    }
+
+    public void recordSensorData(RealmObject sensorData) {
+        realm.beginTransaction();
+        realm.copyToRealm((ServoData) sensorData);
+        realm.commitTransaction();
     }
 }
