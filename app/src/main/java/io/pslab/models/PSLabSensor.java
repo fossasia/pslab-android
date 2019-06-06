@@ -106,6 +106,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String THERMOMETER = "Thermometer";
     public static final String THERMOMETER_CONFIGURATIONS = "Thermometer Configurations";
     public static final String THERMOMETER_DATA_FORMAT = "%.2f";
+    public static final String ROBOTIC_ARM = "Robotic Arm";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
