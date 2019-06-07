@@ -14,6 +14,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,8 @@ import io.pslab.models.CompassData;
 import io.pslab.models.GyroData;
 import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.models.ServoData;
+import io.pslab.models.ThermometerData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
 import io.realm.Realm;
@@ -101,6 +104,11 @@ public class DataLoggerActivity extends AppCompatActivity {
             case "Compass":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.compass));
                 break;
+            case "Thermometer":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.thermometer));
+                break;
+            case "Robotic Arm":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.robotic_arm));
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
                 getSupportActionBar().setTitle(getString(R.string.logged_data));
@@ -402,6 +410,75 @@ public class DataLoggerActivity extends AppCompatActivity {
                         time = block;
                         realm.beginTransaction();
                         realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.accelerometer)));
+                        realm.commitTransaction();
+                    }
+                    i++;
+                    line = reader.readLine();
+                }
+                fillData();
+                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.thermometer))) {
+            try {
+                FileInputStream is = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                String line = reader.readLine();
+                int i = 0;
+                long block = 0, time = 0;
+                while (line != null) {
+                    if (i != 0) {
+                        String[] data = line.split(",");
+                        try {
+                            time += 1000;
+                            ThermometerData thermometerData = new ThermometerData(time, block, Float.valueOf(data[2]), Double.valueOf(data[5]), Double.valueOf(data[6]));
+                            realm.beginTransaction();
+                            realm.copyToRealm(thermometerData);
+                            realm.commitTransaction();
+                        } catch (Exception e) {
+                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        block = System.currentTimeMillis();
+                        time = block;
+                        realm.beginTransaction();
+                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.thermometer)));
+                        realm.commitTransaction();
+                    }
+                    i++;
+                    line = reader.readLine();
+                }
+                fillData();
+                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.robotic_arm))) {
+            try {
+                FileInputStream is = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                String line = reader.readLine();
+                int i = 0;
+                long block = 0, time = 0;
+                while (line != null) {
+                    if (i != 0) {
+                        String[] data = line.split(",");
+                        try {
+                            time += 1000;
+                            ServoData servoData = new ServoData(time, block, data[2], data[3], data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]));
+                            realm.beginTransaction();
+                            realm.copyToRealm(servoData);
+                            realm.commitTransaction();
+                        } catch (Exception e) {
+                            Log.d("exception", i + " " + e.getMessage());
+                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        block = System.currentTimeMillis();
+                        time = block;
+                        realm.beginTransaction();
+                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.robotic_arm)));
                         realm.commitTransaction();
                     }
                     i++;

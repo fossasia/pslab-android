@@ -17,11 +17,6 @@
         android:title="@string/show_guide"
         app:showAsAction="never" />
     <item
-        android:id="@+id/record_csv_data"
-        android:icon="@drawable/menu_icon_save"
-        android:title="@string/save_csv_data"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/multimeter_show_data"
         android:icon="@drawable/menu_icon_save"
         android:title="@string/show_logged_data"

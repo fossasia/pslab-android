@@ -86,7 +86,9 @@
     <dimen name="multimeter_symol_width">25dp</dimen>
     <dimen name="multimeter_symbol_height">20dp</dimen>
     <dimen name="multimeter_textsize">24sp</dimen>
+    <dimen name="multimeter_textbox_height_80">80dp</dimen>
     <dimen name="multimeter_bottombutton_textsize">18sp</dimen>
+    <dimen name="multimeter_measure_textsize">14sp</dimen>
     <dimen name="multimeter_button_text_padding">4dp</dimen>
     <dimen name="multimeter_heading_ll_text_size">16sp</dimen>
     <dimen name="multimeter_textbox_height">110dp</dimen>
@@ -102,6 +104,8 @@
     <dimen name="multimeter_quantity_dimen">50sp</dimen>
     <dimen name="multimeter_constraint_1">8dp</dimen>
     <dimen name="multimeter_constraint_2">16dp</dimen>
+    <dimen name="multimeter_constraint_3">24dp</dimen>
+    <dimen name="multimeter_view_top_margin">5dp</dimen>
     <dimen name="multimeter_margin_2">5dp</dimen>
     <dimen name="multimeter_margin_3">7dp</dimen>
     <dimen name="multimeter_knob_width">185dp</dimen>
@@ -117,6 +121,8 @@
     <dimen name="multimeter_layout_margin_2">10dp</dimen>
     <dimen name="multimeter_constraint_4">15dp</dimen>
     <dimen name="multimeter_length_0">0dp</dimen>
+    <dimen name="multimeter_knob_width_xhdpi">208dp</dimen>
+    <dimen name="multimeter_knob_height_xhdpi">206dp</dimen>
 
     <dimen name="body_resistance_margin">10dp</dimen>
 
@@ -266,6 +272,13 @@
     <dimen name="baro_guage_font_size">8sp</dimen>
     <dimen name="baro_sensor_label_title_size">16sp</dimen>
 
+    <dimen name="thermometer_padding">4dp</dimen>
+    <dimen name="thermometer_tv_height">30dp</dimen>
+    <dimen name="thermometer_tv_value_margin">20dp</dimen>
+    <dimen name="thermometer_select_axes_text_size">18sp</dimen>
+    <dimen name="thermometer_text_size_large">25sp</dimen>
+    <dimen name="thermometer_space_top">120dp</dimen>
+
     <dimen name="item_text_size">18sp</dimen>
     <dimen name="view_data_loc_middle">20dp</dimen>
     <dimen name="lux_chart_axis_text">9sp</dimen>
@@ -288,5 +301,8 @@
     <dimen name="splash_screen_name_width">271dp</dimen>
     <dimen name="splash_screen_name_height">95dp</dimen>
     <dimen name="top_margin_text">30dp</dimen>
+    <dimen name="thermo_guage_font_size">8sp</dimen>
+    <dimen name="thermo_sensor_label_title_size">16sp</dimen>
+    <dimen name="thermo_display_font_size">16sp</dimen>
 
 </resources>

@@ -23,6 +23,9 @@
         android:roundIcon="@drawable/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.ThermometerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
         <activity android:name=".activity.RoboticArmActivity"
             android:screenOrientation="landscape"/>
         <activity

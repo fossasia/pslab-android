@@ -29,6 +29,8 @@ import io.pslab.activity.GyroscopeActivity;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.CompassActivity;
+import io.pslab.activity.RoboticArmActivity;
+import io.pslab.activity.ThermometerActivity;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.GyroData;
@@ -36,6 +38,8 @@ import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.models.ServoData;
+import io.pslab.models.ThermometerData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
 import io.realm.RealmRecyclerViewAdapter;
@@ -85,9 +89,17 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 holder.sensor.setText(context.getResources().getString(R.string.compass));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_compass_log));
                 break;
-            case PSLabSensor.ACCELEROMETER_CONFIGURATIONS:
+            case PSLabSensor.ACCELEROMETER:
                 holder.sensor.setText(context.getResources().getString(R.string.accelerometer));
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_accelerometer));
+                break;
+            case PSLabSensor.THERMOMETER:
+                holder.sensor.setText(R.string.thermometer);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.thermometer_logo));
+                break;
+            case PSLabSensor.ROBOTIC_ARM:
+                holder.sensor.setText(R.string.robotic_arm);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logo));
                 break;
             default:
                 break;
@@ -139,6 +151,16 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             Accelerometer.putExtra(KEY_LOG, true);
             Accelerometer.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(Accelerometer);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.thermometer))) {
+            Intent Thermometer = new Intent(context, ThermometerActivity.class);
+            Thermometer.putExtra(KEY_LOG, true);
+            Thermometer.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(Thermometer);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.robotic_arm))) {
+            Intent RoboticArm = new Intent(context, RoboticArmActivity.class);
+            RoboticArm.putExtra(KEY_LOG, true);
+            RoboticArm.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(RoboticArm);
         }
     }
 
@@ -168,6 +190,8 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfCompassRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER_CONFIGURATIONS)) {
                             LocalDataLog.with().clearBlockOfAccelerometerRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ROBOTIC_ARM)) {
+                            LocalDataLog.with().clearBlockOfServoRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
                         dialog.dismiss();
@@ -266,6 +290,41 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     i.put("dataX", d.getAccelerometerX());
                     i.put("dataY", d.getAccelerometerY());
                     i.put("dataZ", d.getAccelerometerZ());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.THERMOMETER)) {
+            RealmResults<ThermometerData> data = LocalDataLog.with().getBlockOfThermometerRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (ThermometerData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("Axis", d.getTemp());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ROBOTIC_ARM)) {
+            RealmResults<ServoData> data = LocalDataLog.with().getBlockOfServoRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (ServoData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("Servo1", d.getDegree1());
+                    i.put("Servo2", d.getDegree2());
+                    i.put("Servo3", d.getDegree3());
+                    i.put("Servo4", d.getDegree4());
                     i.put("lon", d.getLon());
                     i.put("lat", d.getLat());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
