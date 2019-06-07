@@ -67,6 +67,7 @@ public class DataLoggerActivity extends AppCompatActivity {
     private RealmResults<SensorDataBlock> categoryData;
     private String selectedDevice = null;
     private Realm realm;
+    private String caller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class DataLoggerActivity extends AppCompatActivity {
         deleteAllProgressBar = findViewById(R.id.delete_all_progbar);
         deleteAllProgressBar.setVisibility(View.GONE);
         realm = LocalDataLog.with().getRealm();
-        String caller = getIntent().getStringExtra(CALLER_ACTIVITY);
+        caller = getIntent().getStringExtra(CALLER_ACTIVITY);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -134,7 +135,35 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        getSupportActionBar().setTitle(caller);
+        switch (caller) {
+            case "Lux Meter":
+                startActivity(new Intent(this,LuxMeterActivity.class));
+                break;
+            case "Barometer":
+                startActivity(new Intent(this,BarometerActivity.class));
+                break;
+            case "Accelerometer":
+                startActivity(new Intent(this,AccelerometerActivity.class));
+                break;
+            case "Multimeter":
+                startActivity(new Intent(this,MultimeterActivity.class));
+                break;
+            case "Gyroscope":
+                startActivity(new Intent(this,GyroscopeActivity.class));
+                break;
+            case "Compass":
+                startActivity(new Intent(this,CompassActivity.class));
+                break;
+            case "Thermometer":
+                startActivity(new Intent(this,ThermometerActivity.class));
+                break;
+            case "Robotic Arm":
+                startActivity(new Intent(this,RoboticArmActivity.class));
+                break;
+            default:
+                startActivity(new Intent(this,MainActivity.class));
+        }
     }
 
     @Override
