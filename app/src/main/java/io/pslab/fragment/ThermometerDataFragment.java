@@ -556,7 +556,7 @@ public class ThermometerDataFragment extends Fragment {
                 }
                 break;
             case SHT21_SENSOR:
-                sensorLabel.setText(getResources().getStringArray(R.array.thermo_sensors)[2]);
+                sensorLabel.setText(getResources().getStringArray(R.array.thermo_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {
                     try {
