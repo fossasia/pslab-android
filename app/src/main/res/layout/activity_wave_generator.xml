@@ -85,6 +85,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/mon_title_sep_margin"
                 android:layout_marginRight="@dimen/mon_title_sep_margin"
+                android:clickable="true"
+                android:focusable="true"
                 android:text="@string/wave1"
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/text_size_wavegen"
@@ -93,17 +95,16 @@
                 app:layout_constraintEnd_toStartOf="@+id/fguideline2"
                 app:layout_constraintHorizontal_bias="0.9"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:clickable="true"
-                android:focusable="true"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/wave_mon_wave2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/mon_title_sep_margin"
                 android:layout_marginStart="@dimen/mon_title_sep_margin"
+                android:layout_marginLeft="@dimen/mon_title_sep_margin"
+                android:clickable="true"
+                android:focusable="true"
                 android:text="@string/wave2"
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/text_size_wavegen"
@@ -112,10 +113,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.10"
                 app:layout_constraintStart_toStartOf="@+id/fguideline2"
-                app:layout_constraintTop_toTopOf="@+id/wave_mon_wave1"
-                android:clickable="true"
-                android:focusable="true"
-                />
+                app:layout_constraintTop_toTopOf="@+id/wave_mon_wave1" />
 
             <TextView
                 android:id="@+id/wave_mon_select_wave"
@@ -136,8 +134,8 @@
                 android:id="@+id/wave_freq"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/prop_text_offset_margin"
                 android:layout_marginStart="15dp"
+                android:layout_marginLeft="@dimen/prop_text_offset_margin"
                 android:text="@string/freq_text"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
@@ -151,8 +149,8 @@
                 android:id="@+id/wave_freq_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
+                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
                 app:layout_constraintBottom_toBottomOf="@+id/wave_freq"
@@ -179,8 +177,8 @@
                 android:id="@+id/wave_phase_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
+                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:text="@string/phase_holder_text"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
@@ -208,8 +206,8 @@
                 android:id="@+id/wave_mon_select_prop_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
+                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/mon_selected_text"
                 app:layout_constraintBottom_toBottomOf="@+id/wave_mon_select_prop"
@@ -256,8 +254,8 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="@dimen/length_0dp"
             android:layout_height="@dimen/length_0dp"
-            android:layout_marginLeft="@dimen/card_separation_offset"
             android:layout_marginStart="@dimen/card_separation_offset"
+            android:layout_marginLeft="@dimen/card_separation_offset"
             android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -334,11 +332,11 @@
                 android:id="@+id/pwm_mon_sq1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:text="@string/text_sq1"
                 android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
-                android:enabled="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
                 app:layout_constraintEnd_toStartOf="@+id/pwm_mon_sq2"
                 app:layout_constraintStart_toStartOf="@+id/guideline12"
@@ -348,11 +346,11 @@
                 android:id="@+id/pwm_mon_sq2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:text="@string/text_sq2"
                 android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
-                android:enabled="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
                 app:layout_constraintEnd_toStartOf="@+id/pwm_mon_sq3"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -363,11 +361,11 @@
                 android:id="@+id/pwm_mon_sq3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:text="@string/text_sq3"
                 android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
-                android:enabled="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
                 app:layout_constraintEnd_toStartOf="@+id/pwm_mon_sq4"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -378,11 +376,11 @@
                 android:id="@+id/pwm_mon_sq4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:text="@string/text_sq4"
                 android:textColor="@drawable/text_color_selector"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
-                android:enabled="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3"
                 app:layout_constraintEnd_toStartOf="@+id/guideline13"
                 app:layout_constraintStart_toEndOf="@+id/pwm_mon_sq3"
@@ -392,8 +390,8 @@
                 android:id="@+id/pwm_freq"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/prop_text_offset_margin"
                 android:layout_marginStart="@dimen/prop_text_offset_margin"
+                android:layout_marginLeft="@dimen/prop_text_offset_margin"
                 android:text="@string/freq_text"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
@@ -407,8 +405,8 @@
                 android:id="@+id/pwm_freq_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
+                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
                 app:layout_constraintBottom_toBottomOf="@+id/pwm_freq"
@@ -433,8 +431,8 @@
                 android:id="@+id/pwm_duty_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
+                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:text="@string/duty_holder_text"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
@@ -462,8 +460,8 @@
                 android:id="@+id/pwm_mon_select_prop_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
+                android:layout_marginLeft="@dimen/value_text_offset_margin"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/mon_selected_text"
                 app:layout_constraintBottom_toBottomOf="@+id/pwm_mon_select_prop"
@@ -478,10 +476,10 @@
                 android:id="@+id/pwm_phase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/value_text_offset_margin"
-                android:layout_marginLeft="@dimen/value_text_offset_margin"
-                android:layout_marginRight="@dimen/value_text_offset_margin"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
+                android:layout_marginLeft="@dimen/value_text_offset_margin"
+                android:layout_marginEnd="@dimen/value_text_offset_margin"
+                android:layout_marginRight="@dimen/value_text_offset_margin"
                 android:text="@string/text_phase_colon"
                 android:textColor="@color/white"
                 android:textStyle="bold"
@@ -552,14 +550,14 @@
                 android:id="@+id/seek_bar_wave_gen"
                 android:layout_width="@dimen/length_0dp"
                 android:layout_height="@dimen/seekbar_height_wave"
-                android:layout_marginBottom="@dimen/seekbar_margin"
                 android:layout_marginTop="@dimen/seekbar_margin"
+                android:layout_marginBottom="@dimen/seekbar_margin"
                 android:layout_weight="1"
                 app:isb_indicator_color="@color/colorPrimary"
                 app:isb_max="5000"
                 app:isb_min="0"
-                app:isb_show_indicator="false"
                 app:isb_seek_bar_type="discrete_ticks"
+                app:isb_show_indicator="false"
                 app:isb_thumb_color="@color/colorPrimary"
                 app:isb_tick_color="@color/colorPrimary"
                 app:isb_tick_num="51" />
@@ -611,9 +609,9 @@
                 android:layout_marginRight="@dimen/ctrl_sepration_margin"
                 android:layout_weight="1"
                 android:background="@color/white"
-                android:paddingBottom="@dimen/ctrl_inside_rl_padding"
                 android:paddingLeft="@dimen/ctrl_inside_rl_padding"
-                android:paddingRight="@dimen/ctrl_inside_rl_padding">
+                android:paddingRight="@dimen/ctrl_inside_rl_padding"
+                android:paddingBottom="@dimen/ctrl_inside_rl_padding">
 
                 <View
                     android:layout_width="match_parent"
@@ -639,9 +637,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/contol_title_text"
-                    android:layout_marginBottom="@dimen/ctrl_inside_rl_padding"
                     android:layout_marginLeft="@dimen/ctrl_inside_rl_padding"
-                    android:layout_marginRight="@dimen/ctrl_inside_rl_padding">
+                    android:layout_marginRight="@dimen/ctrl_inside_rl_padding"
+                    android:layout_marginBottom="@dimen/ctrl_inside_rl_padding">
 
                     <android.support.constraint.Guideline
                         android:id="@+id/guideline4"
@@ -762,9 +760,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.1"
                 android:background="@color/white"
-                android:paddingBottom="@dimen/ctrl_inside_rl_padding"
                 android:paddingLeft="@dimen/ctrl_inside_rl_padding"
-                android:paddingRight="@dimen/ctrl_inside_rl_padding">
+                android:paddingRight="@dimen/ctrl_inside_rl_padding"
+                android:paddingBottom="@dimen/ctrl_inside_rl_padding">
 
                 <View
                     android:layout_width="match_parent"
@@ -790,9 +788,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/control_title_pwm"
-                    android:paddingBottom="@dimen/ctrl_inside_rl_padding"
                     android:paddingLeft="@dimen/ctrl_inside_rl_padding"
-                    android:paddingRight="@dimen/ctrl_inside_rl_padding">
+                    android:paddingRight="@dimen/ctrl_inside_rl_padding"
+                    android:paddingBottom="@dimen/ctrl_inside_rl_padding">
 
                     <android.support.constraint.Guideline
                         android:id="@+id/cr_guideline2"
@@ -946,20 +944,39 @@
 
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/btn_view"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/view_btn_margin"
-                android:layout_marginStart="@dimen/view_btn_margin"
-                android:layout_weight="0.1"
-                android:background="@drawable/btn_back_rounded"
-                android:text="@string/view_text"
-                android:minWidth="@dimen/btn_min_width"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_wavegen" />
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_back_rounded"
+                    android:minWidth="@dimen/btn_min_width"
+                    android:text="@string/view_text"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_wavegen" />
+
+                <Button
+                    android:id="@+id/btn_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_btn_margin"
+                    android:background="@drawable/btn_back_rounded"
+                    android:minWidth="@dimen/btn_min_width"
+                    android:text="@string/save_text"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_wavegen"
+                    android:onClick="saveWaveConfig"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
 
     </RelativeLayout>

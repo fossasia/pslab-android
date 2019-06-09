@@ -565,6 +565,7 @@
     <string name="text_waveform">Waveform</string>
     <string name="text_pwm">PWM</string>
     <string name="view_text">View</string>
+    <string name="save_text">Save</string>
     <string name="phase_holder_text">45 deg</string>
     <string name="duty_holder_text">50 %</string>
     <string name="open_instrument">Open instrument</string>
