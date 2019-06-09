@@ -83,7 +83,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 break;
             case PSLabSensor.GYROSCOPE:
                 holder.sensor.setText(context.getResources().getString(R.string.gyroscope));
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logdata_logo));
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logo));
                 break;
             case PSLabSensor.COMPASS:
                 holder.sensor.setText(context.getResources().getString(R.string.compass));
