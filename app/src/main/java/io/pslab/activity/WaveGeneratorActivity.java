@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,8 @@ import com.warkiz.widget.IndicatorSeekBar;
 import io.pslab.R;
 import io.pslab.DataFormatter;
 import io.pslab.communication.ScienceLab;
+import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
@@ -152,6 +156,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private final long LONG_CLICK_DELAY = 100;
     private AlertDialog waveDialog;
     private boolean btnLongpressed;
+    private CSVLogger csvLogger;
 
     public enum WaveConst {WAVETYPE, WAVE1, WAVE2, SQR1, SQR2, SQR3, SQR4, FREQUENCY, PHASE, DUTY, SQUARE, PWM}
 
@@ -177,6 +182,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private static boolean waveMonSelected;
     private TextView activePropTv = null;
     private TextView activePwmPinTv = null;
+    private CoordinatorLayout coordinatorLayout;
 
     ScienceLab scienceLab;
     BottomSheetBehavior bottomSheetBehavior;
@@ -189,12 +195,14 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_wave_generator_main);
         ButterKnife.bind(this);
 
         removeStatusBar();
 
+        coordinatorLayout = findViewById(R.id.wave_generator_coordinator_layout);
+        csvLogger = new CSVLogger(getString(R.string.wave_generator));
         scienceLab = ScienceLabCommon.scienceLab;
         if (!WaveGeneratorCommon.isInitialized) {
             new WaveGeneratorCommon(true);
@@ -204,7 +212,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         tvShadow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 tvShadow.setVisibility(View.GONE);
             }
@@ -486,8 +494,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 v.onTouchEvent(event);
-                if(event.getAction()==MotionEvent.ACTION_UP){
-                    if(btnLongpressed){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (btnLongpressed) {
                         showText.setVisibility(View.GONE);
                         btnLongpressed = false;
                     }
@@ -496,17 +504,75 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void saveWaveConfig(View view) {
+        String data = "Mode,Wave,Shape,Freq,Phase,Duty\n";
+        double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
+        double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
+        double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
+
+        String waveType1 = WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+        String waveType2 = WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+
+        if (scienceLab.isConnected()) {
+            if (digital_mode == WaveConst.SQUARE) {
+                double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+                double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY);
+                data += "Square,Wave1," + waveType1 + "," + String.valueOf(freq1) + ",0,0\n"; //wave1
+                data += "Square,Wave2," + waveType2 + "," + String.valueOf(freq2) + "," + String.valueOf(phase) + ",0\n";//wave2
+                data += "Sqaure,Sq1," + "sqaure," + String.valueOf(freqSqr1) + ",0," + String.valueOf(dutySqr1) + "\n"; //Sq1
+            } else {
+                double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+                double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
+                double dutySqr2 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.DUTY)) / 100;
+                double phaseSqr2 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.PHASE) / 360;
+                double dutySqr3 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.DUTY)) / 100;
+                double phaseSqr3 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.PHASE) / 360;
+                double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
+                double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
+
+                data += "PWM,Sq1,PWM," + String.valueOf(freqSqr1) + ",0," + String.valueOf(dutySqr1) + "\n";
+                data += "PWM,Sq2,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr2) + "," + String.valueOf(dutySqr2) + "\n";
+                data += "PWM,Sq3,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr3) + "," + String.valueOf(dutySqr3) + "\n";
+                data += "PWM,Sq4,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr4) + "," + String.valueOf(dutySqr4) + "\n";
+            }
+            csvLogger.prepareLogFile();
+            csvLogger.writeCSVFile(data);
+            CustomSnackBar.showSnackBar(coordinatorLayout,
+                    getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
+                    , getString(R.string.delete_capital), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            new android.app.AlertDialog.Builder(WaveGeneratorActivity.this, R.style.AlertDialogStyle)
+                                    .setTitle(R.string.delete_file)
+                                    .setMessage(R.string.delete_warning)
+                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            csvLogger.deleteFile();
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.cancel, null)
+                                    .create()
+                                    .show();
+                        }
+                    }, Snackbar.LENGTH_SHORT);
+
+        } else {
+            Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
         removeStatusBar();
     }
+
     private void removeStatusBar() {
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-        else {
+        } else {
             View decorView = getWindow().getDecorView();
 
             decorView.setSystemUiVisibility((View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -518,6 +584,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY));
         }
     }
+
     public void selectBtn(WaveConst btn_selected) {
 
         switch (btn_selected) {
