@@ -442,8 +442,12 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
             if (gpsLogger.isGPSEnabled()) {
                 Location location = gpsLogger.getDeviceLocation();
-                lat = location.getLatitude();
-                lon = location.getLongitude();
+                if (location != null) {
+                    lat = location.getLatitude();
+                    lon = location.getLongitude();
+                } else {
+                    lat = lon = 0.0;
+                }
             } else {
                 lat = lon = 0.0;
             }
