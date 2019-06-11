@@ -787,6 +787,7 @@
     <string name="gyroscope_description_text">Orientation of the positive X, Y, and Z axes. For any positive axis on the device, clockwise rotation outputs negative values, and counterclockwise rotation outputs positive values.</string>
     <string name="gyroscope_config">Gyroscope Configuration</string>
     <string name="no_gyroscope_sensor">Your device does not have sensor required for this functionality</string>
+    <string name="no_data_recorded_gyro">No data recorded as the sensor is not present in the device. Try with an external sensor.</string>
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_default_1000">1000</string>
     <string name="lux_default_2000">2000</string>

@@ -17,6 +17,8 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.data.Entry;
@@ -65,6 +67,8 @@ public class GyroscopeDataFragment extends Fragment {
     private int[] colors = {Color.YELLOW, Color.MAGENTA, Color.GREEN};
     private DecimalFormat df = new DecimalFormat("+#0.0;-#0.0");
     private View rootView;
+    private TextView noSensorText;
+    private LinearLayout gyroLinearLayout;
 
     public static GyroscopeDataFragment newInstance() {
         return new GyroscopeDataFragment();
@@ -101,6 +105,8 @@ public class GyroscopeDataFragment extends Fragment {
 
         gyroscopeViewFragments.get(1).getGyroAxisImage().setImageResource(R.drawable.phone_y_axis);
         gyroscopeViewFragments.get(2).getGyroAxisImage().setImageResource(R.drawable.phone_z_axis);
+        gyroLinearLayout = rootView.findViewById(R.id.gyro_linearlayout);
+        noSensorText = new TextView(getContext());
 
         setupInstruments();
         return rootView;
@@ -114,9 +120,20 @@ public class GyroscopeDataFragment extends Fragment {
             resetInstrumentData();
             playRecordedData();
         } else if (gyroSensor.viewingData) {
-            recordedGyroArray = new ArrayList<>();
-            resetInstrumentData();
-            plotAllRecordedData();
+            if (sensorManager != null) {
+                recordedGyroArray = new ArrayList<>();
+                resetInstrumentData();
+                plotAllRecordedData();
+            }
+            else {
+                gyroscopeViewFragments.clear();
+                rootView.findViewById(R.id.gyroscope_x_axis_fragment).setVisibility(View.INVISIBLE);
+                rootView.findViewById(R.id.gyroscope_y_axis_fragment).setVisibility(View.INVISIBLE);
+                rootView.findViewById(R.id.gyroscope_z_axis_fragment).setVisibility(View.INVISIBLE);
+                noSensorText.setText(getResources().getString(R.string.no_data_recorded_gyro));
+                noSensorText.setAllCaps(true);
+                gyroLinearLayout.addView(noSensorText);
+            }
         } else if (!gyroSensor.isRecording) {
             updateGraphs();
             initiateGyroSensor();
@@ -133,6 +150,9 @@ public class GyroscopeDataFragment extends Fragment {
         }
         if (sensorManager != null) {
             sensorManager.unregisterListener(gyroScopeSensorEventListener);
+        }
+        else {
+            gyroLinearLayout.removeView(noSensorText);
         }
     }
 
