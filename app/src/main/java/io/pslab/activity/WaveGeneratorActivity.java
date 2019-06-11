@@ -1,10 +1,13 @@
 package io.pslab.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.TooltipCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,18 +39,27 @@ import com.warkiz.widget.IndicatorSeekBar;
 import io.pslab.R;
 import io.pslab.DataFormatter;
 import io.pslab.communication.ScienceLab;
+import io.pslab.models.SensorDataBlock;
+import io.pslab.models.ServoData;
+import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
+import io.pslab.others.GPSLogger;
+import io.pslab.others.LocalDataLog;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
 import io.pslab.others.WaveGeneratorCommon;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 public class WaveGeneratorActivity extends AppCompatActivity {
 
@@ -183,6 +196,13 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private TextView activePropTv = null;
     private TextView activePwmPinTv = null;
     private CoordinatorLayout coordinatorLayout;
+    private Realm realm;
+    private GPSLogger gpsLogger;
+    private RealmResults<WaveGeneratorData> recordedWaveData;
+    private final String KEY_LOG = "has_log";
+    private final String DATA_BLOCK = "data_block";
+    private final String MODE_SQUARE = "Square";
+    private final String MODE_PWM = "PWM";
 
     ScienceLab scienceLab;
     BottomSheetBehavior bottomSheetBehavior;
@@ -200,6 +220,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         removeStatusBar();
+
+        realm = LocalDataLog.with().getRealm();
+        gpsLogger = new GPSLogger(this,
+                (LocationManager) getSystemService(Context.LOCATION_SERVICE));
+
 
         coordinatorLayout = findViewById(R.id.wave_generator_coordinator_layout);
         csvLogger = new CSVLogger(getString(R.string.wave_generator));
@@ -503,10 +528,21 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+            recordedWaveData = LocalDataLog.with()
+                    .getBlockOfWaveRecords(getIntent().getExtras().getLong(DATA_BLOCK));
+            setReceivedData();
+        }
     }
 
     public void saveWaveConfig(View view) {
-        String data = "Mode,Wave,Shape,Freq,Phase,Duty\n";
+        long block = System.currentTimeMillis();
+        csvLogger.prepareLogFile();
+        long timestamp;
+        double lat, lon;
+        String data = "Timestamp,DateTime,Mode,Wave,Shape,Freq,Phase,Duty,lat,lon\n";
+        recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.wave_generator)));
         double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
         double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
         double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
@@ -514,13 +550,33 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         String waveType1 = WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
         String waveType2 = WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
 
+        if (gpsLogger.isGPSEnabled()) {
+            Location location = gpsLogger.getDeviceLocation();
+            if (location != null) {
+                lat = location.getLatitude();
+                lon = location.getLongitude();
+            } else {
+                lat = 0.0;
+                lon = 0.0;
+            }
+        } else {
+            lat = 0.0;
+            lon = 0.0;
+        }
+
+        timestamp = System.currentTimeMillis();
+        String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+        String locationData = lat + "," + lon;
         if (scienceLab.isConnected()) {
             if (digital_mode == WaveConst.SQUARE) {
                 double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
                 double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY);
-                data += "Square,Wave1," + waveType1 + "," + String.valueOf(freq1) + ",0,0\n"; //wave1
-                data += "Square,Wave2," + waveType2 + "," + String.valueOf(freq2) + "," + String.valueOf(phase) + ",0\n";//wave2
-                data += "Sqaure,Sq1," + "sqaure," + String.valueOf(freqSqr1) + ",0," + String.valueOf(dutySqr1) + "\n"; //Sq1
+                data += timeData + ",Square,Wave1," + waveType1 + "," + String.valueOf(freq1) + ",0,0," + locationData + "\n"; //wave1
+                recordSensorData(new WaveGeneratorData(timestamp, block, "Square", "Wave1", waveType1, String.valueOf(freq1), "0", "0", lat, lon));
+                data += timeData + ",Square,Wave2," + waveType2 + "," + String.valueOf(freq2) + "," + String.valueOf(phase) + ",0," + locationData + "\n";//wave2
+                recordSensorData(new WaveGeneratorData(timestamp + 1, block, "Square", "Wave2", waveType2, String.valueOf(freq2), String.valueOf(phase), "0", lat, lon));
+                data += timeData + ",Sqaure,Sq1," + "sqaure," + String.valueOf(freqSqr1) + ",0," + String.valueOf(dutySqr1) + "," + locationData; //Sq1
+                recordSensorData(new WaveGeneratorData(timestamp + 2, block, "Square", "Sq1", "square", String.valueOf(freqSqr1), "0", String.valueOf(dutySqr1), lat, lon));
             } else {
                 double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
                 double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
@@ -531,35 +587,82 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
                 double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
 
-                data += "PWM,Sq1,PWM," + String.valueOf(freqSqr1) + ",0," + String.valueOf(dutySqr1) + "\n";
-                data += "PWM,Sq2,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr2) + "," + String.valueOf(dutySqr2) + "\n";
-                data += "PWM,Sq3,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr3) + "," + String.valueOf(dutySqr3) + "\n";
-                data += "PWM,Sq4,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr4) + "," + String.valueOf(dutySqr4) + "\n";
+                data += timeData + ",PWM,Sq1,PWM," + String.valueOf(freqSqr1) + ",0," + String.valueOf(dutySqr1) + "," + locationData + "\n";
+                recordSensorData(new WaveGeneratorData(timestamp, block, "PWM", "Sq1", "PWM", String.valueOf(freqSqr1), "0", String.valueOf(dutySqr1), lat, lon));
+                data += timeData + ",PWM,Sq2,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr2) + "," + String.valueOf(dutySqr2) + "," + locationData + "\n";
+                recordSensorData(new WaveGeneratorData(timestamp + 1, block, "PWM", "Sq2", "PWM", String.valueOf(freqSqr1), String.valueOf(phaseSqr2), String.valueOf(dutySqr2), lat, lon));
+                data += timeData + ",PWM,Sq3,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr3) + "," + String.valueOf(dutySqr3) + "," + locationData + "\n";
+                recordSensorData(new WaveGeneratorData(timestamp + 2, block, "PWM", "Sq3", "PWM", String.valueOf(freqSqr1), String.valueOf(phaseSqr3), String.valueOf(dutySqr3), lat, lon));
+                data += timeData + ",PWM,Sq4,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr4) + "," + String.valueOf(dutySqr4) + "," + locationData;
+                recordSensorData(new WaveGeneratorData(timestamp + 3, block, "PWM", "Sq4", "PWM", String.valueOf(freqSqr1), String.valueOf(phaseSqr4), String.valueOf(dutySqr4), lat, lon));
             }
-            csvLogger.prepareLogFile();
             csvLogger.writeCSVFile(data);
             CustomSnackBar.showSnackBar(coordinatorLayout,
                     getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
-                    , getString(R.string.delete_capital), new View.OnClickListener() {
+                    , getString(R.string.open), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            new android.app.AlertDialog.Builder(WaveGeneratorActivity.this, R.style.AlertDialogStyle)
-                                    .setTitle(R.string.delete_file)
-                                    .setMessage(R.string.delete_warning)
-                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            csvLogger.deleteFile();
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.cancel, null)
-                                    .create()
-                                    .show();
+                            Intent intent = new Intent(WaveGeneratorActivity.this, DataLoggerActivity.class);
+                            intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.wave_generator));
+                            startActivity(intent);
                         }
                     }, Snackbar.LENGTH_SHORT);
 
         } else {
             Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void setReceivedData() {
+        for (WaveGeneratorData data : recordedWaveData) {
+            Log.d("data", data.toString());
+            if (data.getMode().equals(MODE_SQUARE)) {
+                WaveGeneratorCommon.mode_selected = WaveConst.SQUARE;
+                switch (data.getWave()){
+                    case "Wave1":
+                        if (data.getShape().equals("sine")) {
+                            WaveGeneratorCommon.wave.get(WaveConst.WAVE1).put(WaveConst.WAVETYPE, SIN);
+                        } else {
+                            WaveGeneratorCommon.wave.get(WaveConst.WAVE1).put(WaveConst.WAVETYPE, TRIANGULAR);
+                        }
+                        WaveGeneratorCommon.wave.get(WaveConst.WAVE1).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
+                        break;
+                    case "Wave2":
+                        if (data.getShape().equals("sine")) {
+                            WaveGeneratorCommon.wave.get(WaveConst.WAVE2).put(WaveConst.WAVETYPE, SIN);
+                        } else {
+                            WaveGeneratorCommon.wave.get(WaveConst.WAVE2).put(WaveConst.WAVETYPE, TRIANGULAR);
+                        }
+                        WaveGeneratorCommon.wave.get(WaveConst.WAVE2).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
+                        WaveGeneratorCommon.wave.get(WaveConst.WAVE2).put(WaveConst.PHASE, Double.valueOf(data.getPhase()).intValue());
+                        break;
+                    case "Sq1":
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR1).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR1).put(WaveConst.DUTY, Double.valueOf(data.getDuty()).intValue());
+                        break;
+                }
+                enableInitialState();
+            } else if (data.getMode().equals(MODE_PWM)) {
+                WaveGeneratorCommon.mode_selected = WaveConst.PWM;
+                switch (data.getWave()) {
+                    case "Sq1":
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR1).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR1).put(WaveConst.DUTY, ((Double)(Double.valueOf(data.getDuty())*100)).intValue());
+                        break;
+                    case "Sq2":
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR2).put(WaveConst.DUTY, ((Double)(Double.valueOf(data.getDuty())*100)).intValue());
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR2).put(WaveConst.PHASE, ((Double)(Double.valueOf(data.getPhase())*360 )).intValue());
+                        break;
+                    case "Sq3":
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR3).put(WaveConst.DUTY, ((Double)(Double.valueOf(data.getDuty())*100)).intValue());
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR3).put(WaveConst.PHASE, ((Double)(Double.valueOf(data.getPhase())*360)).intValue());
+                        break;
+                    case "Sq4":
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR4).put(WaveConst.DUTY, ((Double)(Double.valueOf(data.getDuty())*100)).intValue());
+                        WaveGeneratorCommon.wave.get(WaveConst.SQR4).put(WaveConst.PHASE, ((Double)(Double.valueOf(data.getPhase())*360)).intValue());
+                        break;
+                }
+                enableInitialStatePWM();
+            }
         }
     }
     @Override
@@ -846,7 +949,13 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private void enableInitialState() {
         selectBtn(WaveConst.WAVE1);
         activePwmPinTv = pwmMonSqr1;
-        toggleDigitalMode(WaveGeneratorCommon.mode_selected);
+        toggleDigitalMode(WaveConst.SQUARE);
+    }
+
+    private void enableInitialStatePWM() {
+        selectBtn(WaveConst.SQR2);
+        activePwmPinTv = pwmMonSqr2;
+        toggleDigitalMode(WaveConst.PWM);
     }
 
     private void setUpBottomSheet() {
@@ -1046,5 +1155,17 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private int dpToPx(int dp) {
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
         return Math.round((float) dp * (displayMetrics.xdpi / 160.0F));
+    }
+
+    public void recordSensorDataBlockID(SensorDataBlock block) {
+        realm.beginTransaction();
+        realm.copyToRealm(block);
+        realm.commitTransaction();
+    }
+
+    public void recordSensorData(RealmObject sensorData) {
+        realm.beginTransaction();
+        realm.copyToRealm((WaveGeneratorData) sensorData);
+        realm.commitTransaction();
     }
 }
