@@ -23,6 +23,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.triggertrap.seekarc.SeekArc;
 
@@ -300,8 +301,14 @@ public class RoboticArmActivity extends AppCompatActivity {
                 removeStatusBar();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText1.getText().toString());
-                    seekArc1.setProgress((int) (degree / 3.6));
-                    editEnter = true;
+                    if (degree > 360 || degree < 0) {
+                        degreeText4.setText(getResources().getString(R.string.zero));
+                        seekArc1.setProgress(0);
+                        toastInvalidValueMessage();
+                    } else {
+                        seekArc1.setProgress((int) (degree / 3.6));
+                        editEnter = true;
+                    }
                 }
                 return false;
             }
@@ -313,8 +320,14 @@ public class RoboticArmActivity extends AppCompatActivity {
                 removeStatusBar();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText2.getText().toString());
-                    seekArc2.setProgress((int) (degree / 3.6));
-                    editEnter = true;
+                    if (degree > 360 || degree < 0) {
+                        degreeText4.setText(getResources().getString(R.string.zero));
+                        seekArc2.setProgress(0);
+                        toastInvalidValueMessage();
+                    } else {
+                        seekArc2.setProgress((int) (degree / 3.6));
+                        editEnter = true;
+                    }
                 }
                 return false;
             }
@@ -326,8 +339,14 @@ public class RoboticArmActivity extends AppCompatActivity {
                 removeStatusBar();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText3.getText().toString());
-                    seekArc3.setProgress((int) (degree / 3.6));
-                    editEnter = true;
+                    if (degree > 360 || degree < 0) {
+                        degreeText4.setText(getResources().getString(R.string.zero));
+                        seekArc3.setProgress(0);
+                        toastInvalidValueMessage();
+                    } else {
+                        seekArc3.setProgress((int) (degree / 3.6));
+                        editEnter = true;
+                    }
                 }
                 return false;
             }
@@ -339,8 +358,14 @@ public class RoboticArmActivity extends AppCompatActivity {
                 removeStatusBar();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText4.getText().toString());
-                    seekArc4.setProgress((int) (degree / 3.6));
-                    editEnter = true;
+                    if (degree > 360 || degree < 0) {
+                        degreeText4.setText(getResources().getString(R.string.zero));
+                        seekArc4.setProgress(0);
+                        toastInvalidValueMessage();
+                    } else {
+                        seekArc4.setProgress((int) (degree / 3.6));
+                        editEnter = true;
+                    }
                 }
                 return false;
             }
@@ -406,6 +431,10 @@ public class RoboticArmActivity extends AppCompatActivity {
         }
     }
 
+    private void toastInvalidValueMessage() {
+        Toast.makeText(RoboticArmActivity.this, getResources().getString(R.string.invalid_servo_value), Toast.LENGTH_SHORT).show();
+    }
+
     private void setReceivedData() {
         ArrayList servoDataList = new ArrayList(recordedServoData);
         for (int i = 0; i < servoDataList.size(); i++) {
@@ -461,6 +490,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(RoboticArmActivity.this, DataLoggerActivity.class);
+                        intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.robotic_arm));
                         startActivity(intent);
                     }
                 }, Snackbar.LENGTH_SHORT);
