@@ -99,7 +99,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 break;
             case PSLabSensor.ROBOTIC_ARM:
                 holder.sensor.setText(R.string.robotic_arm);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logo));
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.robotic_arm));
                 break;
             default:
                 break;
