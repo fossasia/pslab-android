@@ -751,19 +751,31 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             try {
                 analogInput = params[0];
                 // number of samples and timeGap still need to be determined
-                HashMap<String, double[]> data;
+                HashMap<String, double[]> data1;
+                HashMap<String, double[]> data2;
                 if (isTriggerSelected && (triggerChannel.equals("CH1") || triggerChannel.equals("CH2"))) {
                     if (triggerChannel.equals("CH1"))
                         scienceLab.configureTrigger(0, analogInput, trigger, null, null);
                     else if (triggerChannel.equals("CH2"))
                         scienceLab.configureTrigger(1, "CH2", trigger, null, null);
-                    data = scienceLab.captureTwo(samples, timeGap, analogInput, true);
+                    scienceLab.captureTraces(1, samples, timeGap, analogInput, isTriggerSelected, null);
+                    data1 = scienceLab.fetchTrace(1); //fetching data
+                    Thread.sleep((long) (1000 * 10 * 1e-3));
+                    scienceLab.captureTraces(1, samples, timeGap, "CH2", isTriggerSelected, null);
+                    data2 = scienceLab.fetchTrace(1);
+                    Thread.sleep((long) (1000 * 10 * 1e-3));
+
                 } else {
-                    data = scienceLab.captureTwo(samples, timeGap, analogInput, false);
+                    scienceLab.captureTraces(1, samples, timeGap, analogInput, isTriggerSelected, null);
+                    data1 = scienceLab.fetchTrace(1); //fetching data
+                    Thread.sleep((long) (1000 * 10 * 1e-3));
+                    scienceLab.captureTraces(1, samples, timeGap, "CH2", isTriggerSelected, null);
+                    data2 = scienceLab.fetchTrace(1);
+                    Thread.sleep((long) (1000 * 10 * 1e-3));
                 }
-                double[] xData = data.get("x");
-                double[] y1Data = data.get("y1");
-                double[] y2Data = data.get("y2");
+                double[] xData = data1.get("x");
+                double[] y1Data = data1.get("y");
+                double[] y2Data = data2.get("y");
 
                 entries1 = new ArrayList<>();
                 entries2 = new ArrayList<>();
@@ -775,6 +787,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 }
             } catch (NullPointerException e) {
                 cancel(true);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             return null;
         }
