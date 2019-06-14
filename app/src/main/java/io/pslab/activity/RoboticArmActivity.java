@@ -442,10 +442,16 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
             if (gpsLogger.isGPSEnabled()) {
                 Location location = gpsLogger.getDeviceLocation();
-                lat = location.getLatitude();
-                lon = location.getLongitude();
+                if (location != null) {
+                    lat = location.getLatitude();
+                    lon = location.getLongitude();
+                } else {
+                    lat = 0.0;
+                    lon = 0.0;
+                }
             } else {
-                lat = lon = 0.0;
+                lat = 0.0;
+                lon = 0.0;
             }
             recordSensorData(new ServoData(timestamp, block, degree1, degree2, degree3, degree4, lat, lon));
             if (i == 59) {
