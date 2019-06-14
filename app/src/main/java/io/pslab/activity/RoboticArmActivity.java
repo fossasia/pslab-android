@@ -302,7 +302,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText1.getText().toString());
                     if (degree > 360 || degree < 0) {
-                        degreeText4.setText(getResources().getString(R.string.zero));
+                        degreeText1.setText(getResources().getString(R.string.zero));
                         seekArc1.setProgress(0);
                         toastInvalidValueMessage();
                     } else {
@@ -321,7 +321,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText2.getText().toString());
                     if (degree > 360 || degree < 0) {
-                        degreeText4.setText(getResources().getString(R.string.zero));
+                        degreeText2.setText(getResources().getString(R.string.zero));
                         seekArc2.setProgress(0);
                         toastInvalidValueMessage();
                     } else {
@@ -340,7 +340,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText3.getText().toString());
                     if (degree > 360 || degree < 0) {
-                        degreeText4.setText(getResources().getString(R.string.zero));
+                        degreeText3.setText(getResources().getString(R.string.zero));
                         seekArc3.setProgress(0);
                         toastInvalidValueMessage();
                     } else {
