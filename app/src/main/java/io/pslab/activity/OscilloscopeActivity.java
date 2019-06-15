@@ -15,7 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.TooltipCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -39,7 +38,10 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import org.apache.commons.math3.complex.Complex;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -85,6 +87,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public int samples;
     public double timeGap;
     public double timebase;
+    public double xAxisScale = 875f;
     public boolean isCH1Selected;
     public boolean isCH2Selected;
     public boolean isCH3Selected;
@@ -161,6 +164,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private BottomSheetBehavior bottomSheetBehavior;
     private GestureDetector gestureDetector;
     private boolean btnLongpressed;
+    private double maxAmp, maxFreq;
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
@@ -169,7 +173,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_oscilloscope);
         ButterKnife.bind(this);
 
@@ -239,7 +243,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             public void run() {
                 //Thread to check which checkbox is enabled
                 while (monitor) {
-                    if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
+                    if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected && !isFourierTransformSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute(CHANNEL.CH1.toString());
                         synchronized (lock) {
@@ -251,7 +255,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (scienceLab.isConnected() && isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
+                    if (scienceLab.isConnected() && isCH2Selected && !isCH1Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected && !isFourierTransformSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute(CHANNEL.CH2.toString());
                         synchronized (lock) {
@@ -263,7 +267,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (scienceLab.isConnected() && isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected && !isXYPlotSelected) {
+                    if (scienceLab.isConnected() && isCH3Selected && !isCH1Selected && !isCH2Selected && !isMICSelected && !isXYPlotSelected && !isFourierTransformSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute(CHANNEL.CH3.toString());
                         synchronized (lock) {
@@ -275,7 +279,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (scienceLab.isConnected() && isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected && !isXYPlotSelected) {
+                    if (scienceLab.isConnected() && isMICSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected && !isXYPlotSelected && !isFourierTransformSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute(CHANNEL.MIC.toString());
                         synchronized (lock) {
@@ -287,7 +291,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected) {
+                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && !isCH3Selected && !isMICSelected && !isXYPlotSelected && !isFourierTransformSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute(CHANNEL.CH1.toString(), CHANNEL.CH2.toString());
                         synchronized (lock) {
@@ -299,7 +303,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (scienceLab.isConnected() && isCH1Selected && isCH3Selected && !isCH2Selected && !isMICSelected && !isXYPlotSelected) {
+                    if (scienceLab.isConnected() && isCH3Selected && isCH2Selected && !isCH1Selected && !isMICSelected && !isXYPlotSelected && !isFourierTransformSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute(CHANNEL.CH1.toString(), CHANNEL.CH3.toString());
                         synchronized (lock) {
@@ -311,7 +315,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (scienceLab.isConnected() && isCH1Selected && isMICSelected && !isCH2Selected && !isCH3Selected && !isXYPlotSelected) {
+                    if (scienceLab.isConnected() && isMICSelected && isCH2Selected && !isCH3Selected && !isCH1Selected && !isXYPlotSelected && !isFourierTransformSelected) {
                         captureTask2 = new CaptureTaskTwo();
                         captureTask2.execute(CHANNEL.CH1.toString(), CHANNEL.MIC.toString());
                         synchronized (lock) {
@@ -347,7 +351,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected && !isXYPlotSelected) {
+                    if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && isCH3Selected && isMICSelected && !isXYPlotSelected && !isFourierTransformSelected) {
                         captureTask3 = new CaptureTaskThree();
                         captureTask3.execute(CHANNEL.CH1.toString());
                         synchronized (lock) {
@@ -386,6 +390,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
+                    if (scienceLab.isConnected() && isFourierTransformSelected) {
+                        new FFTTask().execute(CHANNEL.CH1.toString());
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
                     if (isInBuiltMicSelected) {
                         if (audioJack == null)
                             audioJack = new AudioJack("input");
@@ -404,6 +419,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                             audioJack = null;
                         }
                     }
+
                 }
             }
         };
@@ -430,8 +446,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 v.onTouchEvent(event);
-                if(event.getAction()==MotionEvent.ACTION_UP){
-                    if(btnLongpressed){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (btnLongpressed) {
                         showText.setVisibility(View.GONE);
                         btnLongpressed = false;
                     }
@@ -451,8 +467,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-        else {
+        } else {
             View decorView = getWindow().getDecorView();
 
             decorView.setSystemUiVisibility((View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -464,6 +479,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY));
         }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -731,7 +747,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 double[] yData = data.get("y");
 
                 entries = new ArrayList<>();
-
                 for (int i = 0; i < xData.length; i++) {
                     entries.add(new Entry((float) xData[i] / ((timebase == 875) ? 1 : 1000), (float) yData[i]));
                 }
@@ -751,6 +766,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 ledImageView.setTag("green");
             }
 
+            setLeftYAxisScale(16f, -16f);
+            setRightYAxisScale(16f, -16f);
+            setXAxisScale(xAxisScale);
             LineDataSet dataSet = new LineDataSet(entries, analogInput);
             LineData lineData = new LineData(dataSet);
             dataSet.setDrawCircles(false);
@@ -1039,5 +1057,104 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 lock.notify();
             }
         }
+    }
+
+    public class FFTTask extends AsyncTask<String, Void, Void> {
+        ArrayList<Entry> entries;
+        String analogInput;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                analogInput = params[0];
+                if (isTriggerSelected) {
+                    scienceLab.configureTrigger(0, analogInput, trigger, null, null);
+                }
+                // number of samples and timeGap still need to be determined
+                scienceLab.captureTraces(1, samples, timeGap, analogInput, isTriggerSelected, null);
+                Log.v("Sleep Time", "" + (1024 * 10 * 1e-3));
+                Thread.sleep((long) (1000 * 10 * 1e-3));
+                HashMap<String, double[]> data = scienceLab.fetchTrace(1); //fetching data
+
+                double[] yData = data.get("y");
+                Complex[] yComplex = new Complex[yData.length];
+                for (int i = 0; i < yData.length; i++) {
+                    yComplex[i] = Complex.valueOf(yData[i]);
+                }
+                Complex[] fftOut = fft(yComplex);
+                int n = fftOut.length;
+                maxAmp = 0;
+
+                entries = new ArrayList<>();
+                double factor = samples * timeGap * 1e-3;
+                maxFreq = (n / 2 - 1) / factor;
+                for (int i = 0; i < n / 2; i++) {
+                    float y = (float) fftOut[i].abs() / samples;
+                    if (y > maxAmp) {
+                        maxAmp = y;
+                    }
+                    entries.add(new Entry((float) (i / factor), y));
+                }
+            } catch (NullPointerException e) {
+                cancel(true);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (!String.valueOf(ledImageView.getTag()).equals("green")) {
+                ledImageView.setImageResource(R.drawable.green_led);
+                ledImageView.setTag("green");
+            }
+
+            LineDataSet dataSet = new LineDataSet(entries, analogInput);
+            LineData lineData = new LineData(dataSet);
+            dataSet.setDrawCircles(false);
+            setXAxisScale(maxFreq);
+            setLeftYAxisScale(maxAmp, 0);
+            setRightYAxisScale(maxAmp, 0);
+            mChart.setData(lineData);
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+
+            synchronized (lock) {
+                lock.notify();
+            }
+        }
+    }
+
+    public Complex[] fft(Complex[] input) {
+        Complex[] x = input;
+        int n = x.length;
+
+        if (n == 1) return new Complex[]{x[0]};
+
+        if (n % 2 != 0) {
+            x = Arrays.copyOfRange(x, 0, x.length - 1);
+        }
+
+        Complex[] halfArray = new Complex[n / 2];
+        for (int k = 0; k < n / 2; k++) {
+            halfArray[k] = x[2 * k];
+        }
+        Complex[] q = fft(halfArray);
+
+        for (int k = 0; k < n / 2; k++) {
+            halfArray[k] = x[2 * k + 1];
+        }
+        Complex[] r = fft(halfArray);
+
+        Complex[] y = new Complex[n];
+        for (int k = 0; k < n / 2; k++) {
+            double kth = -2 * k * Math.PI / n;
+            Complex wk = new Complex(Math.cos(kth), Math.sin(kth));
+            y[k] = q[k].add(wk.multiply(r[k]));
+            y[k + n / 2] = q[k].subtract(wk.multiply(r[k]));
+        }
+        return y;
     }
 }
