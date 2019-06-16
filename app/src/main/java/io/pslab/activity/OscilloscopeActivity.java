@@ -1109,10 +1109,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     }
 
     public class FFTTaskTwo extends AsyncTask<String, Void, Void> {
-        ArrayList<Entry> entries1;
-        ArrayList<Entry> entries2;
-        String analogInput1;
-        String analogInput2;
+        private ArrayList<Entry> entries1;
+        private ArrayList<Entry> entries2;
+        private String analogInput1;
+        private String analogInput2;
 
         @Override
         protected Void doInBackground(String... params) {
@@ -1149,7 +1149,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 int n = Math.min(fftOut1.length, fftOut2.length);
                 maxAmp = 0;
 
-                float maxAmp1 = 0, maxAmp2 = 0;
+                float maxAmp1 = 0;
+                float maxAmp2 = 0;
                 entries1 = new ArrayList<>();
                 entries2 = new ArrayList<>();
                 double factor = samples * timeGap * 1e-3;
