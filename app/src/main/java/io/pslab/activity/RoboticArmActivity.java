@@ -31,12 +31,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import io.pslab.R;
+import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
+import io.pslab.others.ScienceLabCommon;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -58,12 +60,18 @@ public class RoboticArmActivity extends AppCompatActivity {
     private RealmResults<ServoData> recordedServoData;
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
+    private int timelinePosition = 0;
+    private ScienceLab scienceLab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_robotic_arm);
 
+        scienceLab = ScienceLabCommon.scienceLab;
+        if (!scienceLab.isConnected()) {
+            Toast.makeText(this, getResources().getString(R.string.device_not_connected), Toast.LENGTH_SHORT).show();
+        }
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -383,6 +391,18 @@ public class RoboticArmActivity extends AppCompatActivity {
                         .getMarginStart() + screen_width / 6);
                 timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
                 scrollView.smoothScrollBy(screen_width / 6, 0);
+                String deg1 = ((TextView) servo1TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                deg1 = (deg1.length() > 0) ? deg1 : "0";
+                String deg2 = ((TextView) servo2TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                deg2 = (deg2.length() > 0) ? deg2 : "0";
+                String deg3 = ((TextView) servo3TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                deg3 = (deg3.length() > 0) ? deg3 : "0";
+                String deg4 = ((TextView) servo4TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                deg4 = (deg4.length() > 0) ? deg4 : "0";
+                if (scienceLab.isConnected()) {
+                    scienceLab.servo4(Double.valueOf(deg1), Double.valueOf(deg2), Double.valueOf(deg3), Double.valueOf(deg4));
+                }
+                timelinePosition++;
             }
 
             @Override
@@ -421,6 +441,9 @@ public class RoboticArmActivity extends AppCompatActivity {
                 timeIndicatorParams.setMarginStart(3);
                 timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
+                isPlaying = false;
+                playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                timelinePosition = 0;
             }
         });
 
