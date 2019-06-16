@@ -745,6 +745,7 @@
     <string name="servo2_title">Servo 2</string>
     <string name="servo3_title">Servo 3</string>
     <string name="servo4_title">Servo 4</string>
+    <string name="invalid_servo_value">Kindly select a value between 0 and 360</string>
     <string-array name="baro_sensors">
         <item>Built-In</item>
         <item>BMP180</item>
