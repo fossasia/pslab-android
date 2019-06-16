@@ -31,6 +31,7 @@ import io.pslab.activity.MapsActivity;
 import io.pslab.activity.CompassActivity;
 import io.pslab.activity.RoboticArmActivity;
 import io.pslab.activity.ThermometerActivity;
+import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.GyroData;
@@ -40,6 +41,7 @@ import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
+import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
 import io.realm.RealmRecyclerViewAdapter;
@@ -101,6 +103,10 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 holder.sensor.setText(R.string.robotic_arm);
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.robotic_arm));
                 break;
+            case PSLabSensor.WAVE_GENERATOR:
+                holder.sensor.setText(R.string.wave_generator);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_wave_generator));
+                break;
             default:
                 break;
         }
@@ -161,6 +167,11 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             RoboticArm.putExtra(KEY_LOG, true);
             RoboticArm.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(RoboticArm);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.wave_generator))) {
+            Intent waveGenerator = new Intent(context, WaveGeneratorActivity.class);
+            waveGenerator.putExtra(KEY_LOG, true);
+            waveGenerator.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(waveGenerator);
         }
     }
 
@@ -192,6 +203,8 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfAccelerometerRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ROBOTIC_ARM)) {
                             LocalDataLog.with().clearBlockOfServoRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.WAVE_GENERATOR)) {
+                            LocalDataLog.with().clearBlockOfWaveRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
                         dialog.dismiss();
@@ -325,6 +338,27 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     i.put("Servo2", d.getDegree2());
                     i.put("Servo3", d.getDegree3());
                     i.put("Servo4", d.getDegree4());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.WAVE_GENERATOR)) {
+            RealmResults<WaveGeneratorData> data = LocalDataLog.with().getBlockOfWaveRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (WaveGeneratorData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("Mode", d.getMode());
+                    i.put("Wave", d.getWave());
+                    i.put("Shape", d.getShape());
+                    i.put("Freq", d.getFreq());
+                    i.put("Phase", d.getPhase());
+                    i.put("Duty", d.getDuty());
                     i.put("lon", d.getLon());
                     i.put("lat", d.getLat());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);

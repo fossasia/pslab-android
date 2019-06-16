@@ -41,5 +41,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/robotic_arm" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wave_generator" />
     </RadioGroup>
 </RelativeLayout>
