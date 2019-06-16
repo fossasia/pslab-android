@@ -784,9 +784,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     }
 
     public class CaptureTaskTwo extends AsyncTask<String, Void, Void> {
-        ArrayList<Entry> entries1;
-        ArrayList<Entry> entries2;
-        String analogInput1, analogInput2;
+        private ArrayList<Entry> entries1;
+        private ArrayList<Entry> entries2;
+        private String analogInput1, analogInput2;
 
         @Override
         protected Void doInBackground(String... params) {
