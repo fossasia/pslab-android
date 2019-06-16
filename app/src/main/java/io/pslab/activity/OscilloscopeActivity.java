@@ -823,7 +823,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 entries1 = new ArrayList<>();
                 entries2 = new ArrayList<>();
 
-                for (int i = 0; i < xData.length; i++) {
+                for (int i = 0; i < Math.min(xData.length, Math.min(y1Data.length, y2Data.length)); i++) {
                     float xi = (float) xData[i] / ((timebase == 875) ? 1 : 1000);
                     entries1.add(new Entry(xi, (float) y1Data[i]));
                     entries2.add(new Entry(xi, (float) y2Data[i]));
