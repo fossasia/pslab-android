@@ -391,12 +391,32 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     }
 
                     if (scienceLab.isConnected() && isFourierTransformSelected) {
-                        new FFTTask().execute(CHANNEL.CH1.toString());
-                        synchronized (lock) {
-                            try {
-                                lock.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                        if (isCH1Selected && !isCH2Selected) {
+                            new FFTTask().execute(CHANNEL.CH1.toString());
+                            synchronized (lock) {
+                                try {
+                                    lock.wait();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else if (!isCH1Selected && isCH2Selected) {
+                            new FFTTask().execute(CHANNEL.CH2.toString());
+                            synchronized (lock) {
+                                try {
+                                    lock.wait();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else if (isCH1Selected && isCH2Selected) {
+                            new FFTTaskTwo().execute(CHANNEL.CH1.toString(), CHANNEL.CH2.toString());
+                            synchronized (lock) {
+                                try {
+                                    lock.wait();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -1126,6 +1146,104 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             }
         }
     }
+
+    public class FFTTaskTwo extends AsyncTask<String, Void, Void> {
+        private ArrayList<Entry> entries1;
+        private ArrayList<Entry> entries2;
+        private String analogInput1;
+        private String analogInput2;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                analogInput1 = params[0];
+                analogInput2 = params[1];
+                if (isTriggerSelected) {
+                    if (triggerChannel.equals("CH1"))
+                        scienceLab.configureTrigger(0, analogInput1, trigger, null, null);
+                    else if (triggerChannel.equals("CH2"))
+                        scienceLab.configureTrigger(1, analogInput2, trigger, null, null);
+                }
+                // number of samples and timeGap still need to be determined
+                scienceLab.captureTraces(1, samples, timeGap, analogInput1, isTriggerSelected, null);
+                Log.v("Sleep Time", "" + (1024 * 10 * 1e-3));
+                Thread.sleep((long) (1000 * 10 * 1e-3));
+                HashMap<String, double[]> data1 = scienceLab.fetchTrace(1); //fetching data
+
+                scienceLab.captureTraces(1, samples, timeGap, analogInput2, isTriggerSelected, null);
+                Log.v("Sleep Time", "" + (1024 * 10 * 1e-3));
+                Thread.sleep((long) (1000 * 10 * 1e-3));
+                HashMap<String, double[]> data2 = scienceLab.fetchTrace(1);
+
+                double[] yData1 = data1.get("y");
+                double[] yData2 = data2.get("y");
+                Complex[] yComplex1 = new Complex[yData1.length];
+                Complex[] yComplex2 = new Complex[yData2.length];
+                for (int i = 0; i < Math.min(yData1.length, yData2.length) ; i++) {
+                    yComplex1[i] = Complex.valueOf(yData1[i]);
+                    yComplex2[i] = Complex.valueOf(yData2[i]);
+                }
+                Complex[] fftOut1 = fft(yComplex1);
+                Complex[] fftOut2 = fft(yComplex2);
+                int n = Math.min(fftOut1.length, fftOut2.length);
+                maxAmp = 0;
+
+                float maxAmp1 = 0;
+                float maxAmp2 = 0;
+                entries1 = new ArrayList<>();
+                entries2 = new ArrayList<>();
+                double factor = samples * timeGap * 1e-3;
+                maxFreq = (n / 2 - 1) / factor;
+                for (int i = 0; i < n / 2; i++) {
+                    float y1 = (float) fftOut1[i].abs() / samples;
+                    if (y1 > maxAmp1) {
+                        maxAmp1 = y1;
+                    }
+                    entries1.add(new Entry((float) (i / factor), y1));
+                    float y2 = (float) fftOut2[i].abs() / samples;
+                    if (y2 > maxAmp2) {
+                        maxAmp2 = y2;
+                    }
+                    entries2.add(new Entry((float) (i / factor), y2));
+                }
+            } catch (NullPointerException e) {
+                cancel(true);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (!String.valueOf(ledImageView.getTag()).equals("green")) {
+                ledImageView.setImageResource(R.drawable.green_led);
+                ledImageView.setTag("green");
+            }
+
+            LineDataSet dataSet1 = new LineDataSet(entries1, analogInput1);
+            LineDataSet dataSet2 = new LineDataSet(entries2, analogInput2);
+            dataSet2.setColor(Color.GREEN);
+
+            dataSet1.setDrawCircles(false);
+            dataSet2.setDrawCircles(false);
+
+            List<ILineDataSet> dataSets = new ArrayList<>();
+            dataSets.add(dataSet1);
+            dataSets.add(dataSet2);
+
+            LineData data = new LineData(dataSets);
+            mChart.setData(data);
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+
+            synchronized (lock) {
+                lock.notify();
+            }
+        }
+    }
+
 
     public Complex[] fft(Complex[] input) {
         Complex[] x = input;
