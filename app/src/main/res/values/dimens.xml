@@ -305,4 +305,8 @@
     <dimen name="thermo_sensor_label_title_size">16sp</dimen>
     <dimen name="thermo_display_font_size">16sp</dimen>
 
+    <dimen name="robotic_arm_width">25dp</dimen>
+    <dimen name="robotic_arm_margin_7">7dp</dimen>
+    <dimen name="robotic_arm_margin_10">10dp</dimen>
+    <dimen name="robotic_arm_height">25dp</dimen>
 </resources>
