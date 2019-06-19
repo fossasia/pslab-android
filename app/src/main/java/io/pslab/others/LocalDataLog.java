@@ -5,6 +5,7 @@ import io.pslab.interfaces.sensorloggers.BaroMeterRecordables;
 import io.pslab.interfaces.sensorloggers.GyroscopeRecordables;
 import io.pslab.interfaces.sensorloggers.CompassRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
+import io.pslab.interfaces.sensorloggers.OscilloscopeRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
 import io.pslab.interfaces.sensorloggers.ServoRecordables;
 import io.pslab.interfaces.sensorloggers.ThermometerRecordables;
@@ -14,6 +15,7 @@ import io.pslab.models.BaroData;
 import io.pslab.models.GyroData;
 import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
+import io.pslab.models.OscilloscopeData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
@@ -26,7 +28,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables {
+public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables, OscilloscopeRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -376,6 +378,44 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     @Override
     public RealmResults<WaveGeneratorData> getBlockOfWaveRecords(long block) {
         return realm.where(WaveGeneratorData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Oscilloscope Section
+     ***********************************************************************************************/
+
+    @Override
+    public OscilloscopeData getOscilloscopeData(long timeStamp) {
+        return realm.where(OscilloscopeData.class)
+                .equalTo("time", timeStamp)
+                .findFirst();
+    }
+
+    @Override
+    public void clearAllOscilloscopeRecords() {
+        realm.beginTransaction();
+        realm.delete(OscilloscopeData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfOscilloscopeRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<OscilloscopeData> data = getBlockOfOscilloscopeRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<OscilloscopeData> getAllOscilloscopeRecords() {
+        return realm.where(OscilloscopeData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<OscilloscopeData> getBlockOfOscilloscopeRecords(long block) {
+        return realm.where(OscilloscopeData.class)
                 .equalTo("block", block)
                 .findAll();
     }

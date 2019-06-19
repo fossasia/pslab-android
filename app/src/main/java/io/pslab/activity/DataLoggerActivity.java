@@ -111,8 +111,13 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             case "Robotic Arm":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.robotic_arm));
+                break;
             case "Wave Generator":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getResources().getString(R.string.wave_generator));
+                break;
+            case "Oscilloscope":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getResources().getString(R.string.oscilloscope));
+                break;
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
                 getSupportActionBar().setTitle(getString(R.string.logged_data));
@@ -166,6 +171,9 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             case "Wave Generator":
                 startActivity(new Intent(this, WaveGeneratorActivity.class));
+                break;
+            case "Oscilloscope":
+                startActivity(new Intent(this, OscilloscopeActivity.class));
                 break;
             default:
                 startActivity(new Intent(this,MainActivity.class));

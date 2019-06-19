@@ -139,6 +139,9 @@
     <dimen name="osc_image_weight">2</dimen>
     <dimen name="osc_divider_line">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
+    <dimen name="osc_play_button_height">50dp</dimen>
+    <dimen name="osc_play_button_widht">50dp</dimen>
+    <dimen name="osc_playback_margin">10dp</dimen>
 
     <dimen name="modified_spinner_height">40dp</dimen>
     <dimen name="spinner_text_size">15sp</dimen>

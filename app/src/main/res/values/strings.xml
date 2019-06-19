@@ -768,6 +768,8 @@
     <string name="setting_multimeter_update">setting_multimeter_update_period</string>
     <string name="time_string_multimeter">Please provide time interval at which data will be updated (100 ms to 2000 ms)</string>
 
+    <string name="timebase_title">Timebase</string>
+
     <string name="delete_all">Delete All Data</string>
     <string name="delete_all_message">Are You Sure?</string>
     <string name="baro_meter">Barometer</string>
