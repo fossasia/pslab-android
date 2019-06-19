@@ -188,6 +188,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 } else {
                     degreeText1.setText(String.valueOf((int) (i * 3.6)));
                 }
+                degreeText1.setCursorVisible(false);
             }
 
             @Override
@@ -210,6 +211,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 } else {
                     degreeText2.setText(String.valueOf((int) (i * 3.6)));
                 }
+                degreeText2.setCursorVisible(false);
             }
 
             @Override
@@ -232,6 +234,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 } else {
                     degreeText3.setText(String.valueOf((int) (i * 3.6)));
                 }
+                degreeText3.setCursorVisible(false);
             }
 
             @Override
@@ -254,6 +257,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 } else {
                     degreeText4.setText(String.valueOf((int) (i * 3.6)));
                 }
+                degreeText4.setCursorVisible(false);
             }
 
             @Override
@@ -322,6 +326,13 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
         });
 
+        degreeText1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                degreeText1.setCursorVisible(true);
+            }
+        });
+
         degreeText2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -338,6 +349,13 @@ public class RoboticArmActivity extends AppCompatActivity {
                     }
                 }
                 return false;
+            }
+        });
+
+        degreeText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                degreeText2.setCursorVisible(true);
             }
         });
 
@@ -360,6 +378,13 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
         });
 
+        degreeText3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                degreeText3.setCursorVisible(true);
+            }
+        });
+
         degreeText4.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -376,6 +401,13 @@ public class RoboticArmActivity extends AppCompatActivity {
                     }
                 }
                 return false;
+            }
+        });
+
+        degreeText4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                degreeText4.setCursorVisible(true);
             }
         });
 
