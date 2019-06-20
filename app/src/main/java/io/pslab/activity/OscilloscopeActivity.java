@@ -2,9 +2,13 @@ package io.pslab.activity;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +17,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -42,8 +47,11 @@ import org.apache.commons.math3.complex.Complex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,13 +60,23 @@ import io.pslab.communication.AnalyticsClass;
 import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.ChannelParametersFragment;
 import io.pslab.fragment.DataAnalysisFragment;
+import io.pslab.fragment.OscilloscopePlaybackFragment;
 import io.pslab.fragment.TimebaseTriggerFragment;
 import io.pslab.fragment.XYPlotFragment;
+import io.pslab.models.OscilloscopeData;
+import io.pslab.models.SensorDataBlock;
 import io.pslab.others.AudioJack;
+import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
+import io.pslab.others.GPSLogger;
+import io.pslab.others.LocalDataLog;
 import io.pslab.others.MathUtils;
 import io.pslab.others.Plot2D;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 import static io.pslab.others.MathUtils.map;
 
@@ -138,10 +156,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     View parentLayout;
     @BindView(R.id.bottom_sheet_oscilloscope)
     LinearLayout bottomSheet;
-    Fragment channelParametersFragment;
-    Fragment timebaseTriggerFragment;
-    Fragment dataAnalysisFragment;
-    Fragment xyPlotFragment;
+    private Fragment channelParametersFragment;
+    private Fragment timebaseTriggerFragment;
+    private Fragment dataAnalysisFragment;
+    private Fragment xyPlotFragment;
+    private Fragment playbackFragment;
     @BindView(R.id.imageView_led_os)
     ImageView ledImageView;
     @BindView(R.id.show_guide_oscilloscope)
@@ -166,7 +185,26 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private GestureDetector gestureDetector;
     private boolean btnLongpressed;
     private double maxAmp, maxFreq;
-
+    private ImageView recordButton;
+    private boolean isRecording = false;
+    private Realm realm;
+    public RealmResults<OscilloscopeData> recordedOscilloscopeData;
+    private CSVLogger csvLogger;
+    private GPSLogger gpsLogger;
+    private long block;
+    private Timer recordTimer;
+    private long recordPeriod = 100;
+    private String oscilloscopeCSVHeader = "Timestamp,DateTime,Channel,xData,yData,Timebase,lat,lon";
+    private String loggingXdata = "";
+    private String loggingYdata1 = "";
+    private String loggingYdata2 = "";
+    private final String KEY_LOG = "has_log";
+    private final String DATA_BLOCK = "data_block";
+    private int currentPosition = 0;
+    private Timer playbackTimer;
+    private View mainLayout;
+    private double lat;
+    private double lon;
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
     @SuppressLint("ClickableViewAccessibility")
@@ -188,6 +226,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 parentLayout.setVisibility(View.GONE);
             }
         });
+        mainLayout = findViewById(R.id.oscilloscope_mail_layout);
+
+        realm = LocalDataLog.with().getRealm();
+        gpsLogger = new GPSLogger(this,
+                (LocationManager) getSystemService(Context.LOCATION_SERVICE));
+        csvLogger = new CSVLogger(getString(R.string.oscilloscope));
+
+        recordButton = findViewById(R.id.oscilloscope_record_button);
 
         scienceLab = ScienceLabCommon.scienceLab;
         x1 = mChart.getXAxis();
@@ -222,6 +268,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         timebaseTriggerFragment = new TimebaseTriggerFragment();
         dataAnalysisFragment = new DataAnalysisFragment();
         xyPlotFragment = new XYPlotFragment();
+        playbackFragment = new OscilloscopePlaybackFragment();
 
         if (findViewById(R.id.layout_dock_os2) != null) {
             addFragment(R.id.layout_dock_os2, channelParametersFragment);
@@ -508,6 +555,192 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 return true;
             }
         });
+
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isRecording) {
+                    isRecording = false;
+                    recordButton.setImageResource(R.drawable.ic_record_white);
+                    CustomSnackBar.showSnackBar(mainLayout,
+                            getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
+                            , getString(R.string.open), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(OscilloscopeActivity.this, DataLoggerActivity.class);
+                                    intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.oscilloscope));
+                                    startActivity(intent);
+                                }
+                            }, Snackbar.LENGTH_SHORT);
+                } else {
+                    isRecording = true;
+                    recordButton.setImageResource(R.drawable.ic_record_stop_white);
+                    block = System.currentTimeMillis();
+                    if (gpsLogger.isGPSEnabled()) {
+                        Location location = gpsLogger.getDeviceLocation();
+                        if (location != null) {
+                            lat = location.getLatitude();
+                            lon = location.getLongitude();
+                        } else {
+                            lat = 0.0;
+                            lon = 0.0;
+                        }
+                    } else {
+                        lat = 0.0;
+                        lon = 0.0;
+                    }
+                    csvLogger = new CSVLogger(getResources().getString(R.string.oscilloscope));
+                    csvLogger.prepareLogFile();
+                    csvLogger.writeCSVFile(oscilloscopeCSVHeader);
+                    recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.oscilloscope)));
+                    CustomSnackBar.showSnackBar(mainLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
+                }
+            }
+        });
+
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+            recordedOscilloscopeData = LocalDataLog.with()
+                    .getBlockOfOscilloscopeRecords(getIntent().getExtras().getLong(DATA_BLOCK));
+            setLayoutForPlayback();
+        }
+    }
+
+    private void setLayoutForPlayback() {
+        findViewById(R.id.layout_dock_os1).setVisibility(View.GONE);
+        recordButton.setVisibility(View.GONE);
+        RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
+        RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+        lineChartParams.height = height * 4/5;
+        lineChartParams.width = width;
+        mChartLayout.setLayoutParams(lineChartParams);
+        frameLayoutParams.height = height /5;
+        frameLayoutParams.width = width;
+        frameLayout.setLayoutParams(frameLayoutParams);
+        replaceFragment(R.id.layout_dock_os2, playbackFragment, "Playback Fragment" );
+    }
+
+    public void playRecordedData() {
+        final Handler handler = new Handler();
+        if (playbackTimer == null) {
+            playbackTimer = new Timer();
+        }
+        playbackTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (currentPosition < recordedOscilloscopeData.size()) {
+                                OscilloscopeData data = recordedOscilloscopeData.get(currentPosition);
+                                if (data.getMode() == 1) {
+                                    currentPosition += 1;
+                                    ArrayList<Entry> entries = new ArrayList<>();
+                                    String[] xData = data.getDataX().split(" ");
+                                    String[] yData = data.getDataY().split(" ");
+
+                                    int n = Math.min(xData.length, yData.length);
+                                    for (int i = 0; i < n; i++) {
+                                        if (xData[i].length() > 0 && yData[i].length() > 0) {
+                                            entries.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData[i])));
+                                        }
+                                    }
+
+                                    setLeftYAxisScale(16f, -16f);
+                                    setRightYAxisScale(16f, -16f);
+                                    setXAxisScale(data.getTimebase());
+                                    LineDataSet dataSet = new LineDataSet(entries, data.getChannel());
+                                    LineData lineData = new LineData(dataSet);
+                                    dataSet.setDrawCircles(false);
+                                    mChart.setData(lineData);
+                                    mChart.notifyDataSetChanged();
+                                    mChart.invalidate();
+
+                                    ((OscilloscopePlaybackFragment) playbackFragment).setTimeBase(String.valueOf(data.getTimebase()));
+                                } else if (data.getMode() == 2) {
+                                    OscilloscopeData data2 = recordedOscilloscopeData.get(currentPosition + 1);
+                                    currentPosition += 2;
+                                    ArrayList<Entry> entries1 = new ArrayList<>();
+                                    ArrayList<Entry> entries2 = new ArrayList<>();
+                                    String[] xData = data.getDataX().split(" ");
+                                    String[] yData1 = data.getDataY().split(" ");
+                                    String[] yData2 = data2.getDataY().split(" ");
+                                    int n = Math.min(xData.length, Math.min(yData1.length, yData2.length));
+                                    for (int i = 0; i < n; i++) {
+                                        if (xData[i].length() > 0 && yData1[i].length() > 0 && yData2[i].length() > 0) {
+                                            entries1.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData1[i])));
+                                            entries2.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData2[i])));
+                                        }
+                                    }
+
+                                    setLeftYAxisScale(16f, -16f);
+                                    setRightYAxisScale(16f, -16f);
+                                    setXAxisScale(data.getTimebase());
+
+                                    LineDataSet dataSet1 = new LineDataSet(entries1, data.getChannel());
+                                    LineDataSet dataSet2 = new LineDataSet(entries2, data2.getChannel());
+                                    dataSet1.setDrawCircles(false);
+                                    dataSet2.setDrawCircles(false);
+                                    dataSet2.setColor(Color.GREEN);
+                                    dataSet2.setDrawCircles(false);
+                                    List<ILineDataSet> dataSets = new ArrayList<>();
+                                    dataSets.add(dataSet1);
+                                    dataSets.add(dataSet2);
+
+                                    LineData lineData = new LineData(dataSets);
+                                    mChart.setData(lineData);
+                                    mChart.notifyDataSetChanged();
+                                    mChart.invalidate();
+
+                                    ((OscilloscopePlaybackFragment) playbackFragment).setTimeBase(String.valueOf(data.getTimebase()));
+                                }
+                            } else {
+                                playbackTimer.cancel();
+                                playbackTimer = null;
+                                ((OscilloscopePlaybackFragment) playbackFragment).resetPlayButton();
+                                currentPosition = 0;
+                            }
+                        } catch (Exception e) {
+                            playbackTimer.cancel();
+                            playbackTimer = null;
+                            ((OscilloscopePlaybackFragment) playbackFragment).resetPlayButton();
+                            currentPosition = 0;
+                        }
+                    }
+                });
+
+            }
+        }, 0, recordPeriod);
+    }
+
+    public void pauseData() {
+        playbackTimer.cancel();
+        playbackTimer = null;
+    }
+
+    private void logSingleChannelData(String channel) {
+        long timestamp = System.currentTimeMillis();
+        if (loggingXdata.length() > 0 && loggingYdata1.length() > 0) {
+            recordSensorData(new OscilloscopeData(timestamp, block, 1, channel, loggingXdata, loggingYdata1, xAxisScale, lat, lon));
+            String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+            String locationData = lat + "," + lon;
+            String data = timeData + "," + channel + "," + loggingXdata + "," + loggingYdata1 + "," + xAxisScale + "," + locationData;
+            csvLogger.writeCSVFile(data);
+        }
+    }
+
+    private void logTwoChannelData(String channel1, String channel2) {
+        long timestamp = System.currentTimeMillis();
+        if (loggingXdata.length() > 0 && loggingYdata1.length() > 0 && loggingYdata2.length() > 0) {
+            recordSensorData(new OscilloscopeData(timestamp, block, 2, channel1, loggingXdata, loggingYdata1, xAxisScale, lat, lon));
+            recordSensorData(new OscilloscopeData(timestamp + 1, block, 2, channel2, loggingXdata, loggingYdata2, xAxisScale, lat, lon));
+            String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+            String locationData = lat + "," + lon;
+            String data = timeData + "," + channel1 + "," + loggingXdata + "," + loggingYdata1 + "," + xAxisScale + "," + locationData;
+            csvLogger.writeCSVFile(data);
+            data = timeData + "," + channel2 + "," + loggingXdata + "," + loggingYdata2 + "," + xAxisScale + "," + locationData;
+            csvLogger.writeCSVFile(data);
+        }
     }
 
     @Override
@@ -632,6 +865,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             if (audioJack != null) {
                 audioJack.release();
             }
+        }
+        if (recordTimer != null) {
+            recordTimer.cancel();
+            recordTimer = null;
         }
         super.onDestroy();
     }
@@ -799,10 +1036,28 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 double[] xData = data.get("x");
                 double[] yData = data.get("y");
 
+                String[] xString = new String[xData.length];
+                String[] yString = new String[yData.length];
                 entries = new ArrayList<>();
                 for (int i = 0; i < xData.length; i++) {
-                    entries.add(new Entry((float) xData[i] / ((timebase == 875) ? 1 : 1000), (float) yData[i]));
+                    xData[i] = xData[i] / ((timebase == 875) ? 1 : 1000);
+                    entries.add(new Entry((float)xData[i], (float)yData[i]));
+
+                    xString[i] = String.valueOf(xData[i]);
+                    yString[i] = String.valueOf(yData[i]);
                 }
+
+                loggingXdata = String.join(" ", xString);
+                loggingYdata1 = String.join(" ", yString);
+                if (isRecording) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            logSingleChannelData(analogInput);
+                        }
+                    });
+                }
+
             } catch (NullPointerException e) {
                 cancel(true);
             } catch (InterruptedException e) {
@@ -876,11 +1131,31 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 entries1 = new ArrayList<>();
                 entries2 = new ArrayList<>();
 
-                for (int i = 0; i < Math.min(xData.length, Math.min(y1Data.length, y2Data.length)); i++) {
-                    float xi = (float) xData[i] / ((timebase == 875) ? 1 : 1000);
-                    entries1.add(new Entry(xi, (float) y1Data[i]));
-                    entries2.add(new Entry(xi, (float) y2Data[i]));
+                int n = Math.min(xData.length, Math.min(y1Data.length, y2Data.length));
+                String[] xString = new String[n];
+                String[] y1String = new String[n];
+                String[] y2String = new String[n];
+                for (int i = 0; i < n ; i++) {
+                    xData[i] = xData[i] / ((timebase == 875) ? 1 : 1000);
+                    entries1.add(new Entry((float)xData[i], (float) y1Data[i]));
+                    entries2.add(new Entry((float)xData[i], (float) y2Data[i]));
+                    xString[i] = String.valueOf(xData[i]);
+                    y1String[i] = String.valueOf(y1Data[i]);
+                    y2String[i] = String.valueOf(y2Data[i]);
                 }
+                loggingXdata = String.join(" ", xString);
+                loggingYdata1 = String.join(" ", y1String);
+                loggingYdata2 = String.join(" ", y2String);
+
+                if (isRecording) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            logTwoChannelData(analogInput1, analogInput2);
+                        }
+                    });
+                }
+
             } catch (NullPointerException e) {
                 cancel(true);
             } catch (InterruptedException e) {
@@ -1346,7 +1621,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-
     public Complex[] fft(Complex[] input) {
         Complex[] x = input;
         int n = x.length;
@@ -1376,5 +1650,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             y[k + n / 2] = q[k].subtract(wk.multiply(r[k]));
         }
         return y;
+    }
+
+    public void recordSensorDataBlockID(SensorDataBlock block) {
+        realm.beginTransaction();
+        realm.copyToRealm(block);
+        realm.commitTransaction();
+    }
+
+    public void recordSensorData(RealmObject sensorData) {
+        realm.beginTransaction();
+        realm.copyToRealm((OscilloscopeData) sensorData);
+        realm.commitTransaction();
     }
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <CheckBox
+        android:id="@+id/fourier_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="@string/fourier_transforms"
+        />
+    <TextView
+        android:id="@+id/timebase_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Base.TextAppearance.AppCompat.Title"
+        android:text="@string/timebase_title"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/osc_playback_margin"
+        />
+    <TextView
+        android:id="@+id/timebase_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/timebase_title"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/osc_playback_margin"
+        />
+    <ImageView
+        android:id="@+id/play_button"
+        android:layout_width="@dimen/osc_play_button_widht"
+        android:layout_height="@dimen/osc_play_button_height"
+        android:src="@drawable/ic_play_button"
+        android:tint="@color/colorPrimary"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        />
+</RelativeLayout>
