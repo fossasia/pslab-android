@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +32,8 @@ public class OscilloscopePlaybackFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_oscilloscope_playback, container, false);
         timebaseTextView = rootView.findViewById(R.id.timebase_data);
         playButton = rootView.findViewById(R.id.play_button);
+        CheckBox fourierCheckBox = rootView.findViewById(R.id.fourier_checkbox);
+
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,6 +46,13 @@ public class OscilloscopePlaybackFragment extends Fragment {
                     playButton.setImageResource(R.drawable.pause_icon);
                     oscilloscopeActivity.playRecordedData();
                 }
+            }
+        });
+
+        fourierCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                oscilloscopeActivity.isPlaybackFourierChecked = isChecked;
             }
         });
         return rootView;
