@@ -205,6 +205,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private View mainLayout;
     private double lat;
     private double lon;
+    public boolean isPlaybackFourierChecked = false;
+
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
     @SuppressLint("ClickableViewAccessibility")
@@ -610,13 +612,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         recordButton.setVisibility(View.GONE);
         RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
         RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
-        lineChartParams.height = height * 4/5;
+        lineChartParams.height = height * 4 / 5;
         lineChartParams.width = width;
         mChartLayout.setLayoutParams(lineChartParams);
-        frameLayoutParams.height = height /5;
+        frameLayoutParams.height = height / 5;
         frameLayoutParams.width = width;
         frameLayout.setLayoutParams(frameLayoutParams);
-        replaceFragment(R.id.layout_dock_os2, playbackFragment, "Playback Fragment" );
+        replaceFragment(R.id.layout_dock_os2, playbackFragment, "Playback Fragment");
     }
 
     public void playRecordedData() {
@@ -639,16 +641,37 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                                     String[] xData = data.getDataX().split(" ");
                                     String[] yData = data.getDataY().split(" ");
 
-                                    int n = Math.min(xData.length, yData.length);
-                                    for (int i = 0; i < n; i++) {
-                                        if (xData[i].length() > 0 && yData[i].length() > 0) {
-                                            entries.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData[i])));
+                                    if (!isPlaybackFourierChecked) {
+                                        int n = Math.min(xData.length, yData.length);
+                                        for (int i = 0; i < n; i++) {
+                                            if (xData[i].length() > 0 && yData[i].length() > 0) {
+                                                entries.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData[i])));
+                                            }
                                         }
+                                        setLeftYAxisScale(16f, -16f);
+                                        setRightYAxisScale(16f, -16f);
+                                        setXAxisScale(data.getTimebase());
+                                    } else {
+                                        Complex[] yComplex = new Complex[yData.length];
+                                        for (int i = 0; i < yData.length; i++) {
+                                            yComplex[i] = Complex.valueOf(Double.valueOf(yData[i]));
+                                        }
+                                        Complex[] fftOut = fft(yComplex);
+                                        int n = fftOut.length;
+                                        double mA = 0;
+                                        double factor = samples * timeGap * 1e-3;
+                                        double mF = (n / 2 - 1) / factor;
+                                        for (int i = 0; i < n / 2; i++) {
+                                            float y = (float) fftOut[i].abs() / samples;
+                                            if (y > mA) {
+                                                mA = y;
+                                            }
+                                            entries.add(new Entry((float) (i / factor), y));
+                                        }
+                                        setLeftYAxisScale(mA, 0);
+                                        setRightYAxisScale(mA, 0);
+                                        setXAxisScale(mF);
                                     }
-
-                                    setLeftYAxisScale(16f, -16f);
-                                    setRightYAxisScale(16f, -16f);
-                                    setXAxisScale(data.getTimebase());
                                     LineDataSet dataSet = new LineDataSet(entries, data.getChannel());
                                     LineData lineData = new LineData(dataSet);
                                     dataSet.setDrawCircles(false);
@@ -665,18 +688,52 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                                     String[] xData = data.getDataX().split(" ");
                                     String[] yData1 = data.getDataY().split(" ");
                                     String[] yData2 = data2.getDataY().split(" ");
-                                    int n = Math.min(xData.length, Math.min(yData1.length, yData2.length));
-                                    for (int i = 0; i < n; i++) {
-                                        if (xData[i].length() > 0 && yData1[i].length() > 0 && yData2[i].length() > 0) {
-                                            entries1.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData1[i])));
-                                            entries2.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData2[i])));
+
+                                    if (!isPlaybackFourierChecked) {
+                                        int n = Math.min(xData.length, Math.min(yData1.length, yData2.length));
+                                        for (int i = 0; i < n; i++) {
+                                            if (xData[i].length() > 0 && yData1[i].length() > 0 && yData2[i].length() > 0) {
+                                                entries1.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData1[i])));
+                                                entries2.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData2[i])));
+                                            }
                                         }
+
+                                        setLeftYAxisScale(16f, -16f);
+                                        setRightYAxisScale(16f, -16f);
+                                        setXAxisScale(data.getTimebase());
+                                    } else {
+                                        Complex[] yComplex1 = new Complex[yData1.length];
+                                        Complex[] yComplex2 = new Complex[yData2.length];
+                                        for (int i = 0; i < Math.min(yData1.length, yData2.length); i++) {
+                                            yComplex1[i] = Complex.valueOf(Double.valueOf(yData1[i]));
+                                            yComplex2[i] = Complex.valueOf(Double.valueOf(yData2[i]));
+                                        }
+                                        Complex[] fftOut1 = fft(yComplex1);
+                                        Complex[] fftOut2 = fft(yComplex2);
+                                        int n = Math.min(fftOut1.length, fftOut2.length);
+                                        double mA = 0;
+
+                                        float maxAmp1 = 0;
+                                        float maxAmp2 = 0;
+                                        double factor = samples * timeGap * 1e-3;
+                                        double mF = (n / 2 - 1) / factor;
+                                        for (int i = 0; i < n / 2; i++) {
+                                            float y1 = (float) fftOut1[i].abs() / samples;
+                                            if (y1 > maxAmp1) {
+                                                maxAmp1 = y1;
+                                            }
+                                            entries1.add(new Entry((float) (i / factor), y1));
+                                            float y2 = (float) fftOut2[i].abs() / samples;
+                                            if (y2 > maxAmp2) {
+                                                maxAmp2 = y2;
+                                            }
+                                            entries2.add(new Entry((float) (i / factor), y2));
+                                        }
+                                        mA = Math.max(maxAmp1, maxAmp2);
+                                        setXAxisScale(mF);
+                                        setLeftYAxisScale(mA, 0);
+                                        setRightYAxisScale(mA, 0);
                                     }
-
-                                    setLeftYAxisScale(16f, -16f);
-                                    setRightYAxisScale(16f, -16f);
-                                    setXAxisScale(data.getTimebase());
-
                                     LineDataSet dataSet1 = new LineDataSet(entries1, data.getChannel());
                                     LineDataSet dataSet2 = new LineDataSet(entries2, data2.getChannel());
                                     dataSet1.setDrawCircles(false);
@@ -1041,7 +1098,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 entries = new ArrayList<>();
                 for (int i = 0; i < xData.length; i++) {
                     xData[i] = xData[i] / ((timebase == 875) ? 1 : 1000);
-                    entries.add(new Entry((float)xData[i], (float)yData[i]));
+                    entries.add(new Entry((float) xData[i], (float) yData[i]));
 
                     xString[i] = String.valueOf(xData[i]);
                     yString[i] = String.valueOf(yData[i]);
@@ -1135,10 +1192,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 String[] xString = new String[n];
                 String[] y1String = new String[n];
                 String[] y2String = new String[n];
-                for (int i = 0; i < n ; i++) {
+                for (int i = 0; i < n; i++) {
                     xData[i] = xData[i] / ((timebase == 875) ? 1 : 1000);
-                    entries1.add(new Entry((float)xData[i], (float) y1Data[i]));
-                    entries2.add(new Entry((float)xData[i], (float) y2Data[i]));
+                    entries1.add(new Entry((float) xData[i], (float) y1Data[i]));
+                    entries2.add(new Entry((float) xData[i], (float) y2Data[i]));
                     xString[i] = String.valueOf(xData[i]);
                     y1String[i] = String.valueOf(y1Data[i]);
                     y2String[i] = String.valueOf(y2Data[i]);
@@ -1186,6 +1243,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             dataSets.add(dataSet2);
 
             LineData data = new LineData(dataSets);
+            setXAxisScale(xAxisScale);
+            setLeftYAxisScale(16, -16);
+            setRightYAxisScale(16, -16);
             mChart.setData(data);
             mChart.notifyDataSetChanged();
             mChart.invalidate();
@@ -1583,6 +1643,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     }
                     entries2.add(new Entry((float) (i / factor), y2));
                 }
+                maxAmp = Math.max(maxAmp1, maxAmp2);
             } catch (NullPointerException e) {
                 cancel(true);
             } catch (InterruptedException e) {
@@ -1611,6 +1672,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             dataSets.add(dataSet2);
 
             LineData data = new LineData(dataSets);
+            setXAxisScale(maxFreq);
+            setLeftYAxisScale(maxAmp, 0);
+            setRightYAxisScale(maxAmp, 0);
             mChart.setData(data);
             mChart.notifyDataSetChanged();
             mChart.invalidate();
