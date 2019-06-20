@@ -18,7 +18,7 @@
             android:baselineAligned="false">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="@dimen/thermo_width_0"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:gravity="center_horizontal|center_vertical"
@@ -27,7 +27,7 @@
                 <TextView
                     android:id="@+id/label_thermo_sensor"
                     style="@style/thermo_meter_stat_heading"
-                    android:paddingBottom="5dp"
+                    android:paddingBottom="@dimen/thermo_padding"
                     android:textSize="@dimen/thermo_sensor_label_title_size" />
 
                 <TextView
@@ -128,7 +128,6 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/chart_xaxis_layout_thermo"
                 android:layout_toEndOf="@+id/chart_yaxis_layout_hmc_thermo"
-                android:layout_toRightOf="@+id/chart_yaxis_layout_hmc_thermo"
                 android:background="@color/black" />
         </RelativeLayout>
 
