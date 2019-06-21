@@ -9,8 +9,8 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp">
+        android:layout_marginEnd="@dimen/timebase_margin_end"
+        android:layout_marginStart="@dimen/timebase_margin_start">
 
         <TableRow
             android:layout_width="match_parent"

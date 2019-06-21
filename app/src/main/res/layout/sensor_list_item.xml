@@ -10,6 +10,6 @@
     android:textAlignment="center"
     android:textAllCaps="true"
     android:textColor="@color/white"
-    android:textSize="14sp"
+    android:textSize="@dimen/sensorlist_text_size"
     android:textStyle="bold"
     />

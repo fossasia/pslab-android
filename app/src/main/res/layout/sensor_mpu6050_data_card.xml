@@ -33,8 +33,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginLeft="@dimen/mpu6050_margin"
+            android:layout_marginStart="@dimen/mpu6050_margin"
             android:layout_weight="1"
             android:orientation="vertical"
             android:weightSum="4">
