@@ -205,7 +205,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private double lon;
     public boolean isPlaybackFourierChecked = false;
     private HashMap<String, Integer> channelIndexMap;
-    Integer[] channelColors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.MAGENTA};
+    private Integer[] channelColors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.MAGENTA};
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
@@ -1085,14 +1085,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     }
 
     public class CaptureTask extends AsyncTask<String, Void, Void> {
-        ArrayList<ArrayList<Entry>> entries = new ArrayList<>();
-        Integer noOfChannels;
-        String[] paramsChannels;
+        private ArrayList<ArrayList<Entry>> entries = new ArrayList<>();
+        private Integer noOfChannels;
+        private String[] paramsChannels;
 
         @Override
-        protected Void doInBackground(String... strings) {
-            paramsChannels = strings;
-            noOfChannels = strings.length;
+        protected Void doInBackground(String... channels) {
+            paramsChannels = channels;
+            noOfChannels = channels.length;
             try {
                 double[] xData;
                 double[] yData;
@@ -1100,7 +1100,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 String[] xDataString = null;
                 for (int i = 0; i < noOfChannels; i++) {
                     entries.add(new ArrayList<>());
-                    String channel = strings[i];
+                    String channel = channels[i];
                     HashMap<String, double[]> data;
                     if (triggerChannel.equals(channel))
                         scienceLab.configureTrigger(channelIndexMap.get(channel), channel, trigger, null, null);
