@@ -565,6 +565,7 @@
     <string name="text_waveform">Waveform</string>
     <string name="text_pwm">PWM</string>
     <string name="view_text">View</string>
+    <string name="save_text">Save</string>
     <string name="phase_holder_text">45 deg</string>
     <string name="duty_holder_text">50 %</string>
     <string name="open_instrument">Open instrument</string>
@@ -744,6 +745,7 @@
     <string name="servo2_title">Servo 2</string>
     <string name="servo3_title">Servo 3</string>
     <string name="servo4_title">Servo 4</string>
+    <string name="invalid_servo_value">Kindly select a value between 0 and 360</string>
     <string-array name="baro_sensors">
         <item>Built-In</item>
         <item>BMP180</item>
@@ -766,6 +768,8 @@
     <string name="setting_multimeter_update">setting_multimeter_update_period</string>
     <string name="time_string_multimeter">Please provide time interval at which data will be updated (100 ms to 2000 ms)</string>
 
+    <string name="timebase_title">Timebase</string>
+
     <string name="delete_all">Delete All Data</string>
     <string name="delete_all_message">Are You Sure?</string>
     <string name="baro_meter">Barometer</string>
@@ -786,6 +790,7 @@
     <string name="gyroscope_description_text">Orientation of the positive X, Y, and Z axes. For any positive axis on the device, clockwise rotation outputs negative values, and counterclockwise rotation outputs positive values.</string>
     <string name="gyroscope_config">Gyroscope Configuration</string>
     <string name="no_gyroscope_sensor">Your device does not have sensor required for this functionality</string>
+    <string name="no_data_recorded_gyro">No data recorded as the sensor is not present in the device. Try with an external sensor.</string>
     <string name="lux_meter">Lux Meter</string>
     <string name="lux_default_1000">1000</string>
     <string name="lux_default_2000">2000</string>

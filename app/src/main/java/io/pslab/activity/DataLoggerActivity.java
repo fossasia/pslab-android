@@ -43,6 +43,7 @@ import io.pslab.models.LuxData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
+import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
 import io.realm.Realm;
@@ -67,6 +68,7 @@ public class DataLoggerActivity extends AppCompatActivity {
     private RealmResults<SensorDataBlock> categoryData;
     private String selectedDevice = null;
     private Realm realm;
+    private String caller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,7 @@ public class DataLoggerActivity extends AppCompatActivity {
         deleteAllProgressBar = findViewById(R.id.delete_all_progbar);
         deleteAllProgressBar.setVisibility(View.GONE);
         realm = LocalDataLog.with().getRealm();
-        String caller = getIntent().getStringExtra(CALLER_ACTIVITY);
+        caller = getIntent().getStringExtra(CALLER_ACTIVITY);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -109,6 +111,13 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             case "Robotic Arm":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.robotic_arm));
+                break;
+            case "Wave Generator":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getResources().getString(R.string.wave_generator));
+                break;
+            case "Oscilloscope":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getResources().getString(R.string.oscilloscope));
+                break;
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
                 getSupportActionBar().setTitle(getString(R.string.logged_data));
@@ -134,7 +143,41 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        getSupportActionBar().setTitle(caller);
+        switch (caller) {
+            case "Lux Meter":
+                startActivity(new Intent(this,LuxMeterActivity.class));
+                break;
+            case "Barometer":
+                startActivity(new Intent(this,BarometerActivity.class));
+                break;
+            case "Accelerometer":
+                startActivity(new Intent(this,AccelerometerActivity.class));
+                break;
+            case "Multimeter":
+                startActivity(new Intent(this,MultimeterActivity.class));
+                break;
+            case "Gyroscope":
+                startActivity(new Intent(this,GyroscopeActivity.class));
+                break;
+            case "Compass":
+                startActivity(new Intent(this,CompassActivity.class));
+                break;
+            case "Thermometer":
+                startActivity(new Intent(this,ThermometerActivity.class));
+                break;
+            case "Robotic Arm":
+                startActivity(new Intent(this,RoboticArmActivity.class));
+                break;
+            case "Wave Generator":
+                startActivity(new Intent(this, WaveGeneratorActivity.class));
+                break;
+            case "Oscilloscope":
+                startActivity(new Intent(this, OscilloscopeActivity.class));
+                break;
+            default:
+                startActivity(new Intent(this,MainActivity.class));
+        }
     }
 
     @Override
@@ -479,6 +522,41 @@ public class DataLoggerActivity extends AppCompatActivity {
                         time = block;
                         realm.beginTransaction();
                         realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.robotic_arm)));
+                        realm.commitTransaction();
+                    }
+                    i++;
+                    line = reader.readLine();
+                }
+                fillData();
+                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.wave_generator))) {
+            try {
+                FileInputStream is = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                String line = reader.readLine();
+                int i = 0;
+                long block = 0, time = 0;
+                while (line != null) {
+                    if (i != 0) {
+                        String[] data = line.split(",");
+                        try {
+                            time += 1000;
+                            WaveGeneratorData waveData = new WaveGeneratorData(time, block, data[2], data[3], data[4], data[5], data[6],data[7],Float.valueOf(data[8]), Float.valueOf(data[9]));
+                            realm.beginTransaction();
+                            realm.copyToRealm(waveData);
+                            realm.commitTransaction();
+                        } catch (Exception e) {
+                            Log.d("exception", i + " " + e.getMessage());
+                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        block = System.currentTimeMillis();
+                        time = block;
+                        realm.beginTransaction();
+                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.wave_generator)));
                         realm.commitTransaction();
                     }
                     i++;

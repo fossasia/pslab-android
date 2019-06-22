@@ -29,17 +29,21 @@ import io.pslab.activity.GyroscopeActivity;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.CompassActivity;
+import io.pslab.activity.OscilloscopeActivity;
 import io.pslab.activity.RoboticArmActivity;
 import io.pslab.activity.ThermometerActivity;
+import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.GyroData;
 import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
+import io.pslab.models.OscilloscopeData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
+import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
 import io.realm.RealmRecyclerViewAdapter;
@@ -83,7 +87,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 break;
             case PSLabSensor.GYROSCOPE:
                 holder.sensor.setText(context.getResources().getString(R.string.gyroscope));
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logdata_logo));
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logo));
                 break;
             case PSLabSensor.COMPASS:
                 holder.sensor.setText(context.getResources().getString(R.string.compass));
@@ -99,7 +103,15 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 break;
             case PSLabSensor.ROBOTIC_ARM:
                 holder.sensor.setText(R.string.robotic_arm);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logo));
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.robotic_arm));
+                break;
+            case PSLabSensor.WAVE_GENERATOR:
+                holder.sensor.setText(R.string.wave_generator);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_wave_generator));
+                break;
+            case PSLabSensor.OSCILLOSCOPE:
+                holder.sensor.setText(R.string.oscilloscope);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_oscilloscope));
                 break;
             default:
                 break;
@@ -161,6 +173,16 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             RoboticArm.putExtra(KEY_LOG, true);
             RoboticArm.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(RoboticArm);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.wave_generator))) {
+            Intent waveGenerator = new Intent(context, WaveGeneratorActivity.class);
+            waveGenerator.putExtra(KEY_LOG, true);
+            waveGenerator.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(waveGenerator);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.oscilloscope))) {
+            Intent oscilloscope = new Intent(context, OscilloscopeActivity.class);
+            oscilloscope.putExtra(KEY_LOG, true);
+            oscilloscope.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(oscilloscope);
         }
     }
 
@@ -192,6 +214,10 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfAccelerometerRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ROBOTIC_ARM)) {
                             LocalDataLog.with().clearBlockOfServoRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.WAVE_GENERATOR)) {
+                            LocalDataLog.with().clearBlockOfWaveRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.OSCILLOSCOPE)) {
+                            LocalDataLog.with().clearBlockOfOscilloscopeRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
                         dialog.dismiss();
@@ -327,6 +353,46 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     i.put("Servo4", d.getDegree4());
                     i.put("lon", d.getLon());
                     i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.WAVE_GENERATOR)) {
+            RealmResults<WaveGeneratorData> data = LocalDataLog.with().getBlockOfWaveRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (WaveGeneratorData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("Mode", d.getMode());
+                    i.put("Wave", d.getWave());
+                    i.put("Shape", d.getShape());
+                    i.put("Freq", d.getFreq());
+                    i.put("Phase", d.getPhase());
+                    i.put("Duty", d.getDuty());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.OSCILLOSCOPE)) {
+            RealmResults<OscilloscopeData> data = LocalDataLog.with().getBlockOfOscilloscopeRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (OscilloscopeData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("channel", d.getChannel());
+                    i.put("xData", d.getDataX());
+                    i.put("yData", d.getDataY());
+                    i.put("timebase", d.getTimebase());
+                    i.put("lat", d.getLat());
+                    i.put("lon", d.getLon());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -139,6 +139,9 @@
     <dimen name="osc_image_weight">2</dimen>
     <dimen name="osc_divider_line">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
+    <dimen name="osc_play_button_height">50dp</dimen>
+    <dimen name="osc_play_button_widht">50dp</dimen>
+    <dimen name="osc_playback_margin">10dp</dimen>
 
     <dimen name="modified_spinner_height">40dp</dimen>
     <dimen name="spinner_text_size">15sp</dimen>
@@ -225,6 +228,8 @@
     <dimen name="connect_inst_margin_b0ttom">20dp</dimen>
     <dimen name="device_status_height_text">60dp</dimen>
     <dimen name="progress_bar_height">8dp</dimen>
+    <dimen name="timebase_margin_end">8dp</dimen>
+    <dimen name="timebase_margin_start">8dp</dimen>
     <dimen name="connect_instruction_text_header">18sp</dimen>
 
     <dimen name="compass_padding">4dp</dimen>
@@ -267,6 +272,7 @@
     <dimen name="lux_display_font_size">16sp</dimen>
     <dimen name="lux_guage_font_size">8sp</dimen>
     <dimen name="lux_sensor_label_title_size">16sp</dimen>
+    <dimen name="lux_width_0">0dp</dimen>
 
     <dimen name="baro_display_font_size">16sp</dimen>
     <dimen name="baro_guage_font_size">8sp</dimen>
@@ -278,6 +284,11 @@
     <dimen name="thermometer_select_axes_text_size">18sp</dimen>
     <dimen name="thermometer_text_size_large">25sp</dimen>
     <dimen name="thermometer_space_top">120dp</dimen>
+    <dimen name="thermo_guage_font_size">8sp</dimen>
+    <dimen name="thermo_sensor_label_title_size">16sp</dimen>
+    <dimen name="thermo_display_font_size">16sp</dimen>
+    <dimen name="thermo_width_0">0dp</dimen>
+    <dimen name="thermo_padding">5dp</dimen>
 
     <dimen name="item_text_size">18sp</dimen>
     <dimen name="view_data_loc_middle">20dp</dimen>
@@ -301,8 +312,25 @@
     <dimen name="splash_screen_name_width">271dp</dimen>
     <dimen name="splash_screen_name_height">95dp</dimen>
     <dimen name="top_margin_text">30dp</dimen>
-    <dimen name="thermo_guage_font_size">8sp</dimen>
-    <dimen name="thermo_sensor_label_title_size">16sp</dimen>
-    <dimen name="thermo_display_font_size">16sp</dimen>
 
+    <dimen name="robotic_arm_width">25dp</dimen>
+    <dimen name="robotic_arm_margin_small">7dp</dimen>
+    <dimen name="robotic_arm_margin">10dp</dimen>
+    <dimen name="robotic_arm_height">25dp</dimen>
+    <dimen name="robotic_arm_text_size">24sp</dimen>
+    <dimen name="servo_image_width">20dp</dimen>
+    <dimen name="servo_image_margin">2dp</dimen>
+    <dimen name="seekarc_padding">30dp</dimen>
+    <dimen name="seekarc_edit_text">36sp</dimen>
+
+    <dimen name="sensor_sht21_margin">5dp</dimen>
+    <dimen name="sht21_height">40dp</dimen>
+    <dimen name="card_sht21_height">180dp</dimen>
+    <dimen name="margin_top_sht21">20dp</dimen>
+    <dimen name="sht21_text_height">40dp</dimen>
+
+    <dimen name="mpu6050_margin">30dp</dimen>
+
+    <dimen name="sensorlist_text_size">14sp</dimen>
+    <dimen name="text_size_sensor_list">14sp</dimen>
 </resources>

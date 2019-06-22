@@ -202,7 +202,7 @@ public class InstrumentsFragment extends Fragment {
                     getResources().getString(R.string.thermometer), R.drawable.thermometer_logo, getResources().getString(descriptions[11])
                     ));
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.robotic_arm), R.drawable.gyroscope_logo, getResources().getString(descriptions[11])
+                    getResources().getString(R.string.robotic_arm), R.drawable.robotic_arm, getResources().getString(descriptions[11])
             ));
             return null;
         }

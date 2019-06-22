@@ -39,6 +39,45 @@
             layout="@layout/servo_controller_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+            android:id="@+id/servo_timeline_controls"
+            android:layout_width="@dimen/robotic_arm_margin"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:background="@color/colorPrimary"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/timeline_play_pause_button"
+                android:layout_width="@dimen/robotic_arm_width"
+                android:layout_height="@dimen/robotic_arm_height"
+                android:layout_margin="@dimen/robotic_arm_margin_small"
+                android:background="@drawable/ic_play_arrow_white_24dp" />
+
+            <Button
+                android:id="@+id/timeline_stop_button"
+                android:layout_width="@dimen/robotic_arm_width"
+                android:layout_height="@dimen/robotic_arm_height"
+                android:layout_margin="@dimen/robotic_arm_margin"
+                android:background="@drawable/ic_record_stop_white" />
+
+            <Button
+                android:id="@+id/timeline_save_button"
+                android:layout_width="@dimen/robotic_arm_width"
+                android:layout_height="@dimen/robotic_arm_height"
+                android:layout_margin="@dimen/robotic_arm_margin_small"
+                android:background="@drawable/menu_icon_save" />
+
+            <Button
+                android:id="@+id/timeline_guide_button"
+                android:layout_width="@dimen/robotic_arm_width"
+                android:layout_height="@dimen/robotic_arm_height"
+                android:layout_margin="@dimen/robotic_arm_margin"
+                android:background="@drawable/menu_icon_guide" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -90,37 +129,6 @@
                     android:orientation="horizontal" />
             </LinearLayout>
         </HorizontalScrollView>
-
-        <LinearLayout
-            android:id="@+id/servo_timeline_controls"
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.1"
-            android:background="@color/colorPrimary"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/timeline_play_pause_button"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/ic_play_arrow_white_24dp" />
-
-            <Button
-                android:id="@+id/timeline_stop_button"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/ic_stop_white_24dp" />
-
-            <Button
-                android:id="@+id/timeline_save_button"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/menu_icon_save" />
-        </LinearLayout>
     </LinearLayout>
 
 

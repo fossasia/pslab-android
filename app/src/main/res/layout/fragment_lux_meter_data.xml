@@ -18,7 +18,7 @@
             android:baselineAligned="false">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="@dimen/lux_width_0"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:gravity="center_horizontal|center_vertical"

@@ -23,6 +23,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.triggertrap.seekarc.SeekArc;
 
@@ -30,12 +31,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import io.pslab.R;
+import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
+import io.pslab.others.ScienceLabCommon;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -57,12 +60,18 @@ public class RoboticArmActivity extends AppCompatActivity {
     private RealmResults<ServoData> recordedServoData;
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
+    private int timelinePosition = 0;
+    private ScienceLab scienceLab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_robotic_arm);
 
+        scienceLab = ScienceLabCommon.scienceLab;
+        if (!scienceLab.isConnected()) {
+            Toast.makeText(this, getResources().getString(R.string.device_not_connected), Toast.LENGTH_SHORT).show();
+        }
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -179,6 +188,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 } else {
                     degreeText1.setText(String.valueOf((int) (i * 3.6)));
                 }
+                degreeText1.setCursorVisible(false);
             }
 
             @Override
@@ -201,6 +211,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 } else {
                     degreeText2.setText(String.valueOf((int) (i * 3.6)));
                 }
+                degreeText2.setCursorVisible(false);
             }
 
             @Override
@@ -223,6 +234,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 } else {
                     degreeText3.setText(String.valueOf((int) (i * 3.6)));
                 }
+                degreeText3.setCursorVisible(false);
             }
 
             @Override
@@ -245,6 +257,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 } else {
                     degreeText4.setText(String.valueOf((int) (i * 3.6)));
                 }
+                degreeText4.setCursorVisible(false);
             }
 
             @Override
@@ -300,10 +313,23 @@ public class RoboticArmActivity extends AppCompatActivity {
                 removeStatusBar();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText1.getText().toString());
-                    seekArc1.setProgress((int) (degree / 3.6));
-                    editEnter = true;
+                    if (degree > 360 || degree < 0) {
+                        degreeText1.setText(getResources().getString(R.string.zero));
+                        seekArc1.setProgress(0);
+                        toastInvalidValueMessage();
+                    } else {
+                        seekArc1.setProgress((int) (degree / 3.6));
+                        editEnter = true;
+                    }
                 }
                 return false;
+            }
+        });
+
+        degreeText1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                degreeText1.setCursorVisible(true);
             }
         });
 
@@ -313,10 +339,23 @@ public class RoboticArmActivity extends AppCompatActivity {
                 removeStatusBar();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText2.getText().toString());
-                    seekArc2.setProgress((int) (degree / 3.6));
-                    editEnter = true;
+                    if (degree > 360 || degree < 0) {
+                        degreeText2.setText(getResources().getString(R.string.zero));
+                        seekArc2.setProgress(0);
+                        toastInvalidValueMessage();
+                    } else {
+                        seekArc2.setProgress((int) (degree / 3.6));
+                        editEnter = true;
+                    }
                 }
                 return false;
+            }
+        });
+
+        degreeText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                degreeText2.setCursorVisible(true);
             }
         });
 
@@ -326,10 +365,23 @@ public class RoboticArmActivity extends AppCompatActivity {
                 removeStatusBar();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText3.getText().toString());
-                    seekArc3.setProgress((int) (degree / 3.6));
-                    editEnter = true;
+                    if (degree > 360 || degree < 0) {
+                        degreeText3.setText(getResources().getString(R.string.zero));
+                        seekArc3.setProgress(0);
+                        toastInvalidValueMessage();
+                    } else {
+                        seekArc3.setProgress((int) (degree / 3.6));
+                        editEnter = true;
+                    }
                 }
                 return false;
+            }
+        });
+
+        degreeText3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                degreeText3.setCursorVisible(true);
             }
         });
 
@@ -339,10 +391,23 @@ public class RoboticArmActivity extends AppCompatActivity {
                 removeStatusBar();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText4.getText().toString());
-                    seekArc4.setProgress((int) (degree / 3.6));
-                    editEnter = true;
+                    if (degree > 360 || degree < 0) {
+                        degreeText4.setText(getResources().getString(R.string.zero));
+                        seekArc4.setProgress(0);
+                        toastInvalidValueMessage();
+                    } else {
+                        seekArc4.setProgress((int) (degree / 3.6));
+                        editEnter = true;
+                    }
                 }
                 return false;
+            }
+        });
+
+        degreeText4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                degreeText4.setCursorVisible(true);
             }
         });
 
@@ -358,6 +423,18 @@ public class RoboticArmActivity extends AppCompatActivity {
                         .getMarginStart() + screen_width / 6);
                 timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
                 scrollView.smoothScrollBy(screen_width / 6, 0);
+                String deg1 = ((TextView) servo1TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                deg1 = (deg1.length() > 0) ? deg1 : "0";
+                String deg2 = ((TextView) servo2TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                deg2 = (deg2.length() > 0) ? deg2 : "0";
+                String deg3 = ((TextView) servo3TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                deg3 = (deg3.length() > 0) ? deg3 : "0";
+                String deg4 = ((TextView) servo4TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                deg4 = (deg4.length() > 0) ? deg4 : "0";
+                if (scienceLab.isConnected()) {
+                    scienceLab.servo4(Double.valueOf(deg1), Double.valueOf(deg2), Double.valueOf(deg3), Double.valueOf(deg4));
+                }
+                timelinePosition++;
             }
 
             @Override
@@ -396,6 +473,9 @@ public class RoboticArmActivity extends AppCompatActivity {
                 timeIndicatorParams.setMarginStart(3);
                 timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
+                isPlaying = false;
+                playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                timelinePosition = 0;
             }
         });
 
@@ -404,6 +484,10 @@ public class RoboticArmActivity extends AppCompatActivity {
                     .getBlockOfServoRecords(getIntent().getExtras().getLong(DATA_BLOCK));
             setReceivedData();
         }
+    }
+
+    private void toastInvalidValueMessage() {
+        Toast.makeText(RoboticArmActivity.this, getResources().getString(R.string.invalid_servo_value), Toast.LENGTH_SHORT).show();
     }
 
     private void setReceivedData() {
@@ -442,10 +526,16 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
             if (gpsLogger.isGPSEnabled()) {
                 Location location = gpsLogger.getDeviceLocation();
-                lat = location.getLatitude();
-                lon = location.getLongitude();
+                if (location != null) {
+                    lat = location.getLatitude();
+                    lon = location.getLongitude();
+                } else {
+                    lat = 0.0;
+                    lon = 0.0;
+                }
             } else {
-                lat = lon = 0.0;
+                lat = 0.0;
+                lon = 0.0;
             }
             recordSensorData(new ServoData(timestamp, block, degree1, degree2, degree3, degree4, lat, lon));
             if (i == 59) {
@@ -461,6 +551,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(RoboticArmActivity.this, DataLoggerActivity.class);
+                        intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.robotic_arm));
                         startActivity(intent);
                     }
                 }, Snackbar.LENGTH_SHORT);

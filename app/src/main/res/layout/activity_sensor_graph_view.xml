@@ -44,10 +44,9 @@
                     android:id="@+id/chart_xaxis_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:background="#000"
+                    android:background="@color/black"
                     android:orientation="vertical">
 
                     <TextView

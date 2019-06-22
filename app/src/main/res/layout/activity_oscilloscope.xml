@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/oscilloscope_mail_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -76,7 +78,6 @@
                 android:id="@+id/chart_yaxis_layout1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:background="@color/black"
@@ -126,7 +127,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="@color/black"
                 android:foregroundGravity="right"
@@ -181,6 +181,13 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/menu_icon_guide"
                 android:contentDescription="@string/show_guide_text" />
+            <ImageView
+                android:id="@+id/oscilloscope_record_button"
+                android:layout_alignParentEnd="true"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_record_white"
+                android:contentDescription="@string/record_title" />
 
             <TextView
                 android:layout_marginTop="@dimen/top_margin_text"
