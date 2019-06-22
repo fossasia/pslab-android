@@ -2,24 +2,31 @@ package io.pslab.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.DragEvent;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +37,8 @@ import com.triggertrap.seekarc.SeekArc;
 import java.util.ArrayList;
 import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
@@ -38,13 +47,16 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
+import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
+import io.pslab.others.SwipeGestureDetector;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 public class RoboticArmActivity extends AppCompatActivity {
 
+    private static final String PREF_NAME = "RoboticArmActivity";
     private EditText degreeText1, degreeText2, degreeText3, degreeText4;
     private SeekArc seekArc1, seekArc2, seekArc3, seekArc4;
     private LinearLayout servo1TimeLine, servo2TimeLine, servo3TimeLine, servo4TimeLine;
@@ -62,11 +74,32 @@ public class RoboticArmActivity extends AppCompatActivity {
     private final String DATA_BLOCK = "data_block";
     private int timelinePosition = 0;
     private ScienceLab scienceLab;
+    private BottomSheetBehavior bottomSheetBehavior;
+    private GestureDetector gestureDetector;
+    @BindView(R.id.sheet_slide_text_robotic_arm)
+    TextView bottomSheetSlideText;
+    @BindView(R.id.parent_layout_robotic)
+    View parentLayout;
+    @BindView(R.id.bottom_sheet_robotic_arm)
+    LinearLayout bottomSheet;
+    @BindView(R.id.img_arrow_robotic_arm)
+    ImageView arrowUpDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_robotic_arm);
+        ButterKnife.bind(this);
+
+        setUpBottomSheet();
+        parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                parentLayout.setVisibility(View.GONE);
+            }
+        });
 
         scienceLab = ScienceLabCommon.scienceLab;
         if (!scienceLab.isConnected()) {
@@ -484,6 +517,79 @@ public class RoboticArmActivity extends AppCompatActivity {
                     .getBlockOfServoRecords(getIntent().getExtras().getLong(DATA_BLOCK));
             setReceivedData();
         }
+
+        Button guideButton = findViewById(R.id.timeline_guide_button);
+        guideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
+                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
+    }
+
+    private void setUpBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        final SharedPreferences settings = this.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        Boolean isFirstTime = settings.getBoolean("RoboticArmFirstTime", true);
+
+        if (isFirstTime) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            parentLayout.setVisibility(View.VISIBLE);
+            parentLayout.setAlpha(0.8f);
+            arrowUpDown.setRotation(180);
+            bottomSheetSlideText.setText(R.string.hide_guide_text);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("RoboticArmFirstTime", false);
+            editor.apply();
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            private Handler handler = new Handler();
+            private Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            };
+
+            @Override
+            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.hide_guide_text);
+                        break;
+
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        handler.postDelayed(runnable, 2000);
+                        break;
+
+                    default:
+                        handler.removeCallbacks(runnable);
+                        bottomSheetSlideText.setText(R.string.show_guide_text);
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                parentLayout.setVisibility(View.VISIBLE);
+                parentLayout.setAlpha(value);
+                arrowUpDown.setRotation(slideOffset * 180);
+            }
+        });
+        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
+        return super.onTouchEvent(event);
     }
 
     private void toastInvalidValueMessage() {
@@ -545,7 +651,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
         }
         servoCSVLogger.writeCSVFile(data);
-        CustomSnackBar.showSnackBar(findViewById(R.id.robotic_arm_relative_view),
+        CustomSnackBar.showSnackBar(findViewById(R.id.robotic_arm_coordinator),
                 getString(R.string.csv_store_text) + " " + servoCSVLogger.getCurrentFilePath()
                 , getString(R.string.open), new View.OnClickListener() {
                     @Override
