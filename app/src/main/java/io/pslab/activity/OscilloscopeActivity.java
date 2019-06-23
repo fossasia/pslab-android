@@ -194,8 +194,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private long recordPeriod = 100;
     private String oscilloscopeCSVHeader = "Timestamp,DateTime,Channel,xData,yData,Timebase,lat,lon";
     private String loggingXdata = "";
-    private String loggingYdata1 = "";
-    private String loggingYdata2 = "";
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
     private int currentPosition = 0;
@@ -206,6 +204,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public boolean isPlaybackFourierChecked = false;
     private HashMap<String, Integer> channelIndexMap;
     private Integer[] channelColors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.MAGENTA};
+    private String[] loggingYdata = new String[4];
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
@@ -652,17 +651,19 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         try {
                             if (currentPosition < recordedOscilloscopeData.size()) {
                                 OscilloscopeData data = recordedOscilloscopeData.get(currentPosition);
-                                if (data.getMode() == 1) {
-                                    currentPosition += 1;
-                                    ArrayList<Entry> entries = new ArrayList<>();
+                                int mode = data.getMode();
+                                List<ILineDataSet> dataSets = new ArrayList<>();
+                                ArrayList<ArrayList<Entry>> entries = new ArrayList<>();
+                                for (int i = 0; i < mode; i ++) {
+                                    data = recordedOscilloscopeData.get(currentPosition);
+                                    entries.add(new ArrayList<>());
                                     String[] xData = data.getDataX().split(" ");
                                     String[] yData = data.getDataY().split(" ");
-
                                     if (!isPlaybackFourierChecked) {
                                         int n = Math.min(xData.length, yData.length);
-                                        for (int i = 0; i < n; i++) {
-                                            if (xData[i].length() > 0 && yData[i].length() > 0) {
-                                                entries.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData[i])));
+                                        for (int j = 0; j < n; j++) {
+                                            if (xData[j].length() > 0 && yData[j].length() > 0) {
+                                                entries.get(i).add(new Entry(Float.valueOf(xData[j]), Float.valueOf(yData[j])));
                                             }
                                         }
                                         setLeftYAxisScale(16f, -16f);
@@ -670,104 +671,37 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                                         setXAxisScale(data.getTimebase());
                                     } else {
                                         Complex[] yComplex = new Complex[yData.length];
-                                        for (int i = 0; i < yData.length; i++) {
-                                            yComplex[i] = Complex.valueOf(Double.valueOf(yData[i]));
+                                        for (int j = 0; j < yData.length; j++) {
+                                            yComplex[j] = Complex.valueOf(Double.valueOf(yData[j]));
                                         }
                                         Complex[] fftOut = fft(yComplex);
                                         int n = fftOut.length;
                                         double mA = 0;
                                         double factor = samples * timeGap * 1e-3;
                                         double mF = (n / 2 - 1) / factor;
-                                        for (int i = 0; i < n / 2; i++) {
-                                            float y = (float) fftOut[i].abs() / samples;
+                                        for (int j = 0; j < n / 2; j++) {
+                                            float y = (float) fftOut[j].abs() / samples;
                                             if (y > mA) {
                                                 mA = y;
                                             }
-                                            entries.add(new Entry((float) (i / factor), y));
+                                            entries.get(i).add(new Entry((float) (j / factor), y));
                                         }
                                         setLeftYAxisScale(mA, 0);
                                         setRightYAxisScale(mA, 0);
                                         setXAxisScale(mF);
                                     }
-                                    LineDataSet dataSet = new LineDataSet(entries, data.getChannel());
-                                    LineData lineData = new LineData(dataSet);
+                                    currentPosition ++;
+                                    LineDataSet dataSet;
+                                    dataSet = new LineDataSet(entries.get(i), data.getChannel());
                                     dataSet.setDrawCircles(false);
-                                    mChart.setData(lineData);
-                                    mChart.notifyDataSetChanged();
-                                    mChart.invalidate();
-
-                                    ((OscilloscopePlaybackFragment) playbackFragment).setTimeBase(String.valueOf(data.getTimebase()));
-                                } else if (data.getMode() == 2) {
-                                    OscilloscopeData data2 = recordedOscilloscopeData.get(currentPosition + 1);
-                                    currentPosition += 2;
-                                    ArrayList<Entry> entries1 = new ArrayList<>();
-                                    ArrayList<Entry> entries2 = new ArrayList<>();
-                                    String[] xData = data.getDataX().split(" ");
-                                    String[] yData1 = data.getDataY().split(" ");
-                                    String[] yData2 = data2.getDataY().split(" ");
-
-                                    if (!isPlaybackFourierChecked) {
-                                        int n = Math.min(xData.length, Math.min(yData1.length, yData2.length));
-                                        for (int i = 0; i < n; i++) {
-                                            if (xData[i].length() > 0 && yData1[i].length() > 0 && yData2[i].length() > 0) {
-                                                entries1.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData1[i])));
-                                                entries2.add(new Entry(Float.valueOf(xData[i]), Float.valueOf(yData2[i])));
-                                            }
-                                        }
-
-                                        setLeftYAxisScale(16f, -16f);
-                                        setRightYAxisScale(16f, -16f);
-                                        setXAxisScale(data.getTimebase());
-                                    } else {
-                                        Complex[] yComplex1 = new Complex[yData1.length];
-                                        Complex[] yComplex2 = new Complex[yData2.length];
-                                        for (int i = 0; i < Math.min(yData1.length, yData2.length); i++) {
-                                            yComplex1[i] = Complex.valueOf(Double.valueOf(yData1[i]));
-                                            yComplex2[i] = Complex.valueOf(Double.valueOf(yData2[i]));
-                                        }
-                                        Complex[] fftOut1 = fft(yComplex1);
-                                        Complex[] fftOut2 = fft(yComplex2);
-                                        int n = Math.min(fftOut1.length, fftOut2.length);
-                                        double mA = 0;
-
-                                        float maxAmp1 = 0;
-                                        float maxAmp2 = 0;
-                                        double factor = samples * timeGap * 1e-3;
-                                        double mF = (n / 2 - 1) / factor;
-                                        for (int i = 0; i < n / 2; i++) {
-                                            float y1 = (float) fftOut1[i].abs() / samples;
-                                            if (y1 > maxAmp1) {
-                                                maxAmp1 = y1;
-                                            }
-                                            entries1.add(new Entry((float) (i / factor), y1));
-                                            float y2 = (float) fftOut2[i].abs() / samples;
-                                            if (y2 > maxAmp2) {
-                                                maxAmp2 = y2;
-                                            }
-                                            entries2.add(new Entry((float) (i / factor), y2));
-                                        }
-                                        mA = Math.max(maxAmp1, maxAmp2);
-                                        setXAxisScale(mF);
-                                        setLeftYAxisScale(mA, 0);
-                                        setRightYAxisScale(mA, 0);
-                                    }
-                                    LineDataSet dataSet1 = new LineDataSet(entries1, data.getChannel());
-                                    LineDataSet dataSet2 = new LineDataSet(entries2, data2.getChannel());
-                                    dataSet1.setDrawCircles(false);
-                                    dataSet2.setDrawCircles(false);
-                                    dataSet2.setColor(Color.GREEN);
-                                    dataSet2.setDrawCircles(false);
-                                    List<ILineDataSet> dataSets = new ArrayList<>();
-                                    dataSets.add(dataSet1);
-                                    dataSets.add(dataSet2);
-
-                                    LineData lineData = new LineData(dataSets);
-                                    mChart.setData(lineData);
-                                    mChart.notifyDataSetChanged();
-                                    mChart.invalidate();
-
+                                    dataSet.setColor(channelColors[i]);
+                                    dataSets.add(dataSet);
                                     ((OscilloscopePlaybackFragment) playbackFragment).setTimeBase(String.valueOf(data.getTimebase()));
                                 }
+                                LineData lineData = new LineData(dataSets);
+                                mChart.setData(lineData);
+                                mChart.notifyDataSetChanged();
+                                mChart.invalidate();
                             } else {
                                 playbackTimer.cancel();
                                 playbackTimer = null;
@@ -792,31 +726,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         playbackTimer = null;
     }
 
-    private void logSingleChannelData(String channel) {
+    private void logChannelData(String[] channels) {
         long timestamp = System.currentTimeMillis();
-        if (loggingXdata.length() > 0 && loggingYdata1.length() > 0) {
-            recordSensorData(new OscilloscopeData(timestamp, block, 1, channel, loggingXdata, loggingYdata1, xAxisScale, lat, lon));
-            String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-            String locationData = lat + "," + lon;
-            String data = timeData + "," + channel + "," + loggingXdata + "," + loggingYdata1 + "," + xAxisScale + "," + locationData;
+        int noOfChannels = channels.length;
+        String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+        String locationData = lat + "," + lon;
+        for (int i = 0; i < noOfChannels; i ++) {
+            recordSensorData(new OscilloscopeData(timestamp + i, block, noOfChannels, channels[i], loggingXdata, loggingYdata[i], xAxisScale, lat, lon));
+            String data = timeData + "," + channels[i] + "," + loggingXdata + "," + loggingYdata[i] + "," + xAxisScale + "," + locationData;
             csvLogger.writeCSVFile(data);
         }
     }
-
-    private void logTwoChannelData(String channel1, String channel2) {
-        long timestamp = System.currentTimeMillis();
-        if (loggingXdata.length() > 0 && loggingYdata1.length() > 0 && loggingYdata2.length() > 0) {
-            recordSensorData(new OscilloscopeData(timestamp, block, 2, channel1, loggingXdata, loggingYdata1, xAxisScale, lat, lon));
-            recordSensorData(new OscilloscopeData(timestamp + 1, block, 2, channel2, loggingXdata, loggingYdata2, xAxisScale, lat, lon));
-            String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-            String locationData = lat + "," + lon;
-            String data = timeData + "," + channel1 + "," + loggingXdata + "," + loggingYdata1 + "," + xAxisScale + "," + locationData;
-            csvLogger.writeCSVFile(data);
-            data = timeData + "," + channel2 + "," + loggingXdata + "," + loggingYdata2 + "," + xAxisScale + "," + locationData;
-            csvLogger.writeCSVFile(data);
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -1121,26 +1041,16 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 }
 
                 if (isRecording) {
-                    if (noOfChannels == 1) {
-                        loggingXdata = String.join(" ", xDataString);
-                        loggingYdata1 = String.join(" ", yDataString.get(0));
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                logSingleChannelData(paramsChannels[0]);
-                            }
-                        });
-                    } else if (noOfChannels == 2) {
-                        loggingXdata = String.join(" ", xDataString);
-                        loggingYdata1 = String.join(" ", yDataString.get(0));
-                        loggingYdata2 = String.join(" ", yDataString.get(1));
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                logTwoChannelData(paramsChannels[0], paramsChannels[1]);
-                            }
-                        });
+                    loggingXdata = String.join(" ", xDataString);
+                    for (int i = 0; i < noOfChannels; i ++) {
+                        loggingYdata[i] = String.join(" ", yDataString.get(i));
                     }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            logChannelData(paramsChannels);
+                        }
+                    });
                 }
 
             } catch (NullPointerException e) {
