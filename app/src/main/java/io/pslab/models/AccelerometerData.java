@@ -69,6 +69,10 @@ public class AccelerometerData extends RealmObject {
         this.accelerometer_Z = accelerometer_Z;
     }
 
+    public float[] getAccelerometer(){
+        return new float[]{this.accelerometer_X, this.accelerometer_Y, this.accelerometer_Z};
+    }
+
     public double getLat() {
         return lat;
     }
