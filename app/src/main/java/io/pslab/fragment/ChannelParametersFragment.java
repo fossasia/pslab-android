@@ -226,12 +226,16 @@ public class ChannelParametersFragment extends Fragment {
                 micSelectedPosition = position;
                 if (position == 1) {
                     ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
-                    if (checkBoxMIC.isChecked())
+                    if (checkBoxMIC.isChecked()) {
                         ((OscilloscopeActivity) getActivity()).isMICSelected = true;
+                        ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
+                    }
                 } else {
                     ((OscilloscopeActivity) getActivity()).isMICSelected = false;
-                    if (checkBoxMIC.isChecked())
+                    if (checkBoxMIC.isChecked()) {
                         ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
+                        ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
+                    }
                 }
             }
 
@@ -265,8 +269,10 @@ public class ChannelParametersFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (micSelectedPosition == 1) {
+                    ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
                     ((OscilloscopeActivity) getActivity()).isMICSelected = isChecked;
                 } else if (micSelectedPosition == 2) {
+                    ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
                     // check for RECORD_AUDIO permission if has then change boolean
                     if (isChecked)
                         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -276,6 +282,8 @@ public class ChannelParametersFragment extends Fragment {
                         }
                     else
                         ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
+                } else {
+                    ((OscilloscopeActivity) getActivity()).isAudioInputSelected = false;
                 }
             }
         });
