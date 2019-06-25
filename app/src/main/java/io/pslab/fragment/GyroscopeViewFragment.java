@@ -54,22 +54,6 @@ public class GyroscopeViewFragment extends Fragment {
         return gyroAxisImage;
     }
 
-    public LineChart getGyroChart() {
-        return gyroChart;
-    }
-
-    public TextView getGyroMax() {
-        return gyroMax;
-    }
-
-    public TextView getGyroMin() {
-        return gyroMin;
-    }
-
-    public TextView getGyroValue() {
-        return gyroValue;
-    }
-
     public void setUp() {
         XAxis x = this.gyroChart.getXAxis();
         this.y = this.gyroChart.getAxisLeft();
