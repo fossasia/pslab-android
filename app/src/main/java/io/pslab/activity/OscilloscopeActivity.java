@@ -457,7 +457,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     }
 
                     if (scienceLab.isConnected() && isXYPlotSelected) {
-                        Log.d("xy plot", "called");
                         xyPlotTask = new XYPlotTask();
                         xyPlotTask.execute(xyPlotAxis1, xyPlotAxis2);
                         synchronized (lock) {
@@ -1113,26 +1112,34 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         protected Void doInBackground(String... params) {
             analogInput1 = params[0];
             analogInput2 = params[1];
-            try {
-                HashMap<String, double[]> data;
+            HashMap<String, double[]> data;
+            if (analogInput1.equals(analogInput2)) {
                 scienceLab.captureTraces(1, samples, timeGap, analogInput1, isTriggerSelected, null);
                 data = scienceLab.fetchTrace(1);
-                Thread.sleep((long) (1000 * 10 * 1e-3));
+                double[] yData = data.get("y");
+                int n = yData.length;
+                xFloatData = new float[n];
+                yFloatData = new float[n];
+                for (int i = 0; i < n; i++) {
+                    xFloatData[i] = (float) yData[i];
+                    yFloatData[i] = (float) yData[i];
+                }
+            } else {
+                scienceLab.captureTraces(1, samples, timeGap, analogInput1, isTriggerSelected, null);
+                data = scienceLab.fetchTrace(1);
                 double[] yData1 = data.get("y");
                 scienceLab.captureTraces(1, samples, timeGap, analogInput2, isTriggerSelected, null);
                 data = scienceLab.fetchTrace(1);
-                Thread.sleep((long) (1000 * 10 * 1e-3));
                 double[] yData2 = data.get("y");
                 int n = Math.min(yData1.length, yData2.length);
                 xFloatData = new float[n];
                 yFloatData = new float[n];
-                for (int i = 0; i < n; i ++) {
-                    xFloatData[i] = (float)yData1[i];
-                    yFloatData[i] = (float)yData2[i];
+                for (int i = 0; i < n; i++) {
+                    xFloatData[i] = (float) yData1[i];
+                    yFloatData[i] = (float) yData2[i];
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
+
             return null;
         }
 
