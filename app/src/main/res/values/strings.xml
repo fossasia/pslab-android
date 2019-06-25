@@ -607,6 +607,7 @@
     <string name="time_string_baro">Please provide time interval at which data will be updated (100 ms to 2000 ms)</string>
     <string name="setting_baro_update">setting_baro_update_period</string>
     <string name="setting_lux_update">setting_lux_update_period</string>
+    <string name="setting_gyro_update">setting_gyro_update_period</string>
     <string name="setting_accelerometer_update">setting_accelerometer_update_period</string>
     <string name="default_value_baro">1.10</string>
     <string name="default_value_lux">1</string>
@@ -619,10 +620,12 @@
     <string name="high_limit_msg">Entered High Limit is not within the limits!</string>
     <string name="high_limit_baro">setting_baro_high_limit</string>
     <string name="high_limit_lux">setting_lux_high_limit</string>
+    <string name="high_limit_gyro">setting_gyro_high_limit</string>
     <string name="high_limit_acceleration">setting_accelerometer_high_limit</string>
     <string name="setting_lux_type">setting_lux_sensor_type</string>
     <string name="no_file_selected">No file was selected</string>
     <string name="setting_lux_sensor_gain">setting_lux_sensor_gain</string>
+    <string name="setting_gyro_sensor_gain">setting_gyro_sensor_gain</string>
     <string name="setting_accelerometer_sensor_gain">setting_accelerometer_sensor_gain</string>
     <string name="set_gain_sensor">Please set gain of the sensor</string>
     <string name="sensor_gain">Sensor Gain</string>

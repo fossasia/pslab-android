@@ -15,9 +15,9 @@ import io.pslab.others.PSLabPermission;
 public class GyroscopeSettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
-    public static final String KEY_UPDATE_PERIOD = "setting_lux_update_period";
-    public static final String KEY_HIGH_LIMIT = "setting_lux_high_limit";
-    public static final String KEY_GYROSCOPE_SENSOR_GAIN = "setting_lux_sensor_gain";
+    public static final String KEY_UPDATE_PERIOD = "setting_gyro_update_period";
+    public static final String KEY_HIGH_LIMIT = "setting_gyro_high_limit";
+    public static final String KEY_GYROSCOPE_SENSOR_GAIN = "setting_gyro_sensor_gain";
 
     private PSLabPermission psLabPermission;
 
