@@ -471,11 +471,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (!isInBuiltMicSelected) {
-                        if (audioJack != null) {
-                            audioJack.release();
-                            audioJack = null;
-                        }
+                    if (!isInBuiltMicSelected && audioJack != null) {
+                        audioJack.release();
+                        audioJack = null;
                     }
                 }
             }
@@ -794,6 +792,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             recordTimer.cancel();
             recordTimer = null;
         }
+        if (audioJack != null) {
+            audioJack.release();
+            audioJack = null;
+        }
         super.onDestroy();
     }
 
@@ -1011,11 +1013,39 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     }
                     short[] buffer = audioJack.read();
                     yDataString.add(new String[buffer.length]);
-                    for (int i = 0; i < buffer.length; i++) {
-                        float audioValue = (float) map(buffer[i], -32768, 32767, -3, 3);
-                        yDataString.get(noOfChannels - 1)[i] = String.valueOf(audioValue);
-                        entries.get(noOfChannels - 1).add(new Entry(i, audioValue));
+
+                    int n = buffer.length;
+                    Complex[] fftOut = null;
+                    if (isFourierTransformSelected) {
+                        Complex[] yComplex = new Complex[n];
+                        for (int j = 0; j < n; j++) {
+                            float audioValue = (float) map(buffer[j], -32768, 32767, -3, 3);
+                            yComplex[j] = Complex.valueOf(audioValue);
+                        }
+                        fftOut = fft(yComplex);
                     }
+                    double factor = buffer.length * timeGap * 1e-3;
+                    maxFreq = (n / 2 - 1) / factor;
+                    double mA = 0;
+                    for (int i = 0; i < n; i++) {
+                        float audioValue = (float) map(buffer[i], -32768, 32767, -3, 3);
+                        if (!isFourierTransformSelected) {
+                            entries.get(noOfChannels - 1).add(new Entry(i, audioValue));
+                        } else {
+                            if (i < n / 2) {
+                                float y = (float) fftOut[i].abs() / samples;
+                                if (y > mA) {
+                                    mA = y;
+                                }
+                                entries.get(noOfChannels - 1).add(new Entry((float) (i / factor), y));
+                            }
+                        }
+                        yDataString.get(noOfChannels - 1)[i] = String.valueOf(audioValue);
+                    }
+                    if (mA > maxAmp) {
+                        maxAmp = mA;
+                    }
+
                 }
                 if (isRecording) {
                     loggingXdata = String.join(" ", xDataString);
@@ -1175,6 +1205,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         for (int k = 0; k < n / 2; k++) {
             double kth = -2 * k * Math.PI / n;
             Complex wk = new Complex(Math.cos(kth), Math.sin(kth));
+            if (r[k] == null) {
+                r[k] = new Complex(1);
+            }
+            if (q[k] == null) {
+                q[k] = new Complex(1);
+            }
             y[k] = q[k].add(wk.multiply(r[k]));
             y[k + n / 2] = q[k].subtract(wk.multiply(r[k]));
         }
