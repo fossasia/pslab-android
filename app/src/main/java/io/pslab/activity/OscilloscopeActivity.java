@@ -1020,7 +1020,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         Complex[] yComplex = new Complex[n];
                         for (int j = 0; j < n; j++) {
                             float audioValue = (float) map(buffer[j], -32768, 32767, -3, 3);
-                            Log.d("mic", audioValue + "");
                             yComplex[j] = Complex.valueOf(audioValue);
                         }
                         fftOut = fft(yComplex);
