@@ -297,10 +297,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             public void run() {
                 //Thread to check which checkbox is enabled
                 while (monitor) {
-                    if (isInBuiltMicSelected) {
-                        if (audioJack == null) {
-                            audioJack = new AudioJack("input");
-                        }
+                    if (isInBuiltMicSelected && audioJack == null) {
+                        audioJack = new AudioJack("input");
                     }
 
                     if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isAudioInputSelected && !isXYPlotSelected) {
