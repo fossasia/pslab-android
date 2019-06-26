@@ -82,6 +82,9 @@ public class ScienceLab {
     private NRF24L01 nrf;
     private MCP4728 dac;
 
+    /**Constructor
+     * @param communicationHandler
+     */
     public ScienceLab(CommunicationHandler communicationHandler) {
         mCommandsProto = new CommandsProto();
         mAnalogConstants = new AnalogConstants();
@@ -480,6 +483,9 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * @return resistance of connected resistor
+     */
     public Double getResistance() {
         double volt = this.getAverageVoltage("SEN", null);
         if (volt > 3.295) return null;
@@ -526,10 +532,25 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Blocking call that fetches an oscilloscope trace from the specified input channel
+     * @param channel Channel to select as input. ['CH1'..'CH3','SEN']
+     * @param samples Number of samples to fetch. Maximum 10000
+     * @param timeGap Timegap between samples in microseconds
+     * @return Arrays X(timestamps),Y(Corresponding Voltage values)
+     */
     public HashMap<String, double[]> captureOne(String channel, int samples, double timeGap) {
         return this.captureFullSpeed(channel, samples, timeGap, new ArrayList<String>(), null);
     }
 
+    /**
+     * Blocking call that fetches oscilloscope traces from CH1,CH2
+     * @param samples Number of samples to fetch. Maximum 5000
+     * @param timeGap Timegap between samples in microseconds
+     * @param traceOneRemap Choose the analog input for channel 1. It is connected to CH1 by default. Channel 2 always reads CH2.
+     * @param trigger boolean whether trigger is selected or not
+     * @return Arrays X(timestamps),Y1(Voltage at CH1),Y2(Voltage at CH2)
+     */
     public HashMap<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap, boolean trigger) {
         if (traceOneRemap == null) traceOneRemap = "CH1";
         this.captureTraces(2, samples, timeGap, traceOneRemap, trigger, null);
@@ -548,6 +569,14 @@ public class ScienceLab {
         return retData;
     }
 
+    /**
+     * Blocking call that fetches oscilloscope traces from CH1,CH2,CH#,MIC
+     * @param samples Number of samples to fetch. Maximum 2500
+     * @param timeGap Timegap between samples in microseconds. Minimum 1.75uS
+     * @param traceOneRemap Choose the analog input for channel 1. It is connected to CH1 by default. Channel 2 always reads CH2.
+     * @param trigger boolean whether trigger is selected or not
+     * @return Arrays X(timestamps),Y1(Voltage at CH1),Y2(Voltage at CH2),Y3(Voltage at CH3),Y4(Voltage at CH4)
+     */
     public HashMap<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap, boolean trigger) {
         if (traceOneRemap == null) traceOneRemap = "CH1";
         this.captureTraces(4, samples, timeGap, traceOneRemap, trigger, null);
@@ -567,6 +596,13 @@ public class ScienceLab {
         return retData;
     }
 
+    /**
+     * Blocking call that fetches oscilloscope traces from a set of specified channels
+     * @param samples Number of samples to fetch. Maximum 10000/(total specified channels)
+     * @param timeGap Timegap between samples in microseconds.
+     * @param args Channel names
+     * @return Arrays X(timestamps),Y1,Y2 ..
+     */
     public Map<String, ArrayList<Double>> captureMultiple(int samples, double timeGap, List<String> args) {
         if (args.size() == 0) {
             Log.v(TAG, "Please specify channels to record");
@@ -682,6 +718,18 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
+     * @param channel Channel name 'CH1' / 'CH2' ... 'SEN'
+     * @param samples Number of samples to fetch. Maximum 10000/(total specified channels)
+     * @param timeGap Timegap between samples in microseconds.
+     * @param args  Specify if SQR1 must be toggled right before capturing.
+     *              'SET_LOW': Set SQR1 to 0V
+     *              'SET_HIGH': Set SQR1 to 1V
+     *              'FIRE_PULSES': output a preset frequency on SQR1 for a given interval (keyword arg 'interval' must be specified or it will default to 1000uS) before acquiring data. This is used for measuring speed of sound using piezos if no arguments are specified, a regular capture will be executed.
+     * @param interval Units: uS. Necessary if 'FIRE_PULSES' argument was supplied. Default 1000uS
+     * @return timestamp array ,voltage_value array
+     */
     public HashMap<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
         /*
          * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
@@ -732,6 +780,14 @@ public class ScienceLab {
         }
     }
 
+    /**
+     *
+     * @param channel Channel name 'CH1' / 'CH2' ... 'SEN'
+     * @param samples Number of samples to fetch. Maximum 10000/(total specified channels)
+     * @param timeGap Timegap between samples in microseconds.
+     * @param args timestamp array ,voltage_value array
+     * @return
+     */
     public Map<String, double[]> captureFullSpeedHr(String channel, int samples, double timeGap, List<String> args) {
         this.captureFullSpeedHrInitialize(channel, samples, timeGap, args);
         try {
@@ -794,6 +850,15 @@ public class ScienceLab {
         return null;
     }
 
+    /**
+     * Instruct the ADC to start sampling. use fetchTrace to retrieve the data
+     * @param number Channels to acquire. 1/2/4
+     * @param samples tal points to store per channel. Maximum 3200 total
+     * @param timeGap  Timegap between two successive samples (in uSec)
+     * @param channelOneInput Map channel 1 to 'CH1' ... 'CH9'
+     * @param trigger Whether or not to trigger the oscilloscope based on the voltage level set
+     * @param CH123SA
+     */
     public void captureTraces(int number, int samples, double timeGap, String channelOneInput, Boolean trigger, Integer CH123SA) {
         if (CH123SA == null) CH123SA = 0;
         if (channelOneInput == null) channelOneInput = "CH1";
@@ -847,6 +912,13 @@ public class ScienceLab {
 
     }
 
+    /**
+     * Instruct the ADC to start sampling. Use fetchTrace to retrieve the data
+     * @param channel Channel to acquire data from 'CH1' ... 'CH9'
+     * @param samples Total points to store per channel. Maximum 3200 total.
+     * @param timeGap Timegap between two successive samples (in uSec)
+     * @param trigger Whether or not to trigger the oscilloscope based on the voltage level set by
+     */
     public void captureHighResolutionTraces(String channel, int samples, double timeGap, Boolean trigger) {
         int triggerOrNot = 0;
         if (trigger) triggerOrNot = 0x80;
@@ -869,6 +941,11 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Fetches a channel(1-4) captured by :func:captureTraces called prior to this, and returns xaxis,yaxis
+     * @param channelNumber Any of the maximum of four channels that the oscilloscope captured. 1/2/3/4
+     * @return time array,voltage array
+     */
     public HashMap<String, double[]> fetchTrace(int channelNumber) {
         this.fetchChannel(channelNumber);
         HashMap<String, double[]> retData = new HashMap<>();
@@ -877,6 +954,10 @@ public class ScienceLab {
         return retData;
     }
 
+    /**
+     * Returns the number of samples acquired by the capture routines, and the conversion_done status
+     * @return conversion done(bool) ,samples acquired (number)
+     */
     public int[] oscilloscopeProgress() {
         /*
          * returns the number of samples acquired by the capture routines, and the conversion_done status
@@ -984,6 +1065,17 @@ public class ScienceLab {
         return true;
     }
 
+    /**
+     * Configure trigger parameters for 10-bit capture commands
+     * The capture routines will wait till a rising edge of the input signal crosses the specified level.
+     * The trigger will timeout within 8mS, and capture routines will start regardless.
+     * These settings will not be used if the trigger option in the capture routines are set to False
+     * @param channel Channel 0,1,2,3. Corresponding to the channels being recorded by the capture routine(not the analog inputs)
+     * @param channelName Name of the channel. 'CH1'... 'V+'
+     * @param voltage The voltage level that should trigger the capture sequence(in Volts)
+     * @param resolution
+     * @param prescalar
+     */
     public void configureTrigger(int channel, String channelName, double voltage, Integer resolution, Integer prescalar) {
         if (resolution == null) resolution = 10;
         if (prescalar == null) prescalar = 0;
@@ -1012,7 +1104,13 @@ public class ScienceLab {
         }
     }
 
-
+    /**
+     * Set the gain of the selected PGA
+     * @param channel 'CH1','CH2'
+     * @param gain (0-8) -> (1x,2x,4x,5x,8x,10x,16x,32x,1/11x)
+     * @param force If True, the amplifier gain will be set even if it was previously set to the same value.
+     * @return
+     */
     public double setGain(String channel, int gain, Boolean force) {
         if (force == null) force = false;
         if (gain < 0 || gain > 8) {
@@ -1045,6 +1143,12 @@ public class ScienceLab {
         return 0;
     }
 
+    /**
+     * set the gain of the selected PGA
+     * @param channel 'CH1','CH2'
+     * @param voltageRange Choose from [16,8,4,3,2,1.5,1,.5,160]
+     * @return
+     */
     public Double selectRange(String channel, double voltageRange) {
         double[] ranges = new double[]{16, 8, 4, 3, 2, 1.5, 1, .5, 160};
         if (Arrays.asList(ArrayUtils.toObject(ranges)).contains(voltageRange)) {
@@ -1125,6 +1229,12 @@ public class ScienceLab {
 
     }
 
+    /**
+     * Return the voltage on the selected channel
+     * @param channelName : 'CH1','CH2','CH3', 'MIC','IN1','SEN','V+'
+     * @param sample Samples to average
+     * @return voltage on the selected channel
+     */
     private double getAverageVoltage(String channelName, Integer sample) {
         if (sample == null) sample = 1;
         PolynomialFunction poly;
@@ -1156,6 +1266,11 @@ public class ScienceLab {
         return 0;
     }
 
+    /**
+     * Fetches a section of the ADC hardware buffer
+     * @param startingPosition starting index
+     * @param totalPoints total points to fetch
+     */
     private void fetchBuffer(int startingPosition, int totalPoints) {
         startingPosition = 0;
         totalPoints = 100;
@@ -1174,6 +1289,11 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Clears a section of the ADC hardware buffer
+     * @param startingPosition starting index
+     * @param totalPoints total points to fetch
+     */
     private void clearBuffer(int startingPosition, int totalPoints) {
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
@@ -1187,6 +1307,11 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Fill a section of the ADC hardware buffer with data
+     * @param startingPosition starting index
+     * @param pointArray total points to fetch
+     */
     private void fillBuffer(int startingPosition, int[] pointArray) {
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
@@ -1204,6 +1329,12 @@ public class ScienceLab {
 
     }
 
+    /**
+     * Instruct the ADC to start streaming 8-bit data. use stop_streaming to stop
+     * @param tg timegap. 250KHz clock
+     * @param channel  channel 'CH1'... 'CH9','IN1','SEN'
+     * @throws IOException
+     */
     private void startStreaming(int tg, String channel) throws IOException {
         if (this.streaming)
             this.stopStreaming();
@@ -1219,6 +1350,10 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Instruct the ADC to stop streaming data
+     * @throws IOException
+     */
     private void stopStreaming() throws IOException {
         if (this.streaming) {
             mPacketHandler.sendByte(mCommandsProto.STOP_STREAMING);
@@ -1234,10 +1369,18 @@ public class ScienceLab {
         this.dataSplitting = dataSplitting;
     }
 
+    /**
+     * checks if PSLab device is found
+     * @return true is device found; false otherwise
+     */
     public boolean isDeviceFound() {
         return mCommunicationHandler.isDeviceFound();
     }
 
+    /**
+     * checks if PSLab device is connected
+     * @return true is device is connected; false otherwise
+     */
     public boolean isConnected() {
         return mCommunicationHandler.isConnected();
     }
