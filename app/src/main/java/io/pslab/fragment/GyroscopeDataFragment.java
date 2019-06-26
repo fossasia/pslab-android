@@ -120,20 +120,10 @@ public class GyroscopeDataFragment extends Fragment {
             resetInstrumentData();
             playRecordedData();
         } else if (gyroSensor.viewingData) {
-            if (sensorManager != null) {
-                recordedGyroArray = new ArrayList<>();
-                resetInstrumentData();
-                plotAllRecordedData();
-            }
-            else {
-                gyroscopeViewFragments.clear();
-                rootView.findViewById(R.id.gyroscope_x_axis_fragment).setVisibility(View.INVISIBLE);
-                rootView.findViewById(R.id.gyroscope_y_axis_fragment).setVisibility(View.INVISIBLE);
-                rootView.findViewById(R.id.gyroscope_z_axis_fragment).setVisibility(View.INVISIBLE);
-                noSensorText.setText(getResources().getString(R.string.no_data_recorded_gyro));
-                noSensorText.setAllCaps(true);
-                gyroLinearLayout.addView(noSensorText);
-            }
+            recordedGyroArray = new ArrayList<>();
+            resetInstrumentData();
+            plotAllRecordedData();
+
         } else if (!gyroSensor.isRecording) {
             updateGraphs();
             initiateGyroSensor();
@@ -150,8 +140,7 @@ public class GyroscopeDataFragment extends Fragment {
         }
         if (sensorManager != null) {
             sensorManager.unregisterListener(gyroScopeSensorEventListener);
-        }
-        else {
+        } else {
             gyroLinearLayout.removeView(noSensorText);
         }
     }
@@ -484,13 +473,26 @@ public class GyroscopeDataFragment extends Fragment {
     private void initiateGyroSensor() {
         resetInstrumentData();
         sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        if (sensor == null) {
-            Toast.makeText(getContext(), getResources().getString(R.string.no_gyroscope_sensor), Toast.LENGTH_LONG).show();
+        if (sensorManager == null) {
+            noSensorLayoutUpdate();
         } else {
-            sensorManager.registerListener(gyroScopeSensorEventListener,
-                    sensor, SensorManager.SENSOR_DELAY_FASTEST);
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            if (sensor == null) {
+                Toast.makeText(getContext(), getResources().getString(R.string.no_gyroscope_sensor), Toast.LENGTH_LONG).show();
+            } else {
+                sensorManager.registerListener(gyroScopeSensorEventListener,
+                        sensor, SensorManager.SENSOR_DELAY_FASTEST);
+            }
         }
+    }
 
+    private void noSensorLayoutUpdate() {
+        gyroscopeViewFragments.clear();
+        rootView.findViewById(R.id.gyroscope_x_axis_fragment).setVisibility(View.GONE);
+        rootView.findViewById(R.id.gyroscope_y_axis_fragment).setVisibility(View.GONE);
+        rootView.findViewById(R.id.gyroscope_z_axis_fragment).setVisibility(View.GONE);
+        noSensorText.setText(getResources().getString(R.string.no_data_recorded_gyro));
+        noSensorText.setAllCaps(true);
+        gyroLinearLayout.addView(noSensorText);
     }
 }
