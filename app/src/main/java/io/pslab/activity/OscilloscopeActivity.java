@@ -117,7 +117,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public boolean isXYPlotSelected;
     public boolean sineFit;
     public boolean squareFit;
-    public boolean viewIsClicked;
     public boolean isCH1FrequencyRequired;
     public boolean isCH2FrequencyRequired;
     public String triggerChannel;
@@ -204,6 +203,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private HashMap<String, Integer> channelIndexMap;
     private Integer[] channelColors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.MAGENTA};
     private String[] loggingYdata = new String[4];
+    public String xyPlotAxis1 = "CH1";
+    public String xyPlotAxis2 = "CH2";
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
@@ -257,7 +258,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         curveFittingChannel2 = "None";
         xyPlotXAxisChannel = CHANNEL.CH1.toString();
         xyPlotYAxisChannel = CHANNEL.CH2.toString();
-        viewIsClicked = false;
         analyticsClass = new AnalyticsClass();
         isCH1FrequencyRequired = false;
         isCH2FrequencyRequired = false;
@@ -456,12 +456,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (scienceLab.isConnected() && viewIsClicked && isXYPlotSelected) {
+                    if (scienceLab.isConnected() && isXYPlotSelected) {
                         xyPlotTask = new XYPlotTask();
-                        if (xyPlotXAxisChannel.equals(CHANNEL.CH2.toString()))
-                            xyPlotTask.execute(xyPlotYAxisChannel);
-                        else
-                            xyPlotTask.execute(xyPlotXAxisChannel);
+                        xyPlotTask.execute(xyPlotAxis1, xyPlotAxis2);
                         synchronized (lock) {
                             try {
                                 lock.wait();
@@ -1106,69 +1103,65 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     }
 
     public class XYPlotTask extends AsyncTask<String, Void, Void> {
-        String analogInput;
-        float[] xFloatData = new float[1000];
-        float[] yFloatData = new float[1000];
+        private String analogInput1;
+        private String analogInput2;
+        private float[] xFloatData;
+        private float[] yFloatData;
 
         @Override
         protected Void doInBackground(String... params) {
+            analogInput1 = params[0];
+            analogInput2 = params[1];
             HashMap<String, double[]> data;
-            if ("CH2".equals(xyPlotXAxisChannel) || "CH2".equals(xyPlotYAxisChannel)) {
-                analogInput = params[0];
-                data = scienceLab.captureTwo(1000, 10, analogInput, false);
-                double y1Data[] = data.get("y1");
-                double y2Data[] = data.get("y2");
-                if ("CH2".equals(xyPlotYAxisChannel)) {
-                    for (int i = 0; i < y1Data.length; i++) {
-                        xFloatData[i] = (float) y1Data[i];
-                        yFloatData[i] = (float) y2Data[i];
-                    }
-                } else {
-                    for (int i = 0; i < y1Data.length; i++) {
-                        xFloatData[i] = (float) y2Data[i];
-                        yFloatData[i] = (float) y1Data[i];
-                    }
+            if (analogInput1.equals(analogInput2)) {
+                scienceLab.captureTraces(1, samples, timeGap, analogInput1, isTriggerSelected, null);
+                data = scienceLab.fetchTrace(1);
+                double[] yData = data.get("y");
+                int n = yData.length;
+                xFloatData = new float[n];
+                yFloatData = new float[n];
+                for (int i = 0; i < n; i++) {
+                    xFloatData[i] = (float) yData[i];
+                    yFloatData[i] = (float) yData[i];
                 }
             } else {
-                data = scienceLab.captureFour(1000, 10, analogInput, false);
-                double[] y1Data = data.get("y");
-                double[] y3Data = data.get("y3");
-                double[] y4Data = data.get("y4");
-                switch (xyPlotXAxisChannel) {
-                    case "CH1":
-                        for (int i = 0; i < y1Data.length; i++) {
-                            xFloatData[i] = (float) y1Data[i];
-                        }
-                        break;
-                    case "CH3":
-                        for (int i = 0; i < y3Data.length; i++) {
-                            xFloatData[i] = (float) y3Data[i];
-                        }
-                        break;
-                    case "MIC":
-                        for (int i = 0; i < y4Data.length; i++) {
-                            xFloatData[i] = (float) y4Data[i];
-                        }
-                        break;
+                int noChannels = 1;
+                if ((analogInput1.equals(CHANNEL.CH1.toString()) && analogInput2.equals(CHANNEL.CH2.toString())) || (analogInput1.equals(CHANNEL.CH2.toString()) && analogInput2.equals(CHANNEL.CH1.toString()))) {
+                    noChannels = 2;
+                    scienceLab.captureTraces(noChannels, 175, timeGap, "CH1", isTriggerSelected, null);
+                    data = scienceLab.fetchTrace(1);
+                    double[] yData1 = data.get("y");
+                    data = scienceLab.fetchTrace(2);
+                    double[] yData2 = data.get("y");
+                    int n = Math.min(yData1.length, yData2.length);
+                    xFloatData = new float[n];
+                    yFloatData = new float[n];
+                    for (int i = 0; i < n; i++) {
+                        xFloatData[i] = (float) yData1[i];
+                        yFloatData[i] = (float) yData2[i];
+                    }
+
+                } else {
+                    noChannels = 4;
+                    scienceLab.captureTraces(noChannels, 175, timeGap, "CH1", isTriggerSelected, null);
+                    data = scienceLab.fetchTrace(channelIndexMap.get(analogInput1) + 1);
+                    double[] yData1 = data.get("y");
+                    data = scienceLab.fetchTrace(channelIndexMap.get(analogInput2) + 1);
+                    double[] yData2 = data.get("y");
+                    int n = Math.min(yData1.length, yData2.length);
+                    xFloatData = new float[n];
+                    yFloatData = new float[n];
+                    for (int i = 0; i < n; i++) {
+                        xFloatData[i] = (float) yData1[i];
+                        yFloatData[i] = (float) yData2[i];
+                    }
                 }
 
-                switch (xyPlotYAxisChannel) {
-                    case "CH1":
-                        for (int i = 0; i < y1Data.length; i++) {
-                            yFloatData[i] = (float) y1Data[i];
-                        }
-                        break;
-                    case "CH3":
-                        for (int i = 0; i < y3Data.length; i++) {
-                            yFloatData[i] = (float) y3Data[i];
-                        }
-                        break;
-                    case "MIC":
-                        for (int i = 0; i < y4Data.length; i++) {
-                            yFloatData[i] = (float) y4Data[i];
-                        }
-                        break;
-                }
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             return null;
         }
@@ -1177,6 +1170,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             graph.plotData(xFloatData, yFloatData, 1);
+            synchronized (lock) {
+                lock.notify();
+            }
         }
     }
 
