@@ -1125,21 +1125,44 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     yFloatData[i] = (float) yData[i];
                 }
             } else {
-                scienceLab.captureTraces(1, samples, timeGap, analogInput1, isTriggerSelected, null);
-                data = scienceLab.fetchTrace(1);
-                double[] yData1 = data.get("y");
-                scienceLab.captureTraces(1, samples, timeGap, analogInput2, isTriggerSelected, null);
-                data = scienceLab.fetchTrace(1);
-                double[] yData2 = data.get("y");
-                int n = Math.min(yData1.length, yData2.length);
-                xFloatData = new float[n];
-                yFloatData = new float[n];
-                for (int i = 0; i < n; i++) {
-                    xFloatData[i] = (float) yData1[i];
-                    yFloatData[i] = (float) yData2[i];
-                }
-            }
+                int noChannels = 1;
+                if ((analogInput1.equals(CHANNEL.CH1.toString()) && analogInput2.equals(CHANNEL.CH2.toString())) || (analogInput1.equals(CHANNEL.CH2.toString()) && analogInput2.equals(CHANNEL.CH1.toString()))) {
+                    noChannels = 2;
+                    scienceLab.captureTraces(noChannels, 175, timeGap, "CH1", isTriggerSelected, null);
+                    data = scienceLab.fetchTrace(1);
+                    double[] yData1 = data.get("y");
+                    data = scienceLab.fetchTrace(2);
+                    double[] yData2 = data.get("y");
+                    int n = Math.min(yData1.length, yData2.length);
+                    xFloatData = new float[n];
+                    yFloatData = new float[n];
+                    for (int i = 0; i < n; i++) {
+                        xFloatData[i] = (float) yData1[i];
+                        yFloatData[i] = (float) yData2[i];
+                    }
 
+                } else {
+                    noChannels = 4;
+                    scienceLab.captureTraces(noChannels, 175, timeGap, "CH1", isTriggerSelected, null);
+                    data = scienceLab.fetchTrace(channelIndexMap.get(analogInput1) + 1);
+                    double[] yData1 = data.get("y");
+                    data = scienceLab.fetchTrace(channelIndexMap.get(analogInput2) + 1);
+                    double[] yData2 = data.get("y");
+                    int n = Math.min(yData1.length, yData2.length);
+                    xFloatData = new float[n];
+                    yFloatData = new float[n];
+                    for (int i = 0; i < n; i++) {
+                        xFloatData[i] = (float) yData1[i];
+                        yFloatData[i] = (float) yData2[i];
+                    }
+                }
+
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
