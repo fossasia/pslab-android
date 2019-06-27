@@ -16,12 +16,4 @@
         android:title="@string/setting_data_format_title"
         app:iconSpaceReserved="false" />
 
-    <ListPreference
-        android:defaultValue="0"
-        android:entries="@array/map_service_list"
-        android:entryValues="@array/map_service_values"
-        android:key="@string/map_service_key"
-        android:title="@string/map_service"
-        app:iconSpaceReserved="false"/>
-
 </PreferenceScreen>

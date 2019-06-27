@@ -48,4 +48,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
+    <Button
+        android:id="@+id/button_view_xy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/spinner_channel_select_xy2"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toEndOf="@+id/spinner_channel_select_xy2"
+        android:layout_toRightOf="@+id/spinner_channel_select_xy2"
+        android:layout_weight="1"
+        android:background="@drawable/selector_button"
+        android:text="@string/view"
+        android:textColor="@color/white"
+        android:textSize="@dimen/control_textsize_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

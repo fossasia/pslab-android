@@ -42,6 +42,10 @@
             android:value="@string/google_maps_key" />
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".activity.GoogleMapsActivity"
+            android:label="@string/title_activity_google_maps"/>
         <activity
             android:name=".activity.ThermometerActivity"
             android:screenOrientation="portrait"
