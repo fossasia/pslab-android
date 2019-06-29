@@ -456,8 +456,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                         double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
                         double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
 
-                        scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, true);
-                        scienceLab.setState(WaveGeneratorCommon.state);
+                        scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, false);
                     }
 
                     waveDialog.show();

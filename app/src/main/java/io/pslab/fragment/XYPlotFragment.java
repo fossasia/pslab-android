@@ -22,7 +22,6 @@ public class XYPlotFragment extends Fragment {
     private Spinner spinnerChannelSelect1;
     private Spinner spinnerChannelSelect2;
     private CheckBox checkBoxXYPlot;
-    private Button viewButton;
 
     public static XYPlotFragment newInstance() {
         return new XYPlotFragment();
@@ -36,10 +35,10 @@ public class XYPlotFragment extends Fragment {
         spinnerChannelSelect1 = v.findViewById(R.id.spinner_channel_select_xy1);
         spinnerChannelSelect2 = v.findViewById(R.id.spinner_channel_select_xy2);
         checkBoxXYPlot = v.findViewById(R.id.checkBox_enable_xy_xy);
-        viewButton = v.findViewById(R.id.button_view_xy);
         spinnerChannelSelect1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                ((OscilloscopeActivity) getActivity()).xyPlotAxis1 = channels[position];
                 if (((OscilloscopeActivity) getActivity()).isXYPlotSelected) {
                     ((OscilloscopeActivity) getActivity()).setXAxisLabel(channels[position]);
                     ((OscilloscopeActivity) getActivity()).xAxisLabelUnit.setText("(V)");
@@ -56,6 +55,7 @@ public class XYPlotFragment extends Fragment {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                ((OscilloscopeActivity) getActivity()).xyPlotAxis2 = channels[position];
                 if (((OscilloscopeActivity) getActivity()).isXYPlotSelected) {
                     ((OscilloscopeActivity) getActivity()).setLeftYAxisLabel(channels[position]);
                 }
@@ -107,13 +107,6 @@ public class XYPlotFragment extends Fragment {
 
                 }
 
-            }
-        });
-
-        viewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((OscilloscopeActivity) getActivity()).viewIsClicked = true;
             }
         });
 
