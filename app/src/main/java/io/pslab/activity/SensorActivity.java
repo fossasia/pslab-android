@@ -30,6 +30,7 @@ import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
 import io.pslab.sensors.SensorADS1115;
 import io.pslab.sensors.SensorBMP180;
+import io.pslab.sensors.SensorDHT11;
 import io.pslab.sensors.SensorHMC5883L;
 import io.pslab.sensors.SensorMLX90614;
 import io.pslab.sensors.SensorMPU6050;
@@ -105,6 +106,7 @@ public class SensorActivity extends AppCompatActivity {
         sensorAddr.put(0x68, "MPU6050");
         sensorAddr.put(0x40, "SHT21");
         sensorAddr.put(0x39, "TSL2561");
+        sensorAddr.put(0x0f, "DHT11");
 
         adapter = new ArrayAdapter<>(getApplication(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataName);
 
@@ -159,6 +161,10 @@ public class SensorActivity extends AppCompatActivity {
                         break;
                     case "MPU925x":
                         intent = new Intent(getApplication(), SensorMPU925X.class);
+                        startActivity(intent);
+                        break;
+                    case "DHT11":
+                        intent = new Intent(getApplication(), SensorDHT11.class);
                         startActivity(intent);
                         break;
                     default:

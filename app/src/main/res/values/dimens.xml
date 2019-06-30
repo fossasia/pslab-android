@@ -331,6 +331,12 @@
 
     <dimen name="mpu6050_margin">30dp</dimen>
 
+    <dimen name="sensor_dht11_margin">5dp</dimen>
+    <dimen name="dht11_height">40dp</dimen>
+    <dimen name="card_dht11_height">180dp</dimen>
+    <dimen name="margin_top_dht11">20dp</dimen>
+    <dimen name="dht11_text_height">40dp</dimen>
+
     <dimen name="sensorlist_text_size">14sp</dimen>
     <dimen name="text_size_sensor_list">14sp</dimen>
 </resources>
