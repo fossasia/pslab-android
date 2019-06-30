@@ -82,7 +82,7 @@ public class ScienceLab {
     private NRF24L01 nrf;
     private MCP4728 dac;
 
-    /**Constructor
+    /** Constructor
      * @param communicationHandler
      */
     public ScienceLab(CommunicationHandler communicationHandler) {
@@ -484,7 +484,7 @@ public class ScienceLab {
     }
 
     /**
-     * @return Resistance of connected resistor
+     * @return Resistance of connected resistor between RES an GND pins
      */
     public Double getResistance() {
         double volt = this.getAverageVoltage("SEN", null);
@@ -534,7 +534,7 @@ public class ScienceLab {
 
     /**
      * Blocking call that fetches an oscilloscope trace from the specified input channel
-     * @param channel Channel to select as input. ['CH1'..'CH3','SEN']
+     * @param channel Channel to select as input. ['CH1','CH2','CH3','MIC',SEN']
      * @param samples Number of samples to fetch. Maximum 10000
      * @param timeGap Timegap between samples in microseconds
      * @return Arrays X(timestamps),Y(Corresponding Voltage values)
@@ -570,7 +570,7 @@ public class ScienceLab {
     }
 
     /**
-     * Blocking call that fetches oscilloscope traces from CH1,CH2,CH#,MIC
+     * Blocking call that fetches oscilloscope traces from CH1,CH2,CH3,MIC
      * @param samples Number of samples to fetch. Maximum 2500
      * @param timeGap Timegap between samples in microseconds. Minimum 1.75uS
      * @param traceOneRemap Choose the analog input for channel 1. It is connected to CH1 by default. Channel 2 always reads CH2.
@@ -720,7 +720,7 @@ public class ScienceLab {
 
     /**
      * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
-     * @param channel Channel name 'CH1' / 'CH2' ... 'SEN'
+     * @param channel Channel name 'CH1','CH2','CH3','MIC','SEN'
      * @param samples Number of samples to fetch. Maximum 10000/(total specified channels)
      * @param timeGap Timegap between samples in microseconds.
      * @param args  Specify if SQR1 must be toggled right before capturing.
@@ -855,7 +855,7 @@ public class ScienceLab {
      * @param number Channels to acquire. 1/2/4
      * @param samples Total points to store per channel. Maximum 3200 total
      * @param timeGap  Timegap between two successive samples (in uSec)
-     * @param channelOneInput Map channel 1 to 'CH1' ... 'CH9'
+     * @param channelOneInput Map channel 1 to 'CH1'
      * @param trigger Whether or not to trigger the oscilloscope based on the voltage level set
      * @param CH123SA
      */
@@ -914,7 +914,7 @@ public class ScienceLab {
 
     /**
      * Instruct the ADC to start sampling. Use fetchTrace to retrieve the data
-     * @param channel Channel to acquire data from 'CH1' ... 'CH9'
+     * @param channel Channel to acquire data from 'CH1', 'CH2', 'CH3', 'MIC'
      * @param samples Total points to store per channel. Maximum 3200 total.
      * @param timeGap Timegap between two successive samples (in uSec)
      * @param trigger Whether or not to trigger the oscilloscope based on the voltage level set by
@@ -1071,7 +1071,7 @@ public class ScienceLab {
      * The trigger will timeout within 8mS, and capture routines will start regardless.
      * These settings will not be used if the trigger option in the capture routines are set to False
      * @param channel Channel 0,1,2,3. Corresponding to the channels being recorded by the capture routine(not the analog inputs)
-     * @param channelName Name of the channel. 'CH1'... 'V+'
+     * @param channelName Name of the channel. 'CH1','CH2','CH3','MIC','V+'
      * @param voltage The voltage level that should trigger the capture sequence(in Volts)
      * @param resolution
      * @param prescalar
@@ -1231,7 +1231,7 @@ public class ScienceLab {
 
     /**
      * Return the voltage on the selected channel
-     * @param channelName : 'CH1','CH2','CH3', 'MIC','IN1','SEN','V+'
+     * @param channelName : 'CH1','CH2','CH3','MIC','IN1','SEN','V+'
      * @param sample Samples to average
      * @return Voltage on the selected channel
      */
