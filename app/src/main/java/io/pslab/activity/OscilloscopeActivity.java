@@ -190,7 +190,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private long block;
     private Timer recordTimer;
     private long recordPeriod = 100;
-    private String oscilloscopeCSVHeader = "Timestamp,DateTime,Channel,xData,yData,Timebase,lat,lon";
+    private String oscilloscopeCSVHeader = "Timestamp,DateTime,Mode,Channel,xData,yData,Timebase,lat,lon";
     private String loggingXdata = "";
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
@@ -669,7 +669,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         String locationData = lat + "," + lon;
         for (int i = 0; i < noOfChannels; i++) {
             recordSensorData(new OscilloscopeData(timestamp + i, block, noOfChannels, channels[i], loggingXdata, loggingYdata[i], xAxisScale, lat, lon));
-            String data = timeData + "," + channels[i] + "," + loggingXdata + "," + loggingYdata[i] + "," + xAxisScale + "," + locationData;
+            String data = timeData + "," + noOfChannels + "," + channels[i] + "," + loggingXdata + "," + loggingYdata[i] + "," + xAxisScale + "," + locationData;
             csvLogger.writeCSVFile(data);
         }
     }
