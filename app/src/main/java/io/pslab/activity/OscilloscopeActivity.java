@@ -1024,6 +1024,32 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                             curveFitEntries.get(curveFitEntries.size() - 1).add(new Entry((float) x, (float) y));
                         }
                     }
+
+                    if (squareFit && isDataAnalysisFragSelected && channel.equals(curveFittingChannel1)) {
+                        if (curveFitEntries.size() == 0 || curveFitEntries.get(curveFitEntries.size() - 1) == null) {
+                            curveFitEntries.add(new ArrayList<>());
+                        }
+                        double[] sqFit = analyticsClass.squareFit(xData, yData);
+                        double amp = sqFit[0];
+                        double freq = sqFit[1];
+                        double phase = sqFit[2];
+                        double dc = sqFit[3];
+                        double offset = sqFit[4];
+
+                        freq = freq / 1e6;
+                        double max = xData[xData.length - 1];
+                        for (int j = 0; j < 500; j++) {
+                            double x = j * max / 500;
+                            double t = 2*Math.PI*freq*(x - phase);
+                            double y;
+                            if (t%(2*Math.PI) < 2*Math.PI*dc) {
+                                y = offset + amp;
+                            } else {
+                                y = offset - 2*amp;
+                            }
+                            curveFitEntries.get(curveFitEntries.size() - 1).add(new Entry((float) x, (float) y));
+                        }
+                    }
                     if (mA > maxAmp) {
                         maxAmp = mA;
                     }
