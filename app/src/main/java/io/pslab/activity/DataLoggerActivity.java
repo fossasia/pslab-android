@@ -40,6 +40,7 @@ import io.pslab.models.BaroData;
 import io.pslab.models.CompassData;
 import io.pslab.models.GyroData;
 import io.pslab.models.LuxData;
+import io.pslab.models.OscilloscopeData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
@@ -557,6 +558,41 @@ public class DataLoggerActivity extends AppCompatActivity {
                         time = block;
                         realm.beginTransaction();
                         realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.wave_generator)));
+                        realm.commitTransaction();
+                    }
+                    i++;
+                    line = reader.readLine();
+                }
+                fillData();
+                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.oscilloscope))) {
+            try {
+                FileInputStream is = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                String line = reader.readLine();
+                int i = 0;
+                long block = 0, time = 0;
+                while (line != null) {
+                    if (i != 0) {
+                        String[] data = line.split(",");
+                        try {
+                            time += 1000;
+                            OscilloscopeData oscData = new OscilloscopeData(time, block, Integer.valueOf(data[2]), data[3], data[4], data[5], Float.valueOf(data[6]),Float.valueOf(data[7]), Float.valueOf(data[8]));
+                            realm.beginTransaction();
+                            realm.copyToRealm(oscData);
+                            realm.commitTransaction();
+                        } catch (Exception e) {
+                            Log.d("exception", i + " " + e.getMessage());
+                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        block = System.currentTimeMillis();
+                        time = block;
+                        realm.beginTransaction();
+                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.oscilloscope)));
                         realm.commitTransaction();
                     }
                     i++;
