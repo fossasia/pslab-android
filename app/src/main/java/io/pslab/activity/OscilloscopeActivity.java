@@ -115,6 +115,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public boolean isTriggerSelected;
     public boolean isFourierTransformSelected;
     public boolean isXYPlotSelected;
+    private boolean isDataAnalysisFragSelected;
     public boolean sineFit;
     public boolean squareFit;
     public boolean isCH1FrequencyRequired;
@@ -253,6 +254,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         timeGap = 2;
         sineFit = true;
         squareFit = false;
+        isDataAnalysisFragSelected = false;
         graph = new Plot2D(this, new float[]{}, new float[]{}, 1);
         curveFittingChannel1 = "None";
         curveFittingChannel2 = "None";
@@ -705,6 +707,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 replaceFragment(R.id.layout_dock_os2, channelParametersFragment, "ChannelParametersFragment");
                 clearTextBackgroundColor();
                 channelParametersTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                isDataAnalysisFragSelected = false;
                 break;
 
             case R.id.button_timebase_os:
@@ -712,6 +715,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 replaceFragment(R.id.layout_dock_os2, timebaseTriggerFragment, "TimebaseTiggerFragment");
                 clearTextBackgroundColor();
                 timebaseTiggerTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                isDataAnalysisFragSelected = false;
                 break;
 
             case R.id.button_data_analysis_os:
@@ -719,6 +723,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 replaceFragment(R.id.layout_dock_os2, dataAnalysisFragment, "DataAnalysisFragment");
                 clearTextBackgroundColor();
                 dataAnalysisTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                isDataAnalysisFragSelected = true;
                 break;
 
             case R.id.button_xy_plot_os:
@@ -726,6 +731,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 replaceFragment(R.id.layout_dock_os2, xyPlotFragment, "XYPlotFragment");
                 clearTextBackgroundColor();
                 xyPlotTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                isDataAnalysisFragSelected = false;
                 break;
 
             default:
@@ -941,8 +947,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         private ArrayList<ArrayList<Entry>> entries = new ArrayList<>();
+        private ArrayList<ArrayList<Entry>> curveFitEntries = new ArrayList<>();
         private Integer noOfChannels;
         private String[] paramsChannels;
+        private String channel;
 
         @Override
         protected Void doInBackground(String... channels) {
@@ -959,7 +967,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 maxAmp = 0;
                 for (int i = 0; i < noOfChannels; i++) {
                     entries.add(new ArrayList<>());
-                    String channel = channels[i];
+                    channel = channels[i];
                     HashMap<String, double[]> data;
                     if (triggerChannel.equals(channel))
                         scienceLab.configureTrigger(channelIndexMap.get(channel), channel, trigger, null, null);
@@ -998,10 +1006,56 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         xDataString[j] = String.valueOf(xData[j]);
                         yDataString.get(i)[j] = String.valueOf(yData[j]);
                     }
+                    if (sineFit && isDataAnalysisFragSelected && channel.equals(curveFittingChannel1)) {
+                        if (curveFitEntries.size() == 0 || curveFitEntries.get(curveFitEntries.size() - 1) == null) {
+                            curveFitEntries.add(new ArrayList<>());
+                        }
+                        double[] sinFit = analyticsClass.sineFit(xData, yData);
+                        double amp = sinFit[0];
+                        double freq = sinFit[1];
+                        double offset = sinFit[2];
+                        double phase = sinFit[3];
+
+                        freq = freq / 1e6;
+                        double max = xData[xData.length - 1];
+                        for (int j = 0; j < 500; j++) {
+                            double x = j * max / 500;
+                            double y = offset + amp * Math.sin(Math.abs(freq * (2 * Math.PI)) * x + phase * Math.PI / 180);
+                            curveFitEntries.get(curveFitEntries.size() - 1).add(new Entry((float) x, (float) y));
+                        }
+                    }
+
+                    if (squareFit && isDataAnalysisFragSelected && channel.equals(curveFittingChannel1)) {
+                        if (curveFitEntries.size() == 0 || curveFitEntries.get(curveFitEntries.size() - 1) == null) {
+                            curveFitEntries.add(new ArrayList<>());
+                        }
+                        double[] sqFit = analyticsClass.squareFit(xData, yData);
+                        double amp = sqFit[0];
+                        double freq = sqFit[1];
+                        double phase = sqFit[2];
+                        double dc = sqFit[3];
+                        double offset = sqFit[4];
+
+                        freq = freq / 1e6;
+                        double max = xData[xData.length - 1];
+                        for (int j = 0; j < 500; j++) {
+                            double x = j * max / 500;
+                            double t = 2*Math.PI*freq*(x - phase);
+                            double y;
+                            if (t%(2*Math.PI) < 2*Math.PI*dc) {
+                                y = offset + amp;
+                            } else {
+                                y = offset - 2*amp;
+                            }
+                            curveFitEntries.get(curveFitEntries.size() - 1).add(new Entry((float) x, (float) y));
+                        }
+                    }
                     if (mA > maxAmp) {
                         maxAmp = mA;
                     }
                 }
+
+
                 if (isInBuiltMicSelected) {
                     noOfChannels++;
                     entries.add(new ArrayList<>());
@@ -1082,6 +1136,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 dataSet.setColor(channelColors[i]);
                 dataSets.add(dataSet);
 
+            }
+            for (int i = 0; i < curveFitEntries.size(); i++) {
+                LineDataSet dataSet;
+                dataSet = new LineDataSet(curveFitEntries.get(i), "Fit");
+                dataSet.setDrawCircles(false);
+                dataSet.setColor(Color.YELLOW);
+                dataSets.add(dataSet);
             }
             LineData data = new LineData(dataSets);
             if (!isFourierTransformSelected) {
