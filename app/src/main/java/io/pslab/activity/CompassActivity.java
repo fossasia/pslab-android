@@ -2,8 +2,11 @@ package io.pslab.activity;
 
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
+
 import io.pslab.R;
 import io.pslab.fragment.CompassDataFragment;
+import io.pslab.fragment.CompassSettingsFragment;
 import io.pslab.models.CompassData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
@@ -95,5 +98,19 @@ public class CompassActivity extends PSLabSensor {
             String title = titleFormat.format(recordedCompassData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reinstateConfigurations();
+    }
+
+    private void reinstateConfigurations() {
+        SharedPreferences compassConfigurations;
+        compassConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        locationEnabled = compassConfigurations.getBoolean(CompassSettingsFragment.KEY_INCLUDE_LOCATION, true);
+        CompassDataFragment.setParameters(
+                compassConfigurations.getString(CompassSettingsFragment.KEY_COMPASS_SENSOR_TYPE, "0"));
     }
 }

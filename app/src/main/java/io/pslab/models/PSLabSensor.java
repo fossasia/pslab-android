@@ -44,8 +44,8 @@ import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
 import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.BaroMeterDataFragment;
-import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.CompassDataFragment;
+import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.fragment.ThermometerDataFragment;
 import io.pslab.others.CSVLogger;
@@ -290,9 +290,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
         play.setIcon(playingData ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp);
         MenuItem stop = menu.findItem(R.id.stop_data);
         stop.setVisible(startedPlay);
-        if (getSensorName().equals(getResources().getString(R.string.compass))) {
-            menu.findItem(R.id.settings).setVisible(false);
-        }
         return super.onPrepareOptionsMenu(menu);
     }
 
