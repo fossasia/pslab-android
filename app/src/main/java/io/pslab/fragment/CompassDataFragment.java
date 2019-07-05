@@ -22,7 +22,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,9 +41,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.pslab.R;
 import io.pslab.activity.CompassActivity;
+import io.pslab.communication.ScienceLab;
+import io.pslab.communication.peripherals.I2C;
 import io.pslab.models.CompassData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.ScienceLabCommon;
 
 import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
@@ -52,6 +54,7 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 public class CompassDataFragment extends Fragment {
 
     private Unbinder unbinder;
+    private static int sensorType = 0;
     @Nullable
     @BindView(R.id.compass)
     ImageView compass;
@@ -72,6 +75,8 @@ public class CompassDataFragment extends Fragment {
     @BindView(R.id.tv_sensor_hmc5883l_bz)
     TextView zAxisMagneticField;
 
+    private enum COMPASS_SENSOR {INBUILT_SENSOR, HMC5883L_SENSOR}
+
     private float currentDegree = 0f;
     private int direction;
     private SensorManager sensorManager;
@@ -89,6 +94,10 @@ public class CompassDataFragment extends Fragment {
 
     public static CompassDataFragment newInstance() {
         return new CompassDataFragment();
+    }
+
+    public static void setParameters(String type) {
+        CompassDataFragment.sensorType = Integer.valueOf(type);
     }
 
     @Override
@@ -225,7 +234,7 @@ public class CompassDataFragment extends Fragment {
             plotAllRecordedData();
         } else if (!compassActivity.isRecording) {
             updateData();
-            initiateCompassSensor();
+            initiateCompassSensor(sensorType);
         } else if (returningFromPause) {
             updateData();
         }
@@ -597,13 +606,47 @@ public class CompassDataFragment extends Fragment {
         zAxisMagneticField.setText(getResources().getString(R.string.value_null));
     }
 
-    private void initiateCompassSensor() {
-        sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-        if (sensor == null) {
-            Toast.makeText(getContext(), getContext().getResources().getString(R.string.no_compass_sensor), Toast.LENGTH_SHORT).show();
-        } else {
-            sensorManager.registerListener(compassEventListner, sensor, SensorManager.SENSOR_DELAY_GAME);
+    private void initiateCompassSensor(int type) {
+
+        CompassDataFragment.COMPASS_SENSOR s = CompassDataFragment.COMPASS_SENSOR.values()[type];
+        resetInstrumentData();
+        ScienceLab scienceLab;
+        switch (s) {
+            case INBUILT_SENSOR:
+                degreeIndicator.setText(getResources().getStringArray(R.array.compass_sensors)[0]);
+                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
+                sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+                if (sensor == null) {
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_compass_sensor), Toast.LENGTH_LONG).show();
+                } else {
+                    sensorManager.registerListener(compassEventListner, sensor, SensorManager.SENSOR_DELAY_GAME);
+                }
+                break;
+            case HMC5883L_SENSOR:
+                degreeIndicator.setText(getResources().getStringArray(R.array.compass_sensors)[1]);
+                scienceLab = ScienceLabCommon.scienceLab;
+                if (scienceLab.isConnected()) {
+                    try {
+                        I2C i2c = scienceLab.i2c;
+                        ArrayList<Integer> data;
+                        data = i2c.scan(null);
+                        if (data.contains(0x39)) {
+                            sensorType = 1;
+                        } else {
+                            Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
+                            sensorType = 0;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                    sensorType = 0;
+                }
+                break;
+            default:
+                break;
         }
+
     }
 }

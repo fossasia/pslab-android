@@ -19,6 +19,7 @@ import butterknife.Unbinder;
 import io.pslab.R;
 import io.pslab.fragment.AccelerometerSettingsFragment;
 import io.pslab.fragment.BaroMeterSettingsFragment;
+import io.pslab.fragment.CompassSettingsFragment;
 import io.pslab.fragment.GyroscopeSettingsFragment;
 import io.pslab.fragment.LuxMeterSettingFragment;
 import io.pslab.fragment.MultimeterSettingsFragment;
@@ -75,6 +76,9 @@ public class SettingsActivity extends AppCompatActivity {
                 break;
             case "Multimeter Configurations":
                 fragment = new MultimeterSettingsFragment();
+                break;
+            case PSLabSensor.COMPASS_CONFIGURATIONS:
+                fragment = new CompassSettingsFragment();
                 break;
             default:
                 fragment = new SettingsFragment();
