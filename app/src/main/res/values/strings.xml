@@ -162,6 +162,7 @@
     <string name="mlx90614">mlx90614</string>
     <string name="bmp180">bmp180</string>
     <string name="mpu925x">mpu925x</string>
+    <string name="bma180">bma180</string>
 
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
@@ -274,6 +275,28 @@
         <item></item>
     </string-array>
 
+    <string-array name="bma180_accel_spinner">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="bma180_kalman_spinner">
+        <item>0.01</item>
+        <item>0.1</item>
+        <item>1</item>
+        <item>10</item>
+        <item>100</item>
+        <item>1000</item>
+        <item>10000</item>
+        <item>null</item>
+    </string-array>
+
+    <string-array name="bma180_power_spinner">
+        <item></item>
+        <item></item>
+    </string-array>
 
     <string-array name="ads1115_gain_spinner">
         <item>GAIN_TWOTHIRDS</item>
@@ -762,6 +785,7 @@
     <string-array name="accelerometer_sensors">
         <item>Built-In</item>
         <item>MPU6050</item>
+        <item>BMA180</item>
     </string-array>
     <string-array name="accelerometer_sensor_list_values">
         <item>0</item>
