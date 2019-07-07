@@ -14,7 +14,9 @@ import io.pslab.R;
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_EXPORT_DATA_FORMAT_LIST = "export_data_format_list";
+    public static final String KEY_MAP_SERVICES = "map_services";
     private ListPreference listPreference;
+    private ListPreference mapPreference;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -27,13 +29,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.settings_preference_fragment, rootKey);
         listPreference = (ListPreference) getPreferenceScreen().findPreference(KEY_EXPORT_DATA_FORMAT_LIST);
+        mapPreference = (ListPreference) getPreferenceScreen().findPreference(KEY_MAP_SERVICES);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        listPreference.setSummary("Current format is " + listPreference.getEntry().toString());
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        listPreference.setSummary(listPreference.getEntry().toString());
+        mapPreference.setSummary(mapPreference.getEntry().toString());
     }
 
     @Override
@@ -45,7 +49,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (KEY_EXPORT_DATA_FORMAT_LIST.equals(key)) {
-            listPreference.setSummary("Current format is " + listPreference.getEntry().toString());
+            listPreference.setSummary(listPreference.getEntry().toString());
+        }
+        else if(KEY_MAP_SERVICES.equals(key)) {
+            mapPreference.setSummary(mapPreference.getEntry().toString());
         }
     }
 }

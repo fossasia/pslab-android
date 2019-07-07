@@ -1,0 +1,18 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:appComponentFactory="android.support.v4.app.CoreComponentFactory"
+        tools:replace="android:appComponentFactory">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name="io.pslab.activity.GoogleMapsActivity"
+            android:label="@string/title_activity_google_maps"></activity>
+    </application>
+
+</manifest>

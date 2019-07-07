@@ -31,6 +31,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    flavorDimensions 'default'
+    productFlavors {
+        fdroid {
+            dimension = 'default'
+        }
+        playstore {
+            dimension = 'default'
+        }
+    }
 }
 
 dependencies {
@@ -70,6 +79,8 @@ dependencies {
     implementation 'com.github.Triggertrap:SeekArc:v1.1'
 
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
     // Map libraries

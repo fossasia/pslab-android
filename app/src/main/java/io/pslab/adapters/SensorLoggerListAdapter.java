@@ -404,14 +404,6 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
 
     private void setMapDataToIntent(JSONArray array) {
         Intent map = new Intent(context, MapsActivity.class);
-        if (array.length() > 0) {
-            map.putExtra("hasMarkers", true);
-            map.putExtra("markers", array.toString());
-            context.startActivity(map);
-        } else {
-            map.putExtra("hasMarkers", false);
-            Toast.makeText(context, context.getResources().getString(R.string.no_location_data), Toast.LENGTH_LONG).show();
-        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

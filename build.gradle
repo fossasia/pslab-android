@@ -37,7 +37,7 @@ ext {
     // App dependencies
     supportLibraryVersion = '28.0.0'
     picassoVersion = '2.5.2'
-    butterKnifeVersion = '8.8.1'
+    butterKnifeVersion = '10.1.0'
     circleImageViewVersion = '3.0.0'
     mpAndroidChartVersion = 'v3.0.3'
     commonMathVersion = '3.6.1'
