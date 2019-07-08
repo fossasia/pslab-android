@@ -19,6 +19,5 @@
         android:id="@+id/menu_pslab_layout_back"
         android:title="@string/pslab_pinlayout_back"
         app:showAsAction="never"/>
-
 </menu>
 

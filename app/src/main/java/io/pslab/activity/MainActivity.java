@@ -1,9 +1,11 @@
 package io.pslab.activity;
 
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
@@ -38,6 +40,7 @@ import io.pslab.BuildConfig;
 import io.pslab.R;
 import io.pslab.communication.CommunicationHandler;
 import io.pslab.fragment.AboutUsFragment;
+import io.pslab.fragment.BluetoothScanFragment;
 import io.pslab.fragment.FAQFragment;
 import io.pslab.fragment.HomeFragment;
 import io.pslab.fragment.InstrumentsFragment;
@@ -396,6 +399,24 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 initialisationDialog.dismiss();
                 Toast.makeText(this, getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                        .setMessage(getResources().getString(R.string.bluetooth_scan_dialog))
+                        .setPositiveButton(getResources().getString(R.string.bluetooth_scan_text), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                BluetoothScanFragment bluetoothScanFragment = new BluetoothScanFragment();
+                                bluetoothScanFragment.show(getSupportFragmentManager(), "bluetooth");
+                                bluetoothScanFragment.setCancelable(true);
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .create();
+                dialog.show();
             }
         }
     }
