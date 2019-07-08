@@ -1879,6 +1879,19 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Start logging timestamps of rising/falling edges on ID1.
+     * @param channel ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param channelMode acquisition mode default value: 1(EVERY_EDGE)
+                        - EVERY_SIXTEENTH_RISING_EDGE = 5
+                        - EVERY_FOURTH_RISING_EDGE    = 4
+                        - EVERY_RISING_EDGE           = 3
+                        - EVERY_FALLING_EDGE          = 2
+                        - EVERY_EDGE                  = 1
+                        - DISABLED                    = 0
+     * @param triggerChannel ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param triggerMode    1=Falling edge, 0=Rising Edge, -1=Disable Trigger
+     */
     public void startOneChannelLA(String channel, Integer channelMode, String triggerChannel, Integer triggerMode) {
         if (channel == null) channel = "ID1";
         if (channelMode == null) channelMode = 1;
@@ -1913,6 +1926,21 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Start logging timestamps of rising/falling edges on ID1,ID2
+     * @param channels Channels to acquire data from . default ['ID1','ID2']
+     * @param modes modes for each channel. Array . default value: [1,1]
+                    - EVERY_SIXTEENTH_RISING_EDGE = 5
+                    - EVERY_FOURTH_RISING_EDGE    = 4
+                    - EVERY_RISING_EDGE           = 3
+                    - EVERY_FALLING_EDGE          = 2
+                    - EVERY_EDGE                  = 1
+                    - DISABLED                    = 0
+     * @param maximumTime Total time to sample. If total time exceeds 67 seconds, a prescaler will be used in the reference clock
+     * @param trigger Bool . Enable rising edge trigger on ID1
+     * @param edge 'rising' or 'falling' . trigger edge type for trigger_channels.
+     * @param triggerChannel channel to trigger on . Any digital input. default CH1
+     */
     public void startTwoChannelLA(ArrayList<String> channels, ArrayList<Integer> modes, Integer maximumTime, Integer trigger, String edge, String triggerChannel) {
         if (maximumTime == null) maximumTime = 67;
         if (trigger == null) trigger = 0;
@@ -1959,10 +1987,20 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Start logging timestamps of rising/falling edges on ID1,ID2,ID3
+     * @param modes  modes for each channel. Array. default value: [1,1,1]
+                    - EVERY_SIXTEENTH_RISING_EDGE = 5
+                    - EVERY_FOURTH_RISING_EDGE    = 4
+                    - EVERY_RISING_EDGE           = 3
+                    - EVERY_FALLING_EDGE          = 2
+                    - EVERY_EDGE                  = 1
+                    - DISABLED                    = 0
+     * @param triggerChannel ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param triggerMode same as modes(previously documented keyword argument)
+    default_value : 3
+     */
     public void startThreeChannelLA(ArrayList<Integer> modes, String triggerChannel, Integer triggerMode) {
-        /*
-        Start logging timestamps of rising/falling edges on ID1,ID2,ID3
-        */
         if (modes == null) {
             modes = new ArrayList<>();
             modes.add(1);
@@ -2008,16 +2046,31 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Four channel Logic Analyzer.
+        Start logging timestamps from a 64MHz counter to record level changes on ID1,ID2,ID3,ID4.
+            triggerChannel[0] -> ID1
+            triggerChannel[1] -> ID2
+            triggerChannel[2] -> ID3
+     * @param trigger Bool. Enable rising edge trigger on ID1.
+     * @param maximumTime Maximum delay expected between two logic level changes.
+                         If total time exceeds 1 mS, a prescaler will be used in the reference clock.
+                         However, this only refers to the maximum time between two successive level changes. If a delay larger
+                         than .26 S occurs, it will be truncated by modulo .26 S.
+                         If you need to record large intervals, try single channel/two channel modes which use 32 bit counters
+                         capable of time interval up to 67 seconds.
+     * @param modes modes for each channel. List with four elements\n
+                    default values: [1,1,1,1]
+                    - EVERY_SIXTEENTH_RISING_EDGE = 5
+                    - EVERY_FOURTH_RISING_EDGE    = 4
+                    - EVERY_RISING_EDGE           = 3
+                    - EVERY_FALLING_EDGE          = 2
+                    - EVERY_EDGE                  = 1
+                    - DISABLED                    = 0
+     * @param edge 'rising' or 'falling'. Trigger edge type for trigger_channels.
+     * @param triggerChannel ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     */
     public void startFourChannelLA(Integer trigger, Double maximumTime, ArrayList<Integer> modes, String edge, ArrayList<Boolean> triggerChannel) {
-        /*
-        Four channel Logic Analyzer.
-		Start logging timestamps from a 64MHz counter to record level changes on ID1,ID2,ID3,ID4.
-        */
-        /*
-        triggerChannel[0] -> ID1
-        triggerChannel[1] -> ID2
-        triggerChannel[2] -> ID3
-        */
         if (trigger == null) trigger = 1;
         if (maximumTime == null) maximumTime = 0.001;
         if (modes == null) {
@@ -2061,11 +2114,12 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Fetches the initial states of digital inputs that were recorded right before the Logic analyzer was started,
+        and the total points each channel recorded.
+     * @return CH1 progress,CH2 progress,CH3 progress,CH4 progress,[ID1,ID2,ID3,ID4]. eg. [1,0,1,1]
+     */
     public LinkedHashMap<String, Integer> getLAInitialStates() {
-        /*
-        fetches the initial states of digital inputs that were recorded right before the Logic analyzer was started,
-        and the total points each channel recorded
-        */
         try {
             mPacketHandler.sendByte(mCommandsProto.TIMING);
             mPacketHandler.sendByte(mCommandsProto.GET_INITIAL_DIGITAL_STATES);
@@ -2127,10 +2181,10 @@ public class ScienceLab {
         return null;
     }
 
+    /**
+     * Stop any running logic analyzer function.
+     */
     public void stopLA() {
-        /*
-        Stop any running logic analyzer function
-        */
         try {
             mPacketHandler.sendByte(mCommandsProto.TIMING);
             mPacketHandler.sendByte(mCommandsProto.STOP_LA);
@@ -2140,10 +2194,13 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Fetches the data stored by DMA. integer address increments
+     * @param bytes number of readings(integer) to fetch
+     * @param channel channel number (1-4)
+     * @return array of integer data fetched from Logic Analyser.
+     */
     public int[] fetchIntDataFromLA(Integer bytes, Integer channel) {
-        /*
-        Fetches the data stored by DMA. integer address increments
-        */
         if (channel == null) channel = 1;
         try {
             mPacketHandler.sendByte(mCommandsProto.TIMING);
@@ -2186,10 +2243,13 @@ public class ScienceLab {
         return null;
     }
 
+    /**
+     * Fetches the data stored by DMA. long address increments.
+     * @param bytes number of readings(long integers) to fetch
+     * @param channel channel number (1-2)
+     * @return array of long integers data fetched from Logic Analyser.
+     */
     public long[] fetchLongDataFromLA(Integer bytes, Integer channel) {
-        /*
-        fetches the data stored by DMA. long address increments
-        */
         if (channel == null) channel = 1;
         try {
             mPacketHandler.sendByte(mCommandsProto.TIMING);
@@ -2225,10 +2285,11 @@ public class ScienceLab {
         return null;
     }
 
+    /**
+     * Reads and stores the channels in this.dChannels.
+     * @return true if LA channels fetched successfully.
+     */
     public boolean fetchLAChannels() {
-        /*
-        reads and stores the channels in this.dChannels.
-        */
         LinkedHashMap<String, Integer> data = this.getLAInitialStates();
         for (int i = 0; i < 4; i++) {
             if (this.dChannels.get(i).channelNumber < this.digitalChannelsInBuffer) {
@@ -2238,6 +2299,11 @@ public class ScienceLab {
         return true;
     }
 
+    /**
+     * @param channelNumber Channel number being used e.g. CH1, CH2, CH3, CH4.
+     * @param initialStates State of the digital inputs. returns dictionary with keys 'ID1','ID2','ID3','ID4','SEN'
+     * @return true if data fetched/loaded successfully.
+     */
     public boolean fetchLAChannel(Integer channelNumber, LinkedHashMap<String, Integer> initialStates) {
         DigitalChannel dChan = this.dChannels.get(channelNumber);
 
@@ -2278,6 +2344,10 @@ public class ScienceLab {
         return dChannels.get(i);
     }
 
+    /**
+     * Gets the state of the digital inputs.
+     * @return dictionary with keys 'ID1','ID2','ID3','ID4'.
+     */
     public Map<String, Boolean> getStates() {
         try {
             mPacketHandler.sendByte(mCommandsProto.DIN);
@@ -2296,10 +2366,22 @@ public class ScienceLab {
         return null;
     }
 
+    /**
+     * Fetch the state of given input ID.
+     * @param inputID the input channel
+                        'ID1' -> state of ID1
+                        'ID4' -> state of ID4
+     * @return the logic level on the specified input (ID1,ID2,ID3, or ID4)
+     */
     public Boolean getState(String inputID) {
         return this.getStates().get(inputID);
     }
 
+    /**
+     * set the logic level on digital outputs SQR1,SQR2,SQR3,SQR4.
+     * @param args SQR1,SQR2,SQR3,SQR4
+            states(0 or 1)
+     */
     public void setState(Map<String, Integer> args) {
         int data = 0;
         if (args.containsKey("SQR1")) {
@@ -2325,6 +2407,10 @@ public class ScienceLab {
 
     }
 
+    /**
+     * Count pulses on a digital input. Retrieve total pulses using readPulseCount.
+     * @param channel The input pin to measure rising edges on : ['ID1','ID2','ID3','ID4','RES','EXT','CNTR']
+     */
     public void countPulses(String channel) {
         if (channel == null) channel = "SEN";
         try {
@@ -2337,6 +2423,10 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Read pulses counted using a digital input. Call countPulses before using this.
+     * @return number of pulse.
+     */
     public int readPulseCount() {
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
@@ -2393,6 +2483,11 @@ public class ScienceLab {
         }
     }
 
+    /**
+     * Charges a capacitor connected to IN1 via a 20K resistor from a 3.3V source for a fixed interval.
+     * @param cTime range of time
+     * @return the capacitance calculated using the formula Vc = Vs(1-exp(-t/RC))
+     */
     public double[] getCapacitorRange(int cTime) {
         // returns values as a double array arr[0] = v,  arr[1] = c
         this.chargeCap(0, 30000);
@@ -2411,12 +2506,11 @@ public class ScienceLab {
         return null;
     }
 
+    /**
+     * Charges a capacitor connected to IN1 via a 20K resistor from a 3.3V source for a fixed interval
+     * @return the capacitance calculated using the formula Vc = Vs(1-exp(-t/RC))
+     */
     public double[] getCapacitorRange() {
-        /*
-        Charges a capacitor connected to IN1 via a 20K resistor from a 3.3V source for a fixed interval
-		Returns the capacitance calculated using the formula Vc = Vs(1-exp(-t/RC))
-		This function allows an estimation of the parameters to be used with the :func:`get_capacitance` function.
-		*/
         double[] range = new double[]{1.5, 50e-12};
         for (int i = 0; i < 4; i++) {
             range = getCapacitorRange(50 * (int) (Math.pow(10, i)));
@@ -2430,6 +2524,10 @@ public class ScienceLab {
         return range;
     }
 
+    /**
+     * Measures capacitance of component connected between CAP and ground
+     * @return Capacitance (F)
+     */
     public Double getCapacitance() {
         double[] GOOD_VOLTS = new double[]{2.5, 2.8};
         int CT = 10;
@@ -2496,6 +2594,10 @@ public class ScienceLab {
         return null;
     }
 
+    /**
+     * Fetch the processor's temperature.
+     * @return the processor's temperature.
+     */
     public Double getTemperature() {
         int cs = 3;
         double V = getCTMUVoltage("", cs, 0); // todo inspect this binary channel
@@ -2507,6 +2609,17 @@ public class ScienceLab {
         this.currentScalars = scalars;
     }
 
+    /**
+     * get_ctmu_voltage(5,2)  will activate a constant current source of 5.5uA on IN1 and then measure the voltage at the output.
+     If a diode is used to connect IN1 to ground, the forward voltage drop of the diode will be returned.
+     * @param channel
+     * @param cRange    CRange=0   implies 550uA,
+     *                  CRange=1   implies 0.55uA,
+                        CRange=2   implies 5.5uA,
+                        CRange=3   implies 55uA
+     * @param tgen
+     * @return Voltage
+     */
     public double getCTMUVoltage(String channel, int cRange, int tgen) {
         if (tgen == -1) tgen = 1;
         int channelI = 0;
