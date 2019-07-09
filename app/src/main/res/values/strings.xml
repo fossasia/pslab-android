@@ -563,6 +563,7 @@
     <string name="unit_percent">%</string>
     <string name="text_freq">Freq</string>
     <string name="text_waveform">Waveform</string>
+    <string name="text_analog">Analog</string>
     <string name="text_pwm">PWM</string>
     <string name="view_text">View</string>
     <string name="save_text">Save</string>

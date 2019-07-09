@@ -9,9 +9,10 @@
     tools:context="io.pslab.activity.WaveGeneratorActivity">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/main_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/length_0dp"
-        android:layout_weight="0.9"
+        android:layout_weight="0.7"
         android:background="@color/white"
         android:gravity="center_horizontal"
         android:padding="@dimen/monitors_layout_padding">
@@ -22,9 +23,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-            app:layout_constraintGuide_percent="0.5" />
+            app:layout_constraintGuide_percent="0.6" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline11_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+            app:layout_constraintGuide_percent="0" />
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/square_mode_layout"
             android:layout_width="@dimen/length_0dp"
             android:layout_height="@dimen/length_0dp"
             android:layout_marginEnd="@dimen/card_separation_offset"
@@ -90,7 +100,6 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/fguideline3"
                 app:layout_constraintEnd_toStartOf="@+id/fguideline2"
-                app:layout_constraintHorizontal_bias="0.9"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -106,9 +115,9 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/wave_mon_wave1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.10"
-                app:layout_constraintStart_toStartOf="@+id/fguideline2"
+                app:layout_constraintStart_toEndOf="@id/fguideline2"
                 app:layout_constraintTop_toTopOf="@+id/wave_mon_wave1" />
+
 
             <TextView
                 android:id="@+id/wave_mon_select_wave"
@@ -241,15 +250,358 @@
 
         </android.support.constraint.ConstraintLayout>
 
+        <LinearLayout
+            android:layout_width="@dimen/dimen_zero_dp"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline11">
+
+            <RelativeLayout
+                android:id="@+id/square_mode_controls"
+                android:layout_width="@dimen/length_0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/ctrl_sepration_margin"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/ctrl_inside_rl_padding"
+                android:paddingRight="@dimen/ctrl_inside_rl_padding"
+                android:paddingBottom="@dimen/ctrl_inside_rl_padding">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/back_margin_top"
+                    android:background="@drawable/rectangle_border" />
+
+                <TextView
+                    android:id="@+id/contol_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/ctrl_title_text_margin"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/ctrl_title_text_padding"
+                    android:paddingRight="@dimen/ctrl_title_text_padding"
+                    android:text="@string/text_analog"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_wavegen"
+                    android:textStyle="bold" />
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/contol_title_text"
+                    android:layout_marginLeft="@dimen/ctrl_inside_rl_padding"
+                    android:layout_marginRight="@dimen/ctrl_inside_rl_padding"
+                    android:layout_marginBottom="@dimen/ctrl_inside_rl_padding"
+                    android:padding="@dimen/margin_btn">
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <Button
+                        android:id="@+id/ctrl_btn_wave1"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
+                        android:layout_marginEnd="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/wave1"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toTopOf="@id/guideline5"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/ctrl_btn_wave2"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
+                        android:layout_marginEnd="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/wave2"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toTopOf="@id/guideline5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/guideline4"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/ctrl_btn_freq"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
+                        android:layout_marginEnd="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_freq"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
+                    <Button
+                        android:id="@+id/ctrl_btn_phase"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
+                        android:layout_marginEnd="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_phase"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/guideline4"
+                        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pwm_mode_controls"
+                android:layout_width="@dimen/length_0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/ctrl_inside_rl_padding"
+                android:paddingRight="@dimen/ctrl_inside_rl_padding"
+                android:paddingBottom="@dimen/ctrl_inside_rl_padding"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/back_margin_top"
+                    android:background="@drawable/rectangle_border" />
+
+                <TextView
+                    android:id="@+id/control_title_pwm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/ctrl_title_text_margin"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/ctrl_title_text_padding"
+                    android:paddingRight="@dimen/ctrl_title_text_padding"
+                    android:text="@string/text_digital"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_wavegen"
+                    android:textStyle="bold" />
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/control_title_pwm"
+                    android:paddingLeft="@dimen/ctrl_inside_rl_padding"
+                    android:paddingTop="@dimen/ctrl_inside_tb_padding"
+                    android:paddingRight="@dimen/ctrl_inside_rl_padding"
+                    android:paddingBottom="@dimen/ctrl_inside_tb_padding">
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/cr_guideline2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.25" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/cr_guideline14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/cr_guideline15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/cr_guideline3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.75" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/cr_guideline3_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.33" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/cr_guideline3_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.66" />
+
+                    <Button
+                        android:id="@+id/pwm_btn_sq1"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_margin="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_sq1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toTopOf="@+id/cr_guideline14"
+                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/pwm_btn_sq2"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_margin="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_sq2"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toTopOf="@+id/cr_guideline14"
+                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline15"
+                        app:layout_constraintStart_toStartOf="@+id/cr_guideline2"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/pwm_btn_sq3"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_margin="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_sq3"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toTopOf="@+id/cr_guideline14"
+                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline3"
+                        app:layout_constraintStart_toStartOf="@+id/cr_guideline15"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/pwm_btn_sq4"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_margin="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_sq4"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toTopOf="@+id/cr_guideline14"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/cr_guideline3"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <Button
+                        android:id="@+id/pwm_btn_freq"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_freq"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cr_guideline3_1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
+
+                    <Button
+                        android:id="@+id/pwm_btn_duty"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_margin="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_duty"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline3_2"
+                        app:layout_constraintStart_toStartOf="@id/cr_guideline3_1"
+                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
+
+                    <Button
+                        android:id="@+id/pwm_btn_phase"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_margin="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_phase"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/cr_guideline3_2"
+                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/pwm_mode_layout"
             android:layout_width="@dimen/length_0dp"
             android:layout_height="@dimen/length_0dp"
             android:layout_marginStart="@dimen/card_separation_offset"
             android:background="@color/black"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline11"
+            app:layout_constraintEnd_toStartOf="@+id/guideline11"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <android.support.constraint.Guideline
@@ -520,7 +872,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/length_0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.4"
         android:padding="@dimen/lower_ll_margin">
 
         <LinearLayout
@@ -567,412 +919,144 @@
                 android:src="@drawable/ic_arrow_drop_up_black_24dp"
                 android:stateListAnimator="@animator/selector_animator" />
 
-            <Button
-                android:id="@+id/btn_set"
-                android:layout_width="@dimen/length_0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/seek_btn_margin"
-                android:layout_marginRight="@dimen/seek_btn_margin"
-                android:layout_weight="0.18"
-                android:background="@drawable/btn_back_rounded"
-                android:stateListAnimator="@animator/selector_animator"
-                android:text="@string/set_lowercase"
-                android:textAllCaps="false"
-                android:textColor="@color/white" />
-
         </LinearLayout>
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/seek_control_ll">
+            android:layout_below="@+id/seek_control_ll"
+            android:layout_marginStart="@dimen/margin_btn"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rectangle_border"
+            android:padding="@dimen/margin_btn">
 
-            <RelativeLayout
-                android:layout_width="@dimen/length_0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/ctrl_sepration_margin"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:paddingLeft="@dimen/ctrl_inside_rl_padding"
-                android:paddingRight="@dimen/ctrl_inside_rl_padding"
-                android:paddingBottom="@dimen/ctrl_inside_rl_padding">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/back_margin_top"
-                    android:background="@drawable/rectangle_border" />
-
-                <TextView
-                    android:id="@+id/contol_title_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/ctrl_title_text_margin"
-                    android:background="@color/white"
-                    android:paddingLeft="@dimen/ctrl_title_text_padding"
-                    android:paddingRight="@dimen/ctrl_title_text_padding"
-                    android:text="@string/text_waveform"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/text_size_wavegen"
-                    android:textStyle="bold" />
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/contol_title_text"
-                    android:layout_marginLeft="@dimen/ctrl_inside_rl_padding"
-                    android:layout_marginRight="@dimen/ctrl_inside_rl_padding"
-                    android:layout_marginBottom="@dimen/ctrl_inside_rl_padding">
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                        app:layout_constraintGuide_percent="0.31" />
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                        app:layout_constraintGuide_percent="0.5" />
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                        app:layout_constraintGuide_percent="0.655" />
-
-                    <Button
-                        android:id="@+id/ctrl_btn_wave1"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/wave1"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toTopOf="@+id/ctrl_btn_wave2"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/ctrl_btn_wave2"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/wave2"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/guideline5" />
-
-
-                    <ImageButton
-                        android:id="@+id/ctrl_img_btn_sin"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:src="@drawable/ic_sin"
-                        android:stateListAnimator="@animator/selector_animator"
-                        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline8"
-                        app:layout_constraintStart_toStartOf="@+id/guideline4"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/ctrl_img_btn_tri"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:src="@drawable/ic_triangular"
-                        android:stateListAnimator="@animator/selector_animator"
-                        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/guideline8"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/ctrl_btn_freq"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_freq"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline8"
-                        app:layout_constraintStart_toStartOf="@+id/guideline4"
-                        app:layout_constraintTop_toTopOf="@+id/guideline5" />
-
-                    <Button
-                        android:id="@+id/ctrl_btn_phase"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_phase"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/guideline8"
-                        app:layout_constraintTop_toTopOf="@+id/guideline5" />
-
-                </android.support.constraint.ConstraintLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="@dimen/length_0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:paddingLeft="@dimen/ctrl_inside_rl_padding"
-                android:paddingRight="@dimen/ctrl_inside_rl_padding"
-                android:paddingBottom="@dimen/ctrl_inside_rl_padding">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/back_margin_top"
-                    android:background="@drawable/rectangle_border" />
-
-                <TextView
-                    android:id="@+id/control_title_pwm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/ctrl_title_text_margin"
-                    android:background="@color/white"
-                    android:paddingLeft="@dimen/ctrl_title_text_padding"
-                    android:paddingRight="@dimen/ctrl_title_text_padding"
-                    android:text="@string/text_digital"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/text_size_wavegen"
-                    android:textStyle="bold" />
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/control_title_pwm"
-                    android:paddingLeft="@dimen/ctrl_inside_rl_padding"
-                    android:paddingRight="@dimen/ctrl_inside_rl_padding"
-                    android:paddingBottom="@dimen/ctrl_inside_rl_padding">
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/cr_guideline2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                        app:layout_constraintGuide_percent="0.25" />
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/cr_guideline14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                        app:layout_constraintGuide_percent="0.5" />
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/cr_guideline15"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                        app:layout_constraintGuide_percent="0.5" />
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/cr_guideline3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                        app:layout_constraintGuide_percent="0.75" />
-
-                    <Button
-                        android:id="@+id/pwm_btn_sq1"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_sq1"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toTopOf="@+id/cr_guideline14"
-                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline2"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/pwm_btn_sq2"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_sq2"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toTopOf="@+id/cr_guideline14"
-                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline15"
-                        app:layout_constraintStart_toStartOf="@+id/cr_guideline2"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/pwm_btn_sq3"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_sq3"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toTopOf="@+id/cr_guideline14"
-                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline3"
-                        app:layout_constraintStart_toStartOf="@+id/cr_guideline15"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/pwm_btn_sq4"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_sq4"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toTopOf="@+id/cr_guideline14"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/cr_guideline3"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/pwm_btn_mode"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/mode"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline2"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
-
-                    <Button
-                        android:id="@+id/pwm_btn_freq"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_freq"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline15"
-                        app:layout_constraintStart_toStartOf="@+id/cr_guideline2"
-                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
-
-                    <Button
-                        android:id="@+id/pwm_btn_duty"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_duty"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline3"
-                        app:layout_constraintStart_toStartOf="@+id/cr_guideline15"
-                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
-
-                    <Button
-                        android:id="@+id/pwm_btn_phase"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_phase"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/cr_guideline3"
-                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
-
-                </android.support.constraint.ConstraintLayout>
-
-            </RelativeLayout>
-
-            <LinearLayout
+            <android.support.constraint.Guideline
+                android:id="@+id/bottom_guideline1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                app:layout_constraintGuide_percent="0.20" />
 
-                <Button
-                    android:id="@+id/btn_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_back_rounded"
-                    android:minWidth="@dimen/btn_min_width"
-                    android:text="@string/view_text"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_wavegen" />
+            <android.support.constraint.Guideline
+                android:id="@+id/bottom_guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                app:layout_constraintGuide_percent="0.40" />
 
-                <Button
-                    android:id="@+id/btn_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/view_btn_margin"
-                    android:background="@drawable/btn_back_rounded"
-                    android:minWidth="@dimen/btn_min_width"
-                    android:onClick="saveWaveConfig"
-                    android:text="@string/save_text"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_wavegen" />
+            <android.support.constraint.Guideline
+                android:id="@+id/bottom_guideline22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                app:layout_constraintGuide_percent="0.50" />
 
-            </LinearLayout>
-        </LinearLayout>
+            <android.support.constraint.Guideline
+                android:id="@+id/bottom_guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                app:layout_constraintGuide_percent="0.66" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/bottom_guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                app:layout_constraintGuide_percent="0.82" />
+
+            <ImageButton
+                android:id="@+id/ctrl_img_btn_sin"
+                android:layout_width="@dimen/dimen_zero_dp"
+                android:layout_height="@dimen/dimen_zero_dp"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/margin_btn"
+                android:layout_marginBottom="@dimen/margin_btn"
+                android:background="@drawable/btn_back_rounded"
+                android:src="@drawable/ic_sin"
+                android:stateListAnimator="@animator/selector_animator"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/bottom_guideline1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/ctrl_img_btn_tri"
+                android:layout_width="@dimen/dimen_zero_dp"
+                android:layout_height="@dimen/dimen_zero_dp"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/margin_btn"
+                android:layout_marginBottom="@dimen/margin_btn"
+                android:background="@drawable/btn_back_rounded"
+                android:src="@drawable/ic_triangular"
+                android:stateListAnimator="@animator/selector_animator"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/bottom_guideline2"
+                app:layout_constraintStart_toStartOf="@id/bottom_guideline1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_view"
+                android:layout_width="@dimen/dimen_zero_dp"
+                android:layout_height="@dimen/dimen_zero_dp"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/margin_btn"
+                android:layout_marginBottom="@dimen/margin_btn"
+                android:background="@drawable/btn_back_rounded"
+                android:minWidth="@dimen/btn_min_width"
+                android:text="@string/view_text"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/bottom_guideline3"
+                app:layout_constraintStart_toStartOf="@id/bottom_guideline22"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="@dimen/dimen_zero_dp"
+                android:layout_height="@dimen/dimen_zero_dp"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/margin_btn"
+                android:layout_marginBottom="@dimen/margin_btn"
+                android:background="@drawable/btn_back_rounded"
+                android:minWidth="@dimen/btn_min_width"
+                android:onClick="saveWaveConfig"
+                android:text="@string/save_text"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/bottom_guideline4"
+                app:layout_constraintStart_toStartOf="@id/bottom_guideline3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/pwm_btn_mode"
+                android:layout_width="@dimen/dimen_zero_dp"
+                android:layout_height="@dimen/dimen_zero_dp"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/margin_btn"
+                android:layout_marginEnd="@dimen/margin_btn"
+                android:layout_marginBottom="@dimen/margin_btn"
+                android:background="@drawable/btn_back_rounded"
+                android:minWidth="@dimen/btn_min_width"
+                android:stateListAnimator="@animator/selector_animator"
+                android:text="@string/mode"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/bottom_guideline4"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
 
     </RelativeLayout>
 
