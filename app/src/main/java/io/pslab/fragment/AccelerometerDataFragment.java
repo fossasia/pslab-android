@@ -18,24 +18,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
 import io.pslab.models.AccelerometerData;
@@ -67,6 +63,38 @@ public class AccelerometerDataFragment extends Fragment {
     private int[] colors = {Color.YELLOW, Color.MAGENTA, Color.GREEN};
     private DecimalFormat df = new DecimalFormat("+#0.0;-#0.0");
     private View rootView;
+    private SensorEventListener accelerometerSensorEventListener = new SensorEventListener() {
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {/**/}
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                for (int i = 0; i < accelerometerViewFragments.size(); i++) {
+                    AccelerometerViewFragment fragment = accelerometerViewFragments.get(i);
+                    fragment.setCurrentValue(event.values[i]);
+                    StringBuilder builder = new StringBuilder();
+                    builder.append(df.format(fragment.getCurrentValue()));
+                    builder.append(" ");
+                    builder.append(getResources().getString(R.string.acceleration_unit));
+                    fragment.setAccelerationValue(Html.fromHtml(builder.toString()));
+
+                    if (fragment.getCurrentValue() > fragment.getCurrentMax()) {
+                        builder.insert(0, getResources().getString(R.string.text_max));
+                        builder.insert(3, " ");
+                        fragment.setAccelerationMax(Html.fromHtml(builder.toString()));
+                        fragment.setCurrentMax(fragment.getCurrentValue());
+                    } else if (fragment.getCurrentValue() < fragment.getCurrentMin()) {
+                        builder.insert(0, getResources().getString(R.string.text_min));
+                        builder.insert(3, " ");
+                        fragment.setAccelerationMin(Html.fromHtml(builder.toString()));
+                        fragment.setCurrentMin(fragment.getCurrentValue());
+                    }
+                }
+            }
+        }
+    };
 
     public static AccelerometerDataFragment newInstance() {
         return new AccelerometerDataFragment();
@@ -116,9 +144,9 @@ public class AccelerometerDataFragment extends Fragment {
             resetInstrumentData();
             playRecordedData();
         } else if (accelerometerSensor.viewingData) {
-                recordedAccelerometerArray = new ArrayList<>();
-                resetInstrumentData();
-                plotAllRecordedData();
+            recordedAccelerometerArray = new ArrayList<>();
+            resetInstrumentData();
+            plotAllRecordedData();
         } else if (!accelerometerSensor.isRecording) {
             updateGraphs();
             initiateAccelerometerSensor();
@@ -295,29 +323,17 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(accelerometerSensor.recordedAccelerometerData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + accelerometerSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude\n");
-                for (AccelerometerData accelerometerData : accelerometerSensor.recordedAccelerometerData) {
-                    out.write(accelerometerData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(accelerometerData.getTime())) + ","
-                            + accelerometerData.getAccelerometerX() + ","
-                            + accelerometerData.getAccelerometerY() + ","
-                            + accelerometerData.getAccelerometerZ() + ","
-                            + accelerometerData.getLat() + ","
-                            + accelerometerData.getLon() + "," + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        accelerometerSensor.csvLogger.prepareLogFile();
+        accelerometerSensor.csvLogger.writeMetadata(getResources().getString(R.string.accelerometer));
+        accelerometerSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
+        for (AccelerometerData accelerometerData : accelerometerSensor.recordedAccelerometerData) {
+            accelerometerSensor.csvLogger.writeCSVFile(accelerometerData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(accelerometerData.getTime())) + ","
+                    + accelerometerData.getAccelerometerX() + ","
+                    + accelerometerData.getAccelerometerY() + ","
+                    + accelerometerData.getAccelerometerZ() + ","
+                    + accelerometerData.getLat() + ","
+                    + accelerometerData.getLon());
         }
         View view = rootView.findViewById(R.id.accelerometer_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -377,6 +393,7 @@ public class AccelerometerDataFragment extends Fragment {
         if (getActivity() != null && accelerometerSensor.isRecording) {
             if (accelerometerSensor.writeHeaderToFile) {
                 accelerometerSensor.csvLogger.prepareLogFile();
+                accelerometerSensor.csvLogger.writeMetadata(getResources().getString(R.string.accelerometer));
                 accelerometerSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
                 block = timestamp;
                 accelerometerSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, accelerometerSensor.getSensorName()));
@@ -423,39 +440,6 @@ public class AccelerometerDataFragment extends Fragment {
         Long currentTime = System.currentTimeMillis();
         writeLogToFile(currentTime, accelerometerViewFragments.get(0).getCurrentValue(), accelerometerViewFragments.get(1).getCurrentValue(), accelerometerViewFragments.get(2).getCurrentValue());
     }
-
-    private SensorEventListener accelerometerSensorEventListener = new SensorEventListener() {
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {/**/}
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                for (int i = 0; i < accelerometerViewFragments.size(); i++) {
-                    AccelerometerViewFragment fragment = accelerometerViewFragments.get(i);
-                    fragment.setCurrentValue(event.values[i]);
-                    StringBuilder builder = new StringBuilder();
-                    builder.append(df.format(fragment.getCurrentValue()));
-                    builder.append(" ");
-                    builder.append(getResources().getString(R.string.acceleration_unit));
-                    fragment.setAccelerationValue(Html.fromHtml(builder.toString()));
-
-                    if (fragment.getCurrentValue() > fragment.getCurrentMax()) {
-                        builder.insert(0, getResources().getString(R.string.text_max));
-                        builder.insert(3, " ");
-                        fragment.setAccelerationMax(Html.fromHtml(builder.toString()));
-                        fragment.setCurrentMax(fragment.getCurrentValue());
-                    } else if (fragment.getCurrentValue() < fragment.getCurrentMin()) {
-                        builder.insert(0, getResources().getString(R.string.text_min));
-                        builder.insert(3, " ");
-                        fragment.setAccelerationMin(Html.fromHtml(builder.toString()));
-                        fragment.setCurrentMin(fragment.getCurrentValue());
-                    }
-                }
-            }
-        }
-    };
 
     private void resetInstrumentData() {
         for (AccelerometerViewFragment fragment : accelerometerViewFragments) {

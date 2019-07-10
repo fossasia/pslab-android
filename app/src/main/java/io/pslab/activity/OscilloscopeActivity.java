@@ -45,6 +45,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.apache.commons.math3.complex.Complex;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -547,6 +548,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     }
                     csvLogger = new CSVLogger(getResources().getString(R.string.oscilloscope));
                     csvLogger.prepareLogFile();
+                    csvLogger.writeMetadata(getResources().getString(R.string.oscilloscope));
                     csvLogger.writeCSVFile(oscilloscopeCSVHeader);
                     recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.oscilloscope)));
                     CustomSnackBar.showSnackBar(mainLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);

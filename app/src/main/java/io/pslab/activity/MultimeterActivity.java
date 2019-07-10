@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -481,6 +482,7 @@ public class MultimeterActivity extends AppCompatActivity {
                         if (!isRecordingStarted) {
                             multimeterLogger = new CSVLogger(getString(R.string.multimeter));
                             multimeterLogger.prepareLogFile();
+                            multimeterLogger.writeMetadata(getResources().getString(R.string.multimeter));
                             isRecordingStarted = true;
                             recordData = true;
                             CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);

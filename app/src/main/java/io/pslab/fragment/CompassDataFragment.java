@@ -22,17 +22,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,8 +48,8 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class CompassDataFragment extends Fragment {
 
-    private Unbinder unbinder;
     private static int sensorType = 0;
+    private static int updatePeriod = 1000;
     @Nullable
     @BindView(R.id.compass)
     ImageView compass;
@@ -74,9 +69,7 @@ public class CompassDataFragment extends Fragment {
     TextView yAxisMagneticField;
     @BindView(R.id.tv_sensor_hmc5883l_bz)
     TextView zAxisMagneticField;
-
-    private enum COMPASS_SENSOR {INBUILT_SENSOR, HMC5883L_SENSOR}
-
+    private Unbinder unbinder;
     private float currentDegree = 0f;
     private int direction;
     private SensorManager sensorManager;
@@ -86,11 +79,64 @@ public class CompassDataFragment extends Fragment {
     private ArrayList<CompassData> recordedCompassArray;
     private CompassData compassData = new CompassData();
     private CompassActivity compassActivity;
-    private static int updatePeriod = 1000;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private int turns = 0;
     private boolean returningFromPause = false;
     private View rootView;
+    private SensorEventListener compassEventListner = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            float degree;
+            switch (direction) {
+                case 0:
+                    degree = Math.round(event.values[0]);
+                    if (degree < 0)
+                        degree += 360;
+                    break;
+                case 1:
+                    degree = Math.round(event.values[1]);
+                    if (degree < 0)
+                        degree += 360;
+                    break;
+                case 2:
+                    degree = Math.round(event.values[2]);
+                    if (degree < 0)
+                        degree += 360;
+                    break;
+                default:
+                    degree = Math.round(event.values[0]);
+                    break;
+            }
+
+            setCompassAnimation(degree);
+
+            degreeIndicator.setText(String.valueOf(degree));
+            currentDegree = -degree;
+
+            degree = Math.round(event.values[0]);
+            if (degree < 0)
+                degree += 360;
+            compassData.setBx(String.valueOf(degree));
+            xAxisMagneticField.setText(String.valueOf(degree));
+
+            degree = Math.round(event.values[1]);
+            if (degree < 0)
+                degree += 360;
+            compassData.setBy(String.valueOf(degree));
+            yAxisMagneticField.setText(String.valueOf(degree));
+
+            degree = Math.round(event.values[2]);
+            if (degree < 0)
+                degree += 360;
+            compassData.setBz(String.valueOf(degree));
+            zAxisMagneticField.setText(String.valueOf(degree));
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        }
+    };
 
     public static CompassDataFragment newInstance() {
         return new CompassDataFragment();
@@ -151,61 +197,6 @@ public class CompassDataFragment extends Fragment {
         return rootView;
     }
 
-    private SensorEventListener compassEventListner = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            float degree;
-            switch (direction) {
-                case 0:
-                    degree = Math.round(event.values[0]);
-                    if (degree < 0)
-                        degree += 360;
-                    break;
-                case 1:
-                    degree = Math.round(event.values[1]);
-                    if (degree < 0)
-                        degree += 360;
-                    break;
-                case 2:
-                    degree = Math.round(event.values[2]);
-                    if (degree < 0)
-                        degree += 360;
-                    break;
-                default:
-                    degree = Math.round(event.values[0]);
-                    break;
-            }
-
-            setCompassAnimation(degree);
-
-            degreeIndicator.setText(String.valueOf(degree));
-            currentDegree = -degree;
-
-            degree = Math.round(event.values[0]);
-            if (degree < 0)
-                degree += 360;
-            compassData.setBx(String.valueOf(degree));
-            xAxisMagneticField.setText(String.valueOf(degree));
-
-            degree = Math.round(event.values[1]);
-            if (degree < 0)
-                degree += 360;
-            compassData.setBy(String.valueOf(degree));
-            yAxisMagneticField.setText(String.valueOf(degree));
-
-            degree = Math.round(event.values[2]);
-            if (degree < 0)
-                degree += 360;
-            compassData.setBz(String.valueOf(degree));
-            zAxisMagneticField.setText(String.valueOf(degree));
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-        }
-    };
-
     private void setCompassAnimation(float degree) {
 
         RotateAnimation ra = new RotateAnimation(
@@ -241,30 +232,18 @@ public class CompassDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(compassActivity.recordedCompassData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + compassActivity.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write("Timestamp,DateTime,X-reading,Y-reading,Z-reading,Axis,Latitude,Longitude\n");
-                for (CompassData compassData : compassActivity.recordedCompassData) {
-                    out.write(compassData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(compassData.getTime())) + ","
-                            + compassData.getBx() + ","
-                            + compassData.getBy() + ","
-                            + compassData.getBz() + ","
-                            + compassData.getAxis() + ","
-                            + compassData.getLat() + ","
-                            + compassData.getLon() + "," + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        compassActivity.csvLogger.prepareLogFile();
+        compassActivity.csvLogger.writeMetadata(getResources().getString(R.string.compass));
+        compassActivity.csvLogger.writeCSVFile("Timestamp,DateTime,X-reading,Y-reading,Z-reading,Axis,Latitude,Longitude");
+        for (CompassData compassData : compassActivity.recordedCompassData) {
+            compassActivity.csvLogger.writeCSVFile(compassData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(compassData.getTime())) + ","
+                    + compassData.getBx() + ","
+                    + compassData.getBy() + ","
+                    + compassData.getBz() + ","
+                    + compassData.getAxis() + ","
+                    + compassData.getLat() + ","
+                    + compassData.getLon());
         }
         View view = rootView.findViewById(R.id.compass_card);
         view.setDrawingCacheEnabled(true);
@@ -294,17 +273,17 @@ public class CompassDataFragment extends Fragment {
                         if (compassActivity.playingData) {
                             try {
                                 CompassData d = recordedCompassArray.get(turns);
-                                if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_X_axis))){
+                                if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_X_axis))) {
                                     direction = 0;
                                     xAxisRadioButton.setChecked(true);
                                     yAxisRadioButton.setChecked(false);
                                     zAxisRadioButton.setChecked(false);
-                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Y_axis))){
+                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Y_axis))) {
                                     direction = 1;
                                     xAxisRadioButton.setChecked(false);
                                     yAxisRadioButton.setChecked(true);
                                     zAxisRadioButton.setChecked(false);
-                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Z_axis))){
+                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Z_axis))) {
                                     direction = 2;
                                     xAxisRadioButton.setChecked(false);
                                     yAxisRadioButton.setChecked(false);
@@ -572,6 +551,7 @@ public class CompassDataFragment extends Fragment {
         if (getActivity() != null && compassActivity.isRecording) {
             if (compassActivity.writeHeaderToFile) {
                 compassActivity.csvLogger.prepareLogFile();
+                compassActivity.csvLogger.writeMetadata(getResources().getString(R.string.compass));
                 compassActivity.csvLogger.writeCSVFile("Timestamp,DateTime,X-reading,Y-reading,Z-reading,Axis,Latitude,Longitude");
                 block = timestamp;
                 compassActivity.recordSensorDataBlockID(new SensorDataBlock(timestamp, compassActivity.getSensorName()));
@@ -649,4 +629,6 @@ public class CompassDataFragment extends Fragment {
         }
 
     }
+
+    private enum COMPASS_SENSOR {INBUILT_SENSOR, HMC5883L_SENSOR}
 }

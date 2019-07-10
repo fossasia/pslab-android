@@ -28,14 +28,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -71,15 +67,6 @@ public class LuxMeterDataFragment extends Fragment {
     private static int highLimit = 2000;
     private static int updatePeriod = 100;
     private static int gain = 1;
-    private long timeElapsed;
-    private int count = 0, turns = 0;
-    private float sum = 0;
-    private boolean returningFromPause = false;
-
-    private float luxValue = -1;
-
-    private enum LUX_SENSOR {INBUILT_SENSOR, BH1750_SENSOR, TSL2561_SENSOR}
-
     @BindView(R.id.lux_max)
     TextView statMax;
     @BindView(R.id.lux_min)
@@ -92,7 +79,11 @@ public class LuxMeterDataFragment extends Fragment {
     LineChart mChart;
     @BindView(R.id.light_meter)
     PointerSpeedometer lightMeter;
-
+    private long timeElapsed;
+    private int count = 0, turns = 0;
+    private float sum = 0;
+    private boolean returningFromPause = false;
+    private float luxValue = -1;
     private Timer graphTimer;
     private SensorManager sensorManager;
     private Sensor sensor;
@@ -107,6 +98,18 @@ public class LuxMeterDataFragment extends Fragment {
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private LuxMeterActivity luxSensor;
     private View rootView;
+    private SensorEventListener lightSensorEventListener = new SensorEventListener() {
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {/**/}
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                luxValue = event.values[0];
+            }
+        }
+    };
 
     public static LuxMeterDataFragment newInstance() {
         return new LuxMeterDataFragment();
@@ -179,7 +182,7 @@ public class LuxMeterDataFragment extends Fragment {
     private void plotAllRecordedData() {
         recordedLuxArray.addAll(luxSensor.recordedLuxData);
         if (recordedLuxArray.size() != 0) {
-            for (LuxData d: recordedLuxArray) {
+            for (LuxData d : recordedLuxArray) {
                 if (currentMax < d.getLux()) {
                     currentMax = d.getLux();
                 }
@@ -324,27 +327,15 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(luxSensor.recordedLuxData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write( "Timestamp,DateTime,Readings,Latitude,Longitude" + "\n");
-                for (LuxData luxData : luxSensor.recordedLuxData) {
-                    out.write( luxData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(luxData.getTime())) + ","
-                            + luxData.getLux() + ","
-                            + luxData.getLat() + ","
-                            + luxData.getLon() + "," + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        luxSensor.csvLogger.prepareLogFile();
+        luxSensor.csvLogger.writeMetadata(getResources().getString(R.string.lux_meter));
+        luxSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+        for (LuxData luxData : luxSensor.recordedLuxData) {
+            luxSensor.csvLogger.writeCSVFile(luxData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(luxData.getTime())) + ","
+                    + luxData.getLux() + ","
+                    + luxData.getLat() + ","
+                    + luxData.getLon());
         }
         View view = rootView.findViewById(R.id.luxmeter_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -352,7 +343,7 @@ public class LuxMeterDataFragment extends Fragment {
         try {
             b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
-                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg" ));
+                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -436,6 +427,7 @@ public class LuxMeterDataFragment extends Fragment {
         if (getActivity() != null && luxSensor.isRecording) {
             if (luxSensor.writeHeaderToFile) {
                 luxSensor.csvLogger.prepareLogFile();
+                luxSensor.csvLogger.writeMetadata(getResources().getString(R.string.lux_meter));
                 luxSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
                 block = timestamp;
                 luxSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, luxSensor.getSensorName()));
@@ -505,19 +497,6 @@ public class LuxMeterDataFragment extends Fragment {
             }
         }
     }
-
-    private SensorEventListener lightSensorEventListener = new SensorEventListener() {
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {/**/}
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                luxValue = event.values[0];
-            }
-        }
-    };
 
     private void resetInstrumentData() {
         luxValue = 0;
@@ -610,4 +589,6 @@ public class LuxMeterDataFragment extends Fragment {
                 break;
         }
     }
+
+    private enum LUX_SENSOR {INBUILT_SENSOR, BH1750_SENSOR, TSL2561_SENSOR}
 }

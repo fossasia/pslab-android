@@ -51,6 +51,7 @@ import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
 import io.pslab.others.WaveGeneratorCommon;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -540,6 +541,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         csvLogger.prepareLogFile();
         long timestamp;
         double lat, lon;
+        csvLogger.writeMetadata(getResources().getString(R.string.wave_generator));
         String data = "Timestamp,DateTime,Mode,Wave,Shape,Freq,Phase,Duty,lat,lon\n";
         recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.wave_generator)));
         double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));

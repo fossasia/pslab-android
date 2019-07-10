@@ -19,9 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.view.LayoutInflater;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -188,7 +185,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.action_import_log:
-                importLog();
+                selectFile();
                 break;
             case R.id.delete_all:
                 Context context = DataLoggerActivity.this;
@@ -250,29 +247,6 @@ public class DataLoggerActivity extends AppCompatActivity {
         }
     }
 
-    private void importLog() {
-        AlertDialog alertDialog;
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.import_log_device_type_alert_layout, null);
-        dialogBuilder.setView(dialogView);
-        dialogBuilder.setPositiveButton(getResources().getString(R.string.import_log_positive_button), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                RadioGroup importLogRadioGroup = dialogView.findViewById(R.id.import_log_device_radio_group);
-                try {
-                    RadioButton selectedRadioButton = dialogView.findViewById(importLogRadioGroup.getCheckedRadioButtonId());
-                    selectedDevice = selectedRadioButton.getText().toString();
-                    selectFile();
-                } catch (Exception e) {
-                    Toast.makeText(DataLoggerActivity.this, getResources().getString(R.string.import_data_log_no_selection_error), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        alertDialog = dialogBuilder.create();
-        alertDialog.show();
-    }
-
     private void selectFile() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
@@ -294,6 +268,15 @@ public class DataLoggerActivity extends AppCompatActivity {
     }
 
     private void getFileData(File file) {
+        try {
+            FileInputStream is = null;
+            is = new FileInputStream(file);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line = reader.readLine();
+            selectedDevice = line.split(",")[0];
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.baro_meter))) {
             try {
                 FileInputStream is = new FileInputStream(file);
@@ -302,7 +285,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 int i = 0;
                 long block = 0, time = 0;
                 while (line != null) {
-                    if (i != 0) {
+                    if (i > 1) {
                         String[] data = line.split(",");
                         try {
                             time += 1000;
@@ -313,7 +296,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else if ( i == 0) {
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
@@ -336,7 +319,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 int i = 0;
                 long block = 0, time = 0;
                 while (line != null) {
-                    if (i != 0) {
+                    if (i > 1) {
                         String[] data = line.split(",");
                         try {
                             time += 1000;
@@ -347,7 +330,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else if (i == 0) {
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
@@ -370,7 +353,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 int i = 0;
                 long block = 0, time = 0;
                 while (line != null) {
-                    if (i != 0) {
+                    if (i > 1) {
                         String[] data = line.split(",");
                         try {
                             time += 1000;
@@ -381,7 +364,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else if (i == 0) {
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
@@ -404,7 +387,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 int i = 0;
                 long block = 0, time = 0;
                 while (line != null) {
-                    if (i != 0) {
+                    if (i > 1) {
                         String[] data = line.split(",");
                         try {
                             time += 1000;
@@ -415,7 +398,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else if (i == 0){
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
@@ -438,7 +421,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 int i = 0;
                 long block = 0, time = 0;
                 while (line != null) {
-                    if (i != 0) {
+                    if (i > 1) {
                         String[] data = line.split(",");
                         try {
                             time += 1000;
@@ -449,7 +432,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else if (i == 0) {
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
@@ -472,7 +455,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 int i = 0;
                 long block = 0, time = 0;
                 while (line != null) {
-                    if (i != 0) {
+                    if (i > 1) {
                         String[] data = line.split(",");
                         try {
                             time += 1000;
@@ -483,7 +466,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else if ( i == 0) {
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
@@ -506,7 +489,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 int i = 0;
                 long block = 0, time = 0;
                 while (line != null) {
-                    if (i != 0) {
+                    if (i > 1) {
                         String[] data = line.split(",");
                         try {
                             time += 1000;
@@ -518,7 +501,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                             Log.d("exception", i + " " + e.getMessage());
                             Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else if (i == 0){
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
@@ -541,7 +524,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 int i = 0;
                 long block = 0, time = 0;
                 while (line != null) {
-                    if (i != 0) {
+                    if (i > 1) {
                         String[] data = line.split(",");
                         try {
                             time += 1000;
@@ -553,7 +536,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                             Log.d("exception", i + " " + e.getMessage());
                             Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else if (i == 0){
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();
@@ -576,7 +559,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 int i = 0;
                 long block = 0, time = 0;
                 while (line != null) {
-                    if (i != 0) {
+                    if (i > 1) {
                         String[] data = line.split(",");
                         try {
                             time += 1000;
@@ -588,7 +571,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                             Log.d("exception", i + " " + e.getMessage());
                             Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    } else if (i == 0){
                         block = System.currentTimeMillis();
                         time = block;
                         realm.beginTransaction();

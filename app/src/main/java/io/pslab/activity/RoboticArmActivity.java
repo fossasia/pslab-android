@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.triggertrap.seekarc.SeekArc;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -610,6 +611,7 @@ public class RoboticArmActivity extends AppCompatActivity {
     private void saveTimeline() {
         long block = System.currentTimeMillis();
         servoCSVLogger.prepareLogFile();
+        servoCSVLogger.writeMetadata(getResources().getString(R.string.robotic_arm));
         String data = "Timestamp,DateTime,Servo1,Servo2,Servo3,Servo4,Latitude,Longitude\n";
         long timestamp;
         recordSensorDataBlockID(new SensorDataBlock(block, getString(R.string.robotic_arm)));
