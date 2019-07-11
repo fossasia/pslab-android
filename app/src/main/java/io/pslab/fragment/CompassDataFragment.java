@@ -22,17 +22,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -241,30 +236,18 @@ public class CompassDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(compassActivity.recordedCompassData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + compassActivity.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write("Timestamp,DateTime,X-reading,Y-reading,Z-reading,Axis,Latitude,Longitude\n");
-                for (CompassData compassData : compassActivity.recordedCompassData) {
-                    out.write(compassData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(compassData.getTime())) + ","
-                            + compassData.getBx() + ","
-                            + compassData.getBy() + ","
-                            + compassData.getBz() + ","
-                            + compassData.getAxis() + ","
-                            + compassData.getLat() + ","
-                            + compassData.getLon() + "," + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        compassActivity.csvLogger.prepareLogFile();
+        compassActivity.csvLogger.writeMetaData(getResources().getString(R.string.compass));
+        compassActivity.csvLogger.writeCSVFile("Timestamp,DateTime,X-reading,Y-reading,Z-reading,Axis,Latitude,Longitude");
+        for (CompassData compassData : compassActivity.recordedCompassData) {
+            compassActivity.csvLogger.writeCSVFile(compassData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(compassData.getTime())) + ","
+                    + compassData.getBx() + ","
+                    + compassData.getBy() + ","
+                    + compassData.getBz() + ","
+                    + compassData.getAxis() + ","
+                    + compassData.getLat() + ","
+                    + compassData.getLon());
         }
         View view = rootView.findViewById(R.id.compass_card);
         view.setDrawingCacheEnabled(true);
@@ -572,6 +555,7 @@ public class CompassDataFragment extends Fragment {
         if (getActivity() != null && compassActivity.isRecording) {
             if (compassActivity.writeHeaderToFile) {
                 compassActivity.csvLogger.prepareLogFile();
+                compassActivity.csvLogger.writeMetaData(getResources().getString(R.string.compass));
                 compassActivity.csvLogger.writeCSVFile("Timestamp,DateTime,X-reading,Y-reading,Z-reading,Axis,Latitude,Longitude");
                 block = timestamp;
                 compassActivity.recordSensorDataBlockID(new SensorDataBlock(timestamp, compassActivity.getSensorName()));

@@ -20,7 +20,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -547,6 +546,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     }
                     csvLogger = new CSVLogger(getResources().getString(R.string.oscilloscope));
                     csvLogger.prepareLogFile();
+                    csvLogger.writeMetaData(getResources().getString(R.string.oscilloscope));
                     csvLogger.writeCSVFile(oscilloscopeCSVHeader);
                     recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.oscilloscope)));
                     CustomSnackBar.showSnackBar(mainLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);

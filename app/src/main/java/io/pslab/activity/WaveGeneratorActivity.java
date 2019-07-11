@@ -18,7 +18,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.TooltipCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -40,7 +39,6 @@ import io.pslab.R;
 import io.pslab.DataFormatter;
 import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
-import io.pslab.models.ServoData;
 import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
@@ -538,6 +536,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public void saveWaveConfig(View view) {
         long block = System.currentTimeMillis();
         csvLogger.prepareLogFile();
+        csvLogger.writeMetaData(getResources().getString(R.string.wave_generator));
         long timestamp;
         double lat, lon;
         String data = "Timestamp,DateTime,Mode,Wave,Shape,Freq,Phase,Duty,lat,lon\n";

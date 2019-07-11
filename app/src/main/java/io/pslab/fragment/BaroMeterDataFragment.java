@@ -30,14 +30,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -322,27 +318,15 @@ public class BaroMeterDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(baroSensor.recordedBaroData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + baroSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write( "Timestamp,DateTime,Readings,Latitude,Longitude" + "\n");
-                for (BaroData baroData : baroSensor.recordedBaroData) {
-                    out.write( baroData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())) + ","
-                            + baroData.getBaro() + ","
-                            + baroData.getLat() + ","
-                            + baroData.getLon() + "," + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        baroSensor.csvLogger.prepareLogFile();
+        baroSensor.csvLogger.writeMetaData(getResources().getString(R.string.baro_meter));
+        baroSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+        for (BaroData baroData : baroSensor.recordedBaroData) {
+            baroSensor.csvLogger.writeCSVFile(baroData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())) + ","
+                    + baroData.getBaro() + ","
+                    + baroData.getLat() + ","
+                    + baroData.getLon());
         }
         View view = rootView.findViewById(R.id.barometer_linearlayout);
         view.setDrawingCacheEnabled(true);

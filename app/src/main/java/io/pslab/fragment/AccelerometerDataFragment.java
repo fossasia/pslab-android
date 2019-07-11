@@ -22,18 +22,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import io.pslab.R;
@@ -295,29 +289,17 @@ public class AccelerometerDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(accelerometerSensor.recordedAccelerometerData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + accelerometerSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude\n");
-                for (AccelerometerData accelerometerData : accelerometerSensor.recordedAccelerometerData) {
-                    out.write(accelerometerData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(accelerometerData.getTime())) + ","
-                            + accelerometerData.getAccelerometerX() + ","
-                            + accelerometerData.getAccelerometerY() + ","
-                            + accelerometerData.getAccelerometerZ() + ","
-                            + accelerometerData.getLat() + ","
-                            + accelerometerData.getLon() + "," + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        accelerometerSensor.csvLogger.prepareLogFile();
+        accelerometerSensor.csvLogger.writeMetaData(getResources().getString(R.string.accelerometer));
+        accelerometerSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
+        for (AccelerometerData accelerometerData : accelerometerSensor.recordedAccelerometerData) {
+            accelerometerSensor.csvLogger.writeCSVFile(accelerometerData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(accelerometerData.getTime())) + ","
+                    + accelerometerData.getAccelerometerX() + ","
+                    + accelerometerData.getAccelerometerY() + ","
+                    + accelerometerData.getAccelerometerZ() + ","
+                    + accelerometerData.getLat() + ","
+                    + accelerometerData.getLon());
         }
         View view = rootView.findViewById(R.id.accelerometer_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -377,6 +359,7 @@ public class AccelerometerDataFragment extends Fragment {
         if (getActivity() != null && accelerometerSensor.isRecording) {
             if (accelerometerSensor.writeHeaderToFile) {
                 accelerometerSensor.csvLogger.prepareLogFile();
+                accelerometerSensor.csvLogger.writeMetaData(getResources().getString(R.string.accelerometer));
                 accelerometerSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
                 block = timestamp;
                 accelerometerSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, accelerometerSensor.getSensorName()));
