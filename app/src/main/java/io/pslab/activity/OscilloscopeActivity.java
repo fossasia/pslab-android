@@ -20,7 +20,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -339,9 +338,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (scienceLab.isConnected() && isAudioInputSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected && !isXYPlotSelected) {
-                        captureTask = new CaptureTask();
-                        captureTask.execute(CHANNEL.MIC.toString());
+                    if (isAudioInputSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected && !isXYPlotSelected) {
+                        if (isInBuiltMicSelected || (isMICSelected && scienceLab.isConnected())) {
+                            captureTask = new CaptureTask();
+                            captureTask.execute(CHANNEL.MIC.toString());
+                        }
                         synchronized (lock) {
                             try {
                                 lock.wait();
@@ -446,7 +447,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (!scienceLab.isConnected() || (!isCH1Selected && !isCH2Selected && !isCH3Selected && !isAudioInputSelected)) {
+                    if (!isInBuiltMicSelected && (!scienceLab.isConnected() || (!isCH1Selected && !isCH2Selected && !isCH3Selected && !isAudioInputSelected))) {
                         if (!String.valueOf(ledImageView.getTag()).equals("red")) {
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -470,7 +471,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (!isInBuiltMicSelected && audioJack != null) {
+                    if ((!isInBuiltMicSelected || !isAudioInputSelected) && audioJack != null) {
                         audioJack.release();
                         audioJack = null;
                     }
@@ -545,6 +546,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     }
                     csvLogger = new CSVLogger(getResources().getString(R.string.oscilloscope));
                     csvLogger.prepareLogFile();
+                    csvLogger.writeMetaData(getResources().getString(R.string.oscilloscope));
                     csvLogger.writeCSVFile(oscilloscopeCSVHeader);
                     recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.oscilloscope)));
                     CustomSnackBar.showSnackBar(mainLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
@@ -1078,20 +1080,26 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     double factor = buffer.length * timeGap * 1e-3;
                     maxFreq = (n / 2 - 1) / factor;
                     double mA = 0;
+                    if (xDataString == null) {
+                        xDataString = new String[n];
+                    }
                     for (int i = 0; i < n; i++) {
                         float audioValue = (float) map(buffer[i], -32768, 32767, -3, 3);
                         if (!isFourierTransformSelected) {
-                            entries.get(noOfChannels - 1).add(new Entry(i, audioValue));
+                            if (noOfChannels == 1) {
+                                xDataString[i] = String.valueOf(2.0*i);
+                            }
+                            entries.get(entries.size() - 1).add(new Entry(i, audioValue));
                         } else {
                             if (i < n / 2) {
                                 float y = (float) fftOut[i].abs() / samples;
                                 if (y > mA) {
                                     mA = y;
                                 }
-                                entries.get(noOfChannels - 1).add(new Entry((float) (i / factor), y));
+                                entries.get(entries.size() - 1).add(new Entry((float) (i / factor), y));
                             }
                         }
-                        yDataString.get(noOfChannels - 1)[i] = String.valueOf(audioValue);
+                        yDataString.get(yDataString.size() - 1)[i] = String.valueOf(audioValue);
                     }
                     if (mA > maxAmp) {
                         maxAmp = mA;
@@ -1100,7 +1108,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 }
                 if (isRecording) {
                     loggingXdata = String.join(" ", xDataString);
-                    for (int i = 0; i < noOfChannels; i++) {
+                    for (int i = 0; i < yDataString.size(); i++) {
                         loggingYdata[i] = String.join(" ", yDataString.get(i));
                     }
                     runOnUiThread(new Runnable() {

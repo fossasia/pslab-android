@@ -16,6 +16,13 @@
     <string name="pslab_pinlayout">Pin Layout</string>
     <string name="pslab_pinlayout_front">Pin Layout Front</string>
     <string name="pslab_pinlayout_back">Pin Layout Back</string>
+    <string name="bluetooth_connect_menu">Bluetooth Connection</string>
+    <string name="bluetooth_scan_dialog">USB device not found. Do you want to scan for Bluetooth Connection?</string>
+
+    <string name="bluetooth_scan_text">Scan</string>
+    <string name="bluetooth_stop_text">Stop</string>
+    <string name="scanned_devices_list_title">Scanned Devices</string>
+    <string name="bluetooth_not_supported">Your phone does not support bluetooth</string>
 
     <string name="oscilloscope">Oscilloscope</string>
     <string name="multimeter">Multimeter</string>
@@ -144,7 +151,7 @@
     <string name="not_connected">Not Connected</string>
     <string name="initialising_wait">Initialising Wait…</string>
     <string name="device_connected_successfully">Device Connected Successfully</string>
-    <string name="device_not_found">Device Not Found</string>
+    <string name="device_not_found">No USB Device Found</string>
     <string name="sensor_not_connected_tls">Sensor not connected</string>
 
     <string name="time_unit_la">Time (ms)</string>

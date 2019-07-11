@@ -524,6 +524,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public void saveWaveConfig(View view) {
         long block = System.currentTimeMillis();
         csvLogger.prepareLogFile();
+        csvLogger.writeMetaData(getResources().getString(R.string.wave_generator));
         long timestamp;
         double lat, lon;
         String data = "Timestamp,DateTime,Mode,Wave,Shape,Freq,Phase,Duty,lat,lon\n";
