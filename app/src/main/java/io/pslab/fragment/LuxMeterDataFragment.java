@@ -28,14 +28,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -324,27 +320,15 @@ public class LuxMeterDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(luxSensor.recordedLuxData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write( "Timestamp,DateTime,Readings,Latitude,Longitude" + "\n");
-                for (LuxData luxData : luxSensor.recordedLuxData) {
-                    out.write( luxData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(luxData.getTime())) + ","
-                            + luxData.getLux() + ","
-                            + luxData.getLat() + ","
-                            + luxData.getLon() + "," + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        luxSensor.csvLogger.prepareLogFile();
+        luxSensor.csvLogger.writeMetaData(getResources().getString(R.string.lux_meter));
+        luxSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+        for (LuxData luxData : luxSensor.recordedLuxData) {
+            luxSensor.csvLogger.writeCSVFile(luxData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(luxData.getTime())) + ","
+                    + luxData.getLux() + ","
+                    + luxData.getLat() + ","
+                    + luxData.getLon());
         }
         View view = rootView.findViewById(R.id.luxmeter_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -436,6 +420,7 @@ public class LuxMeterDataFragment extends Fragment {
         if (getActivity() != null && luxSensor.isRecording) {
             if (luxSensor.writeHeaderToFile) {
                 luxSensor.csvLogger.prepareLogFile();
+                luxSensor.csvLogger.writeMetaData(getResources().getString(R.string.lux_meter));
                 luxSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
                 block = timestamp;
                 luxSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, luxSensor.getSensorName()));

@@ -25,18 +25,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -302,29 +296,17 @@ public class GyroscopeDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(gyroSensor.recordedGyroData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + gyroSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude\n");
-                for (GyroData gyroData : gyroSensor.recordedGyroData) {
-                    out.write(gyroData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(gyroData.getTime())) + ","
-                            + gyroData.getGyroX() + ","
-                            + gyroData.getGyroY() + ","
-                            + gyroData.getGyroZ() + ","
-                            + gyroData.getLat() + ","
-                            + gyroData.getLon() + "," + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        gyroSensor.csvLogger.prepareLogFile();
+        gyroSensor.csvLogger.writeMetaData(getResources().getString(R.string.gyroscope));
+        gyroSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
+        for (GyroData gyroData : gyroSensor.recordedGyroData) {
+            gyroSensor.csvLogger.writeCSVFile(gyroData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(gyroData.getTime())) + ","
+                    + gyroData.getGyroX() + ","
+                    + gyroData.getGyroY() + ","
+                    + gyroData.getGyroZ() + ","
+                    + gyroData.getLat() + ","
+                    + gyroData.getLon());
         }
         View view = rootView.findViewById(R.id.gyro_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -384,6 +366,7 @@ public class GyroscopeDataFragment extends Fragment {
         if (getActivity() != null && gyroSensor.isRecording) {
             if (gyroSensor.writeHeaderToFile) {
                 gyroSensor.csvLogger.prepareLogFile();
+                gyroSensor.csvLogger.writeMetaData(getResources().getString(R.string.gyroscope));
                 gyroSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
                 block = timestamp;
                 gyroSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, gyroSensor.getSensorName()));

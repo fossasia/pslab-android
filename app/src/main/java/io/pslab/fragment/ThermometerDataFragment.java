@@ -28,14 +28,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -325,27 +321,15 @@ public class ThermometerDataFragment extends Fragment {
     }
 
     public void saveGraph() {
-        String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(thermoSensor.recordedThermometerData.get(0).getTime());
-        File csvFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + CSV_DIRECTORY + File.separator + thermoSensor.getSensorName() +
-                File.separator + fileName + ".csv");
-        if (!csvFile.exists()) {
-            try {
-                csvFile.createNewFile();
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write( "Timestamp,DateTime,Readings,Latitude,Longitude" + "\n");
-                for (ThermometerData thermometerData : thermoSensor.recordedThermometerData) {
-                    out.write( thermometerData.getTime() + ","
-                            + CSVLogger.FILE_NAME_FORMAT.format(new Date(thermometerData.getTime())) + ","
-                            + thermometerData.getTemp() + ","
-                            + thermometerData.getLat() + ","
-                            + thermometerData.getLon() + "," + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        thermoSensor.csvLogger.prepareLogFile();
+        thermoSensor.csvLogger.writeMetaData(getResources().getString(R.string.thermometer));
+        thermoSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+        for (ThermometerData thermometerData : thermoSensor.recordedThermometerData) {
+            thermoSensor.csvLogger.writeCSVFile(thermometerData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(thermometerData.getTime())) + ","
+                    + thermometerData.getTemp() + ","
+                    + thermometerData.getLat() + ","
+                    + thermometerData.getLon());
         }
         View view = rootView.findViewById(R.id.thermometer_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -437,6 +421,7 @@ public class ThermometerDataFragment extends Fragment {
         if (getActivity() != null && thermoSensor.isRecording) {
             if (thermoSensor.writeHeaderToFile) {
                 thermoSensor.csvLogger.prepareLogFile();
+                thermoSensor.csvLogger.writeMetaData(getResources().getString(R.string.thermometer));
                 thermoSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
                 block = timestamp;
                 thermoSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, thermoSensor.getSensorName()));
