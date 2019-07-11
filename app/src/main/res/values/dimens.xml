@@ -252,6 +252,9 @@
 
     <dimen name="sensor_params_top">10dp</dimen>
 
+    <dimen name="bluetooth_dialog_margin">10dp</dimen>
+    <dimen name="bluetooth_list_divider_height">2dp</dimen>
+
     <dimen name="list_group_layout_height">52dp</dimen>
     <dimen name="list_group_layout_width">52dp</dimen>
     <dimen name="list_item_padding">5dp</dimen>
