@@ -141,41 +141,7 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        getSupportActionBar().setTitle(caller);
-        switch (caller) {
-            case "Lux Meter":
-                startActivity(new Intent(this, LuxMeterActivity.class));
-                break;
-            case "Barometer":
-                startActivity(new Intent(this, BarometerActivity.class));
-                break;
-            case "Accelerometer":
-                startActivity(new Intent(this, AccelerometerActivity.class));
-                break;
-            case "Multimeter":
-                startActivity(new Intent(this, MultimeterActivity.class));
-                break;
-            case "Gyroscope":
-                startActivity(new Intent(this, GyroscopeActivity.class));
-                break;
-            case "Compass":
-                startActivity(new Intent(this, CompassActivity.class));
-                break;
-            case "Thermometer":
-                startActivity(new Intent(this, ThermometerActivity.class));
-                break;
-            case "Robotic Arm":
-                startActivity(new Intent(this, RoboticArmActivity.class));
-                break;
-            case "Wave Generator":
-                startActivity(new Intent(this, WaveGeneratorActivity.class));
-                break;
-            case "Oscilloscope":
-                startActivity(new Intent(this, OscilloscopeActivity.class));
-                break;
-            default:
-                startActivity(new Intent(this, MainActivity.class));
-        }
+        finish();
     }
 
     @Override
