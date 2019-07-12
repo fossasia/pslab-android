@@ -33,6 +33,14 @@
             app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
             app:layout_constraintGuide_percent="0" />
 
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline11_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+            app:layout_constraintGuide_percent="0.66" />
+
         <android.support.constraint.ConstraintLayout
             android:id="@+id/square_mode_layout"
             android:layout_width="@dimen/length_0dp"
@@ -252,15 +260,16 @@
 
         <LinearLayout
             android:layout_width="@dimen/dimen_zero_dp"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/dimen_zero_dp"
+            app:layout_constraintBottom_toTopOf="@id/guideline11_2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline11">
+            app:layout_constraintStart_toEndOf="@id/guideline11"
+            app:layout_constraintTop_toTopOf="parent">
 
             <RelativeLayout
                 android:id="@+id/square_mode_controls"
                 android:layout_width="@dimen/length_0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/ctrl_sepration_margin"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:paddingLeft="@dimen/ctrl_inside_rl_padding"
@@ -305,6 +314,22 @@
                         app:layout_constraintGuide_percent="0.5" />
 
                     <android.support.constraint.Guideline
+                        android:id="@+id/guideline4_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.33" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline4_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                        app:layout_constraintGuide_percent="0.66" />
+
+                    <android.support.constraint.Guideline
                         android:id="@+id/guideline5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -318,7 +343,6 @@
                         android:layout_height="@dimen/length_0dp"
                         android:layout_marginStart="@dimen/margin_btn"
                         android:layout_marginTop="@dimen/margin_btn"
-                        android:layout_marginEnd="@dimen/margin_btn"
                         android:background="@drawable/btn_back_rounded"
                         android:stateListAnimator="@animator/selector_animator"
                         android:text="@string/wave1"
@@ -354,7 +378,6 @@
                         android:layout_height="@dimen/length_0dp"
                         android:layout_marginStart="@dimen/margin_btn"
                         android:layout_marginTop="@dimen/margin_btn"
-                        android:layout_marginEnd="@dimen/margin_btn"
                         android:background="@drawable/btn_back_rounded"
                         android:stateListAnimator="@animator/selector_animator"
                         android:text="@string/text_freq"
@@ -362,7 +385,7 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_wavegen"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline4_1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
@@ -372,7 +395,6 @@
                         android:layout_height="@dimen/length_0dp"
                         android:layout_marginStart="@dimen/margin_btn"
                         android:layout_marginTop="@dimen/margin_btn"
-                        android:layout_marginEnd="@dimen/margin_btn"
                         android:background="@drawable/btn_back_rounded"
                         android:stateListAnimator="@animator/selector_animator"
                         android:text="@string/text_phase"
@@ -380,8 +402,39 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_wavegen"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/guideline4_2"
+                        app:layout_constraintStart_toStartOf="@id/guideline4_1"
+                        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
+                    <ImageButton
+                        android:id="@+id/ctrl_img_btn_sin"
+                        android:layout_width="@dimen/dimen_zero_dp"
+                        android:layout_height="@dimen/dimen_zero_dp"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
+                        android:layout_marginEnd="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:src="@drawable/ic_sin"
+                        android:stateListAnimator="@animator/selector_animator"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/guideline4"
+                        app:layout_constraintStart_toStartOf="@id/guideline4_2"
+                        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
+                    <ImageButton
+                        android:id="@+id/ctrl_img_btn_tri"
+                        android:layout_width="@dimen/dimen_zero_dp"
+                        android:layout_height="@dimen/dimen_zero_dp"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
+                        android:layout_marginEnd="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:src="@drawable/ic_triangular"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/guideline4_2"
                         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
                 </android.support.constraint.ConstraintLayout>
@@ -391,7 +444,7 @@
             <RelativeLayout
                 android:id="@+id/pwm_mode_controls"
                 android:layout_width="@dimen/length_0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:paddingLeft="@dimen/ctrl_inside_rl_padding"
@@ -423,10 +476,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/control_title_pwm"
-                    android:paddingLeft="@dimen/ctrl_inside_rl_padding"
-                    android:paddingTop="@dimen/ctrl_inside_tb_padding"
-                    android:paddingRight="@dimen/ctrl_inside_rl_padding"
-                    android:paddingBottom="@dimen/ctrl_inside_tb_padding">
+                    android:layout_marginLeft="@dimen/ctrl_inside_rl_padding"
+                    android:layout_marginRight="@dimen/ctrl_inside_rl_padding"
+                    android:layout_marginBottom="@dimen/ctrl_inside_rl_padding"
+                    android:padding="@dimen/margin_btn">
 
                     <android.support.constraint.Guideline
                         android:id="@+id/cr_guideline2"
@@ -480,7 +533,8 @@
                         android:id="@+id/pwm_btn_sq1"
                         android:layout_width="@dimen/length_0dp"
                         android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
                         android:background="@drawable/btn_back_rounded"
                         android:stateListAnimator="@animator/selector_animator"
                         android:text="@string/text_sq1"
@@ -495,7 +549,8 @@
                         android:id="@+id/pwm_btn_sq2"
                         android:layout_width="@dimen/length_0dp"
                         android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
                         android:background="@drawable/btn_back_rounded"
                         android:stateListAnimator="@animator/selector_animator"
                         android:text="@string/text_sq2"
@@ -510,7 +565,8 @@
                         android:id="@+id/pwm_btn_sq3"
                         android:layout_width="@dimen/length_0dp"
                         android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
                         android:background="@drawable/btn_back_rounded"
                         android:stateListAnimator="@animator/selector_animator"
                         android:text="@string/text_sq3"
@@ -525,7 +581,9 @@
                         android:id="@+id/pwm_btn_sq4"
                         android:layout_width="@dimen/length_0dp"
                         android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
+                        android:layout_marginEnd="@dimen/margin_btn"
                         android:background="@drawable/btn_back_rounded"
                         android:stateListAnimator="@animator/selector_animator"
                         android:text="@string/text_sq4"
@@ -541,7 +599,8 @@
                         android:id="@+id/pwm_btn_freq"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_margin="@dimen/margin_btn"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
                         android:background="@drawable/btn_back_rounded"
                         android:stateListAnimator="@animator/selector_animator"
                         android:text="@string/text_freq"
@@ -557,26 +616,12 @@
                         android:id="@+id/pwm_btn_duty"
                         android:layout_width="@dimen/length_0dp"
                         android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
+                        android:layout_marginEnd="@dimen/margin_btn"
                         android:background="@drawable/btn_back_rounded"
                         android:stateListAnimator="@animator/selector_animator"
                         android:text="@string/text_duty"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_wavegen"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline3_2"
-                        app:layout_constraintStart_toStartOf="@id/cr_guideline3_1"
-                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
-
-                    <Button
-                        android:id="@+id/pwm_btn_phase"
-                        android:layout_width="@dimen/length_0dp"
-                        android:layout_height="@dimen/length_0dp"
-                        android:layout_margin="@dimen/margin_btn"
-                        android:background="@drawable/btn_back_rounded"
-                        android:stateListAnimator="@animator/selector_animator"
-                        android:text="@string/text_phase"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_wavegen"
@@ -585,18 +630,96 @@
                         app:layout_constraintStart_toStartOf="@+id/cr_guideline3_2"
                         app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
 
+                    <Button
+                        android:id="@+id/pwm_btn_phase"
+                        android:layout_width="@dimen/length_0dp"
+                        android:layout_height="@dimen/length_0dp"
+                        android:layout_marginStart="@dimen/margin_btn"
+                        android:layout_marginTop="@dimen/margin_btn"
+                        android:background="@drawable/btn_back_rounded"
+                        android:stateListAnimator="@animator/selector_animator"
+                        android:text="@string/text_phase"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_wavegen"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/cr_guideline3_2"
+                        app:layout_constraintStart_toStartOf="@id/cr_guideline3_1"
+                        app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
+
                 </android.support.constraint.ConstraintLayout>
 
             </RelativeLayout>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="@dimen/dimen_zero_dp"
+            android:layout_height="@dimen/dimen_zero_dp"
+            android:gravity="center"
+            android:paddingStart="@dimen/wave_gen_ctrl_btns_padding"
+            android:paddingTop="@dimen/margin_btn"
+            android:paddingEnd="@dimen/wave_gen_ctrl_btns_padding"
+            android:paddingBottom="@dimen/wave_gen_ctrl_btns_padding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline11"
+            app:layout_constraintTop_toTopOf="@id/guideline11_2">
+
+            <Button
+                android:id="@+id/btn_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/margin_btn"
+                android:layout_marginBottom="@dimen/margin_btn"
+                android:layout_weight="1"
+                android:background="@drawable/btn_back_rounded"
+                android:minWidth="@dimen/btn_min_width"
+                android:text="@string/view_text"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/margin_btn"
+                android:layout_marginBottom="@dimen/margin_btn"
+                android:layout_weight="1"
+                android:background="@drawable/btn_back_rounded"
+                android:minWidth="@dimen/btn_min_width"
+                android:onClick="saveWaveConfig"
+                android:text="@string/save_text"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/pwm_btn_mode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/margin_btn"
+                android:layout_marginEnd="@dimen/margin_btn"
+                android:layout_marginBottom="@dimen/margin_btn"
+                android:layout_weight="1"
+                android:background="@drawable/btn_back_rounded"
+                android:minWidth="@dimen/btn_min_width"
+                android:stateListAnimator="@animator/selector_animator"
+                android:text="@string/mode"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/pwm_mode_layout"
             android:layout_width="@dimen/length_0dp"
             android:layout_height="@dimen/length_0dp"
-            android:layout_marginStart="@dimen/card_separation_offset"
+            android:layout_marginEnd="@dimen/card_separation_offset"
             android:background="@color/black"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -737,7 +860,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/pwm_duty"
+                app:layout_constraintBottom_toTopOf="@+id/pwm_phase"
                 app:layout_constraintStart_toStartOf="@+id/guideline10"
                 app:layout_constraintTop_toTopOf="@+id/guideline3"
                 app:layout_constraintVertical_chainStyle="packed" />
@@ -758,28 +881,29 @@
                 android:id="@+id/pwm_duty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/prop_sepration_margin_top"
+                android:layout_marginEnd="@dimen/margin_btn"
                 android:text="@string/text_duty_colon"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/guideline9"
-                app:layout_constraintStart_toStartOf="@+id/pwm_freq"
-                app:layout_constraintTop_toBottomOf="@+id/pwm_freq" />
+                app:layout_constraintBottom_toBottomOf="@+id/pwm_phase_value"
+                app:layout_constraintEnd_toStartOf="@+id/pwm_duty_value"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/pwm_phase_value"
+                app:layout_constraintTop_toTopOf="@+id/pwm_phase_value" />
 
             <TextView
                 android:id="@+id/pwm_duty_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/value_text_offset_margin"
+                android:layout_marginEnd="@dimen/prop_sepration_margin_top"
                 android:text="@string/duty_holder_text"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_wavegen"
-                app:layout_constraintBottom_toBottomOf="@+id/pwm_duty"
+                app:layout_constraintBottom_toBottomOf="@id/pwm_duty"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/pwm_duty"
-                app:layout_constraintTop_toTopOf="@+id/pwm_duty" />
+                app:layout_constraintTop_toTopOf="@id/pwm_duty" />
 
             <TextView
                 android:id="@+id/pwm_mon_select_prop"
@@ -845,25 +969,24 @@
                 android:id="@+id/pwm_phase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/value_text_offset_margin"
+                android:layout_marginTop="@dimen/prop_sepration_margin_top"
                 android:layout_marginEnd="@dimen/value_text_offset_margin"
                 android:text="@string/text_phase_colon"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/pwm_duty_value"
-                app:layout_constraintEnd_toStartOf="@+id/pwm_phase_value"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/pwm_duty_value"
-                app:layout_constraintTop_toTopOf="@+id/pwm_duty_value" />
+                app:layout_constraintBottom_toTopOf="@+id/guideline9"
+                app:layout_constraintStart_toStartOf="@+id/pwm_freq"
+                app:layout_constraintTop_toBottomOf="@+id/pwm_freq" />
 
             <TextView
                 android:id="@+id/pwm_phase_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginEnd="@dimen/prop_text_end_margin"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/pwm_phase"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/pwm_phase"
                 app:layout_constraintTop_toTopOf="@+id/pwm_phase" />
         </android.support.constraint.ConstraintLayout>
 
@@ -872,7 +995,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/length_0dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.2"
+        android:gravity="center"
         android:padding="@dimen/lower_ll_margin">
 
         <LinearLayout
@@ -920,143 +1044,6 @@
                 android:stateListAnimator="@animator/selector_animator" />
 
         </LinearLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/seek_control_ll"
-            android:layout_marginStart="@dimen/margin_btn"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/rectangle_border"
-            android:padding="@dimen/margin_btn">
-
-            <android.support.constraint.Guideline
-                android:id="@+id/bottom_guideline1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                app:layout_constraintGuide_percent="0.20" />
-
-            <android.support.constraint.Guideline
-                android:id="@+id/bottom_guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                app:layout_constraintGuide_percent="0.40" />
-
-            <android.support.constraint.Guideline
-                android:id="@+id/bottom_guideline22"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                app:layout_constraintGuide_percent="0.50" />
-
-            <android.support.constraint.Guideline
-                android:id="@+id/bottom_guideline3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                app:layout_constraintGuide_percent="0.66" />
-
-            <android.support.constraint.Guideline
-                android:id="@+id/bottom_guideline4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-                app:layout_constraintGuide_percent="0.82" />
-
-            <ImageButton
-                android:id="@+id/ctrl_img_btn_sin"
-                android:layout_width="@dimen/dimen_zero_dp"
-                android:layout_height="@dimen/dimen_zero_dp"
-                android:layout_marginStart="@dimen/margin_btn"
-                android:layout_marginTop="@dimen/margin_btn"
-                android:layout_marginBottom="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
-                android:src="@drawable/ic_sin"
-                android:stateListAnimator="@animator/selector_animator"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/bottom_guideline1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/ctrl_img_btn_tri"
-                android:layout_width="@dimen/dimen_zero_dp"
-                android:layout_height="@dimen/dimen_zero_dp"
-                android:layout_marginStart="@dimen/margin_btn"
-                android:layout_marginTop="@dimen/margin_btn"
-                android:layout_marginBottom="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
-                android:src="@drawable/ic_triangular"
-                android:stateListAnimator="@animator/selector_animator"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/bottom_guideline2"
-                app:layout_constraintStart_toStartOf="@id/bottom_guideline1"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/btn_view"
-                android:layout_width="@dimen/dimen_zero_dp"
-                android:layout_height="@dimen/dimen_zero_dp"
-                android:layout_marginStart="@dimen/margin_btn"
-                android:layout_marginTop="@dimen/margin_btn"
-                android:layout_marginBottom="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
-                android:minWidth="@dimen/btn_min_width"
-                android:text="@string/view_text"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/bottom_guideline3"
-                app:layout_constraintStart_toStartOf="@id/bottom_guideline22"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/btn_save"
-                android:layout_width="@dimen/dimen_zero_dp"
-                android:layout_height="@dimen/dimen_zero_dp"
-                android:layout_marginStart="@dimen/margin_btn"
-                android:layout_marginTop="@dimen/margin_btn"
-                android:layout_marginBottom="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
-                android:minWidth="@dimen/btn_min_width"
-                android:onClick="saveWaveConfig"
-                android:text="@string/save_text"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/bottom_guideline4"
-                app:layout_constraintStart_toStartOf="@id/bottom_guideline3"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/pwm_btn_mode"
-                android:layout_width="@dimen/dimen_zero_dp"
-                android:layout_height="@dimen/dimen_zero_dp"
-                android:layout_marginStart="@dimen/margin_btn"
-                android:layout_marginTop="@dimen/margin_btn"
-                android:layout_marginEnd="@dimen/margin_btn"
-                android:layout_marginBottom="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
-                android:minWidth="@dimen/btn_min_width"
-                android:stateListAnimator="@animator/selector_animator"
-                android:text="@string/mode"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/bottom_guideline4"
-                app:layout_constraintTop_toTopOf="parent" />
-        </android.support.constraint.ConstraintLayout>
 
     </RelativeLayout>
 

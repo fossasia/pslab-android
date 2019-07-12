@@ -268,6 +268,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         imgBtnSin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                imgBtnSin.setVisibility(View.GONE);
+                imgBtnTri.setVisibility(View.VISIBLE);
                 WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, SIN);
                 selectWaveform(SIN);
             }
@@ -276,6 +278,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         imgBtnTri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                imgBtnSin.setVisibility(View.VISIBLE);
+                imgBtnTri.setVisibility(View.GONE);
                 WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, TRIANGULAR);
                 selectWaveform(TRIANGULAR);
             }
