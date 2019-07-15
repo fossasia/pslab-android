@@ -535,7 +535,7 @@ public class LuxMeterDataFragment extends Fragment {
                 if (sensor == null) {
                     Toast.makeText(getContext(), getResources().getString(R.string.no_lux_sensor), Toast.LENGTH_LONG).show();
                 } else {
-                    float max = sensor.getMaximumRange();
+                    float max = sensor.getMaximumRange() * 10000;
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(luxSensor.LUXMETER_LIMIT, max).apply();
                     lightMeter.setMaxSpeed(max);
                     sensorManager.registerListener(lightSensorEventListener,
