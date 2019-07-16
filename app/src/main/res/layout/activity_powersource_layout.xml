@@ -36,22 +36,26 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/power_card_big_margin"
-                            android:layout_marginRight="@dimen/power_card_big_margin"
                             android:layout_marginTop="@dimen/power_card_medium_margin"
+                            android:layout_marginRight="@dimen/power_card_big_margin"
                             android:text="@string/power_card_pv1"
                             android:textSize="@dimen/power_card_header_text"
                             android:textStyle="bold" />
 
-                        <TextView
+                        <EditText
                             android:id="@+id/power_card_pv1_display"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_margin="@dimen/power_card_large_margin"
                             android:layout_weight="1"
                             android:background="@drawable/control_edittext"
+                            android:cursorVisible="false"
                             android:gravity="center"
+                            android:imeOptions="actionDone"
+                            android:inputType="numberDecimal"
                             android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
+                            android:singleLine="true"
                             android:textSize="@dimen/power_card_display_text" />
 
                         <LinearLayout
@@ -65,8 +69,8 @@
                                 android:id="@+id/power_card_pv1_up"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_marginStart="@dimen/power_card_tiny_margin"
+                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
@@ -127,22 +131,26 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/power_card_big_margin"
-                            android:layout_marginRight="@dimen/power_card_big_margin"
                             android:layout_marginTop="@dimen/power_card_medium_margin"
+                            android:layout_marginRight="@dimen/power_card_big_margin"
                             android:text="@string/power_card_pv2"
                             android:textSize="@dimen/power_card_header_text"
                             android:textStyle="bold" />
 
-                        <TextView
+                        <EditText
                             android:id="@+id/power_card_pv2_display"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_margin="@dimen/power_card_large_margin"
                             android:layout_weight="1"
                             android:background="@drawable/control_edittext"
+                            android:cursorVisible="false"
                             android:gravity="center"
+                            android:imeOptions="actionDone"
+                            android:inputType="numberDecimal"
                             android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
+                            android:singleLine="true"
                             android:textSize="@dimen/power_card_display_text" />
 
                         <LinearLayout
@@ -156,8 +164,8 @@
                                 android:id="@+id/power_card_pv2_up"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_marginStart="@dimen/power_card_tiny_margin"
+                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
@@ -217,22 +225,26 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/power_card_big_margin"
-                            android:layout_marginRight="@dimen/power_card_big_margin"
                             android:layout_marginTop="@dimen/power_card_medium_margin"
+                            android:layout_marginRight="@dimen/power_card_big_margin"
                             android:text="@string/power_card_pv3"
                             android:textSize="@dimen/power_card_header_text"
                             android:textStyle="bold" />
 
-                        <TextView
+                        <EditText
                             android:id="@+id/power_card_pv3_display"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_margin="@dimen/power_card_large_margin"
                             android:layout_weight="1"
                             android:background="@drawable/control_edittext"
+                            android:cursorVisible="false"
                             android:gravity="center"
+                            android:imeOptions="actionDone"
+                            android:inputType="numberDecimal"
                             android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
+                            android:singleLine="true"
                             android:textSize="@dimen/power_card_display_text" />
 
                         <LinearLayout
@@ -246,8 +258,8 @@
                                 android:id="@+id/power_card_pv3_up"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_marginStart="@dimen/power_card_tiny_margin"
+                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
@@ -308,23 +320,27 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/power_card_big_margin"
-                            android:layout_marginRight="@dimen/power_card_big_margin"
                             android:layout_marginTop="@dimen/power_card_medium_margin"
+                            android:layout_marginRight="@dimen/power_card_big_margin"
                             android:text="@string/power_card_pcs"
                             android:textSize="@dimen/power_card_header_text"
                             android:textStyle="bold" />
 
 
-                        <TextView
+                        <EditText
                             android:id="@+id/power_card_pcs_display"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_margin="@dimen/power_card_large_margin"
                             android:layout_weight="1"
                             android:background="@drawable/control_edittext"
+                            android:cursorVisible="false"
                             android:gravity="center"
+                            android:imeOptions="actionDone"
+                            android:inputType="numberDecimal"
                             android:maxLength="8"
                             android:padding="@dimen/power_card_medium_margin"
+                            android:singleLine="true"
                             android:textSize="@dimen/power_card_display_text" />
 
                         <LinearLayout
@@ -338,8 +354,8 @@
                                 android:id="@+id/power_card_pcs_up"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_marginStart="@dimen/power_card_tiny_margin"
+                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"

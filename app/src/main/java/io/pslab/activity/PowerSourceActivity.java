@@ -15,11 +15,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,7 +56,7 @@ public class PowerSourceActivity extends AppCompatActivity {
     private final int PV2_CONTROLLER_MAX = 661;
     private final int PV3_CONTROLLER_MAX = 331;
     private final int PCS_CONTROLLER_MAX = 331;
-    
+
     private final long LONG_CLICK_DELAY = 100;
     private CSVLogger compassLogger = null;
     private Boolean writeHeaderToFile = true;
@@ -64,7 +67,7 @@ public class PowerSourceActivity extends AppCompatActivity {
     @BindView(R.id.power_card_pv1_controller)
     Croller controllerPV1;
     @BindView(R.id.power_card_pv1_display)
-    TextView displayPV1;
+    EditText displayPV1;
     @BindView(R.id.power_card_pv1_up)
     SquareImageButton upPV1;
     @BindView(R.id.power_card_pv1_down)
@@ -76,7 +79,7 @@ public class PowerSourceActivity extends AppCompatActivity {
     @BindView(R.id.power_card_pv2_controller)
     Croller controllerPV2;
     @BindView(R.id.power_card_pv2_display)
-    TextView displayPV2;
+    EditText displayPV2;
     @BindView(R.id.power_card_pv2_up)
     SquareImageButton upPV2;
     @BindView(R.id.power_card_pv2_down)
@@ -85,7 +88,7 @@ public class PowerSourceActivity extends AppCompatActivity {
     @BindView(R.id.power_card_pv3_controller)
     Croller controllerPV3;
     @BindView(R.id.power_card_pv3_display)
-    TextView displayPV3;
+    EditText displayPV3;
     @BindView(R.id.power_card_pv3_up)
     SquareImageButton upPV3;
     @BindView(R.id.power_card_pv3_down)
@@ -94,7 +97,7 @@ public class PowerSourceActivity extends AppCompatActivity {
     @BindView(R.id.power_card_pcs_controller)
     Croller controllerPCS;
     @BindView(R.id.power_card_pcs_display)
-    TextView displayPCS;
+    EditText displayPCS;
     @BindView(R.id.power_card_pcs_up)
     SquareImageButton upPCS;
     @BindView(R.id.power_card_pcs_down)
@@ -157,6 +160,118 @@ public class PowerSourceActivity extends AppCompatActivity {
         autoSize(displayPV2);
         autoSize(displayPV3);
         autoSize(displayPCS);
+
+        displayPV1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPV1.setCursorVisible(true);
+            }
+        });
+        displayPV2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPV2.setCursorVisible(true);
+            }
+        });
+        displayPV3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPV3.setCursorVisible(true);
+            }
+        });
+        displayPCS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPCS.setCursorVisible(true);
+            }
+        });
+        displayPV1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String voltageValue = displayPV1.getText().toString();
+                    voltageValue = voltageValue.replace("V", "");
+                    float voltage = Float.parseFloat(voltageValue);
+                    if (voltage < -5.00f) {
+                        voltage = -5.00f;
+                        displayPV1.setText(String.valueOf(voltage) + " V");
+                    }
+                    if (voltage > 5.00f) {
+                        voltage = 5.00f;
+                        displayPV1.setText(String.valueOf(voltage) + " V");
+                    }
+                    controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
+                            5.00f, -5.00f));
+                }
+                return false;
+            }
+        });
+
+        displayPV2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String voltageValue = displayPV2.getText().toString();
+                    voltageValue = voltageValue.replace("V", "");
+                    float voltage = Float.parseFloat(voltageValue);
+                    if (voltage < -3.30f) {
+                        voltage = -3.30f;
+                        displayPV2.setText(String.valueOf(voltage) + " V");
+                    }
+                    if (voltage > 3.30f) {
+                        voltage = 3.30f;
+                        displayPV2.setText(String.valueOf(voltage) + " V");
+                    }
+                    controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
+                            3.30f, -3.30f));
+                }
+                return false;
+            }
+        });
+
+        displayPV3.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String voltageValue = displayPV3.getText().toString();
+                    voltageValue = voltageValue.replace("V", "");
+                    float voltage = Float.parseFloat(voltageValue);
+                    if (voltage < 0.00f) {
+                        voltage = 0.00f;
+                        displayPV3.setText(String.valueOf(voltage) + " V");
+                    }
+                    if (voltage > 3.30f) {
+                        voltage = 3.30f;
+                        displayPV3.setText(String.valueOf(voltage) + " V");
+                    }
+                    controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
+                            3.30f, 0.00f));
+                }
+                return false;
+            }
+        });
+
+        displayPCS.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String currentValue = displayPCS.getText().toString();
+                    currentValue = currentValue.replace("mA", "");
+                    float current = Float.parseFloat(currentValue);
+                    if (current < 0.00f) {
+                        current = 0.00f;
+                        displayPCS.setText(String.valueOf(current) + " mA");
+                    }
+                    if (current > 3.30f) {
+                        current = 3.30f;
+                        displayPCS.setText(String.valueOf(current) + " mA");
+                    }
+                    controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
+                            3.30f, 0.00f));
+                }
+                return false;
+            }
+        });
 
         monitorControllers(controllerPV1, Pin.PV1, PV1_CONTROLLER_MAX);
         monitorControllers(controllerPV2, Pin.PV2, PV2_CONTROLLER_MAX);
@@ -314,6 +429,7 @@ public class PowerSourceActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(Croller croller, int progress) {
                 setMappedPower(pin, progress);
+                removeCursor();
             }
 
             @Override
@@ -326,6 +442,12 @@ public class PowerSourceActivity extends AppCompatActivity {
         });
     }
 
+    private void removeCursor() {
+        displayPV1.setCursorVisible(false);
+        displayPV2.setCursorVisible(false);
+        displayPV3.setCursorVisible(false);
+        displayPCS.setCursorVisible(false);
+    }
     /**
      * Click listeners to increment and decrement buttons
      *
