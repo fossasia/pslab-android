@@ -14,7 +14,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +44,7 @@ import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
 import io.realm.Realm;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 /**
@@ -203,324 +203,80 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     private void getFileData(File file) {
         try {
-            FileInputStream is = null;
-            is = new FileInputStream(file);
+            FileInputStream is = new FileInputStream(file);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line = reader.readLine();
-            selectedDevice = line.split(",")[0];
+            int i = 0;
+            long block = 0, time = 0;
+            while (line != null) {
+                if (i > 1) {
+                    String[] data = line.split(",");
+                    try {
+                        time += 1000;
+                        realm.beginTransaction();
+                        RealmObject object = getObject(selectedDevice, data, time, block);
+                        if (object != null) {
+                            realm.copyToRealm(object);
+                        } else {
+                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                        }
+                        realm.commitTransaction();
+                    } catch (Exception e) {
+                        Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (i == 0) {
+                    block = System.currentTimeMillis();
+                    time = block;
+                    selectedDevice = line.split(",")[0];
+                    realm.beginTransaction();
+                    realm.copyToRealm(new SensorDataBlock(block, selectedDevice));
+                    realm.commitTransaction();
+                }
+                i++;
+                line = reader.readLine();
+            }
+            fillData();
+            DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.baro_meter))) {
-            try {
-                FileInputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                String line = reader.readLine();
-                int i = 0;
-                long block = 0, time = 0;
-                while (line != null) {
-                    if (i > 1) {
-                        String[] data = line.split(",");
-                        try {
-                            time += 1000;
-                            BaroData baroData = new BaroData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
-                            realm.beginTransaction();
-                            realm.copyToRealm(baroData);
-                            realm.commitTransaction();
-                        } catch (Exception e) {
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (i == 0) {
-                        block = System.currentTimeMillis();
-                        time = block;
-                        realm.beginTransaction();
-                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.baro_meter)));
-                        realm.commitTransaction();
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                fillData();
-                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.lux_meter))) {
-            try {
-                FileInputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                String line = reader.readLine();
-                int i = 0;
-                long block = 0, time = 0;
-                while (line != null) {
-                    if (i > 1) {
-                        String[] data = line.split(",");
-                        try {
-                            time += 1000;
-                            LuxData luxData = new LuxData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
-                            realm.beginTransaction();
-                            realm.copyToRealm(luxData);
-                            realm.commitTransaction();
-                        } catch (Exception e) {
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (i == 0) {
-                        block = System.currentTimeMillis();
-                        time = block;
-                        realm.beginTransaction();
-                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.lux_meter)));
-                        realm.commitTransaction();
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                fillData();
-                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.compass))) {
-            try {
-                FileInputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                String line = reader.readLine();
-                int i = 0;
-                long block = 0, time = 0;
-                while (line != null) {
-                    if (i > 1) {
-                        String[] data = line.split(",");
-                        try {
-                            time += 1000;
-                            CompassData compassData = new CompassData(time, block, data[2].equals("null") ? "0" : data[2], data[3].equals("null") ? "0" : data[3], data[4].equals("null") ? "0" : data[4], data[5], Double.valueOf(data[6]), Double.valueOf(data[7]));
-                            realm.beginTransaction();
-                            realm.copyToRealm(compassData);
-                            realm.commitTransaction();
-                        } catch (Exception e) {
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (i == 0) {
-                        block = System.currentTimeMillis();
-                        time = block;
-                        realm.beginTransaction();
-                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.compass)));
-                        realm.commitTransaction();
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                fillData();
-                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.gyroscope))) {
-            try {
-                FileInputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                String line = reader.readLine();
-                int i = 0;
-                long block = 0, time = 0;
-                while (line != null) {
-                    if (i > 1) {
-                        String[] data = line.split(",");
-                        try {
-                            time += 1000;
-                            GyroData gyroData = new GyroData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
-                            realm.beginTransaction();
-                            realm.copyToRealm(gyroData);
-                            realm.commitTransaction();
-                        } catch (Exception e) {
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (i == 0) {
-                        block = System.currentTimeMillis();
-                        time = block;
-                        realm.beginTransaction();
-                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.gyroscope)));
-                        realm.commitTransaction();
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                fillData();
-                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.accelerometer))) {
-            try {
-                FileInputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                String line = reader.readLine();
-                int i = 0;
-                long block = 0, time = 0;
-                while (line != null) {
-                    if (i > 1) {
-                        String[] data = line.split(",");
-                        try {
-                            time += 1000;
-                            AccelerometerData accelerometerData = new AccelerometerData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
-                            realm.beginTransaction();
-                            realm.copyToRealm(accelerometerData);
-                            realm.commitTransaction();
-                        } catch (Exception e) {
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (i == 0) {
-                        block = System.currentTimeMillis();
-                        time = block;
-                        realm.beginTransaction();
-                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.accelerometer)));
-                        realm.commitTransaction();
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                fillData();
-                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.thermometer))) {
-            try {
-                FileInputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                String line = reader.readLine();
-                int i = 0;
-                long block = 0, time = 0;
-                while (line != null) {
-                    if (i > 1) {
-                        String[] data = line.split(",");
-                        try {
-                            time += 1000;
-                            ThermometerData thermometerData = new ThermometerData(time, block, Float.valueOf(data[2]), Double.valueOf(data[5]), Double.valueOf(data[6]));
-                            realm.beginTransaction();
-                            realm.copyToRealm(thermometerData);
-                            realm.commitTransaction();
-                        } catch (Exception e) {
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (i == 0) {
-                        block = System.currentTimeMillis();
-                        time = block;
-                        realm.beginTransaction();
-                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.thermometer)));
-                        realm.commitTransaction();
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                fillData();
-                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.robotic_arm))) {
-            try {
-                FileInputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                String line = reader.readLine();
-                int i = 0;
-                long block = 0, time = 0;
-                while (line != null) {
-                    if (i > 1) {
-                        String[] data = line.split(",");
-                        try {
-                            time += 1000;
-                            ServoData servoData = new ServoData(time, block, data[2], data[3], data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]));
-                            realm.beginTransaction();
-                            realm.copyToRealm(servoData);
-                            realm.commitTransaction();
-                        } catch (Exception e) {
-                            Log.d("exception", i + " " + e.getMessage());
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (i == 0) {
-                        block = System.currentTimeMillis();
-                        time = block;
-                        realm.beginTransaction();
-                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.robotic_arm)));
-                        realm.commitTransaction();
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                fillData();
-                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.wave_generator))) {
-            try {
-                FileInputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                String line = reader.readLine();
-                int i = 0;
-                long block = 0, time = 0;
-                while (line != null) {
-                    if (i > 1) {
-                        String[] data = line.split(",");
-                        try {
-                            time += 1000;
-                            WaveGeneratorData waveData = new WaveGeneratorData(time, block, data[2], data[3], data[4], data[5], data[6], data[7], Float.valueOf(data[8]), Float.valueOf(data[9]));
-                            realm.beginTransaction();
-                            realm.copyToRealm(waveData);
-                            realm.commitTransaction();
-                        } catch (Exception e) {
-                            Log.d("exception", i + " " + e.getMessage());
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (i == 0) {
-                        block = System.currentTimeMillis();
-                        time = block;
-                        realm.beginTransaction();
-                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.wave_generator)));
-                        realm.commitTransaction();
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                fillData();
-                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (selectedDevice != null && selectedDevice.equals(getResources().getString(R.string.oscilloscope))) {
-            try {
-                FileInputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                String line = reader.readLine();
-                int i = 0;
-                long block = 0, time = 0;
-                while (line != null) {
-                    if (i > 1) {
-                        String[] data = line.split(",");
-                        try {
-                            time += 1000;
-                            OscilloscopeData oscData = new OscilloscopeData(time, block, Integer.valueOf(data[2]), data[3], data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]), Float.valueOf(data[8]));
-                            realm.beginTransaction();
-                            realm.copyToRealm(oscData);
-                            realm.commitTransaction();
-                        } catch (Exception e) {
-                            Log.d("exception", i + " " + e.getMessage());
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (i == 0) {
-                        block = System.currentTimeMillis();
-                        time = block;
-                        realm.beginTransaction();
-                        realm.copyToRealm(new SensorDataBlock(block, getResources().getString(R.string.oscilloscope)));
-                        realm.commitTransaction();
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                fillData();
-                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    }
+
+    private RealmObject getObject(String objectType, String[] data, long time, long block) {
+        RealmObject returnObject = null;
+        switch (objectType) {
+            case "Lux Meter":
+                returnObject = new LuxData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
+                break;
+            case "Barometer":
+                returnObject = new BaroData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
+                break;
+            case "Accelerometer":
+                returnObject = new AccelerometerData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
+                break;
+            case "Gyroscope":
+                returnObject = new GyroData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
+                break;
+            case "Compass":
+                returnObject = new CompassData(time, block, data[2].equals("null") ? "0" : data[2], data[3].equals("null") ? "0" : data[3], data[4].equals("null") ? "0" : data[4], data[5], Double.valueOf(data[6]), Double.valueOf(data[7]));
+                break;
+            case "Thermometer":
+                returnObject = new ThermometerData(time, block, Float.valueOf(data[2]), Double.valueOf(data[5]), Double.valueOf(data[6]));
+                break;
+            case "Robotic Arm":
+                returnObject = new ServoData(time, block, data[2], data[3], data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]));
+                break;
+            case "Wave Generator":
+                returnObject = new WaveGeneratorData(time, block, data[2], data[3], data[4], data[5], data[6], data[7], Float.valueOf(data[8]), Float.valueOf(data[9]));
+                break;
+            case "Oscilloscope":
+                returnObject = new OscilloscopeData(time, block, Integer.valueOf(data[2]), data[3], data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]), Float.valueOf(data[8]));
+                break;
+            default:
+            	returnObject = null;
+            	break;    
         }
+        return returnObject;
     }
 
     private class DeleteAllTask extends AsyncTask<Void, Void, Void> {
