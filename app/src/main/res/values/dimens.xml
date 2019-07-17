@@ -205,6 +205,8 @@
     <dimen name="ctrl_sepration_margin">5dp</dimen>
     <dimen name="back_margin_top">10dp</dimen>
     <dimen name="ctrl_inside_rl_padding">5dp</dimen>
+    <dimen name="wave_gen_ctrl_btns_padding">13dp</dimen>
+    <dimen name="ctrl_inside_tb_padding">20dp</dimen>
     <dimen name="ctrl_title_text_margin">3dp</dimen>
     <dimen name="ctrl_title_text_padding">5dp</dimen>
     <dimen name="view_btn_margin">5dp</dimen>
