@@ -17,11 +17,13 @@ android {
         debug {
             versionNameSuffix "Version: "
             resValue "string", "version", "${versionNameSuffix}${defaultConfig.versionName}"
+            resValue "string", "google_maps_key", google_key
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "version", "${defaultConfig.versionName}"
+            resValue "string", "google_maps_key", google_key
         }
     }
     lintOptions {
@@ -30,6 +32,16 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    flavorDimensions 'default'
+    productFlavors {
+        fdroid {
+            dimension = 'default'
+        }
+        playstore {
+            dimension = 'default'
+        }
     }
 }
 
@@ -73,9 +85,10 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
     // Map libraries
-    implementation "org.osmdroid:osmdroid-android:$rootProject.osmVersion"
-    implementation "org.osmdroid:osmdroid-mapsforge:$rootProject.mapsforgeVersion"
-    implementation "org.osmdroid:osmdroid-geopackage:$rootProject.geoPackageVersion"
+    fdroidImplementation "org.osmdroid:osmdroid-android:$rootProject.osmVersion"
+    fdroidImplementation "org.osmdroid:osmdroid-mapsforge:$rootProject.mapsforgeVersion"
+    fdroidImplementation "org.osmdroid:osmdroid-geopackage:$rootProject.geoPackageVersion"
+    playstoreImplementation "com.google.android.gms:play-services-maps:$rootProject.googleMapsVersion"
 
     implementation "com.android.support:multidex:$rootProject.multiDexVersion"
     implementation "io.realm:android-adapters:$rootProject.realmAdapter"

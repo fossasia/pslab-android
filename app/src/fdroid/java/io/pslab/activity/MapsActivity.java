@@ -7,16 +7,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
+import io.pslab.BuildConfig;
 import io.pslab.R;
-
-/**
- * Created by Padmal on 11/7/18.
- */
 
 public class MapsActivity extends AppCompatActivity {
 
@@ -28,6 +26,7 @@ public class MapsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         map = findViewById(R.id.osmmap);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
