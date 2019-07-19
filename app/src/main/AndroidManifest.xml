@@ -26,6 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity
             android:name=".activity.ThermometerActivity"
             android:screenOrientation="portrait"
@@ -109,7 +110,6 @@
         <activity android:name=".sensors.SensorSHT21" />
         <activity android:name=".sensors.SensorMPU6050" />
         <activity android:name=".sensors.SensorTSL2561" />
-        <activity android:name=".activity.SensorGraphViewActivity" />
     </application>
 
 </manifest>
