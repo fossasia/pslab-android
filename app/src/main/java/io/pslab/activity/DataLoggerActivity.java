@@ -37,6 +37,7 @@ import io.pslab.models.CompassData;
 import io.pslab.models.GyroData;
 import io.pslab.models.LuxData;
 import io.pslab.models.OscilloscopeData;
+import io.pslab.models.PowerSourceData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
@@ -115,6 +116,9 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             case "Oscilloscope":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getResources().getString(R.string.oscilloscope));
+                break;
+            case "Power Source":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getResources().getString(R.string.power_source));
                 break;
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
@@ -272,9 +276,12 @@ public class DataLoggerActivity extends AppCompatActivity {
             case "Oscilloscope":
                 returnObject = new OscilloscopeData(time, block, Integer.valueOf(data[2]), data[3], data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]), Float.valueOf(data[8]));
                 break;
+            case "Power Source":
+                returnObject = new PowerSourceData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Float.valueOf(data[5]), Float.valueOf(data[6]), Float.valueOf(data[7]));
+                break;
             default:
-            	returnObject = null;
-            	break;    
+                returnObject = null;
+                break;
         }
         return returnObject;
     }
