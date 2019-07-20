@@ -109,6 +109,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String ROBOTIC_ARM = "Robotic Arm";
     public static final String WAVE_GENERATOR = "Wave Generator";
     public static final String OSCILLOSCOPE = "Oscilloscope";
+    public static final String POWER_SOURCE = "Power Source";
     public static final String MULTIMETER = "Multimeter";
 
     @BindView(R.id.sensor_toolbar)
