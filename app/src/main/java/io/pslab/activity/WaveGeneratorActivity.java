@@ -848,8 +848,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case DUTY:
                 seekMin = WaveData.DUTY_MIN.getValue();
                 seekMax = WaveData.DUTY_MAX.getValue();
-                numTicks = 11;
-                leastCount = 10;
+                numTicks = 100;
+                leastCount = 1;
                 unit = getString(R.string.unit_percent);
                 break;
 
