@@ -473,46 +473,49 @@ public class LALogicLinesFragment extends Fragment {
 
     private void singleChannelEveryEdge(double[] xData, double[] yData) {
         tempInput = new ArrayList<>();
-        int[] temp = new int[xData.length];
-        int[] yAxis = new int[yData.length];
-
-        for (int i = 0; i < xData.length; i++) {
-            temp[i] = (int) xData[i];
-            yAxis[i] = (int) yData[i];
+        for (int i = 0; i < xData.length; i ++) {
+            tempInput.add(new Entry((float) xData[i], (float)(yData[i] + 2*currentChannel)));
         }
-
-        ArrayList<Integer> xaxis = new ArrayList<>();
-        ArrayList<Integer> yaxis = new ArrayList<>();
-        xaxis.add(temp[0]);
-        yaxis.add(yAxis[0]);
-
-        for (int i = 1; i < xData.length; i++) {
-            if (temp[i] != temp[i - 1]) {
-                xaxis.add(temp[i]);
-                yaxis.add(yAxis[i]);
-            }
-        }
-
-        // Add data to axis in actual graph
-        if (yaxis.size() > 1) {
-            if (yaxis.get(1).equals(yaxis.get(0)))
-                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0) + 2 * currentChannel));
-            else {
-                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0) + 2 * currentChannel));
-                tempInput.add(new Entry(xaxis.get(0), yaxis.get(1) + 2 * currentChannel));
-            }
-            for (int i = 1; i < xaxis.size() - 1; i++) {
-                if (yaxis.get(i).equals(yaxis.get(i + 1)))
-                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i) + 2 * currentChannel));
-                else {
-                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i) + 2 * currentChannel));
-                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i + 1) + 2 * currentChannel));
-                }
-                tempInput.add(new Entry(xaxis.get(xaxis.size() - 1), yaxis.get(xaxis.size() - 1)));
-            }
-        } else {
-            tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
-        }
+//        int[] temp = new int[xData.length];
+//        int[] yAxis = new int[yData.length];
+//
+//        for (int i = 0; i < xData.length; i++) {
+//            temp[i] = (int) xData[i];
+//            yAxis[i] = (int) yData[i];
+//        }
+//
+//        ArrayList<Integer> xaxis = new ArrayList<>();
+//        ArrayList<Integer> yaxis = new ArrayList<>();
+//        xaxis.add(temp[0]);
+//        yaxis.add(yAxis[0]);
+//
+//        for (int i = 1; i < xData.length; i++) {
+//            if (temp[i] != temp[i - 1]) {
+//                xaxis.add(temp[i]);
+//                yaxis.add(yAxis[i]);
+//            }
+//        }
+//
+//        // Add data to axis in actual graph
+//        if (yaxis.size() > 1) {
+//            if (yaxis.get(1).equals(yaxis.get(0)))
+//                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0) + 2 * currentChannel));
+//            else {
+//                tempInput.add(new Entry(xaxis.get(0), yaxis.get(0) + 2 * currentChannel));
+//                tempInput.add(new Entry(xaxis.get(0), yaxis.get(1) + 2 * currentChannel));
+//            }
+//            for (int i = 1; i < xaxis.size() - 1; i++) {
+//                if (yaxis.get(i).equals(yaxis.get(i + 1)))
+//                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i) + 2 * currentChannel));
+//                else {
+//                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i) + 2 * currentChannel));
+//                    tempInput.add(new Entry(xaxis.get(i), yaxis.get(i + 1) + 2 * currentChannel));
+//                }
+//                tempInput.add(new Entry(xaxis.get(xaxis.size() - 1), yaxis.get(xaxis.size() - 1)));
+//            }
+//        } else {
+//            tempInput.add(new Entry(xaxis.get(0), yaxis.get(0)));
+//        }
 
         setLineDataSet();
     }

@@ -2125,10 +2125,9 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.GET_INITIAL_DIGITAL_STATES);
             int initial = mPacketHandler.getInt();
             int A = (mPacketHandler.getInt() - initial) / 2;
-            int B = (mPacketHandler.getInt() - initial) / 2;
-            int C = (mPacketHandler.getInt() - initial) / 2;
-            int D = (mPacketHandler.getInt() - initial) / 2;
-            int s = mPacketHandler.getByte();
+            int B = (mPacketHandler.getInt() - initial) / 2 - this.MAX_SAMPLES / 4;
+            int C = (mPacketHandler.getInt() - initial) / 2 - 2 * this.MAX_SAMPLES / 4;
+            int D = (mPacketHandler.getInt() - initial) / 2 - 3 * this.MAX_SAMPLES / 4;            int s = mPacketHandler.getByte();
             int sError = mPacketHandler.getByte();
             mPacketHandler.getAcknowledgement();
 
