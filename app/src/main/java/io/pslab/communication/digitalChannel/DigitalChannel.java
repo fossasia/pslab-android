@@ -67,18 +67,21 @@ public class DigitalChannel {
         double factor;
         switch (prescalar) {
             case 0:
-                factor = 64;
+                factor = 1.0/64.0;
                 break;
             case 1:
-                factor = 8;
+                factor = 1.0/8.0;
                 break;
             case 2:
+                factor = 1;
+                break;
+            case 3:
                 factor = 4;
                 break;
             default:
                 factor = 1;
         }
-        for (int i = 0; i < this.timestamps.length; i++) this.timestamps[i] /= factor;
+        for (int i = 0; i < this.timestamps.length; i++) this.timestamps[i] *= factor;
         if (dlength > 0)
             this.maxT = this.timestamps[this.timestamps.length - 1];
         else

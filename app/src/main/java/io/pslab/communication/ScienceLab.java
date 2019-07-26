@@ -2225,7 +2225,7 @@ public class ScienceLab {
                     stringBuilder.append(String.valueOf(t));
                     stringBuilder.append(" ");
                 }
-                Log.v("Fetched points : ", stringBuilder.toString());
+                Log.d("Fetched points : ", stringBuilder.toString());
                 mPacketHandler.getAcknowledgement();
                 Arrays.sort(timeStamps);
                 timeStamps[0] = 1;
@@ -2257,27 +2257,31 @@ public class ScienceLab {
             mPacketHandler.sendByte(channel - 1);
             byte[] readData = new byte[bytes * 4];
             mPacketHandler.read(readData, bytes * 4);
-            mPacketHandler.getAcknowledgement();
-            long[] data = new long[bytes];
-            for (int i = 0; i < bytes; i++) {
-                data[i] = ByteBuffer.wrap(Arrays.copyOfRange(readData, 4 * i, 4 * i + 4)).order(ByteOrder.LITTLE_ENDIAN).getLong();
-            }
-            // Trimming array data
-            int markerA = 0;
-            for (int i = 0; i < data.length; i++) {
-                if (data[i] != 0) {
-                    markerA = i;
-                    break;
+            if (readData.length > 0) {
+                mPacketHandler.getAcknowledgement();
+                long[] data = new long[bytes/4];
+                for (int i = 0; i < bytes/4; i++) {
+//                    data[i] = ByteBuffer.wrap(Arrays.copyOfRange(readData, 4 * i, 4 * i + 4)).order(ByteOrder.LITTLE_ENDIAN).getLong();
+                    data[i] = ( (readData[4*i] & 0xff) | ((readData[4*i] & 0xff) << 8) | ((readData[4*i] & 0xff) << 16) | ((readData[4*i] & 0xff) << 24) );
+                    Log.d("data", data[i] + "");
                 }
-            }
-            int markerB = 0;
-            for (int i = data.length - 1; i >= 0; i--) {
-                if (data[i] != 0) {
-                    markerB = i;
-                    break;
+                // Trimming array data
+                int markerA = 0;
+                for (int i = 0; i < data.length; i++) {
+                    if (data[i] != 0) {
+                        markerA = i;
+                        break;
+                    }
                 }
+                int markerB = 0;
+                for (int i = data.length - 1; i >= 0; i--) {
+                    if (data[i] != 0) {
+                        markerB = i;
+                        break;
+                    }
+                }
+                return Arrays.copyOfRange(data, markerA, markerB + 1);
             }
-            return Arrays.copyOfRange(data, markerA, markerB + 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -2322,16 +2326,19 @@ public class ScienceLab {
             }
             i++;
         }
-
-        int[] temp = this.fetchIntDataFromLA(i, dChan.channelNumber + 1);
+        Log.d("no of bytes", i + "");
+        long[] temp = this.fetchLongDataFromLA(i, dChan.channelNumber + 1);
         double[] data = new double[temp.length - 1];
-        if (temp[0] == 1) {
-            for (int j = 1; j < temp.length; j++) {
-                data[j - 1] = temp[j];
-            }
-        } else {
-            Log.e("Error : ", "Can't load data");
-            return false;
+//        if (temp[0] == 1) {
+//            for (int j = 1; j < temp.length; j++) {
+//                data[j - 1] = temp[j];
+//            }
+//        } else {
+//            Log.e("Error : ", "Can't load data");
+//            return false;
+//        }
+        for (int j = 1; j < temp.length; j ++) {
+            data[j - 1] = temp[j];
         }
         dChan.loadData(tempMap, data);
 
