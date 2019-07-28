@@ -18,11 +18,13 @@ else
     rm -rf pslab-dev*
 fi
 
-\cp -r ../app/build/outputs/apk/*/*/**.apk .
-
 # Signing Apps
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
+    ./gradlew bundlePlaystoreRelease
+
+    find ../app/build/outputs -type f \( -name "*.aab" -o -name ".apk" \) -exec cp {} . \;
+
     echo "Push to master branch detected, signing the app..."
     # Retain apk files for testing
     mv app-playstore-debug.apk pslab-master-debug.apk
@@ -30,7 +32,8 @@ if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     # Generate temporary apk for signing
     mv app-playstore-release.apk pslab-master-release.apk
     mv app-fdroid-release.apk pslab-master-release-fdroid.apk
-    
+    mv app.aab pslab-master.aab
+
     git checkout apk
     git add -A
     git commit -am "Travis build pushed [master]"
@@ -38,6 +41,8 @@ if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 fi
 
 if [ "$TRAVIS_BRANCH" == "$DEVELOPMENT_BRANCH" ]; then
+    find ../app/build/outputs -type f -name "*.apk" -exec cp {} . \;
+
     echo "Push to development branch detected, generating apk..."
     # Rename apks with dev prefixes
     mv app-playstore-debug.apk pslab-dev-debug.apk
@@ -55,6 +60,6 @@ fi
 # Publish App to Play Store
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     gem install fastlane
-    fastlane supply --apk pslab-master-release.apk --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME
+    fastlane supply --aab pslab-master.aab --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME
 fi
 
