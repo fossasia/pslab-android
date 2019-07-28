@@ -272,7 +272,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         }
         menu.findItem(R.id.save_graph).setVisible(viewingData || playingData);
         menu.findItem(R.id.play_data).setVisible(viewingData || playingData);
-        menu.findItem(R.id.settings).setTitle(getSensorName() + "Configurations");
+        menu.findItem(R.id.settings).setTitle(getSensorName() + " Configurations");
         menu.findItem(R.id.stop_data).setVisible(viewingData).setEnabled(startedPlay);
     }
 
