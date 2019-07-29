@@ -27,6 +27,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <activity android:name=".activity.CreateConfigActivity"></activity>
         <activity
             android:name=".activity.ThermometerActivity"
             android:screenOrientation="portrait"

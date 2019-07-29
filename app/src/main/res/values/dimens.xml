@@ -328,6 +328,11 @@
     <dimen name="seekarc_padding">30dp</dimen>
     <dimen name="seekarc_edit_text">36sp</dimen>
 
+    <dimen name="create_config_margin1">10dp</dimen>
+    <dimen name="create_config_margin2">20dp</dimen>
+    <dimen name="create_config_margin3">22dp</dimen>
+    <dimen name="create_config_margin4">12dp</dimen>
+
     <dimen name="sensor_sht21_margin">5dp</dimen>
     <dimen name="sht21_height">40dp</dimen>
     <dimen name="card_sht21_height">180dp</dimen>
