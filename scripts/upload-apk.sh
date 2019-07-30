@@ -34,6 +34,10 @@ if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     mv app-fdroid-release.apk pslab-master-release-fdroid.apk
     mv app.aab pslab-master.aab
 
+    git checkout apk
+    git add -A
+    git commit -am "Travis build pushed [master]"
+    git push origin apk --force --quiet> /dev/null
 fi
 
 if [ "$TRAVIS_BRANCH" == "$DEVELOPMENT_BRANCH" ]; then
@@ -47,18 +51,15 @@ if [ "$TRAVIS_BRANCH" == "$DEVELOPMENT_BRANCH" ]; then
     mv app-playstore-release.apk pslab-dev-release.apk
     mv app-fdroid-release.apk pslab-dev-release-fdroid.apk
     # Push generated apk files to apk branch
+    git checkout apk
+    git add -A
+    git commit -am "Travis build pushed [development]"
+    git push origin apk --force --quiet> /dev/null
 fi
-git checkout apk
-git add -A
-git commit -am "Travis build pushed [$TRAVIS_BRANCH]"
-
-git branch -D apk
-git branch -m apk
-
-git push origin apk --force --quiet > /dev/null
 
 # Publish App to Play Store
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     gem install fastlane
     fastlane supply --aab pslab-master.aab --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME
 fi
+
