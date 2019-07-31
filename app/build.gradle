@@ -13,8 +13,8 @@ android {
         applicationId "io.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 17
-        versionName "2.0.16"
+        versionCode 18
+        versionName "2.0.17"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
