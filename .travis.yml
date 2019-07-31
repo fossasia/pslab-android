@@ -4,6 +4,8 @@ sudo: false
 
 jdk: oraclejdk8
 
+dist: trusty
+
 android:
   components:
     - tools
@@ -24,10 +26,12 @@ cache:
 install:
     - echo yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platforms;android-28"
 
+before_script:
+  - bash scripts/prep-key.sh
+
 script:
-  - 'if [ "$TRAVIS_BRANCH" != "apk" ]; then ./gradlew build --stacktrace; fi'
+  - ./gradlew build --stacktrace
 
 after_success:
-  - bash scripts/prep-key.sh
-  - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then bash scripts/upload-apk.sh; fi'
+  - bash scripts/upload-apk.sh
 

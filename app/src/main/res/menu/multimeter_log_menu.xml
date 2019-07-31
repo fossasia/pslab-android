@@ -25,4 +25,19 @@
         android:id="@+id/settings"
         android:title="@string/multimeter_configurations"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/stop_data"
+        android:icon="@drawable/ic_stop_white_24dp"
+        android:orderInCategory="2"
+        android:title="@string/stop"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/play_data"
+        android:icon="@drawable/ic_play_arrow_white_24dp"
+        android:orderInCategory="3"
+        android:title="@string/play"
+        android:visible="false"
+        app:showAsAction="always" />
+
 </menu>

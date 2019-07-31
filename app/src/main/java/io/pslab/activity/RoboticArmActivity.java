@@ -137,7 +137,7 @@ public class RoboticArmActivity extends AppCompatActivity {
         LinearLayout timeLineControlsLayout = findViewById(R.id.servo_timeline_controls);
         servoCSVLogger = new CSVLogger(getResources().getString(R.string.robotic_arm));
 
-        LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
+        LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(14 * screen_width / 60 - 4, screen_height / 2 - 4);
         servoControllerParams.setMargins(2, 5, 2, 0);
         servo1Layout.setLayoutParams(servoControllerParams);
         servo2Layout.setLayoutParams(servoControllerParams);
@@ -610,6 +610,7 @@ public class RoboticArmActivity extends AppCompatActivity {
     private void saveTimeline() {
         long block = System.currentTimeMillis();
         servoCSVLogger.prepareLogFile();
+        servoCSVLogger.writeMetaData(getResources().getString(R.string.robotic_arm));
         String data = "Timestamp,DateTime,Servo1,Servo2,Servo3,Servo4,Latitude,Longitude\n";
         long timestamp;
         recordSensorDataBlockID(new SensorDataBlock(block, getString(R.string.robotic_arm)));

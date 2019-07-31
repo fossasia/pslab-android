@@ -46,10 +46,10 @@ public class AboutUsFragment extends Fragment {
                 .setDescription(getString(R.string.about_us_description))
                 .addGroup("Connect with us")
                 .addEmail("pslab-fossasia@googlegroups.com")
-                .addWebsite("http://pslab.fossasia.org/")
+                .addWebsite("https://pslab.io/")
                 .addGitHub("fossasia?utf8=✓&q=pslab")
-                .addFacebook("pslabapp")
-                .addTwitter("pslabapp")
+                .addFacebook("pslabio")
+                .addTwitter("pslabio")
                 .addYoutube("UCQprMsG-raCIMlBudm20iLQ")
                 .create();
 

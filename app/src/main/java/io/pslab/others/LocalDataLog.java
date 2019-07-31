@@ -2,20 +2,24 @@ package io.pslab.others;
 
 import io.pslab.interfaces.sensorloggers.AccelerometerRecordables;
 import io.pslab.interfaces.sensorloggers.BaroMeterRecordables;
-import io.pslab.interfaces.sensorloggers.GyroscopeRecordables;
 import io.pslab.interfaces.sensorloggers.CompassRecordables;
+import io.pslab.interfaces.sensorloggers.GyroscopeRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
+import io.pslab.interfaces.sensorloggers.MultimeterRecordables;
 import io.pslab.interfaces.sensorloggers.OscilloscopeRecordables;
+import io.pslab.interfaces.sensorloggers.PowerSourceRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
 import io.pslab.interfaces.sensorloggers.ServoRecordables;
 import io.pslab.interfaces.sensorloggers.ThermometerRecordables;
 import io.pslab.interfaces.sensorloggers.WaveGeneratorRecordables;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
-import io.pslab.models.GyroData;
 import io.pslab.models.CompassData;
+import io.pslab.models.GyroData;
 import io.pslab.models.LuxData;
+import io.pslab.models.MultimeterData;
 import io.pslab.models.OscilloscopeData;
+import io.pslab.models.PowerSourceData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
@@ -28,7 +32,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables, OscilloscopeRecordables {
+public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables, OscilloscopeRecordables, PowerSourceRecordables, MultimeterRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -416,6 +420,82 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     @Override
     public RealmResults<OscilloscopeData> getBlockOfOscilloscopeRecords(long block) {
         return realm.where(OscilloscopeData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Power Source Section
+     ***********************************************************************************************/
+
+    @Override
+    public PowerSourceData getPowerData(long timeStamp) {
+        return realm.where(PowerSourceData.class)
+                .equalTo("time", timeStamp)
+                .findFirst();
+    }
+
+    @Override
+    public void clearAllPowerRecords() {
+        realm.beginTransaction();
+        realm.delete(PowerSourceData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfPowerRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<PowerSourceData> data = getBlockOfPowerRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<PowerSourceData> getAllPowerRecords() {
+        return realm.where(PowerSourceData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<PowerSourceData> getBlockOfPowerRecords(long block) {
+        return realm.where(PowerSourceData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Multimeter Section
+     ***********************************************************************************************/
+
+    @Override
+    public MultimeterData getMultimeterData(long timeStamp) {
+        return realm.where(MultimeterData.class)
+                .equalTo("time", timeStamp)
+                .findFirst();
+    }
+
+    @Override
+    public void clearAllMultimeterRecords() {
+        realm.beginTransaction();
+        realm.delete(MultimeterData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfMultimeterRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<MultimeterData> data = getBlockOfMultimeterRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<MultimeterData> getAllMultimeterRecords() {
+        return realm.where(MultimeterData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<MultimeterData> getBlockOfMultimeterRecords(long block) {
+        return realm.where(MultimeterData.class)
                 .equalTo("block", block)
                 .findAll();
     }

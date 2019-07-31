@@ -45,7 +45,7 @@
     <dimen name="power_card_medium_margin">10dp</dimen>
     <dimen name="power_card_header_text">25sp</dimen>
     <dimen name="power_card_tiny_margin">5dp</dimen>
-    <dimen name="power_card_display_text">20sp</dimen>
+    <dimen name="power_card_display_text">25sp</dimen>
     <dimen name="power_card_button_weight">1</dimen>
     <dimen name="power_card_large_margin">13dp</dimen>
 
@@ -205,6 +205,8 @@
     <dimen name="ctrl_sepration_margin">5dp</dimen>
     <dimen name="back_margin_top">10dp</dimen>
     <dimen name="ctrl_inside_rl_padding">5dp</dimen>
+    <dimen name="wave_gen_ctrl_btns_padding">13dp</dimen>
+    <dimen name="ctrl_inside_tb_padding">20dp</dimen>
     <dimen name="ctrl_title_text_margin">3dp</dimen>
     <dimen name="ctrl_title_text_padding">5dp</dimen>
     <dimen name="view_btn_margin">5dp</dimen>
@@ -251,6 +253,9 @@
     <dimen name="power_source_space_top">120dp</dimen>
 
     <dimen name="sensor_params_top">10dp</dimen>
+
+    <dimen name="bluetooth_dialog_margin">10dp</dimen>
+    <dimen name="bluetooth_list_divider_height">2dp</dimen>
 
     <dimen name="list_group_layout_height">52dp</dimen>
     <dimen name="list_group_layout_width">52dp</dimen>

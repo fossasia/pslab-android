@@ -25,11 +25,13 @@ import java.util.Date;
 import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
 import io.pslab.activity.BarometerActivity;
+import io.pslab.activity.CompassActivity;
 import io.pslab.activity.GyroscopeActivity;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.activity.MapsActivity;
-import io.pslab.activity.CompassActivity;
+import io.pslab.activity.MultimeterActivity;
 import io.pslab.activity.OscilloscopeActivity;
+import io.pslab.activity.PowerSourceActivity;
 import io.pslab.activity.RoboticArmActivity;
 import io.pslab.activity.ThermometerActivity;
 import io.pslab.activity.WaveGeneratorActivity;
@@ -38,8 +40,10 @@ import io.pslab.models.BaroData;
 import io.pslab.models.GyroData;
 import io.pslab.models.CompassData;
 import io.pslab.models.LuxData;
+import io.pslab.models.MultimeterData;
 import io.pslab.models.OscilloscopeData;
 import io.pslab.models.PSLabSensor;
+import io.pslab.models.PowerSourceData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
@@ -55,9 +59,9 @@ import io.realm.RealmResults;
 public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorDataBlock, SensorLoggerListAdapter.ViewHolder> {
 
 
-    private Activity context;
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
+    private Activity context;
 
     public SensorLoggerListAdapter(RealmResults<SensorDataBlock> results, Activity context) {
         super(results, true, true);
@@ -112,6 +116,14 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             case PSLabSensor.OSCILLOSCOPE:
                 holder.sensor.setText(R.string.oscilloscope);
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_oscilloscope));
+                break;
+            case PSLabSensor.POWER_SOURCE:
+                holder.sensor.setText(R.string.power_source);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_power_source));
+                break;
+            case PSLabSensor.MULTIMETER:
+                holder.sensor.setText(R.string.multimeter);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_multimeter));
                 break;
             default:
                 break;
@@ -183,6 +195,16 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             oscilloscope.putExtra(KEY_LOG, true);
             oscilloscope.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(oscilloscope);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.power_source))) {
+            Intent powerSource = new Intent(context, PowerSourceActivity.class);
+            powerSource.putExtra(KEY_LOG, true);
+            powerSource.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(powerSource);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.multimeter))) {
+            Intent multimeter = new Intent(context, MultimeterActivity.class);
+            multimeter.putExtra(KEY_LOG, true);
+            multimeter.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(multimeter);
         }
     }
 
@@ -218,6 +240,10 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfWaveRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.OSCILLOSCOPE)) {
                             LocalDataLog.with().clearBlockOfOscilloscopeRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.POWER_SOURCE)) {
+                            LocalDataLog.with().clearBlockOfPowerRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.MULTIMETER)) {
+                            LocalDataLog.with().clearBlockOfMultimeterRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
                         dialog.dismiss();
@@ -391,6 +417,42 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     i.put("xData", d.getDataX());
                     i.put("yData", d.getDataY());
                     i.put("timebase", d.getTimebase());
+                    i.put("lat", d.getLat());
+                    i.put("lon", d.getLon());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.POWER_SOURCE)) {
+            RealmResults<PowerSourceData> data = LocalDataLog.with().getBlockOfPowerRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (PowerSourceData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("PV1", d.getPv1());
+                    i.put("PV2", d.getPv2());
+                    i.put("PV3", d.getPv3());
+                    i.put("PCS", d.getPcs());
+                    i.put("lat", d.getLat());
+                    i.put("lon", d.getLon());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.MULTIMETER)) {
+            RealmResults<MultimeterData> data = LocalDataLog.with().getBlockOfMultimeterRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (MultimeterData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("data", d.getData());
+                    i.put("value", d.getValue());
                     i.put("lat", d.getLat());
                     i.put("lon", d.getLon());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);

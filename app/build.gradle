@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
+apply plugin: "com.github.b3er.local.properties"
+
+def KEYSTORE_FILE = rootProject.file('scripts/key.jks')
+def TRAVIS_BUILD = System.getenv("TRAVIS") == "true" && KEYSTORE_FILE.exists()
+def LOCAL_KEY_PRESENT = project.hasProperty('SIGNING_KEY_FILE') && rootProject.file(SIGNING_KEY_FILE).exists()
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -8,20 +13,43 @@ android {
         applicationId "io.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 17
-        versionName "2.0.16"
+        versionCode 18
+        versionName "2.0.17"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        if (TRAVIS_BUILD) {
+            release {
+                storeFile KEYSTORE_FILE
+                storePassword System.getenv("STORE_PASS")
+                keyAlias System.getenv("ALIAS")
+                keyPassword System.getenv("KEY_PASS")
+            }
+        } else if (LOCAL_KEY_PRESENT) {
+            release {
+                storeFile rootProject.file(SIGNING_KEY_FILE)
+                storePassword STORE_PASS
+                keyAlias ALIAS
+                keyPassword KEY_PASS
+            }
+        }
+    }
+
     buildTypes {
         debug {
             versionNameSuffix "Version: "
             resValue "string", "version", "${versionNameSuffix}${defaultConfig.versionName}"
+            resValue "string", "google_maps_key", google_key
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "version", "${defaultConfig.versionName}"
+            resValue "string", "google_maps_key", google_key
+            if (LOCAL_KEY_PRESENT || TRAVIS_BUILD)
+                signingConfig signingConfigs.release
         }
     }
     lintOptions {
@@ -30,6 +58,16 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    flavorDimensions 'default'
+    productFlavors {
+        fdroid {
+            dimension = 'default'
+        }
+        playstore {
+            dimension = 'default'
+        }
     }
 }
 
@@ -73,9 +111,10 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
     // Map libraries
-    implementation "org.osmdroid:osmdroid-android:$rootProject.osmVersion"
-    implementation "org.osmdroid:osmdroid-mapsforge:$rootProject.mapsforgeVersion"
-    implementation "org.osmdroid:osmdroid-geopackage:$rootProject.geoPackageVersion"
+    fdroidImplementation "org.osmdroid:osmdroid-android:$rootProject.osmVersion"
+    fdroidImplementation "org.osmdroid:osmdroid-mapsforge:$rootProject.mapsforgeVersion"
+    fdroidImplementation "org.osmdroid:osmdroid-geopackage:$rootProject.geoPackageVersion"
+    playstoreImplementation "com.google.android.gms:play-services-maps:$rootProject.googleMapsVersion"
 
     implementation "com.android.support:multidex:$rootProject.multiDexVersion"
     implementation "io.realm:android-adapters:$rootProject.realmAdapter"

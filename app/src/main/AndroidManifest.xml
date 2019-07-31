@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-feature
         android:name="android.hardware.sensor.light"
@@ -15,19 +18,22 @@
     <uses-feature android:name="android.hardware.usb.host" />
 
     <application
-        tools:replace="android:icon"
         android:name=".PSLabApplication"
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:roundIcon="@drawable/app_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".activity.ThermometerActivity"
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <activity
+            android:name=".activity.ThermometerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".activity.RoboticArmActivity"
-            android:screenOrientation="landscape"/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.RoboticArmActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
@@ -104,7 +110,6 @@
         <activity android:name=".sensors.SensorSHT21" />
         <activity android:name=".sensors.SensorMPU6050" />
         <activity android:name=".sensors.SensorTSL2561" />
-        <activity android:name=".activity.SensorGraphViewActivity" />
     </application>
 
 </manifest>

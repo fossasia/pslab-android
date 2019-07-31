@@ -1,9 +1,7 @@
 package io.pslab.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
@@ -28,32 +27,36 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.MultimeterSettingsFragment;
+import io.pslab.models.MultimeterData;
+import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
+import io.pslab.others.LocalDataLog;
 import io.pslab.others.MathUtils;
-
-import android.support.v7.preference.PreferenceManager;
-
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 import it.beppi.knoblibrary.Knob;
-import io.pslab.DataFormatter;
 
 /**
  * Created by Abhinav Raj on 26/5/18.
@@ -64,6 +67,8 @@ public class MultimeterActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "customDialogPreference";
     public static final String NAME = "savingData";
     private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
+    private final String KEY_LOG = "has_log";
+    private final String DATA_BLOCK = "data_block";
     public boolean recordData = false;
     public CSVLogger multimeterLogger = null;
     @BindView(R.id.multimeter_toolbar)
@@ -111,8 +116,17 @@ public class MultimeterActivity extends AppCompatActivity {
     private boolean locationEnabled = true;
     private long recordPeriod;
     private double lat = 0, lon = 0;
-    private String multimeterCSVheader = "Data,Value,Latitude,Longitude\n";
+    private String multimeterCSVheader = "Timestamp,DateTime,Data,Value,Latitude,Longitude";
     private GPSLogger gpsLogger;
+    private Realm realm;
+    private long block;
+    private RealmResults<MultimeterData> recordedMultimeterData;
+    private MenuItem playMenu;
+    private MenuItem stopMenu;
+    private boolean isPlayingBack = false;
+    private boolean playClicked = false;
+    private Timer playBackTimer;
+    private int currentPosition = 0;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -125,8 +139,7 @@ public class MultimeterActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        checkConfig();
-        logTimer();
+
 
         gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
         setUpBottomSheet();
@@ -150,27 +163,37 @@ public class MultimeterActivity extends AppCompatActivity {
 
         String text_quantity = multimeter_data.getString("TextBox", defaultValue);
         String text_unit = multimeter_data.getString("TextBoxUnit", null);
-        knob.setState(knobState);
-        quantity.setText(text_quantity);
-        unit.setText(text_unit);
 
-        knob.setOnStateChanged(new Knob.OnStateChanged() {
-            @Override
-            public void onState(int state) {
-                knobState = state;
-                saveKnobState(knobState);
-            }
-        });
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switchIsChecked = isChecked;
-                SharedPreferences.Editor editor = multimeter_data.edit();
-                editor.putBoolean("SwitchState", switchIsChecked);
-                editor.apply();
-            }
-        });
+        realm = LocalDataLog.with().getRealm();
 
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+            recordedMultimeterData = LocalDataLog.with()
+                    .getBlockOfMultimeterRecords(getIntent().getExtras().getLong(DATA_BLOCK));
+            isPlayingBack = true;
+        } else {
+            knob.setState(knobState);
+            quantity.setText(text_quantity);
+            unit.setText(text_unit);
+            knob.setOnStateChanged(new Knob.OnStateChanged() {
+                @Override
+                public void onState(int state) {
+                    knobState = state;
+                    saveKnobState(knobState);
+                }
+            });
+            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    switchIsChecked = isChecked;
+                    SharedPreferences.Editor editor = multimeter_data.edit();
+                    editor.putBoolean("SwitchState", switchIsChecked);
+                    editor.apply();
+                }
+            });
+            isPlayingBack = false;
+            checkConfig();
+            logTimer();
+        }
     }
 
     @Override
@@ -197,7 +220,7 @@ public class MultimeterActivity extends AppCompatActivity {
                         }
                     }
                     String resistanceUnit;
-                    String recordUnit = "";
+                    String recordUnit = "Ohms";
                     String Resistance = "";
                     if (avgResistance == null) {
                         Resistance = "Infinity";
@@ -218,12 +241,12 @@ public class MultimeterActivity extends AppCompatActivity {
                             recordUnit = "Ohms";
                         } else {
                             Resistance = "Cannot measure!";
-                            resistanceUnit = "";
+                            resistanceUnit = "Ohms";
                         }
                     }
                     saveAndSetData(Resistance, resistanceUnit);
                     if (recordData)
-                        record("Resistance", Resistance + " " + recordUnit);
+                        record(knobMarker[knobState], Resistance + " " + recordUnit);
                 }
                 break;
             case 4: //Capacitor
@@ -234,7 +257,7 @@ public class MultimeterActivity extends AppCompatActivity {
                     String capacitanceUnit;
                     if (capacitance == null) {
                         Capacitance = "Cannot measure!";
-                        capacitanceUnit = "";
+                        capacitanceUnit = "pF";
                     } else {
                         if (capacitance < 1e-9) {
                             Capacitance = capacitanceFormat.format((capacitance / 1e-12));
@@ -255,7 +278,7 @@ public class MultimeterActivity extends AppCompatActivity {
                     }
                     saveAndSetData(Capacitance, capacitanceUnit);
                     if (recordData)
-                        record("Capacitance", Capacitance + " " + capacitanceUnit);
+                        record(knobMarker[knobState], Capacitance + " " + capacitanceUnit);
                 }
                 break;
             case 5:
@@ -316,8 +339,10 @@ public class MultimeterActivity extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
-            saveAndSetData("Cannot measure!", "");
-            record(knobMarker[knobState], "null");
+            saveAndSetData("Cannot measure!", "null");
+            if (recordData) {
+                record(knobMarker[knobState], "null");
+            }
         }
     }
 
@@ -408,12 +433,21 @@ public class MultimeterActivity extends AppCompatActivity {
     private void record(String data, String value) {
         if (locationEnabled && gpsLogger.isGPSEnabled()) {
             Location location = gpsLogger.getDeviceLocation();
-            lat = location.getLatitude();
-            lon = location.getLongitude();
+            if (location != null) {
+                lat = location.getLatitude();
+                lon = location.getLongitude();
+            } else {
+                lat = 0.0;
+                lon = 0.0;
+            }
         } else {
-            lat = lon = 0;
+            lat = 0.0;
+            lon = 0.0;
         }
-        dataRecorded += data + "," + value + "," + lat + "," + lon + "\n";
+        long timestamp = System.currentTimeMillis();
+        dataRecorded = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)) + "," + data + "," + value + "," + lat + "," + lon;
+        multimeterLogger.writeCSVFile(dataRecorded);
+        recordSensorData(new MultimeterData(timestamp, block, data, value, lat, lon));
     }
 
     private void saveKnobState(int state) {
@@ -428,6 +462,16 @@ public class MultimeterActivity extends AppCompatActivity {
         inflater.inflate(R.menu.multimeter_log_menu, menu);
         this.menu = menu;
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        playMenu = menu.findItem(R.id.play_data);
+        stopMenu = menu.findItem(R.id.stop_data);
+        playMenu.setVisible(isPlayingBack);
+        menu.findItem(R.id.record_pause_data).setVisible(!isPlayingBack);
+        menu.findItem(R.id.delete_csv_data).setVisible(!isPlayingBack);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -448,26 +492,14 @@ public class MultimeterActivity extends AppCompatActivity {
                         if (isDataRecorded) {
                             MenuItem item1 = menu.findItem(R.id.record_pause_data);
                             item1.setIcon(R.drawable.ic_record_white);
-                            multimeterLogger.writeCSVFile(dataRecorded);
                             dataRecorded = multimeterCSVheader;
                             // Export Data
                             CustomSnackBar.showSnackBar(coordinatorLayout,
                                     getString(R.string.csv_store_text) + " " + multimeterLogger.getCurrentFilePath()
-                                    , getString(R.string.delete_capital), new View.OnClickListener() {
+                                    , getString(R.string.open), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            new AlertDialog.Builder(MultimeterActivity.this, R.style.AlertDialogStyle)
-                                                    .setTitle(R.string.delete_file)
-                                                    .setMessage(R.string.delete_warning)
-                                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            multimeterLogger.deleteFile();
-                                                        }
-                                                    })
-                                                    .setNegativeButton(R.string.cancel, null)
-                                                    .create()
-                                                    .show();
+                                            startActivity(new Intent(MultimeterActivity.this, DataLoggerActivity.class));
                                         }
                                     }, Snackbar.LENGTH_SHORT);
                             isRecordingStarted = false;
@@ -481,6 +513,10 @@ public class MultimeterActivity extends AppCompatActivity {
                         if (!isRecordingStarted) {
                             multimeterLogger = new CSVLogger(getString(R.string.multimeter));
                             multimeterLogger.prepareLogFile();
+                            multimeterLogger.writeMetaData(getResources().getString(R.string.multimeter));
+                            multimeterLogger.writeCSVFile(multimeterCSVheader);
+                            block = System.currentTimeMillis();
+                            recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.multimeter)));
                             isRecordingStarted = true;
                             recordData = true;
                             CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
@@ -518,10 +554,79 @@ public class MultimeterActivity extends AppCompatActivity {
             case R.id.show_guide:
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 break;
+            case R.id.play_data:
+                if (playClicked) {
+                    playClicked = false;
+                    stopMenu.setVisible(true);
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    if (playBackTimer != null) {
+                        playBackTimer.cancel();
+                    }
+                } else {
+                    playClicked = true;
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    stopMenu.setVisible(true);
+                    if (playBackTimer != null) {
+                        playBackTimer.cancel();
+                    }
+                    playBackTimer = new Timer();
+                    final Handler handler = new Handler();
+                    playBackTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (currentPosition < recordedMultimeterData.size()) {
+                                        setLoggedData(recordedMultimeterData.get(currentPosition));
+                                    } else {
+                                        playBackTimer.cancel();
+                                        currentPosition = 0;
+                                        stopMenu.setVisible(false);
+                                        item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                                    }
+                                }
+                            });
+                        }
+                    }, 0, recordPeriod);
+                }
+                break;
+            case R.id.stop_data:
+                stopMenu.setVisible(false);
+                if (playBackTimer != null) {
+                    playBackTimer.cancel();
+                    playBackTimer = null;
+                }
+                currentPosition = 0;
+                playClicked = false;
+                playMenu.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
             default:
                 break;
         }
         return true;
+    }
+
+    private void setLoggedData(MultimeterData multimeterData) {
+        String data = multimeterData.getData();
+        String value = multimeterData.getValue();
+        knob.setEnabled(false);
+        knob.setState(Arrays.asList(knobMarker).indexOf(data));
+        String quantityString = "";
+        String unitString = "";
+        try {
+            if (value.split(" ")[0].equals("Cannot")) {
+                quantityString = value.split(" ")[0] + " " + value.split(" ")[1];
+                unitString = value.split(" ")[2];
+            } else {
+                quantityString = value.split(" ")[0];
+                unitString = value.split(" ")[1];
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        unit.setText(unitString);
+        quantity.setText(quantityString);
+        currentPosition++;
     }
 
     @Override
@@ -531,10 +636,26 @@ public class MultimeterActivity extends AppCompatActivity {
             recordTimer.cancel();
             recordTimer = null;
         }
+        if (playBackTimer != null) {
+            playBackTimer.cancel();
+            playBackTimer = null;
+        }
         if (isRecordingStarted) {
             if (multimeterLogger != null)
                 multimeterLogger.deleteFile();
             isRecordingStarted = false;
         }
+    }
+
+    public void recordSensorDataBlockID(SensorDataBlock block) {
+        realm.beginTransaction();
+        realm.copyToRealm(block);
+        realm.commitTransaction();
+    }
+
+    public void recordSensorData(RealmObject sensorData) {
+        realm.beginTransaction();
+        realm.copyToRealm((MultimeterData) sensorData);
+        realm.commitTransaction();
     }
 }

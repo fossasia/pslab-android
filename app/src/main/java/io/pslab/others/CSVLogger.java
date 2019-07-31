@@ -101,4 +101,11 @@ public class CSVLogger {
     public void deleteFile() {
         csvFile.delete();
     }
+
+    public void writeMetaData(String instrumentName) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String metaDataTime = sdf.format(System.currentTimeMillis());
+        String metaData = instrumentName + "," + metaDataTime.split(" ")[0] + "," + metaDataTime.split(" ")[1];
+        writeCSVFile(metaData);
+    }
 }

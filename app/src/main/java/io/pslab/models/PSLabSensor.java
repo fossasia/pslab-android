@@ -44,8 +44,8 @@ import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
 import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.BaroMeterDataFragment;
-import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.CompassDataFragment;
+import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.fragment.ThermometerDataFragment;
 import io.pslab.others.CSVLogger;
@@ -109,6 +109,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String ROBOTIC_ARM = "Robotic Arm";
     public static final String WAVE_GENERATOR = "Wave Generator";
     public static final String OSCILLOSCOPE = "Oscilloscope";
+    public static final String POWER_SOURCE = "Power Source";
+    public static final String MULTIMETER = "Multimeter";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -270,7 +272,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         }
         menu.findItem(R.id.save_graph).setVisible(viewingData || playingData);
         menu.findItem(R.id.play_data).setVisible(viewingData || playingData);
-        menu.findItem(R.id.settings).setTitle(getSensorName() + "Configurations");
+        menu.findItem(R.id.settings).setTitle(getSensorName() + " Configurations");
         menu.findItem(R.id.stop_data).setVisible(viewingData).setEnabled(startedPlay);
     }
 
@@ -290,9 +292,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
         play.setIcon(playingData ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp);
         MenuItem stop = menu.findItem(R.id.stop_data);
         stop.setVisible(startedPlay);
-        if (getSensorName().equals(getResources().getString(R.string.compass))) {
-            menu.findItem(R.id.settings).setVisible(false);
-        }
         return super.onPrepareOptionsMenu(menu);
     }
 

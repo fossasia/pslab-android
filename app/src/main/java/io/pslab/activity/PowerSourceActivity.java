@@ -1,9 +1,11 @@
 package io.pslab.activity;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -15,11 +17,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,11 +43,17 @@ import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.items.SquareImageButton;
 import io.pslab.models.PowerSourceData;
+import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
+import io.pslab.others.GPSLogger;
+import io.pslab.others.LocalDataLog;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 public class PowerSourceActivity extends AppCompatActivity {
 
@@ -53,53 +64,46 @@ public class PowerSourceActivity extends AppCompatActivity {
     private final int PV2_CONTROLLER_MAX = 661;
     private final int PV3_CONTROLLER_MAX = 331;
     private final int PCS_CONTROLLER_MAX = 331;
-    
-    private final long LONG_CLICK_DELAY = 100;
-    private CSVLogger compassLogger = null;
-    private Boolean writeHeaderToFile = true;
 
+    private final long LONG_CLICK_DELAY = 100;
+    private final String KEY_LOG = "has_log";
+    private final String DATA_BLOCK = "data_block";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
     @BindView(R.id.power_card_pv1_controller)
     Croller controllerPV1;
     @BindView(R.id.power_card_pv1_display)
-    TextView displayPV1;
+    EditText displayPV1;
     @BindView(R.id.power_card_pv1_up)
     SquareImageButton upPV1;
     @BindView(R.id.power_card_pv1_down)
     SquareImageButton downPV1;
-
     @BindView(R.id.power_source_coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
-
     @BindView(R.id.power_card_pv2_controller)
     Croller controllerPV2;
     @BindView(R.id.power_card_pv2_display)
-    TextView displayPV2;
+    EditText displayPV2;
     @BindView(R.id.power_card_pv2_up)
     SquareImageButton upPV2;
     @BindView(R.id.power_card_pv2_down)
     SquareImageButton downPV2;
-
     @BindView(R.id.power_card_pv3_controller)
     Croller controllerPV3;
     @BindView(R.id.power_card_pv3_display)
-    TextView displayPV3;
+    EditText displayPV3;
     @BindView(R.id.power_card_pv3_up)
     SquareImageButton upPV3;
     @BindView(R.id.power_card_pv3_down)
     SquareImageButton downPV3;
-
     @BindView(R.id.power_card_pcs_controller)
     Croller controllerPCS;
     @BindView(R.id.power_card_pcs_display)
-    TextView displayPCS;
+    EditText displayPCS;
     @BindView(R.id.power_card_pcs_up)
     SquareImageButton upPCS;
     @BindView(R.id.power_card_pcs_down)
     SquareImageButton downPCS;
-
     @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
     @BindView(R.id.shadow)
@@ -116,17 +120,29 @@ public class PowerSourceActivity extends AppCompatActivity {
     ImageView bottomSheetSchematic;
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
-    private PowerSourceData powerSourceData;
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
+    private CSVLogger powerSourceLogger = null;
+    private GPSLogger gpsLogger = null;
+    private Realm realm;
+    private Timer recordTimer = null;
+    private Timer playbackTimer = null;
+    private int currentPosition = 0;
+    private boolean playClicked = false;
+    private long recordPeriod = 1000;
+    private boolean isRecording = false;
+    private Boolean writeHeaderToFile = true;
     private SharedPreferences powerPreferences;
     private boolean isRunning = false;
     private boolean incrementPower = false, decrementPower = false;
-
     private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
-
+    private RealmResults<PowerSourceData> recordedPowerData;
     private Timer powerCounter;
     private Handler powerHandler = new Handler();
+    private long block;
+    private boolean isPlayingBack = false;
+    private MenuItem stopMenu;
+    private MenuItem playMenu;
 
     private float voltagePV1 = 0.00f, voltagePV2 = 0.00f, voltagePV3 = 0.00f, currentPCS = 0.00f;
 
@@ -140,23 +156,138 @@ public class PowerSourceActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        powerSourceData = new PowerSourceData();
         powerPreferences = getSharedPreferences(POWER_PREFERENCES, MODE_PRIVATE);
 
         setUpBottomSheet();
         tvShadow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED)
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 tvShadow.setVisibility(View.GONE);
             }
         });
 
+        gpsLogger = new GPSLogger(this,
+                (LocationManager) getSystemService(Context.LOCATION_SERVICE));
+        realm = LocalDataLog.with().getRealm();
+
         autoSize(displayPV1);
         autoSize(displayPV2);
         autoSize(displayPV3);
         autoSize(displayPCS);
+
+        displayPV1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPV1.setCursorVisible(true);
+            }
+        });
+        displayPV2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPV2.setCursorVisible(true);
+            }
+        });
+        displayPV3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPV3.setCursorVisible(true);
+            }
+        });
+        displayPCS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPCS.setCursorVisible(true);
+            }
+        });
+        displayPV1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String voltageValue = displayPV1.getText().toString();
+                    voltageValue = voltageValue.replace("V", "");
+                    float voltage = Float.parseFloat(voltageValue);
+                    if (voltage < -5.00f) {
+                        voltage = -5.00f;
+                        displayPV1.setText(String.valueOf(voltage) + " V");
+                    }
+                    if (voltage > 5.00f) {
+                        voltage = 5.00f;
+                        displayPV1.setText(String.valueOf(voltage) + " V");
+                    }
+                    controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
+                            5.00f, -5.00f));
+                }
+                return false;
+            }
+        });
+
+        displayPV2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String voltageValue = displayPV2.getText().toString();
+                    voltageValue = voltageValue.replace("V", "");
+                    float voltage = Float.parseFloat(voltageValue);
+                    if (voltage < -3.30f) {
+                        voltage = -3.30f;
+                        displayPV2.setText(String.valueOf(voltage) + " V");
+                    }
+                    if (voltage > 3.30f) {
+                        voltage = 3.30f;
+                        displayPV2.setText(String.valueOf(voltage) + " V");
+                    }
+                    controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
+                            3.30f, -3.30f));
+                }
+                return false;
+            }
+        });
+
+        displayPV3.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String voltageValue = displayPV3.getText().toString();
+                    voltageValue = voltageValue.replace("V", "");
+                    float voltage = Float.parseFloat(voltageValue);
+                    if (voltage < 0.00f) {
+                        voltage = 0.00f;
+                        displayPV3.setText(String.valueOf(voltage) + " V");
+                    }
+                    if (voltage > 3.30f) {
+                        voltage = 3.30f;
+                        displayPV3.setText(String.valueOf(voltage) + " V");
+                    }
+                    controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
+                            3.30f, 0.00f));
+                }
+                return false;
+            }
+        });
+
+        displayPCS.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String currentValue = displayPCS.getText().toString();
+                    currentValue = currentValue.replace("mA", "");
+                    float current = Float.parseFloat(currentValue);
+                    if (current < 0.00f) {
+                        current = 0.00f;
+                        displayPCS.setText(String.valueOf(current) + " mA");
+                    }
+                    if (current > 3.30f) {
+                        current = 3.30f;
+                        displayPCS.setText(String.valueOf(current) + " mA");
+                    }
+                    controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
+                            3.30f, 0.00f));
+                }
+                return false;
+            }
+        });
 
         monitorControllers(controllerPV1, Pin.PV1, PV1_CONTROLLER_MAX);
         monitorControllers(controllerPV2, Pin.PV2, PV2_CONTROLLER_MAX);
@@ -181,10 +312,18 @@ public class PowerSourceActivity extends AppCompatActivity {
                 PV3_CONTROLLER_MAX, 3.30f, 0.00f)), Pin.PV3);
         updateDisplay(displayPCS, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PCS),
                 PCS_CONTROLLER_MAX, 3.30f, 0.00f)), Pin.PCS);
+
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+            recordedPowerData = LocalDataLog.with()
+                    .getBlockOfPowerRecords(getIntent().getExtras().getLong(DATA_BLOCK));
+            isPlayingBack = true;
+            disableButtons();
+        }
     }
 
     /**
      * Autosize the voltage display in textView to utilize empty space
+     *
      * @param view Display text view
      */
     private void autoSize(TextView view) {
@@ -272,6 +411,22 @@ public class PowerSourceActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (isPlayingBack) {
+            menu.findItem(R.id.play_data).setVisible(true);
+            menu.findItem(R.id.stop_data).setVisible(false);
+            menu.findItem(R.id.power_source_record_data).setVisible(false);
+        } else {
+            menu.findItem(R.id.play_data).setVisible(false);
+            menu.findItem(R.id.stop_data).setVisible(false);
+            menu.findItem(R.id.power_source_record_data).setVisible(true);
+        }
+        stopMenu = menu.findItem(R.id.stop_data);
+        playMenu = menu.findItem(R.id.play_data);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_guide:
@@ -279,14 +434,95 @@ public class PowerSourceActivity extends AppCompatActivity {
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.power_source_record_data:
-                if (writeHeaderToFile) {
-                    compassLogger = new CSVLogger(getString(R.string.compass));
-                    compassLogger.prepareLogFile();
-                    compassLogger.writeCSVFile("Timestamp,DateTime,Bx,By,Bz");
-                    recordData();
-                    writeHeaderToFile = !writeHeaderToFile;
+                if (!isRecording) {
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_record_stop_white));
+                    isRecording = true;
+                    if (recordTimer == null) {
+                        recordTimer = new Timer();
+                    } else {
+                        recordTimer.cancel();
+                        recordTimer = new Timer();
+                    }
+                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
+                    final Handler handler = new Handler();
+                    block = System.currentTimeMillis();
+                    recordTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    recordData();
+                                }
+                            });
+                        }
+                    }, 0, recordPeriod);
                 } else {
-                    recordData();
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_record_white));
+                    recordTimer.cancel();
+                    recordTimer = null;
+                    isRecording = false;
+                    writeHeaderToFile = true;
+                    CustomSnackBar.showSnackBar(coordinatorLayout,
+                            getString(R.string.csv_store_text) + " " + powerSourceLogger.getCurrentFilePath()
+                            , getString(R.string.open), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    startActivity(new Intent(PowerSourceActivity.this, DataLoggerActivity.class));
+                                }
+                            }, Snackbar.LENGTH_LONG);
+
+                }
+                break;
+            case R.id.play_data:
+                if (!playClicked) {
+                    playClicked = true;
+                    stopMenu.setVisible(true);
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    if (playbackTimer == null) {
+                        playbackTimer = new Timer();
+                    } else {
+                        playbackTimer.cancel();
+                        playbackTimer = new Timer();
+                    }
+                    final Handler handler = new Handler();
+                    playbackTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (currentPosition < recordedPowerData.size()) {
+                                        setSavedValue(recordedPowerData.get(currentPosition));
+                                    } else {
+                                        playbackTimer.cancel();
+                                        currentPosition = 0;
+                                        playClicked = false;
+                                        stopMenu.setVisible(false);
+                                        item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                                    }
+                                }
+                            });
+                        }
+                    }, 0, recordPeriod);
+
+                } else {
+                    playClicked = false;
+                    stopMenu.setVisible(false);
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    if (playbackTimer != null) {
+                        playbackTimer.cancel();
+                        playbackTimer = null;
+                    }
+                }
+                break;
+            case R.id.stop_data:
+                if (playbackTimer != null) {
+                    playbackTimer.cancel();
+                    currentPosition = 0;
+                    playClicked = false;
+                    playMenu.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    stopMenu.setVisible(false);
                 }
                 break;
             case android.R.id.home:
@@ -314,6 +550,7 @@ public class PowerSourceActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(Croller croller, int progress) {
                 setMappedPower(pin, progress);
+                removeCursor();
             }
 
             @Override
@@ -326,6 +563,12 @@ public class PowerSourceActivity extends AppCompatActivity {
         });
     }
 
+    private void removeCursor() {
+        displayPV1.setCursorVisible(false);
+        displayPV2.setCursorVisible(false);
+        displayPV3.setCursorVisible(false);
+        displayPCS.setCursorVisible(false);
+    }
     /**
      * Click listeners to increment and decrement buttons
      *
@@ -705,28 +948,83 @@ public class PowerSourceActivity extends AppCompatActivity {
     }
 
     private void recordData() {
+        long timestamp;
+        double lat;
+        double lon;
+        if (writeHeaderToFile) {
+            powerSourceLogger = new CSVLogger(getString(R.string.power_source));
+            powerSourceLogger.prepareLogFile();
+            powerSourceLogger.writeMetaData(getString(R.string.power_source));
+            powerSourceLogger.writeCSVFile("Timestamp,DateTime,PV1,PV2,PV2,PCS,Latitude,Longitude");
+            writeHeaderToFile = !writeHeaderToFile;
+            recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.power_source)));
+        }
+        if (gpsLogger.isGPSEnabled()) {
+            Location location = gpsLogger.getDeviceLocation();
+            if (location != null) {
+                lat = location.getLatitude();
+                lon = location.getLongitude();
+            } else {
+                lat = 0.0;
+                lon = 0.0;
+            }
+        } else {
+            lat = 0.0;
+            lon = 0.0;
+        }
+        timestamp = System.currentTimeMillis();
         String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(System.currentTimeMillis()));
-        compassLogger.writeCSVFile(System.currentTimeMillis() + "," + dateTime + "," + powerSourceData.getPv1()
-                + "," + powerSourceData.getPv2() + "," + powerSourceData.getPv3() + "," + powerSourceData.getPcs());
-        CustomSnackBar.showSnackBar(coordinatorLayout,
-                getString(R.string.csv_store_text) + " " + compassLogger.getCurrentFilePath()
-                , getString(R.string.delete_capital), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        new AlertDialog.Builder(PowerSourceActivity.this, R.style.AlertDialogStyle)
-                                .setTitle(R.string.delete_file)
-                                .setMessage(R.string.delete_warning)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        compassLogger.deleteFile();
-                                    }
-                                })
-                                .setNegativeButton(R.string.cancel, null)
-                                .create()
-                                .show();
-                    }
-                }, Snackbar.LENGTH_LONG);
+        powerSourceLogger.writeCSVFile(System.currentTimeMillis() + "," + dateTime + "," + String.valueOf(voltagePV1)
+                + "," + String.valueOf(voltagePV2) + "," + String.valueOf(voltagePV3) + "," + String.valueOf(currentPCS) + "," + lat + "," + lon);
+        recordSensorData(new PowerSourceData(timestamp, block, voltagePV1, voltagePV2, voltagePV3, currentPCS, lat, lon));
+    }
+
+    public void recordSensorDataBlockID(SensorDataBlock block) {
+        realm.beginTransaction();
+        realm.copyToRealm(block);
+        realm.commitTransaction();
+    }
+
+    public void recordSensorData(RealmObject sensorData) {
+        realm.beginTransaction();
+        realm.copyToRealm((PowerSourceData) sensorData);
+        realm.commitTransaction();
+    }
+
+    private void setSavedValue(PowerSourceData data) {
+        voltagePV1 = data.getPv1();
+        voltagePV2 = data.getPv2();
+        voltagePV3 = data.getPv3();
+        currentPCS = data.getPcs();
+        controllerPV1.setProgress(mapPowerToProgress(voltagePV1, PV1_CONTROLLER_MAX, 5.00f, -5.00f));
+        setMappedPower(Pin.PV1, mapPowerToProgress(voltagePV1, PV1_CONTROLLER_MAX, 5.00f, -5.00f));
+        controllerPV2.setProgress(mapPowerToProgress(voltagePV2, PV2_CONTROLLER_MAX, 3.30f, -3.30f));
+        setMappedPower(Pin.PV2, mapPowerToProgress(voltagePV2, PV2_CONTROLLER_MAX, 3.30f, -3.30f));
+        controllerPV3.setProgress(mapPowerToProgress(voltagePV3, PV3_CONTROLLER_MAX, 3.30f, 0.00f));
+        setMappedPower(Pin.PV3, mapPowerToProgress(voltagePV3, PV3_CONTROLLER_MAX, 3.30f, 0.00f));
+        controllerPCS.setProgress(mapPowerToProgress(currentPCS, PCS_CONTROLLER_MAX, 3.30f, 0.00f));
+        setMappedPower(Pin.PCS, mapPowerToProgress(currentPCS, PCS_CONTROLLER_MAX, 3.30f, 0.00f));
+        currentPosition++;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (recordTimer != null) {
+            recordTimer.cancel();
+            recordTimer = null;
+        }
+    }
+
+    private void disableButtons() {
+        upPV1.setEnabled(false);
+        upPV2.setEnabled(false);
+        upPV3.setEnabled(false);
+        upPCS.setEnabled(false);
+        downPV1.setEnabled(false);
+        downPV2.setEnabled(false);
+        downPV3.setEnabled(false);
+        downPCS.setEnabled(false);
     }
 
     private enum Pin {
