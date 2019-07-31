@@ -33,7 +33,6 @@ if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     mv app-playstore-release.apk pslab-master-release.apk
     mv app-fdroid-release.apk pslab-master-release-fdroid.apk
     mv app.aab pslab-master.aab
-
 fi
 
 if [ "$TRAVIS_BRANCH" == "$DEVELOPMENT_BRANCH" ]; then
@@ -46,13 +45,16 @@ if [ "$TRAVIS_BRANCH" == "$DEVELOPMENT_BRANCH" ]; then
 
     mv app-playstore-release.apk pslab-dev-release.apk
     mv app-fdroid-release.apk pslab-dev-release-fdroid.apk
-    # Push generated apk files to apk branch
 fi
-git checkout apk
-git add -A
+
+git checkout --orphan temporary
+# Push generated apk files to apk branch
+git add .
 git commit -am "Travis build pushed [$TRAVIS_BRANCH]"
 
+# Delete current apk branch
 git branch -D apk
+# Rename current branch to apk
 git branch -m apk
 
 git push origin apk --force --quiet > /dev/null
