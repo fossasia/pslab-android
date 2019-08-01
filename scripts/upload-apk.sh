@@ -7,7 +7,7 @@ export DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-development}
 # #setup git
 git config --global user.email "noreply@travis.com"
 git config --global user.name "Travis CI" 
-apt install tree
+sudo apt install tree
 
 echo "Before building; inside app folder"
 ls app
