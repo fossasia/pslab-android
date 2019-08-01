@@ -21,7 +21,7 @@ else
     rm -rf pslab-dev*
 fi
 
-find ../app/build/outputs -type f \( -name "*.aab" -o -name ".apk" \) -exec cp {} . \;
+find ../app/build/outputs -type f \( -name "*.aab" -o -name "*.apk" \) -exec cp {} . \;
     
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 
