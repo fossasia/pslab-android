@@ -30,7 +30,8 @@ before_script:
   - bash scripts/prep-key.sh
 
 script:
-  - ./gradlew build --stacktrace
+  - ./gradlew assemblePlayStoreRelease
+  - ./gradlew assembleFdroidRelease
 
 after_success:
   - bash scripts/upload-apk.sh
