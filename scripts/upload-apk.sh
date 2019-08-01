@@ -60,5 +60,5 @@ git push origin apk -f --quiet > /dev/null
 # Publish App to Play Store
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     gem install fastlane
-    fastlane supply --aab pslab-master-app.aab --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME
+    fastlane supply --aab pslab-master-app.aab --skip_upload_apk true --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME
 fi
