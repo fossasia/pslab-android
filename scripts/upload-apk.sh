@@ -7,17 +7,37 @@ export DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-development}
 # #setup git
 git config --global user.email "noreply@travis.com"
 git config --global user.name "Travis CI" 
+apt install tree
+
+echo "Before building; inside app folder"
+ls app
+tree app
+echo "-------"
+ls app/build/outputs
+echo "-------"
+ls app/build/outputs/apk
+echo "-------"
 
 # Generate Playstore bundle
 ./gradlew bundlePlaystoreRelease
+echo "After building; inside app folder"
+ls app
+tree app
+echo "-------"
+ls app/build/outputs
+echo "-------"
+ls app/build/outputs/apk
+echo "-------"
     
 # #clone the repository
 git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossasia/pslab-android apk > /dev/null
 cd apk
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
+    ls
     rm -rf pslab-master*
-else 
+else
+    ls
     rm -rf pslab-dev*
 fi
 
