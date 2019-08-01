@@ -7,11 +7,9 @@ export DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-development}
 # #setup git
 git config --global user.email "noreply@travis.com"
 git config --global user.name "Travis CI" 
-sudo apt install tree
 
 echo "Before building; inside app folder"
 ls app
-tree app
 echo "-------"
 ls app/build/outputs
 echo "-------"
@@ -22,7 +20,6 @@ echo "-------"
 ./gradlew bundlePlaystoreRelease
 echo "After building; inside app folder"
 ls app
-tree app
 echo "-------"
 ls app/build/outputs
 echo "-------"
