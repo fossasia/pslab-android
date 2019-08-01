@@ -8,27 +8,24 @@ export DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-development}
 git config --global user.email "noreply@travis.com"
 git config --global user.name "Travis CI" 
 
-echo "Before building; inside app folder"
-ls app
-echo "-------"
-ls app/build/outputs
-echo "-------"
-ls app/build/outputs/apk
-echo "-------"
-
 # Generate Playstore bundle
 ./gradlew bundlePlaystoreRelease
-echo "After building; inside app folder"
-ls app
-echo "-------"
+
+echo "------- app/build/outputs"
 ls app/build/outputs
-echo "-------"
+echo "------- app/build/outputs/apk"
 ls app/build/outputs/apk
-echo "-------"
-    
+echo "------- app/build/outputs/apk/fdroid"
+ls app/build/outputs/apk/fdroid
+echo "------- app/build/outputs/apk/playstore"
+ls app/build/outputs/apk/playstore
+
+
 # #clone the repository
 git clone --quiet --branch=apk https://fossasia:$GITHUB_API_KEY@github.com/fossasia/pslab-android apk > /dev/null
 cd apk
+echo "------- apk"
+ls
 
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
     ls
@@ -38,11 +35,12 @@ else
     rm -rf pslab-dev*
 fi
 
-find ../app/build/outputs -type f \( -name "*.aab" -o -name "*.apk" \) -exec cp {} . \;
+find ../app/build/outputs -type f \( -name "*.aab" -o -name "*.apk" \) -exec cp -v {} . \;
     
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
 
     echo "Push to master branch detected, generating apk..."
+    ls
     # Retain apk files for testing
     mv app-playstore-debug.apk pslab-master-playstore-debug.apk
     mv app-fdroid-debug.apk pslab-master-fdroid-debug.apk
@@ -55,6 +53,7 @@ fi
 if [ "$TRAVIS_BRANCH" == "$DEVELOPMENT_BRANCH" ]; then
 
     echo "Push to development branch detected, generating apk..."
+    ls
     # Rename apks with dev prefixes
     mv app-playstore-debug.apk pslab-dev-playstore-debug.apk
     mv app-fdroid-debug.apk pslab-dev-fdroid-debug.apk
