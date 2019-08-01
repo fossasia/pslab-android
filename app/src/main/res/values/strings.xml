@@ -13,6 +13,7 @@
     <string name="nav_report">Feedback &amp; Bugs</string>
     <string name="nav_help_feedback">FAQs</string>
     <string name="nav_share">Share App</string>
+    <string name="nav_config">Generate Config File</string>
     <string name="pslab_pinlayout">Pin Layout</string>
     <string name="pslab_pinlayout_front">Pin Layout Front</string>
     <string name="pslab_pinlayout_back">Pin Layout Back</string>
@@ -67,6 +68,99 @@
         <item>CH3</item>
         <item>CH2</item>
     </string-array>
+
+    <string-array name="multimeter_params">
+        <item>CH1</item>
+        <item>CH2</item>
+        <item>CH3</item>
+        <item>MIC</item>
+        <item>CAP</item>
+        <item>AN8</item>
+        <item>RES</item>
+        <item>C</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
+    </string-array>
+
+    <string-array name="multimeter_params_title">
+        <item>Channel 1</item>
+        <item>Channel 2</item>
+        <item>Channel 3</item>
+        <item>Microphone</item>
+        <item>CAP Voltage</item>
+        <item>Voltage</item>
+        <item>Resistance</item>
+        <item>Capacitance</item>
+        <item>Logic Analyzer Pin 1</item>
+        <item>Logic Analyzer Pin 2</item>
+        <item>Logic Analyzer Pin 3</item>
+        <item>Logic Analyzer Pin 4</item>
+    </string-array>
+
+    <string-array name="oscilloscope_params">
+        <item>CH1</item>
+        <item>CH2</item>
+        <item>CH3</item>
+        <item>MIC</item>
+    </string-array>
+
+    <string-array name="oscilloscope_params_title">
+        <item>Channel 1</item>
+        <item>Channel 2</item>
+        <item>Channel 3</item>
+        <item>Microphone</item>
+    </string-array>
+
+    <string-array name="logic_analyzer_params">
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
+    </string-array>
+
+    <string-array name="logic_analyzer_params_title">
+        <item>Logic Analyzer Pin 1</item>
+        <item>Logic Analyzer Pin 2</item>
+        <item>Logic Analyzer Pin 3</item>
+        <item>Logic Analyzer Pin 4</item>
+    </string-array>
+
+    <string-array name="barometer_params">
+        <item>Pressure</item>
+    </string-array>
+
+    <string-array name="accelerometer_params">
+        <item>Ax</item>
+        <item>Ay</item>
+        <item>Az</item>
+    </string-array>
+
+    <string-array name="accelerometer_params_title">
+        <item>Acceleration X axis</item>
+        <item>Acceleration Y axis</item>
+        <item>Acceleration Z axis</item>
+    </string-array>
+
+    <string-array name="luxmeter_params">
+        <item>Lux</item>
+    </string-array>
+
+    <string-array name="interval_units">
+        <item>sec</item>
+        <item>min</item>
+        <item>hr</item>
+        <item>day</item>
+    </string-array>
+    <string name="select_instrument_title">Instrument:</string>
+    <string name="time_interval_title">Time Interval:</string>
+    <string name="time_interval_hint">Logging Interval</string>
+    <string name="create_config_btn_text">Create Config File</string>
+    <string name="select_params_title">Select Params</string>
+    <string name="no_interval_message">Please select logging interval</string>
+    <string name="file_created_success_message">Config file created successfully</string>
+    <string name="file_created_fail_message">Create config file failed</string>
 
     <string name="id1">ID1</string>
     <string name="id2">ID2</string>

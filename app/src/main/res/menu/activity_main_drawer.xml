@@ -14,6 +14,10 @@
             android:icon="@drawable/ic_wifi_tethering_black_24dp"
             android:title="@string/logged_data" />
         <item
+            android:id="@+id/nav_generate_config"
+            android:icon="@drawable/create_config_icon"
+            android:title="@string/nav_config" />
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/nav_settings" />

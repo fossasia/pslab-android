@@ -293,6 +293,12 @@ public class MainActivity extends AppCompatActivity {
                         shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                         startActivity(shareIntent);
                         return true;
+                    case R.id.nav_generate_config:
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
+                        startActivity(new Intent(MainActivity.this, CreateConfigActivity.class));
+                        break;
                     default:
                         navItemIndex = 0;
                 }
