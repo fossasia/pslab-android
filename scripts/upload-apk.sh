@@ -8,6 +8,11 @@ export DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-development}
 git config --global user.email "noreply@travis.com"
 git config --global user.name "Travis CI" 
 
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/pslab-android" ] || ! [ "$TRAVIS_BRANCH" == "$DEVELOPMENT_BRANCH" -o "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
+    echo "We upload apk only for changes in Development or Master"
+    exit 0
+fi
+
 # Generate Playstore bundle
 ./gradlew bundlePlaystoreRelease
 
@@ -43,18 +48,17 @@ done
 git checkout --orphan temporary
 # Push generated apk files to apk branch
 git add .
-git commit -am "Travis build pushed to [$TRAVIS_BRANCH]"
+git commit -m "Travis build pushed to [$TRAVIS_BRANCH]"
 
 # Delete current apk branch
 git branch -D apk
 # Rename current branch to apk
 git branch -m apk
 
-git push origin apk --force --quiet > /dev/null
+git push origin apk -f --quiet > /dev/null
 
 # Publish App to Play Store
 if [ "$TRAVIS_BRANCH" == "$PUBLISH_BRANCH" ]; then
-    ls
     gem install fastlane
     fastlane supply --aab pslab-master-app.aab --track alpha --json_key ../scripts/fastlane.json --package_name $PACKAGE_NAME
 fi
