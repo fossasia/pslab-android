@@ -1,6 +1,6 @@
 language: android
 
-sudo: true
+sudo: false
 
 jdk: oraclejdk8
 
@@ -30,7 +30,6 @@ before_script:
   - bash scripts/prep-key.sh
 
 script:
-#  - ./gradlew build --stacktrace
   - ./gradlew assemblePlayStoreRelease
   - ./gradlew assembleFdroidRelease
 
