@@ -111,6 +111,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String OSCILLOSCOPE = "Oscilloscope";
     public static final String POWER_SOURCE = "Power Source";
     public static final String MULTIMETER = "Multimeter";
+    public static final String LOGIC_ANALYZER = "Logic Analyzer";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
