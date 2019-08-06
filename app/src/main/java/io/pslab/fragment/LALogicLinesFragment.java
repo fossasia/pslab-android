@@ -1,22 +1,21 @@
 package io.pslab.fragment;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -40,25 +39,32 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
-import io.pslab.DataFormatter;
-import io.pslab.R;
-import io.pslab.activity.LogicalAnalyzerActivity;
-import io.pslab.communication.ScienceLab;
-import io.pslab.communication.digitalChannel.DigitalChannel;
-import io.pslab.others.LogicAnalyzerAxisFormatter;
-import io.pslab.others.MathUtils;
-import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import in.goodiebag.carouselpicker.CarouselPicker;
-
-import static android.content.Context.MODE_PRIVATE;
+import io.pslab.DataFormatter;
+import io.pslab.R;
+import io.pslab.activity.DataLoggerActivity;
+import io.pslab.activity.LogicalAnalyzerActivity;
+import io.pslab.communication.ScienceLab;
+import io.pslab.communication.digitalChannel.DigitalChannel;
+import io.pslab.models.LogicAnalyzerData;
+import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
+import io.pslab.others.GPSLogger;
+import io.pslab.others.LocalDataLog;
+import io.pslab.others.LogicAnalyzerAxisFormatter;
+import io.pslab.others.ScienceLabCommon;
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 /**
  * Created by viveksb007 on 9/6/17.
@@ -102,6 +108,18 @@ public class LALogicLinesFragment extends Fragment {
     private TextView tvTimeUnit, xCoordinateText;
     private ImageView ledImageView;
     private Runnable logicAnalysis;
+    private Realm realm;
+    private ImageView recordButton;
+    private GPSLogger gpsLogger;
+    private CSVLogger csvLogger;
+    private ArrayList<String> recordXAxis;
+    private ArrayList<String> recordYAxis;
+    private ArrayList<Integer> recordChannelMode;
+    private String[] channels = new String[]{"ID1", "ID2", "ID3", "ID4"};
+    private HashMap<String, Integer> channelMap;
+    private String csvHeader = "Timestamp,DateTime,Channel,ChannelMode,xData,yData,lat,lon";
+    private ArrayList<Spinner> channelSelectSpinners;
+    private ArrayList<Spinner> edgeSelectSpinners;
 
     public static LALogicLinesFragment newInstance(Activity activity) {
         LALogicLinesFragment laLogicLinesFragment = new LALogicLinesFragment();
@@ -114,7 +132,14 @@ public class LALogicLinesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(getActivity());
         scienceLab = ScienceLabCommon.scienceLab;
-
+        realm = LocalDataLog.with().getRealm();
+        gpsLogger = new GPSLogger(getContext(), (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE));
+        csvLogger = new CSVLogger(getString(R.string.logical_analyzer));
+        recordXAxis = new ArrayList<>();
+        recordYAxis = new ArrayList<>();
+        recordChannelMode = new ArrayList<>();
+        channelSelectSpinners = new ArrayList<>();
+        edgeSelectSpinners = new ArrayList<>();
         logicAnalysis = new Runnable() {
             @Override
             public void run() {
@@ -149,7 +174,6 @@ public class LALogicLinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
-
         // LED Indicator
         ledImageView = v.findViewById(R.id.imageView_led_la);
 
@@ -157,6 +181,52 @@ public class LALogicLinesFragment extends Fragment {
         tvTimeUnit = v.findViewById(R.id.la_tv_time_unit);
         tvTimeUnit.setText(getString(R.string.time_unit_la));
 
+        //recordButton
+
+        recordButton = v.findViewById(R.id.la_record_button);
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long block = System.currentTimeMillis();
+                double lat;
+                double lon;
+                if (gpsLogger.isGPSEnabled()) {
+                    Location location = gpsLogger.getDeviceLocation();
+                    if (location != null) {
+                        lat = location.getLatitude();
+                        lon = location.getLongitude();
+                    } else {
+                        lat = 0.0;
+                        lon = 0.0;
+                    }
+                } else {
+                    lat = 0.0;
+                    lon = 0.0;
+                }
+                csvLogger.prepareLogFile();
+                csvLogger.writeMetaData(getContext().getResources().getString(R.string.logical_analyzer));
+                csvLogger.writeCSVFile(csvHeader);
+                recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.logical_analyzer)));
+                long timestamp = System.currentTimeMillis();
+                String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+                String locationData = lat + "," + lon;
+                for (int i = 0; i < recordXAxis.size(); i++) {
+                    recordSensorData(new LogicAnalyzerData(timestamp + i, block, channels[i], recordChannelMode.get(i), recordXAxis.get(i), recordYAxis.get(i), lat, lon));
+                    String data = timeData + "," + channels[i] + "," + recordChannelMode.get(i) + "," + recordXAxis.get(i) + "," + recordYAxis.get(i) + "," + locationData;
+                    csvLogger.writeCSVFile(data);
+                }
+                CustomSnackBar.showSnackBar(v,
+                        getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
+                        , getString(R.string.open), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getContext(), DataLoggerActivity.class);
+                                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.logical_analyzer));
+                                startActivity(intent);
+                            }
+                        }, Snackbar.LENGTH_SHORT);
+            }
+        });
         // Carousel View
         carouselPicker = v.findViewById(R.id.carouselPicker);
         llChannel1 = v.findViewById(R.id.ll_chart_channel_1);
@@ -177,7 +247,20 @@ public class LALogicLinesFragment extends Fragment {
         edgeSelectSpinner4 = v.findViewById(R.id.edge_select_spinner_4);
         analyze_button = v.findViewById(R.id.analyze_button);
         channelMode = 1;
+        channelSelectSpinners.add(channelSelectSpinner1);
+        channelSelectSpinners.add(channelSelectSpinner2);
+        channelSelectSpinners.add(channelSelectSpinner3);
+        channelSelectSpinners.add(channelSelectSpinner4);
 
+        edgeSelectSpinners.add(edgeSelectSpinner1);
+        edgeSelectSpinners.add(edgeSelectSpinner2);
+        edgeSelectSpinners.add(edgeSelectSpinner3);
+        edgeSelectSpinners.add(edgeSelectSpinner4);
+        channelMap = new HashMap<>();
+        channelMap.put(channels[0], 0);
+        channelMap.put(channels[1], 1);
+        channelMap.put(channels[2], 2);
+        channelMap.put(channels[3], 3);
         // Axis Indicator
         xCoordinateText = v.findViewById(R.id.x_coordinate_text);
         xCoordinateText.setText("Time:  0.0 mS");
@@ -200,7 +283,65 @@ public class LALogicLinesFragment extends Fragment {
 
         setCarouselPicker();
         setAdapters();
+        LogicalAnalyzerActivity laActivity = (LogicalAnalyzerActivity)getActivity();
+        if (laActivity.isPlayback) {
+            setPlayBackData(laActivity.recordedLAData);
+        }
         return v;
+    }
+
+    private void setPlayBackData(RealmResults<LogicAnalyzerData> data) {
+        analyze_button.setVisibility(View.GONE);
+        recordButton.setVisibility(View.GONE);
+        currentChannel = 0;
+        setViewVisibility(data.size() - 1);
+        channelNames.clear();
+        disableSpinners();
+        carouselPicker.setCurrentItem(data.size() -1);
+        for (int i = 0; i < data.size(); i ++) {
+            LogicAnalyzerData laData = data.get(i);
+            channelNames.add(laData.getChannel());
+            edgeSelectSpinners.get(i).setSelection(laData.getChannelMode() - 1);
+            channelSelectSpinners.get(i).setSelection(channelMap.get(laData.getChannel()));
+            String[] xPoints = laData.getDataX().split(" ");
+            String[] yPoints = laData.getDataY().split(" ");
+            int n = Math.min(xPoints.length, yPoints.length);
+            double[] xaxis = new double[n];
+            double[] yaxis = new double[n];
+            for (int j = 0; j < n; j ++) {
+                xaxis[j] = Double.valueOf(xPoints[j]);
+                yaxis[j] = Double.valueOf(yPoints[j]);
+            }
+            switch (laData.getChannelMode()) {
+                case 1:
+                    singleChannelEveryEdge(xaxis, yaxis);
+                    break;
+                case 4:
+                    singleChannelFourthRisingEdge(xaxis);
+                    break;
+                case 3:
+                    singleChannelRisingEdges(xaxis, yaxis);
+                    break;
+                case 2:
+                    singleChannelFallingEdges(xaxis, yaxis);
+                    break;
+                default:
+                    singleChannelOtherEdges(xaxis, yaxis);
+                    break;
+            }
+            currentChannel ++;
+        }
+        logicLinesChart.setData(new LineData(dataSets));
+        logicLinesChart.invalidate();
+
+        YAxis left = logicLinesChart.getAxisLeft();
+        left.setValueFormatter(new LogicAnalyzerAxisFormatter(channelNames));
+        left.setTextColor(Color.WHITE);
+        left.setGranularity(1f);
+        left.setTextSize(12f);
+        logicLinesChart.getAxisRight().setDrawLabels(false);
+        logicLinesChart.getDescription().setEnabled(false);
+        logicLinesChart.setScaleYEnabled(false);
     }
 
     @Override
@@ -222,66 +363,7 @@ public class LALogicLinesFragment extends Fragment {
             @Override
             public void onPageScrollStateChanged(int state) {
                 if (state == 0) {
-                    switch (carouselPicker.getCurrentItem()) {
-                        case 0:
-                            channelMode = 1;
-                            setAdapters();
-                            llChannel1.setVisibility(View.VISIBLE);
-                            llChannel2.setVisibility(View.GONE);
-                            llChannel3.setVisibility(View.GONE);
-                            llChannel4.setVisibility(View.GONE);
-                            channelSelectSpinner1.setEnabled(true);
-                            break;
-                        case 1:
-                            channelMode = 2;
-                            setAdapterForTwoChannelMode();
-                            llChannel1.setVisibility(View.VISIBLE);
-                            llChannel2.setVisibility(View.VISIBLE);
-                            llChannel3.setVisibility(View.GONE);
-                            llChannel4.setVisibility(View.GONE);
-                            channelSelectSpinner1.setEnabled(true);
-                            channelSelectSpinner2.setEnabled(true);
-                            break;
-                        case 2:
-                            channelMode = 3;
-                            setAdapters();
-                            llChannel1.setVisibility(View.VISIBLE);
-                            llChannel2.setVisibility(View.VISIBLE);
-                            llChannel3.setVisibility(View.VISIBLE);
-                            llChannel4.setVisibility(View.GONE);
-                            channelSelectSpinner1.setSelection(0);
-                            channelSelectSpinner2.setSelection(1);
-                            channelSelectSpinner3.setSelection(2);
-                            channelSelectSpinner1.setEnabled(false);
-                            channelSelectSpinner2.setEnabled(false);
-                            channelSelectSpinner3.setEnabled(false);
-                            break;
-                        case 3:
-                            channelMode = 4;
-                            setAdapters();
-                            llChannel1.setVisibility(View.VISIBLE);
-                            llChannel2.setVisibility(View.VISIBLE);
-                            llChannel3.setVisibility(View.VISIBLE);
-                            llChannel4.setVisibility(View.VISIBLE);
-                            channelSelectSpinner1.setSelection(0);
-                            channelSelectSpinner2.setSelection(1);
-                            channelSelectSpinner3.setSelection(2);
-                            channelSelectSpinner4.setSelection(3);
-                            channelSelectSpinner1.setEnabled(false);
-                            channelSelectSpinner2.setEnabled(false);
-                            channelSelectSpinner3.setEnabled(false);
-                            channelSelectSpinner4.setEnabled(false);
-                            break;
-                        default:
-                            channelMode = 1;
-                            setAdapters();
-                            llChannel1.setVisibility(View.VISIBLE);
-                            llChannel2.setVisibility(View.GONE);
-                            llChannel3.setVisibility(View.GONE);
-                            llChannel4.setVisibility(View.GONE);
-                            channelSelectSpinner1.setEnabled(true);
-                            break;
-                    }
+                    setViewVisibility(carouselPicker.getCurrentItem());
                 }
             }
         });
@@ -464,6 +546,80 @@ public class LALogicLinesFragment extends Fragment {
         });
     }
 
+    private void disableSpinners() {
+        channelSelectSpinner1.setEnabled(false);
+        channelSelectSpinner2.setEnabled(false);
+        channelSelectSpinner3.setEnabled(false);
+        channelSelectSpinner4.setEnabled(false);
+        edgeSelectSpinner1.setEnabled(false);
+        edgeSelectSpinner2.setEnabled(false);
+        edgeSelectSpinner3.setEnabled(false);
+        edgeSelectSpinner4.setEnabled(false);
+        carouselPicker.setEnabled(false);
+    }
+
+    private void setViewVisibility(int mode) {
+        switch (mode) {
+            case 0:
+                channelMode = 1;
+                setAdapters();
+                llChannel1.setVisibility(View.VISIBLE);
+                llChannel2.setVisibility(View.GONE);
+                llChannel3.setVisibility(View.GONE);
+                llChannel4.setVisibility(View.GONE);
+                channelSelectSpinner1.setEnabled(true);
+                break;
+            case 1:
+                channelMode = 2;
+                setAdapterForTwoChannelMode();
+                llChannel1.setVisibility(View.VISIBLE);
+                llChannel2.setVisibility(View.VISIBLE);
+                llChannel3.setVisibility(View.GONE);
+                llChannel4.setVisibility(View.GONE);
+                channelSelectSpinner1.setEnabled(true);
+                channelSelectSpinner2.setEnabled(true);
+                break;
+            case 2:
+                channelMode = 3;
+                setAdapters();
+                llChannel1.setVisibility(View.VISIBLE);
+                llChannel2.setVisibility(View.VISIBLE);
+                llChannel3.setVisibility(View.VISIBLE);
+                llChannel4.setVisibility(View.GONE);
+                channelSelectSpinner1.setSelection(0);
+                channelSelectSpinner2.setSelection(1);
+                channelSelectSpinner3.setSelection(2);
+                channelSelectSpinner1.setEnabled(true);
+                channelSelectSpinner2.setEnabled(true);
+                channelSelectSpinner3.setEnabled(true);
+                break;
+            case 3:
+                channelMode = 4;
+                setAdapters();
+                llChannel1.setVisibility(View.VISIBLE);
+                llChannel2.setVisibility(View.VISIBLE);
+                llChannel3.setVisibility(View.VISIBLE);
+                llChannel4.setVisibility(View.VISIBLE);
+                channelSelectSpinner1.setSelection(0);
+                channelSelectSpinner2.setSelection(1);
+                channelSelectSpinner3.setSelection(2);
+                channelSelectSpinner4.setSelection(3);
+                channelSelectSpinner1.setEnabled(true);
+                channelSelectSpinner2.setEnabled(true);
+                channelSelectSpinner3.setEnabled(true);
+                channelSelectSpinner4.setEnabled(true);
+                break;
+            default:
+                channelMode = 1;
+                setAdapters();
+                llChannel1.setVisibility(View.VISIBLE);
+                llChannel2.setVisibility(View.GONE);
+                llChannel3.setVisibility(View.GONE);
+                llChannel4.setVisibility(View.GONE);
+                channelSelectSpinner1.setEnabled(true);
+                break;
+        }
+    }
     /**
      * Plots every edge of a digital pulse for one channel at a time
      *
@@ -655,8 +811,8 @@ public class LALogicLinesFragment extends Fragment {
         final String[] channels = getResources().getStringArray(R.array.channel_choices);
         final String[] edges = getResources().getStringArray(R.array.edge_choices);
 
-        final List<String> channel_one_list = new ArrayList<>( Arrays.asList(channels));
-        final List<String> channel_two_list = new ArrayList<>( Arrays.asList(channels));
+        final List<String> channel_one_list = new ArrayList<>(Arrays.asList(channels));
+        final List<String> channel_two_list = new ArrayList<>(Arrays.asList(channels));
 
         final ArrayAdapter<String> channel_one_adapter = new ArrayAdapter<>(getContext(), R.layout.modified_spinner_dropdown_list, channel_one_list);
         final ArrayAdapter<String> channel_two_adapter = new ArrayAdapter<>(getContext(), R.layout.modified_spinner_dropdown_list, channel_two_list);
@@ -673,8 +829,8 @@ public class LALogicLinesFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = channelSelectSpinner1.getItemAtPosition(position).toString();
                 channel_two_list.clear();
-                for(int i = 0; i < channels.length; i++) {
-                    if(!channels[i].equals(selection)) {
+                for (int i = 0; i < channels.length; i++) {
+                    if (!channels[i].equals(selection)) {
                         channel_two_list.add(channels[i]);
                     }
                 }
@@ -692,8 +848,8 @@ public class LALogicLinesFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = channelSelectSpinner2.getItemAtPosition(position).toString();
                 channel_one_list.clear();
-                for(int i = 0; i < channels.length; i++) {
-                    if(!channels[i].equals(selection)) {
+                for (int i = 0; i < channels.length; i++) {
+                    if (!channels[i].equals(selection)) {
                         channel_one_list.add(channels[i]);
                     }
                 }
@@ -756,6 +912,7 @@ public class LALogicLinesFragment extends Fragment {
 
     /**
      * Used to delay a thread by some given time in milliseconds
+     *
      * @param delay Time to delay in milliseconds
      */
 
@@ -767,6 +924,32 @@ public class LALogicLinesFragment extends Fragment {
         }
     }
 
+    private void storeAxisValues(double[] xaxis, double[] yaxis, int mode) {
+        StringBuilder stringBuilder1 = new StringBuilder();
+        StringBuilder stringBuilder2 = new StringBuilder();
+        for (int i = 0; i < xaxis.length; i++) {
+            stringBuilder1.append(DataFormatter.formatDouble(xaxis[i], DataFormatter.LOW_PRECISION_FORMAT));
+            stringBuilder2.append(DataFormatter.formatDouble(yaxis[i], DataFormatter.LOW_PRECISION_FORMAT));
+            stringBuilder1.append(" ");
+            stringBuilder2.append(" ");
+        }
+        recordXAxis.add(stringBuilder1.toString());
+        recordYAxis.add(stringBuilder2.toString());
+        recordChannelMode.add(mode);
+    }
+
+    public void recordSensorDataBlockID(SensorDataBlock block) {
+        realm.beginTransaction();
+        realm.copyToRealm(block);
+        realm.commitTransaction();
+    }
+
+    public void recordSensorData(RealmObject sensorData) {
+        realm.beginTransaction();
+        realm.copyToRealm((LogicAnalyzerData) sensorData);
+        realm.commitTransaction();
+    }
+
     private class CaptureOne extends AsyncTask<String, String, Void> {
         private String edgeOption = "";
         private boolean holder;
@@ -774,6 +957,8 @@ public class LALogicLinesFragment extends Fragment {
         @Override
         protected Void doInBackground(String... params) {
             try {
+                channels[0] = params[0];
+
                 int channelNumber = scienceLab.calculateDigitalChannel(params[0]);
                 digitalChannel = scienceLab.getDigitalChannel(channelNumber);
                 edgeOption = params[1];
@@ -830,6 +1015,10 @@ public class LALogicLinesFragment extends Fragment {
                 Log.v("x Axis", stringBuilder1.toString());
                 Log.v("y Axis", stringBuilder2.toString());
 
+                recordXAxis.clear();
+                recordXAxis.add(stringBuilder1.toString());
+                recordYAxis.add(stringBuilder2.toString());
+                recordChannelMode.add(digitalChannel.mode);
                 // Plot the fetched data
                 switch (edgeOption) {
                     case "EVERY EDGE":
@@ -886,6 +1075,9 @@ public class LALogicLinesFragment extends Fragment {
         @Override
         protected final Void doInBackground(ArrayList<String>... arrayLists) {
             try {
+                channels[0] = arrayLists[0].get(0);
+                channels[1] = arrayLists[0].get(1);
+
                 int channelNumber1 = scienceLab.calculateDigitalChannel(arrayLists[0].get(0));
                 int channelNumber2 = scienceLab.calculateDigitalChannel(arrayLists[0].get(1));
 
@@ -951,8 +1143,12 @@ public class LALogicLinesFragment extends Fragment {
                 yaxis.add(digitalChannelArray.get(0).getYAxis());
                 yaxis.add(digitalChannelArray.get(1).getYAxis());
 
+                recordXAxis.clear();
+                recordYAxis.clear();
+                recordChannelMode.clear();
                 // Plot the fetched data
                 for (int i = 0; i < channelMode; i++) {
+                    storeAxisValues(xaxis.get(i), yaxis.get(i), digitalChannelArray.get(i).mode);
                     switch (edgeOption[i]) {
                         case "EVERY EDGE":
                             singleChannelEveryEdge(xaxis.get(i), yaxis.get(i));
@@ -1009,6 +1205,10 @@ public class LALogicLinesFragment extends Fragment {
         @Override
         protected final Void doInBackground(ArrayList<String>... arrayLists) {
             try {
+                channels[0] = arrayLists[0].get(0);
+                channels[1] = arrayLists[0].get(1);
+                channels[2] = arrayLists[0].get(2);
+
                 int channelNumber1 = scienceLab.calculateDigitalChannel(arrayLists[0].get(0));
                 int channelNumber2 = scienceLab.calculateDigitalChannel(arrayLists[0].get(1));
                 int channelNumber3 = scienceLab.calculateDigitalChannel(arrayLists[0].get(2));
@@ -1081,8 +1281,12 @@ public class LALogicLinesFragment extends Fragment {
                 yaxis.add(digitalChannelArray.get(1).getYAxis());
                 yaxis.add(digitalChannelArray.get(2).getYAxis());
 
+                recordXAxis.clear();
+                recordYAxis.clear();
+                recordChannelMode.clear();
                 // Plot the fetched data
                 for (int i = 0; i < channelMode; i++) {
+                    storeAxisValues(xaxis.get(i), yaxis.get(i), digitalChannelArray.get(i).mode);
                     switch (edgeOption[i]) {
                         case "EVERY EDGE":
                             singleChannelEveryEdge(xaxis.get(i), yaxis.get(i));
@@ -1138,6 +1342,11 @@ public class LALogicLinesFragment extends Fragment {
         @Override
         protected Void doInBackground(ArrayList<String>... arrayLists) {
             try {
+                channels[0] = arrayLists[0].get(0);
+                channels[1] = arrayLists[0].get(1);
+                channels[2] = arrayLists[0].get(2);
+                channels[3] = arrayLists[0].get(3);
+
                 int channelNumber1 = scienceLab.calculateDigitalChannel(arrayLists[0].get(0));
                 int channelNumber2 = scienceLab.calculateDigitalChannel(arrayLists[0].get(1));
                 int channelNumber3 = scienceLab.calculateDigitalChannel(arrayLists[0].get(2));
@@ -1221,8 +1430,12 @@ public class LALogicLinesFragment extends Fragment {
                 yaxis.add(digitalChannelArray.get(2).getYAxis());
                 yaxis.add(digitalChannelArray.get(3).getYAxis());
 
+                recordXAxis.clear();
+                recordYAxis.clear();
+                recordChannelMode.clear();
                 // Plot the fetched data
                 for (int i = 0; i < channelMode; i++) {
+                    storeAxisValues(xaxis.get(i), yaxis.get(i), digitalChannelArray.get(i).mode);
                     switch (edgeOption[i]) {
                         case "EVERY EDGE":
                             singleChannelEveryEdge(xaxis.get(i), yaxis.get(i));

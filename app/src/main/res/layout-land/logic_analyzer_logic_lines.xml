@@ -21,14 +21,29 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/la_tv_time_unit"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="@dimen/units_indicator_padding_top"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/la_tv_time_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/units_indicator_padding_top"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:id="@+id/la_record_button"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="end"
+                    android:contentDescription="@string/record_title"
+                    android:src="@drawable/ic_record_white" />
+            </LinearLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -54,9 +69,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|bottom"
-                    android:paddingBottom="@dimen/x_coordinate_padding_bottom"
                     android:paddingEnd="@dimen/x_coordinate_padding_right"
                     android:paddingRight="@dimen/x_coordinate_padding_right"
+                    android:paddingBottom="@dimen/x_coordinate_padding_bottom"
                     android:textColor="@color/white"
                     android:textSize="@dimen/x_coordinate_text_size"
                     tools:text="x: 20" />
@@ -95,8 +110,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/heading"
-                android:layout_marginBottom="@dimen/carousel_margin_bottom"
                 android:layout_marginTop="@dimen/carousel_margin_top"
+                android:layout_marginBottom="@dimen/carousel_margin_bottom"
                 android:background="@drawable/carousel_view_background"
                 app:items_visible="three" />
 
@@ -104,9 +119,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/carouselPicker"
-                android:layout_marginBottom="@dimen/chart_layout_margin_bottom"
                 android:layout_marginEnd="@dimen/recycler_view_margin_end"
-                android:layout_marginRight="@dimen/recycler_view_margin_end">
+                android:layout_marginRight="@dimen/recycler_view_margin_end"
+                android:layout_marginBottom="@dimen/chart_layout_margin_bottom">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -120,12 +135,12 @@
                         android:layout_marginTop="@dimen/ll_margin_top"
                         android:background="@drawable/la_chart_custom_border"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/ll_padding_bottom"
-                        android:paddingEnd="@dimen/ll_padding_right"
-                        android:paddingLeft="@dimen/ll_padding_left"
-                        android:paddingRight="@dimen/ll_padding_right"
                         android:paddingStart="@dimen/ll_padding_left"
-                        android:paddingTop="@dimen/ll_padding_top">
+                        android:paddingLeft="@dimen/ll_padding_left"
+                        android:paddingTop="@dimen/ll_padding_top"
+                        android:paddingEnd="@dimen/ll_padding_right"
+                        android:paddingRight="@dimen/ll_padding_right"
+                        android:paddingBottom="@dimen/ll_padding_bottom">
 
                         <Spinner
                             android:id="@+id/channel_select_spinner_1"
@@ -159,12 +174,12 @@
                         android:layout_marginTop="@dimen/ll_margin_top"
                         android:background="@drawable/la_chart_custom_border"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/ll_padding_bottom"
-                        android:paddingEnd="@dimen/ll_padding_right"
-                        android:paddingLeft="@dimen/ll_padding_left"
-                        android:paddingRight="@dimen/ll_padding_right"
                         android:paddingStart="@dimen/ll_padding_left"
-                        android:paddingTop="@dimen/ll_padding_top">
+                        android:paddingLeft="@dimen/ll_padding_left"
+                        android:paddingTop="@dimen/ll_padding_top"
+                        android:paddingEnd="@dimen/ll_padding_right"
+                        android:paddingRight="@dimen/ll_padding_right"
+                        android:paddingBottom="@dimen/ll_padding_bottom">
 
                         <Spinner
                             android:id="@+id/channel_select_spinner_2"
@@ -198,12 +213,12 @@
                         android:layout_marginTop="@dimen/ll_margin_top"
                         android:background="@drawable/la_chart_custom_border"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/ll_padding_bottom"
-                        android:paddingEnd="@dimen/ll_padding_right"
-                        android:paddingLeft="@dimen/ll_padding_left"
-                        android:paddingRight="@dimen/ll_padding_right"
                         android:paddingStart="@dimen/ll_padding_left"
-                        android:paddingTop="@dimen/ll_padding_top">
+                        android:paddingLeft="@dimen/ll_padding_left"
+                        android:paddingTop="@dimen/ll_padding_top"
+                        android:paddingEnd="@dimen/ll_padding_right"
+                        android:paddingRight="@dimen/ll_padding_right"
+                        android:paddingBottom="@dimen/ll_padding_bottom">
 
                         <Spinner
                             android:id="@+id/channel_select_spinner_3"
@@ -237,12 +252,12 @@
                         android:layout_marginTop="@dimen/ll_margin_top"
                         android:background="@drawable/la_chart_custom_border"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/ll_padding_bottom"
-                        android:paddingEnd="@dimen/ll_padding_right"
-                        android:paddingLeft="@dimen/ll_padding_left"
-                        android:paddingRight="@dimen/ll_padding_right"
                         android:paddingStart="@dimen/ll_padding_left"
-                        android:paddingTop="@dimen/ll_padding_top">
+                        android:paddingLeft="@dimen/ll_padding_left"
+                        android:paddingTop="@dimen/ll_padding_top"
+                        android:paddingEnd="@dimen/ll_padding_right"
+                        android:paddingRight="@dimen/ll_padding_right"
+                        android:paddingBottom="@dimen/ll_padding_bottom">
 
                         <Spinner
                             android:id="@+id/channel_select_spinner_4"
