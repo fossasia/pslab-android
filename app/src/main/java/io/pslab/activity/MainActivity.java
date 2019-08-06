@@ -24,6 +24,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,6 +42,7 @@ import io.pslab.R;
 import io.pslab.communication.CommunicationHandler;
 import io.pslab.fragment.AboutUsFragment;
 import io.pslab.fragment.BluetoothScanFragment;
+import io.pslab.fragment.ESPFragment;
 import io.pslab.fragment.FAQFragment;
 import io.pslab.fragment.HomeFragment;
 import io.pslab.fragment.InstrumentsFragment;
@@ -406,13 +408,43 @@ public class MainActivity extends AppCompatActivity {
                 initialisationDialog.dismiss();
                 Toast.makeText(this, getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
                 AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-                        .setMessage(getResources().getString(R.string.bluetooth_scan_dialog))
+                        .setMessage(getResources().getString(R.string.bluetooth_wifi_scan_dialog))
                         .setPositiveButton(getResources().getString(R.string.bluetooth_scan_text), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                BluetoothScanFragment bluetoothScanFragment = new BluetoothScanFragment();
-                                bluetoothScanFragment.show(getSupportFragmentManager(), "bluetooth");
-                                bluetoothScanFragment.setCancelable(true);
+                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                                LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+                                View dialogView = inflater.inflate(R.layout.bluetooth_wifi_dialog_layout, null);
+                                dialogBuilder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                dialogView.findViewById(R.id.bluetooth_btn).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        BluetoothScanFragment bluetoothScanFragment = new BluetoothScanFragment();
+                                        bluetoothScanFragment.show(getSupportFragmentManager(), "bluetooth");
+                                        bluetoothScanFragment.setCancelable(true);
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                dialogView.findViewById(R.id.wifi_btn).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        ESPFragment espFragment = new ESPFragment();
+                                        espFragment.show(getSupportFragmentManager(), "wifi");
+                                        espFragment.setCancelable(true);
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                dialogBuilder.setView(dialogView)
+                                        .create()
+                                        .show();
                             }
                         })
                         .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -420,8 +452,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
                             }
-                        })
-                        .create();
+                        }).create();
                 dialog.show();
             }
         }

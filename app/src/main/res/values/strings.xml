@@ -18,12 +18,16 @@
     <string name="pslab_pinlayout_front">Pin Layout Front</string>
     <string name="pslab_pinlayout_back">Pin Layout Back</string>
     <string name="bluetooth_connect_menu">Bluetooth Connection</string>
-    <string name="bluetooth_scan_dialog">USB device not found. Do you want to scan for Bluetooth Connection?</string>
-
+    <string name="bluetooth_wifi_scan_dialog">USB device not found. Do you want to scan for Bluetooth or Wifi connection?</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="wifi">WiFi</string>
     <string name="bluetooth_scan_text">Scan</string>
     <string name="bluetooth_stop_text">Stop</string>
     <string name="scanned_devices_list_title">Scanned Devices</string>
     <string name="bluetooth_not_supported">Your phone does not support bluetooth</string>
+    <string name="incorrect_IP_address_message">Please enter valid IP address</string>
+    <string name="enter_IP_hint">Enter IP address of ESP module</string>
+    <string name="esp_connect_text">Connect</string>
 
     <string name="oscilloscope">Oscilloscope</string>
     <string name="multimeter">Multimeter</string>

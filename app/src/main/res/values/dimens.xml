@@ -328,6 +328,9 @@
     <dimen name="seekarc_padding">30dp</dimen>
     <dimen name="seekarc_edit_text">36sp</dimen>
 
+    <dimen name="esp_fragment_padding">30dp</dimen>
+    <dimen name="bluetooth_wifi_icon_dimen">50dp</dimen>
+
     <dimen name="create_config_margin1">10dp</dimen>
     <dimen name="create_config_margin2">20dp</dimen>
     <dimen name="create_config_margin3">22dp</dimen>
