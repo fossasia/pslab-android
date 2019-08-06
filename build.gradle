@@ -57,6 +57,7 @@ ext {
     carouselPickerVersion = 'v1.0'
     speedView = '1.2.0'
     realmAdapter = '2.1.1'
+    okHttpVersion = '4.0.1'
 
     // Map related versions
     osmVersion = '5.1'
