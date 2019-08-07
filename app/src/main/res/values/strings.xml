@@ -849,10 +849,15 @@
 
     <string name="no_baro_sensor">Device does not have a barometer</string>
 
+    <string name="gas_sensor">Gas Sensor</string>
+    <string name="gas_sensor_description">Air quality sensor for detecting a wide range of gases, including NH3, NOx, alcohol, benzene, smoke and CO2</string>
+    <string name="gas_sensor_label">Gas Contents (PPM)</string>
+    <string name="gas_sensor_unit">PPM</string>
+
     <string name="robotic_arm">Robotic Arm</string>
     <string name="robotic_arm_intro">A robotic arm is a type of mechanical arm, usually programmable, with similar functions to a human arm.</string>
     <string name="robotic_arm_desc">Your arm\'s job is to move your hand from place to place. Similarly, the robotic arm\'s job is to move an end effector from place to place. You can outfit robotic arms with all sorts of end effectors, which are suited to a particular application. One common end effector is a simplified version of the hand, which can grasp and carry different objects.</string>
-    <string name="robotic_arm_descriptoin">Controls servos of a robotic arm</string>
+    <string name="robotic_arm_description">Controls servos of a robotic arm</string>
     <string name="servo1_title">Servo 1</string>
     <string name="servo2_title">Servo 2</string>
     <string name="servo3_title">Servo 3</string>
