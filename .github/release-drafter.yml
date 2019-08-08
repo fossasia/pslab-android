@@ -1,19 +1,19 @@
-name-template: PSLab Version $NEXT_MINOR_VERSION :confetti_ball:
-tag-template: v$NEXT_MINOR_VERSION
-categories:
-  - title: :rocket: Features and Enhancements
-    label: 
-      - Feature
-      - Enhancement
-  - title: :bug: Bug Fixes
-    label: Bug
-  - title: :wrench: Maintenance
-    label: 
-      - Chore
-      - Documentation
+name-template: 'PSLab Version $NEXT_PATCH_VERSION'
+tag-template: v$NEXT_PATCH_VERSION
 change-template: '- $TITLE (#$NUMBER) - @$AUTHOR'
-template: |
-  ## Changes
-  $CHANGES
-  
-  This release was made possible thanks to $CONTRIBUTORS
+categories:
+  - title: ':rocket: Features and Enhancements'
+    labels:
+      - 'Feature'
+      - 'Enhancement'
+  - title: ':bug: Bug Fixes'
+    label: 'Bug'
+  - title: ':wrench: Maintenance'
+    labels:
+      - 'Chore'
+      - 'Documentation'
+template: |-
+    ## Changes
+    $CHANGES
+
+    This release was made possible thanks to $CONTRIBUTORS
