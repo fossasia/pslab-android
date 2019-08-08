@@ -9,6 +9,10 @@
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/pslab-fossasia)
 [![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
 
+![Minimum API Level](https://img.shields.io/badge/Min%20API%20Level-23-green)
+![Maximum API Level](https://img.shields.io/badge/Max%20API%20Level-28-orange)
+![GitHub repo size](https://img.shields.io/github/repo-size/fossasia/pslab-android)
+
 This repository holds the Android App for performing experiments with [PSLab](https://pslab.io/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at https://pslab.io
 
 ## Communication
@@ -19,8 +23,8 @@ Please join us on the following channels:
 
 ## Roadmap
  - [x] First we need to get communication between Android App and PSLab working.
- - [ ] Implement Applications and expose PSLab Hardware functionality to the user.
- - [ ] Implement Functionality to Perform Experiment using PSLab Hardware Device.
+ - [x] Implement Applications and expose PSLab Hardware functionality to the user.
+ - [ ] Implement wireless connectivity
 
 ## Screenshots
 
@@ -94,27 +98,26 @@ Please join us on the following channels:
 - [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y)
 
 ## Features
-|   **Feature**    |                    **Description**                    |   **Status**    |
-|------------------|-------------------------------------------------------|-----------------|
-|   Home Screen    | Show status and version of PSLab device               |  		 ✓       |
-|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      | 		 ✓       |
-|  Oscilloscope    | Shows variation of analog signals                     | 		 ✓       |
-|   Multimeter     | Measures voltage, current, resistance and capacitance | 		 ✓       |
-| Logical Analyzer | Captures and displays signals from digital system     | 		 ✓       |
-|  Wave Generator  | Generates arbitrary analog and digital waveforms      | 		 ✓       |
-|   Power Source   | Generates programmable voltage and currents	       | 		 ✓       |
-|    Lux Meter     | Measures the ambient light intensity                  | 		 ✓       |
-|    Baro Meter     | Measures the Pressure                  | 		 ✓       |
-|    AcceleroMeter     | Measures the acceleration of the device                  | 		 ✓       |
-|     Gyro Meter     | Measures the rate of rotation                  | 		 ✓       |
-|    Compass     | Measures the absolute rotation relative to earth magnetic poles                  | 		 ✓       |
-|    Thermometer     | Measures the ambient temperature                  | 		 ✓     |
-|    Robotic Arm Controller     | Allows to control 4 servo motors of the robotic arm independently| 		  ✓     |
+|   **Feature**          | **Description**                                                   | **Status**         |
+|------------------------|-------------------------------------------------------------------|--------------------|
+| Home Screen            | Show status and version of PSLab device                           | :heavy_check_mark: |
+| Instruments            | Exposes PSLab instruments like Oscilloscope, etc                  | :heavy_check_mark: |
+| Oscilloscope           | Shows variation of analog signals                                 | :heavy_check_mark: |
+| Multimeter             | Measures voltage, current, resistance and capacitance             | :heavy_check_mark: |
+| Logical Analyzer       | Captures and displays signals from digital system                 | :heavy_check_mark: |
+| Wave Generator         | Generates arbitrary analog and digital waveforms                  | :heavy_check_mark: |
+| Power Source           | Generates programmable voltage and currents	                     | :heavy_check_mark: |
+| Lux Meter              | Measures the ambient light intensity                              | :heavy_check_mark: |
+| Baro Meter             | Measures the Pressure                                             | :heavy_check_mark: |
+| AcceleroMeter          | Measures the acceleration of the device                           | :heavy_check_mark: |
+| Gyro Meter             | Measures the rate of rotation                                     | :heavy_check_mark: |
+| Compass                | Measures the absolute rotation relative to earth magnetic poles   | :heavy_check_mark: |
+| Thermometer            | Measures the ambient temperature                                  | :heavy_check_mark: |
+| Gas Sensor             | Detects gases, including NH3, NOx, alcohol, benzene, smoke and CO2| :heavy_check_mark: |
+| Robotic Arm Controller | Allows to control 4 servo motors of the robotic arm independently | :heavy_check_mark: |
+
 ## How to set up the Android app in your development environment
 
-  Minimum Android version 6.0 (API Level 23)
-
-  Maximum Android version 8.1 (API Level 27)
 
 ### Application Flavors
 
