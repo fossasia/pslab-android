@@ -99,6 +99,9 @@
         <activity
             android:name=".activity.GyroscopeActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.GasSensorActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.MapsActivity" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />

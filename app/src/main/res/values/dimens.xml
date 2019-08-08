@@ -283,6 +283,11 @@
     <dimen name="baro_guage_font_size">8sp</dimen>
     <dimen name="baro_sensor_label_title_size">16sp</dimen>
 
+    <dimen name="gas_sensor_label_title_size">16sp</dimen>
+
+    <dimen name="gas_sensor_fragment_padding1">5dp</dimen>
+    <dimen name="gas_sensor_fragment_padding2">15dp</dimen>
+
     <dimen name="thermometer_padding">4dp</dimen>
     <dimen name="thermometer_tv_height">30dp</dimen>
     <dimen name="thermometer_tv_value_margin">20dp</dimen>
