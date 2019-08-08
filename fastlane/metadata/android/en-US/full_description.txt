@@ -1,0 +1,10 @@
+PSLab is a tiny pocket science lab that provides an array of equipments for doing science and engineering experiments. It can function like an 
+
+- Oscilloscope
+- Multimeter
+- Logic Analyzer
+- Waveform generator
+- Frequency counter 
+- Programmable voltage and current source
+- Interface for sensors
+- Data logger
