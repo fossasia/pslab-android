@@ -28,6 +28,7 @@
                     android:id="@+id/label_gas_sensor"
                     style="@style/gas_sensor_stat_heading"
                     android:paddingBottom="@dimen/gas_sensor_fragment_padding1"
+                    android:text="@string/gas_sensor"
                     android:textSize="@dimen/gas_sensor_label_title_size" />
 
                 <TextView

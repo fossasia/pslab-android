@@ -5,13 +5,17 @@ import android.support.v4.app.Fragment;
 
 import io.pslab.R;
 import io.pslab.fragment.GasSensorDataFragment;
+import io.pslab.models.GasSensorData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.LocalDataLog;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 public class GasSensorActivity extends PSLabSensor {
 
     private static final String PREF_NAME = "customDialogPreference";
+    public RealmResults<GasSensorData> recordedGasSensorData;
 
     @Override
     public int getMenu() {
@@ -61,17 +65,21 @@ public class GasSensorActivity extends PSLabSensor {
 
     @Override
     public void recordSensorDataBlockID(SensorDataBlock block) {
-
+        realm.beginTransaction();
+        realm.copyToRealm(block);
+        realm.commitTransaction();
     }
 
     @Override
     public void recordSensorData(RealmObject sensorData) {
-
+        realm.beginTransaction();
+        realm.copyToRealm((GasSensorData) sensorData);
+        realm.commitTransaction();
     }
 
     @Override
     public void stopRecordSensorData() {
-
+        LocalDataLog.with().refresh();
     }
 
     @Override
@@ -81,6 +89,12 @@ public class GasSensorActivity extends PSLabSensor {
 
     @Override
     public void getDataFromDataLogger() {
-
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+            viewingData = true;
+            recordedGasSensorData = LocalDataLog.with()
+                    .getBlockOfGasSensorRecords(getIntent().getExtras().getLong(DATA_BLOCK));
+            String title = titleFormat.format(recordedGasSensorData.get(0).getTime());
+            getSupportActionBar().setTitle(title);
+        }
     }
 }
