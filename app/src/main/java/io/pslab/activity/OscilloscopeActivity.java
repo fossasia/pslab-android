@@ -230,10 +230,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         mainLayout = findViewById(R.id.oscilloscope_mail_layout);
 
         channelIndexMap = new HashMap<>();
-        channelIndexMap.put(CHANNEL.CH1.toString(), 0);
-        channelIndexMap.put(CHANNEL.CH2.toString(), 1);
-        channelIndexMap.put(CHANNEL.CH3.toString(), 2);
-        channelIndexMap.put(CHANNEL.MIC.toString(), 3);
+        channelIndexMap.put(CHANNEL.CH1.toString(), 1);
+        channelIndexMap.put(CHANNEL.CH2.toString(), 2);
+        channelIndexMap.put(CHANNEL.CH3.toString(), 3);
+        channelIndexMap.put(CHANNEL.MIC.toString(), 4);
 
         realm = LocalDataLog.with().getRealm();
         gpsLogger = new GPSLogger(this,
@@ -967,15 +967,15 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 ArrayList<String[]> yDataString = new ArrayList<>();
                 String[] xDataString = null;
                 maxAmp = 0;
+                scienceLab.captureTraces(4, samples, timeGap, channel, isTriggerSelected, null);
+                Thread.sleep((long)(samples*timeGap*1e-3));
                 for (int i = 0; i < noOfChannels; i++) {
                     entries.add(new ArrayList<>());
                     channel = channels[i];
                     HashMap<String, double[]> data;
                     if (triggerChannel.equals(channel))
                         scienceLab.configureTrigger(channelIndexMap.get(channel), channel, trigger, null, null);
-                    scienceLab.captureTraces(1, samples, timeGap, channel, isTriggerSelected, null);
-                    data = scienceLab.fetchTrace(1);
-                    Thread.sleep((long) (1000 * 10 * 1e-3));
+                    data = scienceLab.fetchTrace(channelIndexMap.get(channel));
                     xData = data.get("x");
                     yData = data.get("y");
                     int n = Math.min(xData.length, yData.length);
