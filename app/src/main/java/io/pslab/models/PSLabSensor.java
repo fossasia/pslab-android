@@ -45,6 +45,7 @@ import io.pslab.activity.SettingsActivity;
 import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.BaroMeterDataFragment;
 import io.pslab.fragment.CompassDataFragment;
+import io.pslab.fragment.GasSensorDataFragment;
 import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.fragment.ThermometerDataFragment;
@@ -112,6 +113,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String POWER_SOURCE = "Power Source";
     public static final String MULTIMETER = "Multimeter";
     public static final String LOGIC_ANALYZER = "Logic Analyzer";
+    public static final String GAS_SENSOR = "Gas Sensor";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -346,6 +348,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     } else if (getSensorFragment() instanceof ThermometerDataFragment){
                         ((ThermometerDataFragment) getSupportFragmentManager()
                         .findFragmentByTag(getSensorName())).playData();
+                    } else if (getSensorFragment() instanceof GasSensorDataFragment){
+                        ((GasSensorDataFragment) getSupportFragmentManager()
+                                .findFragmentByTag(getSensorName())).playData();
                     }
                 }
                 invalidateOptionsMenu();
@@ -368,6 +373,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                             .findFragmentByTag(getSensorName())).stopData();
                 } else if (getSensorFragment() instanceof ThermometerDataFragment){
                     ((ThermometerDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
+                } else if (getSensorFragment() instanceof GasSensorDataFragment){
+                    ((GasSensorDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
                 }
                 break;
@@ -413,8 +421,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 } else if (getSensorFragment() instanceof ThermometerDataFragment) {
                     ((ThermometerDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
+                } else if (getSensorFragment() instanceof GasSensorDataFragment){
+                    ((GasSensorDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).saveGraph();
                 }
-                    break;
+                break;
             case android.R.id.home:
                 this.finish();
                 break;

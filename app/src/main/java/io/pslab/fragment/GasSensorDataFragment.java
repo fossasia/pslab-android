@@ -1,7 +1,10 @@
 package io.pslab.fragment;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,17 +24,27 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.GasSensorActivity;
 import io.pslab.communication.ScienceLab;
+import io.pslab.models.GasSensorData;
+import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVLogger;
 import io.pslab.others.ScienceLabCommon;
+
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class GasSensorDataFragment extends Fragment {
 
@@ -54,6 +67,12 @@ public class GasSensorDataFragment extends Fragment {
     private long startTime;
     private long timeElapsed;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
+    private long block;
+    private GasSensorData sensorData;
+    private boolean returningFromPause = false;
+    private int turns = 0;
+    private ArrayList<GasSensorData> recordedGasSensorArray;
+
 
     public static GasSensorDataFragment newInstance() {
         return new GasSensorDataFragment();
@@ -64,7 +83,6 @@ public class GasSensorDataFragment extends Fragment {
         super.onCreate(savedInstanceState);
         startTime = System.currentTimeMillis();
         gasSensorActivity = (GasSensorActivity) getActivity();
-        graphTimer = new Timer();
     }
 
     @Nullable
@@ -81,10 +99,24 @@ public class GasSensorDataFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mChart.clear();
-        entries.clear();
-        mChart.invalidate();
-        updateGraphs();
+        if (gasSensorActivity.playingData) {
+            sensorLabel.setText(getResources().getString(R.string.baro_meter));
+            recordedGasSensorArray = new ArrayList<>();
+            resetInstrumentData();
+            playRecordedData();
+        } else if (gasSensorActivity.viewingData) {
+            sensorLabel.setText(getResources().getString(R.string.baro_meter));
+            recordedGasSensorArray = new ArrayList<>();
+            resetInstrumentData();
+            plotAllRecordedData();
+        } else if (!gasSensorActivity.isRecording) {
+            updateGraphs();
+            entries.clear();
+            mChart.clear();
+            mChart.invalidate();
+        } else if (returningFromPause) {
+            updateGraphs();
+        }
     }
 
     @Override
@@ -94,6 +126,170 @@ public class GasSensorDataFragment extends Fragment {
             graphTimer.cancel();
         }
         unbinder.unbind();
+    }
+
+    private void plotAllRecordedData() {
+        recordedGasSensorArray.addAll(gasSensorActivity.recordedGasSensorData);
+        if (recordedGasSensorArray.size() != 0) {
+            for (GasSensorData d : recordedGasSensorArray) {
+                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getPpmValue());
+                entries.add(entry);
+                gasSensorMeter.setWithTremble(false);
+                gasSensorMeter.setSpeedAt(d.getPpmValue());
+                gasValue.setText(String.valueOf(String.format("%.2f", d.getPpmValue())));
+            }
+            y.setAxisMaximum(1024);
+            y.setAxisMinimum(0);
+            y.setLabelCount(10);
+
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
+            dataSet.setDrawCircles(false);
+            dataSet.setDrawValues(false);
+            dataSet.setLineWidth(2);
+            LineData data = new LineData(dataSet);
+
+            mChart.setData(data);
+            mChart.notifyDataSetChanged();
+            mChart.setVisibleXRangeMaximum(80);
+            mChart.moveViewToX(data.getEntryCount());
+            mChart.invalidate();
+        }
+    }
+
+    private void playRecordedData() {
+        recordedGasSensorArray.addAll(gasSensorActivity.recordedGasSensorData);
+        try {
+            if (recordedGasSensorArray.size() > 1) {
+                GasSensorData i = recordedGasSensorArray.get(1);
+                long timeGap = i.getTime() - i.getBlock();
+                processRecordedData(timeGap);
+            } else {
+                processRecordedData(0);
+            }
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(getActivity(),
+                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void processRecordedData(long timeGap) {
+        final Handler handler = new Handler();
+        if (graphTimer != null) {
+            graphTimer.cancel();
+        } else {
+            graphTimer = new Timer();
+        }
+        graphTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (gasSensorActivity.playingData) {
+                            try {
+                                GasSensorData d = recordedGasSensorArray.get(turns);
+                                turns++;
+                                gasValue.setText(String.valueOf(String.format("%.2f", d.getPpmValue())));
+                                y.setAxisMaximum(1024);
+                                y.setAxisMinimum(0);
+                                y.setLabelCount(10);
+                                gasSensorMeter.setWithTremble(false);
+                                gasSensorMeter.setSpeedAt(d.getPpmValue());
+
+                                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getPpmValue());
+                                entries.add(entry);
+
+                                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
+                                dataSet.setDrawCircles(false);
+                                dataSet.setDrawValues(false);
+                                dataSet.setLineWidth(2);
+                                LineData data = new LineData(dataSet);
+
+                                mChart.setData(data);
+                                mChart.notifyDataSetChanged();
+                                mChart.setVisibleXRangeMaximum(80);
+                                mChart.moveViewToX(data.getEntryCount());
+                                mChart.invalidate();
+                            } catch (IndexOutOfBoundsException e) {
+                                graphTimer.cancel();
+                                graphTimer = null;
+                                turns = 0;
+                                gasSensorActivity.playingData = false;
+                                gasSensorActivity.startedPlay = false;
+                                gasSensorActivity.invalidateOptionsMenu();
+                            }
+                        }
+                    }
+                });
+            }
+        }, 0, timeGap);
+    }
+
+    public void playData() {
+        resetInstrumentData();
+        gasSensorActivity.startedPlay = true;
+        try {
+            if (recordedGasSensorArray.size() > 1) {
+                GasSensorData i = recordedGasSensorArray.get(1);
+                long timeGap = i.getTime() - i.getBlock();
+                processRecordedData(timeGap);
+            } else {
+                processRecordedData(0);
+            }
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(getActivity(),
+                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void stopData() {
+        if (graphTimer != null) {
+            graphTimer.cancel();
+            graphTimer = null;
+        }
+        recordedGasSensorArray.clear();
+        entries.clear();
+        plotAllRecordedData();
+        gasSensorActivity.startedPlay = false;
+        gasSensorActivity.playingData = false;
+        turns = 0;
+        gasSensorActivity.invalidateOptionsMenu();
+    }
+
+    public void saveGraph() {
+        gasSensorActivity.csvLogger.prepareLogFile();
+        gasSensorActivity.csvLogger.writeMetaData(getResources().getString(R.string.gas_sensor));
+        gasSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+        for (GasSensorData baroData : gasSensorActivity.recordedGasSensorData) {
+            gasSensorActivity.csvLogger.writeCSVFile(baroData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())) + ","
+                    + baroData.getPpmValue() + ","
+                    + baroData.getLat() + ","
+                    + baroData.getLon());
+        }
+        View view = rootView.findViewById(R.id.gas_sensor_linearlayout);
+        view.setDrawingCacheEnabled(true);
+        Bitmap b = view.getDrawingCache();
+        try {
+            b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + CSV_DIRECTORY + File.separator + gasSensorActivity.getSensorName() +
+                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (graphTimer != null) {
+            returningFromPause = true;
+            graphTimer.cancel();
+            graphTimer = null;
+            if (gasSensorActivity.playingData) {
+                gasSensorActivity.finish();
+            }
+        }
     }
 
     private void updateGraphs() {
@@ -118,6 +314,33 @@ public class GasSensorDataFragment extends Fragment {
         }, 0, 1000);
     }
 
+    private void writeLogToFile(long timestamp, float ppmValue) {
+        if (getActivity() != null && gasSensorActivity.isRecording) {
+            if (gasSensorActivity.writeHeaderToFile) {
+                gasSensorActivity.csvLogger.prepareLogFile();
+                gasSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+                block = timestamp;
+                gasSensorActivity.recordSensorDataBlockID(new SensorDataBlock(timestamp, gasSensorActivity.getSensorName()));
+                gasSensorActivity.writeHeaderToFile = !gasSensorActivity.writeHeaderToFile;
+            }
+            if (gasSensorActivity.addLocation && gasSensorActivity.gpsLogger.isGPSEnabled()) {
+                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+                Location location = gasSensorActivity.gpsLogger.getDeviceLocation();
+                gasSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
+                        + ppmValue + "," + location.getLatitude() + "," + location.getLongitude());
+                sensorData = new GasSensorData(timestamp, block, ppmValue, location.getLatitude(), location.getLongitude());
+            } else {
+                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+                gasSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
+                        + ppmValue + ",0.0,0.0");
+                sensorData = new GasSensorData(timestamp, block, ppmValue, 0.0, 0.0);
+            }
+            gasSensorActivity.recordSensorData(sensorData);
+        } else {
+            gasSensorActivity.writeHeaderToFile = true;
+        }
+    }
+
     private void visualizeData() {
         if (scienceLab.isConnected()) {
             double volt = scienceLab.getVoltage("CH1", 1);
@@ -130,7 +353,7 @@ public class GasSensorDataFragment extends Fragment {
                 previousTimeElapsed = timeElapsed;
                 Entry entry = new Entry((float) timeElapsed, (float) ppmValue);
                 entries.add(entry);
-
+                writeLogToFile(System.currentTimeMillis(), (float) ppmValue);
                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.gas_sensor_unit));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
@@ -183,5 +406,13 @@ public class GasSensorDataFragment extends Fragment {
 
         y2.setDrawGridLines(false);
         y2.setMaxWidth(0);
+    }
+
+    private void resetInstrumentData() {
+        startTime = System.currentTimeMillis();
+        gasValue.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        gasSensorMeter.setSpeedAt(0);
+        gasSensorMeter.setWithTremble(false);
+        entries.clear();
     }
 }
