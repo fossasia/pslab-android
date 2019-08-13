@@ -13,14 +13,16 @@ public class BaroData extends RealmObject {
     private long time;
     private long block;
     private float baro;
+    private float altitude;
     private double lat, lon;
 
     public BaroData() {/**/}
 
-    public BaroData(long time, long block, float baro, double lat, double lon) {
+    public BaroData(long time, long block, float baro, float altitude, double lat, double lon) {
         this.time = time;
         this.block = block;
         this.baro = baro;
+        this.altitude = altitude;
         this.lat = lat;
         this.lon = lon;
     }
@@ -49,6 +51,14 @@ public class BaroData extends RealmObject {
         this.baro = baro;
     }
 
+    public float getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(float altitude) {
+        this.altitude = altitude;
+    }
+
     public double getLat() {
         return lat;
     }
@@ -67,6 +77,6 @@ public class BaroData extends RealmObject {
 
     @Override
     public String toString() {
-        return "Block - " + block + ", Time - " + time + ", Baro - " + baro + ", Lat - " + lat + ", Lon - " + lon;
+        return "Block - " + block + ", Time - " + time + ", Baro - " + baro + ", Altitude - " + altitude + ", Lat - " + lat + ", Lon - " + lon;
     }
 }

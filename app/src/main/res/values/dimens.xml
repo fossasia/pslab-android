@@ -282,6 +282,7 @@
     <dimen name="baro_display_font_size">16sp</dimen>
     <dimen name="baro_guage_font_size">8sp</dimen>
     <dimen name="baro_sensor_label_title_size">16sp</dimen>
+    <dimen name="baro_altitude_box_margin">10dp</dimen>
 
     <dimen name="gas_sensor_label_title_size">16sp</dimen>
 

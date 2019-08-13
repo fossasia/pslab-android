@@ -898,8 +898,10 @@
     <string name="delete_all">Delete All Data</string>
     <string name="delete_all_message">Are You Sure?</string>
     <string name="baro_meter">Barometer</string>
+    <string name="alti_unit">m</string>
     <string name="baro_unit">atm</string>
     <string name="avg_baro">Avg (atm)</string>
+    <string name="avg_alti">Altitude (m)</string>
     <string name="min_baro">Min (atm)</string>
     <string name="max_baro">Max (atm)</string>
     <string name="baro_meter_description">Measures the atmospheric pressure</string>

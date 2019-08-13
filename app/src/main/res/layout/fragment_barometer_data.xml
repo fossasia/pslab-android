@@ -57,6 +57,17 @@
                     android:id="@+id/baro_avg"
                     style="@style/baro_meter_stat_display" />
 
+                <TextView
+                    android:id="@+id/label_alti_stat_avg"
+                    style="@style/baro_meter_stat_heading"
+                    android:text="@string/avg_alti" />
+
+                <TextView
+                    android:id="@+id/alti_value"
+                    style="@style/baro_meter_stat_display"
+                    android:layout_marginBottom="@dimen/baro_altitude_box_margin"
+                    />
+
             </LinearLayout>
 
             <LinearLayout
