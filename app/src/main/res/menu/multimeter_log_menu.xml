@@ -7,15 +7,10 @@
         android:title="@string/record_csv_data"
         app:showAsAction="always" />
     <item
-        android:id="@+id/delete_csv_data"
-        android:icon="@drawable/delete_icon"
-        android:title="@string/delete_csv_data"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/show_guide"
-        android:icon="@drawable/menu_icon_save"
+        android:icon="@drawable/menu_icon_guide"
         android:title="@string/show_guide"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/multimeter_show_data"
         android:icon="@drawable/menu_icon_save"
