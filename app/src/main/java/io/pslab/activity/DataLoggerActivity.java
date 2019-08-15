@@ -261,7 +261,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 returnObject = new LuxData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
                 break;
             case "Barometer":
-                returnObject = new BaroData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
+                returnObject = new BaroData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Double.valueOf(data[4]), Double.valueOf(data[5]));
                 break;
             case "Accelerometer":
                 returnObject = new AccelerometerData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));

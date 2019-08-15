@@ -313,6 +313,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     JSONObject i = new JSONObject();
                     i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
                     i.put("data", d.getBaro());
+                    i.put("altitude", d.getAltitude());
                     i.put("lon", d.getLon());
                     i.put("lat", d.getLat());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);

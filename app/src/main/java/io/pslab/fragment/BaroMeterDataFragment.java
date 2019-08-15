@@ -29,6 +29,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,6 +37,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -87,21 +89,26 @@ public class BaroMeterDataFragment extends Fragment {
     LineChart mChart;
     @BindView(R.id.baro_meter)
     PointerSpeedometer baroMeter;
+    @BindView(R.id.alti_value)
+    TextView altiValue;
 
     private Timer graphTimer;
     private SensorManager sensorManager;
     private Sensor sensor;
     private long startTime, block;
-    private ArrayList<Entry> entries;
+    private ArrayList<Entry> pressureEntries;
+    private ArrayList<Entry> altitudeEntries;
     private ArrayList<BaroData> recordedBaroArray;
     private BaroData sensorData;
     private float currentMin = 2;
     private float currentMax = 0.5f;
     private YAxis y;
+    private YAxis y2;
     private Unbinder unbinder;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private BarometerActivity baroSensor;
     private View rootView;
+    private String csvHeader = "Timestamp,DateTime,Pressure,Altitude,Latitude,Longitude";
 
     public static BaroMeterDataFragment newInstance() {
         return new BaroMeterDataFragment();
@@ -117,7 +124,8 @@ public class BaroMeterDataFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startTime = System.currentTimeMillis();
-        entries = new ArrayList<>();
+        pressureEntries = new ArrayList<>();
+        altitudeEntries = new ArrayList<>();
         baroSensor = (BarometerActivity) getActivity();
     }
 
@@ -149,7 +157,8 @@ public class BaroMeterDataFragment extends Fragment {
             count = 0;
             currentMin = 2;
             currentMax = 0.5f;
-            entries.clear();
+            pressureEntries.clear();
+            altitudeEntries.clear();
             mChart.clear();
             mChart.invalidate();
             initiateBaroSensor(sensorType);
@@ -181,7 +190,9 @@ public class BaroMeterDataFragment extends Fragment {
                     currentMin = d.getBaro();
                 }
                 Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getBaro());
-                entries.add(entry);
+                pressureEntries.add(entry);
+                altitudeEntries.add(new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getAltitude()));
+                altiValue.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, d.getAltitude()));
                 baroMeter.setWithTremble(false);
                 baroMeter.setSpeedAt(d.getBaro());
                 sum += entry.getY();
@@ -189,15 +200,27 @@ public class BaroMeterDataFragment extends Fragment {
             y.setAxisMaximum(currentMax);
             y.setAxisMinimum(currentMin);
             y.setLabelCount(10);
+            y2.setAxisMaximum(getAltitude(currentMax));
+            y2.setAxisMinimum(getAltitude(currentMin));
+            y2.setLabelCount(10);
             statMax.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, currentMax));
             statMin.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, currentMin));
             statMean.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, (sum / recordedBaroArray.size())));
 
-            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
+            List<ILineDataSet> dataSets = new ArrayList<>();
+            LineDataSet dataSet = new LineDataSet(pressureEntries, getString(R.string.baro_unit));
             dataSet.setDrawCircles(false);
             dataSet.setDrawValues(false);
             dataSet.setLineWidth(2);
-            LineData data = new LineData(dataSet);
+            dataSets.add(dataSet);
+
+            dataSet = new LineDataSet(altitudeEntries, getString(R.string.alti_unit));
+            dataSet.setDrawCircles(false);
+            dataSet.setDrawValues(false);
+            dataSet.setLineWidth(2);
+            dataSet.setColor(Color.YELLOW);
+            dataSets.add(dataSet);
+            LineData data = new LineData(dataSets);
 
             mChart.setData(data);
             mChart.notifyDataSetChanged();
@@ -251,20 +274,34 @@ public class BaroMeterDataFragment extends Fragment {
                                 y.setAxisMaximum(currentMax);
                                 y.setAxisMinimum(currentMin);
                                 y.setLabelCount(10);
+                                y2.setAxisMaximum(getAltitude(currentMax));
+                                y2.setAxisMinimum(getAltitude(currentMin));
+                                y2.setLabelCount(10);
                                 baroMeter.setWithTremble(false);
                                 baroMeter.setSpeedAt(d.getBaro());
 
                                 Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getBaro());
-                                entries.add(entry);
+                                pressureEntries.add(entry);
+                                altitudeEntries.add(new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getAltitude()));
                                 count++;
                                 sum += entry.getY();
                                 statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.BAROMETER_DATA_FORMAT));
+                                altiValue.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, d.getAltitude()));
 
-                                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
+                                List<ILineDataSet> dataSets = new ArrayList<>();
+                                LineDataSet dataSet = new LineDataSet(pressureEntries, getString(R.string.baro_unit));
                                 dataSet.setDrawCircles(false);
                                 dataSet.setDrawValues(false);
                                 dataSet.setLineWidth(2);
-                                LineData data = new LineData(dataSet);
+                                dataSets.add(dataSet);
+
+                                dataSet = new LineDataSet(altitudeEntries, getString(R.string.alti_unit));
+                                dataSet.setDrawCircles(false);
+                                dataSet.setDrawValues(false);
+                                dataSet.setLineWidth(2);
+                                dataSet.setColor(Color.YELLOW);
+                                dataSets.add(dataSet);
+                                LineData data = new LineData(dataSets);
 
                                 mChart.setData(data);
                                 mChart.notifyDataSetChanged();
@@ -309,7 +346,7 @@ public class BaroMeterDataFragment extends Fragment {
             graphTimer = null;
         }
         recordedBaroArray.clear();
-        entries.clear();
+        pressureEntries.clear();
         plotAllRecordedData();
         baroSensor.startedPlay = false;
         baroSensor.playingData = false;
@@ -320,11 +357,12 @@ public class BaroMeterDataFragment extends Fragment {
     public void saveGraph() {
         baroSensor.csvLogger.prepareLogFile();
         baroSensor.csvLogger.writeMetaData(getResources().getString(R.string.baro_meter));
-        baroSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+        baroSensor.csvLogger.writeCSVFile(csvHeader);
         for (BaroData baroData : baroSensor.recordedBaroData) {
             baroSensor.csvLogger.writeCSVFile(baroData.getTime() + ","
                     + CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())) + ","
                     + baroData.getBaro() + ","
+                    + baroData.getAltitude() + ","
                     + baroData.getLat() + ","
                     + baroData.getLon());
         }
@@ -343,7 +381,7 @@ public class BaroMeterDataFragment extends Fragment {
         baroMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(baroSensor.BAROMETER_LIMIT, 2));
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();
-        YAxis y2 = mChart.getAxisRight();
+        this.y2 = mChart.getAxisRight();
 
         mChart.setTouchEnabled(true);
         mChart.setHighlightPerDragEnabled(true);
@@ -372,8 +410,11 @@ public class BaroMeterDataFragment extends Fragment {
         y.setDrawGridLines(true);
         y.setLabelCount(10);
 
-        y2.setDrawGridLines(false);
-        y2.setMaxWidth(0);
+        y2.setTextColor(Color.WHITE);
+        y2.setAxisMinimum(getAltitude(currentMin));
+        y2.setAxisMaximum(getAltitude(currentMax));
+        y2.setDrawGridLines(true);
+        y2.setLabelCount(10);
     }
 
     @Override
@@ -416,7 +457,7 @@ public class BaroMeterDataFragment extends Fragment {
         if (getActivity() != null && baroSensor.isRecording) {
             if (baroSensor.writeHeaderToFile) {
                 baroSensor.csvLogger.prepareLogFile();
-                baroSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+                baroSensor.csvLogger.writeCSVFile(csvHeader);
                 block = timestamp;
                 baroSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, baroSensor.getSensorName()));
                 baroSensor.writeHeaderToFile = !baroSensor.writeHeaderToFile;
@@ -425,13 +466,13 @@ public class BaroMeterDataFragment extends Fragment {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = baroSensor.gpsLogger.getDeviceLocation();
                 baroSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + "," + location.getLatitude() + "," + location.getLongitude());
-                sensorData = new BaroData(timestamp, block, baroValue, location.getLatitude(), location.getLongitude());
+                        + sensorReading + "," + getAltitude(sensorReading) + "," + location.getLatitude() + "," + location.getLongitude());
+                sensorData = new BaroData(timestamp, block, baroValue, getAltitude(baroValue), location.getLatitude(), location.getLongitude());
             } else {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 baroSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + ",0.0,0.0");
-                sensorData = new BaroData(timestamp, block, baroValue, 0.0, 0.0);
+                        + sensorReading + "," + getAltitude(sensorReading) + ",0.0,0.0");
+                sensorData = new BaroData(timestamp, block, baroValue, getAltitude(baroValue), 0.0, 0.0);
             }
             baroSensor.recordSensorData(sensorData);
         } else {
@@ -451,6 +492,9 @@ public class BaroMeterDataFragment extends Fragment {
         y.setAxisMaximum(currentMax);
         y.setAxisMinimum(currentMin);
         y.setLabelCount(10);
+        y2.setAxisMaximum(getAltitude(currentMax));
+        y2.setAxisMinimum(getAltitude(currentMin));
+        y2.setLabelCount(10);
         if (baroValue >= 0) {
             baroMeter.setWithTremble(false);
             baroMeter.setSpeedAt(baroValue);
@@ -465,16 +509,28 @@ public class BaroMeterDataFragment extends Fragment {
                 Entry entry = new Entry((float) timeElapsed, baroValue);
                 Long currentTime = System.currentTimeMillis();
                 writeLogToFile(currentTime, baroValue);
-                entries.add(entry);
+                pressureEntries.add(entry);
+                altitudeEntries.add(new Entry((float) timeElapsed, getAltitude(baroValue)));
 
                 count++;
                 sum += entry.getY();
                 statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.BAROMETER_DATA_FORMAT));
-                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
+                altiValue.setText(String.format(Locale.getDefault(), PSLabSensor.BAROMETER_DATA_FORMAT, getAltitude(baroValue)));
+
+                List<ILineDataSet> dataSets = new ArrayList<>();
+                LineDataSet dataSet = new LineDataSet(pressureEntries, getString(R.string.baro_unit));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
                 dataSet.setLineWidth(2);
-                LineData data = new LineData(dataSet);
+                dataSets.add(dataSet);
+
+                dataSet = new LineDataSet(altitudeEntries, getString(R.string.alti_unit));
+                dataSet.setDrawCircles(false);
+                dataSet.setDrawValues(false);
+                dataSet.setLineWidth(2);
+                dataSet.setColor(Color.YELLOW);
+                dataSets.add(dataSet);
+                LineData data = new LineData(dataSets);
 
                 mChart.setData(data);
                 mChart.notifyDataSetChanged();
@@ -512,9 +568,11 @@ public class BaroMeterDataFragment extends Fragment {
         statMax.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
         statMin.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
         statMean.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        altiValue.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
         baroMeter.setSpeedAt(0);
         baroMeter.setWithTremble(false);
-        entries.clear();
+        pressureEntries.clear();
+        altitudeEntries.clear();
     }
 
     private void initiateBaroSensor(int type) {
@@ -562,6 +620,14 @@ public class BaroMeterDataFragment extends Fragment {
                 break;
             default:
                 break;
+        }
+    }
+
+    private float getAltitude(float pressure) {
+        if (pressure <= 0.0) {
+            return  0;
+        } else {
+            return (float) (44330 * (1 - Math.pow(pressure, 1.0 / 5.255)));
         }
     }
 }
