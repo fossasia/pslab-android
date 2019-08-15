@@ -18,12 +18,16 @@
     <string name="pslab_pinlayout_front">Pin Layout Front</string>
     <string name="pslab_pinlayout_back">Pin Layout Back</string>
     <string name="bluetooth_connect_menu">Bluetooth Connection</string>
-    <string name="bluetooth_scan_dialog">USB device not found. Do you want to scan for Bluetooth Connection?</string>
-
+    <string name="bluetooth_wifi_scan_dialog">USB device not found. Do you want to scan for Bluetooth or Wifi connection?</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="wifi">WiFi</string>
     <string name="bluetooth_scan_text">Scan</string>
     <string name="bluetooth_stop_text">Stop</string>
     <string name="scanned_devices_list_title">Scanned Devices</string>
     <string name="bluetooth_not_supported">Your phone does not support bluetooth</string>
+    <string name="incorrect_IP_address_message">Please enter valid IP address</string>
+    <string name="enter_IP_hint">Enter IP address of ESP module</string>
+    <string name="esp_connect_text">Connect</string>
 
     <string name="oscilloscope">Oscilloscope</string>
     <string name="multimeter">Multimeter</string>
@@ -845,10 +849,15 @@
 
     <string name="no_baro_sensor">Device does not have a barometer</string>
 
+    <string name="gas_sensor">Gas Sensor</string>
+    <string name="gas_sensor_description">Air quality sensor for detecting a wide range of gases, including NH3, NOx, alcohol, benzene, smoke and CO2</string>
+    <string name="gas_sensor_label">Gas Contents (PPM)</string>
+    <string name="gas_sensor_unit">PPM</string>
+
     <string name="robotic_arm">Robotic Arm</string>
     <string name="robotic_arm_intro">A robotic arm is a type of mechanical arm, usually programmable, with similar functions to a human arm.</string>
     <string name="robotic_arm_desc">Your arm\'s job is to move your hand from place to place. Similarly, the robotic arm\'s job is to move an end effector from place to place. You can outfit robotic arms with all sorts of end effectors, which are suited to a particular application. One common end effector is a simplified version of the hand, which can grasp and carry different objects.</string>
-    <string name="robotic_arm_descriptoin">Controls servos of a robotic arm</string>
+    <string name="robotic_arm_description">Controls servos of a robotic arm</string>
     <string name="servo1_title">Servo 1</string>
     <string name="servo2_title">Servo 2</string>
     <string name="servo3_title">Servo 3</string>
@@ -889,8 +898,10 @@
     <string name="delete_all">Delete All Data</string>
     <string name="delete_all_message">Are You Sure?</string>
     <string name="baro_meter">Barometer</string>
+    <string name="alti_unit">m</string>
     <string name="baro_unit">atm</string>
     <string name="avg_baro">Avg (atm)</string>
+    <string name="avg_alti">Altitude (m)</string>
     <string name="min_baro">Min (atm)</string>
     <string name="max_baro">Max (atm)</string>
     <string name="baro_meter_description">Measures the atmospheric pressure</string>

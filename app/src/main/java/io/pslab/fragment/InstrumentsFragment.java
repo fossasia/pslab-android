@@ -18,6 +18,7 @@ import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
 import io.pslab.activity.BarometerActivity;
 import io.pslab.activity.CompassActivity;
+import io.pslab.activity.GasSensorActivity;
 import io.pslab.activity.GyroscopeActivity;
 import io.pslab.activity.LogicalAnalyzerActivity;
 import io.pslab.activity.LuxMeterActivity;
@@ -116,6 +117,10 @@ public class InstrumentsFragment extends Fragment {
                                 intent = new Intent(context, RoboticArmActivity.class);
                                 startActivity(intent);
                                 break;
+                            case "Gas Sensor":
+                                intent = new Intent(context, GasSensorActivity.class);
+                                startActivity(intent);
+                                break;
                             default:
                                 break;
                         }
@@ -161,7 +166,8 @@ public class InstrumentsFragment extends Fragment {
                     R.string.compass_description,
                     R.string.gyroscope_description,
                     R.string.thermometer_desc,
-                    R.string.robotic_arm_descriptoin
+                    R.string.robotic_arm_description,
+                    R.string.gas_sensor_description
 
             };
 
@@ -202,7 +208,10 @@ public class InstrumentsFragment extends Fragment {
                     getResources().getString(R.string.thermometer), R.drawable.thermometer_logo, getResources().getString(descriptions[11])
                     ));
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.robotic_arm), R.drawable.robotic_arm, getResources().getString(descriptions[11])
+                    getResources().getString(R.string.robotic_arm), R.drawable.robotic_arm, getResources().getString(descriptions[12])
+            ));
+            applicationItemList.add(new ApplicationItem(
+                    getResources().getString(R.string.gas_sensor), R.drawable.robotic_arm, getResources().getString(descriptions[13])
             ));
             return null;
         }

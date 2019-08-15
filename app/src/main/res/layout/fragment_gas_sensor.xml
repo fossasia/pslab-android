@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/barometer_linearlayout"
+    android:id="@+id/gas_sensor_linearlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -18,55 +18,27 @@
             android:baselineAligned="false">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dimen_zero_dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/label_baro_sensor"
-                    style="@style/baro_meter_stat_heading"
-                    android:paddingBottom="5dp"
-                    android:textSize="@dimen/baro_sensor_label_title_size" />
+                    android:id="@+id/label_gas_sensor"
+                    style="@style/gas_sensor_stat_heading"
+                    android:paddingBottom="@dimen/gas_sensor_fragment_padding1"
+                    android:text="@string/gas_sensor"
+                    android:textSize="@dimen/gas_sensor_label_title_size" />
 
                 <TextView
-                    android:id="@+id/label_baro_stat_max"
-                    style="@style/baro_meter_stat_heading"
-                    android:text="@string/max_baro" />
+                    android:id="@+id/label_gas_sensor_val"
+                    style="@style/gas_sensor_stat_heading"
+                    android:text="@string/gas_sensor_label" />
 
                 <TextView
-                    android:id="@+id/baro_max"
-                    style="@style/baro_meter_stat_display" />
-
-                <TextView
-                    android:id="@+id/label_baro_stat_min"
-                    style="@style/baro_meter_stat_heading"
-                    android:text="@string/min_baro" />
-
-                <TextView
-                    android:id="@+id/baro_min"
-                    style="@style/baro_meter_stat_display" />
-
-                <TextView
-                    android:id="@+id/label_baro_stat_avg"
-                    style="@style/baro_meter_stat_heading"
-                    android:text="@string/avg_baro" />
-
-                <TextView
-                    android:id="@+id/baro_avg"
-                    style="@style/baro_meter_stat_display" />
-
-                <TextView
-                    android:id="@+id/label_alti_stat_avg"
-                    style="@style/baro_meter_stat_heading"
-                    android:text="@string/avg_alti" />
-
-                <TextView
-                    android:id="@+id/alti_value"
-                    style="@style/baro_meter_stat_display"
-                    android:layout_marginBottom="@dimen/baro_altitude_box_margin"
-                    />
+                    android:id="@+id/gas_sensor_value"
+                    style="@style/gas_sensor_stat_display" />
 
             </LinearLayout>
 
@@ -77,16 +49,16 @@
                 android:orientation="vertical">
 
                 <com.github.anastr.speedviewlib.PointerSpeedometer
-                    android:id="@+id/baro_meter"
+                    android:id="@+id/gas_sensor"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/speedometer_height"
-                    android:padding="15dp"
+                    android:padding="@dimen/gas_sensor_fragment_padding2"
                     app:sv_speedTextColor="@color/black"
                     app:sv_speedTextPosition="BOTTOM_CENTER"
                     app:sv_speedTextSize="@dimen/baro_display_font_size"
                     app:sv_speedometerMode="NORMAL"
                     app:sv_textSize="@dimen/baro_guage_font_size"
-                    app:sv_unit="@string/baro_unit"
+                    app:sv_unit="@string/gas_sensor_unit"
                     app:sv_unitTextColor="@color/black" />
 
             </LinearLayout>
@@ -124,7 +96,7 @@
                 <TextView
                     android:id="@+id/tv_label_left_yaxis_hmc"
                     style="@style/graph_y_axis_title_text"
-                    android:text="@string/baro_unit"
+                    android:text="@string/gas_sensor_unit"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -133,7 +105,7 @@
             </android.support.constraint.ConstraintLayout>
 
             <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart_baro_meter"
+                android:id="@+id/chart_gas_sensor"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/chart_xaxis_layout"

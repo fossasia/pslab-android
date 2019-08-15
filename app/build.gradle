@@ -13,8 +13,8 @@ android {
         applicationId "io.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 18
-        versionName "2.0.17"
+        versionCode 19
+        versionName "2.0.18"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -106,6 +106,8 @@ dependencies {
 
     implementation 'com.github.GoodieBag:ProtractorView:v1.2'
     implementation 'com.github.Triggertrap:SeekArc:v1.1'
+
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
 
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"

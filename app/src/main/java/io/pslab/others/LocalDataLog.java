@@ -3,7 +3,9 @@ package io.pslab.others;
 import io.pslab.interfaces.sensorloggers.AccelerometerRecordables;
 import io.pslab.interfaces.sensorloggers.BaroMeterRecordables;
 import io.pslab.interfaces.sensorloggers.CompassRecordables;
+import io.pslab.interfaces.sensorloggers.GasSensorRecordables;
 import io.pslab.interfaces.sensorloggers.GyroscopeRecordables;
+import io.pslab.interfaces.sensorloggers.LogicAnalyzerRecordables;
 import io.pslab.interfaces.sensorloggers.LuxMeterRecordables;
 import io.pslab.interfaces.sensorloggers.MultimeterRecordables;
 import io.pslab.interfaces.sensorloggers.OscilloscopeRecordables;
@@ -15,7 +17,9 @@ import io.pslab.interfaces.sensorloggers.WaveGeneratorRecordables;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.CompassData;
+import io.pslab.models.GasSensorData;
 import io.pslab.models.GyroData;
+import io.pslab.models.LogicAnalyzerData;
 import io.pslab.models.LuxData;
 import io.pslab.models.MultimeterData;
 import io.pslab.models.OscilloscopeData;
@@ -32,7 +36,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables, OscilloscopeRecordables, PowerSourceRecordables, MultimeterRecordables {
+public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables, OscilloscopeRecordables, PowerSourceRecordables, MultimeterRecordables, LogicAnalyzerRecordables, GasSensorRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -496,6 +500,82 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     @Override
     public RealmResults<MultimeterData> getBlockOfMultimeterRecords(long block) {
         return realm.where(MultimeterData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Logic Analyzer Section
+     ***********************************************************************************************/
+
+    @Override
+    public LogicAnalyzerData getLAData(long timeStamp) {
+        return realm.where(LogicAnalyzerData.class)
+                .equalTo("time", timeStamp)
+                .findFirst();
+    }
+
+    @Override
+    public void clearAllLARecords() {
+        realm.beginTransaction();
+        realm.delete(LogicAnalyzerData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfLARecords(long block) {
+        realm.beginTransaction();
+        RealmResults<LogicAnalyzerData> data = getBlockOfLARecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<LogicAnalyzerData> getAllLARecords() {
+        return realm.where(LogicAnalyzerData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<LogicAnalyzerData> getBlockOfLARecords(long block) {
+        return realm.where(LogicAnalyzerData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Gas Sensor Section
+     ***********************************************************************************************/
+
+    @Override
+    public GasSensorData getGasSensorData(long timeStamp) {
+        return realm.where(GasSensorData.class)
+                .equalTo("time", timeStamp)
+                .findFirst();
+    }
+
+    @Override
+    public void clearAllGasSensorRecords() {
+        realm.beginTransaction();
+        realm.delete(GasSensorData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfGasSensorRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<GasSensorData> data = getBlockOfGasSensorRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<GasSensorData> getAllGasSensorRecords() {
+        return realm.where(GasSensorData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<GasSensorData> getBlockOfGasSensorRecords(long block) {
+        return realm.where(GasSensorData.class)
                 .equalTo("block", block)
                 .findAll();
     }

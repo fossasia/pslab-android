@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.TooltipCompat;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,12 +22,15 @@ import android.widget.TextView;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.LALogicLinesFragment;
+import io.pslab.models.LogicAnalyzerData;
+import io.pslab.others.LocalDataLog;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.others.SwipeGestureDetector;
+import io.realm.RealmResults;
 
 /**
  * Created by viveksb007 on 10/5/17.
@@ -56,6 +58,11 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
     private GestureDetector gestureDetector;
     private TextView showText;
     private boolean btnLongpressed;
+    private final String KEY_LOG = "has_log";
+    private final String DATA_BLOCK = "data_block";
+    public boolean isPlayback = false;
+    public RealmResults<LogicAnalyzerData> recordedLAData;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,6 +131,12 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+            recordedLAData = LocalDataLog.with()
+                    .getBlockOfLARecords(getIntent().getExtras().getLong(DATA_BLOCK));
+            isPlayback = true;
+        }
     }
 
     @Override

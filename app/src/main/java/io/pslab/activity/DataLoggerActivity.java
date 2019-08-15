@@ -34,7 +34,9 @@ import io.pslab.adapters.SensorLoggerListAdapter;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.CompassData;
+import io.pslab.models.GasSensorData;
 import io.pslab.models.GyroData;
+import io.pslab.models.LogicAnalyzerData;
 import io.pslab.models.LuxData;
 import io.pslab.models.OscilloscopeData;
 import io.pslab.models.PowerSourceData;
@@ -119,6 +121,12 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             case "Power Source":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getResources().getString(R.string.power_source));
+                break;
+            case "Logic Analyzer":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getResources().getString(R.string.logical_analyzer));
+                break;
+            case "Gas Sensor":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.gas_sensor));
                 break;
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
@@ -253,7 +261,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 returnObject = new LuxData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
                 break;
             case "Barometer":
-                returnObject = new BaroData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
+                returnObject = new BaroData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Double.valueOf(data[4]), Double.valueOf(data[5]));
                 break;
             case "Accelerometer":
                 returnObject = new AccelerometerData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
@@ -278,6 +286,12 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             case "Power Source":
                 returnObject = new PowerSourceData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Float.valueOf(data[5]), Float.valueOf(data[6]), Float.valueOf(data[7]));
+                break;
+            case "Logic Analyzer":
+                returnObject = new LogicAnalyzerData(time, block, data[2], Integer.valueOf(data[3]), data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]));
+                break;
+            case "Gas Sensor":
+                returnObject = new GasSensorData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
                 break;
             default:
                 returnObject = null;

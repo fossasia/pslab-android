@@ -26,7 +26,9 @@ import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
 import io.pslab.activity.BarometerActivity;
 import io.pslab.activity.CompassActivity;
+import io.pslab.activity.GasSensorActivity;
 import io.pslab.activity.GyroscopeActivity;
+import io.pslab.activity.LogicalAnalyzerActivity;
 import io.pslab.activity.LuxMeterActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.MultimeterActivity;
@@ -37,8 +39,10 @@ import io.pslab.activity.ThermometerActivity;
 import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
+import io.pslab.models.GasSensorData;
 import io.pslab.models.GyroData;
 import io.pslab.models.CompassData;
+import io.pslab.models.LogicAnalyzerData;
 import io.pslab.models.LuxData;
 import io.pslab.models.MultimeterData;
 import io.pslab.models.OscilloscopeData;
@@ -125,6 +129,14 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 holder.sensor.setText(R.string.multimeter);
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_multimeter));
                 break;
+            case PSLabSensor.LOGIC_ANALYZER:
+                holder.sensor.setText(R.string.logical_analyzer);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_logic_analyzer));
+                break;
+            case PSLabSensor.GAS_SENSOR:
+                holder.sensor.setText(R.string.gas_sensor);
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.robotic_arm));
+                break;
             default:
                 break;
         }
@@ -205,6 +217,16 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             multimeter.putExtra(KEY_LOG, true);
             multimeter.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(multimeter);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.logical_analyzer))) {
+            Intent laIntent = new Intent(context, LogicalAnalyzerActivity.class);
+            laIntent.putExtra(KEY_LOG, true);
+            laIntent.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(laIntent);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getResources().getString(R.string.gas_sensor))) {
+            Intent gasSensorIntent = new Intent(context, GasSensorActivity.class);
+            gasSensorIntent.putExtra(KEY_LOG, true);
+            gasSensorIntent.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(gasSensorIntent);
         }
     }
 
@@ -244,6 +266,10 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfPowerRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.MULTIMETER)) {
                             LocalDataLog.with().clearBlockOfMultimeterRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LOGIC_ANALYZER)) {
+                            LocalDataLog.with().clearBlockOfLARecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GAS_SENSOR)) {
+                            LocalDataLog.with().clearBlockOfGasSensorRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
                         dialog.dismiss();
@@ -287,6 +313,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     JSONObject i = new JSONObject();
                     i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
                     i.put("data", d.getBaro());
+                    i.put("altitude", d.getAltitude());
                     i.put("lon", d.getLon());
                     i.put("lat", d.getLat());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
@@ -455,6 +482,41 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                     i.put("value", d.getValue());
                     i.put("lat", d.getLat());
                     i.put("lon", d.getLon());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LOGIC_ANALYZER)) {
+            RealmResults<LogicAnalyzerData> data = LocalDataLog.with().getBlockOfLARecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (LogicAnalyzerData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("channel", d.getChannel());
+                    i.put("channel_mode", d.getChannelMode());
+                    i.put("xaxis", d.getDataX());
+                    i.put("yaxis", d.getDataY());
+                    i.put("lat", d.getLat());
+                    i.put("lon", d.getLon());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GAS_SENSOR)) {
+            RealmResults<GasSensorData> data = LocalDataLog.with().getBlockOfGasSensorRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (GasSensorData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("ppmValue", d.getPpmValue());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
                     if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
                 } catch (JSONException e) {
                     e.printStackTrace();

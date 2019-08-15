@@ -3,26 +3,20 @@ package io.pslab.models;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by Padmal on 12/13/18.
- */
-
-public class BaroData extends RealmObject {
+public class GasSensorData extends RealmObject {
 
     @PrimaryKey
     private long time;
     private long block;
-    private float baro;
-    private float altitude;
+    private float ppmValue;
     private double lat, lon;
 
-    public BaroData() {/**/}
+    public GasSensorData() {/**/}
 
-    public BaroData(long time, long block, float baro, float altitude, double lat, double lon) {
+    public GasSensorData(long time, long block, float ppmValue, double lat, double lon) {
         this.time = time;
         this.block = block;
-        this.baro = baro;
-        this.altitude = altitude;
+        this.ppmValue = ppmValue;
         this.lat = lat;
         this.lon = lon;
     }
@@ -43,20 +37,12 @@ public class BaroData extends RealmObject {
         this.block = block;
     }
 
-    public float getBaro() {
-        return baro;
+    public float getPpmValue() {
+        return ppmValue;
     }
 
-    public void setBaro(float baro) {
-        this.baro = baro;
-    }
-
-    public float getAltitude() {
-        return altitude;
-    }
-
-    public void setAltitude(float altitude) {
-        this.altitude = altitude;
+    public void setPpmValue(float ppmValue) {
+        this.ppmValue = ppmValue;
     }
 
     public double getLat() {
@@ -77,6 +63,6 @@ public class BaroData extends RealmObject {
 
     @Override
     public String toString() {
-        return "Block - " + block + ", Time - " + time + ", Baro - " + baro + ", Altitude - " + altitude + ", Lat - " + lat + ", Lon - " + lon;
+        return "Block - " + block + ", Time - " + time + ", PPM value - " + ppmValue + ", Lat - " + lat + ", Lon - " + lon;
     }
 }

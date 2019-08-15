@@ -282,6 +282,12 @@
     <dimen name="baro_display_font_size">16sp</dimen>
     <dimen name="baro_guage_font_size">8sp</dimen>
     <dimen name="baro_sensor_label_title_size">16sp</dimen>
+    <dimen name="baro_altitude_box_margin">10dp</dimen>
+
+    <dimen name="gas_sensor_label_title_size">16sp</dimen>
+
+    <dimen name="gas_sensor_fragment_padding1">5dp</dimen>
+    <dimen name="gas_sensor_fragment_padding2">15dp</dimen>
 
     <dimen name="thermometer_padding">4dp</dimen>
     <dimen name="thermometer_tv_height">30dp</dimen>
@@ -327,6 +333,9 @@
     <dimen name="servo_image_margin">2dp</dimen>
     <dimen name="seekarc_padding">30dp</dimen>
     <dimen name="seekarc_edit_text">36sp</dimen>
+
+    <dimen name="esp_fragment_padding">30dp</dimen>
+    <dimen name="bluetooth_wifi_icon_dimen">50dp</dimen>
 
     <dimen name="create_config_margin1">10dp</dimen>
     <dimen name="create_config_margin2">20dp</dimen>
