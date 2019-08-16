@@ -8,6 +8,7 @@
 
     <ExpandableListView
         android:id="@+id/expListView"
+        android:layout_margin="@dimen/faq_answer_margin_start"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_zero_dp"
         android:layout_weight="0.14"

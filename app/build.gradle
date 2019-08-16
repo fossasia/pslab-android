@@ -63,9 +63,11 @@ android {
     flavorDimensions 'default'
     productFlavors {
         fdroid {
+            resValue "string", "flavor", "Fdroid version"
             dimension = 'default'
         }
         playstore {
+            resValue "string", "flavor", "Play Store version"
             dimension = 'default'
         }
     }

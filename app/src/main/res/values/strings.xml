@@ -6,12 +6,13 @@
     <string name="Toast_double_tap">Press again to close PSLab</string>
     <string name="Toast_magnetic_not_present">"The sensor required for this instrument is not present in your device"</string>
 
-    <string name="nav_device">Device</string>
+    <string name="nav_device">Connect Device</string>
     <string name="nav_instruments">Instruments</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_about_us">About Us</string>
+    <string name="nav_buy_pslab">Buy PSLab</string>
     <string name="nav_report">Feedback &amp; Bugs</string>
-    <string name="nav_help_feedback">FAQs</string>
+    <string name="nav_help_feedback">FAQ</string>
     <string name="nav_share">Share App</string>
     <string name="nav_config">Generate Config File</string>
     <string name="pslab_pinlayout">Pin Layout</string>
@@ -51,10 +52,14 @@
 
     <string-array name="nav_item_activity_titles">
         <item>Instruments</item>
-        <item>Device</item>
+        <item>Logged Data</item>
+        <item>Connect Device</item>
+        <item>Generate Config File</item>
         <item>Settings</item>
         <item>About Us</item>
+        <item>Buy PSLab</item>
         <item>FAQs</item>
+        <item>Share App</item>
     </string-array>
 
     <string name="application_icon">Application Icon</string>
@@ -818,15 +823,13 @@
     <string name="faq_question1">How can I use this application?</string>
     <string name="faq_question2">What are the experiments I can perform?</string>
     <string name="faq_question3">Where can I find the schematic for connections of the instruments?</string>
-    <string name="faq_question4">How can I design my own experiment and save it?</string>
-    <string name="faq_question5">Can I submit a change request for a particular instrument? If so, how?</string>
+    <string name="faq_question4">Can I submit a change request for a particular instrument? If so, how?</string>
 
     <string name="answer">A:</string>
     <string name="faq_answer1">Each instrument includes a bottomsheet guide which gets open when you slide up from the bottom of your screen. It includes all the necessary details to connect the device along a brief guide to use it.</string>
     <string name="faq_answer2">The goal of PSLab is to create an Open Source hardware device (open on all layers) that can be used for experiments by teachers, students and citizen scientists. Our tiny pocket lab provides an array of sensors for doing science and engineering experiments. It provides functions of numerous measurement devices including an oscilloscope, a waveform generator, a frequency counter, a programmable voltage, current source and as a data logger. Hence, you can perform all kind of experiments using these devices.</string>
     <string name="faq_answer3">The bottomsheet guide implemented in each instrument has all the schematics for the connection of the device.</string>
-    <string name="faq_answer4">Right now, we are not having an option to make and save custom experiments. But we will implement it soon.</string>
-    <string name="faq_answer5">You can submit your reviews, feature requests and feedback through our Feedback and Issues page.</string>
+    <string name="faq_answer4">You can submit your reviews, feature requests and feedback through our Feedback and Issues page.</string>
 
     <string name="date_of_recording">DATE OF RECORDING</string>
     <string name="time_of_recording">TIME OF RECORDING</string>
