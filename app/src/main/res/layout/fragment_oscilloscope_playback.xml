@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         style="@style/Base.TextAppearance.AppCompat.Title"
         android:text="@string/timebase_title"
-        android:layout_centerHorizontal="true"
+        android:layout_toStartOf="@+id/timebase_data"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/osc_playback_margin"
         />
@@ -24,17 +24,9 @@
         android:id="@+id/timebase_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/timebase_title"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/osc_playback_margin"
-        />
-    <ImageView
-        android:id="@+id/play_button"
-        android:layout_width="@dimen/osc_play_button_widht"
-        android:layout_height="@dimen/osc_play_button_height"
-        android:src="@drawable/ic_play_button"
-        android:tint="@color/colorPrimary"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/osc_playback_margin"
+        android:layout_marginStart="@dimen/osc_playback_margin"
         />
 </RelativeLayout>
