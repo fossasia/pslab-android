@@ -15,6 +15,8 @@ public class ScienceLabCommon {
     private static ScienceLabCommon scienceLabCommon = null;
     public static ScienceLab scienceLab;
     public boolean connected = false;
+    public static boolean isWifiConnected = false;
+    private static String espBaseIP = "";
 
     private ScienceLabCommon() {
     }
@@ -34,5 +36,21 @@ public class ScienceLabCommon {
             scienceLabCommon = new ScienceLabCommon();
         }
         return scienceLabCommon;
+    }
+
+    public static String getEspIP() {
+        return espBaseIP;
+    }
+
+    public static void setEspBaseIP(String espBaseIP) {
+        ScienceLabCommon.espBaseIP = espBaseIP;
+    }
+
+    public static boolean isWifiConnected() {
+        return isWifiConnected;
+    }
+
+    public static void setIsWifiConnected(boolean wifiConnected) {
+        isWifiConnected = wifiConnected;
     }
 }
