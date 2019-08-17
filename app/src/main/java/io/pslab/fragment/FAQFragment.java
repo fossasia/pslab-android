@@ -23,14 +23,13 @@ public class FAQFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        questions = new String[]{getString(R.string.faq_question1), getString(R.string.faq_question2), getString(R.string.faq_question3), getString(R.string.faq_question4), getString(R.string.faq_question5)};
+        questions = new String[]{getString(R.string.faq_question1), getString(R.string.faq_question2), getString(R.string.faq_question3), getString(R.string.faq_question4)};
 
         answers = new String[][]{
                 {getString(R.string.faq_answer1)},
                 {getString(R.string.faq_answer2)},
                 {getString(R.string.faq_answer3)},
-                {getString(R.string.faq_answer4)},
-                {getString(R.string.faq_answer5)}
+                {getString(R.string.faq_answer4)}
         };
     }
 

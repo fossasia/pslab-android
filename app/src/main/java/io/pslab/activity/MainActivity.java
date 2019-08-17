@@ -187,13 +187,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment getHomeFragment() throws IOException {
         switch (navItemIndex) {
-            case 1:
-                return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
             case 2:
-                return null;
-            case 3:
+                return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
+            case 5:
                 return AboutUsFragment.newInstance();
-            case 4:
+            case 7:
                 return FAQFragment.newInstance();
             default:
                 return InstrumentsFragment.newInstance();
@@ -228,11 +226,11 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
-            case 3:
-                navigationView.getMenu().getItem(size_menu-1).getSubMenu().getItem(1).setChecked(true);
+            case 5:
+                navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
-            case 4:
-                navigationView.getMenu().getItem(size_menu-1).getSubMenu().getItem(0).setChecked(true);
+            case 7:
+                navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             default:
                 navigationView.getMenu().getItem(0).setChecked(true);
@@ -250,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_INSTRUMENTS;
                         break;
                     case R.id.nav_device:
-                        navItemIndex = 1;
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_DEVICE;
                         break;
                     case R.id.nav_settings:
@@ -262,21 +260,18 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         return true;
                     case R.id.nav_about_us:
-                        navItemIndex = 3;
+                        navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
                     case R.id.nav_help_feedback:
-                        navItemIndex = 4;
+                        navItemIndex = 7;
                         CURRENT_TAG = TAG_FAQ;
                         break;
-                    case R.id.nav_report_us:
-                        customTabService.launchUrl("https://goo.gl/forms/sHlmRAPFmzcGQ27u2");
+                    case R.id.nav_buy_pslab:
+                        customTabService.launchUrl("https://pslab.io/shop/");
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
-                        break;
-                    case R.id.nav_app_version:
-                        setTitleColor(R.color.gray);
                         break;
                     case R.id.sensor_data_logger:
                         if (drawer != null) {
