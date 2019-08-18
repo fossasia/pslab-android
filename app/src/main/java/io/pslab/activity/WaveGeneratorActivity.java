@@ -587,7 +587,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         }
     }
 
-    private void viewWave() {
+    private void setWave() {
         double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
         double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
         double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
@@ -616,15 +616,15 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, false);
             }
 
-            waveDialog.show();
-            Window window = waveDialog.getWindow();
-            window.setLayout(dpToPx(350), dpToPx(300));
-            waveDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-                    .setTextColor(ContextCompat.getColor(WaveGeneratorActivity.this, R.color.colorPrimary));
-
-        } else {
-            Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void viewWaveDialog() {
+        waveDialog.show();
+        Window window = waveDialog.getWindow();
+        window.setLayout(dpToPx(350), dpToPx(300));
+        waveDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                .setTextColor(ContextCompat.getColor(WaveGeneratorActivity.this, R.color.colorPrimary));
     }
 
     @Override
@@ -643,7 +643,12 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 saveWaveConfig();
                 break;
             case R.id.play_data:
-                viewWave();
+                setWave();
+                if (scienceLab.isConnected()) {
+                    viewWaveDialog();
+                } else {
+                    Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.show_guide:
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
@@ -925,7 +930,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         } else {
             WaveGeneratorCommon.wave.get(waveBtnActive).put(prop_active, value);
         }
-
+        setWave();
         Double dValue = (double) value;
         String valueText = DataFormatter.formatDouble(dValue, DataFormatter.MEDIUM_PRECISION_FORMAT) + " " + unit;
         activePropTv.setText(valueText);
