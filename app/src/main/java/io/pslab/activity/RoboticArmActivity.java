@@ -14,16 +14,19 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -62,7 +65,6 @@ public class RoboticArmActivity extends AppCompatActivity {
     private LinearLayout servo1TimeLine, servo2TimeLine, servo3TimeLine, servo4TimeLine;
     private int degree;
     private boolean editEnter = false;
-    private Button playPauseButton, stopButton, saveButton;
     private HorizontalScrollView scrollView;
     private CountDownTimer timeLine;
     private boolean isPlaying = false;
@@ -76,6 +78,9 @@ public class RoboticArmActivity extends AppCompatActivity {
     private ScienceLab scienceLab;
     private BottomSheetBehavior bottomSheetBehavior;
     private GestureDetector gestureDetector;
+    private LinearLayout timeIndicatorLayout;
+    private LinearLayout.LayoutParams timeIndicatorParams;
+    private MenuItem playMenu;
     @BindView(R.id.sheet_slide_text_robotic_arm)
     TextView bottomSheetSlideText;
     @BindView(R.id.parent_layout_robotic)
@@ -91,6 +96,13 @@ public class RoboticArmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_robotic_arm);
         ButterKnife.bind(this);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.robotic_arm);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         setUpBottomSheet();
         parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,8 +120,13 @@ public class RoboticArmActivity extends AppCompatActivity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
+        TypedValue tv = new TypedValue();
+        int actionBarHeight = 0;
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+        }
         int screen_width = size.x;
-        int screen_height = size.y;
+        int screen_height = size.y - actionBarHeight;
         realm = LocalDataLog.with().getRealm();
         gpsLogger = new GPSLogger(this,
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE));
@@ -130,14 +147,10 @@ public class RoboticArmActivity extends AppCompatActivity {
         servo2TimeLine = findViewById(R.id.servo2_timeline);
         servo3TimeLine = findViewById(R.id.servo3_timeline);
         servo4TimeLine = findViewById(R.id.servo4_timeline);
-        playPauseButton = findViewById(R.id.timeline_play_pause_button);
-        stopButton = findViewById(R.id.timeline_stop_button);
-        saveButton = findViewById(R.id.timeline_save_button);
         scrollView = findViewById(R.id.horizontal_scroll_view);
-        LinearLayout timeLineControlsLayout = findViewById(R.id.servo_timeline_controls);
         servoCSVLogger = new CSVLogger(getResources().getString(R.string.robotic_arm));
 
-        LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(14 * screen_width / 60 - 4, screen_height / 2 - 4);
+        LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
         servoControllerParams.setMargins(2, 5, 2, 0);
         servo1Layout.setLayoutParams(servoControllerParams);
         servo2Layout.setLayoutParams(servoControllerParams);
@@ -151,9 +164,6 @@ public class RoboticArmActivity extends AppCompatActivity {
         servo2TimeLine.setLayoutParams(servoTimeLineParams);
         servo3TimeLine.setLayoutParams(servoTimeLineParams);
         servo4TimeLine.setLayoutParams(servoTimeLineParams);
-
-        LinearLayout.LayoutParams timeLineControlsParams = new LinearLayout.LayoutParams(screen_width / 15, screen_height / 2);
-        timeLineControlsLayout.setLayoutParams(timeLineControlsParams);
 
         LinearLayout.LayoutParams servoTimeLineBoxParams = new LinearLayout.LayoutParams(screen_width / 6 - 2, screen_height / 8 - 2);
         servoTimeLineBoxParams.setMargins(2, 0, 0, 0);
@@ -444,8 +454,8 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
         });
 
-        LinearLayout timeIndicatorLayout = findViewById(R.id.time_indicator);
-        LinearLayout.LayoutParams timeIndicatorParams = new LinearLayout.LayoutParams(screen_width / 6 - 2, 12);
+        timeIndicatorLayout = findViewById(R.id.time_indicator);
+        timeIndicatorParams = new LinearLayout.LayoutParams(screen_width / 6 - 2, 12);
         timeIndicatorParams.setMarginStart(3);
         timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
 
@@ -477,55 +487,12 @@ public class RoboticArmActivity extends AppCompatActivity {
             }
         };
 
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isPlaying) {
-                    isPlaying = false;
-                    playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
-                    timeLine.onFinish();
-                } else {
-                    isPlaying = true;
-                    playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
-                    timeLine.start();
-                }
-            }
-        });
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveTimeline();
-            }
-        });
-
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timeLine.cancel();
-                timeIndicatorParams.setMarginStart(3);
-                timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
-                scrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
-                isPlaying = false;
-                playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
-                timelinePosition = 0;
-            }
-        });
-
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
             recordedServoData = LocalDataLog.with()
                     .getBlockOfServoRecords(getIntent().getExtras().getLong(DATA_BLOCK));
             setReceivedData();
         }
 
-        Button guideButton = findViewById(R.id.timeline_guide_button);
-        guideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
-                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
-            }
-        });
     }
 
     private void setUpBottomSheet() {
@@ -716,6 +683,62 @@ public class RoboticArmActivity extends AppCompatActivity {
             return true;
         }
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.robotic_arm_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        playMenu = menu.findItem(R.id.play_data);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.play_data:
+                if (isPlaying) {
+                    isPlaying = false;
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    timeLine.onFinish();
+                } else {
+                    isPlaying = true;
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    timeLine.start();
+                }
+                break;
+            case R.id.stop_data:
+                timeLine.cancel();
+                timeIndicatorParams.setMarginStart(3);
+                timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
+                scrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
+                isPlaying = false;
+                playMenu.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                timelinePosition = 0;
+                break;
+            case R.id.show_guide:
+                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
+                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.show_logged_data:
+                Intent intent = new Intent(RoboticArmActivity.this, DataLoggerActivity.class);
+                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.robotic_arm));
+                startActivity(intent);
+                break;
+            case R.id.save_data:
+                saveTimeline();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 
     @Override
     protected void onResume() {

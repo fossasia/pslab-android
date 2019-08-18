@@ -43,7 +43,7 @@
 
     <TextView
         android:id="@+id/tv_range1_cp"
-        android:layout_width="41dp"
+        android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
@@ -56,7 +56,7 @@
 
     <TextView
         android:id="@+id/tv_range2_cp"
-        android:layout_width="42dp"
+        android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
@@ -70,9 +70,10 @@
     <Spinner
         android:id="@+id/spinner_range_ch2_cp"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="@dimen/osc_spinner_margin_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/tv_range2_cp" />
 

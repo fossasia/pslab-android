@@ -20,8 +20,11 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -161,8 +164,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private Fragment dataAnalysisFragment;
     private Fragment xyPlotFragment;
     private Fragment playbackFragment;
-    @BindView(R.id.imageView_led_os)
-    ImageView ledImageView;
     @BindView(R.id.show_guide_oscilloscope)
     TextView showText;
     private ScienceLab scienceLab;
@@ -179,9 +180,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private volatile boolean monitor = true;
     private BottomSheetBehavior bottomSheetBehavior;
     private GestureDetector gestureDetector;
-    private boolean btnLongpressed;
     private double maxAmp, maxFreq;
-    private ImageView recordButton;
     private boolean isRecording = false;
     private Realm realm;
     public RealmResults<OscilloscopeData> recordedOscilloscopeData;
@@ -205,6 +204,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private String[] loggingYdata = new String[4];
     public String xyPlotAxis1 = "CH1";
     public String xyPlotAxis2 = "CH2";
+    private boolean isPlayingback = false;
+    private boolean isPlaying = false;
+    private MenuItem playMenu;
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
@@ -229,6 +231,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         });
         mainLayout = findViewById(R.id.oscilloscope_mail_layout);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.oscilloscope);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         channelIndexMap = new HashMap<>();
         channelIndexMap.put(CHANNEL.CH1.toString(), 1);
         channelIndexMap.put(CHANNEL.CH2.toString(), 2);
@@ -239,8 +249,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         gpsLogger = new GPSLogger(this,
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE));
         csvLogger = new CSVLogger(getString(R.string.oscilloscope));
-
-        recordButton = findViewById(R.id.oscilloscope_record_button);
 
         scienceLab = ScienceLabCommon.scienceLab;
         x1 = mChart.getXAxis();
@@ -447,18 +455,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if (!isInBuiltMicSelected && (!scienceLab.isConnected() || (!isCH1Selected && !isCH2Selected && !isCH3Selected && !isAudioInputSelected))) {
-                        if (!String.valueOf(ledImageView.getTag()).equals("red")) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ledImageView.setImageResource(R.drawable.red_led);
-                                    ledImageView.setTag("red");
-                                }
-                            });
-                        }
-                    }
-
                     if (scienceLab.isConnected() && isXYPlotSelected) {
                         xyPlotTask = new XYPlotTask();
                         xyPlotTask.execute(xyPlotAxis1, xyPlotAxis2);
@@ -481,42 +477,38 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         monitorThread = new Thread(runnable);
         monitorThread.start();
 
-        ImageView guideImageView = findViewById(R.id.oscilloscope_guide_button);
-        guideImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
-                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
-            }
-        });
-        guideImageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showText.setVisibility(View.VISIBLE);
-                btnLongpressed = true;
-                return true;
-            }
-        });
-        guideImageView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.onTouchEvent(event);
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (btnLongpressed) {
-                        showText.setVisibility(View.GONE);
-                        btnLongpressed = false;
-                    }
-                }
-                return true;
-            }
-        });
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+            recordedOscilloscopeData = LocalDataLog.with()
+                    .getBlockOfOscilloscopeRecords(getIntent().getExtras().getLong(DATA_BLOCK));
+            isPlayingback = true;
+            setLayoutForPlayback();
+        }
+    }
 
-        recordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_landscape_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        playMenu = menu.findItem(R.id.play_data);
+        menu.findItem(R.id.record_pause_data).setVisible(!isPlayingback);
+        menu.findItem(R.id.play_data).setVisible(isPlayingback);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.record_pause_data:
                 if (isRecording) {
                     isRecording = false;
-                    recordButton.setImageResource(R.drawable.ic_record_white);
+                    item.setIcon(R.drawable.ic_record_white);
                     CustomSnackBar.showSnackBar(mainLayout,
                             getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
                             , getString(R.string.open), new View.OnClickListener() {
@@ -529,7 +521,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                             }, Snackbar.LENGTH_SHORT);
                 } else {
                     isRecording = true;
-                    recordButton.setImageResource(R.drawable.ic_record_stop_white);
+                    item.setIcon(R.drawable.ic_record_stop_white);
                     block = System.currentTimeMillis();
                     if (gpsLogger.isGPSEnabled()) {
                         Location location = gpsLogger.getDeviceLocation();
@@ -551,26 +543,42 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.oscilloscope)));
                     CustomSnackBar.showSnackBar(mainLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
                 }
-            }
-        });
-
-        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
-            recordedOscilloscopeData = LocalDataLog.with()
-                    .getBlockOfOscilloscopeRecords(getIntent().getExtras().getLong(DATA_BLOCK));
-            setLayoutForPlayback();
+                break;
+            case R.id.show_guide:
+                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
+                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.show_logged_data:
+                Intent intent = new Intent(OscilloscopeActivity.this, DataLoggerActivity.class);
+                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.oscilloscope));
+                startActivity(intent);
+                break;
+            case R.id.play_data:
+                if (isPlaying) {
+                    isPlaying = false;
+                    item.setIcon(R.drawable.ic_play_arrow_white_24dp);
+                    pauseData();
+                } else {
+                    isPlaying = true;
+                    item.setIcon(R.drawable.ic_pause_white_24dp);
+                    playRecordedData();
+                }
+                break;
+            default:
+                break;
         }
+        return true;
     }
 
     private void setLayoutForPlayback() {
         findViewById(R.id.layout_dock_os1).setVisibility(View.GONE);
-        recordButton.setVisibility(View.GONE);
         RelativeLayout.LayoutParams lineChartParams = (RelativeLayout.LayoutParams) mChartLayout.getLayoutParams();
         RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
-        lineChartParams.height = height * 4 / 5;
-        lineChartParams.width = width;
+        lineChartParams.height = height * 3 / 4;
+        lineChartParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
         mChartLayout.setLayoutParams(lineChartParams);
-        frameLayoutParams.height = height / 5;
-        frameLayoutParams.width = width;
+        frameLayoutParams.height = height / 4;
+        frameLayoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
         frameLayout.setLayoutParams(frameLayoutParams);
         replaceFragment(R.id.layout_dock_os2, playbackFragment, "Playback Fragment");
     }
@@ -643,7 +651,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                             } else {
                                 playbackTimer.cancel();
                                 playbackTimer = null;
-                                ((OscilloscopePlaybackFragment) playbackFragment).resetPlayButton();
+                                playMenu.setIcon(R.drawable.ic_play_arrow_white_24dp);
                                 currentPosition = 0;
                             }
                         } catch (Exception e) {
@@ -651,7 +659,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                                 playbackTimer.cancel();
                                 playbackTimer = null;
                             }
-                            ((OscilloscopePlaybackFragment) playbackFragment).resetPlayButton();
+                            playMenu.setIcon(R.drawable.ic_play_arrow_white_24dp);
                             currentPosition = 0;
                         }
                     }
@@ -662,8 +670,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void pauseData() {
-        playbackTimer.cancel();
-        playbackTimer = null;
+        if (playbackTimer != null) {
+            playbackTimer.cancel();
+            playbackTimer = null;
+        }
     }
 
     private void logChannelData(String[] channels) {
@@ -760,10 +770,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             frameLayoutParams.width = width * 7 / 8;
             frameLayout.setLayoutParams(frameLayoutParams);
         } else {
-            lineChartParams.height = height * 2 / 3;
+            lineChartParams.height = height * 3 / 5;
             lineChartParams.width = width * 5 / 6;
             mChartLayout.setLayoutParams(lineChartParams);
-            frameLayoutParams.height = height / 3;
+            frameLayoutParams.height = height * 2 / 5;
             frameLayoutParams.width = width * 5 / 6;
             frameLayout.setLayoutParams(frameLayoutParams);
         }
@@ -1131,10 +1141,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (!String.valueOf(ledImageView.getTag()).equals("green")) {
-                ledImageView.setImageResource(R.drawable.green_led);
-                ledImageView.setTag("green");
-            }
 
             List<ILineDataSet> dataSets = new ArrayList<>();
             for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {

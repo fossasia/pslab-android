@@ -142,6 +142,7 @@
     <dimen name="osc_play_button_height">50dp</dimen>
     <dimen name="osc_play_button_widht">50dp</dimen>
     <dimen name="osc_playback_margin">10dp</dimen>
+    <dimen name="osc_spinner_margin_bottom">13dp</dimen>
 
     <dimen name="modified_spinner_height">40dp</dimen>
     <dimen name="spinner_text_size">15sp</dimen>
