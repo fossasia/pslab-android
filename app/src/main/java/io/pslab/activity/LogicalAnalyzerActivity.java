@@ -1,5 +1,6 @@
 package io.pslab.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,15 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import io.pslab.R;
-import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.LALogicLinesFragment;
 import io.pslab.models.LogicAnalyzerData;
 import io.pslab.others.LocalDataLog;
 import io.pslab.others.MathUtils;
-import io.pslab.others.ScienceLabCommon;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.pslab.others.SwipeGestureDetector;
 import io.realm.RealmResults;
 
@@ -40,9 +38,6 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "LogicAnalyzerPreference";
 
-    @BindView(R.id.logical_analyzer_toolbar)
-    Toolbar toolbar;
-    private ScienceLab scienceLab;
     private boolean isRunning = false;
 
     //Bottom Sheet
@@ -56,13 +51,11 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
     private TextView bottomSheetDesc;
     private BottomSheetBehavior bottomSheetBehavior;
     private GestureDetector gestureDetector;
-    private TextView showText;
-    private boolean btnLongpressed;
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
     public boolean isPlayback = false;
     public RealmResults<LogicAnalyzerData> recordedLAData;
-
+    private LALogicLinesFragment laLogicLinesFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,8 +63,6 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_logic_analyzer);
-        scienceLab = ScienceLabCommon.scienceLab;
-        ButterKnife.bind(this);
 
         // Bottom Sheet guide
         bottomSheet = findViewById(R.id.bottom_sheet);
@@ -82,7 +73,6 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
         bottomSheetText = findViewById(R.id.custom_dialog_text);
         bottomSheetSchematic = findViewById(R.id.custom_dialog_schematic);
         bottomSheetDesc = findViewById(R.id.custom_dialog_desc);
-        showText = findViewById(R.id.show_guide_logic_analyzer);
         // Inflating bottom sheet dialog on how to use Logic Analyzer
         setUpBottomSheet();
         tvShadow.setOnClickListener(new View.OnClickListener() {
@@ -96,41 +86,15 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
 
         removeStatusBar();
 
-        getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, LALogicLinesFragment.newInstance(this)).commit();
+        laLogicLinesFragment = LALogicLinesFragment.newInstance(this);
+        getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, laLogicLinesFragment).commit();
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.logical_analyzer);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
-        ImageView guideImageView = findViewById(R.id.logic_analyzer_guide_button);
-        guideImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
-                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
-            }
-        });
-        guideImageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showText.setVisibility(View.VISIBLE);
-                btnLongpressed = true;
-                return true;
-            }
-        });
-        guideImageView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.onTouchEvent(event);
-                if(event.getAction()==MotionEvent.ACTION_UP){
-                    if(btnLongpressed){
-                        showText.setVisibility(View.GONE);
-                        btnLongpressed = false;
-                    }
-                }
-                return true;
-            }
-        });
 
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
             recordedLAData = LocalDataLog.with()
@@ -161,16 +125,35 @@ public class LogicalAnalyzerActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY));
         }
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.logical_analyzer_menu, menu);
+        return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.show_logged_data:
+                Intent intent = new Intent(LogicalAnalyzerActivity.this, DataLoggerActivity.class);
+                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.logical_analyzer));
+                startActivity(intent);
+                break;
+            case R.id.save_graph:
+                laLogicLinesFragment.logData();
+                break;
+            case R.id.show_guide:
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                break;
+            default:
+            	break;    
+        }
+        return true;
+    }
     @Override
     public void onBackPressed() {
         if (!isRunning)
