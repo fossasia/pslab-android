@@ -84,7 +84,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WaveGeneratorActivity"
-            android:screenOrientation="userLandscape" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AccelerometerActivity"
             android:screenOrientation="portrait" />

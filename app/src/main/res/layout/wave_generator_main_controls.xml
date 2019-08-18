@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <Button
+        android:id="@+id/btn_produce_sound"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_btn"
+        android:layout_marginTop="@dimen/margin_btn"
+        android:layout_marginBottom="@dimen/margin_btn"
+        android:layout_weight="1"
+        android:background="@drawable/btn_back_rounded"
+        android:minWidth="@dimen/btn_min_width"
+        android:text="@string/produce_sound_text"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/pwm_btn_mode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_btn"
+        android:layout_marginTop="@dimen/margin_btn"
+        android:layout_marginEnd="@dimen/margin_btn"
+        android:layout_marginBottom="@dimen/margin_btn"
+        android:layout_weight="1"
+        android:background="@drawable/btn_back_rounded"
+        android:minWidth="@dimen/btn_min_width"
+        android:stateListAnimator="@animator/selector_animator"
+        android:text="@string/mode"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+</LinearLayout>

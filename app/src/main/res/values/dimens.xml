@@ -216,6 +216,7 @@
     <dimen name="divider_width">1dp</dimen>
     <dimen name="prop_text_end_margin">8dp</dimen>
     <dimen name="btn_min_width">50dp</dimen>
+    <dimen name="wave_seekbar_margin">20dp</dimen>
 
     <dimen name="device_version_padding">20dp</dimen>
     <dimen name="connect_msg_tv_padding">20dp</dimen>

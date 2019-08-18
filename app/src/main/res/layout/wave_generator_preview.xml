@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/preview_layout"
+    android:layout_width="@dimen/dimen_zero_dp"
+    android:layout_height="@dimen/dimen_zero_dp"
+    android:background="@color/black">
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000" />
+</LinearLayout>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -23,6 +24,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -34,7 +37,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import java.util.Date;
@@ -150,8 +155,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     ImageButton imgBtnDown;
     @BindView(R.id.seek_bar_wave_gen)
     IndicatorSeekBar seekBar;
-    @BindView(R.id.btn_view)
-    Button btnView;
     //bottomSheet
     @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
@@ -161,10 +164,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     ImageView arrowUpDown;
     @BindView(R.id.sheet_slide_text)
     TextView bottomSheetSlideText;
-    @BindView(R.id.show_guide_wave_generator)
-    TextView showText;
     @BindView(R.id.wave_phase)
     TextView wavePhaseTitle;
+    @BindView(R.id.btn_produce_sound)
+    Button btnProduceSound;
     ScienceLab scienceLab;
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
@@ -173,7 +176,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private Timer waveGenCounter;
     private Handler wavegenHandler = new Handler();
     private AlertDialog waveDialog;
-    private boolean btnLongpressed;
     private CSVLogger csvLogger;
     private WaveConst waveBtnActive, pwmBtnActive, prop_active, digital_mode;
     private TextView activePropTv = null;
@@ -186,6 +188,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private ConstraintLayout squareModeLayout;
     private RelativeLayout pwmModeControls;
     private RelativeLayout squareModeControls;
+    private LineChart previewChart;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -202,10 +205,17 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         gpsLogger = new GPSLogger(this,
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE));
 
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.wave_generator));
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         coordinatorLayout = findViewById(R.id.wave_generator_coordinator_layout);
         squareModeLayout = findViewById(R.id.square_mode_layout);
         pwmModeLayout = findViewById(R.id.pwm_mode_layout);
+        previewChart = findViewById(R.id.chart_preview);
 
         squareModeControls = findViewById(R.id.square_mode_controls);
         pwmModeControls = findViewById(R.id.pwm_mode_controls);
@@ -417,49 +427,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
         monitorLongClicks(imgBtnUp, imgBtnDown);
 
-        btnView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
-                double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
-                double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
-
-                String waveType1 = WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
-                String waveType2 = WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
-
-                if (scienceLab.isConnected()) {
-                    if (digital_mode == WaveConst.SQUARE) {
-                        if (phase == WaveData.PHASE_MIN.getValue()) {
-                            scienceLab.setW1(freq1, waveType1);
-                            scienceLab.setW2(freq2, waveType2);
-                        } else {
-                            scienceLab.setWaves(freq1, phase, freq2);
-                        }
-                    } else {
-                        double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
-                        double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
-                        double dutySqr2 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.DUTY)) / 100;
-                        double phaseSqr2 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.PHASE) / 360;
-                        double dutySqr3 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.DUTY)) / 100;
-                        double phaseSqr3 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.PHASE) / 360;
-                        double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
-                        double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
-
-                        scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, false);
-                    }
-
-                    waveDialog.show();
-                    Window window = waveDialog.getWindow();
-                    window.setLayout(dpToPx(350), dpToPx(300));
-                    waveDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-                            .setTextColor(ContextCompat.getColor(WaveGeneratorActivity.this, R.color.colorPrimary));
-
-                } else {
-                    Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
@@ -488,44 +455,15 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
         });
 
-        ImageView guideImageView = findViewById(R.id.wave_generator_guide_button);
-        guideImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
-                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
-            }
-        });
-        guideImageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showText.setVisibility(View.VISIBLE);
-                btnLongpressed = true;
-                return true;
-            }
-        });
-        guideImageView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.onTouchEvent(event);
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (btnLongpressed) {
-                        showText.setVisibility(View.GONE);
-                        btnLongpressed = false;
-                    }
-                }
-                return true;
-            }
-        });
-
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
             recordedWaveData = LocalDataLog.with()
                     .getBlockOfWaveRecords(getIntent().getExtras().getLong(DATA_BLOCK));
             setReceivedData();
         }
+        chartInit();
     }
 
-    public void saveWaveConfig(View view) {
+    public void saveWaveConfig() {
         long block = System.currentTimeMillis();
         csvLogger.prepareLogFile();
         csvLogger.writeMetaData(getResources().getString(R.string.wave_generator));
@@ -647,6 +585,79 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 enableInitialStatePWM();
             }
         }
+    }
+
+    private void viewWave() {
+        double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
+        double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
+        double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
+
+        String waveType1 = WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+        String waveType2 = WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+
+        if (scienceLab.isConnected()) {
+            if (digital_mode == WaveConst.SQUARE) {
+                if (phase == WaveData.PHASE_MIN.getValue()) {
+                    scienceLab.setW1(freq1, waveType1);
+                    scienceLab.setW2(freq2, waveType2);
+                } else {
+                    scienceLab.setWaves(freq1, phase, freq2);
+                }
+            } else {
+                double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+                double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
+                double dutySqr2 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.DUTY)) / 100;
+                double phaseSqr2 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.PHASE) / 360;
+                double dutySqr3 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.DUTY)) / 100;
+                double phaseSqr3 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.PHASE) / 360;
+                double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
+                double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
+
+                scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, false);
+            }
+
+            waveDialog.show();
+            Window window = waveDialog.getWindow();
+            window.setLayout(dpToPx(350), dpToPx(300));
+            waveDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                    .setTextColor(ContextCompat.getColor(WaveGeneratorActivity.this, R.color.colorPrimary));
+
+        } else {
+            Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.wave_generator_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.save_data:
+                saveWaveConfig();
+                break;
+            case R.id.play_data:
+                viewWave();
+                break;
+            case R.id.show_guide:
+                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
+                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.show_logged_data:
+                Intent intent = new Intent(WaveGeneratorActivity.this, DataLoggerActivity.class);
+                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getString(R.string.wave_generator));
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -918,7 +929,25 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         Double dValue = (double) value;
         String valueText = DataFormatter.formatDouble(dValue, DataFormatter.MEDIUM_PRECISION_FORMAT) + " " + unit;
         activePropTv.setText(valueText);
+    }
 
+    private void chartInit() {
+        previewChart.setTouchEnabled(true);
+        previewChart.setHighlightPerDragEnabled(true);
+        previewChart.setDragEnabled(true);
+        previewChart.setScaleEnabled(true);
+        previewChart.setDrawGridBackground(false);
+        previewChart.setPinchZoom(true);
+        previewChart.setScaleYEnabled(false);
+        previewChart.setBackgroundColor(Color.BLACK);
+        previewChart.getDescription().setEnabled(false);
+        previewChart.getXAxis().setAxisMaximum(1000);
+        previewChart.getXAxis().setAxisMinimum(0);
+        previewChart.getXAxis().setTextColor(Color.WHITE);
+        previewChart.getAxisLeft().setAxisMaximum(5);
+        previewChart.getAxisLeft().setAxisMinimum(-5);
+        previewChart.fitScreen();
+        previewChart.invalidate();
     }
 
     private void toggleSeekBtns(boolean state) {
