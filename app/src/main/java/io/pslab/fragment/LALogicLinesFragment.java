@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -106,10 +105,7 @@ public class LALogicLinesFragment extends Fragment {
     private ArrayList<String> channelNames = new ArrayList<>();
     private ArrayList<String> edgesNames = new ArrayList<>();
     private TextView tvTimeUnit, xCoordinateText;
-    private ImageView ledImageView;
-    private Runnable logicAnalysis;
     private Realm realm;
-    private ImageView recordButton;
     private GPSLogger gpsLogger;
     private CSVLogger csvLogger;
     private ArrayList<String> recordXAxis;
@@ -120,6 +116,7 @@ public class LALogicLinesFragment extends Fragment {
     private String csvHeader = "Timestamp,DateTime,Channel,ChannelMode,xData,yData,lat,lon";
     private ArrayList<Spinner> channelSelectSpinners;
     private ArrayList<Spinner> edgeSelectSpinners;
+    private View rootView;
 
     public static LALogicLinesFragment newInstance(Activity activity) {
         LALogicLinesFragment laLogicLinesFragment = new LALogicLinesFragment();
@@ -140,112 +137,36 @@ public class LALogicLinesFragment extends Fragment {
         recordChannelMode = new ArrayList<>();
         channelSelectSpinners = new ArrayList<>();
         edgeSelectSpinners = new ArrayList<>();
-        logicAnalysis = new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (scienceLab.isConnected()) {
-                        if (!String.valueOf(ledImageView.getTag()).equals("green")) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ledImageView.setImageResource(R.drawable.green_led);
-                                    ledImageView.setTag("green");
-                                }
-                            });
-                        }
-                    } else {
-                        if (!String.valueOf(ledImageView.getTag()).equals("red")) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ledImageView.setImageResource(R.drawable.red_led);
-                                    ledImageView.setTag("red");
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-        };
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
-        // LED Indicator
-        ledImageView = v.findViewById(R.id.imageView_led_la);
+        rootView = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
 
         // Heading
-        tvTimeUnit = v.findViewById(R.id.la_tv_time_unit);
+        tvTimeUnit = rootView.findViewById(R.id.la_tv_time_unit);
         tvTimeUnit.setText(getString(R.string.time_unit_la));
 
-        //recordButton
-
-        recordButton = v.findViewById(R.id.la_record_button);
-        recordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                long block = System.currentTimeMillis();
-                double lat;
-                double lon;
-                if (gpsLogger.isGPSEnabled()) {
-                    Location location = gpsLogger.getDeviceLocation();
-                    if (location != null) {
-                        lat = location.getLatitude();
-                        lon = location.getLongitude();
-                    } else {
-                        lat = 0.0;
-                        lon = 0.0;
-                    }
-                } else {
-                    lat = 0.0;
-                    lon = 0.0;
-                }
-                csvLogger.prepareLogFile();
-                csvLogger.writeMetaData(getContext().getResources().getString(R.string.logical_analyzer));
-                csvLogger.writeCSVFile(csvHeader);
-                recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.logical_analyzer)));
-                long timestamp = System.currentTimeMillis();
-                String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                String locationData = lat + "," + lon;
-                for (int i = 0; i < recordXAxis.size(); i++) {
-                    recordSensorData(new LogicAnalyzerData(timestamp + i, block, channels[i], recordChannelMode.get(i), recordXAxis.get(i), recordYAxis.get(i), lat, lon));
-                    String data = timeData + "," + channels[i] + "," + recordChannelMode.get(i) + "," + recordXAxis.get(i) + "," + recordYAxis.get(i) + "," + locationData;
-                    csvLogger.writeCSVFile(data);
-                }
-                CustomSnackBar.showSnackBar(v,
-                        getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
-                        , getString(R.string.open), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(getContext(), DataLoggerActivity.class);
-                                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.logical_analyzer));
-                                startActivity(intent);
-                            }
-                        }, Snackbar.LENGTH_SHORT);
-            }
-        });
         // Carousel View
-        carouselPicker = v.findViewById(R.id.carouselPicker);
-        llChannel1 = v.findViewById(R.id.ll_chart_channel_1);
+        carouselPicker = rootView.findViewById(R.id.carouselPicker);
+        llChannel1 = rootView.findViewById(R.id.ll_chart_channel_1);
         llChannel1.setVisibility(View.VISIBLE);
-        llChannel2 = v.findViewById(R.id.ll_chart_channel_2);
+        llChannel2 = rootView.findViewById(R.id.ll_chart_channel_2);
         llChannel2.setVisibility(View.GONE);
-        llChannel3 = v.findViewById(R.id.ll_chart_channel_3);
+        llChannel3 = rootView.findViewById(R.id.ll_chart_channel_3);
         llChannel3.setVisibility(View.GONE);
-        llChannel4 = v.findViewById(R.id.ll_chart_channel_4);
+        llChannel4 = rootView.findViewById(R.id.ll_chart_channel_4);
         llChannel4.setVisibility(View.GONE);
-        channelSelectSpinner1 = v.findViewById(R.id.channel_select_spinner_1);
-        channelSelectSpinner2 = v.findViewById(R.id.channel_select_spinner_2);
-        channelSelectSpinner3 = v.findViewById(R.id.channel_select_spinner_3);
-        channelSelectSpinner4 = v.findViewById(R.id.channel_select_spinner_4);
-        edgeSelectSpinner1 = v.findViewById(R.id.edge_select_spinner_1);
-        edgeSelectSpinner2 = v.findViewById(R.id.edge_select_spinner_2);
-        edgeSelectSpinner3 = v.findViewById(R.id.edge_select_spinner_3);
-        edgeSelectSpinner4 = v.findViewById(R.id.edge_select_spinner_4);
-        analyze_button = v.findViewById(R.id.analyze_button);
+        channelSelectSpinner1 = rootView.findViewById(R.id.channel_select_spinner_1);
+        channelSelectSpinner2 = rootView.findViewById(R.id.channel_select_spinner_2);
+        channelSelectSpinner3 = rootView.findViewById(R.id.channel_select_spinner_3);
+        channelSelectSpinner4 = rootView.findViewById(R.id.channel_select_spinner_4);
+        edgeSelectSpinner1 = rootView.findViewById(R.id.edge_select_spinner_1);
+        edgeSelectSpinner2 = rootView.findViewById(R.id.edge_select_spinner_2);
+        edgeSelectSpinner3 = rootView.findViewById(R.id.edge_select_spinner_3);
+        edgeSelectSpinner4 = rootView.findViewById(R.id.edge_select_spinner_4);
+        analyze_button = rootView.findViewById(R.id.analyze_button);
         channelMode = 1;
         channelSelectSpinners.add(channelSelectSpinner1);
         channelSelectSpinners.add(channelSelectSpinner2);
@@ -262,9 +183,9 @@ public class LALogicLinesFragment extends Fragment {
         channelMap.put(channels[2], 2);
         channelMap.put(channels[3], 3);
         // Axis Indicator
-        xCoordinateText = v.findViewById(R.id.x_coordinate_text);
+        xCoordinateText = rootView.findViewById(R.id.x_coordinate_text);
         xCoordinateText.setText("Time:  0.0 mS");
-        progressBar = v.findViewById(R.id.la_progressBar);
+        progressBar = rootView.findViewById(R.id.la_progressBar);
         progressBar.setVisibility(View.GONE);
         ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
 
@@ -273,7 +194,7 @@ public class LALogicLinesFragment extends Fragment {
         dataSets = new ArrayList<>();
 
         // Creating base layout for chart
-        logicLinesChart = v.findViewById(R.id.chart_la);
+        logicLinesChart = rootView.findViewById(R.id.chart_la);
         logicLinesChart.setBorderWidth(2);
         Legend legend = logicLinesChart.getLegend();
         legend.setTextColor(Color.WHITE);
@@ -283,22 +204,62 @@ public class LALogicLinesFragment extends Fragment {
 
         setCarouselPicker();
         setAdapters();
-        LogicalAnalyzerActivity laActivity = (LogicalAnalyzerActivity)getActivity();
+        LogicalAnalyzerActivity laActivity = (LogicalAnalyzerActivity) getActivity();
         if (laActivity.isPlayback) {
             setPlayBackData(laActivity.recordedLAData);
         }
-        return v;
+        return rootView;
+    }
+
+    public void logData() {
+        long block = System.currentTimeMillis();
+        double lat;
+        double lon;
+        if (gpsLogger.isGPSEnabled()) {
+            Location location = gpsLogger.getDeviceLocation();
+            if (location != null) {
+                lat = location.getLatitude();
+                lon = location.getLongitude();
+            } else {
+                lat = 0.0;
+                lon = 0.0;
+            }
+        } else {
+            lat = 0.0;
+            lon = 0.0;
+        }
+        csvLogger.prepareLogFile();
+        csvLogger.writeMetaData(getContext().getResources().getString(R.string.logical_analyzer));
+        csvLogger.writeCSVFile(csvHeader);
+        recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.logical_analyzer)));
+        long timestamp = System.currentTimeMillis();
+        String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+        String locationData = lat + "," + lon;
+        for (int i = 0; i < recordXAxis.size(); i++) {
+            recordSensorData(new LogicAnalyzerData(timestamp + i, block, channels[i], recordChannelMode.get(i), recordXAxis.get(i), recordYAxis.get(i), lat, lon));
+            String data = timeData + "," + channels[i] + "," + recordChannelMode.get(i) + "," + recordXAxis.get(i) + "," + recordYAxis.get(i) + "," + locationData;
+            csvLogger.writeCSVFile(data);
+        }
+        CustomSnackBar.showSnackBar(rootView,
+                getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
+                , getString(R.string.open), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getContext(), DataLoggerActivity.class);
+                        intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.logical_analyzer));
+                        startActivity(intent);
+                    }
+                }, Snackbar.LENGTH_SHORT);
     }
 
     private void setPlayBackData(RealmResults<LogicAnalyzerData> data) {
         analyze_button.setVisibility(View.GONE);
-        recordButton.setVisibility(View.GONE);
         currentChannel = 0;
         setViewVisibility(data.size() - 1);
         channelNames.clear();
         disableSpinners();
-        carouselPicker.setCurrentItem(data.size() -1);
-        for (int i = 0; i < data.size(); i ++) {
+        carouselPicker.setCurrentItem(data.size() - 1);
+        for (int i = 0; i < data.size(); i++) {
             LogicAnalyzerData laData = data.get(i);
             channelNames.add(laData.getChannel());
             edgeSelectSpinners.get(i).setSelection(laData.getChannelMode() - 1);
@@ -308,7 +269,7 @@ public class LALogicLinesFragment extends Fragment {
             int n = Math.min(xPoints.length, yPoints.length);
             double[] xaxis = new double[n];
             double[] yaxis = new double[n];
-            for (int j = 0; j < n; j ++) {
+            for (int j = 0; j < n; j++) {
                 xaxis[j] = Double.valueOf(xPoints[j]);
                 yaxis[j] = Double.valueOf(yPoints[j]);
             }
@@ -329,7 +290,7 @@ public class LALogicLinesFragment extends Fragment {
                     singleChannelOtherEdges(xaxis, yaxis);
                     break;
             }
-            currentChannel ++;
+            currentChannel++;
         }
         logicLinesChart.setData(new LineData(dataSets));
         logicLinesChart.invalidate();
@@ -347,9 +308,6 @@ public class LALogicLinesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (scienceLab.isConnected()) {
-            new Thread(logicAnalysis).start();
-        }
 
         carouselPicker.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -620,6 +578,7 @@ public class LALogicLinesFragment extends Fragment {
                 break;
         }
     }
+
     /**
      * Plots every edge of a digital pulse for one channel at a time
      *
@@ -899,8 +858,6 @@ public class LALogicLinesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
-            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override
