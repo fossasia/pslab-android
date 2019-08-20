@@ -2,6 +2,8 @@ package io.pslab.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +25,13 @@ public class FAQFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        questions = new String[]{getString(R.string.faq_question1), getString(R.string.faq_question2), getString(R.string.faq_question3), getString(R.string.faq_question4)};
+        questions = getResources().getStringArray(R.array.faq_questions);
 
-        answers = new String[][]{
-                {getString(R.string.faq_answer1)},
-                {getString(R.string.faq_answer2)},
-                {getString(R.string.faq_answer3)},
-                {getString(R.string.faq_answer4)}
-        };
+        String[] ans = getResources().getStringArray(R.array.faq_answers);
+        answers = new String[ans.length][];
+        for (int i = 0; i < ans.length; i++) {
+            answers[i] = new String[]{ans[i]};
+        }
     }
 
     @Override
@@ -113,7 +114,9 @@ public class FAQFragment extends Fragment {
                 holder = (ViewHolder) v.getTag();
             }
 
-            holder.text.setText(getChild(questionPosition, childPosition).toString());
+            holder.text.setClickable(true);
+            holder.text.setMovementMethod(LinkMovementMethod.getInstance());
+            holder.text.setText(Html.fromHtml(getChild(questionPosition, childPosition).toString(), Html.FROM_HTML_MODE_COMPACT));
 
             return v;
         }
