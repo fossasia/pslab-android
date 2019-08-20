@@ -218,6 +218,8 @@
     <dimen name="btn_min_width">50dp</dimen>
     <dimen name="wave_seekbar_margin">20dp</dimen>
 
+    <dimen name="bluetooth_btn_margin">10dp</dimen>
+    <dimen name="bluetooth_heading_margin">20dp</dimen>
     <dimen name="device_version_padding">20dp</dimen>
     <dimen name="connect_msg_tv_padding">20dp</dimen>
     <dimen name="device_desc_padding">20dp</dimen>

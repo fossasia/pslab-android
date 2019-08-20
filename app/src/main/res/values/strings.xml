@@ -19,7 +19,7 @@
     <string name="pslab_pinlayout_front">Pin Layout Front</string>
     <string name="pslab_pinlayout_back">Pin Layout Back</string>
     <string name="bluetooth_connect_menu">Bluetooth Connection</string>
-    <string name="bluetooth_wifi_scan_dialog">USB device not found. Do you want to scan for Bluetooth or Wifi connection?</string>
+    <string name="bluetooth_wifi_connect_option">Connect using Bluetooth or Wi-Fi</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="wifi">WiFi</string>
     <string name="bluetooth_scan_text">Scan</string>

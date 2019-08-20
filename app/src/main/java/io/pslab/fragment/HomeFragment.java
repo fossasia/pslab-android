@@ -12,20 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import io.pslab.R;
-import io.pslab.others.InitializationVariable;
-
 import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.pslab.R;
+import io.pslab.others.InitializationVariable;
+import io.pslab.others.ScienceLabCommon;
 
 import static io.pslab.others.ScienceLabCommon.scienceLab;
 
@@ -55,6 +56,12 @@ public class HomeFragment extends Fragment {
     ProgressBar wvProgressBar;
     @BindView(R.id.steps_header_text)
     TextView stepsHeader;
+    @BindView(R.id.bluetooth_btn)
+    Button bluetoothButton;
+    @BindView(R.id.wifi_btn)
+    Button wifiButton;
+    @BindView(R.id.bluetooth_wifi_option_tv)
+    TextView bluetoothWifiOption;
     private boolean deviceFound = false, deviceConnected = false;
     private Unbinder unbinder;
 
@@ -138,7 +145,32 @@ public class HomeFragment extends Fragment {
                 return false;
             }
         });
+        if (ScienceLabCommon.scienceLab.isConnected()) {
+            bluetoothButton.setVisibility(View.GONE);
+            wifiButton.setVisibility(View.GONE);
+            bluetoothWifiOption.setVisibility(View.GONE);
+        } else {
+            bluetoothButton.setVisibility(View.VISIBLE);
+            wifiButton.setVisibility(View.VISIBLE);
+            bluetoothWifiOption.setVisibility(View.VISIBLE);
+        }
+        bluetoothButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BluetoothScanFragment bluetoothScanFragment = new BluetoothScanFragment();
+                bluetoothScanFragment.show(getActivity().getSupportFragmentManager(), "bluetooth");
+                bluetoothScanFragment.setCancelable(true);
+            }
+        });
 
+        wifiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ESPFragment espFragment = new ESPFragment();
+                espFragment.show(getActivity().getSupportFragmentManager(), "wifi");
+                espFragment.setCancelable(true);
+            }
+        });
         return view;
     }
 
