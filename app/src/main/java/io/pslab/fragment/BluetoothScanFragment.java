@@ -42,10 +42,12 @@ public class BluetoothScanFragment extends DialogFragment {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String deviceName = device.getName();
-                deviceList.add(deviceName);
-                bluetoothDevices.add(device);
-                deviceListAdapter.notifyDataSetChanged();
+                if (device != null) {
+                    String deviceName = device.getName();
+                    deviceList.add(deviceName);
+                    bluetoothDevices.add(device);
+                    deviceListAdapter.notifyDataSetChanged();
+                }
             }
         }
     };
