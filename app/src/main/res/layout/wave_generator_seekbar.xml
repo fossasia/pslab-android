@@ -11,11 +11,12 @@
         android:id="@+id/img_btn_down"
         android:layout_width="@dimen/length_0dp"
         android:layout_height="wrap_content"
+        android:padding="@dimen/btn_padding"
         android:layout_marginLeft="@dimen/seek_btn_margin"
         android:layout_marginRight="@dimen/seek_btn_margin"
         android:layout_weight="0.1"
         android:background="@drawable/btn_back_rounded"
-        android:src="@drawable/ic_arrow_drop_down_black_24dp"
+        android:src="@drawable/ic_arrow_left_24dp"
         android:stateListAnimator="@animator/selector_animator" />
 
     <com.warkiz.widget.IndicatorSeekBar
@@ -38,11 +39,12 @@
         android:id="@+id/img_btn_up"
         android:layout_width="@dimen/length_0dp"
         android:layout_height="wrap_content"
+        android:padding="@dimen/btn_padding"
         android:layout_marginLeft="@dimen/seek_btn_margin"
         android:layout_marginRight="@dimen/seek_btn_margin"
         android:layout_weight="0.1"
         android:background="@drawable/btn_back_rounded"
-        android:src="@drawable/ic_arrow_drop_up_black_24dp"
+        android:src="@drawable/ic_arrow_right_24dp"
         android:stateListAnimator="@animator/selector_animator" />
 
 </LinearLayout>

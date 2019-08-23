@@ -123,6 +123,8 @@
     <dimen name="multimeter_length_0">0dp</dimen>
     <dimen name="multimeter_knob_width_xhdpi">208dp</dimen>
     <dimen name="multimeter_knob_height_xhdpi">206dp</dimen>
+    <dimen name="wave_gen_control_text_size">14sp</dimen>
+    <dimen name="button_bg_radius">5dp</dimen>
 
     <dimen name="body_resistance_margin">10dp</dimen>
 

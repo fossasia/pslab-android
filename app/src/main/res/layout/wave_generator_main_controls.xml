@@ -17,10 +17,25 @@
         android:text="@string/produce_sound_text"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="@dimen/wave_gen_control_text_size" />
 
     <Button
-        android:id="@+id/pwm_btn_mode"
+        android:id="@+id/analog_mode_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_btn"
+        android:layout_marginTop="@dimen/margin_btn"
+        android:layout_marginBottom="@dimen/margin_btn"
+        android:layout_weight="1"
+        android:background="@drawable/btn_back_rounded"
+        android:minWidth="@dimen/btn_min_width"
+        android:stateListAnimator="@animator/selector_animator"
+        android:text="@string/text_analog"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/wave_gen_control_text_size" />
+    <Button
+        android:id="@+id/digital_mode_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/margin_btn"
@@ -28,11 +43,11 @@
         android:layout_marginEnd="@dimen/margin_btn"
         android:layout_marginBottom="@dimen/margin_btn"
         android:layout_weight="1"
-        android:background="@drawable/btn_back_rounded"
+        android:background="@drawable/btn_back_rounded_light"
         android:minWidth="@dimen/btn_min_width"
         android:stateListAnimator="@animator/selector_animator"
-        android:text="@string/mode"
+        android:text="@string/text_digital"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="@dimen/wave_gen_control_text_size" />
 </LinearLayout>

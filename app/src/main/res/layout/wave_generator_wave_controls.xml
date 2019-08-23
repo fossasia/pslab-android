@@ -2,8 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/dimen_zero_dp"
-    android:layout_height="@dimen/dimen_zero_dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/square_mode_controls"
@@ -67,6 +67,14 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.66" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline4_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
+                app:layout_constraintGuide_percent="0.83" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline5"
@@ -134,7 +142,7 @@
                 android:layout_height="@dimen/length_0dp"
                 android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
+                android:background="@drawable/btn_back_rounded_light"
                 android:stateListAnimator="@animator/selector_animator"
                 android:text="@string/text_phase"
                 android:textAllCaps="false"
@@ -156,7 +164,7 @@
                 android:src="@drawable/ic_sin"
                 android:stateListAnimator="@animator/selector_animator"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline4_3"
                 app:layout_constraintStart_toStartOf="@id/guideline4_2"
                 app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
@@ -164,16 +172,14 @@
                 android:id="@+id/ctrl_img_btn_tri"
                 android:layout_width="@dimen/dimen_zero_dp"
                 android:layout_height="@dimen/dimen_zero_dp"
-                android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/margin_btn"
                 android:layout_marginEnd="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
+                android:background="@drawable/btn_back_rounded_light"
                 android:src="@drawable/ic_triangular"
                 android:stateListAnimator="@animator/selector_animator"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/guideline4_2"
+                app:layout_constraintStart_toStartOf="@id/guideline4_3"
                 app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
         </android.support.constraint.ConstraintLayout>
@@ -290,7 +296,7 @@
                 android:layout_height="@dimen/length_0dp"
                 android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
+                android:background="@drawable/btn_back_rounded_light"
                 android:stateListAnimator="@animator/selector_animator"
                 android:text="@string/text_sq2"
                 android:textColor="@color/white"
@@ -306,7 +312,7 @@
                 android:layout_height="@dimen/length_0dp"
                 android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
+                android:background="@drawable/btn_back_rounded_light"
                 android:stateListAnimator="@animator/selector_animator"
                 android:text="@string/text_sq3"
                 android:textColor="@color/white"
@@ -323,7 +329,7 @@
                 android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/margin_btn"
                 android:layout_marginEnd="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
+                android:background="@drawable/btn_back_rounded_light"
                 android:stateListAnimator="@animator/selector_animator"
                 android:text="@string/text_sq4"
                 android:textColor="@color/white"
@@ -358,7 +364,7 @@
                 android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/margin_btn"
                 android:layout_marginEnd="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
+                android:background="@drawable/btn_back_rounded_light"
                 android:stateListAnimator="@animator/selector_animator"
                 android:text="@string/text_duty"
                 android:textAllCaps="false"
@@ -375,7 +381,7 @@
                 android:layout_height="@dimen/length_0dp"
                 android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded"
+                android:background="@drawable/btn_back_rounded_light"
                 android:stateListAnimator="@animator/selector_animator"
                 android:text="@string/text_phase"
                 android:textAllCaps="false"
