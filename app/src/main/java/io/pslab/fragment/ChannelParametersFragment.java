@@ -21,7 +21,6 @@ import android.widget.Toast;
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
-import io.pslab.others.NothingSelectedSpinnerAdapter;
 
 public class ChannelParametersFragment extends Fragment {
 
@@ -30,13 +29,11 @@ public class ChannelParametersFragment extends Fragment {
     private CheckBox checkBoxCH1;
     private CheckBox checkBoxCH2;
     private CheckBox checkBoxCH3;
-    private CheckBox checkBoxMIC;
     private Spinner spinnerRangeCh1;
     private Spinner spinnerRangeCh2;
     private Spinner spinnerChannelSelect;
-    private Spinner spinnerMICSelect;
-    private int micSelectedPosition;
-
+    private CheckBox builtInMicCheckBox;
+    private CheckBox pslabMicCheckBox;
 
     public static ChannelParametersFragment newInstance() {
         return new ChannelParametersFragment();
@@ -56,15 +53,15 @@ public class ChannelParametersFragment extends Fragment {
         spinnerRangeCh1 = v.findViewById(R.id.spinner_range_ch1_cp);
         spinnerRangeCh2 = v.findViewById(R.id.spinner_range_ch2_cp);
         spinnerChannelSelect = v.findViewById(R.id.spinner_channel_select_cp);
-        spinnerMICSelect = v.findViewById(R.id.spinner_mic_select_cp);
 
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         checkBoxCH1 = v.findViewById(R.id.checkBox_ch1_cp);
         checkBoxCH2 = v.findViewById(R.id.checkBox_ch2_cp);
         checkBoxCH3 = v.findViewById(R.id.checkBox_ch3_cp);
         checkBoxCH3.setText(getString(R.string.ch3_value, 3.3));
-        checkBoxMIC = v.findViewById(R.id.checkBox_mic_cp);
 
+        builtInMicCheckBox = v.findViewById(R.id.built_in_mic_cb);
+        pslabMicCheckBox = v.findViewById(R.id.pslab_mic_cb);
         ArrayAdapter<String> rangesAdapter;
         ArrayAdapter<String> channelsAdapter;
         ArrayAdapter<String> micsAdapter;
@@ -88,9 +85,6 @@ public class ChannelParametersFragment extends Fragment {
         spinnerRangeCh2.setSelection(rangesAdapter.getPosition("+/-16V"), true);
         spinnerChannelSelect.setAdapter(channelsAdapter);
         spinnerChannelSelect.setSelection(channelsAdapter.getPosition("CH1"), true);
-        spinnerMICSelect.setAdapter(new NothingSelectedSpinnerAdapter(micsAdapter,
-                R.layout.nothing_selected_spinner_row,
-                getActivity()));
 
         spinnerRangeCh1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -220,31 +214,6 @@ public class ChannelParametersFragment extends Fragment {
             }
         });
 
-        spinnerMICSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                micSelectedPosition = position;
-                if (position == 1) {
-                    ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
-                    if (checkBoxMIC.isChecked()) {
-                        ((OscilloscopeActivity) getActivity()).isMICSelected = true;
-                        ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
-                    }
-                } else {
-                    ((OscilloscopeActivity) getActivity()).isMICSelected = false;
-                    if (checkBoxMIC.isChecked()) {
-                        ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
-                        ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
-                    }
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         checkBoxCH1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -265,29 +234,37 @@ public class ChannelParametersFragment extends Fragment {
                 ((OscilloscopeActivity) getActivity()).isCH3Selected = isChecked;
             }
         });
-        checkBoxMIC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        builtInMicCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (micSelectedPosition == 1) {
-                    ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
-                    ((OscilloscopeActivity) getActivity()).isMICSelected = isChecked;
-                } else if (micSelectedPosition == 2) {
-                    ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
-                    // check for RECORD_AUDIO permission if has then change boolean
-                    if (isChecked)
-                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
-                        } else {
-                            ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
-                        }
-                    else
-                        ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
-                } else {
-                    ((OscilloscopeActivity) getActivity()).isAudioInputSelected = false;
+                ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = isChecked;
+                ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
+                ((OscilloscopeActivity) getActivity()).isMICSelected = !isChecked;
+                if (isChecked) {
+                    pslabMicCheckBox.setChecked(false);
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
+                        ((OscilloscopeActivity) getActivity()).isAudioInputSelected = false;
+                    }
                 }
             }
         });
 
+        pslabMicCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ((OscilloscopeActivity) getActivity()).isMICSelected = isChecked;
+                ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
+                ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = !isChecked;
+                if (isChecked) {
+                    builtInMicCheckBox.setChecked(false);
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
+                        ((OscilloscopeActivity) getActivity()).isAudioInputSelected = false;
+                    }
+                }
+            }
+        });
         return v;
     }
 
@@ -298,8 +275,8 @@ public class ChannelParametersFragment extends Fragment {
                 ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
             } else {
                 Toast.makeText(getActivity(), "This feature won't work.", Toast.LENGTH_SHORT).show();
-                if (checkBoxMIC.isChecked())
-                    checkBoxMIC.toggle();
+                if (builtInMicCheckBox.isChecked())
+                    builtInMicCheckBox.toggle();
             }
         }
     }

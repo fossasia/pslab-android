@@ -16,12 +16,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/top_app_bar_layout">
+            android:layout_below="@id/top_app_bar_layout"
+            android:layout_marginTop="@dimen/osc_main_margin"
+            android:layout_marginStart="@dimen/osc_main_margin">
 
             <RelativeLayout
                 android:id="@+id/layout_chart_os"
                 android:layout_width="@dimen/osc_chart_width"
-                android:layout_height="@dimen/osc_chart_height">
+                android:layout_height="@dimen/osc_chart_height"
+                android:layout_marginEnd="@dimen/osc_main_margin">
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart_os"
@@ -190,7 +193,9 @@
                 android:layout_toEndOf="@+id/layout_chart_os"
                 android:layout_toRightOf="@+id/layout_chart_os"
                 android:background="@drawable/rounded_custom_border_2"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/osc_main_margin"
+                android:layout_marginEnd="@dimen/osc_main_margin">
 
                 <ImageButton
                     android:id="@+id/button_channel_parameters_os"
@@ -306,11 +311,10 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/layout_chart_os"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginStart="@dimen/length_0dp"
-                android:layout_marginLeft="@dimen/length_0dp"
-                android:layout_toStartOf="@+id/layout_dock_os1"
-                android:layout_toLeftOf="@+id/layout_dock_os1">
+                android:layout_marginEnd="@dimen/osc_main_margin"
+                android:layout_marginTop="@dimen/osc_main_margin"
+                android:layout_marginBottom="@dimen/osc_main_margin"
+                android:layout_toStartOf="@+id/layout_dock_os1">
 
             </FrameLayout>
         </RelativeLayout>

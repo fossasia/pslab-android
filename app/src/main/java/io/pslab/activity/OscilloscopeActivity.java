@@ -764,17 +764,17 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         RelativeLayout.LayoutParams frameLayoutParams = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
         if (getResources().getBoolean(R.bool.isTablet)) {
             lineChartParams.height = height * 3 / 4;
-            lineChartParams.width = width * 7 / 8;
+            lineChartParams.width = width * 9 / 10;
             mChartLayout.setLayoutParams(lineChartParams);
             frameLayoutParams.height = height / 4;
-            frameLayoutParams.width = width * 7 / 8;
+            frameLayoutParams.width = width * 9 / 10;
             frameLayout.setLayoutParams(frameLayoutParams);
         } else {
             lineChartParams.height = height * 3 / 5;
-            lineChartParams.width = width * 5 / 6;
+            lineChartParams.width = width * 7 / 8;
             mChartLayout.setLayoutParams(lineChartParams);
             frameLayoutParams.height = height * 2 / 5;
-            frameLayoutParams.width = width * 5 / 6;
+            frameLayoutParams.width = width * 7 / 8;
             frameLayout.setLayoutParams(frameLayoutParams);
         }
     }

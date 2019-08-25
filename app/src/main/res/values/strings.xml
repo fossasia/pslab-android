@@ -682,6 +682,8 @@
     <string name="duty_holder_text">50 %</string>
     <string name="open_instrument">Open instrument</string>
 
+    <string name="built_in_mic_option">In-Built MIC</string>
+    <string name="pslab_mic_option">PSLab MIC</string>
     <string name="sine">Sine</string>
     <string name="triangular">Triangular</string>
     <string name="square">Square</string>
