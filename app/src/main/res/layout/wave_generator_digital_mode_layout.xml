@@ -2,18 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pwm_mode_layout"
-    android:layout_width="@dimen/length_0dp"
-    android:layout_height="@dimen/length_0dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginEnd="@dimen/card_separation_offset"
     android:background="@color/black">
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-        app:layout_constraintGuide_percent="0.20" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline9"
@@ -54,7 +46,7 @@
         app:layout_constraintBottom_toTopOf="@+id/pwm_mon_mode_select"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.45"
         app:layout_constraintVertical_chainStyle="packed"
         app:srcCompat="@drawable/ic_pwm_pic" />
@@ -74,64 +66,6 @@
         app:layout_constraintTop_toBottomOf="@+id/pwm_ic_img" />
 
     <TextView
-        android:id="@+id/pwm_mon_sq1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/text_sq1"
-        android:textColor="@drawable/text_color_selector"
-        android:textSize="@dimen/text_size_wavegen"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/pwm_mon_sq2"
-        app:layout_constraintStart_toStartOf="@+id/guideline12"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/pwm_mon_sq2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/text_sq2"
-        android:textColor="@drawable/text_color_selector"
-        android:textSize="@dimen/text_size_wavegen"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/pwm_mon_sq3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/pwm_mon_sq1"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/pwm_mon_sq3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/text_sq3"
-        android:textColor="@drawable/text_color_selector"
-        android:textSize="@dimen/text_size_wavegen"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/pwm_mon_sq4"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/pwm_mon_sq2"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/pwm_mon_sq4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/text_sq4"
-        android:textColor="@drawable/text_color_selector"
-        android:textSize="@dimen/text_size_wavegen"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/guideline13"
-        app:layout_constraintStart_toEndOf="@+id/pwm_mon_sq3"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/pwm_freq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -142,7 +76,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/pwm_phase"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
@@ -222,18 +156,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.20"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline3" />
-
-    <View
-        android:layout_width="@dimen/length_0dp"
-        android:layout_height="@dimen/divider_width"
-        android:background="@color/dark_grey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.20"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:layout_width="@dimen/length_0dp"

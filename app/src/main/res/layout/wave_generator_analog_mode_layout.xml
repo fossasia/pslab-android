@@ -2,8 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/square_mode_layout"
-    android:layout_width="@dimen/length_0dp"
-    android:layout_height="@dimen/length_0dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginEnd="@dimen/card_separation_offset"
     android:background="@color/black">
 
@@ -14,14 +14,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
         app:layout_constraintGuide_percent="0.5" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/fguideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-        app:layout_constraintGuide_percent="0.20" />
 
     <android.support.constraint.Guideline
         android:id="@+id/fguideline9"
@@ -37,7 +29,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.20" />
 
     <ImageView
         android:id="@+id/wave_ic_img"
@@ -46,41 +38,10 @@
         app:layout_constraintBottom_toTopOf="@+id/wave_mon_select_wave"
         app:layout_constraintEnd_toStartOf="@+id/fguideline10"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fguideline3"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.45"
         app:layout_constraintVertical_chainStyle="packed"
         app:srcCompat="@drawable/ic_triangular" />
-
-    <TextView
-        android:id="@+id/wave_mon_wave1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/mon_title_sep_margin"
-        android:enabled="false"
-        android:text="@string/wave1"
-        android:textColor="@drawable/text_color_selector"
-        android:textSize="@dimen/text_size_wavegen"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/fguideline3"
-        app:layout_constraintEnd_toStartOf="@+id/fguideline2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/wave_mon_wave2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/mon_title_sep_margin"
-        android:enabled="false"
-        android:text="@string/wave2"
-        android:textColor="@drawable/text_color_selector"
-        android:textSize="@dimen/text_size_wavegen"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/wave_mon_wave1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/fguideline2"
-        app:layout_constraintTop_toTopOf="@+id/wave_mon_wave1" />
-
 
     <TextView
         android:id="@+id/wave_mon_select_wave"
@@ -108,7 +69,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/wave_phase"
         app:layout_constraintStart_toStartOf="@+id/fguideline10"
-        app:layout_constraintTop_toTopOf="@+id/fguideline3"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
@@ -186,20 +147,9 @@
         android:background="@color/dark_grey"
         app:layout_constraintBottom_toTopOf="@+id/fguideline9"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.35"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fguideline3" />
-
-    <View
-        android:layout_width="@dimen/length_0dp"
-        android:layout_height="@dimen/divider_width"
-        android:background="@color/dark_grey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.20"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:layout_width="@dimen/length_0dp"

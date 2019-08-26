@@ -788,8 +788,6 @@
     <string name="show_guide_text">Show Guide</string>
     <string name="hide_guide_text">Hide Guide</string>
 
-    <string name="wave_pin_disable_comment">Wave Pins will be disabled</string>
-
     <string name="wave_gen_guide_intro">The wave generator can be used to generate different types of waves like
         Sine wave, Square wave, Saw Tooth wave and allow us to changes their characteristics like frequency, phase, duty.
         \nIt also allows us to produce PWM signals having different phase and duty.</string>
