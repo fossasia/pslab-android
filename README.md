@@ -7,11 +7,10 @@
 [![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/pslab-fossasia)
-[![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
-
 ![Minimum API Level](https://img.shields.io/badge/Min%20API%20Level-23-green)
 ![Maximum API Level](https://img.shields.io/badge/Max%20API%20Level-28-orange)
 ![GitHub repo size](https://img.shields.io/github/repo-size/fossasia/pslab-android)
+[![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
 
 This repository holds the Android App for performing experiments with [PSLab](https://pslab.io/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at https://pslab.io
 
@@ -107,10 +106,10 @@ Please join us on the following channels:
 | Logical Analyzer       | Captures and displays signals from digital system                 | :heavy_check_mark: |
 | Wave Generator         | Generates arbitrary analog and digital waveforms                  | :heavy_check_mark: |
 | Power Source           | Generates programmable voltage and currents	                     | :heavy_check_mark: |
-| Lux Meter              | Measures the ambient light intensity                              | :heavy_check_mark: |
-| Baro Meter             | Measures the Pressure                                             | :heavy_check_mark: |
-| AcceleroMeter          | Measures the acceleration of the device                           | :heavy_check_mark: |
-| Gyro Meter             | Measures the rate of rotation                                     | :heavy_check_mark: |
+| Luxmeter              | Measures the ambient light intensity                              | :heavy_check_mark: |
+| Barometer             | Measures the Pressure                                             | :heavy_check_mark: |
+| Accelerometer          | Measures the acceleration of the device                           | :heavy_check_mark: |
+| Gyrometer             | Measures the rate of rotation                                     | :heavy_check_mark: |
 | Compass                | Measures the absolute rotation relative to earth magnetic poles   | :heavy_check_mark: |
 | Thermometer            | Measures the ambient temperature                                  | :heavy_check_mark: |
 | Gas Sensor             | Detects gases, including NH3, NOx, alcohol, benzene, smoke and CO2| :heavy_check_mark: |
