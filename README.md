@@ -1,7 +1,6 @@
 # PSLab Android App
 
-<a href="https://play.google.com/store/apps/details?id=io.pslab"><img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"></a>
-<a href="https://f-droid.org/app/io.pslab"><img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png"></a>
+Repository for the PSLab Android App for performing experiments with the [Pocket Science Lab](https://pslab.io) open-hardware platform.
 
 [![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=development)](https://travis-ci.org/fossasia/pslab-android)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
@@ -13,6 +12,9 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
 
 This repository holds the Android App for performing experiments with [PSLab](https://pslab.io/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at https://pslab.io
+
+<a href="https://play.google.com/store/apps/details?id=io.pslab"><img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"></a>
+<a href="https://f-droid.org/app/io.pslab"><img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png"></a>
 
 ## Buy
 
