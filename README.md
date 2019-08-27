@@ -4,21 +4,25 @@
 <a href="https://f-droid.org/app/io.pslab"><img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png"></a>
 
 [![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=development)](https://travis-ci.org/fossasia/pslab-android)
-[![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/pslab-fossasia)
 ![Minimum API Level](https://img.shields.io/badge/Min%20API%20Level-23-green)
 ![Maximum API Level](https://img.shields.io/badge/Max%20API%20Level-28-orange)
 ![GitHub repo size](https://img.shields.io/github/repo-size/fossasia/pslab-android)
+[![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
 
 This repository holds the Android App for performing experiments with [PSLab](https://pslab.io/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at https://pslab.io
 
+## Buy
+
+* You can get a Pocket Science Lab device from the [FOSSASIA Shop](https://fossasia.com).
+* More resellers are listed on the [PSLab website](https://pslab.io/shop/).
+
 ## Communication
 
-Please join us on the following channels:
-* [Pocket Science Channel](https://gitter.im/fossasia/pslab)
-* [Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia)
+* The PSLab [chat channel is on Gitter](https://gitter.im/fossasia/pslab).
+* Please also join us on the [PSLab Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia).
 
 ## Roadmap
  - [x] First we need to get communication between Android App and PSLab working.
