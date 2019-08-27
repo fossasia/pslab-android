@@ -10,9 +10,8 @@
         android:id="@+id/checkBox_ch1_cp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/osc_cb_margin"
+        android:layout_marginTop="@dimen/osc_cb_margin"
         android:text="@string/ch1"
         android:textStyle="normal|bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -22,9 +21,8 @@
         android:id="@+id/checkBox_ch2_cp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="@dimen/osc_cb_margin"
+        android:layout_marginStart="@dimen/osc_cb_margin"
         android:text="@string/ch2"
         android:textStyle="normal|bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,20 +32,19 @@
         android:id="@+id/checkBox_ch3_cp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/osc_cb_margin"
+        android:layout_marginTop="@dimen/osc_cb_margin"
         android:textStyle="normal|bold"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/mic_radio_group"
+        app:layout_constraintStart_toEndOf="@id/spinner_channel_select_cp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_range1_cp"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/osc_tv_height"
+        android:layout_marginStart="@dimen/osc_cb_margin"
+        android:layout_marginTop="@dimen/osc_cb_margin"
         android:gravity="center_vertical"
         android:text="@string/range"
         android:textColor="@color/cardview_dark_background"
@@ -57,10 +54,9 @@
     <TextView
         android:id="@+id/tv_range2_cp"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="@dimen/osc_tv_height"
+        android:layout_marginBottom="@dimen/osc_cb_margin"
+        android:layout_marginStart="@dimen/osc_cb_margin"
         android:gravity="fill_vertical"
         android:text="@string/range"
         android:textColor="@color/cardview_dark_background"
@@ -71,8 +67,7 @@
         android:id="@+id/spinner_range_ch2_cp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/osc_cb_margin"
         android:layout_marginBottom="@dimen/osc_spinner_margin_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/tv_range2_cp" />
@@ -80,49 +75,64 @@
     <Spinner
         android:id="@+id/spinner_channel_select_cp"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="@dimen/osc_spinner_height"
+        android:layout_marginStart="@dimen/osc_cb_margin"
         app:layout_constraintLeft_toRightOf="@+id/spinner_range_ch1_cp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/spinner_range_ch1_cp"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="@dimen/osc_spinner_height"
         app:layout_constraintLeft_toRightOf="@+id/tv_range1_cp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/osc_cb_margin"/>
 
     <TextView
         android:id="@+id/tv_ch2_cp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginBottom="@dimen/osc_cb_margin2"
+        android:layout_marginStart="@dimen/osc_cb_margin"
         android:clickable="true"
         android:text="@string/ch2"
-
         android:textColor="@android:color/background_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/spinner_range_ch2_cp" />
 
-    <CheckBox
+    <RadioGroup
+        android:id="@+id/mic_radio_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox_mic_cp"
-        app:layout_constraintLeft_toLeftOf="@+id/checkBox_ch3_cp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginTop="@dimen/osc_cb_margin"
+        android:layout_marginEnd="@dimen/osc_cb_margin"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Spinner
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:id="@+id/spinner_mic_select_cp"
-        app:layout_constraintLeft_toRightOf="@+id/checkBox_mic_cp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <CheckBox
+            android:id="@+id/built_in_mic_cb"
+            style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/osc_tv_margin"
+            android:text="@string/built_in_mic_option"
+            android:textStyle="normal|bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/pslab_mic_cb" />
+
+        <CheckBox
+            android:id="@+id/pslab_mic_cb"
+            style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/osc_cb_margin"
+            android:text="@string/pslab_mic_option"
+            android:textStyle="normal|bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </RadioGroup>
 
 
 </android.support.constraint.ConstraintLayout>

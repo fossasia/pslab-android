@@ -128,16 +128,23 @@
 
     <dimen name="body_resistance_margin">10dp</dimen>
 
+    <dimen name="osc_cb_margin">8dp</dimen>
+    <dimen name="osc_cb_margin2">16dp</dimen>
+    <dimen name="osc_tv_height">32dp</dimen>
+    <dimen name="osc_spinner_height">48dp</dimen>
+    <dimen name="osc_radio_margin">20dp</dimen>
     <dimen name="osc_chart_width">600dp</dimen>
     <dimen name="osc_chart_height">300dp</dimen>
     <dimen name="osc_axis_text_size">9sp</dimen>
     <dimen name="osc_tv_unit_margin">8dp</dimen>
+    <dimen name="osc_tv_margin">10dp</dimen>
     <dimen name="osc_text_margin">4dp</dimen>
     <dimen name="osc_tv_left_axis_height">9dp</dimen>
     <dimen name="osc_tv_axis_margin">16dp</dimen>
-    <dimen name="osc_text_size">12sp</dimen>
+    <dimen name="osc_text_size">9sp</dimen>
     <dimen name="osc_image_dimens">15dp</dimen>
     <dimen name="osc_image_margin">1dp</dimen>
+    <dimen name="osc_main_margin">5dp</dimen>
     <dimen name="osc_image_weight">2</dimen>
     <dimen name="osc_divider_line">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
@@ -145,6 +152,8 @@
     <dimen name="osc_play_button_widht">50dp</dimen>
     <dimen name="osc_playback_margin">10dp</dimen>
     <dimen name="osc_spinner_margin_bottom">13dp</dimen>
+    <dimen name="osc_text_size_large">18sp</dimen>
+    <dimen name="osc_spinner_padding">2dp</dimen>
 
     <dimen name="modified_spinner_height">40dp</dimen>
     <dimen name="spinner_text_size">15sp</dimen>

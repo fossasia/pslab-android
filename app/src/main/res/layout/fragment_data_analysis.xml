@@ -10,20 +10,17 @@
     <Spinner
         android:id="@+id/spinner_curve_fit_da"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/osc_spinner_height"
+        android:layout_marginStart="@dimen/osc_cb_margin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/spinner_channel_select_da1"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/osc_spinner_height"
+        android:layout_marginEnd="@dimen/osc_cb_margin"
+        android:layout_marginStart="@dimen/osc_cb_margin"
         app:layout_constraintLeft_toRightOf="@+id/spinner_curve_fit_da"
         app:layout_constraintRight_toLeftOf="@+id/spinner_channel_select_da2"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,10 +28,8 @@
     <Spinner
         android:id="@+id/spinner_channel_select_da2"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/osc_spinner_height"
+        android:layout_marginEnd="@dimen/osc_cb_margin"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,9 +37,7 @@
         android:id="@+id/checkBox_fourier_da"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="@dimen/osc_cb_margin"
         android:text="@string/fourier_transforms"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
