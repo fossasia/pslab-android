@@ -5,14 +5,15 @@ import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.SparseBooleanArray;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -30,12 +31,12 @@ public class CreateConfigActivity extends AppCompatActivity {
     private ArrayList<String> instrumentsList;
     private ArrayList<String[]> instrumentParamsList;
     private ArrayList<String[]> instrumentParamsListTitles;
-    private ListView paramsListView;
     private int selectedItem = 0;
     private String intervalUnit = "sec";
     private EditText intervalEditText;
     private String interval;
     private View rootView;
+    private LinearLayout paramsListContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class CreateConfigActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_config);
         Toolbar toolbar = findViewById(R.id.toolbar);
         rootView = findViewById(R.id.create_config_root_view);
-        paramsListView = findViewById(R.id.params_list);
+        paramsListContainer = findViewById(R.id.params_list_container);
         Spinner selectInstrumentSpinner = findViewById(R.id.select_instrument_spinner);
         Spinner intervalUnitSpinner = findViewById(R.id.interval_unit_spinner);
         intervalEditText = findViewById(R.id.interval_edit_text);
@@ -95,10 +96,10 @@ public class CreateConfigActivity extends AppCompatActivity {
                 if (interval.length() == 0) {
                     Toast.makeText(CreateConfigActivity.this, getResources().getString(R.string.no_interval_message), Toast.LENGTH_SHORT).show();
                 } else {
-                    SparseBooleanArray selectedParams = paramsListView.getCheckedItemPositions();
                     ArrayList<String> selectedParamsList = new ArrayList<>();
-                    for (int i = 0; i < paramsListView.getCount(); i++) {
-                        if (selectedParams.get(i)) {
+                    for (int i = 0; i < paramsListContainer.getChildCount(); i ++) {
+                        CheckBox checkBox = (CheckBox) paramsListContainer.getChildAt(i);
+                        if (checkBox.isChecked()) {
                             selectedParamsList.add(instrumentParamsList.get(selectedItem)[i]);
                         }
                     }
@@ -133,8 +134,17 @@ public class CreateConfigActivity extends AppCompatActivity {
     }
 
     private void createCheckboxList() {
-        paramsListView.setAdapter(new ArrayAdapter<String>(CreateConfigActivity.this, android.R.layout.simple_list_item_multiple_choice, instrumentParamsListTitles.get(selectedItem)));
-        paramsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        paramsListContainer.removeAllViews();
+        String[] params = instrumentParamsListTitles.get(selectedItem);
+        for (int i = 0; i < params.length; i++){
+            CheckBox checkBox = new CheckBox(CreateConfigActivity.this);
+            checkBox.setText(params[i]);
+            LinearLayout.LayoutParams checkBoxParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+            checkBoxParams.gravity = Gravity.CENTER_HORIZONTAL;
+            checkBoxParams.setMargins(0,(int)getResources().getDimension(R.dimen.create_config_margin1),0,0);
+            checkBox.setLayoutParams(checkBoxParams);
+            paramsListContainer.addView(checkBox, i);
+        }
     }
 
     @Override

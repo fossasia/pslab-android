@@ -7,84 +7,91 @@
     android:layout_height="match_parent"
     tools:context=".activity.CreateConfigActivity">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/top_app_bar_layout"
-        android:padding="@dimen/home_fragment_padding">
+        android:layout_below="@+id/top_app_bar_layout">
 
-        <TextView
-            android:id="@+id/select_instrument_title"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/create_config_margin4"
-            android:text="@string/select_instrument_title" />
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/select_instrument_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/select_instrument_title" />
-
-        <TextView
-            android:id="@+id/time_interval_title"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/select_instrument_title"
-            android:layout_marginTop="@dimen/create_config_margin3"
-            android:text="@string/time_interval_title" />
-
-        <EditText
-            android:id="@+id/interval_edit_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/select_instrument_title"
-            android:layout_marginStart="@dimen/margin_btn"
-            android:layout_marginTop="@dimen/create_config_margin1"
-            android:layout_toEndOf="@id/time_interval_title"
-            android:hint="@string/time_interval_hint"
-            android:inputType="number" />
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/interval_unit_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/select_instrument_title"
-            android:layout_marginStart="@dimen/margin_btn"
-            android:layout_marginTop="@dimen/create_config_margin1"
-            android:layout_toEndOf="@+id/interval_edit_text" />
-
-        <TextView
-            android:id="@+id/select_params_title"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/time_interval_title"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/create_config_margin2"
-            android:text="@string/select_params_title" />
-
-        <ListView
-            android:id="@+id/params_list"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/create_config_btn"
-            android:layout_below="@+id/select_params_title"
-            android:layout_margin="@dimen/create_config_margin1" />
+            android:padding="@dimen/home_fragment_padding">
 
-        <Button
-            android:id="@+id/create_config_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@color/colorPrimary"
-            android:padding="@dimen/margin_btn"
-            android:text="@string/create_config_btn_text"
-            android:textColor="@color/white" />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/select_instrument_title"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/create_config_margin4"
+                android:text="@string/select_instrument_title" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/select_instrument_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/select_instrument_title" />
+
+            <TextView
+                android:id="@+id/time_interval_title"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/select_instrument_title"
+                android:layout_marginTop="@dimen/create_config_margin3"
+                android:text="@string/time_interval_title" />
+
+            <EditText
+                android:id="@+id/interval_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/select_instrument_title"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/create_config_margin1"
+                android:layout_toEndOf="@id/time_interval_title"
+                android:hint="@string/time_interval_hint"
+                android:inputType="number" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/interval_unit_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/select_instrument_title"
+                android:layout_marginStart="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/create_config_margin1"
+                android:layout_toEndOf="@+id/interval_edit_text" />
+
+            <TextView
+                android:id="@+id/select_params_title"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/time_interval_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/create_config_margin2"
+                android:text="@string/select_params_title" />
+
+            <LinearLayout
+                android:id="@+id/params_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/select_params_title"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/create_config_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/params_list_container"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_back_rounded"
+                android:padding="@dimen/margin_btn"
+                android:layout_marginTop="@dimen/create_config_margin2"
+                android:text="@string/create_config_btn_text"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+    </ScrollView>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/top_app_bar_layout"
