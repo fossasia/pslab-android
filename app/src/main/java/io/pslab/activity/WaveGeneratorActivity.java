@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -20,6 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -29,7 +29,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,18 +36,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.warkiz.widget.IndicatorSeekBar;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
@@ -202,6 +206,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         pwmModeLayout = findViewById(R.id.pwm_mode_layout);
         previewChart = findViewById(R.id.chart_preview);
 
+        waveBtnActive = WaveConst.WAVE1;
+        pwmBtnActive = WaveConst.SQR1;
         squareModeControls = findViewById(R.id.square_mode_controls);
         pwmModeControls = findViewById(R.id.pwm_mode_controls);
         csvLogger = new CSVLogger(getString(R.string.wave_generator));
@@ -751,6 +757,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         }
         prop_active = null;
         toggleSeekBtns(false);
+        previewWave();
     }
 
     private void selectWaveform(final int waveType) {
@@ -778,6 +785,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         }
         selectedWaveText.setText(waveFormText);
         selectedWaveImg.setImageDrawable(image);
+        previewWave();
     }
 
     private void toggleDigitalMode(WaveConst mode) {
@@ -800,6 +808,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             btnPwmSq4.setEnabled(true);
         }
         WaveGeneratorCommon.mode_selected = mode;
+        previewWave();
     }
 
     private void fetchPropertyValue(WaveConst btnActive, WaveConst property, String unit, TextView propTextView) {
@@ -897,9 +906,78 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             WaveGeneratorCommon.wave.get(waveBtnActive).put(prop_active, value);
         }
         setWave();
+        previewWave();
         Double dValue = (double) value;
         String valueText = String.valueOf(dValue.intValue()) + " " + unit;
         activePropTv.setText(valueText);
+    }
+
+    private void previewWave() {
+        List<ILineDataSet> dataSets = new ArrayList<>();
+        ArrayList<Entry> entries = getSamplePoints(false);
+        ArrayList<Entry> refEntries = getSamplePoints(true);
+        LineDataSet dataSet;
+        LineDataSet refDataSet;
+        if (WaveGeneratorCommon.mode_selected == WaveConst.PWM) {
+            dataSet = new LineDataSet(entries, pwmBtnActive.toString());
+            refDataSet = new LineDataSet(refEntries, getResources().getString(R.string.reference_wave_title));
+        } else {
+            dataSet = new LineDataSet(entries, waveBtnActive.toString());
+            refDataSet = new LineDataSet(refEntries, getResources().getString(R.string.reference_wave_title));
+        }
+        dataSet.setDrawCircles(false);
+        dataSet.setColor(Color.WHITE);
+        refDataSet.setDrawCircles(false);
+        refDataSet.setColor(Color.GRAY);
+        dataSets.add(refDataSet);
+        dataSets.add(dataSet);
+        LineData data = new LineData(dataSets);
+        data.setDrawValues(false);
+        previewChart.setData(data);
+        previewChart.notifyDataSetChanged();
+        previewChart.invalidate();
+    }
+
+    private ArrayList<Entry> getSamplePoints(boolean isReference) {
+        ArrayList<Entry> entries = new ArrayList<>();
+        if (WaveGeneratorCommon.mode_selected == WaveConst.PWM) {
+            double freq = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+            double duty = ((double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.DUTY)) / 100;
+            double phase = 0;
+            if (pwmBtnActive != WaveConst.SQR1 && !isReference) {
+                phase = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.PHASE);
+            }
+            for (int i = 0; i < 5000; i++) {
+                double t = 2 * Math.PI * freq * (i) / 1e6 + phase * Math.PI / 180;
+                double y;
+                if (t % (2 * Math.PI) < 2 * Math.PI * duty) {
+                    y = 5;
+                } else {
+                    y = -5;
+                }
+                entries.add(new Entry((float) i, (float) y));
+            }
+        } else {
+            double phase = 0;
+            int shape = WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE);
+            double freq = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
+
+            if (waveBtnActive != WaveConst.WAVE1 && !isReference) {
+                phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
+            }
+            if (shape == 1) {
+                for (int i = 0; i < 5000; i++) {
+                    float y = (float) (5 * Math.sin(2 * Math.PI * (freq / 1e6) * i + phase * Math.PI / 180));
+                    entries.add(new Entry((float) i, y));
+                }
+            } else {
+                for (int i = 0; i < 5000; i++) {
+                    float y = (float) ((10 / Math.PI) * (Math.asin(Math.sin(2 * Math.PI * (freq / 1e6) * i + phase * Math.PI / 180))));
+                    entries.add(new Entry((float) i, y));
+                }
+            }
+        }
+        return entries;
     }
 
     private void chartInit() {
@@ -912,13 +990,18 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         previewChart.setScaleYEnabled(false);
         previewChart.setBackgroundColor(Color.BLACK);
         previewChart.getDescription().setEnabled(false);
-        previewChart.getXAxis().setAxisMaximum(1000);
+        previewChart.getXAxis().setAxisMaximum(5000);
         previewChart.getXAxis().setAxisMinimum(0);
         previewChart.getXAxis().setTextColor(Color.WHITE);
-        previewChart.getAxisLeft().setAxisMaximum(5);
-        previewChart.getAxisLeft().setAxisMinimum(-5);
+        previewChart.getAxisLeft().setAxisMaximum(10);
+        previewChart.getAxisLeft().setAxisMinimum(-10);
+        previewChart.getAxisRight().setAxisMaximum(10);
+        previewChart.getAxisRight().setAxisMinimum(-10);
         previewChart.fitScreen();
         previewChart.invalidate();
+        Legend l = previewChart.getLegend();
+        l.setForm(Legend.LegendForm.LINE);
+        l.setTextColor(Color.WHITE);
     }
 
     private void toggleSeekBtns(boolean state) {

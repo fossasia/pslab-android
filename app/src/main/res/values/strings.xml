@@ -682,6 +682,7 @@
     <string name="duty_holder_text">50 %</string>
     <string name="open_instrument">Open instrument</string>
 
+    <string name="reference_wave_title">Reference</string>
     <string name="built_in_mic_option">In-Built MIC</string>
     <string name="pslab_mic_option">PSLab MIC</string>
     <string name="sine">Sine</string>
