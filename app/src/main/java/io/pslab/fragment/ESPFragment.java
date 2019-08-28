@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import io.pslab.R;
+import io.pslab.others.ScienceLabCommon;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -78,6 +79,10 @@ public class ESPFragment extends DialogFragment {
                         .url("http://" + espIPAddress)
                         .build();
                 Response response = client.newCall(request).execute();
+                if (response.code() == 200) {
+                    ScienceLabCommon.setIsWifiConnected(true);
+                    ScienceLabCommon.setEspBaseIP(espIPAddress);
+                }
                 result = response.body().string();
             } catch (IOException e) {
                 e.printStackTrace();

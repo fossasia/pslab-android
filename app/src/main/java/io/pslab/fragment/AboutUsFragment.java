@@ -16,6 +16,7 @@ import io.pslab.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mehdi.sakout.aboutpage.AboutPage;
+import mehdi.sakout.aboutpage.Element;
 
 /**
  * Created by Abhinav on 12-05-2018.
@@ -43,6 +44,9 @@ public class AboutUsFragment extends Fragment {
         View aboutPage = new AboutPage(getActivity())
                 .isRTL(false)
                 .setImage(R.drawable.logo200x200)
+                .addWebsite("https://goo.gl/forms/sHlmRAPFmzcGQ27u2", getString(R.string.nav_report))
+                .addItem(new Element(getString(R.string.version), R.drawable.ic_widgets_black_24dp))
+                .addItem(new Element(getString(R.string.flavor), R.drawable.ic_android_black_24dp))
                 .setDescription(getString(R.string.about_us_description))
                 .addGroup("Connect with us")
                 .addEmail("pslab-fossasia@googlegroups.com")

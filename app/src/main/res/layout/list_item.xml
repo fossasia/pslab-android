@@ -24,7 +24,6 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/faq_answer_margin"
-            android:justificationMode="inter_word"
             android:paddingBottom="@dimen/list_item_padding"
             android:paddingLeft="@dimen/text_padding_top"
             android:paddingRight="@dimen/text_padding_top"

@@ -2,11 +2,17 @@ package io.pslab.communication;
 
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+
+import io.pslab.interfaces.HttpCallback;
+import io.pslab.others.ScienceLabCommon;
 
 /**
  * Created by viveksb007 on 28/3/17.
@@ -24,6 +30,7 @@ public class PacketHandler {
     private CommandsProto mCommandsProto;
     private int timeout = 500, VERSION_STRING_LENGTH = 15;
     ByteBuffer burstBuffer = ByteBuffer.allocate(2000);
+    private HttpAsyncTask httpAsyncTask;
 
     public PacketHandler(int timeout, CommunicationHandler communicationHandler) {
         this.loadBurst = false;
@@ -31,11 +38,11 @@ public class PacketHandler {
         this.timeout = timeout;
         this.mCommandsProto = new CommandsProto();
         this.mCommunicationHandler = communicationHandler;
-        connected = mCommunicationHandler.isConnected();
+        connected = (mCommunicationHandler.isConnected() || ScienceLabCommon.isWifiConnected());
     }
 
     public boolean isConnected() {
-        connected = mCommunicationHandler.isConnected();
+        connected = (mCommunicationHandler.isConnected() || ScienceLabCommon.isWifiConnected());
         return connected;
     }
 
@@ -44,7 +51,7 @@ public class PacketHandler {
             sendByte(mCommandsProto.COMMON);
             sendByte(mCommandsProto.GET_VERSION);
             // Read "<PSLAB Version String>\n"
-            mCommunicationHandler.read(buffer, VERSION_STRING_LENGTH + 1, timeout);
+            commonRead(VERSION_STRING_LENGTH + 1);
             version = new String(Arrays.copyOfRange(buffer, 0, VERSION_STRING_LENGTH), Charset.forName("UTF-8"));
         } catch (IOException e) {
             Log.e("Error in Communication", e.toString());
@@ -58,7 +65,7 @@ public class PacketHandler {
         }
         if (!loadBurst) {
             try {
-                mCommunicationHandler.write(new byte[]{(byte) (val & 0xff)}, timeout);
+                commonWrite(new byte[]{(byte) (val & 0xff)});
             } catch (IOException | NullPointerException e) {
                 Log.e("Error in sending byte", e.toString());
                 e.printStackTrace();
@@ -74,7 +81,7 @@ public class PacketHandler {
         }
         if (!loadBurst) {
             try {
-                mCommunicationHandler.write(new byte[]{(byte) (val & 0xff), (byte) ((val >> 8) & 0xff)}, timeout);
+                commonWrite(new byte[]{(byte) (val & 0xff), (byte) ((val >> 8) & 0xff)});
             } catch (IOException e) {
                 Log.e("Error in sending int", e.toString());
                 e.printStackTrace();
@@ -97,7 +104,7 @@ public class PacketHandler {
             return 1;
         } else {
             try {
-                mCommunicationHandler.read(buffer, 1, timeout);
+                commonRead(1);
                 return buffer[0];
             } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
@@ -108,7 +115,7 @@ public class PacketHandler {
 
     public byte getByte() {
         try {
-            int numByteRead = mCommunicationHandler.read(buffer, 1, timeout);
+            int numByteRead = commonRead(1);
             if (numByteRead == 1) {
                 return buffer[0];
             } else {
@@ -123,7 +130,7 @@ public class PacketHandler {
     int getVoltageSummation() {
         try {
             // Note : bytesToBeRead has to be +1 than the requirement
-            int numByteRead = mCommunicationHandler.read(buffer, 3, timeout);
+            int numByteRead = commonRead(3);
             if (numByteRead == 3) {
                 return (buffer[0] & 0xff) | ((buffer[1] << 8) & 0xff00);
             } else {
@@ -137,7 +144,7 @@ public class PacketHandler {
 
     public int getInt() {
         try {
-            int numByteRead = mCommunicationHandler.read(buffer, 2, timeout);
+            int numByteRead = commonRead(2);
             if (numByteRead == 2) {
                 // LSB is read first
                 return (buffer[0] & 0xff) | ((buffer[1] << 8) & 0xff00);
@@ -152,7 +159,7 @@ public class PacketHandler {
 
     public long getLong() {
         try {
-            int numByteRead = mCommunicationHandler.read(buffer, 4, timeout);
+            int numByteRead = commonRead(4);
             if (numByteRead == 4) {
                 // C++ has long of 4-bytes but in Java int has 4-bytes
                 // refer "https://stackoverflow.com/questions/7619058/convert-a-byte-array-to-integer-in-java-and-vice-versa" for Endian
@@ -171,7 +178,7 @@ public class PacketHandler {
     }
 
     public int read(byte[] dest, int bytesToRead) throws IOException {
-        int numBytesRead = mCommunicationHandler.read(buffer, bytesToRead, timeout);
+        int numBytesRead = commonRead(bytesToRead);
         for (int i = 0; i < bytesToRead; i++) {
             dest[i] = buffer[i];
         }
@@ -185,10 +192,10 @@ public class PacketHandler {
 
     public byte[] sendBurst() {
         try {
-            mCommunicationHandler.write(burstBuffer.array(), timeout);
+            commonWrite(burstBuffer.array());
             burstBuffer.clear();
             loadBurst = false;
-            int bytesRead = mCommunicationHandler.read(buffer, inputQueueSize, timeout);
+            int bytesRead = commonRead(inputQueueSize);
             inputQueueSize = 0;
             return Arrays.copyOfRange(buffer, 0, bytesRead);
         } catch (IOException e) {
@@ -197,4 +204,51 @@ public class PacketHandler {
         return new byte[]{-1};
     }
 
+    private int commonRead(int bytesToRead) throws IOException {
+        final int[] bytesRead = {0};
+        if (mCommunicationHandler.isConnected()) {
+            bytesRead[0] = mCommunicationHandler.read(buffer, bytesToRead, timeout);
+        } else if (ScienceLabCommon.isWifiConnected()) {
+            httpAsyncTask = new HttpAsyncTask(ScienceLabCommon.getEspIP(), new HttpCallback<JSONObject>() {
+                @Override
+                public void success(JSONObject jsonObject) {
+                    try {
+                        //Server will send byte array
+                        buffer = (byte[])jsonObject.get("data");
+                        bytesRead[0] = buffer.length;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void error(Exception e) {
+                    Log.e(TAG, "Error reading data over ESP");
+                }
+            });
+            httpAsyncTask.execute(new byte[]{});
+        }
+        return bytesRead[0];
+    }
+
+    private void commonWrite(byte[] data) throws IOException {
+        if (mCommunicationHandler.isConnected()) {
+            mCommunicationHandler.write(data, timeout);
+        } else if (ScienceLabCommon.isWifiConnected()) {
+            httpAsyncTask = new HttpAsyncTask(ScienceLabCommon.getEspIP(), new HttpCallback<JSONObject>() {
+                @Override
+                public void success(JSONObject jsonObject) {
+                    Log.v(TAG, "write response:" + jsonObject.toString());
+                }
+
+                @Override
+                public void error(Exception e) {
+                    Log.e(TAG, "Error writing data over ESP");
+                }
+            });
+
+            httpAsyncTask.execute(data);
+        }
+
+    }
 }

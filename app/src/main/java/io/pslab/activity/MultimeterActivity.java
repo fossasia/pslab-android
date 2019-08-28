@@ -470,7 +470,6 @@ public class MultimeterActivity extends AppCompatActivity {
         stopMenu = menu.findItem(R.id.stop_data);
         playMenu.setVisible(isPlayingBack);
         menu.findItem(R.id.record_pause_data).setVisible(!isPlayingBack);
-        menu.findItem(R.id.delete_csv_data).setVisible(!isPlayingBack);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -525,18 +524,6 @@ public class MultimeterActivity extends AppCompatActivity {
                 } else {
                     CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                 }
-                break;
-            case R.id.delete_csv_data:
-                if (isDataRecorded) {
-                    MenuItem item1 = menu.findItem(R.id.record_pause_data);
-                    item1.setIcon(R.drawable.ic_record_white);
-                    recordData = false;
-                    isRecordingStarted = false;
-                    isDataRecorded = false;
-                    multimeterLogger.deleteFile();
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.data_deleted), null, null, Snackbar.LENGTH_SHORT);
-                } else
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.nothing_to_delete), null, null, Snackbar.LENGTH_SHORT);
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(this, SettingsActivity.class);

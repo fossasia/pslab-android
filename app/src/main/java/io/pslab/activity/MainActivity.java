@@ -1,11 +1,9 @@
 package io.pslab.activity;
 
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
@@ -24,7 +22,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,8 +38,6 @@ import io.pslab.BuildConfig;
 import io.pslab.R;
 import io.pslab.communication.CommunicationHandler;
 import io.pslab.fragment.AboutUsFragment;
-import io.pslab.fragment.BluetoothScanFragment;
-import io.pslab.fragment.ESPFragment;
 import io.pslab.fragment.FAQFragment;
 import io.pslab.fragment.HomeFragment;
 import io.pslab.fragment.InstrumentsFragment;
@@ -187,13 +182,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment getHomeFragment() throws IOException {
         switch (navItemIndex) {
-            case 1:
-                return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
             case 2:
-                return null;
-            case 3:
+                return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
+            case 5:
                 return AboutUsFragment.newInstance();
-            case 4:
+            case 7:
                 return FAQFragment.newInstance();
             default:
                 return InstrumentsFragment.newInstance();
@@ -228,11 +221,11 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
-            case 3:
-                navigationView.getMenu().getItem(size_menu-1).getSubMenu().getItem(1).setChecked(true);
+            case 5:
+                navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
-            case 4:
-                navigationView.getMenu().getItem(size_menu-1).getSubMenu().getItem(0).setChecked(true);
+            case 7:
+                navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             default:
                 navigationView.getMenu().getItem(0).setChecked(true);
@@ -250,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_INSTRUMENTS;
                         break;
                     case R.id.nav_device:
-                        navItemIndex = 1;
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_DEVICE;
                         break;
                     case R.id.nav_settings:
@@ -262,21 +255,18 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         return true;
                     case R.id.nav_about_us:
-                        navItemIndex = 3;
+                        navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
                     case R.id.nav_help_feedback:
-                        navItemIndex = 4;
+                        navItemIndex = 7;
                         CURRENT_TAG = TAG_FAQ;
                         break;
-                    case R.id.nav_report_us:
-                        customTabService.launchUrl("https://goo.gl/forms/sHlmRAPFmzcGQ27u2");
+                    case R.id.nav_buy_pslab:
+                        customTabService.launchUrl("https://pslab.io/shop/");
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
-                        break;
-                    case R.id.nav_app_version:
-                        setTitleColor(R.color.gray);
                         break;
                     case R.id.sensor_data_logger:
                         if (drawer != null) {
@@ -407,53 +397,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 initialisationDialog.dismiss();
                 Toast.makeText(this, getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
-                AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-                        .setMessage(getResources().getString(R.string.bluetooth_wifi_scan_dialog))
-                        .setPositiveButton(getResources().getString(R.string.bluetooth_scan_text), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
-                                LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-                                View dialogView = inflater.inflate(R.layout.bluetooth_wifi_dialog_layout, null);
-                                dialogBuilder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                                dialogView.findViewById(R.id.bluetooth_btn).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        BluetoothScanFragment bluetoothScanFragment = new BluetoothScanFragment();
-                                        bluetoothScanFragment.show(getSupportFragmentManager(), "bluetooth");
-                                        bluetoothScanFragment.setCancelable(true);
-                                        dialog.cancel();
-                                    }
-                                });
-
-                                dialogView.findViewById(R.id.wifi_btn).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        ESPFragment espFragment = new ESPFragment();
-                                        espFragment.show(getSupportFragmentManager(), "wifi");
-                                        espFragment.setCancelable(true);
-                                        dialog.cancel();
-                                    }
-                                });
-
-                                dialogBuilder.setView(dialogView)
-                                        .create()
-                                        .show();
-                            }
-                        })
-                        .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        }).create();
-                dialog.show();
+                navItemIndex = 2;
+                CURRENT_TAG = TAG_DEVICE;
+                loadHomeFragment();
             }
         }
     }

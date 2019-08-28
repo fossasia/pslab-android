@@ -36,13 +36,6 @@
                     android:textStyle="bold"
                     android:layout_weight="1"/>
 
-                <ImageView
-                    android:id="@+id/la_record_button"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="end"
-                    android:contentDescription="@string/record_title"
-                    android:src="@drawable/ic_record_white" />
             </LinearLayout>
 
             <FrameLayout
@@ -75,16 +68,6 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/x_coordinate_text_size"
                     tools:text="x: 20" />
-
-                <ImageView
-                    android:id="@+id/imageView_led_la"
-                    android:layout_width="@dimen/indicator_width"
-                    android:layout_height="@dimen/indicator_height"
-                    android:layout_gravity="end|bottom"
-                    android:layout_margin="@dimen/indicator_margin"
-                    android:contentDescription="@string/indicator_description"
-                    android:tag="red"
-                    app:srcCompat="@drawable/red_led" />
 
             </FrameLayout>
 

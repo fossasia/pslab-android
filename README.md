@@ -1,25 +1,30 @@
 # PSLab Android App
 
-<a href="https://play.google.com/store/apps/details?id=io.pslab"><img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"></a>
-<a href="https://f-droid.org/app/io.pslab"><img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png"></a>
+Repository for the PSLab Android App for performing experiments with the [Pocket Science Lab](https://pslab.io) open-hardware platform.
 
 [![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=development)](https://travis-ci.org/fossasia/pslab-android)
-[![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/pslab-fossasia)
-[![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
-
 ![Minimum API Level](https://img.shields.io/badge/Min%20API%20Level-23-green)
 ![Maximum API Level](https://img.shields.io/badge/Max%20API%20Level-28-orange)
 ![GitHub repo size](https://img.shields.io/github/repo-size/fossasia/pslab-android)
+[![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
 
 This repository holds the Android App for performing experiments with [PSLab](https://pslab.io/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at https://pslab.io
 
+<a href="https://play.google.com/store/apps/details?id=io.pslab"><img alt="Get it on Google Play" height="80" src="/docs/images/playstore_badge.png"></a>
+<a href="https://f-droid.org/app/io.pslab"><img alt="Get it on F-Droid" height="80" src="/docs/images/fdroid_badge.png"></a>
+
+## Buy
+
+* You can get a Pocket Science Lab device from the [FOSSASIA Shop](https://fossasia.com).
+* More resellers are listed on the [PSLab website](https://pslab.io/shop/).
+
 ## Communication
 
-Please join us on the following channels:
-* [Pocket Science Channel](https://gitter.im/fossasia/pslab)
-* [Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia)
+* The PSLab [chat channel is on Gitter](https://gitter.im/fossasia/pslab).
+* Please also join us on the [PSLab Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia).
 
 ## Roadmap
  - [x] First we need to get communication between Android App and PSLab working.
@@ -31,9 +36,9 @@ Please join us on the following channels:
   <table>
       <tr>
        <td><img src="/docs/images/view_device_not_found.png"></td>
-       <td><img src="/docs/images/view_initialization.png"></td>
        <td><img src="/docs/images/view_home_screen.png"></td>
        <td><img src="/docs/images/view_instrument_panel.png"></td>
+       <td><img src="/docs/images/view_about_us.png"></td>
       </tr>
   </table>
   <table>
@@ -44,29 +49,24 @@ Please join us on the following channels:
     </table>
   <table>
     <tr>
-     <td><img src="/docs/images/view_about_us.png"></td>
-     <td><img src="/docs/images/view_not_connected_nav_menu.png" width = "500"></td>
      <td><img src="/docs/images/view_pin_layout_front.png"></td>
      <td><img src="/docs/images/view_pin_layout_back.png"></td>
+     <td><img src="/docs/images/view_side_navigation_drawer.png"></td>
+     <td><img src="/docs/images/instrument_luxmeter_guide.png"></td>
     </tr>
   </table>
   <table>
     <tr>
-     <td><img src="/docs/images/instrument_oscilloscope_channelparam.png"></td>
-     <td><img src="/docs/images/instrument_oscilloscope_audiojack.png"></td>
+     <td><img src="/docs/images/instrument_oscilloscope_channel_view.png"></td>
+     <td><img src="/docs/images/instrument_oscilloscope_audiojack_view.png"></td>
     </tr>
   </table>
   <table>
     <tr>
      <td><img src="/docs/images/instrument_wave_generator_analog.png"></td>
      <td><img src="/docs/images/instrument_wave_generator_digital.png"></td>
-    </tr>
-  </table>
-  <table>
-    <tr>
      <td><img src="/docs/images/instrument_power_source_view.png"></td>
-     <td><img src="/docs/images/instrument_luxmeter_guide.png"></td>
-     <td><img src="/docs/images/instrument_multimeter_view.png"></td>
+     <td><img src="/docs/images/instrument_multi_meter_view.png"></td>
     </tr>
   </table>
   <table>
@@ -74,6 +74,7 @@ Please join us on the following channels:
      <td><img src="/docs/images/instrument_barometer_view.png"></td>
      <td><img src="/docs/images/view_log_map_location.png"></td>
      <td><img src="/docs/images/view_data_logger.png"></td>
+     <td><img src="/docs/images/view_create_config_file.png"></td>
     </tr>
   </table>
   <table>
@@ -86,8 +87,8 @@ Please join us on the following channels:
   </table>
   <table>
     <tr>
-     <td><img src="/docs/images/instrument_robotic_arm_view.png" width = "1000"/></td>
-     <td><img src="/docs/images/instrument_logic_analyzer_view.png"/></td>
+     <td><img src="/docs/images/instrument_robotic_arm_controller_view.png" width = "500"/></td>
+     <td><img src="/docs/images/instrument_logical_analyzer_view.png" width = "500"/></td>
     </tr>
   </table>
 
@@ -107,10 +108,10 @@ Please join us on the following channels:
 | Logical Analyzer       | Captures and displays signals from digital system                 | :heavy_check_mark: |
 | Wave Generator         | Generates arbitrary analog and digital waveforms                  | :heavy_check_mark: |
 | Power Source           | Generates programmable voltage and currents	                     | :heavy_check_mark: |
-| Lux Meter              | Measures the ambient light intensity                              | :heavy_check_mark: |
-| Baro Meter             | Measures the Pressure                                             | :heavy_check_mark: |
-| AcceleroMeter          | Measures the acceleration of the device                           | :heavy_check_mark: |
-| Gyro Meter             | Measures the rate of rotation                                     | :heavy_check_mark: |
+| Luxmeter              | Measures the ambient light intensity                              | :heavy_check_mark: |
+| Barometer             | Measures the Pressure                                             | :heavy_check_mark: |
+| Accelerometer          | Measures the acceleration of the device                           | :heavy_check_mark: |
+| Gyrometer             | Measures the rate of rotation                                     | :heavy_check_mark: |
 | Compass                | Measures the absolute rotation relative to earth magnetic poles   | :heavy_check_mark: |
 | Thermometer            | Measures the ambient temperature                                  | :heavy_check_mark: |
 | Gas Sensor             | Detects gases, including NH3, NOx, alcohol, benzene, smoke and CO2| :heavy_check_mark: |
@@ -249,7 +250,7 @@ The project is maintained by
 - Lorenz Gerber ([@lorenzgerber](https://github.com/lorenzgerber))
 - Wei Tat ([@cweitat](https://github.com/cweitat))
 - Wai Gie ([@woshikie](https://github.com/woshikie))
-
+- Neel Trivedi ([@neel1998](https://github.com/neel1998))
 ## Alumni
 - Praveen Patil ([@wavicles](https://github.com/wavicles))
 - Jithin ([@jithinbp](https://github.com/jithinbp))

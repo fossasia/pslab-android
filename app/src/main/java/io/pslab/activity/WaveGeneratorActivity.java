@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -23,6 +24,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -34,7 +37,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import java.util.Date;
@@ -74,10 +79,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private final String MODE_SQUARE = "Square";
     private final String MODE_PWM = "PWM";
     //waveform monitor
-    @BindView(R.id.wave_mon_wave1)
-    TextView waveMonWave1;
-    @BindView(R.id.wave_mon_wave2)
-    TextView waveMonWave2;
     @BindView(R.id.wave_ic_img)
     ImageView selectedWaveImg;
     @BindView(R.id.wave_mon_select_wave)
@@ -95,14 +96,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     ImageView pwmSelectedModeImg;
     @BindView(R.id.pwm_mon_mode_select)
     TextView pwmMonSelectMode;
-    @BindView(R.id.pwm_mon_sq1)
-    TextView pwmMonSqr1;
-    @BindView(R.id.pwm_mon_sq2)
-    TextView pwmMonSqr2;
-    @BindView(R.id.pwm_mon_sq3)
-    TextView pwmMonSqr3;
-    @BindView(R.id.pwm_mon_sq4)
-    TextView pwmMonSqr4;
     @BindView(R.id.pwm_freq_value)
     TextView pwmFreqValue;
     @BindView(R.id.pwm_phase_value)
@@ -135,8 +128,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     Button btnPwmSq3;
     @BindView(R.id.pwm_btn_sq4)
     Button btnPwmSq4;
-    @BindView(R.id.pwm_btn_mode)
-    Button btnPwmMode;
+    @BindView(R.id.analog_mode_btn)
+    Button btnAnalogMode;
+    @BindView(R.id.digital_mode_btn)
+    Button btnDigitalMode;
     @BindView(R.id.pwm_btn_freq)
     Button pwmBtnFreq;
     @BindView(R.id.pwm_btn_duty)
@@ -150,8 +145,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     ImageButton imgBtnDown;
     @BindView(R.id.seek_bar_wave_gen)
     IndicatorSeekBar seekBar;
-    @BindView(R.id.btn_view)
-    Button btnView;
     //bottomSheet
     @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
@@ -161,10 +154,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     ImageView arrowUpDown;
     @BindView(R.id.sheet_slide_text)
     TextView bottomSheetSlideText;
-    @BindView(R.id.show_guide_wave_generator)
-    TextView showText;
     @BindView(R.id.wave_phase)
     TextView wavePhaseTitle;
+    @BindView(R.id.btn_produce_sound)
+    Button btnProduceSound;
     ScienceLab scienceLab;
     BottomSheetBehavior bottomSheetBehavior;
     GestureDetector gestureDetector;
@@ -173,11 +166,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private Timer waveGenCounter;
     private Handler wavegenHandler = new Handler();
     private AlertDialog waveDialog;
-    private boolean btnLongpressed;
     private CSVLogger csvLogger;
     private WaveConst waveBtnActive, pwmBtnActive, prop_active, digital_mode;
     private TextView activePropTv = null;
-    private TextView activePwmPinTv = null;
     private CoordinatorLayout coordinatorLayout;
     private Realm realm;
     private GPSLogger gpsLogger;
@@ -186,26 +177,30 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private ConstraintLayout squareModeLayout;
     private RelativeLayout pwmModeControls;
     private RelativeLayout squareModeControls;
+    private LineChart previewChart;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_wave_generator_main);
         ButterKnife.bind(this);
-
-        removeStatusBar();
 
         realm = LocalDataLog.with().getRealm();
         gpsLogger = new GPSLogger(this,
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE));
 
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.wave_generator));
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         coordinatorLayout = findViewById(R.id.wave_generator_coordinator_layout);
         squareModeLayout = findViewById(R.id.square_mode_layout);
         pwmModeLayout = findViewById(R.id.pwm_mode_layout);
+        previewChart = findViewById(R.id.chart_preview);
 
         squareModeControls = findViewById(R.id.square_mode_controls);
         pwmModeControls = findViewById(R.id.pwm_mode_controls);
@@ -238,15 +233,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 }
             }
         });
-        waveMonWave1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!waveBtnActive.equals(WaveConst.WAVE1)) {
-                    waveMonSelected = true;
-                    selectBtn(WaveConst.WAVE1);
-                }
-            }
-        });
         btnCtrlWave2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -256,20 +242,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 }
             }
         });
-        waveMonWave2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!waveBtnActive.equals(WaveConst.WAVE2)) {
-                    waveMonSelected = true;
-                    selectBtn(WaveConst.WAVE2);
-                }
-            }
-        });
         imgBtnSin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imgBtnSin.setVisibility(View.GONE);
-                imgBtnTri.setVisibility(View.VISIBLE);
+                imgBtnSin.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                imgBtnTri.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
                 WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, SIN);
                 selectWaveform(SIN);
             }
@@ -278,8 +255,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         imgBtnTri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imgBtnSin.setVisibility(View.VISIBLE);
-                imgBtnTri.setVisibility(View.GONE);
+                imgBtnSin.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                imgBtnTri.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
                 WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, TRIANGULAR);
                 selectWaveform(TRIANGULAR);
             }
@@ -294,6 +271,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = waveFreqValue;
                 waveMonPropSelect.setText(getString(R.string.wave_frequency));
                 setSeekBar(seekBar);
+                btnCtrlFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnCtrlPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
             }
         });
 
@@ -306,34 +285,40 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = wavePhaseValue;
                 waveMonPropSelect.setText(getString(R.string.phase_offset));
                 setSeekBar(seekBar);
+                btnCtrlFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnCtrlPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
             }
         });
 
-        //pwm panel
-        btnPwmMode.setOnClickListener(new View.OnClickListener() {
+        btnAnalogMode.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                WaveGeneratorCommon.intializeDigitalValue();
-                if (digital_mode == WaveConst.SQUARE) {
-                    pwmModeLayout.setVisibility(View.VISIBLE);
-                    pwmModeControls.setVisibility(View.VISIBLE);
-                    squareModeLayout.setVisibility(View.GONE);
-                    squareModeControls.setVisibility(View.GONE);
-                    toggleDigitalMode(WaveConst.PWM);
-                    imgBtnSin.setEnabled(false);
-                    imgBtnTri.setEnabled(false);
-                    pwmBtnActive = WaveConst.SQR1;
-                    selectBtn(WaveConst.SQR1);
-                    Toast.makeText(WaveGeneratorActivity.this, R.string.wave_pin_disable_comment, Toast.LENGTH_SHORT).show();
-                } else {
-                    pwmModeLayout.setVisibility(View.GONE);
-                    pwmModeControls.setVisibility(View.GONE);
-                    squareModeLayout.setVisibility(View.VISIBLE);
-                    squareModeControls.setVisibility(View.VISIBLE);
-                    imgBtnSin.setEnabled(true);
-                    imgBtnTri.setEnabled(true);
-                    toggleDigitalMode(WaveConst.SQUARE);
-                }
+            public void onClick(View v) {
+                pwmModeLayout.setVisibility(View.GONE);
+                pwmModeControls.setVisibility(View.GONE);
+                squareModeLayout.setVisibility(View.VISIBLE);
+                squareModeControls.setVisibility(View.VISIBLE);
+                imgBtnSin.setEnabled(true);
+                imgBtnTri.setEnabled(true);
+                toggleDigitalMode(WaveConst.SQUARE);
+                btnDigitalMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnAnalogMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+            }
+        });
+
+        btnDigitalMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pwmModeLayout.setVisibility(View.VISIBLE);
+                pwmModeControls.setVisibility(View.VISIBLE);
+                squareModeLayout.setVisibility(View.GONE);
+                squareModeControls.setVisibility(View.GONE);
+                toggleDigitalMode(WaveConst.PWM);
+                imgBtnSin.setEnabled(false);
+                imgBtnTri.setEnabled(false);
+                pwmBtnActive = WaveConst.SQR1;
+                selectBtn(WaveConst.SQR1);
+                btnDigitalMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnAnalogMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
             }
         });
 
@@ -386,6 +371,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = pwmFreqValue;
                 pwmMonPropSelect.setText(getString(R.string.frequecy_colon));
                 setSeekBar(seekBar);
+                pwmBtnFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                pwmBtnPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                pwmBtnDuty.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
             }
         });
 
@@ -398,6 +386,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = pwmPhaseValue;
                 pwmMonPropSelect.setText(getString(R.string.pwm_phase));
                 setSeekBar(seekBar);
+                pwmBtnFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                pwmBtnPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                pwmBtnDuty.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
             }
         });
 
@@ -410,6 +401,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = pwmDutyValue;
                 pwmMonPropSelect.setText(getString(R.string.duty_cycle));
                 setSeekBar(seekBar);
+                pwmBtnFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                pwmBtnPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                pwmBtnDuty.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
             }
         });
 
@@ -417,53 +411,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
         monitorLongClicks(imgBtnUp, imgBtnDown);
 
-        btnView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
-                double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
-                double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
-
-                String waveType1 = WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
-                String waveType2 = WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
-
-                if (scienceLab.isConnected()) {
-                    if (digital_mode == WaveConst.SQUARE) {
-                        if (phase == WaveData.PHASE_MIN.getValue()) {
-                            scienceLab.setW1(freq1, waveType1);
-                            scienceLab.setW2(freq2, waveType2);
-                        } else {
-                            scienceLab.setWaves(freq1, phase, freq2);
-                        }
-                    } else {
-                        double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
-                        double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
-                        double dutySqr2 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.DUTY)) / 100;
-                        double phaseSqr2 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.PHASE) / 360;
-                        double dutySqr3 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.DUTY)) / 100;
-                        double phaseSqr3 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.PHASE) / 360;
-                        double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
-                        double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
-
-                        scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, false);
-                    }
-
-                    waveDialog.show();
-                    Window window = waveDialog.getWindow();
-                    window.setLayout(dpToPx(350), dpToPx(300));
-                    waveDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-                            .setTextColor(ContextCompat.getColor(WaveGeneratorActivity.this, R.color.colorPrimary));
-
-                } else {
-                    Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
-                String valueText = DataFormatter.formatDouble((float) progress, DataFormatter.MEDIUM_PRECISION_FORMAT) + " " + unit;
+                String valueText = progress + " " + unit;
                 if (waveMonSelected) {
                     waveMonPropValueSelect.setText(valueText);
                 } else {
@@ -488,44 +439,15 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
         });
 
-        ImageView guideImageView = findViewById(R.id.wave_generator_guide_button);
-        guideImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
-                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
-            }
-        });
-        guideImageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showText.setVisibility(View.VISIBLE);
-                btnLongpressed = true;
-                return true;
-            }
-        });
-        guideImageView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.onTouchEvent(event);
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (btnLongpressed) {
-                        showText.setVisibility(View.GONE);
-                        btnLongpressed = false;
-                    }
-                }
-                return true;
-            }
-        });
-
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
             recordedWaveData = LocalDataLog.with()
                     .getBlockOfWaveRecords(getIntent().getExtras().getLong(DATA_BLOCK));
             setReceivedData();
         }
+        chartInit();
     }
 
-    public void saveWaveConfig(View view) {
+    public void saveWaveConfig() {
         long block = System.currentTimeMillis();
         csvLogger.prepareLogFile();
         csvLogger.writeMetaData(getResources().getString(R.string.wave_generator));
@@ -649,27 +571,87 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         }
     }
 
+    private void setWave() {
+        double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
+        double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
+        double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
+
+        String waveType1 = WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+        String waveType2 = WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+
+        if (scienceLab.isConnected()) {
+            if (digital_mode == WaveConst.SQUARE) {
+                if (phase == WaveData.PHASE_MIN.getValue()) {
+                    scienceLab.setW1(freq1, waveType1);
+                    scienceLab.setW2(freq2, waveType2);
+                } else {
+                    scienceLab.setWaves(freq1, phase, freq2);
+                }
+            } else {
+                double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+                double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
+                double dutySqr2 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.DUTY)) / 100;
+                double phaseSqr2 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.PHASE) / 360;
+                double dutySqr3 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.DUTY)) / 100;
+                double phaseSqr3 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.PHASE) / 360;
+                double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
+                double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
+
+                scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, false);
+            }
+
+        }
+    }
+
+    private void viewWaveDialog() {
+        waveDialog.show();
+        Window window = waveDialog.getWindow();
+        window.setLayout(dpToPx(350), dpToPx(300));
+        waveDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                .setTextColor(ContextCompat.getColor(WaveGeneratorActivity.this, R.color.colorPrimary));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.wave_generator_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.save_data:
+                saveWaveConfig();
+                break;
+            case R.id.play_data:
+                setWave();
+                if (scienceLab.isConnected()) {
+                    viewWaveDialog();
+                } else {
+                    Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.show_guide:
+                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
+                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.show_logged_data:
+                Intent intent = new Intent(WaveGeneratorActivity.this, DataLoggerActivity.class);
+                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getString(R.string.wave_generator));
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        removeStatusBar();
-    }
-
-    private void removeStatusBar() {
-        if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else {
-            View decorView = getWindow().getDecorView();
-
-            decorView.setSystemUiVisibility((View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY));
-        }
     }
 
     public void selectBtn(WaveConst btn_selected) {
@@ -680,8 +662,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
                 waveBtnActive = WaveConst.WAVE1;
 
-                waveMonWave1.setTextColor(getResources().getColor(R.color.orange));
-                waveMonWave2.setTextColor(getResources().getColor(R.color.dark_grey));
+                btnCtrlWave1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnCtrlWave2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
 
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
@@ -696,8 +678,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
                 waveBtnActive = WaveConst.WAVE2;
 
-                waveMonWave2.setTextColor(getResources().getColor(R.color.orange));
-                waveMonWave1.setTextColor(getResources().getColor(R.color.dark_grey));
+                btnCtrlWave2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnCtrlWave1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
 
                 btnCtrlPhase.setEnabled(true); // enable phase for wave2
 
@@ -709,10 +691,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 break;
 
             case SQR1:
-                activePwmPinTv.setEnabled(false);
                 pwmBtnActive = WaveConst.SQR1;
-                activePwmPinTv = pwmMonSqr1;
-                activePwmPinTv.setEnabled(true);
+                btnPwmSq1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnPwmSq2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq3.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq4.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
                 pwmBtnPhase.setEnabled(false);  //phase disabled for sq1
                 pwmPhaseValue.setText("--");
                 fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
@@ -721,10 +704,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
             case SQR2:
 
-                activePwmPinTv.setEnabled(false);
                 pwmBtnActive = WaveConst.SQR2;
-                activePwmPinTv = pwmMonSqr2;
-                activePwmPinTv.setEnabled(true);
+                btnPwmSq1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnPwmSq3.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq4.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
                 pwmBtnPhase.setEnabled(true);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -732,10 +716,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
             case SQR3:
 
-                activePwmPinTv.setEnabled(false);
                 pwmBtnActive = WaveConst.SQR3;
-                activePwmPinTv = pwmMonSqr3;
-                activePwmPinTv.setEnabled(true);
+                btnPwmSq1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq3.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnPwmSq4.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
                 pwmBtnPhase.setEnabled(true);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -743,10 +728,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
             case SQR4:
 
-                activePwmPinTv.setEnabled(false);
                 pwmBtnActive = WaveConst.SQR4;
-                activePwmPinTv = pwmMonSqr4;
-                activePwmPinTv.setEnabled(true);
+                btnPwmSq1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq3.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq4.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
                 pwmBtnPhase.setEnabled(true);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -754,8 +740,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
             default:
                 waveBtnActive = WaveConst.WAVE1;
-                waveMonWave1.setTextColor(getResources().getColor(R.color.orange));
-                waveMonWave2.setTextColor(getResources().getColor(R.color.dark_grey));
+                btnCtrlWave1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnCtrlWave2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
                 selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
@@ -813,16 +799,12 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             btnPwmSq3.setEnabled(true);
             btnPwmSq4.setEnabled(true);
         }
-        pwmMonSqr1.setSelected(false);
-        pwmMonSqr2.setSelected(false);
-        pwmMonSqr3.setSelected(false);
-        pwmMonSqr4.setSelected(false);
         WaveGeneratorCommon.mode_selected = mode;
     }
 
     private void fetchPropertyValue(WaveConst btnActive, WaveConst property, String unit, TextView propTextView) {
         Double value = (double) WaveGeneratorCommon.wave.get(btnActive).get(property);
-        String valueText = value + " " + unit;
+        String valueText = value.intValue() + " " + unit;
         propTextView.setText(valueText);
     }
 
@@ -914,11 +896,29 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         } else {
             WaveGeneratorCommon.wave.get(waveBtnActive).put(prop_active, value);
         }
-
+        setWave();
         Double dValue = (double) value;
-        String valueText = DataFormatter.formatDouble(dValue, DataFormatter.MEDIUM_PRECISION_FORMAT) + " " + unit;
+        String valueText = String.valueOf(dValue.intValue()) + " " + unit;
         activePropTv.setText(valueText);
+    }
 
+    private void chartInit() {
+        previewChart.setTouchEnabled(true);
+        previewChart.setHighlightPerDragEnabled(true);
+        previewChart.setDragEnabled(true);
+        previewChart.setScaleEnabled(true);
+        previewChart.setDrawGridBackground(false);
+        previewChart.setPinchZoom(true);
+        previewChart.setScaleYEnabled(false);
+        previewChart.setBackgroundColor(Color.BLACK);
+        previewChart.getDescription().setEnabled(false);
+        previewChart.getXAxis().setAxisMaximum(1000);
+        previewChart.getXAxis().setAxisMinimum(0);
+        previewChart.getXAxis().setTextColor(Color.WHITE);
+        previewChart.getAxisLeft().setAxisMaximum(5);
+        previewChart.getAxisLeft().setAxisMinimum(-5);
+        previewChart.fitScreen();
+        previewChart.invalidate();
     }
 
     private void toggleSeekBtns(boolean state) {
@@ -935,13 +935,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
     private void enableInitialState() {
         selectBtn(WaveConst.WAVE1);
-        activePwmPinTv = pwmMonSqr1;
         toggleDigitalMode(WaveConst.SQUARE);
     }
 
     private void enableInitialStatePWM() {
         selectBtn(WaveConst.SQR2);
-        activePwmPinTv = pwmMonSqr2;
         toggleDigitalMode(WaveConst.PWM);
     }
 

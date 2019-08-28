@@ -19,8 +19,6 @@ public class OscilloscopePlaybackFragment extends Fragment {
 
     private OscilloscopeActivity oscilloscopeActivity;
     private TextView timebaseTextView;
-    private ImageView playButton;
-    private boolean isPlaying = false;
 
     public static OscilloscopePlaybackFragment newInstance() {
         return new OscilloscopePlaybackFragment();
@@ -31,23 +29,7 @@ public class OscilloscopePlaybackFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_oscilloscope_playback, container, false);
         timebaseTextView = rootView.findViewById(R.id.timebase_data);
-        playButton = rootView.findViewById(R.id.play_button);
         CheckBox fourierCheckBox = rootView.findViewById(R.id.fourier_checkbox);
-
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isPlaying) {
-                    isPlaying = false;
-                    playButton.setImageResource(R.drawable.ic_play_button);
-                    oscilloscopeActivity.pauseData();
-                } else {
-                    isPlaying = true;
-                    playButton.setImageResource(R.drawable.pause_icon);
-                    oscilloscopeActivity.playRecordedData();
-                }
-            }
-        });
 
         fourierCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -62,11 +44,6 @@ public class OscilloscopePlaybackFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         oscilloscopeActivity = (OscilloscopeActivity) getActivity();
-    }
-
-    public void resetPlayButton() {
-        playButton.setImageResource(R.drawable.ic_play_button);
-        isPlaying = false;
     }
 
     public void setTimeBase(String timeBase) {
