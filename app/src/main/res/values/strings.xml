@@ -705,6 +705,9 @@
     <string name="ir_thermometer_desc">\u2022 The above pin configuration has to be same except for the pin
     GND. You can use any of the PSLab device GND pins.\n</string>
 
+    <string name="robotic_arm_second_unit">s</string>
+    <string name="robotic_arm_degree_symbol">\u00B0</string>
+
     <string name="high_limit">High Limit</string>
     <string name="update_period">Update Period</string>
     <string name="max_lx">Max (Lx)</string>
