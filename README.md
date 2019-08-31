@@ -242,8 +242,6 @@ The project is maintained by
 - Neel Trivedi ([@neel1998](https://github.com/neel1998))
 
 ### Alumni
-- Praveen Patil ([@wavicles](https://github.com/wavicles))
-- Jithin ([@jithinbp](https://github.com/jithinbp))
 - Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96))
 - Asitava Sarkar ([@asitava1998](https://github.com/asitava1998))
 - Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))
