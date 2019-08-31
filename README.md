@@ -119,7 +119,6 @@ This repository holds the Android App for performing experiments with [PSLab](ht
 
 ## How to set up the Android app in your development environment
 
-
 ### Application Flavors
 
 There are 2 flavors (build variants) of PSLab Android application.
@@ -218,17 +217,9 @@ Despite any reason, follow the steps given below to squash all commits into one 
 ### Branch Policy
 
 We have the following branches
- * **development**
-	 All development goes on in this branch. If you're making a contribution,
-	 you are supposed to make a pull request to _development_.
-	 Make sure it passes a build check on Travis.
-
- * **master**
-   This contains the stable code. After significant features/bugfixes are accumulated on development, we move it to master.
-
- * **apk**
-   This branch contains automatically generated apk file for testing.
-
+* **development** All development goes on in this branch. If you're making a contribution, you are supposed to make a pull request to _development_. Make sure it passes a build check on Travis.
+* **master** This contains the stable code. After significant features/bugfixes are accumulated on development, we move it to master.
+* **apk** This branch contains automatically generated apk file for testing.
 
 ### Code style
 
@@ -239,11 +230,9 @@ Please try to follow the mentioned guidelines while writing and submitting your 
  * The activity/fragment file name corresponding to the layout files should be named as                       (activity/fragment name)(activity/fragment).java like ```ChannelsParameterFragment.java``` corresponding to the layout file ```fragment_channels_parameter.xml``` .
  * The corresponding widgets for buttons, textboxes, checkboxes etc. in activity files should be named as (viewtype/widget)(fragment/activity name)(no. in the file) like ```spinnerChannelSelect1``` corresponding to ```spinner_channel_select1``` .
 
-## License
+## Developers
 
-This project is currently licensed under the Apache License 2.0. A copy of [LICENSE](LICENSE) is to be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
-
-## Maintainers
+### Maintainers
 The project is maintained by
 - Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal))
 - Mario Behling ([@mariobehling](http://github.com/mariobehling))
@@ -251,7 +240,8 @@ The project is maintained by
 - Wei Tat ([@cweitat](https://github.com/cweitat))
 - Wai Gie ([@woshikie](https://github.com/woshikie))
 - Neel Trivedi ([@neel1998](https://github.com/neel1998))
-## Alumni
+
+### Alumni
 - Praveen Patil ([@wavicles](https://github.com/wavicles))
 - Jithin ([@jithinbp](https://github.com/jithinbp))
 - Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96))
@@ -261,3 +251,7 @@ The project is maintained by
 - Abhinav ([@abhinavraj23](https://github.com/abhinavraj23))
 - Harsh ([@harsh-2711](https://github.com/harsh-2711))
 - Yatri ([@yatri1609](https://github.com/yatri1609))
+
+## License
+
+This project is currently licensed under the Apache License 2.0. A copy of [LICENSE](LICENSE) is to be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
