@@ -660,7 +660,7 @@
     <string name="unit_hz">Hz</string>
     <string name="text_phase_colon">Phase :</string>
     <string name="text_phase">Phase</string>
-    <string name="deg_text">deg</string>
+    <string name="deg_text">\u00b0</string>
     <string name="selected_text_holder">Wave Frequency :</string>
     <string name="text_sq1">SQR1</string>
     <string name="text_sq2">SQR2</string>
@@ -678,7 +678,7 @@
     <string name="view_text">View</string>
     <string name="produce_sound_text">Produce Sound</string>
     <string name="save_text">Save</string>
-    <string name="phase_holder_text">45 deg</string>
+    <string name="phase_holder_text">45\u00b0</string>
     <string name="duty_holder_text">50 %</string>
     <string name="open_instrument">Open instrument</string>
 
