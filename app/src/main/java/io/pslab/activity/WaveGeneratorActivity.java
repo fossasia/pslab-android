@@ -420,7 +420,15 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
-                String valueText = progress + " " + unit;
+                String valueText;
+                switch (unit) {
+                    case "\u00b0":
+                        valueText = progress + unit;
+                        break;
+                    default:
+                        valueText = progress + " " + unit;
+                }
+
                 if (waveMonSelected) {
                     waveMonPropValueSelect.setText(valueText);
                 } else {
@@ -813,7 +821,14 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
     private void fetchPropertyValue(WaveConst btnActive, WaveConst property, String unit, TextView propTextView) {
         Double value = (double) WaveGeneratorCommon.wave.get(btnActive).get(property);
-        String valueText = value.intValue() + " " + unit;
+        String valueText;
+        switch (unit) {
+            case "\u00b0":
+                valueText = value.intValue() + unit;
+                break;
+            default:
+                valueText = value.intValue() + " " + unit;
+        }
         propTextView.setText(valueText);
     }
 
@@ -908,7 +923,14 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         setWave();
         previewWave();
         Double dValue = (double) value;
-        String valueText = String.valueOf(dValue.intValue()) + " " + unit;
+        String valueText;
+        switch (unit) {
+            case "\u00b0":
+                valueText = String.valueOf(dValue.intValue()) + unit;
+                break;
+            default:
+                valueText = String.valueOf(dValue.intValue()) + " " + unit;
+        }
         activePropTv.setText(valueText);
     }
 
