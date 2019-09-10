@@ -13,6 +13,7 @@
         android:layout_marginBottom="@dimen/margin_btn"
         android:layout_weight="1"
         android:background="@drawable/btn_back_rounded"
+        android:stateListAnimator="@animator/selector_animator"
         android:minWidth="@dimen/btn_min_width"
         android:text="@string/produce_sound_text"
         android:textAllCaps="false"

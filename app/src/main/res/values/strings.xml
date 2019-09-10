@@ -677,6 +677,7 @@
     <string name="text_pwm">PWM</string>
     <string name="view_text">View</string>
     <string name="produce_sound_text">Produce Sound</string>
+    <string name="stop_sound_text">Stop Sound</string>
     <string name="save_text">Save</string>
     <string name="phase_holder_text">45\u00b0</string>
     <string name="duty_holder_text">50 %</string>

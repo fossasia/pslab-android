@@ -9,6 +9,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -182,6 +186,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private RelativeLayout pwmModeControls;
     private RelativeLayout squareModeControls;
     private LineChart previewChart;
+    private boolean isPlayingSound = false;
+    private ProduceSoundTask produceSoundTask;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -459,6 +465,23 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             setReceivedData();
         }
         chartInit();
+
+        btnProduceSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPlayingSound) {
+                    btnProduceSound.setText(getResources().getString(R.string.produce_sound_text));
+                    produceSoundTask.cancel(true);
+                    produceSoundTask = null;
+                    isPlayingSound = false;
+                } else {
+                    btnProduceSound.setText(getResources().getString(R.string.stop_sound_text));
+                    produceSoundTask = new ProduceSoundTask();
+                    produceSoundTask.execute();
+                    isPlayingSound = true;
+                }
+            }
+        });
     }
 
     public void saveWaveConfig() {
@@ -1272,6 +1295,52 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
         public final int getValue() {
             return value;
+        }
+    }
+
+    private class ProduceSoundTask extends AsyncTask<Void, Void, Void> {
+
+        private AudioTrack track;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            short[] buffer = new short[1024];
+            track = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, buffer.length, AudioTrack.MODE_STREAM);
+            float angle = 0;
+            float samples[] = new float[1024];
+
+            track.play();
+            double frequency;
+            while (isPlayingSound) {
+                if (WaveGeneratorCommon.mode_selected == WaveConst.SQUARE) {
+                    frequency = WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
+                } else {
+                    frequency = WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+                }
+                float increment = (float) ((2 * Math.PI) * frequency / 44100);
+                for (int i = 0; i < samples.length; i++) {
+                    samples[i] = (float) Math.sin(angle);
+                    if (WaveGeneratorCommon.mode_selected == WaveConst.PWM) {
+                        samples[i] = (samples[i] >= 0.0) ? 1 : -1;
+                    } else {
+                        if (WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE) == 2) {
+                            samples[i] = (float) ((2 / Math.PI) * Math.asin(samples[i]));
+                        }
+                    }
+                    buffer[i] = (short) (samples[i] * Short.MAX_VALUE);
+                    angle += increment;
+                }
+                track.write(buffer, 0, buffer.length);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            track.flush();
+            track.stop();
+            track.release();
         }
     }
 }
