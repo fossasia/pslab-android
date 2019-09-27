@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.AudioDeviceInfo;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -140,6 +141,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     Button btnAnalogMode;
     @BindView(R.id.digital_mode_btn)
     Button btnDigitalMode;
+    @BindView(R.id.use_phone_btn)
+    Button btnUsePhone;
     @BindView(R.id.pwm_btn_freq)
     Button pwmBtnFreq;
     @BindView(R.id.pwm_btn_duty)
@@ -187,7 +190,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private RelativeLayout squareModeControls;
     private LineChart previewChart;
     private boolean isPlayingSound = false;
+    private boolean usePhone = false;
     private ProduceSoundTask produceSoundTask;
+    private GenerateWavesFromPhoneTask generateWavesFromPhoneTask;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -331,6 +336,24 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 selectBtn(WaveConst.SQR1);
                 btnDigitalMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
                 btnAnalogMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+            }
+        });
+
+        btnUsePhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                usePhone = !usePhone;
+                if(usePhone) {
+                    if(isPlayingSound) {
+                        btnProduceSound.callOnClick();
+                    }
+                    btnUsePhone.setText(R.string.text_use_pslab);
+                    generateWavesFromPhoneTask = new GenerateWavesFromPhoneTask(WaveGeneratorActivity.this);
+                    generateWavesFromPhoneTask.execute();
+                } else {
+                    btnUsePhone.setText(R.string.text_use_phone);
+                    generateWavesFromPhoneTask.cancel(true);
+                }
             }
         });
 
@@ -1282,6 +1305,42 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         realm.commitTransaction();
     }
 
+    /**
+     * Samples a wave into an AudioTrack instance. Useful for either playing sound or pushing the signal
+     * through the headphone jack.
+     *
+     */
+    public void sampleWaveIntoAudioTrack(AudioTrack track, int sampleRateInHz, int bufferLength, AsyncTask asyncTask) {
+        assert(track != null);
+
+        short[] buffer = new short[bufferLength];
+        float angle = 0;
+        float samples[] = new float[bufferLength];
+        double frequency;
+
+        while(!asyncTask.isCancelled()) {
+            if (WaveGeneratorCommon.mode_selected == WaveConst.SQUARE) {
+                frequency = WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
+            } else {
+                frequency = WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+            }
+            float increment = (float) ((2 * Math.PI) * frequency / sampleRateInHz);
+            for (int i = 0; i < samples.length; i++) {
+                samples[i] = (float) Math.sin(angle);
+                if (WaveGeneratorCommon.mode_selected == WaveConst.PWM) {
+                    samples[i] = (samples[i] >= 0.0) ? 1 : -1;
+                } else {
+                    if (WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE) == 2) {
+                        samples[i] = (float) ((2 / Math.PI) * Math.asin(samples[i]));
+                    }
+                }
+                buffer[i] = (short) (samples[i] * Short.MAX_VALUE);
+                angle += increment;
+            }
+            track.write(buffer, 0, buffer.length);
+        }
+    }
+
     public enum WaveConst {WAVETYPE, WAVE1, WAVE2, SQR1, SQR2, SQR3, SQR4, FREQUENCY, PHASE, DUTY, SQUARE, PWM}
 
     public enum WaveData {
@@ -1300,47 +1359,66 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
     private class ProduceSoundTask extends AsyncTask<Void, Void, Void> {
 
-        private AudioTrack track;
+        final int sampleRateInHz = 44100;
+        final int bufferLength = 1024;
+        private AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferLength, AudioTrack.MODE_STREAM);
 
         @Override
         protected Void doInBackground(Void... voids) {
-            short[] buffer = new short[1024];
-            track = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, buffer.length, AudioTrack.MODE_STREAM);
-            float angle = 0;
-            float samples[] = new float[1024];
-
             track.play();
-            double frequency;
-            while (isPlayingSound) {
-                if (WaveGeneratorCommon.mode_selected == WaveConst.SQUARE) {
-                    frequency = WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
-                } else {
-                    frequency = WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+            sampleWaveIntoAudioTrack(track, sampleRateInHz, bufferLength, this);
+            track.flush();
+            track.stop();
+            track.release();
+            return null;
+        }
+    }
+
+    private class GenerateWavesFromPhoneTask extends AsyncTask<Void, Void, Void> {
+
+        WaveGeneratorActivity activity = null;
+        final int sampleRateInHz = 44100;
+        final int bufferLength = 1024;
+        private AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferLength, AudioTrack.MODE_STREAM);
+
+        public GenerateWavesFromPhoneTask(WaveGeneratorActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            boolean wired = false;
+            AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+            AudioDeviceInfo[] audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_ALL);
+            for(AudioDeviceInfo deviceInfo : audioDevices){
+                if(deviceInfo.getType()==AudioDeviceInfo.TYPE_WIRED_HEADPHONES
+                        || deviceInfo.getType()==AudioDeviceInfo.TYPE_WIRED_HEADSET){
+                    wired = true;
+                    break;
                 }
-                float increment = (float) ((2 * Math.PI) * frequency / 44100);
-                for (int i = 0; i < samples.length; i++) {
-                    samples[i] = (float) Math.sin(angle);
-                    if (WaveGeneratorCommon.mode_selected == WaveConst.PWM) {
-                        samples[i] = (samples[i] >= 0.0) ? 1 : -1;
-                    } else {
-                        if (WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE) == 2) {
-                            samples[i] = (float) ((2 / Math.PI) * Math.asin(samples[i]));
-                        }
-                    }
-                    buffer[i] = (short) (samples[i] * Short.MAX_VALUE);
-                    angle += increment;
-                }
-                track.write(buffer, 0, buffer.length);
             }
+            if(!wired) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), R.string.text_not_wired,Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return null;
+            }
+            track.play();
+            sampleWaveIntoAudioTrack(track, sampleRateInHz, bufferLength, this);
+            track.flush();
+            track.stop();
+            track.release();
             return null;
         }
 
         @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            track.flush();
-            track.stop();
-            track.release();
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            activity.usePhone = false;
+            activity.btnUsePhone.setText(R.string.text_use_phone);
         }
     }
 }

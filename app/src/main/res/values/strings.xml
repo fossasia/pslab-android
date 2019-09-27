@@ -695,7 +695,9 @@
     <string name="duty_cycle">Duty Cycle:</string>
     <string name="mode">Mode</string>
     <string name="text_digital">Digital</string>
-
+    <string name="text_use_phone">Use Phone</string>
+    <string name="text_use_pslab">Use PSLab</string>
+    <string name="text_not_wired">Nothing plugged in the headphone jack</string>
     <string name="text_connected">Connected</string>
     <string name="text_disconnected">Disconnected</string>
 
