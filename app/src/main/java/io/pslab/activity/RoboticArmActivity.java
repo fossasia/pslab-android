@@ -150,10 +150,10 @@ public class RoboticArmActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.horizontal_scroll_view);
         servoCSVLogger = new CSVLogger(getResources().getString(R.string.robotic_arm));
 
-        degreeText1.setText(getResources().getString(R.string.zero) + getResources().getString(R.string.robotic_arm_degree_symbol));
-        degreeText2.setText(getResources().getString(R.string.zero) + getResources().getString(R.string.robotic_arm_degree_symbol));
-        degreeText3.setText(getResources().getString(R.string.zero) + getResources().getString(R.string.robotic_arm_degree_symbol));
-        degreeText4.setText(getResources().getString(R.string.zero) + getResources().getString(R.string.robotic_arm_degree_symbol));
+        degreeText1.setText(getResources().getString(R.string.zero));
+        degreeText2.setText(getResources().getString(R.string.zero));
+        degreeText3.setText(getResources().getString(R.string.zero));
+        degreeText4.setText(getResources().getString(R.string.zero));
 
         LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
         servoControllerParams.setMargins(2, 5, 2, 0);
@@ -231,10 +231,10 @@ public class RoboticArmActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
                 if (editEnter) {
-                    degreeText1.setText(String.valueOf(degree) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                    degreeText1.setText(String.valueOf(degree));
                     editEnter = false;
                 } else {
-                    degreeText1.setText(String.valueOf((int) (i * 3.6)) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                    degreeText1.setText(String.valueOf((int) (i * 3.6)));
                 }
                 degreeText1.setCursorVisible(false);
             }
@@ -254,10 +254,10 @@ public class RoboticArmActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
                 if (editEnter) {
-                    degreeText2.setText(String.valueOf(degree) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                    degreeText2.setText(String.valueOf(degree));
                     editEnter = false;
                 } else {
-                    degreeText2.setText(String.valueOf((int) (i * 3.6)) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                    degreeText2.setText(String.valueOf((int) (i * 3.6)));
                 }
                 degreeText2.setCursorVisible(false);
             }
@@ -277,10 +277,10 @@ public class RoboticArmActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
                 if (editEnter) {
-                    degreeText3.setText(String.valueOf(degree) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                    degreeText3.setText(String.valueOf(degree));
                     editEnter = false;
                 } else {
-                    degreeText3.setText(String.valueOf((int) (i * 3.6)) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                    degreeText3.setText(String.valueOf((int) (i * 3.6)));
                 }
                 degreeText3.setCursorVisible(false);
             }
@@ -300,10 +300,10 @@ public class RoboticArmActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
                 if (editEnter) {
-                    degreeText4.setText(String.valueOf(degree) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                    degreeText4.setText(String.valueOf(degree));
                     editEnter = false;
                 } else {
-                    degreeText4.setText(String.valueOf((int) (i * 3.6)) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                    degreeText4.setText(String.valueOf((int) (i * 3.6)));
                 }
                 degreeText4.setCursorVisible(false);
             }
@@ -362,7 +362,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText1.getText().toString());
                     if (degree > 360 || degree < 0) {
-                        degreeText1.setText(getResources().getString(R.string.zero) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                        degreeText1.setText(getResources().getString(R.string.zero));
                         seekArc1.setProgress(0);
                         toastInvalidValueMessage();
                     } else {
@@ -388,7 +388,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText2.getText().toString());
                     if (degree > 360 || degree < 0) {
-                        degreeText2.setText(getResources().getString(R.string.zero) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                        degreeText2.setText(getResources().getString(R.string.zero));
                         seekArc2.setProgress(0);
                         toastInvalidValueMessage();
                     } else {
@@ -414,7 +414,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText3.getText().toString());
                     if (degree > 360 || degree < 0) {
-                        degreeText3.setText(getResources().getString(R.string.zero) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                        degreeText3.setText(getResources().getString(R.string.zero));
                         seekArc3.setProgress(0);
                         toastInvalidValueMessage();
                     } else {
@@ -440,7 +440,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     degree = Integer.valueOf(degreeText4.getText().toString());
                     if (degree > 360 || degree < 0) {
-                        degreeText4.setText(getResources().getString(R.string.zero) + getResources().getString(R.string.robotic_arm_degree_symbol));
+                        degreeText4.setText(getResources().getString(R.string.zero));
                         seekArc4.setProgress(0);
                         toastInvalidValueMessage();
                     } else {
