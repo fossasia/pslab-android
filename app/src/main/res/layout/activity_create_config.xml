@@ -12,84 +12,86 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_app_bar_layout">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/home_fragment_padding">
+            android:orientation="vertical"
+            android:padding="@dimen/config_activity_padding">
 
-            <TextView
-                android:id="@+id/select_instrument_title"
-                style="@style/Base.TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/select_instrument"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/create_config_margin4"
-                android:text="@string/select_instrument_title" />
+                android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/select_instrument_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/select_instrument_title" />
+                <TextView
+                    android:id="@+id/select_instrument_title"
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_instrument_title" />
 
-            <TextView
-                android:id="@+id/time_interval_title"
-                style="@style/Base.TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/select_instrument_title"
-                android:layout_marginTop="@dimen/create_config_margin3"
-                android:text="@string/time_interval_title" />
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/select_instrument_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <EditText
-                android:id="@+id/interval_edit_text"
-                android:layout_width="wrap_content"
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/select_instrument_title"
-                android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/create_config_margin1"
-                android:layout_toEndOf="@id/time_interval_title"
-                android:hint="@string/time_interval_hint"
-                android:inputType="number" />
+                android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/interval_unit_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/select_instrument_title"
-                android:layout_marginStart="@dimen/margin_btn"
-                android:layout_marginTop="@dimen/create_config_margin1"
-                android:layout_toEndOf="@+id/interval_edit_text" />
+                <TextView
+                    android:id="@+id/time_interval_title"
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time_interval_title" />
+
+                <EditText
+                    android:id="@+id/interval_edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/time_interval_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:textAlignment="center" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/interval_unit_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/select_params_title"
                 style="@style/Base.TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/time_interval_title"
-                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/create_config_margin2"
                 android:text="@string/select_params_title" />
 
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/params_list_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/select_params_title"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:layout_height="@dimen/create_config_recycler_view"
+                android:layout_marginTop="@dimen/create_config_margin1" />
 
             <Button
                 android:id="@+id/create_config_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/params_list_container"
-                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/create_config_margin2"
                 android:background="@drawable/btn_back_rounded"
                 android:padding="@dimen/margin_btn"
-                android:layout_marginTop="@dimen/create_config_margin2"
                 android:text="@string/create_config_btn_text"
                 android:textColor="@color/white" />
-        </RelativeLayout>
+        </LinearLayout>
 
     </ScrollView>
 
