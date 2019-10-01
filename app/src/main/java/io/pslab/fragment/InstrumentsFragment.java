@@ -211,7 +211,7 @@ public class InstrumentsFragment extends Fragment {
                     getResources().getString(R.string.robotic_arm), R.drawable.robotic_arm, getResources().getString(descriptions[12])
             ));
             applicationItemList.add(new ApplicationItem(
-                    getResources().getString(R.string.gas_sensor), R.drawable.robotic_arm, getResources().getString(descriptions[13])
+                    getResources().getString(R.string.gas_sensor), R.drawable.tile_icon_gas, getResources().getString(descriptions[13])
             ));
             return null;
         }
