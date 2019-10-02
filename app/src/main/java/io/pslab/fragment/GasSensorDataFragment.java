@@ -91,6 +91,9 @@ public class GasSensorDataFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_gas_sensor, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         scienceLab = ScienceLabCommon.scienceLab;
+        if (!scienceLab.isConnected()) {
+            Toast.makeText(getContext(), R.string.not_connected, Toast.LENGTH_SHORT).show();
+        }
         entries = new ArrayList<>();
         setupInstruments();
         return rootView;
@@ -366,8 +369,6 @@ public class GasSensorDataFragment extends Fragment {
                 mChart.moveViewToX(data.getEntryCount());
                 mChart.invalidate();
             }
-        } else {
-            Toast.makeText(getContext(), R.string.not_connected, Toast.LENGTH_SHORT).show();
         }
     }
 
