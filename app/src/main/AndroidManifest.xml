@@ -103,6 +103,9 @@
             android:name=".activity.GasSensorActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.MapsActivity" />
+        <activity
+            android:name=".activity.DustSensorActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".receivers.USBDetachReceiver" />
 

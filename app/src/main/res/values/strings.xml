@@ -887,6 +887,28 @@
     <string name="gas_sensor_label">Gas Contents (PPM)</string>
     <string name="gas_sensor_unit">PPM</string>
 
+    <string name="dust_sensor">Dust Sensor</string>
+    <string name="dust_sensor_intro">Dust Sensor is used to measure air quality</string>
+    <string name="dust_sensor_desc">Connect pins according to pin diagram and start measuring. Power up the sensor using VCC pin in PSLab and connect data pin to CH1. Make sure the ground wire is connected to one of the GND pins in PSLab.</string>
+    <string name="dust_sensor_description">Dust sensor is used to measure air quality in terms of particles per square meter</string>
+    <string name="dust_sensor_label">Particles (PPM)</string>
+    <string name="dust_sensor_unit">PPM</string>
+    <string name="dust_sensor_default">1000</string>
+    <string name="dust_sensor_status_label">Air Quality</string>
+    <string name="setting_dust_update_period">setting_dust_update_period</string>
+    <string name="setting_dust_high_limit">setting_dust_high_limit</string>
+    <string name="setting_dust_sensor_type">setting_dust_sensor_type</string>
+    <string name="dust_summary">1000 ms</string>
+    <string name="dialogue_msg_dust">Please provide threshold value for dust particle value to be recorded (0.0~5.0)</string>
+    <string-array name="dust_sensor_list">
+        <item>DSM-501A</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="dust_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <string name="robotic_arm">Robotic Arm</string>
     <string name="robotic_arm_intro">A robotic arm is a type of mechanical arm, usually programmable, with similar functions to a human arm.</string>
     <string name="robotic_arm_desc">Your arm\'s job is to move your hand from place to place. Similarly, the robotic arm\'s job is to move an end effector from place to place. You can outfit robotic arms with all sorts of end effectors, which are suited to a particular application. One common end effector is a simplified version of the hand, which can grasp and carry different objects.</string>
@@ -1014,5 +1036,6 @@
     <string name="osm_map">OpenStreetMap</string>
     <string name="no_location_specified">Location not specified</string>
     <string name="compass_default_0">0</string>
+    <string name="unknown">Unknown</string>
 
 </resources>

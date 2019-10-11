@@ -45,6 +45,7 @@ import io.pslab.activity.SettingsActivity;
 import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.BaroMeterDataFragment;
 import io.pslab.fragment.CompassDataFragment;
+import io.pslab.fragment.DustSensorDataFragment;
 import io.pslab.fragment.GasSensorDataFragment;
 import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
@@ -107,6 +108,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String THERMOMETER = "Thermometer";
     public static final String THERMOMETER_CONFIGURATIONS = "Thermometer Configurations";
     public static final String THERMOMETER_DATA_FORMAT = "%.2f";
+    public static final String DUSTSENSOR = "Dust Sensor";
+    public static final String DUSTSENSOR_CONFIGURATIONS = "Dust Sensor Configurations";
     public static final String ROBOTIC_ARM = "Robotic Arm";
     public static final String WAVE_GENERATOR = "Wave Generator";
     public static final String OSCILLOSCOPE = "Oscilloscope";
@@ -351,6 +354,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     } else if (getSensorFragment() instanceof GasSensorDataFragment){
                         ((GasSensorDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
+                    } else if (getSensorFragment() instanceof DustSensorDataFragment) {
+                        ((DustSensorDataFragment) getSupportFragmentManager().findFragmentByTag(getSensorName())).playData();
                     }
                 }
                 invalidateOptionsMenu();
@@ -377,6 +382,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 } else if (getSensorFragment() instanceof GasSensorDataFragment){
                     ((GasSensorDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
+
+                } else if (getSensorFragment() instanceof DustSensorDataFragment) {
+                    ((DustSensorDataFragment) getSupportFragmentManager().findFragmentByTag(getSensorName())).stopData();
                 }
                 break;
             case R.id.show_map:
@@ -424,6 +432,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 } else if (getSensorFragment() instanceof GasSensorDataFragment){
                     ((GasSensorDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
+                } else if (getSensorFragment() instanceof DustSensorDataFragment) {
+                    ((DustSensorDataFragment) getSupportFragmentManager().findFragmentByTag(getSensorName())).saveGraph();
                 }
                 break;
             case android.R.id.home:

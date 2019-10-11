@@ -3,6 +3,7 @@ package io.pslab.others;
 import io.pslab.interfaces.sensorloggers.AccelerometerRecordables;
 import io.pslab.interfaces.sensorloggers.BaroMeterRecordables;
 import io.pslab.interfaces.sensorloggers.CompassRecordables;
+import io.pslab.interfaces.sensorloggers.DustSensorRecordables;
 import io.pslab.interfaces.sensorloggers.GasSensorRecordables;
 import io.pslab.interfaces.sensorloggers.GyroscopeRecordables;
 import io.pslab.interfaces.sensorloggers.LogicAnalyzerRecordables;
@@ -17,6 +18,7 @@ import io.pslab.interfaces.sensorloggers.WaveGeneratorRecordables;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.CompassData;
+import io.pslab.models.DustSensorData;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.GyroData;
 import io.pslab.models.LogicAnalyzerData;
@@ -36,7 +38,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables, OscilloscopeRecordables, PowerSourceRecordables, MultimeterRecordables, LogicAnalyzerRecordables, GasSensorRecordables {
+public class LocalDataLog implements DustSensorRecordables, LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables, OscilloscopeRecordables, PowerSourceRecordables, MultimeterRecordables, LogicAnalyzerRecordables, GasSensorRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -576,6 +578,41 @@ public class LocalDataLog implements LuxMeterRecordables, BaroMeterRecordables, 
     @Override
     public RealmResults<GasSensorData> getBlockOfGasSensorRecords(long block) {
         return realm.where(GasSensorData.class)
+                .equalTo("block", block)
+                .findAll();
+    }
+
+    /***********************************************************************************************
+     * Dust Sensor Section
+     ***********************************************************************************************/
+    @Override
+    public DustSensorData getDustSensorData(long timestamp) {
+        return realm.where(DustSensorData.class).equalTo("time", timestamp).findFirst();
+    }
+
+    @Override
+    public void clearAllDustSensorRecords() {
+        realm.beginTransaction();
+        realm.delete(LuxData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfDustSensorRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<DustSensorData> data = getBlockOfDustSensorRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<DustSensorData> getAllDustSensorRecords() {
+        return realm.where(DustSensorData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<DustSensorData> getBlockOfDustSensorRecords(long block) {
+        return realm.where(DustSensorData.class)
                 .equalTo("block", block)
                 .findAll();
     }
