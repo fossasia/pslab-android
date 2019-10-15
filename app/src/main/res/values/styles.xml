@@ -44,6 +44,29 @@
         <item name="colorControlNormal">@color/grey</item>
     </style>
 
+    <style name="dust_sensor_stat_heading">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="dust_sensor_stat_display">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:background">@drawable/control_edittext</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+
     <style name="lux_meter_stat_display">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

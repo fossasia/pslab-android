@@ -18,6 +18,7 @@ import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
 import io.pslab.activity.BarometerActivity;
 import io.pslab.activity.CompassActivity;
+import io.pslab.activity.DustSensorActivity;
 import io.pslab.activity.GasSensorActivity;
 import io.pslab.activity.GyroscopeActivity;
 import io.pslab.activity.LogicalAnalyzerActivity;
@@ -59,73 +60,74 @@ public class InstrumentsFragment extends Fragment {
         context = getActivity().getApplicationContext();
         applicationItemList = new ArrayList<>();
         applicationAdapter = new ApplicationAdapter(context, applicationItemList,
-                new ApplicationAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(ApplicationItem item) {
-                        Intent intent;
-                        switch (item.getApplicationName()) {
-                            case "Oscilloscope":
-                                intent = new Intent(context, OscilloscopeActivity.class);
-                                intent.putExtra("who", "Instruments");
-                                startActivity(intent);
-                                break;
-                            case "Multimeter":
-                                intent = new Intent(context, MultimeterActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Logic Analyzer":
-                                intent = new Intent(context, LogicalAnalyzerActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Sensors":
-                                intent = new Intent(context, SensorActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Wave Generator":
-                                intent = new Intent(context, WaveGeneratorActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Power Source":
-                                intent = new Intent(context, PowerSourceActivity.class);
-                                startActivity(intent);
-                                break;
-                            case PSLabSensor.LUXMETER:
-                                intent = new Intent(context, LuxMeterActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Accelerometer":
-                                intent = new Intent(context, AccelerometerActivity.class);
-                                startActivity(intent);
-                                break;
-                            case PSLabSensor.BAROMETER:
-                                intent = new Intent(context, BarometerActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Compass":
-                                intent = new Intent(context, CompassActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Gyroscope":
-                                intent = new Intent(context, GyroscopeActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Thermometer":
-                                intent = new Intent(context, ThermometerActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Robotic Arm":
-                                intent = new Intent(context, RoboticArmActivity.class);
-                                startActivity(intent);
-                                break;
-                            case "Gas Sensor":
-                                intent = new Intent(context, GasSensorActivity.class);
-                                startActivity(intent);
-                                break;
-                            default:
-                                break;
-                        }
-
+                item -> {
+                    Intent intent;
+                    switch (item.getApplicationName()) {
+                        case "Oscilloscope":
+                            intent = new Intent(context, OscilloscopeActivity.class);
+                            intent.putExtra("who", "Instruments");
+                            startActivity(intent);
+                            break;
+                        case "Multimeter":
+                            intent = new Intent(context, MultimeterActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Logic Analyzer":
+                            intent = new Intent(context, LogicalAnalyzerActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Sensors":
+                            intent = new Intent(context, SensorActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Wave Generator":
+                            intent = new Intent(context, WaveGeneratorActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Power Source":
+                            intent = new Intent(context, PowerSourceActivity.class);
+                            startActivity(intent);
+                            break;
+                        case PSLabSensor.LUXMETER:
+                            intent = new Intent(context, LuxMeterActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Accelerometer":
+                            intent = new Intent(context, AccelerometerActivity.class);
+                            startActivity(intent);
+                            break;
+                        case PSLabSensor.BAROMETER:
+                            intent = new Intent(context, BarometerActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Compass":
+                            intent = new Intent(context, CompassActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Gyroscope":
+                            intent = new Intent(context, GyroscopeActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Thermometer":
+                            intent = new Intent(context, ThermometerActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Robotic Arm":
+                            intent = new Intent(context, RoboticArmActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Gas Sensor":
+                            intent = new Intent(context, GasSensorActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "Dust Sensor":
+                            intent = new Intent(context, DustSensorActivity.class);
+                            startActivity(intent);
+                            break;
+                        default:
+                            break;
                     }
+
                 });
         int rows = context.getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_PORTRAIT ? 1 : 2;
@@ -167,8 +169,8 @@ public class InstrumentsFragment extends Fragment {
                     R.string.gyroscope_description,
                     R.string.thermometer_desc,
                     R.string.robotic_arm_description,
-                    R.string.gas_sensor_description
-
+                    R.string.gas_sensor_description,
+                    R.string.dust_sensor_description
             };
 
             applicationItemList.add(new ApplicationItem(
@@ -212,6 +214,9 @@ public class InstrumentsFragment extends Fragment {
             ));
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.gas_sensor), R.drawable.tile_icon_gas, getResources().getString(descriptions[13])
+            ));
+            applicationItemList.add(new ApplicationItem(
+                    getResources().getString(R.string.dust_sensor), R.drawable.tile_icon_gas, getResources().getString(descriptions[14])
             ));
             return null;
         }
