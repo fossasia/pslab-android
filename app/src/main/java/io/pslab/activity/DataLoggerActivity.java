@@ -69,7 +69,6 @@ public class DataLoggerActivity extends AppCompatActivity {
     private RealmResults<SensorDataBlock> categoryData;
     private String selectedDevice = null;
     private Realm realm;
-    private String caller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +79,7 @@ public class DataLoggerActivity extends AppCompatActivity {
         deleteAllProgressBar = findViewById(R.id.delete_all_progbar);
         deleteAllProgressBar.setVisibility(View.GONE);
         realm = LocalDataLog.with().getRealm();
-        caller = getIntent().getStringExtra(CALLER_ACTIVITY);
+        String caller = getIntent().getStringExtra(CALLER_ACTIVITY);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -170,17 +169,10 @@ public class DataLoggerActivity extends AppCompatActivity {
                 new AlertDialog.Builder(context)
                         .setTitle(context.getString(R.string.delete))
                         .setMessage(context.getString(R.string.delete_all_message))
-                        .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteAllProgressBar.setVisibility(View.VISIBLE);
-                                new DeleteAllTask().execute();
-                            }
-                        }).setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
+                        .setPositiveButton(context.getString(R.string.delete), (dialog, which) -> {
+                            deleteAllProgressBar.setVisibility(View.VISIBLE);
+                            new DeleteAllTask().execute();
+                        }).setNegativeButton(context.getString(R.string.cancel), (dialog, which) -> dialog.dismiss()).create().show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -255,7 +247,7 @@ public class DataLoggerActivity extends AppCompatActivity {
     }
 
     private RealmObject getObject(String objectType, String[] data, long time, long block) {
-        RealmObject returnObject = null;
+        RealmObject returnObject;
         switch (objectType) {
             case "Lux Meter":
                 returnObject = new LuxData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));

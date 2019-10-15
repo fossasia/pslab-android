@@ -20,16 +20,14 @@ public class SplashActivity extends AppCompatActivity {
 
     private Handler handler;
     private Runnable runnable;
-    private ImageView logo;
-    private ImageView text;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
         ButterKnife.bind(this);
-        logo = findViewById(R.id.imageView);
-        text = findViewById(R.id.PSLabText);
+        ImageView logo = findViewById(R.id.imageView);
+        ImageView text = findViewById(R.id.PSLabText);
         logo.animate().alpha(1f).setDuration(2500);
         text.animate().alpha(1f).setDuration(2500);
         PSLabPermission psLabPermission = PSLabPermission.getInstance();
@@ -54,13 +52,10 @@ public class SplashActivity extends AppCompatActivity {
     private void exitSplashScreen() {
         handler = new Handler();
         int SPLASH_TIME_OUT = 2000;
-        handler.postDelayed(runnable = new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        handler.postDelayed(runnable = () -> {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }, SPLASH_TIME_OUT);
     }
 }

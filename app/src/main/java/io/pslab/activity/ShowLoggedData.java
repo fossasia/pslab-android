@@ -109,37 +109,31 @@ public class ShowLoggedData extends AppCompatActivity {
             }
         });
 
-        sensorListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final String sensor = ((TextView) view).getText().toString();
-                final MaterialDialog dialog = new MaterialDialog.Builder(context)
-                        .title(sensor)
-                        .customView(R.layout.sensor_list_long_click_dailog, false)
-                        .build();
-                dialog.show();
-                View customView = dialog.getCustomView();
-                assert customView != null;
-                ListView clickOptions = customView.findViewById(R.id.lv_sensor_list_click);
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sensor_click_list));
-                clickOptions.setAdapter(arrayAdapter);
+        sensorListView.setOnItemLongClickListener((parent, view, position, id) -> {
+            final String sensor = ((TextView) view).getText().toString();
+            final MaterialDialog dialog = new MaterialDialog.Builder(context)
+                    .title(sensor)
+                    .customView(R.layout.sensor_list_long_click_dailog, false)
+                    .build();
+            dialog.show();
+            View customView = dialog.getCustomView();
+            assert customView != null;
+            ListView clickOptions = customView.findViewById(R.id.lv_sensor_list_click);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sensor_click_list));
+            clickOptions.setAdapter(arrayAdapter);
 
-                clickOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        switch (position) {
-                            case 0:
-                                // todo : check for permission first
-                                exportCompleteSensorData(sensor);
-                                break;
-                            case 1:
-                                break;
-                        }
-                        dialog.dismiss();
-                    }
-                });
-                return true;
-            }
+            clickOptions.setOnItemClickListener((parent1, view1, position1, id1) -> {
+                switch (position1) {
+                    case 0:
+                        // todo : check for permission first
+                        exportCompleteSensorData(sensor);
+                        break;
+                    case 1:
+                        break;
+                }
+                dialog.dismiss();
+            });
+            return true;
         });
     }
 
@@ -160,7 +154,7 @@ public class ShowLoggedData extends AppCompatActivity {
                         try {
                             stream = new FileOutputStream(file);
                             for (DataMPU6050 temp : results) {
-                                stream.write((String.valueOf(temp.getAx()) + " " + temp.getAy() + " " + temp.getAz() + " " +
+                                stream.write((temp.getAx() + " " + temp.getAy() + " " + temp.getAz() + " " +
                                         temp.getGx() + " " + temp.getGy() + " " + temp.getGz() + " " + temp.getTemperature() + "\n").getBytes());
                             }
                         } catch (IOException e) {
@@ -189,19 +183,19 @@ public class ShowLoggedData extends AppCompatActivity {
                             StringBuilder stringBuilder = new StringBuilder();
                             stringBuilder.append("Ax,Ay,Ax,Gx,Gy,Gz,Temperature\n");
                             for (DataMPU6050 temp : results) {
-                                stringBuilder.append(String.valueOf(temp.getAx()));
+                                stringBuilder.append(temp.getAx());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getAy()));
+                                stringBuilder.append(temp.getAy());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getAz()));
+                                stringBuilder.append(temp.getAz());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getGx()));
+                                stringBuilder.append(temp.getGx());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getGy()));
+                                stringBuilder.append(temp.getGy());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getGz()));
+                                stringBuilder.append(temp.getGz());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getTemperature()));
+                                stringBuilder.append(temp.getTemperature());
                                 stringBuilder.append('\n');
                             }
                             writer.write(stringBuilder.toString());
@@ -242,12 +236,7 @@ public class ShowLoggedData extends AppCompatActivity {
         isTrialListViewOnStack = true;
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, trialList);
         trialListView.setAdapter(adapter);
-        trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                populateSensorData(sensor, position);
-            }
-        });
+        trialListView.setOnItemClickListener((parent, view, position, id) -> populateSensorData(sensor, position));
     }
 
     private void populateSensorData(String sensor, long trial) {

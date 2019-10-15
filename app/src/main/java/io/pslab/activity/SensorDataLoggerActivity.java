@@ -96,52 +96,39 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
         }
         context = this;
         realm = Realm.getDefaultInstance();
-        scanFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (scienceLab.isConnected()) {
-                    Runnable detectSensors = new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                ArrayList<Integer> scanResult = i2c.scan(null);
-                                final ArrayList<String> listData = new ArrayList<String>();
-                                if (scanResult != null) {
-                                    for (Integer temp : scanResult) {
-                                        if (sensorAddress.get(temp) != null) {
-                                            listData.add(sensorAddress.get(temp) + " : " + temp);
-                                            sensorList.add(sensorAddress.get(temp));
-                                        }
-                                    }
+
+        scanFab.setOnClickListener(v -> {
+            if (scienceLab.isConnected()) {
+                Runnable detectSensors = () -> {
+                    try {
+                        ArrayList<Integer> scanResult = i2c.scan(null);
+                        final ArrayList<String> listData = new ArrayList<>();
+                        if (scanResult != null) {
+                            for (Integer temp : scanResult) {
+                                if (sensorAddress.get(temp) != null) {
+                                    listData.add(sensorAddress.get(temp) + " : " + temp);
+                                    sensorList.add(sensorAddress.get(temp));
                                 }
-                                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ListView sensorList = new ListView(context);
-                                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listData);
-                                        sensorList.setAdapter(adapter);
-                                        container.addView(sensorList);
-                                        sensorList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                            @Override
-                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                handleClick(position);
-                                            }
-                                        });
-                                    }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
                         }
-                    };
-                    new Thread(detectSensors).start();
-                } else {
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
-                    View snackBarView = snackbar.getView();
-                    TextView snackBarTextView = snackBarView.findViewById(android.support.design.R.id.snackbar_text);
-                    snackBarTextView.setTextColor(Color.YELLOW);
-                    snackbar.show();
-                }
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            ListView sensorList = new ListView(context);
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, listData);
+                            sensorList.setAdapter(adapter);
+                            container.addView(sensorList);
+                            sensorList.setOnItemClickListener((parent, view, position, id) -> handleClick(position));
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                };
+                new Thread(detectSensors).start();
+            } else {
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
+                View snackBarView = snackbar.getView();
+                TextView snackBarTextView = snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+                snackBarTextView.setTextColor(Color.YELLOW);
+                snackbar.show();
             }
         });
         sensorAddress.put(0x60, "MCP4728");
@@ -158,92 +145,78 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     private void handleClick(int position) {
         String sensor = sensorList.get(position);
         Toast.makeText(context, sensor, Toast.LENGTH_SHORT).show();
-        switch (sensor) {
-            case "MPU6050":
-                MaterialDialog dialog = new MaterialDialog.Builder(context)
-                        .customView(R.layout.sensor_mpu6050_data_card, true)
-                        .positiveText(getResources().getString(R.string.start_logging))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull final DialogAction which) {
-                                if (!isLogging) {
-                                    isLogging = true;
-                                    loggingThreadRunning = true;
-                                    dialog.getActionButton(DialogAction.POSITIVE).setText(getResources().getString(R.string.stop_logging));
-                                    Runnable loggingRunnable = new Runnable() {
-                                        @Override
-                                        public void run() {
+        if ("MPU6050".equals(sensor)) {
+            MaterialDialog dialog = new MaterialDialog.Builder(context)
+                    .customView(R.layout.sensor_mpu6050_data_card, true)
+                    .positiveText(getResources().getString(R.string.start_logging))
+                    .onPositive((dialog1, which) -> {
+                        if (!isLogging) {
+                            isLogging = true;
+                            loggingThreadRunning = true;
+                            dialog1.getActionButton(DialogAction.POSITIVE).setText(getResources().getString(R.string.stop_logging));
+                            Runnable loggingRunnable = () -> {
+                                try {
+                                    MPU6050 sensorMPU6050 = new MPU6050(i2c, scienceLab);
+                                    while (loggingThreadRunning) {
+                                        TaskMPU6050 taskMPU6050 = new TaskMPU6050(sensorMPU6050);
+                                        taskMPU6050.execute();
+                                        synchronized (lock) {
                                             try {
-                                                MPU6050 sensorMPU6050 = new MPU6050(i2c, scienceLab);
-                                                while (loggingThreadRunning) {
-                                                    TaskMPU6050 taskMPU6050 = new TaskMPU6050(sensorMPU6050);
-                                                    taskMPU6050.execute();
-                                                    synchronized (lock) {
-                                                        try {
-                                                            lock.wait();
-                                                        } catch (InterruptedException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
-                                                    Thread.sleep(500);
-                                                }
-                                            } catch (IOException | InterruptedException e) {
+                                                lock.wait();
+                                            } catch (InterruptedException e) {
                                                 e.printStackTrace();
                                             }
                                         }
-                                    };
-                                    loggingThread = new Thread(loggingRunnable);
-                                    loggingThread.start();
-                                } else {
-                                    isLogging = false;
-                                    dialog.getActionButton(DialogAction.POSITIVE).setText(getResources().getString(R.string.start_logging));
-                                    loggingThreadRunning = false;
+                                        Thread.sleep(500);
+                                    }
+                                } catch (IOException | InterruptedException e) {
+                                    e.printStackTrace();
                                 }
-                            }
-                        })
-                        .negativeText(getResources().getString(R.string.cancel))
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                if (isLogging) {
-                                    // stop and discard logging gracefully
-                                }
-                                dialog.dismiss();
-                            }
-                        })
-                        .neutralText(getResources().getString(R.string.save_data))
-                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                realm.beginTransaction();
-                                long trial;
-                                Number trialNumber = realm.where(DataMPU6050.class).max("trial");
-                                if (trialNumber == null) {
-                                    trial = 0;
-                                } else {
-                                    trial = (long) trialNumber + 1;
-                                }
-                                for (int i = 0; i < mpu6050DataList.size(); i++) {
-                                    DataMPU6050 tempObject = mpu6050DataList.get(i);
-                                    tempObject.setTrial(trial);
-                                    tempObject.setId(i);
-                                    realm.copyToRealm(tempObject);
-                                }
-                                RealmResults<SensorLogged> results = realm.where(SensorLogged.class).equalTo("sensor", "MPU6050").findAll();
-                                if (results.size() == 0) {
-                                    SensorLogged sensorLogged = new SensorLogged("MPU6050");
-                                    realm.copyToRealm(sensorLogged);
-                                }
-                                realm.commitTransaction();
-                                Toast.makeText(SensorDataLoggerActivity.this, "Data Logged Successfully", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
-                        })
-                        .autoDismiss(false)
-                        .build();
-                dialog.show();
-                customView = dialog.getCustomView();
-                break;
+                            };
+                            loggingThread = new Thread(loggingRunnable);
+                            loggingThread.start();
+                        } else {
+                            isLogging = false;
+                            dialog1.getActionButton(DialogAction.POSITIVE).setText(getResources().getString(R.string.start_logging));
+                            loggingThreadRunning = false;
+                        }
+                    })
+                    .negativeText(getResources().getString(R.string.cancel))
+                    .onNegative((dialog12, which) -> {
+                        if (isLogging) {
+                            // stop and discard logging gracefully
+                        }
+                        dialog12.dismiss();
+                    })
+                    .neutralText(getResources().getString(R.string.save_data))
+                    .onNeutral((dialog13, which) -> {
+                        realm.beginTransaction();
+                        long trial;
+                        Number trialNumber = realm.where(DataMPU6050.class).max("trial");
+                        if (trialNumber == null) {
+                            trial = 0;
+                        } else {
+                            trial = (long) trialNumber + 1;
+                        }
+                        for (int i = 0; i < mpu6050DataList.size(); i++) {
+                            DataMPU6050 tempObject = mpu6050DataList.get(i);
+                            tempObject.setTrial(trial);
+                            tempObject.setId(i);
+                            realm.copyToRealm(tempObject);
+                        }
+                        RealmResults<SensorLogged> results = realm.where(SensorLogged.class).equalTo("sensor", "MPU6050").findAll();
+                        if (results.size() == 0) {
+                            SensorLogged sensorLogged = new SensorLogged("MPU6050");
+                            realm.copyToRealm(sensorLogged);
+                        }
+                        realm.commitTransaction();
+                        Toast.makeText(SensorDataLoggerActivity.this, "Data Logged Successfully", Toast.LENGTH_SHORT).show();
+                        dialog13.dismiss();
+                    })
+                    .autoDismiss(false)
+                    .build();
+            dialog.show();
+            customView = dialog.getCustomView();
         }
     }
 
@@ -270,12 +243,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             TextView tvAx = customView.findViewById(R.id.tv_sensor_mpu6050_ax);
-            TextView tvAy = customView.findViewById(R.id.tv_sensor_mpu6050_ay);
             TextView tvAz = customView.findViewById(R.id.tv_sensor_mpu6050_az);
-            TextView tvGx = customView.findViewById(R.id.tv_sensor_mpu6050_gx);
-            TextView tvGy = customView.findViewById(R.id.tv_sensor_mpu6050_gy);
-            TextView tvGz = customView.findViewById(R.id.tv_sensor_mpu6050_gz);
-            TextView tvTemp = customView.findViewById(R.id.tv_sensor_mpu6050_temp);
             tvAx.setText(DataFormatter.formatDouble(dataMPU6050.get(0), DataFormatter.HIGH_PRECISION_FORMAT));
             tvAx.setText(DataFormatter.formatDouble(dataMPU6050.get(1), DataFormatter.HIGH_PRECISION_FORMAT));
             tvAz.setText(DataFormatter.formatDouble(dataMPU6050.get(2), DataFormatter.HIGH_PRECISION_FORMAT));

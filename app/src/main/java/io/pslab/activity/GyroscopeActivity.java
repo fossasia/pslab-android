@@ -17,7 +17,6 @@ import io.realm.RealmResults;
 public class GyroscopeActivity extends PSLabSensor {
 
     private static final String PREF_NAME = "customDialogPreference";
-    public final String GYROSCOPE_LIMIT = "gyroscope_limit";
     public RealmResults<GyroData> recordedGyroData;
 
     @Override

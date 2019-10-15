@@ -143,13 +143,10 @@ public class MultimeterActivity extends AppCompatActivity {
 
         gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
         setUpBottomSheet();
-        tvShadow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                tvShadow.setVisibility(View.GONE);
-            }
+        tvShadow.setOnClickListener(v -> {
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            tvShadow.setVisibility(View.GONE);
         });
 
         multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
@@ -174,21 +171,15 @@ public class MultimeterActivity extends AppCompatActivity {
             knob.setState(knobState);
             quantity.setText(text_quantity);
             unit.setText(text_unit);
-            knob.setOnStateChanged(new Knob.OnStateChanged() {
-                @Override
-                public void onState(int state) {
-                    knobState = state;
-                    saveKnobState(knobState);
-                }
+            knob.setOnStateChanged(state -> {
+                knobState = state;
+                saveKnobState(knobState);
             });
-            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    switchIsChecked = isChecked;
-                    SharedPreferences.Editor editor = multimeter_data.edit();
-                    editor.putBoolean("SwitchState", switchIsChecked);
-                    editor.apply();
-                }
+            aSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                switchIsChecked = isChecked;
+                SharedPreferences.Editor editor = multimeter_data.edit();
+                editor.putBoolean("SwitchState", switchIsChecked);
+                editor.apply();
             });
             isPlayingBack = false;
             checkConfig();
@@ -310,12 +301,7 @@ public class MultimeterActivity extends AppCompatActivity {
         recordTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        logData();
-                    }
-                });
+                runOnUiThread(() -> logData());
             }
         }, 0, recordPeriod);
     }
@@ -495,12 +481,7 @@ public class MultimeterActivity extends AppCompatActivity {
                             // Export Data
                             CustomSnackBar.showSnackBar(coordinatorLayout,
                                     getString(R.string.csv_store_text) + " " + multimeterLogger.getCurrentFilePath()
-                                    , getString(R.string.open), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            startActivity(new Intent(MultimeterActivity.this, DataLoggerActivity.class));
-                                        }
-                                    }, Snackbar.LENGTH_SHORT);
+                                    , getString(R.string.open), view -> startActivity(new Intent(MultimeterActivity.this, DataLoggerActivity.class)), Snackbar.LENGTH_SHORT);
                             isRecordingStarted = false;
                             recordData = false;
                         } else {
