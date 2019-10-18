@@ -20,6 +20,7 @@ import io.pslab.R;
 import io.pslab.fragment.AccelerometerSettingsFragment;
 import io.pslab.fragment.BaroMeterSettingsFragment;
 import io.pslab.fragment.CompassSettingsFragment;
+import io.pslab.fragment.DustSensorSettingsFragment;
 import io.pslab.fragment.GyroscopeSettingsFragment;
 import io.pslab.fragment.LuxMeterSettingFragment;
 import io.pslab.fragment.MultimeterSettingsFragment;
@@ -79,6 +80,9 @@ public class SettingsActivity extends AppCompatActivity {
                 break;
             case PSLabSensor.COMPASS_CONFIGURATIONS:
                 fragment = new CompassSettingsFragment();
+                break;
+            case PSLabSensor.DUSTSENSOR_CONFIGURATIONS:
+                fragment = new DustSensorSettingsFragment();
                 break;
             default:
                 fragment = new SettingsFragment();

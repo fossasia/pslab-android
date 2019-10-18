@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,8 +38,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.pslab.DataFormatter;
 import io.pslab.R;
-import io.pslab.activity.GasSensorActivity;
+import io.pslab.activity.DustSensorActivity;
 import io.pslab.communication.ScienceLab;
+import io.pslab.models.DustSensorData;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
@@ -46,24 +48,31 @@ import io.pslab.others.ScienceLabCommon;
 
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
-public class GasSensorDataFragment extends Fragment {
+public class DustSensorDataFragment extends Fragment {
 
-    @BindView(R.id.gas_sensor_value)
-    TextView gasValue;
-    @BindView(R.id.label_gas_sensor)
+    @BindView(R.id.dust_sensor_value)
+    TextView dustValue;
+    @BindView(R.id.dust_sensor_status)
+    TextView dustStatus;
+    @BindView(R.id.label_dust_sensor)
     TextView sensorLabel;
-    @BindView(R.id.chart_gas_sensor)
+    @BindView(R.id.chart_dust_sensor)
     LineChart mChart;
-    @BindView(R.id.gas_sensor)
-    PointerSpeedometer gasSensorMeter;
-    private GasSensorActivity gasSensorActivity;
+    @BindView(R.id.dust_sensor)
+    PointerSpeedometer dustSensorMeter;
+
+    // TODO: Support multiple kinds of dust sensors
+    private static int sensorType = 0;
+    private static double highLimit = 4.0;
+    private static int updatePeriod = 1000;
+
+    private DustSensorActivity dustSensorActivity;
     private View rootView;
     private Unbinder unbinder;
     private ScienceLab scienceLab;
     private YAxis y;
     private Timer graphTimer;
     private ArrayList<Entry> entries;
-    private long updatePeriod = 1000;
     private long startTime;
     private long timeElapsed;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
@@ -71,29 +80,31 @@ public class GasSensorDataFragment extends Fragment {
     private GasSensorData sensorData;
     private boolean returningFromPause = false;
     private int turns = 0;
-    private ArrayList<GasSensorData> recordedGasSensorArray;
+    private ArrayList<DustSensorData> recordedDustSensorArray;
 
-
-    public static GasSensorDataFragment newInstance() {
-        return new GasSensorDataFragment();
+    public static DustSensorDataFragment newInstance() {
+        return new DustSensorDataFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startTime = System.currentTimeMillis();
-        gasSensorActivity = (GasSensorActivity) getActivity();
+        dustSensorActivity = (DustSensorActivity) getActivity();
+    }
+
+    public static void setParameters(double highLimit, int updatePeriod, String type) {
+        DustSensorDataFragment.highLimit = highLimit;
+        DustSensorDataFragment.updatePeriod = updatePeriod;
+        DustSensorDataFragment.sensorType = Integer.valueOf(type);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_gas_sensor, container, false);
+        rootView = inflater.inflate(R.layout.fragment_dust_sensor, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         scienceLab = ScienceLabCommon.scienceLab;
-        if (!scienceLab.isConnected()) {
-            Toast.makeText(getContext(), R.string.not_connected, Toast.LENGTH_SHORT).show();
-        }
         entries = new ArrayList<>();
         setupInstruments();
         return rootView;
@@ -102,17 +113,17 @@ public class GasSensorDataFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (gasSensorActivity.playingData) {
+        if (dustSensorActivity.playingData) {
             sensorLabel.setText(getResources().getString(R.string.baro_meter));
-            recordedGasSensorArray = new ArrayList<>();
+            recordedDustSensorArray = new ArrayList<>();
             resetInstrumentData();
             playRecordedData();
-        } else if (gasSensorActivity.viewingData) {
+        } else if (dustSensorActivity.viewingData) {
             sensorLabel.setText(getResources().getString(R.string.baro_meter));
-            recordedGasSensorArray = new ArrayList<>();
+            recordedDustSensorArray = new ArrayList<>();
             resetInstrumentData();
             plotAllRecordedData();
-        } else if (!gasSensorActivity.isRecording) {
+        } else if (!dustSensorActivity.isRecording) {
             updateGraphs();
             entries.clear();
             mChart.clear();
@@ -132,16 +143,20 @@ public class GasSensorDataFragment extends Fragment {
     }
 
     private void plotAllRecordedData() {
-        recordedGasSensorArray.addAll(gasSensorActivity.recordedGasSensorData);
-        if (recordedGasSensorArray.size() != 0) {
-            for (GasSensorData d : recordedGasSensorArray) {
+        recordedDustSensorArray.addAll(dustSensorActivity.recordedDustSensorData);
+        if (recordedDustSensorArray.size() != 0) {
+            for (DustSensorData d : recordedDustSensorArray) {
                 Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getPpmValue());
                 entries.add(entry);
-                gasSensorMeter.setWithTremble(false);
-                gasSensorMeter.setSpeedAt(d.getPpmValue());
-                gasValue.setText(String.valueOf(String.format("%.2f", d.getPpmValue())));
+                dustSensorMeter.setWithTremble(false);
+                float ppm = d.getPpmValue();
+                dustSensorMeter.setSpeedAt(ppm);
+                dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
+                dustValue.setText(String.valueOf(String.format(Locale.getDefault(), "%.2f", ppm)));
+                String status = ppm > highLimit ? "Good" : "Bad";
+                dustStatus.setText(status);
             }
-            y.setAxisMaximum(1024);
+            y.setAxisMaximum(5);
             y.setAxisMinimum(0);
             y.setLabelCount(10);
 
@@ -160,10 +175,10 @@ public class GasSensorDataFragment extends Fragment {
     }
 
     private void playRecordedData() {
-        recordedGasSensorArray.addAll(gasSensorActivity.recordedGasSensorData);
+        recordedDustSensorArray.addAll(dustSensorActivity.recordedDustSensorData);
         try {
-            if (recordedGasSensorArray.size() > 1) {
-                GasSensorData i = recordedGasSensorArray.get(1);
+            if (recordedDustSensorArray.size() > 1) {
+                DustSensorData i = recordedDustSensorArray.get(1);
                 long timeGap = i.getTime() - i.getBlock();
                 processRecordedData(timeGap);
             } else {
@@ -188,16 +203,21 @@ public class GasSensorDataFragment extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (gasSensorActivity.playingData) {
+                        if (dustSensorActivity.playingData) {
                             try {
-                                GasSensorData d = recordedGasSensorArray.get(turns);
+                                DustSensorData d = recordedDustSensorArray.get(turns);
                                 turns++;
-                                gasValue.setText(String.valueOf(String.format("%.2f", d.getPpmValue())));
-                                y.setAxisMaximum(1024);
+                                float ppm = d.getPpmValue();
+                                dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
+                                dustValue.setText(String.valueOf(String.format(Locale.getDefault(), "%.2f", ppm)));
+                                String status = ppm > highLimit ? "Good" : "Bad";
+                                dustStatus.setText(status);
+
+                                y.setAxisMaximum(5);
                                 y.setAxisMinimum(0);
                                 y.setLabelCount(10);
-                                gasSensorMeter.setWithTremble(false);
-                                gasSensorMeter.setSpeedAt(d.getPpmValue());
+                                dustSensorMeter.setWithTremble(false);
+                                dustSensorMeter.setSpeedAt(ppm);
 
                                 Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getPpmValue());
                                 entries.add(entry);
@@ -217,9 +237,9 @@ public class GasSensorDataFragment extends Fragment {
                                 graphTimer.cancel();
                                 graphTimer = null;
                                 turns = 0;
-                                gasSensorActivity.playingData = false;
-                                gasSensorActivity.startedPlay = false;
-                                gasSensorActivity.invalidateOptionsMenu();
+                                dustSensorActivity.playingData = false;
+                                dustSensorActivity.startedPlay = false;
+                                dustSensorActivity.invalidateOptionsMenu();
                             }
                         }
                     }
@@ -230,10 +250,10 @@ public class GasSensorDataFragment extends Fragment {
 
     public void playData() {
         resetInstrumentData();
-        gasSensorActivity.startedPlay = true;
+        dustSensorActivity.startedPlay = true;
         try {
-            if (recordedGasSensorArray.size() > 1) {
-                GasSensorData i = recordedGasSensorArray.get(1);
+            if (recordedDustSensorArray.size() > 1) {
+                DustSensorData i = recordedDustSensorArray.get(1);
                 long timeGap = i.getTime() - i.getBlock();
                 processRecordedData(timeGap);
             } else {
@@ -250,32 +270,32 @@ public class GasSensorDataFragment extends Fragment {
             graphTimer.cancel();
             graphTimer = null;
         }
-        recordedGasSensorArray.clear();
+        recordedDustSensorArray.clear();
         entries.clear();
         plotAllRecordedData();
-        gasSensorActivity.startedPlay = false;
-        gasSensorActivity.playingData = false;
+        dustSensorActivity.startedPlay = false;
+        dustSensorActivity.playingData = false;
         turns = 0;
-        gasSensorActivity.invalidateOptionsMenu();
+        dustSensorActivity.invalidateOptionsMenu();
     }
 
     public void saveGraph() {
-        gasSensorActivity.csvLogger.prepareLogFile();
-        gasSensorActivity.csvLogger.writeMetaData(getResources().getString(R.string.gas_sensor));
-        gasSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
-        for (GasSensorData baroData : gasSensorActivity.recordedGasSensorData) {
-            gasSensorActivity.csvLogger.writeCSVFile(baroData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())) + ","
-                    + baroData.getPpmValue() + ","
-                    + baroData.getLat() + ","
-                    + baroData.getLon());
+        dustSensorActivity.csvLogger.prepareLogFile();
+        dustSensorActivity.csvLogger.writeMetaData(getResources().getString(R.string.gas_sensor));
+        dustSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+        for (DustSensorData dustSensorData : dustSensorActivity.recordedDustSensorData) {
+            dustSensorActivity.csvLogger.writeCSVFile(dustSensorData.getTime() + ","
+                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(dustSensorData.getTime())) + ","
+                    + dustSensorData.getPpmValue() + ","
+                    + dustSensorData.getLat() + ","
+                    + dustSensorData.getLon());
         }
         View view = rootView.findViewById(R.id.gas_sensor_linearlayout);
         view.setDrawingCacheEnabled(true);
         Bitmap b = view.getDrawingCache();
         try {
             b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                    File.separator + CSV_DIRECTORY + File.separator + gasSensorActivity.getSensorName() +
+                    File.separator + CSV_DIRECTORY + File.separator + dustSensorActivity.getSensorName() +
                     File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -289,8 +309,8 @@ public class GasSensorDataFragment extends Fragment {
             returningFromPause = true;
             graphTimer.cancel();
             graphTimer = null;
-            if (gasSensorActivity.playingData) {
-                gasSensorActivity.finish();
+            if (dustSensorActivity.playingData) {
+                dustSensorActivity.finish();
             }
         }
     }
@@ -304,13 +324,10 @@ public class GasSensorDataFragment extends Fragment {
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            visualizeData();
-                        } catch (NullPointerException e) {
-                        }
+                handler.post(() -> {
+                    try {
+                        visualizeData();
+                    } catch (NullPointerException e) {
                     }
                 });
             }
@@ -318,45 +335,47 @@ public class GasSensorDataFragment extends Fragment {
     }
 
     private void writeLogToFile(long timestamp, float ppmValue) {
-        if (getActivity() != null && gasSensorActivity.isRecording) {
-            if (gasSensorActivity.writeHeaderToFile) {
-                gasSensorActivity.csvLogger.prepareLogFile();
-                gasSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+        if (getActivity() != null && dustSensorActivity.isRecording) {
+            if (dustSensorActivity.writeHeaderToFile) {
+                dustSensorActivity.csvLogger.prepareLogFile();
+                dustSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
                 block = timestamp;
-                gasSensorActivity.recordSensorDataBlockID(new SensorDataBlock(timestamp, gasSensorActivity.getSensorName()));
-                gasSensorActivity.writeHeaderToFile = !gasSensorActivity.writeHeaderToFile;
+                dustSensorActivity.recordSensorDataBlockID(new SensorDataBlock(timestamp, dustSensorActivity.getSensorName()));
+                dustSensorActivity.writeHeaderToFile = !dustSensorActivity.writeHeaderToFile;
             }
-            if (gasSensorActivity.addLocation && gasSensorActivity.gpsLogger.isGPSEnabled()) {
+            if (dustSensorActivity.addLocation && dustSensorActivity.gpsLogger.isGPSEnabled()) {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                Location location = gasSensorActivity.gpsLogger.getDeviceLocation();
-                gasSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
+                Location location = dustSensorActivity.gpsLogger.getDeviceLocation();
+                dustSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + ppmValue + "," + location.getLatitude() + "," + location.getLongitude());
                 sensorData = new GasSensorData(timestamp, block, ppmValue, location.getLatitude(), location.getLongitude());
             } else {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                gasSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
+                dustSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
                         + ppmValue + ",0.0,0.0");
                 sensorData = new GasSensorData(timestamp, block, ppmValue, 0.0, 0.0);
             }
-            gasSensorActivity.recordSensorData(sensorData);
+            dustSensorActivity.recordSensorData(sensorData);
         } else {
-            gasSensorActivity.writeHeaderToFile = true;
+            dustSensorActivity.writeHeaderToFile = true;
         }
     }
 
     private void visualizeData() {
         if (scienceLab.isConnected()) {
-            double volt = scienceLab.getVoltage("CH1", 1);
-            double ppmValue = (volt / 3.3) * 1024.0;
-            gasValue.setText(String.valueOf(String.format("%.2f", ppmValue)));
-            gasSensorMeter.setWithTremble(false);
-            gasSensorMeter.setSpeedAt((float) ppmValue);
+            double ppm = scienceLab.getVoltage("CH1", 1);
+            dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
+            dustValue.setText(String.valueOf(String.format(Locale.getDefault(), "%.2f", ppm)));
+            String status = ppm > highLimit ? "Good" : "Bad";
+            dustStatus.setText(status);
+            dustSensorMeter.setWithTremble(false);
+            dustSensorMeter.setSpeedAt((float) ppm);
             timeElapsed = ((System.currentTimeMillis() - startTime) / updatePeriod);
             if (timeElapsed != previousTimeElapsed) {
                 previousTimeElapsed = timeElapsed;
-                Entry entry = new Entry((float) timeElapsed, (float) ppmValue);
+                Entry entry = new Entry((float) timeElapsed, (float) ppm);
                 entries.add(entry);
-                writeLogToFile(System.currentTimeMillis(), (float) ppmValue);
+                writeLogToFile(System.currentTimeMillis(), (float) ppm);
                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.gas_sensor_unit));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
@@ -369,11 +388,13 @@ public class GasSensorDataFragment extends Fragment {
                 mChart.moveViewToX(data.getEntryCount());
                 mChart.invalidate();
             }
+        } else {
+            Toast.makeText(getContext(), R.string.not_connected, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void setupInstruments() {
-        gasSensorMeter.setMaxSpeed(1024);
+        dustSensorMeter.setMaxSpeed(5);
         XAxis x = mChart.getXAxis();
         this.y = mChart.getAxisLeft();
         YAxis y2 = mChart.getAxisRight();
@@ -400,7 +421,7 @@ public class GasSensorDataFragment extends Fragment {
         x.setAvoidFirstLastClipping(true);
 
         y.setTextColor(Color.WHITE);
-        y.setAxisMaximum(1024);
+        y.setAxisMaximum(5);
         y.setAxisMinimum(0);
         y.setDrawGridLines(true);
         y.setLabelCount(10);
@@ -411,9 +432,11 @@ public class GasSensorDataFragment extends Fragment {
 
     private void resetInstrumentData() {
         startTime = System.currentTimeMillis();
-        gasValue.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
-        gasSensorMeter.setSpeedAt(0);
-        gasSensorMeter.setWithTremble(false);
+        dustValue.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        dustStatus.setText(getString(R.string.unknown));
+        dustSensorMeter.setSpeedAt(0);
+        dustSensorMeter.setWithTremble(false);
         entries.clear();
     }
+
 }

@@ -135,7 +135,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 break;
             case PSLabSensor.GAS_SENSOR:
                 holder.sensor.setText(R.string.gas_sensor);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.robotic_arm));
+                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_gas));
                 break;
             default:
                 break;

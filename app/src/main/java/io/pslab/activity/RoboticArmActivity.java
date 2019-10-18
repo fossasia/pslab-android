@@ -150,6 +150,11 @@ public class RoboticArmActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.horizontal_scroll_view);
         servoCSVLogger = new CSVLogger(getResources().getString(R.string.robotic_arm));
 
+        degreeText1.setText(getResources().getString(R.string.zero));
+        degreeText2.setText(getResources().getString(R.string.zero));
+        degreeText3.setText(getResources().getString(R.string.zero));
+        degreeText4.setText(getResources().getString(R.string.zero));
+
         LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
         servoControllerParams.setMargins(2, 5, 2, 0);
         servo1Layout.setLayoutParams(servoControllerParams);
@@ -173,7 +178,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             timeLineBox.setLayoutParams(servoTimeLineBoxParams);
             timeLineBox.setPadding(5, 5, 5, 5);
             TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
-            timeText.setText(String.valueOf(i + 1));
+            timeText.setText(String.valueOf(i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
             timeLineBox.setOnDragListener(servo1DragListener);
             servo1TimeLine.addView(timeLineBox, i);
         }
@@ -183,7 +188,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             timeLineBox.setLayoutParams(servoTimeLineBoxParams);
             timeLineBox.setPadding(5, 5, 5, 5);
             TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
-            timeText.setText(String.valueOf(i + 1));
+            timeText.setText(String.valueOf(i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
             timeLineBox.setOnDragListener(servo2DragListener);
             servo2TimeLine.addView(timeLineBox, i);
         }
@@ -193,7 +198,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             timeLineBox.setLayoutParams(servoTimeLineBoxParams);
             timeLineBox.setPadding(5, 5, 5, 5);
             TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
-            timeText.setText(String.valueOf(i + 1));
+            timeText.setText(String.valueOf(i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
             timeLineBox.setOnDragListener(servo3DragListener);
             servo3TimeLine.addView(timeLineBox, i);
         }
@@ -203,7 +208,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             timeLineBox.setLayoutParams(servoTimeLineBoxParams);
             timeLineBox.setPadding(5, 5, 5, 5);
             TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
-            timeText.setText(String.valueOf(i + 1));
+            timeText.setText(String.valueOf(i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
             timeLineBox.setOnDragListener(servo4DragListener);
             servo4TimeLine.addView(timeLineBox, i);
         }
@@ -467,13 +472,13 @@ public class RoboticArmActivity extends AppCompatActivity {
                 timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
                 scrollView.smoothScrollBy(screen_width / 6, 0);
                 String deg1 = ((TextView) servo1TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
-                deg1 = (deg1.length() > 0) ? deg1 : "0";
+                deg1 = (deg1.length() > 0) ? deg1.substring(0, deg1.length() - 1) : getResources().getString(R.string.zero);
                 String deg2 = ((TextView) servo2TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
-                deg2 = (deg2.length() > 0) ? deg2 : "0";
+                deg2 = (deg2.length() > 0) ? deg2.substring(0, deg2.length() - 1) : getResources().getString(R.string.zero);
                 String deg3 = ((TextView) servo3TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
-                deg3 = (deg3.length() > 0) ? deg3 : "0";
+                deg3 = (deg3.length() > 0) ? deg3.substring(0, deg3.length() - 1) : getResources().getString(R.string.zero);
                 String deg4 = ((TextView) servo4TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
-                deg4 = (deg4.length() > 0) ? deg4 : "0";
+                deg4 = (deg4.length() > 0) ? deg4.substring(0, deg4.length() - 1) : getResources().getString(R.string.zero);
                 if (scienceLab.isConnected()) {
                     scienceLab.servo4(Double.valueOf(deg1), Double.valueOf(deg2), Double.valueOf(deg3), Double.valueOf(deg4));
                 }
@@ -567,10 +572,10 @@ public class RoboticArmActivity extends AppCompatActivity {
         ArrayList servoDataList = new ArrayList(recordedServoData);
         for (int i = 0; i < servoDataList.size(); i++) {
             ServoData servoData = (ServoData) servoDataList.get(i);
-            ((TextView) servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree1());
-            ((TextView) servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree2());
-            ((TextView) servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree3());
-            ((TextView) servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree4());
+            ((TextView) servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree1() + getResources().getString(R.string.robotic_arm_degree_symbol));
+            ((TextView) servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree2() + getResources().getString(R.string.robotic_arm_degree_symbol));
+            ((TextView) servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree3() + getResources().getString(R.string.robotic_arm_degree_symbol));
+            ((TextView) servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree4() + getResources().getString(R.string.robotic_arm_degree_symbol));
         }
     }
 
@@ -585,18 +590,22 @@ public class RoboticArmActivity extends AppCompatActivity {
         double lat, lon;
         for (int i = 0; i < 60; i++) {
             timestamp = System.currentTimeMillis();
-            degree1 = degree2 = degree3 = degree4 = "0";
+            degree1 = degree2 = degree3 = degree4 = getResources().getString(R.string.zero);
             if (((TextView) servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
                 degree1 = ((TextView) servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                degree1 = degree1.substring(0, degree1.length() - 1);
             }
             if (((TextView) servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
                 degree2 = ((TextView) servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                degree2 = degree2.substring(0, degree2.length() - 1);
             }
             if (((TextView) servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
                 degree3 = ((TextView) servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                degree3 = degree3.substring(0, degree3.length() - 1);
             }
             if (((TextView) servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().length() > 0) {
                 degree4 = ((TextView) servo4TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).getText().toString();
+                degree4 = degree4.substring(0, degree4.length() - 1);
             }
             if (gpsLogger.isGPSEnabled()) {
                 Location location = gpsLogger.getDeviceLocation();
@@ -638,7 +647,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 View view = (View) event.getLocalState();
                 TextView text = view.findViewById(R.id.degreeText);
                 if (view.getId() == R.id.servo_1) {
-                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText());
+                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
                 }
             }
             return true;
@@ -651,7 +660,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 View view = (View) event.getLocalState();
                 TextView text = view.findViewById(R.id.degreeText);
                 if (view.getId() == R.id.servo_2) {
-                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText());
+                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
                 }
             }
             return true;
@@ -664,7 +673,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 View view = (View) event.getLocalState();
                 TextView text = view.findViewById(R.id.degreeText);
                 if (view.getId() == R.id.servo_3) {
-                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText());
+                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
                 }
             }
             return true;
@@ -677,7 +686,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 View view = (View) event.getLocalState();
                 TextView text = view.findViewById(R.id.degreeText);
                 if (view.getId() == R.id.servo_4) {
-                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText());
+                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
                 }
             }
             return true;
