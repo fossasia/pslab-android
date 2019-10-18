@@ -80,6 +80,7 @@
     <dimen name="device_status_width">80dp</dimen>
     <dimen name="device_status_height">80dp</dimen>
     <dimen name="device_status_textsize">20sp</dimen>
+    <dimen name="config_activity_padding">9dp</dimen>
 
     <dimen name="multimeter_layout_margin">20dp</dimen>
     <dimen name="multimeter_line_width">1dp</dimen>
@@ -356,6 +357,10 @@
     <dimen name="create_config_margin2">20dp</dimen>
     <dimen name="create_config_margin3">22dp</dimen>
     <dimen name="create_config_margin4">12dp</dimen>
+    <dimen name="create_config_recycler_view">280dp</dimen>
+    <dimen name="check_box_width">0dp</dimen>
+    <dimen name="check_box_magin">4dp</dimen>
+    <dimen name="check_box_corner">5dp</dimen>
     <dimen name="sensor_sht21_margin">5dp</dimen>
     <dimen name="sht21_height">40dp</dimen>
     <dimen name="card_sht21_height">180dp</dimen>
