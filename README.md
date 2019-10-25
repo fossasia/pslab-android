@@ -1,35 +1,44 @@
 # PSLab Android App
 
-<a href="https://play.google.com/store/apps/details?id=io.pslab"><img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"></a>
-<a href="https://f-droid.org/app/io.pslab"><img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png"></a>
+Repository for the PSLab Android App for performing experiments with the [Pocket Science Lab](https://pslab.io) open-hardware platform.
 
 [![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=development)](https://travis-ci.org/fossasia/pslab-android)
-[![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd728d91bb5743ff916c16c1251f8dd5)](https://www.codacy.com/app/praveenkumar103/pslab-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](mailto:pslab-fossasia@googlegroups.com)
+![Minimum API Level](https://img.shields.io/badge/Min%20API%20Level-23-green)
+![Maximum API Level](https://img.shields.io/badge/Max%20API%20Level-28-orange)
+![GitHub repo size](https://img.shields.io/github/repo-size/fossasia/pslab-android)
+[![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
 
 This repository holds the Android App for performing experiments with [PSLab](https://pslab.io/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at https://pslab.io
 
+<a href="https://play.google.com/store/apps/details?id=io.pslab"><img alt="Get it on Google Play" height="80" src="/docs/images/playstore_badge.png"></a>
+<a href="https://f-droid.org/app/io.pslab"><img alt="Get it on F-Droid" height="80" src="/docs/images/fdroid_badge.png"></a>
+
+## Buy
+
+* You can get a Pocket Science Lab device from the [FOSSASIA Shop](https://fossasia.com).
+* More resellers are listed on the [PSLab website](https://pslab.io/shop/).
+
 ## Communication
 
-Please join us on the following channels:
-* [Pocket Science Channel](https://gitter.im/fossasia/pslab)
-* [Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia)
+* The PSLab [chat channel is on Gitter](https://gitter.im/fossasia/pslab).
+* Please also join us on the [PSLab Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia).
 
 ## Roadmap
  - [x] First we need to get communication between Android App and PSLab working.
- - [ ] Implement Applications and expose PSLab Hardware functionality to the user.
- - [ ] Implement Functionality to Perform Experiment using PSLab Hardware Device.
+ - [x] Implement Applications and expose PSLab Hardware functionality to the user.
+ - [ ] Implement wireless connectivity
 
 ## Screenshots
 
   <table>
       <tr>
        <td><img src="/docs/images/view_device_not_found.png"></td>
-       <td><img src="/docs/images/view_initialization.png"></td>
        <td><img src="/docs/images/view_home_screen.png"></td>
        <td><img src="/docs/images/view_instrument_panel.png"></td>
+       <td><img src="/docs/images/view_about_us.png"></td>
       </tr>
   </table>
   <table>
@@ -40,29 +49,24 @@ Please join us on the following channels:
     </table>
   <table>
     <tr>
-     <td><img src="/docs/images/view_about_us.png"></td>
-     <td><img src="/docs/images/view_navigation_drawer.png"></td>
      <td><img src="/docs/images/view_pin_layout_front.png"></td>
      <td><img src="/docs/images/view_pin_layout_back.png"></td>
-    </tr>
-  </table>
-  <table>
-    <tr>
-     <td><img src="/docs/images/instrument_oscilloscope_channelparam.png"></td>
-     <td><img src="/docs/images/instrument_oscilloscope_audiojack.png"></td>
-    </tr>
-  </table>
-  <table>
-    <tr>
-     <td><img src="/docs/images/instrument_wavegenerator_view.png"></td>
-     <td><img src="/docs/images/instrument_logic_analyzer_view.png"></td>
-    </tr>
-  </table>
-  <table>
-    <tr>
-     <td><img src="/docs/images/instrument_power_source_view.png"></td>
+     <td><img src="/docs/images/view_side_navigation_drawer.png"></td>
      <td><img src="/docs/images/instrument_luxmeter_guide.png"></td>
-     <td><img src="/docs/images/instrument_multimeter_view.png"></td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+     <td><img src="/docs/images/instrument_oscilloscope_channel_view.png"></td>
+     <td><img src="/docs/images/instrument_oscilloscope_audiojack_view.png"></td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+     <td><img src="/docs/images/instrument_wave_generator_analog.png"></td>
+     <td><img src="/docs/images/instrument_wave_generator_digital.png"></td>
+     <td><img src="/docs/images/instrument_power_source_view.png"></td>
+     <td><img src="/docs/images/instrument_multi_meter_view.png"></td>
     </tr>
   </table>
   <table>
@@ -70,6 +74,21 @@ Please join us on the following channels:
      <td><img src="/docs/images/instrument_barometer_view.png"></td>
      <td><img src="/docs/images/view_log_map_location.png"></td>
      <td><img src="/docs/images/view_data_logger.png"></td>
+     <td><img src="/docs/images/view_create_config_file.png"></td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+     <td><img src="/docs/images/instrument_accelerometer_view.png" width = "500"></td>
+     <td><img src="/docs/images/instrument_gyro_view.png" width = "500"></td>
+     <td><img src="/docs/images/instrument_compass_view.png" width = "500"></td>
+     <td><img src="/docs/images/instrument_thermo_view.png" width = "500"></td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+     <td><img src="/docs/images/instrument_robotic_arm_controller_view.png" width = "500"/></td>
+     <td><img src="/docs/images/instrument_logical_analyzer_view.png" width = "500"/></td>
     </tr>
   </table>
 
@@ -82,22 +101,34 @@ Please join us on the following channels:
 ## Features
 |   **Feature**    |                    **Description**                    |   **Status**    |
 |------------------|-------------------------------------------------------|-----------------|
-|   Home Screen    | Show status and version of PSLab device               |  		 ✓       |
-|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      | 		 ✓       |
-|  Oscilloscope    | Shows variation of analog signals                     | 		 ✓       |
-|   Multimeter     | Measures voltage, current, resistance and capacitance | 		 ✓       |
-| Logical Analyzer | Captures and displays signals from digital system     | 		 ✓       |
-|  Wave Generator  | Generates arbitrary analog and digital waveforms      | 		 ✓       |
-|   Power Source   | Generates programmable voltage and currents	       | 		 ✓       |
-|    Lux Meter     | Measures the ambient light intensity                  | 		 ✓       |
+|   Home Screen    | Show status and version of PSLab device               |  		 :heavy_check_mark:      |
+|   Instruments    | Exposes PSLab instruments like Oscilloscope, etc      | 		:heavy_check_mark:     |
+|  Oscilloscope    | Shows variation of analog signals                     | 		:heavy_check_mark:    |
+|   Multimeter     | Measures voltage, current, resistance and capacitance | 		:heavy_check_mark:     |
+| Logical Analyzer | Captures and displays signals from digital system     | 		:heavy_check_mark:      |
+|  Wave Generator  | Generates arbitrary analog and digital waveforms      | 		:heavy_check_mark:     |
+|   Power Source   | Generates programmable voltage and currents	       | 		:heavy_check_mark:       |
+|    Lux Meter     | Measures the ambient light intensity                  | 		:heavy_check_mark:      |
+| Barometer             | Measures the Pressure                                             | :heavy_check_mark: |
+| Accelerometer          | Measures the acceleration of the device                           | :heavy_check_mark: |
+| Gyrometer             | Measures the rate of rotation                                     | :heavy_check_mark: |
+| Compass                | Measures the absolute rotation relative to earth magnetic poles   | :heavy_check_mark: |
+| Thermometer            | Measures the ambient temperature                                  | :heavy_check_mark: |
+| Gas Sensor             | Detects gases, including NH3, NOx, alcohol, benzene, smoke and CO2| :heavy_check_mark: |
+| Robotic Arm Controller | Allows to control 4 servo motors of the robotic arm independently | :heavy_check_mark: |
 
 
 ## How to set up the Android app in your development environment
 
-  Minimum Android version 4.1 (API Level 16)
-  
-  Maximum Android version 8.1 (API Level 27)
+### Application Flavors
 
+There are 2 flavors (build variants) of PSLab Android application.
+
+1. #### Play Store Flavor
+  - Play Store flavor uses Google Maps to display location stored in logs in Data logger.
+2. #### Fdroid Flavors
+  - Fdroid flavor uses Open Street Maps to display location stored in logs in Data logger.
+  
 ### Development Setup
 
 Before you begin, you should already have the Android Studio SDK downloaded and set up correctly. You can find a guide on how to do this here: [Setting up Android Studio](http://developer.android.com/sdk/installing/index.html?pkg=studio)
@@ -207,22 +238,22 @@ Please try to follow the mentioned guidelines while writing and submitting your 
  * Name the views and widgets defined in the layout files as (viewtype/widget) _ (fragment/activity name) _ (no. in the file) like ```spinner_channel_select_la1``` , ```button_activity_oscilloscope1``` .
  * The activity/fragment file name corresponding to the layout files should be named as                       (activity/fragment name)(activity/fragment).java like ```ChannelsParameterFragment.java``` corresponding to the layout file ```fragment_channels_parameter.xml``` .
  * The corresponding widgets for buttons, textboxes, checkboxes etc. in activity files should be named as (viewtype/widget)(fragment/activity name)(no. in the file) like ```spinnerChannelSelect1``` corresponding to ```spinner_channel_select1``` .
+ 
+ 
+## Developers
 
-## License
+### Maintainers
 
-This project is currently licensed under the Apache License 2.0. A copy of [LICENSE](LICENSE) is to be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
-
-## Maintainers
 The project is maintained by
 - Padmal ([@CloudyPadmal](https://github.com/CloudyPadmal))
 - Mario Behling ([@mariobehling](http://github.com/mariobehling))
 - Lorenz Gerber ([@lorenzgerber](https://github.com/lorenzgerber))
 - Wei Tat ([@cweitat](https://github.com/cweitat))
 - Wai Gie ([@woshikie](https://github.com/woshikie))
+- Neel Trivedi ([@neel1998](https://github.com/neel1998))
 
-## Alumni
-- Praveen Patil ([@wavicles](https://github.com/wavicles))
-- Jithin ([@jithinbp](https://github.com/jithinbp))
+### Alumni
+
 - Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96))
 - Asitava Sarkar ([@asitava1998](https://github.com/asitava1998))
 - Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))
@@ -230,3 +261,7 @@ The project is maintained by
 - Abhinav ([@abhinavraj23](https://github.com/abhinavraj23))
 - Harsh ([@harsh-2711](https://github.com/harsh-2711))
 - Yatri ([@yatri1609](https://github.com/yatri1609))
+
+### License
+
+This project is currently licensed under the Apache License 2.0. A copy of [LICENSE](LICENSE) is to be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
