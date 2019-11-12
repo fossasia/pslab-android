@@ -107,6 +107,8 @@ public class DustSensorDataFragment extends Fragment {
         scienceLab = ScienceLabCommon.scienceLab;
         entries = new ArrayList<>();
         setupInstruments();
+        if(!scienceLab.isConnected())
+            Toast.makeText(getContext(), R.string.not_connected, Toast.LENGTH_SHORT).show();
         return rootView;
     }
 
@@ -388,8 +390,6 @@ public class DustSensorDataFragment extends Fragment {
                 mChart.moveViewToX(data.getEntryCount());
                 mChart.invalidate();
             }
-        } else {
-            Toast.makeText(getContext(), R.string.not_connected, Toast.LENGTH_SHORT).show();
         }
     }
 
