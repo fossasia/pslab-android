@@ -134,6 +134,8 @@ Before you begin, you should already have the Android Studio SDK downloaded and 
 
 ### Setting up the Android Project
 
+### By downloading the zip file
+
 1. Download the _pslab-android_ project source. You can do this either by forking and cloning the repository (recommended if you plan on pushing changes) or by downloading it as a ZIP file and extracting it.
 
 2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select _Import Project (Eclipse ADT, Gradle, etc.)_
@@ -158,6 +160,18 @@ To debug over Wi-Fi: http://blog.fossasia.org/android-app-debugging-over-wifi-fo
 
 Note :
 1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java)
+
+### By direct cloning
+
+1. Clone the repository by clicking the clone link of the repository and copy the link.
+
+2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select check out the project from versio control
+
+3. Select git from the drop down menu that appeared
+
+4. Paste the clone URL that you copied and press clone.
+
+5. follow the steps define above to build and run the app.
 
 ### Permissions Required
 
