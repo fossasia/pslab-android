@@ -163,15 +163,37 @@ Note :
 
 ### By direct cloning
 
-1. Clone the repository by clicking the clone link of the repository and copy the link.
 
-2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select check out the project from versio control
+1. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select "check out project from version control".
 
-3. Select git from the drop down menu that appeared
+2. Select git from the drop down menu that appeared.
 
-4. Paste the clone URL that you copied and press clone.
+3. Go to the repository and click clone or download button.
 
-5. follow the steps define above to build and run the app.
+4. From the dropdown that appeared, copy the link.
+
+5. Paste the URL that you copied and press clone.
+
+6. Android studio should now begin building the project with gradle.
+
+7. Once this process is complete and Android Studio opens, check the Console for any build errors.
+
+ - _Note:_ If you receive a Gradle sync error titled, "failed to find ...", you should click on the link below the error message (if available) that says _Install missing platform(s) and sync project_ and allow Android studio to fetch you what is missing.
+
+8. Once all build errors have been resolved, you should be all set to build the app and test it.
+
+9. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
+
+10.  If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
+
+If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
+
+You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through USB cable.
+
+To debug over Wi-Fi: http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/ 
+
+Note :
+1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java)
 
 ### Permissions Required
 
