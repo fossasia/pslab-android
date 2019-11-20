@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -99,7 +98,8 @@ public class CreateConfigActivity extends AppCompatActivity {
             public void onClick(View v) {
                 interval = intervalEditText.getText().toString();
                 if (interval.length() == 0) {
-                    Toast.makeText(CreateConfigActivity.this, getResources().getString(R.string.no_interval_message), Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                            getString(R.string.no_interval_message),null,null, Snackbar.LENGTH_SHORT);
                 } else {
                     ArrayList<String> selectedParamsList = new ArrayList<>();
                     for (int i = 0; i < paramsListContainer.getChildCount(); i++) {

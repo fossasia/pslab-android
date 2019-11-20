@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -19,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,6 +45,7 @@ import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
 import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.LocalDataLog;
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -209,7 +210,8 @@ public class DataLoggerActivity extends AppCompatActivity {
                 File file = new File(path);
                 getFileData(file);
             } else
-                Toast.makeText(this, this.getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.no_file_selected),null,null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -230,11 +232,13 @@ public class DataLoggerActivity extends AppCompatActivity {
                         if (object != null) {
                             realm.copyToRealm(object);
                         } else {
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                    getString(R.string.incorrect_import_format),null,null, Snackbar.LENGTH_SHORT);
                         }
                         realm.commitTransaction();
                     } catch (Exception e) {
-                        Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                getString(R.string.incorrect_import_format),null,null, Snackbar.LENGTH_SHORT);
                     }
                 } else if (i == 0) {
                     block = System.currentTimeMillis();

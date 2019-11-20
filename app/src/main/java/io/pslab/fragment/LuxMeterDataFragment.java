@@ -11,13 +11,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -52,6 +52,7 @@ import io.pslab.models.LuxData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -220,8 +221,8 @@ public class LuxMeterDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched),null,null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -314,8 +315,8 @@ public class LuxMeterDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched),null,null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -533,7 +534,8 @@ public class LuxMeterDataFragment extends Fragment {
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
                 if (sensor == null) {
-                    Toast.makeText(getContext(), getResources().getString(R.string.no_lux_sensor), Toast.LENGTH_LONG).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.no_lux_sensor),null,null, Snackbar.LENGTH_LONG);
                 } else {
                     float max = sensor.getMaximumRange() * 10000;
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(luxSensor.LUXMETER_LIMIT, max).apply();
@@ -555,14 +557,16 @@ public class LuxMeterDataFragment extends Fragment {
                             sensorBH1750.setRange(String.valueOf(gain));
                             sensorType = 0;
                         } else {
-                            Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
+                            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                    getString(R.string.sensor_not_connected_tls),null,null, Snackbar.LENGTH_SHORT);
                             sensorType = 0;
                         }
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.device_not_found),null,null, Snackbar.LENGTH_SHORT);
                     sensorType = 0;
                 }
 
@@ -580,14 +584,16 @@ public class LuxMeterDataFragment extends Fragment {
                             sensorTSL2561.setGain(String.valueOf(gain));
                             sensorType = 2;
                         } else {
-                            Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
+                            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                    getString(R.string.sensor_not_connected_tls),null,null, Snackbar.LENGTH_SHORT);
                             sensorType = 0;
                         }
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.device_not_found),null,null, Snackbar.LENGTH_SHORT);
                     sensorType = 0;
                 }
                 break;

@@ -3,6 +3,7 @@ package io.pslab.fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
@@ -14,11 +15,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.EditTextWidget;
 import io.pslab.others.ScienceLabCommon;
 
@@ -424,14 +425,14 @@ public class ControlFragmentAdvanced extends Fragment {
 
                                 if (Double.parseDouble(input) > maxima) {
                                     input = DataFormatter.formatDouble(maxima, DataFormatter.LOW_PRECISION_FORMAT);
-                                    Toast.makeText(getContext(), "The Maximum value for this field is " + maxima, Toast.LENGTH_SHORT).show();
+                                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                            "The Maximum value for this field is " + maxima,null,null, Snackbar.LENGTH_SHORT);
                                 }
                                 if (Double.parseDouble(input) < minima) {
                                     input = DataFormatter.formatDouble(minima, DataFormatter.MEDIUM_PRECISION_FORMAT);
-                                    Toast.makeText(getContext(), "The Minimum value for this field is " + minima, Toast.LENGTH_SHORT).show();
+                                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                            "The Minimum value for this field is " + minima,null,null, Snackbar.LENGTH_SHORT);
                                 }
-
-
                                 et.setText(input);
                             }
                         })
