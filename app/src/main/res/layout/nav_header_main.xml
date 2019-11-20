@@ -20,7 +20,7 @@
             android:id="@+id/img_profile"
             android:layout_width="@dimen/profile_width"
             android:layout_height="@dimen/profile_height"
-            android:src="@drawable/nav_header_logo"
+            android:src="@drawable/ic_nav_header_logo"
             android:contentDescription="@string/app_name"
             />
         <TextView
