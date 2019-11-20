@@ -2,7 +2,6 @@ package io.pslab.activity;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,7 +41,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(this, R.string.no_location_specified, Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.no_location_specified),null,null,Snackbar.LENGTH_SHORT);
         }
     }
 

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.io.IOException;
 
 import io.pslab.R;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -44,7 +45,8 @@ public class ESPFragment extends DialogFragment {
             public void onClick(View v) {
                 espIPAddress = espIPEditText.getText().toString();
                 if (espIPAddress.length() == 0) {
-                    Toast.makeText(getContext(), getResources().getString(R.string.incorrect_IP_address_message), Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.incorrect_IP_address_message),null,null, Snackbar.LENGTH_SHORT);
                 } else {
                     new ESPTask().execute();
                 }
@@ -95,7 +97,8 @@ public class ESPFragment extends DialogFragment {
             espConnectProgressBar.setVisibility(View.GONE);
             espConnectBtn.setVisibility(View.VISIBLE);
             if (result.length() == 0) {
-                Toast.makeText(getContext(), getResources().getString(R.string.incorrect_IP_address_message), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                        getString(R.string.incorrect_IP_address_message),null,null,Snackbar.LENGTH_SHORT);
             } else {
                 Log.v("Response", result);
             }

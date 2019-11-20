@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -508,9 +507,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     Intent map = new Intent(getApplicationContext(), MapsActivity.class);
                     startActivity(map);
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            getResources().getString(R.string.no_permission_for_maps),
-                            Toast.LENGTH_LONG).show();
+                    CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                            getString(R.string.no_permission_for_maps),null,null,Snackbar.LENGTH_LONG);
                 }
                 break;
             case PSLabPermission.LOG_PERMISSION:
@@ -662,7 +660,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
         try {
             getDataFromDataLogger();
         } catch (ArrayIndexOutOfBoundsException e) {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_data_fetched), Toast.LENGTH_LONG).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched),null,null,Snackbar.LENGTH_LONG);
         }
         if (checkGPSOnResume) {
             isRecording = true;

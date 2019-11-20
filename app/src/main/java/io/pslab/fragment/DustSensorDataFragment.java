@@ -8,12 +8,13 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -44,6 +45,7 @@ import io.pslab.models.DustSensorData;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
@@ -108,7 +110,7 @@ public class DustSensorDataFragment extends Fragment {
         entries = new ArrayList<>();
         setupInstruments();
         if(!scienceLab.isConnected())
-            Toast.makeText(getContext(), R.string.not_connected, Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),getString(R.string.not_connected),null,null,Snackbar.LENGTH_SHORT);
         return rootView;
     }
 
@@ -187,8 +189,8 @@ public class DustSensorDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched),null,null,Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -262,8 +264,8 @@ public class DustSensorDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched),null,null,Snackbar.LENGTH_SHORT);
         }
     }
 
