@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -16,11 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
+import io.pslab.others.CustomSnackBar;
 
 public class ChannelParametersFragment extends Fragment {
 
@@ -274,7 +275,8 @@ public class ChannelParametersFragment extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
             } else {
-                Toast.makeText(getActivity(), "This feature won't work.", Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                        "This feature won't work.",null,null, Snackbar.LENGTH_SHORT);
                 if (builtInMicCheckBox.isChecked())
                     builtInMicCheckBox.toggle();
             }

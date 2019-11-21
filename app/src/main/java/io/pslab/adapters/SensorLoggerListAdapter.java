@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +53,7 @@ import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
 import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.LocalDataLog;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -242,10 +243,9 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                                         File.separator + CSVLogger.CSV_DIRECTORY +
                                         File.separator + block.getSensorType() +
                                         File.separator + CSVLogger.FILE_NAME_FORMAT.format(block.getBlock()) + ".csv");
-                        Toast.makeText(context, logDirectory.delete()
-                                        ? context.getString(R.string.log_deleted)
-                                        : context.getString(R.string.nothing_to_delete),
-                                Toast.LENGTH_LONG).show();
+                        CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content),
+                                logDirectory.delete()?context.getString(R.string.log_deleted)
+                                :context.getString(R.string.nothing_to_delete),null,null, Snackbar.LENGTH_LONG);
                         if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LUXMETER)) {
                             LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.BAROMETER)) {
@@ -534,7 +534,8 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             context.startActivity(map);
         } else {
             map.putExtra("hasMarkers", false);
-            Toast.makeText(context, context.getResources().getString(R.string.no_location_data), Toast.LENGTH_LONG).show();
+            CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content),
+                    context.getString(R.string.no_location_data),null,null,Snackbar.LENGTH_LONG);
         }
     }
 

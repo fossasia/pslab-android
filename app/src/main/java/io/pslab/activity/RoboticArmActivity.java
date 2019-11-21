@@ -33,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.triggertrap.seekarc.SeekArc;
 
@@ -115,7 +114,8 @@ public class RoboticArmActivity extends AppCompatActivity {
 
         scienceLab = ScienceLabCommon.scienceLab;
         if (!scienceLab.isConnected()) {
-            Toast.makeText(this, getResources().getString(R.string.device_not_connected), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.device_not_connected),null,null, Snackbar.LENGTH_SHORT);
         }
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -565,7 +565,8 @@ public class RoboticArmActivity extends AppCompatActivity {
     }
 
     private void toastInvalidValueMessage() {
-        Toast.makeText(RoboticArmActivity.this, getResources().getString(R.string.invalid_servo_value), Toast.LENGTH_SHORT).show();
+        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                getString(R.string.invalid_servo_value),null,null, Snackbar.LENGTH_SHORT);
     }
 
     private void setReceivedData() {

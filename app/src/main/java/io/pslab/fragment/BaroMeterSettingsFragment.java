@@ -3,15 +3,16 @@ package io.pslab.fragment;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
-import android.widget.Toast;
 
 import io.pslab.DataFormatter;
 import io.pslab.R;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.PSLabPermission;
 
 /**
@@ -85,7 +86,8 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                         updatePeriodPref.setSummary(String.valueOf(updatePeriod) + " ms");
                     }
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.update_period_msg), Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.update_period_msg),null,null, Snackbar.LENGTH_SHORT);
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -102,7 +104,8 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                         highLimitPref.setSummary(DataFormatter.formatDouble(highLimit, DataFormatter.LOW_PRECISION_FORMAT) + " atm");
                     }
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.high_limit_msg), Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.high_limit_msg),null,null,Snackbar.LENGTH_SHORT);
                     highLimitPref.setSummary("1.10 atm");
                     highLimitPref.setText("1.10");
                     SharedPreferences.Editor editor = sharedPref.edit();

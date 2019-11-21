@@ -7,8 +7,8 @@ import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 import io.pslab.R;
 
@@ -59,7 +59,8 @@ public class CustomTabService {
         try{
             mCustomTabsIntent.launchUrl(activity, Uri.parse(Url));
         }catch (Exception e){
-            Toast.makeText(activity.getApplication(), "Error: "+e.toString(), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(activity.findViewById(android.R.id.content),
+                    "Error: "+e.toString(),null,null, Snackbar.LENGTH_SHORT);
         }
     }
 }

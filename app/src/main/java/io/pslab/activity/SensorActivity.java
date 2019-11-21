@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -20,11 +21,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
@@ -162,7 +163,8 @@ public class SensorActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     default:
-                        Toast.makeText(getApplication(), "Sensor Not Supported", Toast.LENGTH_SHORT).show();
+                        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                "Sensor Not Supported",null,null, Snackbar.LENGTH_SHORT);
                 }
             }
         });

@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import io.pslab.R;
+import io.pslab.others.CustomSnackBar;
 
 public class BluetoothScanFragment extends DialogFragment {
     private Button bluetoothScanStopButton;
@@ -101,7 +102,8 @@ public class BluetoothScanFragment extends DialogFragment {
         scannedDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), bluetoothDevices.get(position).getAddress(), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                        bluetoothDevices.get(position).getAddress(),null,null, Snackbar.LENGTH_SHORT);
                 bluetoothDevice = bluetoothDevices.get(position);
                 getDialog().cancel();
                 connectBluetooth();
@@ -120,7 +122,8 @@ public class BluetoothScanFragment extends DialogFragment {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             isScanning = false;
-            Toast.makeText(getContext(), getResources().getString(R.string.bluetooth_not_supported), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.bluetooth_not_supported),null,null,Snackbar.LENGTH_SHORT);
         } else {
             if (!bluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);

@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -479,7 +478,8 @@ public class LALogicLinesFragment extends Fragment {
                                 monitor.start();
                                 break;
                             default:
-                                Toast.makeText(getContext(), getResources().getString(R.string.needs_implementation), Toast.LENGTH_SHORT).show();
+                                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                        getString(R.string.needs_implementation),null,null, Snackbar.LENGTH_SHORT);
                                 break;
                         }
 
@@ -498,7 +498,8 @@ public class LALogicLinesFragment extends Fragment {
                         };
                         logicLinesChart.setOnChartValueSelectedListener(listener);
                     } else
-                        Toast.makeText(getContext(), getResources().getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                        CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                getString(R.string.device_not_found),null,null, Snackbar.LENGTH_SHORT);
                 }
             }
         });
@@ -1016,7 +1017,8 @@ public class LALogicLinesFragment extends Fragment {
             } else {
                 progressBar.setVisibility(View.GONE);
                 ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
-                Toast.makeText(getContext(), getResources().getString(R.string.no_data_generated), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                        getString(R.string.no_data_generated),null,null, Snackbar.LENGTH_SHORT);
                 analyze_button.setClickable(true);
             }
 
@@ -1147,7 +1149,8 @@ public class LALogicLinesFragment extends Fragment {
             } else {
                 progressBar.setVisibility(View.GONE);
                 ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
-                Toast.makeText(getContext(), getResources().getString(R.string.no_data_generated), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                        getString(R.string.no_data_generated),null,null, Snackbar.LENGTH_SHORT);
             }
 
             analyze_button.setClickable(true);
@@ -1285,7 +1288,8 @@ public class LALogicLinesFragment extends Fragment {
             } else {
                 progressBar.setVisibility(View.GONE);
                 ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
-                Toast.makeText(getContext(), getResources().getString(R.string.no_data_generated), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                        getString(R.string.no_data_generated),null,null, Snackbar.LENGTH_SHORT);
             }
 
             analyze_button.setClickable(true);
@@ -1434,7 +1438,8 @@ public class LALogicLinesFragment extends Fragment {
             } else {
                 progressBar.setVisibility(View.GONE);
                 ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
-                Toast.makeText(getContext(), getResources().getString(R.string.no_data_generated), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                        getString(R.string.no_data_generated),null,null, Snackbar.LENGTH_SHORT);
             }
 
             analyze_button.setClickable(true);
