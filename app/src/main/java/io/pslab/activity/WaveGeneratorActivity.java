@@ -39,7 +39,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -554,7 +553,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                     }, Snackbar.LENGTH_SHORT);
 
         } else {
-            Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.device_not_connected),null,null,Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -668,7 +668,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 if (scienceLab.isConnected()) {
                     viewWaveDialog();
                 } else {
-                    Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                            getString(R.string.device_not_connected),null,null,Snackbar.LENGTH_SHORT);
                 }
                 break;
             case R.id.show_guide:

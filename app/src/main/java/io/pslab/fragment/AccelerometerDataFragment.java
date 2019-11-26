@@ -11,13 +11,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -35,6 +35,7 @@ import io.pslab.activity.AccelerometerActivity;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 
 import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
@@ -177,8 +178,8 @@ public class AccelerometerDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched),null,null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -267,8 +268,8 @@ public class AccelerometerDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getActivity().getResources().getString(R.string.no_data_fetched),null,null,Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -451,7 +452,8 @@ public class AccelerometerDataFragment extends Fragment {
         sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (sensor == null) {
-            Toast.makeText(getContext(), getResources().getString(R.string.no_accelerometer_sensor), Toast.LENGTH_LONG).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getResources().getString(R.string.no_accelerometer_sensor),null,null,Snackbar.LENGTH_LONG);
         } else {
             sensorManager.registerListener(accelerometerSensorEventListener,
                     sensor, SensorManager.SENSOR_DELAY_FASTEST);

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -37,6 +37,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.others.CustomSnackBar;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -174,7 +175,8 @@ public class ShowLoggedData extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-                        Toast.makeText(context, "MPU6050 data exported successfully", Toast.LENGTH_SHORT).show();
+                        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                "MPU6050 data exported successfully",null,null, Snackbar.LENGTH_SHORT);
                         break;
                 }
             } else {
@@ -209,12 +211,14 @@ public class ShowLoggedData extends AppCompatActivity {
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(context, "MPU6050 data exported successfully", Toast.LENGTH_SHORT).show();
+                        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                "MPU6050 data exported successfully",null,null,Snackbar.LENGTH_SHORT);
                         break;
                 }
             }
         } else {
-            Toast.makeText(context, "Can't write to storage", Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    "Can't write to storage",null,null,Snackbar.LENGTH_SHORT);
         }
     }
 
