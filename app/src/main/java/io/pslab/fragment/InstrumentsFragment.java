@@ -61,76 +61,49 @@ public class InstrumentsFragment extends Fragment {
         applicationItemList = new ArrayList<>();
         applicationAdapter = new ApplicationAdapter(context, applicationItemList,
                 item -> {
-                    Intent intent;
-                    switch (item.getApplicationName()) {
-                        case "Oscilloscope":
-                            intent = new Intent(context, OscilloscopeActivity.class);
-                            intent.putExtra("who", "Instruments");
-                            startActivity(intent);
-                            break;
-                        case "Multimeter":
-                            intent = new Intent(context, MultimeterActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Logic Analyzer":
-                            intent = new Intent(context, LogicalAnalyzerActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Sensors":
-                            intent = new Intent(context, SensorActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Wave Generator":
-                            intent = new Intent(context, WaveGeneratorActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Power Source":
-                            intent = new Intent(context, PowerSourceActivity.class);
-                            startActivity(intent);
-                            break;
-                        case PSLabSensor.LUXMETER:
-                            intent = new Intent(context, LuxMeterActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Accelerometer":
-                            intent = new Intent(context, AccelerometerActivity.class);
-                            startActivity(intent);
-                            break;
-                        case PSLabSensor.BAROMETER:
-                            intent = new Intent(context, BarometerActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Compass":
-                            intent = new Intent(context, CompassActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Gyroscope":
-                            intent = new Intent(context, GyroscopeActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Thermometer":
-                            intent = new Intent(context, ThermometerActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Robotic Arm":
-                            intent = new Intent(context, RoboticArmActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Gas Sensor":
-                            intent = new Intent(context, GasSensorActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "Dust Sensor":
-                            intent = new Intent(context, DustSensorActivity.class);
-                            startActivity(intent);
-                            break;
-                        default:
-                            break;
+                    Intent intent = null;
+                    String applicationName = item.getApplicationName();
+
+                    if (applicationName.equals(getString(R.string.oscilloscope))) {
+                        intent = new Intent(context, OscilloscopeActivity.class);
+                        intent.putExtra("who", "Instruments");
                     }
 
+                    if (applicationName.equals(getString(R.string.multimeter)))
+                        intent = new Intent(context, MultimeterActivity.class);
+                    if (applicationName.equals(getString(R.string.logical_analyzer)))
+                        intent = new Intent(context, LogicalAnalyzerActivity.class);
+                    if (applicationName.equals(getString(R.string.sensors)))
+                        intent = new Intent(context, SensorActivity.class);
+                    if (applicationName.equals(getString(R.string.wave_generator)))
+                        intent = new Intent(context, WaveGeneratorActivity.class);
+                    if (applicationName.equals(getString(R.string.power_source)))
+                        intent = new Intent(context, PowerSourceActivity.class);
+                    if (applicationName.equals(getString(R.string.lux_meter)))
+                        intent = new Intent(context, LuxMeterActivity.class);
+                    if (applicationName.equals(getString(R.string.accelerometer)))
+                        intent = new Intent(context, AccelerometerActivity.class);
+                    if (applicationName.equals(getString(R.string.baro_meter)))
+                        intent = new Intent(context, BarometerActivity.class);
+                    if (applicationName.equals(getString(R.string.compass)))
+                        intent = new Intent(context, CompassActivity.class);
+                    if (applicationName.equals(getString(R.string.gyroscope)))
+                        intent = new Intent(context, GyroscopeActivity.class);
+                    if (applicationName.equals(getString(R.string.thermometer)))
+                        intent = new Intent(context, ThermometerActivity.class);
+                    if (applicationName.equals(getString(R.string.robotic_arm)))
+                        intent = new Intent(context, RoboticArmActivity.class);
+                    if (applicationName.equals(getString(R.string.gas_sensor)))
+                        intent = new Intent(context, GasSensorActivity.class);
+                    if (applicationName.equals(getString(R.string.dust_sensor)))
+                        intent = new Intent(context, DustSensorActivity.class);
+
+                    if (intent != null)
+                        startActivity(intent);
                 });
         int rows = context.getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_PORTRAIT ? 1 : 2;
+
         initiateViews(view, rows);
         new loadList().execute();
         return view;
@@ -208,7 +181,7 @@ public class InstrumentsFragment extends Fragment {
             ));
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.thermometer), R.drawable.thermometer_logo, getResources().getString(descriptions[11])
-                    ));
+            ));
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.robotic_arm), R.drawable.robotic_arm, getResources().getString(descriptions[12])
             ));
