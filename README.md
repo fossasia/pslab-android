@@ -95,7 +95,7 @@ This repository holds the Android App for performing experiments with [PSLab](ht
     <tr>
      <td><img src="/docs/images/instrument_sensors_guide.png" width = "500"></td>
      <td><img src="/docs/images/instrument_gas_sensor_guide.png" width = "500"></td>
-     <td><img src="/docs/images/instrument_gas_sensor_veiw.png" width = "500"></td>
+     <td><img src="/docs/images/instrument_gas_sensor_view.png" width = "500"></td>
      <td><img src="/docs/images/instrument_dust_sensor_guide.png" width = "500"></td>
      </tr>
   </table>
