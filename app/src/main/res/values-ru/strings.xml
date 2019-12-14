@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PSLab</string>
-    <string name="openDrawer">открыть</string>
-    <string name="closeDrawer">закрыть</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
 
     <string name="Toast_double_tap">Нажмите еще раз, чтобы закрыть PSLab</string>
     <string name="Toast_magnetic_not_present">"Датчик, необходимый для этого инструмента, отсутствует в вашем устройстве"</string>
 
     <string name="nav_device">Подключение устройства</string>
     <string name="nav_instruments">Инструменты</string>
-    <string name="nav_settings">Настройки</string>
+    <string name="nav_settings">Settings</string>
     <string name="nav_about_us">О нас</string>
     <string name="nav_buy_pslab">Купить PSLab</string>
     <string name="nav_report">Обратная связь</string>
     <string name="nav_help_feedback">FAQ</string>
     <string name="nav_share">Поделиться приложением</string>
-    <string name="nav_config">Создать файл конфигурации</string>
+    <string name="nav_config">Generate Config File</string>
     <string name="pslab_pinlayout">Расположение выводов</string>
     <string name="pslab_pinlayout_front">Расположение передних выводов</string>
     <string name="pslab_pinlayout_back">Расположение задних выводов</string>
@@ -39,10 +39,10 @@
     <string name="power_source">Power Source</string>
     <string name="record_title">Запись текущих данных</string>
 
-    <string name="setting_auto_start_key">настройки автоматического запуска</string>
+    <string name="setting_auto_start_key">setting_auto_start</string>
     <string name="setting_auto_start_summary">Автозапуск приложения при подключении устройства</string>
     <string name="settting_auto_start_title">Автозапуск приложения</string>
-    <string name="setting_data_format_key">експортировать данные в виде списка</string>
+    <string name="setting_data_format_key">export_data_format_list</string>
     <string name="setting_data_format_title">Формат экспорта данных</string>
 
     <string name="control_item_1">Управление</string>
@@ -166,7 +166,7 @@
     <string name="select_instrument_title">Инструмент:</string>
     <string name="time_interval_title">Временной интервал:</string>
     <string name="time_interval_hint">Интервал регистрации</string>
-    <string name="create_config_btn_text">Создать файл конфигурации</string>
+    <string name="create_config_btn_text">Create Config File</string>
     <string name="select_params_title">Выберите параметры</string>
     <string name="no_interval_message">Пожалуйста, выберите интервал регистрации</string>
     <string name="file_created_success_message">Файл конфигурации успешно создан</string>
@@ -641,7 +641,7 @@
 
     <string name="multimeter_dialog_heading">Мультиметр</string>
     <string name="multimeter_default_value">0.00</string>
-    <string name="multimeter_configurations">Конфигурация мультиметра</string>
+    <string name="multimeter_configurations">Multimeter Configurations</string>
     <string name = "multimeter_dialog_text"> Используйте PV1, PV2, PV3. Подсоедините выводы SEN и CAP к резистору и конденсатору соответственно,
         как показано на рисунке, для измерения сопротивления или емкости
         подключенного элемента. \n\n\u2022 CH1 и CH2 могут считывать свободный диапазон
@@ -735,15 +735,15 @@
     <string name = "setting_compass">Настройки типа компоса</string>
     <string name = "setting_accelerometer">Настройки типа акселирометра </string>
     <string name = "include_location"> Включить данные о местоположении в зарегистрированный файл </string>
-    <string name = "location_sensor">Включить данные датчика местоположения </string>
+    <string name="location_sensor">include_location_sensor_data</string>
     <string name = "include_cap"> Включить данные о местоположении </string>
     <string name = "time_string_accelerometer"> Укажите интервал времени, через который будут обновляться данные </string>
     <string name = "time_string_lux"> Укажите временной интервал, с которым будут обновляться данные (от 100 мс до 1000 мс) </string>
     <string name = "time_string_baro"> Укажите временной интервал, с которым будут обновляться данные (от 100 мс до 2000 мс) </string>
-    <string name="setting_baro_update">Настройки периуда обновления барометра</string>
-    <string name="setting_lux_update">Настройки периуда обновления люксометра</string>
-    <string name="setting_gyro_update">Настройки периуда обновления гироскопа</string>
-    <string name="setting_accelerometer_update">Настройки периуда обновления акселирометра</string>
+    <string name="setting_baro_update">setting_baro_update_period</string>
+    <string name="setting_lux_update">setting_lux_update_period</string>
+    <string name="setting_gyro_update">setting_gyro_update_period</string>
+    <string name="setting_accelerometer_update">setting_accelerometer_update_period</string>
     <string name="default_value_baro">1.10</string>
     <string name="default_value_lux">1</string>
     <string name="default_value_acceleration">10</string>
@@ -753,11 +753,11 @@
     <string name = "dialogue_msg_gyro"> Укажите максимальный предел угловой скорости для записи (от 0 рад / с до 1000 рад / с) </string>
     <string name = "update_period_msg"> Введенный период обновления не выходит за пределы! </string>
     <string name = "high_limit_msg"> Введенный верхний предел не выходит за пределы! </string>
-    <string name = "high_limit_baro"> Настройка верхнего перуда барометра </string>
-    <string name = "high_limit_lux"> Настройка верхнего перуда люксометра  </string>
-    <string name = "high_limit_gyro"> Настройка верхнего перуда гироскопа  </string>
-    <string name = "high_limit_acceleration"> Настройка верхнего перуда акселирометра  </string>
-    <string name = "setting_lux_type"> Настройка типа датчика люксометра </string>
+    <string name="high_limit_baro">setting_baro_high_limit</string>
+    <string name="high_limit_lux">setting_lux_high_limit</string>
+    <string name="high_limit_gyro">setting_gyro_high_limit</string>
+    <string name="high_limit_acceleration">setting_accelerometer_high_limit</string>
+    <string name="setting_lux_type">setting_lux_sensor_type</string>
     <string name = "no_file_selected"> Файл не был выбран </string>
     <string name = "setting_lux_sensor_gain">настройка чувствительности люксометра </string>
     <string name = "setting_gyro_sensor_gain">Настройка чувствительности гироскопа </string>
@@ -911,9 +911,9 @@
     <string name = "dust_sensor_unit"> PPM </string>
     <string name = "dust_sensor_default"> 1000 </string>
     <string name = "dust_sensor_status_label"> Качество воздуха </string>
-    <string name = "setting_dust_update_period">Установка периода обновления датчика ппыли</string>
-    <string name = "setting_dust_high_limit"> Установка максимальной границы датчика пыли </string>
-    <string name = "setting_dust_sensor_type"> Установка типа датчика выли </string>
+    <string name="setting_dust_update_period">setting_dust_update_period</string>
+    <string name="setting_dust_high_limit">setting_dust_high_limit</string>
+    <string name="setting_dust_sensor_type">setting_dust_sensor_type</string>
     <string name = "dust_summary"> 1000 мс </string>
     <string name = "dialogue_msg_dust"> Укажите пороговое значение для записываемого значения частиц пыли (0,0 ~ 5,0) </string>
     <string-array name="dust_sensor_list">
@@ -961,7 +961,7 @@
 
     <string name="multimeter_default_1000">1000</string>
     <string name="multimeter_summary">1000 мс</string>
-    <string name="setting_multimeter_update">Установка периода обновления мультиметра</string>
+    <string name="setting_multimeter_update">setting_multimeter_update_period</string>
     <string name="time_string_multimeter">Пожалуйста, укажите интервал времени, через который будут обновляться данные (от 100 мс до 2000 мс)</string>
 
     <string name="timebase_title">Временная база</string>
@@ -987,7 +987,7 @@
     <string name = "gyroscope_description"> Измеряет скорость вращения вокруг оси XYZ </string>
     <string name = "gyroscope_intro"> Гироскоп используется для измерения скорости вращения тела вдоль осей X, Y и Z. </string>
     <string name = "gyroscope_description_text"> Ориентация положительных осей X, Y и Z. Для любой положительной оси устройства вращение по часовой стрелке выводит отрицательные значения, а вращение против часовой стрелки выводит положительные значения. </string>
-    <string name = "gyroscope_config"> Конфигурация гироскопа </string>
+    <string name="gyroscope_config">Gyroscope Configuration</string>
     <string name = "no_gyroscope_sensor"> Ваше устройство не имеет датчика, необходимого для этой функции </string>
     <string name = "no_data_recorded_gyro"> Нет записанных данных, так как датчик отсутствует в устройстве. Попробуйте с внешним датчиком. </string>
     <string name = "lux_meter"> Люксметр </string>
@@ -1008,7 +1008,7 @@
     GND. GND предназначен для заземления, и могут использоваться любые выводы GND устройства PSLab, поскольку они являются общими. \n\n
     \u2022 Выберите датчик, перейдя на вкладку «Настройка» в нижней панели навигации и выберите BHT-1750 в раскрывающемся меню в разделе «Выбор датчика». \n </string>
     <string name = "no_data_fetched"> Данные не получены </string>
-    <string name = "accelerometer_configurations"> Конфигурации акселерометра </string>
+    <string name="accelerometer_configurations">Accelerometer Configurations</string>
     <string name = "view_map"> Просмотр карты </string>
     <string name = "thermometer_desc"> Для измерения температуры окружающей среды </string>
     <string name="thermometer">Thermometer</string>
@@ -1024,15 +1024,15 @@
     <string name="avg_thermo_fahrenheit">Сред (°F)</string>
     <string name="max_thermo_fahrenheit">Макс (°F)</string>
     <string name="min_thermo_fahrenheit">Мин (°F)</string>
-    <string name="setting_thermo_type">Настройка типа термодатчика</string>
-    <string name="select_unit">Выберите единицы измерения времени </string>
+    <string name="setting_thermo_type">setting_thermo_sensor_type</string>
+    <string name="select_unit">select_temp_unit</string>
     <string name="select_temp_unit">Выберите единицы измерения температуры</string>
     <string name="unit_select">Ед.</string>
     <string name="thermo_default_1000">1000</string>
     <string name = "time_string_thermo"> Укажите временной интервал, с которым будут обновляться данные (от 100 мс до 1000 мс) </string>
-    <string name="setting_thermo_update">Установка периода обновления информации о температуре</string>
+    <string name="setting_thermo_update">setting_thermo_update_period</string>
     <string name="thermo_summary">1000 мс</string>
-    <string name="setting_thermo_sensor_gain">Настройки термометра</string>
+    <string name="setting_thermo_sensor_gain">setting_thermo_sensor_gain</string>
     <string name="default_value_thermo">0</string>
     <string name="thermo_default">°C</string>
 
