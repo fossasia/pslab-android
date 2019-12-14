@@ -485,6 +485,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(PSLabSensor.this, DataLoggerActivity.class);
+                        intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getSensorName());
                         startActivity(intent);
                     }
                 }, Snackbar.LENGTH_INDEFINITE);
