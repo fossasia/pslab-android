@@ -96,6 +96,16 @@ This repository holds the Android App for performing experiments with [PSLab](ht
      <td><img src="/docs/images/instrument_logical_analyzer_view.png" width = "500"/></td>
     </tr>
   </table>
+  <table>
+    <tr>
+     <td><img src="/docs/images/instrument_dust_sensor_guide.png"></td>
+     <td><img src="/docs/images/instrument_dust_sensor_view.png"></td>
+     <td><img src="/docs/images/instrument_gas_sensor_guide.png"></td>
+     <td><img src="/docs/images/instrument_gas_sensor_view.png"></td>
+     <td><img src="/docs/images/instrument_sensors_guides.png"></td>
+     <td><img src="/docs/images/instrument_sensors_view.png"></td>
+    </tr>
+  </table>
 
 ## Video Demo
 - [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k)
