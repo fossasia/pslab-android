@@ -6,8 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -23,12 +25,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rupins.drawercardbehaviour.CardDrawerLayout;
 
 import java.io.IOException;
 
@@ -58,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     @Nullable
     @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
+            //DrawerLayout --> CardDrawerLayout
+    CardDrawerLayout drawer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -147,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_INSTRUMENTS;
             loadHomeFragment();
         }
+
     }
 
     private void loadHomeFragment() {
@@ -312,8 +321,11 @@ public class MainActivity extends AppCompatActivity {
                     super.onDrawerOpened(drawerView);
                 }
             };
-            drawer.setDrawerListener(actionBarDrawerToggle);
+            drawer.addDrawerListener(actionBarDrawerToggle);
             actionBarDrawerToggle.syncState();
+            drawer.setViewScale(Gravity.START, 0.9f);
+            drawer.setRadius(Gravity.START, 35);
+            drawer.setViewElevation(Gravity.START, 20);
         }
     }
 

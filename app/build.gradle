@@ -109,6 +109,8 @@ dependencies {
     implementation 'com.github.GoodieBag:ProtractorView:v1.2'
     implementation 'com.github.Triggertrap:SeekArc:v1.1'
 
+    implementation 'com.github.RupinSahu:CardDrawer:-SNAPSHOT'
+
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
 
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
