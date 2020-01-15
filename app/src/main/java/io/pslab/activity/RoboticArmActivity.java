@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.DragEvent;
@@ -43,6 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
+import io.pslab.filters.RoboticArmServoMinMaxFilters;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
 import io.pslab.others.CSVLogger;
@@ -154,6 +156,11 @@ public class RoboticArmActivity extends AppCompatActivity {
         degreeText2.setText(getResources().getString(R.string.zero));
         degreeText3.setText(getResources().getString(R.string.zero));
         degreeText4.setText(getResources().getString(R.string.zero));
+
+        degreeText1.setFilters(new InputFilter[]{new RoboticArmServoMinMaxFilters(0,360)});
+        degreeText2.setFilters(new InputFilter[]{new RoboticArmServoMinMaxFilters(0,360)});
+        degreeText3.setFilters(new InputFilter[]{new RoboticArmServoMinMaxFilters(0,360)});
+        degreeText4.setFilters(new InputFilter[]{new RoboticArmServoMinMaxFilters(0,360)});
 
         LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
         servoControllerParams.setMargins(2, 5, 2, 0);
