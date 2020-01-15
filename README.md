@@ -133,28 +133,47 @@ There are 2 flavors (build variants) of PSLab Android application.
 Before you begin, you should already have the Android Studio SDK downloaded and set up correctly. You can find a guide on how to do this here: [Setting up Android Studio](http://developer.android.com/sdk/installing/index.html?pkg=studio)
 
 ### Setting up the Android Project
+For setting up the PSLab android project you may follow any of the two methods listed below, that is, you may download the repository zip file or you may directly clone the repository to Android Studio.
+
+### By downloading the zip file
 
 1. Download the _pslab-android_ project source. You can do this either by forking and cloning the repository (recommended if you plan on pushing changes) or by downloading it as a ZIP file and extracting it.
 
 2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select _Import Project (Eclipse ADT, Gradle, etc.)_
+@@ -159,6 +161,40 @@ To debug over Wi-Fi: http://blog.fossasia.org/android-app-debugging-over-wifi-fo
+Note :
+1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java)
 
-3. Navigate to the directory where you saved the pslab-android project, select the "pslab-android" folder, and hit OK. Android Studio should now begin building the project with Gradle.
+### By direct cloning
 
-4. Once this process is complete and Android Studio opens, check the Console for any build errors.
 
-  - _Note:_ If you receive a Gradle sync error titled, "failed to find ...", you should click on the link below the error message (if available) that says _Install missing platform(s) and sync project_ and allow Android studio to fetch you what is missing.
+1. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select "check out project from version control".
 
-5. Once all build errors have been resolved, you should be all set to build the app and test it.
+2. Select git from the drop down menu that appeared.
 
-6. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
+3. Go to the repository and click clone or download button.
 
-7. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
+4. From the dropdown that appeared, copy the link.
+
+5. Paste the URL that you copied and press clone.
+
+6. Android studio should now begin building the project with gradle.
+
+7. Once this process is complete and Android Studio opens, check the Console for any build errors.
+
+ - _Note:_ If you receive a Gradle sync error titled, "failed to find ...", you should click on the link below the error message (if available) that says _Install missing platform(s) and sync project_ and allow Android studio to fetch you what is missing.
+
+8. Once all build errors have been resolved, you should be all set to build the app and test it.
+
+9. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
+
+10.  If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
 
 If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
 
 You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through USB cable.
 
-To debug over Wi-Fi: http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/
+To debug over Wi-Fi: http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/ 
 
 Note :
 1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java)
