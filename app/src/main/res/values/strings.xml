@@ -49,6 +49,7 @@
     <string name="control_item_3">Advanced</string>
 
     <string name="about_us_description">The goal of PSLab is to create an Open Source hardware device (open on all layers) that can be used for experiments by teachers, students and citizen scientists. Our tiny pocket lab provides an array of sensors for doing science and engineering experiments. It provides functions of numerous measurement devices including an oscilloscope, a waveform generator, a frequency counter, a programmable voltage, current source and as a data logger.\n FOSSASIA is an organization developing Open Source software applications and Open Hardware together with a global community from its base in Asia. It is our goal to provide access to open technologies, science applications and knowledge that improve people\'s lives. We want to enable people to adapt and change technology according to their own ideas and needs and validate science and knowledge through an Open Access approach.</string>
+
     <string-array name="nav_item_activity_titles">
         <item>Instruments</item>
         <item>Logged Data</item>
@@ -476,8 +477,11 @@
     <string name="view_logged_data">View Logged Data</string>
     <string name="export_logged_data">Export Logged Data</string>
     <string name="sensor_logged_data">Sensor Logged Data</string>
+
     <string name="full">Full</string>
+
     <string name="pocket_science_logo">Pocket Science Logo</string>
+
     <string name="timebase_microsec">%1$.2f μs</string>
     <string name="timebase_milisec">%1$.2f ms</string>
     <string name="time_space">Time </string>
