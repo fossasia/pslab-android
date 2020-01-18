@@ -1,0 +1,1037 @@
+<resources>
+    <string name="app_name">PSLab</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <string name="Toast_double_tap">Tekan lagi untuk menutup PSLab</string>
+    <string name="Toast_magnetic_not_present">
+"Sensor yang diperlukan untuk instrumen ini tidak ada di perangkat Anda"</string>
+
+    <string name="nav_device">Hubungkan Perangkat</string>
+    <string name="nav_instruments">
+Instrumen</string>
+    <string name="nav_settings">Pengaturan</string>
+    <string name="nav_about_us">Tentang kami</string>
+    <string name="nav_buy_pslab">Beli PSLab</string>
+    <string name="nav_report">Umpan balik &amp; Bug</string>
+    <string name="nav_help_feedback">FAQ</string>
+    <string name="nav_share">Bagikan Aplikasi</string>
+    <string name="nav_config">Hasilkan File Konfigurasi</string>
+    <string name="pslab_pinlayout">Tata Letak Pin</string>
+    <string name="pslab_pinlayout_front">Tata Letak Pin Depan</string>
+    <string name="pslab_pinlayout_back">Tata Letak Pin Kembali</string>
+    <string name="bluetooth_connect_menu">Koneksi Bluetooth</string>
+    <string name="bluetooth_wifi_connect_option">Terhubung menggunakan Bluetooth atau Wi-Fi</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="wifi">WiFi</string>
+    <string name="bluetooth_scan_text">Pindai</string>
+    <string name="bluetooth_stop_text">Berhenti</string>
+    <string name="scanned_devices_list_title">Perangkat yang Dipindai</string>
+    <string name="bluetooth_not_supported">Ponsel Anda tidak mendukung bluetooth</string>
+    <string name="incorrect_IP_address_message">Silakan masukkan alamat IP yang valid</string>
+    <string name="enter_IP_hint">Masukkan alamat IP modul ESP</string>
+    <string name="esp_connect_text">Menghubung</string>
+
+    <string name="oscilloscope">Osiloskop</string>
+    <string name="multimeter">Multimeter</string>
+    <string name="logical_analyzer">Penganalisis Logika</string>
+    <string name="wave_generator">Generator gelombang</string>
+    <string name="sensors">Sensor</string>
+    <string name="power_source">Sumber daya</string>
+    <string name="record_title">Rekam data saat ini</string>
+
+    <string name="setting_auto_start_key">setting_auto_start</string>
+    <string name="setting_auto_start_summary">Mulai aplikasi secara otomatis ketika perangkat PSLab terhubung</string>
+    <string name="settting_auto_start_title">Mulai Otomatis</string>
+    <string name="setting_data_format_key">export_data_format_list</string>
+    <string name="setting_data_format_title">Format Data Ekspor</string>
+
+    <string name="control_item_1">Kontrol</string>
+    <string name="control_item_2">Baca</string>
+    <string name="control_item_3">Maju</string>
+
+    <string name="about_us_description">Tujuan PSLab adalah untuk membuat perangkat keras Open Source (terbuka di semua lapisan) yang dapat digunakan untuk eksperimen oleh guru, siswa, dan ilmuwan warga. Laboratorium saku mungil kami menyediakan berbagai sensor untuk melakukan percobaan sains dan teknik. Ini menyediakan fungsi berbagai perangkat pengukuran termasuk osiloskop, generator bentuk gelombang, penghitung frekuensi, tegangan yang dapat diprogram, sumber arus dan sebagai data logger.</string>
+
+    <string-array name="nav_item_activity_titles">
+        <item>Instrumen</item>
+        <item>Data yang Dicatat</item>
+        <item>Hubungkan Perangkat</item>
+        <item>Hasilkan File Konfigurasi</item>
+        <item>Pengaturan</item>
+        <item>Tentang kami</item>
+        <item>Beli PSLab</item>
+        <item>Tanya Jawab</item>
+        <item>Bagikan Aplikasi</item>
+    </string-array>
+
+    <string name="application_icon"> Ikon Aplikasi</string>
+
+    <string-array name="multimeter_knob_states">
+        <item>CH1</item>
+        <item>CAP</item>
+        <item>AN8</item>
+        <item>RES</item>
+        <item>C</item>
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+        <item>CH3</item>
+        <item>CH2</item>
+    </string-array>
+
+    <string-array name="multimeter_params">
+        <item>CH1</item>
+        <item>CH2</item>
+        <item>CH3</item>
+        <item>MIC</item>
+        <item>CAP</item>
+        <item>AN8</item>
+        <item>RES</item>
+        <item>C</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
+    </string-array>
+
+    <string-array name="multimeter_params_title">
+        <item>Saluran 1</item>
+        <item>Saluran 2</item>
+        <item>Saluran 3</item>
+        <item>Mikropon</item>
+        <item>Tegangan CAP</item>
+        <item>Voltase</item>
+        <item>Perlawanan</item>
+        <item>Kapasitansi</item>
+        <item>Penganalisis Logika Pin 1</item>
+        <item>Penganalisis Logika Pin 2</item>
+        <item>Penganalisis Logika Pin 3</item>
+        <item>Penganalisis Logika Pin 4</item>
+    </string-array>
+
+    <string-array name="oscilloscope_params">
+        <item>CH1</item>
+        <item>CH2</item>
+        <item>CH3</item>
+        <item>MIC</item>
+    </string-array>
+
+    <string-array name="oscilloscope_params_title">
+        <item>Saluran 1</item>
+        <item>Saluran 2</item>
+        <item>Saluran 3</item>
+        <item>Mikropon</item>
+    </string-array>
+
+    <string-array name="logic_analyzer_params">
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
+    </string-array>
+
+    <string-array name="logic_analyzer_params_title">
+        <item>Penganalisis Logika Pin 1</item>
+        <item>Penganalisis Logika Pin 2</item>
+        <item>Penganalisis Logika Pin 3</item>
+        <item>Penganalisis Logika Pin 4</item>
+    </string-array>
+
+    <string-array name="barometer_params">
+        <item>Tekanan</item>
+    </string-array>
+
+    <string-array name="accelerometer_params">
+        <item>Ax</item>
+        <item>Ay</item>
+        <item>Az</item>
+    </string-array>
+
+    <string-array name="accelerometer_params_title">
+        <item>Akselerasi sumbu X</item>
+        <item>Akselerasi sumbu Y</item>
+        <item>Akselerasi sumbu Z</item>
+    </string-array>
+
+    <string-array name="luxmeter_params">
+        <item>Lux</item>
+    </string-array>
+
+    <string-array name="interval_units">
+        <item>sec</item>
+        <item>min</item>
+        <item>hr</item>
+        <item>day</item>
+    </string-array>
+    <string name="select_instrument_title">Instrumen:</string>
+    <string name="time_interval_title">Jarak waktu:</string>
+    <string name="time_interval_hint">Interval Penebangan</string>
+    <string name="create_config_btn_text">Buat File Konfigurasi</string>
+    <string name="select_params_title">Pilih Params</string>
+    <string name="no_interval_message">Silakan pilih interval pencatatan</string>
+    <string name="file_created_success_message">File konfigurasi berhasil dibuat</string>
+    <string name="file_created_fail_message">Gagal membuat file config</string>
+
+    <string name="id1">ID1</string>
+    <string name="id2">ID2</string>
+    <string name="id3">ID3</string>
+    <string name="id4">ID4</string>
+    <string name="count_pulse">Hitung Pulsa</string>
+    <string name="capacitance_unit">Farad</string>
+    <string name="frequency_unit">Hz</string>
+    <string name="multimeter_voltage_unit">Volts</string>
+    <string name="voltage_channels">Voltase</string>
+    <string name="resistance_abbreviation">\u2126</string>
+    <string name="multimeter_measure">Mengukur</string>
+
+    <string name="multimeter_angle_1">33</string>
+    <string name="multimeter_angle_3">65</string>
+    <string name="multimeter_angle_4">98</string>
+    <string name="multimeter_angle_5">131</string>
+    <string name="multimeter_angle_6">164</string>
+    <string name="multimeter_angle_7">196</string>
+    <string name="multimeter_angle_8">229</string>
+    <string name="multimeter_angle_9">262</string>
+    <string name="multimeter_angle_10">294</string>
+    <string name="multimeter_angle_11">327</string>
+    <string name="multimeter_angle_12">0</string>
+
+    <string name="set">SET</string>
+    <string name="read">READ</string>
+    <string name="resistance">Perlawanan</string>
+    <string name="capacitance">Kapasitansi</string>
+    <string name="frequency">Frekuensi</string>
+    <string name="count_pulses">Hitung Pulsa</string>
+    <string-array name="ID">
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+    </string-array>
+    <string name="reset">RESET</string>
+    <string name="voltage">Voltase</string>
+    <string name="ch1">CH1</string>
+    <string name="ch2">CH2</string>
+    <string name="ch3">CH3</string>
+    <string name="cap">CAP</string>
+    <string name="sen">SEN</string>
+    <string name="an8">AN8</string>
+    <string name="w1">Gelombang 1</string>
+    <string name="w2">Gelombang 2</string>
+    <string name="phase">Tahap</string>
+    <string name="output">Keluaran</string>
+    <string name="dutycycle">Siklus</string>
+    <string name="sqr1">SQR1</string>
+    <string name="sqr2">SQR2</string>
+    <string name="sqr3">SQR3</string>
+    <string name="sqr4">SQR4</string>
+    <string name="freq_range">10Hz-5kHz</string>
+    <string name="zero">0</string>
+    <string-array name="wave_type">
+        <item>SINE</item>
+        <item>SQUARE</item>
+    </string-array>
+    <string name="digital_outputs">Output Digital</string>
+    <string name="configure_PWM">Konfigurasikan PWM</string>
+    <string name="waveform_generator">Generator Gelombang Sewenang-wenang</string>
+    <string name="autoscan">Autoscan</string>
+    <string name="select_sensor">Pilih Sensor</string>
+
+    <string name="accelerometer">Akselerometer</string>
+    <string name="x_axis">X axis</string>
+    <string name="y_axis">Y axis</string>
+    <string name="z_axis">Z axis</string>
+    <string name="text_max">Maks</string>
+    <string name="text_min">Min</string>
+    <string name="meters_per_sec_text">ms&lt;sup&gt;&lt;small&gt;-2&lt;/small&gt;&lt;/sup&gt;</string>
+    <string name="meters_per_sec_html">ms<sup><small>-2</small></sup></string>
+    <string name="radian_per_sec_text">rads&lt;sup&gt;&lt;small&gt;-1&lt;/small&gt;&lt;/sup&gt;</string>
+    <string name="radian_per_sec_html">rads<sup><small>-1</small></sup></string>
+    <string name="time_seconds">Waktu (s)</string>
+    <string name="accelerometer_intro">Accelerometer digunakan untuk mengukur akselerasi benda di sepanjang sumbu X, Y dan Z.\n</string>
+    <string name="accelerometer_description_text">\n\nGambar di atas menunjukkan arah ketiga sumbu saat ponsel dipegang teguh. \n\nMenjalankan langkah untuk mengukur akselerasi dalam aplikasi PSLab: \n\n\u2022 Pegang perangkat seperti yang ditunjukkan pada gambar di atas. \n\n\u2022 Mempercepat perangkat di sepanjang salah satu atau beberapa sumbu. \n\n\u2022 Amati nilai dalam kartu atau grafik yang diplot dari sumbu tertentu. \n\nInstrumen accelerometer juga dapat digunakan untuk mengukur akselerasi benda yang bergerak dengan menempatkan perangkat di/di dalam tubuh dan kemudian mempercepat tubuh. \n\nCATAT: Jangan mempercepat tubuh jika perangkat tidak terpasang dengan benar jika perangkat tidak rusak.</string>
+    <string name="no_accelerometer_sensor">Perangkat tidak memiliki sensor accelerometer</string>
+
+    <string name="not_connected">Tidak terhubung</string>
+    <string name="initialising_wait">Inisialisasi Tunggu ...</string>
+    <string name="device_connected_successfully">Perangkat Berhasil Terhubung</string>
+    <string name="device_not_found">Tidak Ada Perangkat USB Ditemukan</string>
+    <string name="sensor_not_connected_tls">Sensor not connected</string>
+
+    <string name="time_unit_la">Waktu (ms)</string>
+    <string name="view">VIEW</string>
+
+    <!-- Experiment Headers -->
+    <!-- Experiments -->
+
+
+    <string name="hmc5883l">hmc5883l</string>
+    <string name="mpu6050">mpu6050</string>
+    <string name="sht21">sht21</string>
+    <string name="tsl2561">tsl2561</string>
+    <string name="ads1115">ads1115</string>
+    <string name="mlx90614">mlx90614</string>
+    <string name="bmp180">bmp180</string>
+    <string name="mpu925x">mpu925x</string>
+
+    <string name="raw_data">Data mentah</string>
+    <string name="configure">Konfigurasikan</string>
+    <string name="plot">Merencanakan</string>
+
+    <string name="data">Data</string>
+    <string name="bx">Bx</string>
+    <string name="by">By</string>
+    <string name="bz">Bz</string>
+    <string name="ax">Ax</string>
+    <string name="ay">Ay</string>
+    <string name="az">Az</string>
+    <string name="gx">Gx</string>
+    <string name="gy">Gy</string>
+    <string name="gz">Gz</string>
+    <string name="temp">Temp</string>
+    <string name="luminosity">Kilau</string>
+    <string name="humidity">Kelembaban</string>
+    <string name="object_temp">Obyek Temp</string>
+    <string name="ambient_temp">Ambient Temp</string>
+    <string name="temperature">Suhu</string>
+    <string name="altitude">Ketinggian</string>
+    <string name="pressure">Tekanan</string>
+    <string name="gyro_range">Atur Rentang Gyro</string>
+    <string name="accel_range">Setel Kisaran Accel</string>
+    <string name="kalman">Filter kalman</string>
+    <string name="power_up">Nyalakan</string>
+    <string name="full_spectrum">Spektrum penuh</string>
+    <string name="infrared">Inframerah</string>
+    <string name="visible">Terlihat</string>
+    <string name="set_gain">Atur Gain</string>
+    <string name="set_timing">Tetapkan Waktu</string>
+    <string name="set_channel">Setel Saluran</string>
+    <string name="set_rate">Setel Rate</string>
+    <string name="plot_accelerometer">Plot - Akselerometer</string>
+    <string name="plot_gyroscope">Plot - Giroskop</string>
+    <string name="rad">(rad)</string>
+    <string name="angle">Sudut</string>
+    <string name="time">Waktu (sec)</string>
+    <string name="infinite_symbol">∞</string>
+    <string name="timegap">Timegap</string>
+    <string name="no_of_samples">Jumlah sampel</string>
+    <string name="temp2">Temp.</string>
+    <string name="alt">Alt.</string>
+    <string name="meter">(m)</string>
+    <string name="pascal">(Pa)</string>
+
+    <string-array name="tsl2561_gain_spinner">
+        <item>Tidak ada keuntungan</item>
+        <item>1x</item>
+        <item>16x</item>
+    </string-array>
+    <string-array name="mpu6050_gyro_spinner">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+
+    <string-array name="mpu6050_accel_spinner">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="mpu6050_kalman_spinner">
+        <item>0.01</item>
+        <item>0.1</item>
+        <item>1</item>
+        <item>10</item>
+        <item>100</item>
+        <item>1000</item>
+        <item>10000</item>
+        <item>null</item>
+    </string-array>
+
+    <string-array name="mpu6050_power_spinner">
+        <item></item>
+        <item></item>
+    </string-array>
+
+    <string-array name="mpu925x_gyro_spinner">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+
+    <string-array name="mpu925x_accel_spinner">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="mpu925x_kalman_spinner">
+        <item>0.01</item>
+        <item>0.1</item>
+        <item>1</item>
+        <item>10</item>
+        <item>100</item>
+        <item>1000</item>
+        <item>10000</item>
+        <item>null</item>
+    </string-array>
+
+    <string-array name="mpu925x_power_spinner">
+        <item></item>
+        <item></item>
+    </string-array>
+
+
+    <string-array name="ads1115_gain_spinner">
+        <item>GAIN_TWOTHIRDS</item>
+        <item>GAIN_ONE</item>
+        <item>GAIN_TWO</item>
+        <item>GAIN_FOUR</item>
+        <item>GAIN_EIGHT</item>
+        <item>GAIN_SIXTEEN</item>
+    </string-array>
+
+    <string-array name="ads1115_channel_spinner">
+        <item>UNI_0</item>
+        <item>UNI_1</item>
+        <item>UNI_2</item>
+        <item>UNI_3</item>
+        <item>DIFF_01</item>
+        <item>DIFF_23</item>
+    </string-array>
+
+    <string-array name="ads1115_rate_spinner">
+        <item>8</item>
+        <item>16</item>
+        <item>32</item>
+        <item>64</item>
+        <item>128</item>
+        <item>250</item>
+        <item>475</item>
+        <item>860</item>
+    </string-array>
+
+    <string-array name="lux_sensor_list">
+        <item>Sensor bawaan</item>
+        <item>BH1750</item>
+        <item>TSL2561</item>
+    </string-array>
+
+    <string-array name="thermo_sensor_list">
+        <item>Sensor bawaan</item>
+        <item>SHT21</item>
+    </string-array>
+
+    <string-array name="thermo_unit_list">
+        <item>°F</item>
+        <item>°C</item>
+    </string-array>
+
+    <string-array name="lux_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="thermo_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="device_not_connected">Perangkat Tidak Terhubung</string>
+    <string name="use_autoscan">Gunakan tombol Autoscan untuk menemukan sensor yang terhubung ke perangkat PSLab</string>
+    <string name="sensor_not_connected">Tidak ada sensor yang terhubung melalui I2C. Coba pilih sensor dari bawah
+        daftar dan pelajari cara menggunakan bus Inter-Integrated Circuit (I2C). Setelah terhubung, klik Autoscan</string>
+    <string name="scanning">Memindai...</string>
+
+    <string name="voltage_unit">(V)</string>
+    <string name="volts">volts</string>
+    <string name="seconds">(s)</string>
+    <string name="lux">Lx</string>
+    <string name="pressure2">Tekan.</string>
+    <string name="plot_altitude">Plot - Ketinggian</string>
+    <string name="celcius">(°C)</string>
+    <string name="plot_temperature">Plot - Suhu</string>
+    <string name="guass">Gauss</string>
+    <string name="guass_unit">(Ga)</string>
+    <string name="humid">Lembab.</string>
+    <string name="humid_unit">(RH)</string>
+    <string name="plot_humidity">Plot - Kelembaban</string>
+    <string name="illum">Ilum.</string>
+    <string name="lux2">(Lux)</string>
+    <string name="acceleration">Acc.</string>
+    <string name="acceleration_unit">(m/s²)</string>
+    <string name="range">Jarak</string>
+    <string name="wave1">Gelombang1</string>
+    <string name="wave2">Gelombang2</string>
+
+    <string name="start_logging">Mulai Pencatatan</string>
+    <string name="stop_logging">Hentikan Pencatatan</string>
+    <string name="stop">Berhenti</string>
+    <string name="cancel">Membatalkan</string>
+    <string name="ok">Baik</string>
+    <string name="save_data">Simpan Data</string>
+    <string name="view_logged_data">Lihat Data yang Dicatat</string>
+    <string name="export_logged_data">Ekspor Data yang Dicatat</string>
+    <string name="sensor_logged_data">Sensor Data Yang Dicatat</string>
+
+    <string name="full">Penuh</string>
+
+    <string name="pocket_science_logo">Logo Ilmu Saku</string>
+
+    <string name="timebase_microsec">%1$.2f μs</string>
+    <string name="timebase_milisec">%1$.2f ms</string>
+    <string name="time_space">Waktu </string>
+    <string name="unit_μs">(μs)</string>
+    <string name="label_ch1">CH1</string>
+    <string name="label_V">(V)</string>
+    <string name="label_ch2">CH2</string>
+    <string name="channel_parameters">Parameter Saluran</string>
+    <string name="timebase_and_trigger">Timebase dan Pemicu</string>
+    <string name="data_analysis">Analisis data</string>
+    <string name="xy_plot">XY Plot</string>
+    <string name="hundred_ms">100ms</string>
+    <string name="hyphen">-</string>
+    <string name="plus">+</string>
+    <string name="select_a_value">Pilih sebuah Nilai </string>
+    <string name="ch3_value">CH3 (+/- %1$.1fV)</string>
+    <string name="one_value">1.0</string>
+    <string name="fourier_transforms">Transformasi Fourier</string>
+    <string name="timebase">TimeBase</string>
+    <string name="text_view">TextView</string>
+    <string name="device_status_text">Perangkat PSLab tidak ditemukan</string>
+    <string name="select_mic">[SELECT MIC]</string>
+    <string name="oscilloscope_intro">\u2022 Oscilloscope di PSLab memberikan banyak fungsi a
+        Osiloskop tersedia secara komersial. Ini memiliki 4 saluran dengan MIC, 2 generator gelombang sinus dan
+        4 PWM generator gelombang persegi, dapat mengubah timebase, menganalisis sinyal dan melakukan gelombang Sine dan Square
+        pas dan plot saluran ke saluran tegangan. \n\n\u2022 Untuk membaca dari gelombang sinus atau gelombang persegi, Anda
+        dapat menghubungkan pin gelombang Output dan Saluran ke Oscilloscope sebagai berikut.</string>
+    <string name="oscilloscope_desc">\u2022 Gambar di atas memiliki koneksi dari SQ1 ke CH1 dan SI1 ke CH2. \n\n\u2022 Setelah Anda menghasilkan gelombang dari instrumen Wave Generator, sambungkan pin yang relevan dan amati dari Oscilloscope dengan mencentang saluran yang relevan di parameter Channel. Jika kamu menggunakan pin CH1, pilih CH1 dari parameter saluran.</string>
+    <string name="channel_param_desc">Dari Pengaturan ini, Anda dapat mengubah Saluran yang dibutuhkan
+        untuk osbserved dari plot. \n\n\u2022 Centang kotak untuk plot Saluran yang relevan. \n\n\ u2022 Dapat mengubah rentang tegangan sumbu Y di plot menggunakan pemintal di sebelah Saluran. \n\n\u2022 Untuk Saluran keempat, Anda dapat memilih mikrofon internal atau mikrofon eksternal. Jika
+        Anda harus menggunakan mikrofon eksternal, sambungannya adalah sebagai berikut. dari SQ1 ke CH1 dan SI1 ke CH2. \n\n\ u2022 Setelah Anda menghasilkan gelombang dari instrumen Wave Generator, sambungkan pin yang relevan dan amati dari Oscilloscope dengan memeriksa saluran yang relevan di parameter Channel. Jika Anda menggunakan pin CH1, pilih CH1 dari parameter saluran.</string>
+    <string name="channel_param_mic">\u2022 Terminal positif MIC harus terhubung dengan pin MIC
+        dan terminal negatif harus dihubungkan dengan pin GND perangkat PSLab</string>
+    <string name="timebase_desc">Pengaturan ini memberi Anda kontrol rentang sumbu Waktu (sumbu X) \ n \ n
+        \ u2022 Slidder timebase dapat digunakan untuk menambah atau mengurangi waktu pengambilan sinyal.
+        Dapat mengubah rentang dari 875,0 mikro detik menjadi 102,4 mili detik. \ N \ n
+        \ u2022 Ini akan berguna untuk menangkap sinyal gelombang periodik dalam rentang yang diberikan untuk analisis. \ n \ n
+        \ u2022 Anda dapat menggunakan pelatuk untuk menetapkan nilai tegangan, sehingga ketika sinyal melebihi yang diberikan
+        nilai, plot akan berhenti.</string>
+    <string name="data_analysis_desc">\ u2022 Menggunakan Pengaturan ini, fungsi matematika dari sinyal yang dianalisis
+        dapat ditemukan. Dapat memilih jenis Wave dari Sine atau Square dan Channel yang perlu dianalisis. \ N \ n
+        Selanjutnya, sinyal yang dianalisis Transformasi Fourier dapat diamati dengan mencentang kotak Fourier Transfroms.</string>
+    <string name="xy_plot_desc">\u2022 Ini digunakan untuk merencanakan tegangan Kanal ke Kanal dalam plot X-Y
+        tegangan sebagai unit untuk kedua sumbu yang relevan untuk Saluran yang sesuai.</string>
+
+    <string-array name="sensor_click_list">
+        <item>Ekspor Data</item>
+        <item>Bagikan Data</item>
+    </string-array>
+
+    <string name="no_permission_for_maps">Tidak cukup izin untuk memuat peta</string>
+
+    <string-array name="export_data_format_list">
+        <item>TXT Format</item>
+        <item>CSV Format</item>
+    </string-array>
+    <string-array name="export_data_format_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="other">Lain</string>
+    <string name="trigger">Pelatuk</string>
+    <string name="enable_xy_plot">Aktifkan plot XY</string>
+    <string name="plot_hyphen_pressure">Plot - Tekanan</string>
+    <string name="plot_object_temperature">Plot - Suhu Objek</string>
+    <string name="plot_ambient_temperature">Plot - Suhu Sekitar</string>
+
+    <string name="search_menu_title">Cari</string>
+
+    <string name="oscilloscope_description">Mengizinkan pengamatan berbagai tegangan sinyal</string>
+    <string name="multimeter_description">Ukur tegangan, arus, resistansi dan kapasitansi</string>
+    <string name="logic_analyzer_description">Menangkap dan menampilkan sinyal dari sistem digital</string>
+    <string name="sensors_description">Mengizinkan logging data dikembalikan oleh sensor yang terhubung</string>
+    <string name="wave_generator_description">Menghasilkan bentuk gelombang analog dan digital yang sewenang-wenang</string>
+    <string name="power_source_description">Menghasilkan tegangan dan arus yang dapat diprogram</string>
+    <string name="lux_meter_description">Mengukur intensitas cahaya sekitar</string>
+    <string name="compass_description">Tiga sumbu magnetometer menunjuk ke utara magnet</string>
+
+    <string name="tile_instrument_horizontal_bars">Bilah horizontal untuk mencocokkan ikon</string>
+    <string name="tile_instrument_vertical_bars">Bilah vertikal untuk mencocokkan ikon ubin</string>
+
+    <string name="accelerometer_description">Mengukur akselerasi Linear dalam arah XYZ</string>
+    <string name="web_view_link_text">Apa itu Perangkat PSLab?</string>
+    <string name="pslab_connect_text">Langkah-langkah untuk menghubungkan Perangkat PSLab</string>
+    <string name="pslab_instruction_1">Hubungkan micro USB (Mini B) ke PSLab</string>
+    <string name="pslab_instruction_2">Hubungkan ujung lain kabel micro USB ke OTG</string>
+    <string name="pslab_instruction_3">Hubungkan OTG ke telepon</string>
+    <string name="number_one">1.</string>
+    <string name="number_two">2.</string>
+    <string name="number_three">3.</string>
+
+    <string name="compass">Kompas</string>
+    <string name="text_parallel_axes">Pilih sumbu yang paralel dengan ground</string>
+    <string name="compass_test_value">360°</string>
+    <string name="show_axis_help">Dapatkan sumbu saat ini</string>
+
+    <string name="compass_bottom_sheet_heading">Kompas</string>
+    <string name="compass_bottom_sheet_text">Instrumen kompas digunakan untuk menavigasi dan menemukan medan magnet di sepanjang sumbu. Instrumen kompas dalam aplikasi PSLab dapat digunakan dengan sensor seluler bawaan atau dengan sensor HMC5883L.</string>
+    <string name="compass_bottom_sheet_description">\ nLangkah untuk mengkalibrasi sumbu saat menggunakan sensor bawaan: \ n \ n
+        \ u2022 Seperti yang ditunjukkan pada gambar di atas, pegang perangkat dalam posisi vertikal. \ n \ n
+        \ u2022 Sekarang, pilih sumbu di mana kompas seharusnya bekerja. \ n \ n
+        \ u2022 Akhirnya, buka Kompas instrumen dan pilih tombol radio di sebelah sumbu yang dipilih. \ n \ n
+        \ u2022 Gerakkan perangkat di sekitar sumbu yang dipilih dan lihat kompas berputar yang menunjukkan sudut yang dibuat oleh perangkat dengan sumbu yang sebenarnya.</string>
+    <string name="no_compass_sensor">Perangkat Anda tidak memiliki sensor untuk mendukung Kompas</string>
+    <string name="compass_X_axis">X-axis</string>
+    <string name="compass_Y_axis">Y-axis</string>
+    <string name="compass_Z_axis">Z-axis</string>
+    <string name="value_null">0</string>
+    <string name="indicator_description">Menunjukkan koneksi perangkat</string>
+
+    <string-array name="edge_choices">
+        <item>EVERY EDGE</item>
+        <item>EVERY FALLING EDGE</item>
+        <item>EVERY RISING EDGE</item>
+        <item>EVERY FOURTH RISING EDGE</item>
+        <item>DISABLED</item>
+    </string-array>
+
+    <string-array name="channel_choices">
+        <item>ID1</item>
+        <item>ID2</item>
+        <item>ID3</item>
+        <item>ID4</item>
+    </string-array>
+
+    <string name="no_data_generated">Tidak Ada Data Yang Dihasilkan</string>
+    <string name="needs_implementation">Belum diimplementasikan</string>
+
+    <string name="analyze_input">Menganalisa</string>
+    <string name="channel_selection_heading">Pilihan Saluran</string>
+
+    <string name="power_card_pv1">PV1</string>
+    <string name="power_card_pv2">PV2</string>
+    <string name="power_card_pv3">PV3</string>
+    <string name="power_card_pcs">PCS</string>
+
+    <string name="schematic_desc">Gambar skematis ada di sini</string>
+    <string name="donot_show_again">Jangan tampilkan lagi</string>
+    <string name="ok_button_text">OK</string>
+
+    <string name="multimeter_dialog_heading">Multimeter</string>
+    <string name="multimeter_default_value">0.00</string>
+    <string name="multimeter_configurations">Konfigurasi Multimeter</string>
+    <string name="multimeter_dialog_text">Gunakan PV1, PV2, PV3 Hubungkan pin SEN dan CAP ke masing-masing resistor dan kapasitor seperti yang ditunjukkan pada gambar untuk mengukur resistansi atau kapasitansi dari elemen yang terhubung. \ n \ n \ u2022 CH1 dan CH2 dapat membaca rentang tegangan gratis. CH3, SEN, CAP, AN8 hanya dapat membaca dari 0V hingga 3.30V</string>
+    <string name="multimeter_dialog_description">\ u2022 Untuk mengukur tegangan, sambungkan langsung sumber listrik (mis. PV1, PV2 dan PV3) ke pin saluran seperti yang ditunjukkan pada gambar. \ n \ n \ u2022 Demikian pula untuk mengukur frekuensi atau menghitung pulsa, hubungkan SQ1, SQ2, SQ3 atau SQ4 pin ke ID1, ID2, ID3 atau ID4. \ n \ n
+        <b> Bagian Berbeda </b> \ n \ n
+        <b> Resistance: </b> Mengukur tahanan elemen yang terhubung antara pin SEN dan GND perangkat PSLab. \ n \ n
+        <b> Kapasitansi: </b> Mengukur kapasitansi elemen yang terhubung antara CAP dan pin GND perangkat PSLab. \ n \ n
+        <b> Tegangan: </b> Mengukur tegangan setiap elemen yang terhubung yang terhubung antara saluran dan pin GND dan pin lainnya seperti AN8. \ n \ n
+        <b> Frekuensi: </b> Mengukur frekuensi di seluruh elemen yang terhubung antara ID dan pin GND. \ n \ n
+        <b> Hitung Pulsa: </b> Mengukur denyut nadi dari gelombang apa pun melalui elemen yang terhubung antara ID dan pin GND. \ n \ n
+    </string>
+
+    <string name="show_guide">Tampilkan Panduan</string>
+    <string name="powersource_dialog_heading">Sumber daya</string>
+    <string name="powersource_dialog_text">Perangkat PSLab dapat menghasilkan voltase dari + 5V hingga -5V pada resolusi 10mV</string>
+    <string name="powersource_dialog_description">
+        \ u2022 Sambungkan satu kabel ke PV1 dan kabel lainnya ke GND untuk menghasilkan voltase antara + 5V hingga -5V. \ n \ n
+        \ u2022 Demikian pula sambungkan kabel antara PV2 untuk menghasilkan tegangan antara + 3.3V hingga -3.3V \ n \ n
+        \ u2022 Gunakan pin PV3 untuk menghasilkan tegangan antara 0V hingga + 3.3V \ n \ n
+        Pin PCS u u2022 digunakan untuk memasok arus konstan antara pin PCS dan pin GND dalam kisaran 3,3 mA
+    </string>
+
+    <string name="logic_analyzer_dialog_text">Logic Analyzer adalah alat yang digunakan untuk mengetahui hubungan waktu antara berbagai pulsa digital. Logic Analyzer yang tersedia di aplikasi PSLab dapat dioperasikan sebagai berikut: \ n</string>
+    <string name="logic_analyzer_dialog_description">\ n \ u2022 Langkah pertama adalah menghubungkan sumber / memproduksi pulsa digital dengan pin pengukur yaitu ID1, ID2, ID3 dan / atau ID4. \ n \ n \ u2022 Seperti yang ditunjukkan pada gambar, pin gelombang persegi SQR1, SQR2, SQR3 dan / atau SQR4 dapat digunakan jika tidak ada sumber lain yang tersedia untuk menghasilkan pulsa digital. \ N \ n \ u2022 Langkah selanjutnya adalah memilih mode saluran yaitu jumlah pin IDx yang digunakan. \ N \ n \ u2022 Langkah terakhir adalah memilih kombinasi saluran dan tepi yang tepat (yang perlu dianalisis) dari daftar yang disediakan untuk setiap pin yang digunakan. \ N \ n \ u2022 Sekarang tekan tombol "Analisis" dan tunggu data diambil dari alat. Setelah data diambil, data akan diplot untuk dianalisis.</string>
+
+    <string name="wave_name_holder">Segitiga</string>
+    <string name="freq_text">Frekuensi :</string>
+    <string name="unit_hz">Hz</string>
+    <string name="text_phase_colon">Tahap :</string>
+    <string name="text_phase">Tahap</string>
+    <string name="deg_text">\u00b0</string>
+    <string name="selected_text_holder">Frekuensi gelombang :</string>
+    <string name="text_sq1">SQR1</string>
+    <string name="text_sq2">SQR2</string>
+    <string name="text_sq3">SQR3</string>
+    <string name="text_sq4">SQR4</string>
+    <string name="text_duty_colon">Tugas :</string>
+    <string name="text_duty">Tugas</string>
+    <string name="frequecy_colon">Frekuensi :</string>
+    <string name="set_lowercase">Set</string>
+    <string name="unit_percent">%</string>
+    <string name="text_freq">Frek</string>
+    <string name="text_waveform">Bentuk gelombang</string>
+    <string name="text_analog">Analog</string>
+    <string name="text_pwm">PWM</string>
+    <string name="view_text">Melihat</string>
+    <string name="produce_sound_text">Menghasilkan suara</string>
+    <string name="stop_sound_text">Hentikan Suara</string>
+    <string name="save_text">Menyimpan</string>
+    <string name="phase_holder_text">45\u00b0</string>
+    <string name="duty_holder_text">50 %</string>
+    <string name="open_instrument">Instrumen terbuka</string>
+
+    <string name="reference_wave_title">Referensi</string>
+    <string name="built_in_mic_option">In-Built MIC</string>
+    <string name="pslab_mic_option">PSLab MIC</string>
+    <string name="sine">Sinus</string>
+    <string name="triangular">Segitiga</string>
+    <string name="square">Kotak</string>
+    <string name="wave_frequency">Frekuensi gelombang :</string>
+    <string name="phase_offset">Offset Fase :</string>
+    <string name="pwm_phase">Fase PWM :</string>
+    <string name="duty_cycle">Siklus:</string>
+    <string name="mode">Mode</string>
+    <string name="text_digital">Digital</string>
+
+    <string name="text_connected">Terhubung</string>
+    <string name="text_disconnected">Terputus</string>
+
+    <string name="ir_thermometer">Termometer</string>
+    <string name="ir_thermometer_intro">\ u2022 Termometer dapat digunakan untuk mengukur suhu. Instrumen ini
+    kompatibel dengan MLX-90614 Infrared thermo sensor. \ n \ n
+    \ u2022 Saat menggunakan sensor MLX-90614, sambungkan sensor ke perangkat PSLab seperti yang ditunjukkan di bawah ini</string>
+    <string name="ir_thermometer_desc">\ u2022 Konfigurasi pin di atas harus sama kecuali untuk pin
+    GND. Anda dapat menggunakan salah satu pin GND perangkat PSLab. \ N</string>
+
+    <string name="robotic_arm_second_unit">s</string>
+    <string name="robotic_arm_degree_symbol">\u00B0</string>
+
+    <string name="high_limit">Batas Tinggi</string>
+    <string name="update_period">Perbarui Periode</string>
+    <string name="max_lx">Maks (Lx)</string>
+    <string name="min_lx">Min (Lx)</string>
+    <string name="avg_lx">Avg (Lx)</string>
+    <string name="no_lux_sensor">Perangkat tidak memiliki sensor Lux</string>
+    <string name="active_sensor">Sensor Aktif</string>
+    <string name="setting_baro">setting_baro_sensor_type</string>
+    <string name="setting_compass">setting_compass_sensor_type</string>
+    <string name="setting_accelerometer">setting_accelerometer_sensor_type</string>
+    <string name="include_location">Sertakan data lokasi dalam file yang dicatat</string>
+    <string name="location_sensor">include_location_sensor_data</string>
+    <string name="include_cap">Sertakan Data Lokasi</string>
+    <string name="time_string_accelerometer">Harap berikan interval waktu di mana data akan diperbarui</string>
+    <string name="time_string_lux">Harap berikan interval waktu di mana data akan diperbarui (100 ms hingga 1000 ms)</string>
+    <string name="time_string_baro">Harap berikan interval waktu di mana data akan diperbarui (100 ms hingga 2000 ms)</string>
+    <string name="setting_baro_update">setting_baro_update_period</string>
+    <string name="setting_lux_update">setting_lux_update_period</string>
+    <string name="setting_gyro_update">setting_gyro_update_period</string>
+    <string name="setting_accelerometer_update">setting_accelerometer_update_period</string>
+    <string name="default_value_baro">1.10</string>
+    <string name="default_value_lux">1</string>
+    <string name="default_value_acceleration">10</string>
+    <string name="dialogue_msg_acceleration">Harap berikan batas maksimum nilai percepatan yang akan direkam</string>
+    <string name="dialogue_msg_atm">Harap berikan batas maksimum nilai atm untuk direkam</string>
+    <string name="dialogue_msg_lux">Harap berikan batas maksimum nilai Lux untuk direkam (10 Lx hingga 10.000 Lx)</string>
+    <string name="dialogue_msg_gyro">Berikan batas maksimum kecepatan sudut yang akan direkam (0 rad / s hingga 1000 rad / s)</string>
+    <string name="update_period_msg">Periode Pembaruan yang Dimasuki tidak dalam batas!</string>
+    <string name="high_limit_msg">Dimasukkan Batas Tinggi tidak dalam batas!</string>
+    <string name="high_limit_baro">setting_baro_high_limit</string>
+    <string name="high_limit_lux">setting_lux_high_limit</string>
+    <string name="high_limit_gyro">setting_gyro_high_limit</string>
+    <string name="high_limit_acceleration">setting_accelerometer_high_limit</string>
+    <string name="setting_lux_type">setting_lux_sensor_type</string>
+    <string name="no_file_selected">Tidak ada file yang dipilih</string>
+    <string name="setting_lux_sensor_gain">setting_lux_sensor_gain</string>
+    <string name="setting_gyro_sensor_gain">setting_gyro_sensor_gain</string>
+    <string name="setting_accelerometer_sensor_gain">setting_accelerometer_sensor_gain</string>
+    <string name="set_gain_sensor">Silakan atur gain dari sensor</string>
+    <string name="sensor_gain">Keuntungan Sensor</string>
+    <string-array name="lux_sensors">
+        <item>Built-In</item>
+        <item>BH1750</item>
+        <item>TSL2561</item>
+    </string-array>
+    <string-array name="thermo_sensors">
+        <item>Built-In</item>
+        <item>TSL2561</item>
+    </string-array>
+
+    <string name="save_csv_data">Ekspor Data</string>
+    <string name="delete_csv_data">Hapus Data CSV</string>
+    <string name="record_csv_data">Rekam Data</string>
+
+    <string name="incorrect_import_format">Format file tidak cocok dengan format log perangkat</string>
+    <string name="import_log_action">Impor Log</string>
+    <string name="import_data_log_no_selection_error">Silakan pilih salah satu perangkat</string>
+    <string name="import_log_positive_button">Pilih</string>
+
+    <string name="data_recording_with_location">Rekaman data dimulai dengan lokasi</string>
+    <string name="data_recording_with_nogps">Perekaman data dimulai tetapi GPS tidak aktif</string>
+    <string name="data_recording_with_gps_off">Data yang direkam tidak akan mengandung lokasi</string>
+    <string name="data_recording_without_location">Perekaman data dimulai tanpa lokasi</string>
+    <string name="no_location_data">Tidak ada data lokasi di log ini</string>
+
+    <string name="data_recording_start">Perekaman Data: Dimulai</string>
+    <string name="data_recording_paused">Perekaman Data: Dijeda</string>
+    <string name="data_deleted">Data yang direkam berhasil dihapus</string>
+    <string name="nothing_to_delete">Tidak ada yang dihapus</string>
+    <string name="log_deleted">Log dihapus</string>
+    <string name="nothing_to_export">Harap catat beberapa data</string>
+    <string name="csv_store_text">File CSV disimpan di </string>
+
+    <string name="delete_warning">Anda yakin ingin menghapus file ini?</string>
+    <string name="delete_file">Menghapus berkas</string>
+    <string name="delete_capital">DELETE</string>
+    <string name="delete">Menghapus</string>
+    <string name="delete_confirmation">Anda yakin ingin menghapus log ini</string>
+
+    <string name="allow_gps">Izinkan GPS</string>
+    <string name="allow_gps_info">Silakan aktifkan GPS untuk memasukkan lokasi saat ini dalam file yang dicatat</string>
+    <string name="prmsn_denied_storage">Izin ditolak untuk penyimpanan</string>
+
+    <string name="show_guide_text">Tampilkan Panduan</string>
+    <string name="hide_guide_text">Sembunyikan Panduan</string>
+
+    <string name="wave_gen_guide_intro">Generator gelombang dapat digunakan untuk menghasilkan berbagai jenis gelombang seperti
+        Gelombang sinus, gelombang kotak, gelombang gergaji dan memungkinkan kita untuk mengubah karakteristik mereka seperti frekuensi, fase, tugas.
+        \ nIni juga memungkinkan kami untuk menghasilkan sinyal PWM yang memiliki fase dan tugas yang berbeda.</string>
+
+    <string name="sine_wave_instn">
+        \ u2022 Hubungkan pin Wave S1 dan S2 ke pin channel CH1, CH2 seperti yang ditunjukkan pada gambar di atas \ n \ n
+        \ u2022 Pilih tombol Wave1 untuk pin S1 dan tombol Wave2 untuk pin S2 \ n \ n
+        \ u2022 Tekan tombol Gambar sinus untuk gelombang Sinus dan tombol gambar Gigi-Gergaji untuk gelombang Gigi-Gergaji \ n \ n
+        \ u2022 Tetapkan frekuensi masing-masing dan perbedaan fasa (opsional) menggunakan tombol di panel bentuk gelombang \ n \ n
+        \ u2022 Tekan tombol Lihat untuk melihat gelombang dalam osiloskop
+    </string>
+
+    <string name="square_wave_instn">
+        \ u2022 Hubungkan pin Wave SQ1 ke pin channel CH1 seperti yang ditunjukkan pada gambar di atas \ n \ n
+        \ u2022 Pastikan mode dipilih ke Kotak, jika tidak tekan tombol mode untuk beralih ke mode Kotak \ n \ n
+        \ u2022 Pilih tombol SQ1 \ n \ n
+        \ u2022 Tetapkan Frekuensi dan Siklus Tugasnya \ n \ n
+        \ u2022 Tekan tombol Lihat untuk melihat gelombang persegi dalam osiloskop
+    </string>
+
+    <string name="pwm_wave_inst">
+        \ u2022 Beralih ke mode PWM (Dalam mode ini pin S1 dan S2 akan dinonaktifkan) \ n \ n
+        \ u2022 Tetapkan frekuensi umum untuk semua pin SQ \ n \ n
+        \ u2022 Tetapkan tugas dan fase untuk semua pin SQ \ n \ n
+        \ u2022 Tekan tombol Lihat untuk menghasilkan sinyal PWM </string>
+
+    <string name="gen_sine_wave_text">Untuk menghasilkan gelombang Sine atau gelombang Saw-Tooth:</string>
+    <string name="gen_sq_text">Untuk menghasilkan gelombang kotak</string>
+    <string name="gen_pwm_text">Begitu pula untuk menghasilkan empat sinyal PWM yang berbeda</string>
+
+    <string name="question">Q:</string>
+    <string-array name="faq_questions">
+        <item>Apa itu Pocket Science Lab? Apa yang bisa saya lakukan dengannya?</item>
+        <item>Di mana saya dapat membeli Pocket Science Lab?</item>
+        <item>Di mana saya dapat mengunduh Aplikasi Android untuk Pocket Science Lab?</item>
+        <item>Di mana saya dapat mengunduh aplikasi desktop untuk Pocket Science Lab untuk Windows, Linux dan Mac?</item>
+        <item>Apakah Anda memiliki aplikasi iOS untuk perangkat Apple?</item>
+        <item>Bagaimana saya bisa terhubung ke perangkat? Kabel USB apa yang saya butuhkan? Apa yang dimaksud dengan kabel USB OTG?</item>
+        <item>Saya menemukan bug di salah satu aplikasi atau perangkat keras Anda. Apa yang harus dilakukan? Di mana saya harus melaporkannya?</item>
+        <item>Bisakah saya merekam atau menyimpan data di aplikasi dan mengekspor atau mengimpornya?</item>
+        <item>Ponsel Android saya sudah memiliki beberapa sensor, dapatkah saya menggunakannya dengan aplikasi PSLab juga?</item>
+        <item>Sensor eksternal mana yang dapat saya gunakan dengan perangkat PSLab dan aplikasi? Yang mana yang kompatibel?</item>
+        <item>Bagaimana saya bisa menggunakan Pocket Science Lab sebagai data logger independen tanpa ponsel atau desktop terhubung?</item>
+        <item>Itu keren, PSLab itu Open Hardware! Di mana saya dapat menemukan daftar skema dan bagian dari Pocket Science Lab?</item>
+        <item>Siapa yang mengembangkan PSLab? Kapan Anda memulainya? Apa cerita di baliknya?</item>
+        <item>Saya menemukan kesalahan di situs web, di mana saya bisa mengirimkan masalah?</item>
+    </string-array>
+
+    <string name="answer">A:</string>
+    <string-array name="faq_answers">
+        <item>Pocket Science Lab (PSLab) adalah papan perangkat keras bertenaga USB kecil yang dapat digunakan untuk pengukuran dan percobaan. Ini berfungsi sebagai ekstensi untuk ponsel Android atau PC. PSLab hadir dengan Oscilloscope, Multimeter, Wave Generator, Logic Analyzer, Sumber Daya, dan banyak lagi instrumen bawaan lainnya. Ini juga dapat digunakan sebagai aplikasi kontrol robotika. Dan, kami terus menambahkan lebih banyak instrumen digital. PSLab adalah banyak perangkat dalam satu. Cukup sambungkan dua kabel ke pin yang relevan (keterangan ada di bagian belakang papan PSLab) dan mulailah mengukur. Anda dapat menggunakan Open Source Android atau aplikasi desktop kami untuk melihat dan mengumpulkan data. Anda juga dapat mencolokkan ratusan sensor standar I²C yang kompatibel ke slot pin PSLab. Ini bekerja tanpa perlu pemrograman. Jadi, percobaan apa yang Anda lakukan hanya terbatas pada imajinasi Anda!</item>
+        <item>Ada halaman ikhtisar untuk toko-toko tempat Anda dapat membeli perangkat Pocket Science Lab di berbagai wilayah di situs web &lt; a href = \"https://pslab.io/shop/\" &gt; di https://pslab.io/shop/&lt;/a&gt;.</item>
+        <item>Aplikasi ini dapat diunduh dari &lt;a href = \"https://f-droid.org/en/packages/io.pslab/\"&gt; F-Droid &lt;/a &gt;atau &lt;a href =\"https://play.google.com/store/apps/details?id=io.pslab\"&gt; Play Store &lt;/a&gt;. Cukup klik tautan yang akan diarahkan!</item>
+        <item>Kami sedang mengembangkan aplikasi desktop untuk Windows, Linux dan Mac di &lt;a href=\"https://github.com/fossasia/pslab-desktop/tree/install\"&gt;repositori desktop Git kami. Anda dapat menemukannya di cabang instal proyek di sini &lt;/ a&gt;. Aplikasi ini masih dalam pengembangan. Kami menggunakan teknologi seperti Electron dan Python, yang bekerja di semua platform. Namun, untuk membuat installer final berfungsi di mana-mana diperlukan beberapa penyesuaian dan perbaikan di sana-sini. Jadi, harap tunggu beberapa gangguan. Anda dapat menggunakan pelacak di repositori untuk mengirim masalah, bug, dan permintaan fitur.</item>
+        <item>Sayangnya Apple memiliki batasan dan kontrol yang ketat sehingga mereka tidak dapat terhubung ke perangkat keras lain ke perangkat Apple mereka sendiri. Banyak orang berpendapat bahwa ini bertentangan dengan kebebasan pengguna. Mayoritas produsen perangkat keras tidak dapat memberikan opsi untuk menghubungkan produk mereka dengan perangkat Apple. Apple dalam banyak kasus sama sekali tidak mengizinkan produk non-Apple dihubungkan dengan telepon, pembalut, dan perangkat keras lainnya. Kadang-kadang hanya mungkin setelah proses yang panjang dan mahal, tetapi bahkan jika kita akan mencoba untuk melalui proses seperti itu tidak pasti, bahwa akan mungkin untuk mendapatkan kerja sama Apple untuk terhubung ke Pocket Science Lab. Karena kebijakan pembatasan Apple dan pendekatan kepemilikan yang membatasi kebebasan pengguna produk Apple, saat ini kami tidak dapat menyediakan aplikasi iOS. Masyarakat secara teratur membahas pendekatan baru, tetapi sayangnya kami belum menemukan solusi. Apple tidak memiliki minat untuk mendukung pengguna karena tujuan utamanya untuk menghasilkan laba, alih-alih mengizinkan pengguna untuk menggunakan perangkat mereka dengan cara yang mereka inginkan. Perilaku Apple dilihat oleh beberapa orang dengan cara yang membatasi hak asasi manusia dan kebebasan orang yang kebetulan menjadi pengguna produk Apple.</item>
+        <item>Untuk terhubung ke perangkat Anda memerlukan kabel USB OTG (&lt; a href=\ "https://en.wikipedia.org/wiki/USB_On-The-Go\"&gt;OTG=Sedang bepergian &lt;/a&gt;) yang merupakan kabel USB yang memungkinkan perangkat yang terhubung untuk beralih antara peran host dan perangkat. &lt;u &gt; kabel USB yang tidak kompatibel dengan OTG TIDAK akan berfungsi &lt; /u&gt;. Dimungkinkan juga untuk memperpanjang PSLab dengan chip ESP WiFi atau chip Bluetooth dan berkomunikasi melalui gateway ini menggunakan aplikasi Android. Anda dapat merujuk ke &lt; a href=\"https://github.com/fossasia/pslab-hardware\"&gt; dokumentasi dan kode pengembang perangkat keras di GitHub untuk detail lebih lanjut di sini &lt;/a&gt;.</item>
+        <item>Kami memiliki pelacak masalah di semua proyek kami. Mereka saat ini di-host di GitHub. Untuk mengirim bug atau permintaan fitur, Anda harus masuk ke layanan. &lt;ahref=\"https: //github.com/fossasia?utf8=%E2%9C%93&amp;q=pslab\"&gt; Daftar repositori PSLab kami ada di sini &lt;/a&gt; (gulirkan sedikit ke bawah, saat Anda mengakses halaman ini).</item>
+        <item>Ya, kami telah menerapkan fungsi rekam dan mainkan atau cara untuk menyimpan dan membuka konfigurasi di instrumen pada aplikasi Android dan desktop. Data yang Anda rekam dapat diimpor ke dalam aplikasi dan dilihat. Fitur ini masih dalam pengembangan, tetapi berfungsi dengan baik di sebagian besar tempat. Anda dapat menemukannya di bilah aplikasi. Ada tombol untuk merekam, memutar, menyimpan, dan membuka data.</item>
+        <item>Ya, tentu saja. Anda dapat menginstal aplikasi Android PSLab (&lt;a href = \"https://play.google.com/store/apps/details?id=io.pslab\"&gt;Play Store&lt;/a&gt;, &lt;a href = \"https://f-droid.org/en/packages/io.pslab/\"&gt;Fdroid&lt;/a&gt;) di ponsel Anda dan gunakan dengan perangkat seperti Luxmeter atau Kompas. Kami menambahkan dukungan untuk lebih banyak sensor bawaan langkah demi langkah.</item>
+        <item>Dalam aplikasi kami, kami menggunakan standar industri I²C (&lt;a href = \"https://en.wikipedia.org/wiki/I%C2%B2C\"&gt;Wikipedia&lt;/a&gt;). Anda bisa mendapatkan data dari sensor yang terhubung ke perangkat melalui port USB menggunakan kabel USB OTG (OTG = On the go) yang merupakan kabel USB yang memungkinkan perangkat terhubung untuk bolak-balik antara peran host dan perangkat . Untuk transfer kami menggunakan UART (penerima-pemancar asinkron universal), &lt;a href = \"https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter\"&gt;Wikipedia&lt;/a&gt;). Banyak sensor yang dapat digunakan dengan instrumen tertentu, mis. Barometer, Termometer, Giroskop dll. Anda dapat mengakses konfigurasi sensor dalam pengaturan instrumen di menu burger kanan atas setiap instrumen. Semua sensor yang menggunakan standar I²C kompatibel dengan perangkat. Ada pin koneksi untuk sensor analog dan digital. Anda menemukan deskripsi pin di bagian belakang perangkat. Bahkan jika belum ada instrumen spesifik di salah satu aplikasi kami, Anda masih dapat melihat dan menyimpan data mentah menggunakan komponen instrumen Oscilloscope. Ada &lt;a href = \"https://pslab.io/sensors/\"&gt;halaman dengan daftar sensor yang direkomendasikan di situs web&lt;/a&gt;.</item>
+        <item>Kami sudah menerapkan fungsi ini, namun masih dalam tahap prototipe. Anda dapat membuat file konfigurasi di aplikasi Android dan mentransfernya ke perangkat PSLab (Anda mungkin harus memperbarui firmware yang Anda temukan di org Github kami). Anda dapat memberi daya pada perangkat PSLab dengan baterai USB dan dapat mengumpulkan data secara terpisah dari aplikasi. Setelah Anda menghubungkan aplikasi, Anda dapat mengunduh data yang dikumpulkan. Versi perangkat yang akan datang akan dilengkapi dengan kartu SD untuk menyimpan data secara lokal juga. Saat ini masih ada batasan untuk menggunakan fitur ini, tetapi kami terus mengusahakannya 🙂</item>
+        <item>Perangkat keras PSLab dikembangkan menggunakan &lt;a href = \"http://www.kicad-pcb.org/\"&gt;KiCad&lt;/a&gt;. Perangkat lunak ini dapat menghasilkan semua jenis format dan daftar komponen. Anda dapat menemukan skema dan sumber file di &lt;a href = \"https://github.com/fossasia/pslab-hardware\"&gt;repositori hardware Git di sini&lt;/a&gt;.</item>
+        <item>PSLab dikembangkan dengan komunitas di &lt;a href = \"https://fossasia.org/\"&gt;FOSSASIA&lt;/a&gt;. Ada lebih dari 100 pengembang yang telah berkontribusi pada proyek di berbagai repositori. Proyek ini dimulai setelah Praveen Kumar, seorang guru fisika dari India, memperkenalkan gagasan perangkat laboratorium fisika terbuka yang terinspirasi oleh proyek ExpEYES pada KTT FOSSASIA di Kamboja 2014. Ia membantu proyek ini bergerak maju dan bekerja dengan kontributor awal pada komponen perangkat lunak. Papan Open Hardware dirilis pada 2017 sebagai bagian dari proyek GSoC oleh Jithin B P yang menggunakan papan ExpEYES yang ia kembangkan sebelumnya sebagai dasar untuk membuat versi pertama PSLab. Pada tahun-tahun berikutnya, komponen perangkat keras diperbarui, ukuran dan desainnya disesuaikan sehingga menghasilkan biaya produksi yang jauh lebih rendah dan banyak fitur ditambahkan dalam firmware. Aplikasi Android dikembangkan dari awal dan sebagian besar aplikasi desktop diimplementasikan kembali dengan antarmuka lintas platform Elektron baru. &lt;a href = \"https://twitter.com/Cloudypadmal\"&gt;Padmal M&lt;/a&gt; dari Sri Lanka memimpin tim teknologi sejak 2018 dan menentukan peta jalan bersama &lt;a href = \"https://twitter.com/mariobehling\">Mario Behling&lt;/a&gt;, pengembang inti dan kontributor dari komunitas yang lebih luas. Sejak 2019 FOSSASIA memproduksi batch papan dalam jumlah besar. Adalah tujuan kami untuk memberikan contoh sebagai proyek Perangkat Keras Terbuka, untuk membuatnya berkelanjutan secara komersial dan menginspirasi orang lain untuk membuat perangkat keras Terbuka dan perangkat lunak Bebas dan Sumber Terbuka.</item>
+        <item>Kami menggunakan pelacak masalah untuk sebagian besar pekerjaan kami. Anda bisa mengirimkan &lt;a href = \"https://github.com/fossasia/pslab.io/issues\"&gt;masalah yang Anda temukan tentang situs web di pelacak masalah kami di sini&lt;/a&gt;.</item>
+    </string-array>
+
+    <string name="date_of_recording">DATE OF RECORDING</string>
+    <string name="time_of_recording">TIME OF RECORDING</string>
+    <string name="date_of_rec">Tanggal Rek</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="location">Lokasi</string>
+
+    <string name="start_time">Waktu mulai</string>
+    <string name="end_time">Akhir waktu</string>
+    <string name="timezone">Zona waktu</string>
+    <string name="dev_model">Model Perangkat</string>
+    <string name="dev_brand">Merek Perangkat</string>
+    <string name="dev_android_sdk">Perangkat Android SDK</string>
+
+    <string name="logged_data">Data yang Dicatat</string>
+    <string name="no_logs_to_display">Tidak ada data log untuk ditampilkan</string>
+    <string name="show_logged_data">Tampilkan Data yang Dicatat</string>
+    <string name="time_elapsed">Waktu yang telah berlalu</string>
+
+    <string name="no_baro_sensor">Perangkat tidak memiliki barometer</string>
+
+    <string name="gas_sensor">Sensor Gas</string>
+    <string name="gas_sensor_description">Sensor kualitas udara untuk mendeteksi berbagai macam gas, termasuk NH3, NOx, alkohol, benzena, asap, dan CO2</string>
+    <string name="gas_sensor_label">Isi Gas (PPM)</string>
+    <string name="gas_sensor_unit">PPM</string>
+
+    <string name="dust_sensor">Dust Sensor</string>
+    <string name="dust_sensor_intro">Sensor Debu digunakan untuk mengukur kualitas udara</string>
+    <string name="dust_sensor_desc">Hubungkan pin sesuai dengan diagram pin dan mulailah mengukur. Nyalakan sensor menggunakan pin VCC di PSLab dan sambungkan pin data ke CH1. Pastikan kabel arde terhubung ke salah satu pin GND di PSLab.</string>
+    <string name="dust_sensor_description">Sensor debu digunakan untuk mengukur kualitas udara dalam hal partikel per meter persegi</string>
+    <string name="dust_sensor_label">Partikel (PPM)</string>
+    <string name="dust_sensor_unit">PPM</string>
+    <string name="dust_sensor_default">1000</string>
+    <string name="dust_sensor_status_label">Kualitas udara</string>
+    <string name="setting_dust_update_period">setting_dust_update_period</string>
+    <string name="setting_dust_high_limit">setting_dust_high_limit</string>
+    <string name="setting_dust_sensor_type">setting_dust_sensor_type</string>
+    <string name="dust_summary">1000 ms</string>
+    <string name="dialogue_msg_dust">Berikan nilai ambang batas untuk nilai partikel debu yang akan direkam (0.0~5.0)</string>
+    <string-array name="dust_sensor_list">
+        <item>DSM-501A</item>
+        <item>Lain</item>
+    </string-array>
+    <string-array name="dust_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="robotic_arm">Lengan Robot</string>
+    <string name="robotic_arm_intro">Lengan robot adalah jenis lengan mekanik, biasanya dapat diprogram, dengan fungsi yang mirip dengan lengan manusia.</string>
+    <string name="robotic_arm_desc">Tugas lengan Anda adalah memindahkan tangan Anda dari satu tempat ke tempat lain. Demikian pula, tugas lengan robot adalah untuk memindahkan efektor akhir dari satu tempat ke tempat lain. Anda dapat mengenakan lengan robot dengan segala macam efektor akhir, yang cocok untuk aplikasi tertentu. Salah satu efektor ujung yang umum adalah versi tangan yang disederhanakan, yang dapat menangkap dan membawa objek yang berbeda.</string>
+    <string name="robotic_arm_description">Mengontrol servos dari lengan robot</string>
+    <string name="servo1_title">Servo 1</string>
+    <string name="servo2_title">Servo 2</string>
+    <string name="servo3_title">Servo 3</string>
+    <string name="servo4_title">Servo 4</string>
+    <string name="invalid_servo_value">Pilih nilai antara 0 dan 360</string>
+    <string-array name="baro_sensors">
+        <item>Built-In</item>
+        <item>BMP180</item>
+    </string-array>
+    <string-array name="baro_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="accelerometer_sensors">
+        <item>Built-In</item>
+        <item>MPU6050</item>
+    </string-array>
+    <string-array name="accelerometer_sensor_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="compass_sensors">
+        <item>Built-In</item>
+        <item>HMC5883L</item>
+    </string-array>
+    <string-array name="compass_sensors_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="multimeter_default_1000">1000</string>
+    <string name="multimeter_summary">1000 ms</string>
+    <string name="setting_multimeter_update">setting_multimeter_update_period</string>
+    <string name="time_string_multimeter">Harap berikan interval waktu di mana data akan diperbarui (100 ms hingga 2000 ms)</string>
+
+    <string name="timebase_title">Timebase</string>
+
+    <string name="delete_all">Hapus Semua Data</string>
+    <string name="delete_all_message">Apakah Anda Yakin?</string>
+    <string name="baro_meter">Barometer</string>
+    <string name="alti_unit">m</string>
+    <string name="baro_unit">atm</string>
+    <string name="avg_baro">Avg (atm)</string>
+    <string name="avg_alti">Ketinggian (m)</string>
+    <string name="min_baro">Min (atm)</string>
+    <string name="max_baro">Maks (atm)</string>
+    <string name="baro_meter_description">Mengukur tekanan atmosfer</string>
+    <string name="baro_meter_intro">\ u2022 Barometer dapat digunakan untuk mengukur tekanan atmosfer. Instrumen ini
+    kompatibel dengan sensor tekanan bawaan pada perangkat android apa pun atau sensor tekanan BMP-180. \ n \ n
+    \ u2022 Jika Anda ingin menggunakan sensor BMP-180, hubungkan sensor ke perangkat PSLab seperti yang ditunjukkan pada gambar.</string>
+    <string name="baro_meter_desc">\ u2022 Konfigurasi pin di atas harus sama kecuali untuk pin
+    GND. GND dimaksudkan untuk Ground dan salah satu perangkat PSLab pin GND dapat digunakan karena umum. \ N \ n
+    \ u2022 Pilih sensor dengan membuka tab <b> Konfigurasi </b> dari bilah navigasi bawah dan pilih BMP-180 di menu tarik turun di bawah <b> Pilih Sensor </b>.</string>
+    <string name="gyroscope">Giroskop</string>
+    <string name="gyroscope_description">Mengukur laju rotasi tentang sumbu XYZ</string>
+    <string name="gyroscope_intro">Giroskop digunakan untuk mengukur laju rotasi benda sepanjang sumbu X, Y dan Z.</string>
+    <string name="gyroscope_description_text">Orientasi sumbu X, Y, dan Z positif. Untuk sumbu positif pada perangkat, rotasi searah jarum jam menghasilkan nilai negatif, dan rotasi berlawanan arah jarum jam menghasilkan nilai positif.</string>
+    <string name="gyroscope_config">Konfigurasi Giroskop</string>
+    <string name="no_gyroscope_sensor">Perangkat Anda tidak memiliki sensor yang diperlukan untuk fungsi ini</string>
+    <string name="no_data_recorded_gyro">Tidak ada data yang direkam karena sensor tidak ada di perangkat. Coba dengan sensor eksternal.</string>
+    <string name="lux_meter">Lux Meter</string>
+    <string name="lux_default_1000">1000</string>
+    <string name="lux_default_2000">2000</string>
+    <string name="gyro_default_20">20</string>
+    <string name="lux_default_0">0</string>
+    <string name="lux_summary">1000 ms</string>
+    <string name="log_saved_directory">Log disimpan di \ n</string>
+    <string name="log_saved_failed">Tidak dapat menyimpan log. Silakan periksa izin penyimpanan.</string>
+    <string name="open">Buka</string>
+    <string name="play">Bermain</string>
+    <string name="save_graph">Simpan Grafik</string>
+    <string name="lux_meter_intro">\ u2022 Meter Lux dapat digunakan untuk mengukur intensitas cahaya sekitar. Instrumen ini
+    kompatibel dengan sensor cahaya internal pada perangkat android atau sensor cahaya BH-1750. \ n \ n
+    \ u2022 Jika Anda ingin menggunakan sensor BH-1750, sambungkan sensor ke perangkat PSLab seperti yang ditunjukkan di bawah ini</string>
+    <string name="lux_meter_desc">\ u2022 Konfigurasi pin di atas harus sama kecuali untuk pin
+    GND. GND dimaksudkan untuk Ground dan salah satu perangkat PSLab pin GND dapat digunakan karena umum. \ N \ n
+    \ u2022 Pilih sensor dengan masuk ke tab Konfigurasi dari bilah navigasi bawah dan pilih BHT-1750 di menu tarik turun di bawah Sensor Pilih. \ n</string>
+    <string name="no_data_fetched">Tidak Ada Data yang Diambil</string>
+    <string name="accelerometer_configurations">Konfigurasi Akselerometer</string>
+    <string name="view_map">Lihat peta</string>
+    <string name="thermometer_desc">Untuk mengukur suhu sekitar</string>
+    <string name="thermometer">Termometer</string>
+    <string name="thermometer_bottom_sheet_text">Instrumen termometer digunakan untuk mengukur suhu sekitar. Ini dapat diukur menggunakan sensor temprature ambient inbuilt atau melalui SHT21.</string>
+    <string name="thermometer_bottom_sheet_desc">Instrumen termometer digunakan untuk mengukur suhu sekitar. Ini dapat diukur menggunakan sensor temprature ambient inbuilt atau melalui SHT21.</string>
+    <string name="no_thermometer_sensor">Perangkat tidak memiliki Sensor Thermometer</string>
+    <string name="thermo_unit_celcius">°C</string>
+    <string name="thermo_unit_fahrenheit">°F</string>
+    <string name="avg_thermo_celcius">Avg (°C)</string>
+    <string name="max_thermo_celcius">Maks (°C)</string>
+    <string name="min_thermo_celcius">Min (°C)</string>
+    <string name="avg_thermo_fahrenheit">Avg (°F)</string>
+    <string name="max_thermo_fahrenheit">Maks (°F)</string>
+    <string name="min_thermo_fahrenheit">Min (°F)</string>
+    <string name="setting_thermo_type">setting_thermo_sensor_type</string>
+    <string name="select_unit">select_temp_unit</string>
+    <string name="select_temp_unit">Pilih unit suhu</string>
+    <string name="unit_select">Unit</string>
+    <string name="thermo_default_1000">1000</string>
+    <string name="time_string_thermo">Harap berikan interval waktu di mana data akan diperbarui (100 ms hingga 1000 ms)</string>
+    <string name="setting_thermo_update">setting_thermo_update_period</string>
+    <string name="thermo_summary">1000 ms</string>
+    <string name="setting_thermo_sensor_gain">setting_thermo_sensor_gain</string>
+    <string name="default_value_thermo">0</string>
+    <string name="thermo_default">°C</string>
+
+    <string name="title_activity_google_maps">Peta</string>
+    <string name="map_service_key">map_services</string>
+    <string name="map_service">Layanan Peta</string>
+
+    <string-array name="map_service_list">
+        <item>OpenStreetMap</item>
+        <item>Google Map</item>
+    </string-array>
+
+    <string-array name="map_service_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="google_map">Peta Google</string>
+    <string name="osm_map">OpenStreetMap</string>
+    <string name="no_location_specified">Lokasi tidak ditentukan</string>
+    <string name="compass_default_0">0</string>
+    <string name="unknown">Tidak dikenal</string>
+
+</resources>

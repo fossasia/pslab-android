@@ -38,11 +38,6 @@
             android:icon="@drawable/ic_info_black_24dp"
             android:title="@string/nav_about_us" />
         <item
-            android:id="@+id/nav_rate"
-            android:checkable="true"
-            android:icon="@android:drawable/btn_star"
-            android:title="@string/rateapp" />
-        <item
             android:id="@+id/nav_buy_pslab"
             android:checkable="true"
             android:icon="@drawable/ic_shopping_cart_black_24dp"

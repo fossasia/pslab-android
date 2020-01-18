@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="app_name">PSLab</string>
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
@@ -1037,5 +1037,5 @@
     <string name="no_location_specified">Location not specified</string>
     <string name="compass_default_0">0</string>
     <string name="unknown">Unknown</string>
-    <string name="rateapp">Rate App</string>
+
 </resources>

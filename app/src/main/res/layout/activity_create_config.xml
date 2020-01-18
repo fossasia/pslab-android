@@ -29,15 +29,12 @@
                     style="@style/Base.TextAppearance.AppCompat.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:text="@string/select_instrument_title" />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/select_instrument_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textAlignment="center" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -52,7 +49,6 @@
                     style="@style/Base.TextAppearance.AppCompat.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:text="@string/time_interval_title" />
 
                 <EditText
@@ -63,7 +59,6 @@
                     android:imeOptions="actionDone"
                     android:inputType="number"
                     android:textAlignment="center"
-                    android:layout_gravity="center"
                     android:layout_weight="1"/>
 
                 <android.support.v7.widget.AppCompatSpinner

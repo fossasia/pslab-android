@@ -468,9 +468,7 @@ public class PowerSourceActivity extends AppCompatActivity {
                             , getString(R.string.open), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Intent intent = new Intent(PowerSourceActivity.this, DataLoggerActivity.class);
-                                    intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.power_source));
-                                    startActivity(intent);
+                                    startActivity(new Intent(PowerSourceActivity.this, DataLoggerActivity.class));
                                 }
                             }, Snackbar.LENGTH_LONG);
 

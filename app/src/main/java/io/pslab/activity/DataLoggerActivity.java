@@ -129,9 +129,6 @@ public class DataLoggerActivity extends AppCompatActivity {
             case "Gas Sensor":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.gas_sensor));
                 break;
-            case "Dust Sensor":
-                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.dust_sensor));
-                break;
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
                 getSupportActionBar().setTitle(getString(R.string.logged_data));

@@ -109,8 +109,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 webView.loadUrl("https://pslab.io");
-                webView.getSettings().setDomStorageEnabled(true);
-                webView.getSettings().setJavaScriptEnabled(true);
                 svHomeContent.setVisibility(View.GONE);
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
