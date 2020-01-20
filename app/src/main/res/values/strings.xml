@@ -1,70 +1,70 @@
 ﻿<resources>
-    <string name="app_name">PSLab</string>
-    <string name="openDrawer">open_drawer</string>
-    <string name="closeDrawer">close_drawer</string>
+   < string  name = " app_name " > PSLab </ string >
+    < string  name = " openDrawer " > open_drawer </ string >
+    < string  name = " closeDrawer " > close_drawer </ string >
 
-    <string name="Toast_double_tap">Press again to close PSLab</string>
-    <string name="Toast_magnetic_not_present">"The sensor required for this instrument is not present in your device"</string>
+    < string  name = " Toast_double_tap " > PSLab </ string > ని మూసివేయడానికి మళ్ళీ నొక్కండి
+    < string  name = " Toast_magnetic_not_present " > "ఈ పరికరానికి అవసరమైన సెన్సార్ మీ పరికరంలో లేదు" </ string >
 
-    <string name="nav_device">Connect Device</string>
-    <string name="nav_instruments">Instruments</string>
-    <string name="nav_settings">Settings</string>
-    <string name="nav_about_us">About Us</string>
-    <string name="nav_buy_pslab">Buy PSLab</string>
-    <string name="nav_report">Feedback &amp; Bugs</string>
-    <string name="nav_help_feedback">FAQ</string>
-    <string name="nav_share">Share App</string>
-    <string name="nav_config">Generate Config File</string>
-    <string name="pslab_pinlayout">Pin Layout</string>
-    <string name="pslab_pinlayout_front">Pin Layout Front</string>
-    <string name="pslab_pinlayout_back">Pin Layout Back</string>
-    <string name="bluetooth_connect_menu">Bluetooth Connection</string>
-    <string name="bluetooth_wifi_connect_option">Connect using Bluetooth or Wi-Fi</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="wifi">WiFi</string>
-    <string name="bluetooth_scan_text">Scan</string>
-    <string name="bluetooth_stop_text">Stop</string>
-    <string name="scanned_devices_list_title">Scanned Devices</string>
-    <string name="bluetooth_not_supported">Your phone does not support bluetooth</string>
-    <string name="incorrect_IP_address_message">Please enter valid IP address</string>
-    <string name="enter_IP_hint">Enter IP address of ESP module</string>
-    <string name="esp_connect_text">Connect</string>
+    < string  name = " nav_device " > పరికరాన్ని కనెక్ట్ చేయండి </ string >
+    < string  name = " nav_instruments " > ఇన్స్ట్రుమెంట్స్ </ string >
+    < string  name = " nav_settings " > సెట్టింగులు </ string >
+    < string  name = " nav_about_us " > మా గురించి </ string >
+    < string  name = " nav_buy_pslab " > PSLab కొనండి </ string >
+    < string  name = " nav_report " > అభిప్రాయం & amp; బగ్స్ </ string >
+    < string  name = " nav_help_feedback " > తరచుగా అడిగే ప్రశ్నలు </ string >
+    < string  name = " nav_share " > అనువర్తనాన్ని భాగస్వామ్యం చేయండి </ string >
+    < string  name = " nav_config " > కాన్ఫిగర్ ఫైల్‌ను సృష్టించండి </ string >
+    < string  name = " pslab_pinlayout " > పిన్ లేఅవుట్ </ string >
+    < string  name = " pslab_pinlayout_front " > పిన్ లేఅవుట్ ఫ్రంట్ </ string >
+    < string  name = " pslab_pinlayout_back " > లేఅవుట్ వెనుకకు పిన్ చేయండి </ string >
+    < string  name = " bluetooth_connect_menu " > బ్లూటూత్ కనెక్షన్ </ string >
+    < string  name = " bluetooth_wifi_connect_option " > బ్లూటూత్ లేదా Wi-Fi ఉపయోగించి కనెక్ట్ అవ్వండి </ string >
+    < string  name = " bluetooth " > బ్లూటూత్ </ string >
+    < string  name = " wifi " > వైఫై </ string >
+    < string  name = " bluetooth_scan_text " > స్కాన్ </ string >
+    < string  name = " bluetooth_stop_text " > ఆపు </ string >
+    < string  name = " scanned_devices_list_title " > స్కాన్ చేసిన పరికరాలు </ string >
+    < string  name = " bluetooth_not_supported " > మీ ఫోన్ బ్లూటూత్‌కు మద్దతు ఇవ్వదు </ string >
+    < string  name = " wrong_IP_address_message " > దయచేసి చెల్లుబాటు అయ్యే IP చిరునామాను నమోదు చేయండి </ string >
+    < string  name = " enter_IP_hint " > ESP మాడ్యూల్ యొక్క IP చిరునామాను నమోదు చేయండి </ string >
+    < string  name = " esp_connect_text " > కనెక్ట్ </ string >
 
-    <string name="oscilloscope">Oscilloscope</string>
-    <string name="multimeter">Multimeter</string>
-    <string name="logical_analyzer">Logic Analyzer</string>
-    <string name="wave_generator">Wave Generator</string>
-    <string name="sensors">Sensors</string>
-    <string name="power_source">Power Source</string>
-    <string name="record_title">Record current data</string>
+    < string  name = " oscilloscope " > ఓసిల్లోస్కోప్ </ string >
+    < string  name = " multimeter " > మల్టిమీటర్ </ string >
+    < string  name = " logical_analyzer " > లాజిక్ ఎనలైజర్ </ string >
+    < string  name = " wave_generator " > వేవ్ జనరేటర్ </ string >
+    < string  name = " సెన్సార్లు " > సెన్సార్లు </ string >
+    < string  name = " power_source " > శక్తి మూలం </ string >
+    < string  name = " record_title " > ప్రస్తుత డేటాను రికార్డ్ చేయండి </ string >
 
-    <string name="setting_auto_start_key">setting_auto_start</string>
-    <string name="setting_auto_start_summary">Auto start app when PSLab device is connected</string>
-    <string name="settting_auto_start_title">Auto Start</string>
-    <string name="setting_data_format_key">export_data_format_list</string>
-    <string name="setting_data_format_title">Export Data Format</string>
+    < string  name = " setting_auto_start_key " > setting_auto_start </ string >
+    < string  name = " setting_auto_start_summary " > PSLab పరికరం కనెక్ట్ అయినప్పుడు ఆటో ప్రారంభ అనువర్తనం </ string >
+    < string  name = " settleing_auto_start_title " > ఆటో ప్రారంభం </ string >
+    < string  name = " setting_data_format_key " > export_data_format_list </ string >
+    < string  name = " setting_data_format_title " > ఎగుమతి డేటా ఆకృతి </ string >
 
-    <string name="control_item_1">Control</string>
-    <string name="control_item_2">Read</string>
-    <string name="control_item_3">Advanced</string>
+    < string  name = " control_item_1 " > నియంత్రణ </ string >
+    < string  name = " control_item_2 " > చదవండి </ string >
+    < string  name = " control_item_3 " > అధునాతన </ string >
 
-    <string name="about_us_description">The goal of PSLab is to create an Open Source hardware device (open on all layers) that can be used for experiments by teachers, students and citizen scientists. Our tiny pocket lab provides an array of sensors for doing science and engineering experiments. It provides functions of numerous measurement devices including an oscilloscope, a waveform generator, a frequency counter, a programmable voltage, current source and as a data logger.</string>
+    < string  name = " about_us_description " > PSLab యొక్క లక్ష్యం ఉపాధ్యాయులు, విద్యార్థులు మరియు పౌర శాస్త్రవేత్తల ప్రయోగాలకు ఉపయోగపడే ఓపెన్ సోర్స్ హార్డ్‌వేర్ పరికరాన్ని (అన్ని పొరలలో తెరిచి ఉంటుంది) సృష్టించడం. మా చిన్న పాకెట్ ల్యాబ్ సైన్స్ మరియు ఇంజనీరింగ్ ప్రయోగాలు చేయడానికి సెన్సార్ల శ్రేణిని అందిస్తుంది. ఇది ఓసిల్లోస్కోప్, వేవ్‌ఫార్మ్ జనరేటర్, ఫ్రీక్వెన్సీ కౌంటర్, ప్రోగ్రామబుల్ వోల్టేజ్, ప్రస్తుత మూలం మరియు డేటా లాగర్‌తో సహా అనేక కొలత పరికరాల విధులను అందిస్తుంది. </ String >
 
-    <string-array name="nav_item_activity_titles">
-        <item>Instruments</item>
-        <item>Logged Data</item>
-        <item>Connect Device</item>
-        <item>Generate Config File</item>
-        <item>Settings</item>
-        <item>About Us</item>
-        <item>Buy PSLab</item>
-        <item>FAQs</item>
-        <item>Share App</item>
-    </string-array>
+    < string-array  name = " nav_item_activity_titles " >
+        <item > ఇన్స్ట్రుమెంట్స్ </ item >
+        < item > లాగిన్ చేసిన డేటా </ item >
+        < item > పరికరాన్ని కనెక్ట్ చేయండి </ item >
+        < item > కాన్ఫిగర్ ఫైల్‌ను రూపొందించండి </ item >
+        < item > సెట్టింగులు </ item >
+        < item > మా గురించి </ item>
+        <item > PSLab కొనండి </ item >
+        <item > తరచుగా అడిగే ప్రశ్నలు </item>
+        < item > అనువర్తనాన్ని భాగస్వామ్యం చేయండి </ item >
+    </ string-array >
 
-    <string name="application_icon">Application Icon</string>
+    < string  name = " application_icon " > అప్లికేషన్ ఐకాన్ </ string >
 
-    <string-array name="multimeter_knob_states">
+    < string-array  name = " multimeter_knob_states " >
         <item>CH1</item>
         <item>CAP</item>
         <item>AN8</item>
@@ -76,10 +76,10 @@
         <item>ID4</item>
         <item>CH3</item>
         <item>CH2</item>
-    </string-array>
+    </ string-array >
 
-    <string-array name="multimeter_params">
-        <item>CH1</item>
+    < string-array  name = " multimeter_params " >
+          <item>CH1</item>
         <item>CH2</item>
         <item>CH3</item>
         <item>MIC</item>
@@ -91,951 +91,951 @@
         <item>LA2</item>
         <item>LA3</item>
         <item>LA4</item>
-    </string-array>
+    </ string-array >
 
-    <string-array name="multimeter_params_title">
-        <item>Channel 1</item>
-        <item>Channel 2</item>
-        <item>Channel 3</item>
-        <item>Microphone</item>
-        <item>CAP Voltage</item>
-        <item>Voltage</item>
-        <item>Resistance</item>
-        <item>Capacitance</item>
-        <item>Logic Analyzer Pin 1</item>
-        <item>Logic Analyzer Pin 2</item>
-        <item>Logic Analyzer Pin 3</item>
-        <item>Logic Analyzer Pin 4</item>
-    </string-array>
+    < string-array  name = " multimeter_params_title " >
+        <item> ఛానల్ 1 </ item >
+        <item> ఛానల్ 2 </ item >
+       <item> ఛానల్ 3 </ item >
+        <<item>మైక్రోఫోన్</ item >
+        <item> CAP వోల్టేజ్</ item >
+        <item>వోల్టేజ్v
+        <item> ప్రతిఘటన </ item >
+        <item> సామర్థ్యం </ item >
+       <item>లాజిక్ ఎనలైజర్ పిన్ 1 </ item >
+        <item> లాజిక్ ఎనలైజర్ పిన్ 2 </ item >
+        <item> లాజిక్ ఎనలైజర్ పిన్ 3 </ item >
+        <item>లాజిక్ ఎనలైజర్ పిన్ 4 </ item >
+    </ string-array >
 
-    <string-array name="oscilloscope_params">
-        <item>CH1</item>
+    < string-array  name = " oscilloscope_params " >
+      <item>CH1</item>
         <item>CH2</item>
         <item>CH3</item>
         <item>MIC</item>
-    </string-array>
+    </ string-array >
 
-    <string-array name="oscilloscope_params_title">
-        <item>Channel 1</item>
-        <item>Channel 2</item>
-        <item>Channel 3</item>
-        <item>Microphone</item>
-    </string-array>
+    < string-array  name = " oscilloscope_params_title " >
+        <item> ఛానల్ 1</item>
+        <item> ఛానల్ 2</item>
+        <item> ఛానల్ 3</item>
+        <item>మైక్రోఫోన్</item>
+    </ string-array >
 
-    <string-array name="logic_analyzer_params">
+    < string-array  name = " లాజిక్_అనలైజర్_పారామ్స్ " >
         <item>LA1</item>
         <item>LA2</item>
         <item>LA3</item>
         <item>LA4</item>
-    </string-array>
-
-    <string-array name="logic_analyzer_params_title">
-        <item>Logic Analyzer Pin 1</item>
-        <item>Logic Analyzer Pin 2</item>
-        <item>Logic Analyzer Pin 3</item>
-        <item>Logic Analyzer Pin 4</item>
-    </string-array>
-
-    <string-array name="barometer_params">
-        <item>Pressure</item>
-    </string-array>
-
-    <string-array name="accelerometer_params">
-        <item>Ax</item>
-        <item>Ay</item>
-        <item>Az</item>
-    </string-array>
-
-    <string-array name="accelerometer_params_title">
-        <item>Acceleration X axis</item>
-        <item>Acceleration Y axis</item>
-        <item>Acceleration Z axis</item>
-    </string-array>
-
-    <string-array name="luxmeter_params">
-        <item>Lux</item>
-    </string-array>
-
-    <string-array name="interval_units">
-        <item>sec</item>
-        <item>min</item>
-        <item>hr</item>
-        <item>day</item>
-    </string-array>
-    <string name="select_instrument_title">Instrument:</string>
-    <string name="time_interval_title">Time Interval:</string>
-    <string name="time_interval_hint">Logging Interval</string>
-    <string name="create_config_btn_text">Create Config File</string>
-    <string name="select_params_title">Select Params</string>
-    <string name="no_interval_message">Please select logging interval</string>
-    <string name="file_created_success_message">Config file created successfully</string>
-    <string name="file_created_fail_message">Create config file failed</string>
-
-    <string name="id1">ID1</string>
-    <string name="id2">ID2</string>
-    <string name="id3">ID3</string>
-    <string name="id4">ID4</string>
-    <string name="count_pulse">Count Pulse</string>
-    <string name="capacitance_unit">Farad</string>
-    <string name="frequency_unit">Hz</string>
-    <string name="multimeter_voltage_unit">Volts</string>
-    <string name="voltage_channels">Voltage</string>
-    <string name="resistance_abbreviation">\u2126</string>
-    <string name="multimeter_measure">Measure</string>
-
-    <string name="multimeter_angle_1">33</string>
-    <string name="multimeter_angle_3">65</string>
-    <string name="multimeter_angle_4">98</string>
-    <string name="multimeter_angle_5">131</string>
-    <string name="multimeter_angle_6">164</string>
-    <string name="multimeter_angle_7">196</string>
-    <string name="multimeter_angle_8">229</string>
-    <string name="multimeter_angle_9">262</string>
-    <string name="multimeter_angle_10">294</string>
-    <string name="multimeter_angle_11">327</string>
-    <string name="multimeter_angle_12">0</string>
-
-    <string name="set">SET</string>
-    <string name="read">READ</string>
-    <string name="resistance">Resistance</string>
-    <string name="capacitance">Capacitance</string>
-    <string name="frequency">Frequency</string>
-    <string name="count_pulses">Count Pulses</string>
-    <string-array name="ID">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
-    </string-array>
-    <string name="reset">RESET</string>
-    <string name="voltage">Voltage</string>
-    <string name="ch1">CH1</string>
-    <string name="ch2">CH2</string>
-    <string name="ch3">CH3</string>
-    <string name="cap">CAP</string>
-    <string name="sen">SEN</string>
-    <string name="an8">AN8</string>
-    <string name="w1">Wave 1</string>
-    <string name="w2">Wave 2</string>
-    <string name="phase">Phase</string>
-    <string name="output">Output</string>
-    <string name="dutycycle">Duty cycle</string>
-    <string name="sqr1">SQR1</string>
-    <string name="sqr2">SQR2</string>
-    <string name="sqr3">SQR3</string>
-    <string name="sqr4">SQR4</string>
-    <string name="freq_range">10Hz-5kHz</string>
-    <string name="zero">0</string>
-    <string-array name="wave_type">
-        <item>SINE</item>
-        <item>SQUARE</item>
-    </string-array>
-    <string name="digital_outputs">Digital Outputs</string>
-    <string name="configure_PWM">Configure PWM</string>
-    <string name="waveform_generator">Arbitrary Waveform Generator</string>
-    <string name="autoscan">Autoscan</string>
-    <string name="select_sensor">Select Sensor</string>
-
-    <string name="accelerometer">Accelerometer</string>
-    <string name="x_axis">X axis</string>
-    <string name="y_axis">Y axis</string>
-    <string name="z_axis">Z axis</string>
-    <string name="text_max">Max</string>
-    <string name="text_min">Min</string>
-    <string name="meters_per_sec_text">ms&lt;sup&gt;&lt;small&gt;-2&lt;/small&gt;&lt;/sup&gt;</string>
-    <string name="meters_per_sec_html">ms<sup><small>-2</small></sup></string>
-    <string name="radian_per_sec_text">rads&lt;sup&gt;&lt;small&gt;-1&lt;/small&gt;&lt;/sup&gt;</string>
-    <string name="radian_per_sec_html">rads<sup><small>-1</small></sup></string>
-    <string name="time_seconds">Time (s)</string>
-    <string name="accelerometer_intro">Accelerometer is used to measure acceleration of a body along the X, Y and Z axis.\n</string>
-    <string name="accelerometer_description_text">\n\nThe figure above shows the direction of all the three axis when the mobile is held straight.\n\nSteps to measure acceleration in PSLab app:\n\n\u2022 Hold the device as shown in the above figure.\n\n\u2022 Accelerate the device along any one or multiple axis.\n\n\u2022 Observe the values in the cards or the plotted graph of any particular axis.\n\nThe Accelerometer instrument can also be used to measure the acceleration of a moving body by placing the device on/inside the body and then accelerating the body.\n\nNOTE: Don\'t accelerate the body if the device isn\'t properly attached else the device could be damaged. </string>
-    <string name="no_accelerometer_sensor">Device does not have any accelerometer sensor</string>
-
-    <string name="not_connected">Not Connected</string>
-    <string name="initialising_wait">Initialising Wait…</string>
-    <string name="device_connected_successfully">Device Connected Successfully</string>
-    <string name="device_not_found">No USB Device Found</string>
-    <string name="sensor_not_connected_tls">Sensor not connected</string>
-
-    <string name="time_unit_la">Time (ms)</string>
-    <string name="view">VIEW</string>
-
-    <!-- Experiment Headers -->
-    <!-- Experiments -->
-
-
-    <string name="hmc5883l">hmc5883l</string>
-    <string name="mpu6050">mpu6050</string>
-    <string name="sht21">sht21</string>
-    <string name="tsl2561">tsl2561</string>
-    <string name="ads1115">ads1115</string>
-    <string name="mlx90614">mlx90614</string>
-    <string name="bmp180">bmp180</string>
-    <string name="mpu925x">mpu925x</string>
-
-    <string name="raw_data">Raw Data</string>
-    <string name="configure">Configure</string>
-    <string name="plot">Plot</string>
-
-    <string name="data">Data</string>
-    <string name="bx">Bx</string>
-    <string name="by">By</string>
-    <string name="bz">Bz</string>
-    <string name="ax">Ax</string>
-    <string name="ay">Ay</string>
-    <string name="az">Az</string>
-    <string name="gx">Gx</string>
-    <string name="gy">Gy</string>
-    <string name="gz">Gz</string>
-    <string name="temp">Temp</string>
-    <string name="luminosity">Luminosity</string>
-    <string name="humidity">Humidity</string>
-    <string name="object_temp">Object Temp</string>
-    <string name="ambient_temp">Ambient Temp</string>
-    <string name="temperature">Temperature</string>
-    <string name="altitude">Altitude</string>
-    <string name="pressure">Pressure</string>
-    <string name="gyro_range">Set Gyro Range</string>
-    <string name="accel_range">Set Accel Range</string>
-    <string name="kalman">Kalman filter</string>
-    <string name="power_up">Power Up</string>
-    <string name="full_spectrum">Full spectrum</string>
-    <string name="infrared">Infrared</string>
-    <string name="visible">Visible</string>
-    <string name="set_gain">Set Gain</string>
-    <string name="set_timing">Set Timing</string>
-    <string name="set_channel">Set Channel</string>
-    <string name="set_rate">Set Rate</string>
-    <string name="plot_accelerometer">Plot - Accelerometer</string>
-    <string name="plot_gyroscope">Plot - Gyroscope</string>
-    <string name="rad">(rad)</string>
-    <string name="angle">Angle</string>
-    <string name="time">Time (sec)</string>
-    <string name="infinite_symbol">∞</string>
-    <string name="timegap">Timegap</string>
-    <string name="no_of_samples">No. of samples</string>
-    <string name="temp2">Temp.</string>
-    <string name="alt">Alt.</string>
-    <string name="meter">(m)</string>
-    <string name="pascal">(Pa)</string>
-
-    <string-array name="tsl2561_gain_spinner">
-        <item>No gain</item>
-        <item>1x</item>
-        <item>16x</item>
-    </string-array>
-    <string-array name="mpu6050_gyro_spinner">
-        <item>250</item>
-        <item>500</item>
-        <item>1000</item>
-        <item>2000</item>
-    </string-array>
-
-    <string-array name="mpu6050_accel_spinner">
-        <item>2</item>
-        <item>4</item>
-        <item>8</item>
-        <item>16</item>
-    </string-array>
-
-    <string-array name="mpu6050_kalman_spinner">
-        <item>0.01</item>
-        <item>0.1</item>
-        <item>1</item>
-        <item>10</item>
-        <item>100</item>
-        <item>1000</item>
-        <item>10000</item>
-        <item>null</item>
-    </string-array>
-
-    <string-array name="mpu6050_power_spinner">
-        <item></item>
-        <item></item>
-    </string-array>
-
-    <string-array name="mpu925x_gyro_spinner">
-        <item>250</item>
-        <item>500</item>
-        <item>1000</item>
-        <item>2000</item>
-    </string-array>
-
-    <string-array name="mpu925x_accel_spinner">
-        <item>2</item>
-        <item>4</item>
-        <item>8</item>
-        <item>16</item>
-    </string-array>
-
-    <string-array name="mpu925x_kalman_spinner">
-        <item>0.01</item>
-        <item>0.1</item>
-        <item>1</item>
-        <item>10</item>
-        <item>100</item>
-        <item>1000</item>
-        <item>10000</item>
-        <item>null</item>
-    </string-array>
-
-    <string-array name="mpu925x_power_spinner">
-        <item></item>
-        <item></item>
-    </string-array>
-
-
-    <string-array name="ads1115_gain_spinner">
-        <item>GAIN_TWOTHIRDS</item>
-        <item>GAIN_ONE</item>
-        <item>GAIN_TWO</item>
-        <item>GAIN_FOUR</item>
-        <item>GAIN_EIGHT</item>
-        <item>GAIN_SIXTEEN</item>
-    </string-array>
-
-    <string-array name="ads1115_channel_spinner">
-        <item>UNI_0</item>
-        <item>UNI_1</item>
-        <item>UNI_2</item>
-        <item>UNI_3</item>
-        <item>DIFF_01</item>
-        <item>DIFF_23</item>
-    </string-array>
-
-    <string-array name="ads1115_rate_spinner">
-        <item>8</item>
-        <item>16</item>
-        <item>32</item>
-        <item>64</item>
-        <item>128</item>
-        <item>250</item>
-        <item>475</item>
-        <item>860</item>
-    </string-array>
-
-    <string-array name="lux_sensor_list">
-        <item>In-built Sensor</item>
-        <item>BH1750</item>
-        <item>TSL2561</item>
-    </string-array>
-
-    <string-array name="thermo_sensor_list">
-        <item>In-built Sensor</item>
-        <item>SHT21</item>
-    </string-array>
-
-    <string-array name="thermo_unit_list">
-        <item>°F</item>
-        <item>°C</item>
-    </string-array>
-
-    <string-array name="lux_sensor_list_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
-    <string-array name="thermo_sensor_list_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
-    <string name="device_not_connected">Device Not Connected</string>
-    <string name="use_autoscan">Use Autoscan button to find connected sensors to PSLab device</string>
-    <string name="sensor_not_connected">No sensors connected via I2C. Try selecting a sensor from the below
-        list and learn how to use Inter-Integrated Circuit (I2C) bus. After connecting, click Autoscan</string>
-    <string name="scanning">Scanning...</string>
-
-    <string name="voltage_unit">(V)</string>
-    <string name="volts">volts</string>
-    <string name="seconds">(s)</string>
-    <string name="lux">Lx</string>
-    <string name="pressure2">Press.</string>
-    <string name="plot_altitude">Plot - Altitude</string>
-    <string name="celcius">(°C)</string>
-    <string name="plot_temperature">Plot - Temperature</string>
-    <string name="guass">Guass</string>
-    <string name="guass_unit">(Ga)</string>
-    <string name="humid">Humid.</string>
-    <string name="humid_unit">(RH)</string>
-    <string name="plot_humidity">Plot - Humidity</string>
-    <string name="illum">Illum.</string>
-    <string name="lux2">(Lux)</string>
-    <string name="acceleration">Acc.</string>
-    <string name="acceleration_unit">(m/s²)</string>
-    <string name="range">Range</string>
-    <string name="wave1">Wave1</string>
-    <string name="wave2">Wave2</string>
-
-    <string name="start_logging">Start Logging</string>
-    <string name="stop_logging">Stop Logging</string>
-    <string name="stop">Stop</string>
-    <string name="cancel">Cancel</string>
-    <string name="ok">OK</string>
-    <string name="save_data">Save Data</string>
-    <string name="view_logged_data">View Logged Data</string>
-    <string name="export_logged_data">Export Logged Data</string>
-    <string name="sensor_logged_data">Sensor Logged Data</string>
-
-    <string name="full">Full</string>
-
-    <string name="pocket_science_logo">Pocket Science Logo</string>
-
-    <string name="timebase_microsec">%1$.2f μs</string>
-    <string name="timebase_milisec">%1$.2f ms</string>
-    <string name="time_space">Time </string>
-    <string name="unit_μs">(μs)</string>
-    <string name="label_ch1">CH1</string>
-    <string name="label_V">(V)</string>
-    <string name="label_ch2">CH2</string>
-    <string name="channel_parameters">Channel Parameters</string>
-    <string name="timebase_and_trigger">Timebase and Trigger</string>
-    <string name="data_analysis">Data Analysis</string>
-    <string name="xy_plot">XY Plot</string>
-    <string name="hundred_ms">100ms</string>
-    <string name="hyphen">-</string>
-    <string name="plus">+</string>
-    <string name="select_a_value">Select a Value </string>
-    <string name="ch3_value">CH3 (+/- %1$.1fV)</string>
-    <string name="one_value">1.0</string>
-    <string name="fourier_transforms">Fourier Transforms</string>
-    <string name="timebase">TimeBase</string>
-    <string name="text_view">TextView</string>
-    <string name="device_status_text">PSLab Device not found</string>
-    <string name="select_mic">[SELECT MIC]</string>
-    <string name="oscilloscope_intro">\u2022 Oscilloscope in PSLab gives out many of the functionalities of a
-        commercially available Oscilloscope. It has 4-channels with a MIC in, 2 Sine wave generators and
-        4 PWM square wave generators, can change the timebase, analyses signal and does Sine and Square wave
-        fitting and plots channel to channel voltage.\n\n\u2022 To read from a Sine wave or a square wave, you
-        can connect the Output wave pin and a Channel to the Oscilloscope as follows.</string>
-    <string name="oscilloscope_desc">\u2022 Above shown figure has a connection from SQ1 to CH1 and SI1
-        to CH2.\n\n
-        \u2022 Once you have generated a wave from the Wave Generator instrument connect the relevant pins
-        and observe it from the Oscilloscope by ticking the relevant channel in Channel parameters. If you
-        are using CH1 pin, select CH1 from channel parameters.</string>
-    <string name="channel_param_desc">From this Setting, you can change the Channel that needs
-        to be osbserved from the plot.\n\n\u2022 Tick the check boxes to plot the relevant Channel.\n\n
-        \u2022 Can change the Y-axis voltage range in the plot using the spinner next to the Channel.\n\n
-        \u2022 For the fourth Channel, you can choose either In-built microphone or an external mic. If
-        you are to use an external microphone, the connection is as follows.</string>
-    <string name="channel_param_mic">\u2022 The Positive terminal of the MIC should be connected with the MIC pin
-        and negative terminal should be conneted with the GND pin of PSLab device</string>
-    <string name="timebase_desc">This setting gives you the control of the range of Time axis(X-axis)\n\n
-        \u2022 The timebase slidder can be used to increase or decrease the signal capturing time.
-        Can change the range from 875.0 micro seconds to 102.4 milli seconds.\n\n
-        \u2022 This will be useful to capture periodic wave signals in the given range for analysis.\n\n
-        \u2022 You can use the trigger to set voltage value, so that when the signal exceeds the given
-        value, plot will halt.</string>
-    <string name="data_analysis_desc">\u2022 Using this Setting, the mathematical function of the analysed signal
-        can be found. Can choose the Wave type from Sine or Square and the Channel that needs to be analyzed.\n\n
-        \u2022 Furthermore, analyzed signal\'s Fourier transform can be observed by checking Fourier Transfroms check box.</string>
-    <string name="xy_plot_desc">\u2022 This is used to plot the Channel to Channel voltage in a X-Y plot having
-        voltage as the unit for the both axes relevant for the corresponding Channels.</string>
-
-    <string-array name="sensor_click_list">
-        <item>Export Data</item>
-        <item>Share Data</item>
-    </string-array>
-
-    <string name="no_permission_for_maps">Not sufficient permission to load map</string>
-
-    <string-array name="export_data_format_list">
-        <item>TXT Format</item>
-        <item>CSV Format</item>
-    </string-array>
-    <string-array name="export_data_format_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
-    <string name="other">Other</string>
-    <string name="trigger">Trigger</string>
-    <string name="enable_xy_plot">Enable XY plot</string>
-    <string name="plot_hyphen_pressure">Plot - Pressure</string>
-    <string name="plot_object_temperature">Plot - Object Temperature</string>
-    <string name="plot_ambient_temperature">Plot - Ambient Temperature</string>
-
-    <string name="search_menu_title">Search</string>
-
-    <string name="oscilloscope_description">Allows observation of varying signal voltages</string>
-    <string name="multimeter_description">Measure voltage, current, resistance and capacitance</string>
-    <string name="logic_analyzer_description">Captures and displays signals from digital systems</string>
-    <string name="sensors_description">Allows logging of data returned by sensor connected</string>
-    <string name="wave_generator_description">Generates arbitrary analog and digital waveforms</string>
-    <string name="power_source_description">Generates programmable voltage and currents</string>
-    <string name="lux_meter_description">Measures the ambient light intensity</string>
-    <string name="compass_description">Three axes magnetometer pointing to magnetic north</string>
-
-    <string name="tile_instrument_horizontal_bars">Horizontal bars to match icon</string>
-    <string name="tile_instrument_vertical_bars">Verticle bars to match tile icon</string>
-
-    <string name="accelerometer_description">Measures the Linear acceleration in XYZ directions</string>
-    <string name="web_view_link_text">What is PSLab Device?</string>
-    <string name="pslab_connect_text">Steps to connect the PSLab Device</string>
-    <string name="pslab_instruction_1">Connect a micro USB(Mini B) to PSLab</string>
-    <string name="pslab_instruction_2">Connect the other end of the micro USB cable to a OTG</string>
-    <string name="pslab_instruction_3">Connect the OTG to the phone</string>
-    <string name="number_one">1.</string>
-    <string name="number_two">2.</string>
-    <string name="number_three">3.</string>
-
-    <string name="compass">Compass</string>
-    <string name="text_parallel_axes">Select axes parallel to ground</string>
-    <string name="compass_test_value">360°</string>
-    <string name="show_axis_help">Get current axis</string>
-
-    <string name="compass_bottom_sheet_heading">Compass</string>
-    <string name="compass_bottom_sheet_text">Compass instrument is used to navigate and to find magnetic field along axis. Compass instrument in PSLab app can be used with built-in mobile sensors or with sensor HMC5883L.</string>
-    <string name="compass_bottom_sheet_description">\nSteps to calibrate the axis while using built-in sensor:\n\n
-        \u2022 As shown in the above figure, hold the device in vertical position.\n\n
-        \u2022 Now, choose the axis along which the compass should work.\n\n
-        \u2022 Finally, go to Compass instrument and select the radio button next to the axis chosen.\n\n
-        \u2022 Move the device around the chosen axis and see the compass rotating showing the angle made by the device with the actual axis.</string>
-    <string name="no_compass_sensor">Your device does not have sensor to support Compass</string>
-    <string name="compass_X_axis">X-axis</string>
-    <string name="compass_Y_axis">Y-axis</string>
-    <string name="compass_Z_axis">Z-axis</string>
-    <string name="value_null">0</string>
-    <string name="indicator_description">Indicates device connection</string>
-
-    <string-array name="edge_choices">
-        <item>EVERY EDGE</item>
-        <item>EVERY FALLING EDGE</item>
-        <item>EVERY RISING EDGE</item>
-        <item>EVERY FOURTH RISING EDGE</item>
-        <item>DISABLED</item>
-    </string-array>
-
-    <string-array name="channel_choices">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
-    </string-array>
-
-    <string name="no_data_generated">No Data Generated</string>
-    <string name="needs_implementation">Yet to be implemented</string>
-
-    <string name="analyze_input">Analyze</string>
-    <string name="channel_selection_heading">Channel Selection</string>
-
-    <string name="power_card_pv1">PV1</string>
-    <string name="power_card_pv2">PV2</string>
-    <string name="power_card_pv3">PV3</string>
-    <string name="power_card_pcs">PCS</string>
-
-    <string name="schematic_desc">Schematic image goes here</string>
-    <string name="donot_show_again">Don\'t show again</string>
-    <string name="ok_button_text">OK</string>
-
-    <string name="multimeter_dialog_heading">Multimeter</string>
-    <string name="multimeter_default_value">0.00</string>
-    <string name="multimeter_configurations">Multimeter Configurations</string>
-    <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element. \n\n\u2022 CH1 and CH2 can read a free range of voltage. CH3, SEN, CAP, AN8 can only read from 0V to 3.30V</string>
-    <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.\n\n
-        <b>Different Sections</b>\n\n
-        <b>Resistance:</b> Measures the resistance of the element connected between the SEN and GND pin of the PSLab device.\n\n
-        <b>Capacitance:</b> Measures the capacitance of the element connected between the CAP and GND pin of the PSLab device.\n\n
-        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as AN8.\n\n
-        <b>Frequency:</b> Measures the frequency across any element connected between any of ID and GND pins.\n\n
-        <b>Count Pulse:</b> Measures the pulse of any wave through an element connected between any of ID and GND pins.\n\n
-    </string>
-
-    <string name="show_guide">Show Guide</string>
-    <string name="powersource_dialog_heading">Power Source</string>
-    <string name="powersource_dialog_text">PSLab device can generate voltages from +5V to -5V at a resolution of 10mV</string>
-    <string name="powersource_dialog_description">
-        \u2022 Connect one wire to PV1 and another wire to GND to generate voltages between +5V to -5V.\n\n
-        \u2022 Similarly connect wires between PV2 to generate voltages between +3.3V to -3.3V\n\n
-        \u2022 Use PV3 pin to generate voltages between 0V to +3.3V\n\n
-        \u2022 PCS pin is used to supply a constant current between PCS pin and a GND pin in a range of 3.3mA
-    </string>
-
-    <string name="logic_analyzer_dialog_text">Logic Analyzer is an instrument used to find out the time relationship between different digital pulses. The Logic Analyzer available in the PSLab app can be operated as follows :\n</string>
-    <string name="logic_analyzer_dialog_description">\n\u2022 First step is to connect the source/s producing digital pulses with the measuring pin/s i.e. ID1, ID2, ID3 and/or ID4.\n\n\u2022 As shown in the figure, square wave pins SQR1, SQR2, SQR3 and/or SQR4 can be used if no other source is available for generating digital pulses.\n\n\u2022 Next step is to select the channel mode i.e. the number of IDx pins in use.\n\n\u2022 The last step is to select proper channel and edges (that needs to be analyzed) combination from the list provided for each pin in use.\n\n\u2022 Now press "Analyze" button and wait for the data to be fetched from the device. Once the data is fetched, the data will be plotted to analyze.</string>
-
-    <string name="wave_name_holder">Triangular</string>
-    <string name="freq_text">Frequency :</string>
-    <string name="unit_hz">Hz</string>
-    <string name="text_phase_colon">Phase :</string>
-    <string name="text_phase">Phase</string>
-    <string name="deg_text">\u00b0</string>
-    <string name="selected_text_holder">Wave Frequency :</string>
-    <string name="text_sq1">SQR1</string>
-    <string name="text_sq2">SQR2</string>
-    <string name="text_sq3">SQR3</string>
-    <string name="text_sq4">SQR4</string>
-    <string name="text_duty_colon">Duty :</string>
-    <string name="text_duty">Duty</string>
-    <string name="frequecy_colon">Frequency :</string>
-    <string name="set_lowercase">Set</string>
-    <string name="unit_percent">%</string>
-    <string name="text_freq">Freq</string>
-    <string name="text_waveform">Waveform</string>
-    <string name="text_analog">Analog</string>
-    <string name="text_pwm">PWM</string>
-    <string name="view_text">View</string>
-    <string name="produce_sound_text">Produce Sound</string>
-    <string name="stop_sound_text">Stop Sound</string>
-    <string name="save_text">Save</string>
-    <string name="phase_holder_text">45\u00b0</string>
-    <string name="duty_holder_text">50 %</string>
-    <string name="open_instrument">Open instrument</string>
-
-    <string name="reference_wave_title">Reference</string>
-    <string name="built_in_mic_option">In-Built MIC</string>
-    <string name="pslab_mic_option">PSLab MIC</string>
-    <string name="sine">Sine</string>
-    <string name="triangular">Triangular</string>
-    <string name="square">Square</string>
-    <string name="wave_frequency">Wave Frequency :</string>
-    <string name="phase_offset">Phase Offset :</string>
-    <string name="pwm_phase">PWM Phase :</string>
-    <string name="duty_cycle">Duty Cycle:</string>
-    <string name="mode">Mode</string>
-    <string name="text_digital">Digital</string>
-
-    <string name="text_connected">Connected</string>
-    <string name="text_disconnected">Disconnected</string>
-
-    <string name="ir_thermometer">Thermometer</string>
-    <string name="ir_thermometer_intro">\u2022 The Thermometer can be used to measure the temperature. This instruments
-    is compatible with the MLX-90614 Infrared thermo sensor.\n\n
-    \u2022 When using the sensor MLX-90614, connect the sensor to PSLab device as shown below</string>
-    <string name="ir_thermometer_desc">\u2022 The above pin configuration has to be same except for the pin
-    GND. You can use any of the PSLab device GND pins.\n</string>
-
-    <string name="robotic_arm_second_unit">s</string>
-    <string name="robotic_arm_degree_symbol">\u00B0</string>
-
-    <string name="high_limit">High Limit</string>
-    <string name="update_period">Update Period</string>
-    <string name="max_lx">Max (Lx)</string>
-    <string name="min_lx">Min (Lx)</string>
-    <string name="avg_lx">Avg (Lx)</string>
-    <string name="no_lux_sensor">Device does not have a Lux sensor</string>
-    <string name="active_sensor">Active Sensor</string>
-    <string name="setting_baro">setting_baro_sensor_type</string>
-    <string name="setting_compass">setting_compass_sensor_type</string>
-    <string name="setting_accelerometer">setting_accelerometer_sensor_type</string>
-    <string name="include_location">Include the location data in the logged file</string>
-    <string name="location_sensor">include_location_sensor_data</string>
-    <string name="include_cap">Include Location Data</string>
-    <string name="time_string_accelerometer">Please provide time interval at which data will be updated</string>
-    <string name="time_string_lux">Please provide time interval at which data will be updated (100 ms to 1000 ms)</string>
-    <string name="time_string_baro">Please provide time interval at which data will be updated (100 ms to 2000 ms)</string>
-    <string name="setting_baro_update">setting_baro_update_period</string>
-    <string name="setting_lux_update">setting_lux_update_period</string>
-    <string name="setting_gyro_update">setting_gyro_update_period</string>
-    <string name="setting_accelerometer_update">setting_accelerometer_update_period</string>
-    <string name="default_value_baro">1.10</string>
-    <string name="default_value_lux">1</string>
-    <string name="default_value_acceleration">10</string>
-    <string name="dialogue_msg_acceleration">Please provide maximum limit of acceleration value to be recorded</string>
-    <string name="dialogue_msg_atm">Please provide maximum limit of atm value to be recorded</string>
-    <string name="dialogue_msg_lux">Please provide maximum limit of Lux value to be recorded (10 Lx to 10000 Lx)</string>
-    <string name="dialogue_msg_gyro">Please provide maximum limit of angular velocity to be recorded (0 rad/s to 1000 rad/s)</string>
-    <string name="update_period_msg">Entered Update Period is not within the limits!</string>
-    <string name="high_limit_msg">Entered High Limit is not within the limits!</string>
-    <string name="high_limit_baro">setting_baro_high_limit</string>
-    <string name="high_limit_lux">setting_lux_high_limit</string>
-    <string name="high_limit_gyro">setting_gyro_high_limit</string>
-    <string name="high_limit_acceleration">setting_accelerometer_high_limit</string>
-    <string name="setting_lux_type">setting_lux_sensor_type</string>
-    <string name="no_file_selected">No file was selected</string>
-    <string name="setting_lux_sensor_gain">setting_lux_sensor_gain</string>
-    <string name="setting_gyro_sensor_gain">setting_gyro_sensor_gain</string>
-    <string name="setting_accelerometer_sensor_gain">setting_accelerometer_sensor_gain</string>
-    <string name="set_gain_sensor">Please set gain of the sensor</string>
-    <string name="sensor_gain">Sensor Gain</string>
-    <string-array name="lux_sensors">
-        <item>Built-In</item>
-        <item>BH1750</item>
-        <item>TSL2561</item>
-    </string-array>
-    <string-array name="thermo_sensors">
-        <item>Built-In</item>
-        <item>TSL2561</item>
-    </string-array>
-
-    <string name="save_csv_data">Export Data</string>
-    <string name="delete_csv_data">Delete CSV Data</string>
-    <string name="record_csv_data">Record Data</string>
-
-    <string name="incorrect_import_format">File format does not match device log format</string>
-    <string name="import_log_action">Import Log</string>
-    <string name="import_data_log_no_selection_error">Kindly select one of the devices</string>
-    <string name="import_log_positive_button">Select</string>
-
-    <string name="data_recording_with_location">Data recording started with location</string>
-    <string name="data_recording_with_nogps">Data recording started but GPS is off</string>
-    <string name="data_recording_with_gps_off">Recorded data will not contain location</string>
-    <string name="data_recording_without_location">Data recording started without location</string>
-    <string name="no_location_data">No location data in this log</string>
-
-    <string name="data_recording_start">Data Recording: Started</string>
-    <string name="data_recording_paused">Data Recording: Paused</string>
-    <string name="data_deleted">Recorded data deleted successfully</string>
-    <string name="nothing_to_delete">Nothing to delete</string>
-    <string name="log_deleted">Log deleted</string>
-    <string name="nothing_to_export">Please record some data</string>
-    <string name="csv_store_text">CSV file stored at </string>
-
-    <string name="delete_warning">Are you sure you want to delete this file?</string>
-    <string name="delete_file">Delete File</string>
-    <string name="delete_capital">DELETE</string>
-    <string name="delete">Delete</string>
-    <string name="delete_confirmation">Are you sure you want to delete this log</string>
-
-    <string name="allow_gps">Allow GPS</string>
-    <string name="allow_gps_info">Please turn on GPS to include the current location in the logged file</string>
-    <string name="prmsn_denied_storage">Permission denied for storage</string>
-
-    <string name="show_guide_text">Show Guide</string>
-    <string name="hide_guide_text">Hide Guide</string>
-
-    <string name="wave_gen_guide_intro">The wave generator can be used to generate different types of waves like
-        Sine wave, Square wave, Saw Tooth wave and allow us to changes their characteristics like frequency, phase, duty.
-        \nIt also allows us to produce PWM signals having different phase and duty.</string>
-
-    <string name="sine_wave_instn">
-        \u2022 Connect the Wave pins S1 and S2 to the channel pins CH1, CH2 as shown in the above figure\n\n
-        \u2022 Select the Wave1 button for S1 pin and Wave2 button for S2 pin\n\n
-        \u2022 Press Sine image button for Sine wave and Saw-Tooth image button for Saw-Tooth wave\n\n
-        \u2022 Set their respective frequencies and phase difference(optional) using buttons in waveform panel\n\n
-        \u2022 Press the View button to view the waves in oscilloscope
-    </string>
-
-    <string name="square_wave_instn">
-        \u2022 Connect the Wave pins SQ1 to the channel pin CH1 as shown in the above figure\n\n
-        \u2022 Ensure the mode is selected to the Square, if not press the mode button to switch to Square mode\n\n
-        \u2022 Select the SQ1 button\n\n
-        \u2022 Set its Frequency and Duty Cycle\n\n
-        \u2022 Press the View button to view the square wave in oscilloscope
-    </string>
-
-    <string name="pwm_wave_inst">
-        \u2022 Switch over to PWM mode(In this mode S1 and S2 pin will be disabled)\n\n
-        \u2022 Set the common frequency for all the SQ pins\n\n
-        \u2022 Set the duty and phase for all the SQ pins\n\n
-        \u2022 Press View button to generate the PWM signals </string>
-
-    <string name="gen_sine_wave_text">To generate Sine wave or Saw-Tooth wave:</string>
-    <string name="gen_sq_text">To generate Square wave</string>
-    <string name="gen_pwm_text">Similarly, to produce four different PWM signal</string>
-
-    <string name="question">Q:</string>
-    <string-array name="faq_questions">
-        <item>What is Pocket Science Lab? What can I do with it?</item>
-        <item>Where can I buy a Pocket Science Lab?</item>
-        <item>Where can I download the Android App for Pocket Science Lab?</item>
-        <item>Where can I download the desktop app for Pocket Science Lab for Windows, Linux and Mac?</item>
-        <item>Do you have an iOS app for Apple devices?</item>
-        <item>How can I connect to the device? What kind of USB cable do I need? What is an OTG USB cable?</item>
-        <item>I found a bug in one of your apps or hardware. What to do? Where should I report it?</item>
-        <item>Can I record or save data in the apps and export or import it?</item>
-        <item>My Android phone already has some sensors, can I use them with the PSLab app as well?</item>
-        <item>Which external sensors can I use with a PSLab device and the apps? Which ones are compatible?</item>
-        <item>How can I use the Pocket Science Lab as an independent data logger without the phone or desktop connected?</item>
-        <item>It is cool, that PSLab is Open Hardware! Where can I find the schematics and parts list of Pocket Science Lab?</item>
-        <item>Who develops PSLab? When did you start it? What is the story behind it?</item>
-        <item>I found a mistake on the website, where can I submit the issue?</item>
-    </string-array>
-
-    <string name="answer">A:</string>
-    <string-array name="faq_answers">
-        <item>Pocket Science Lab (PSLab) is a small USB powered hardware board that can be used for measurements and experiments. It works as an extension for Android phones or PCs. PSLab comes with a built-in Oscilloscope, Multimeter, Wave Generator, Logic Analyzer, Power Source, and many more instruments. It can also be used as a robotics control app. And, we are constantly adding more digital instruments. PSLab is many devices in one. Simply connect two wires to the relevant pins (description is on the back of the PSLab board) and start measuring. You can use our Open Source Android or desktop app to view and collect the data. You can also plug in hundreds of compatible I²C standard sensors to the PSLab pin slots. It works without the need for programming. So, what experiments you do is just limited to your imagination!</item>
-        <item>There is an overview page for shops where you can buy a Pocket Science Lab device in different regions on the &lt;a href = \"https://pslab.io/shop/\"&gt;website at https://pslab.io/shop/&lt;/a&gt;.</item>
-        <item>The app can be downloaded from &lt;a href = \"https://f-droid.org/en/packages/io.pslab/\"&gt;F-Droid&lt;/a&gt; or &lt;a href = \"https://play.google.com/store/apps/details?id=io.pslab\"&gt;Play Store&lt;/a&gt;. Simply click on the links to be directed over!</item>
-        <item>We are developing a desktop app for Windows, Linux and Mac in &lt;a href = \"https://github.com/fossasia/pslab-desktop/tree/install\"&gt;our desktop Git repository. You can find it in the install branch of the project here&lt;/a&gt;. The app is still under development. We are using technologies like Electron and Python, that work on all platforms. However, to make the final installer work everywhere requires some tweaks and improvements here and there. So, please expect some glitches. You can use the tracker in the repository to submit issues, bugs and feature requests.</item>
-        <item>Unfortunately Apple has tight restrictions and controls users in a way that prevents them to connect other hardware to their own Apple devices. Many people argue that this is against the freedom of users. The majority of hardware producers are not able to provide options to connect their products with Apple devices. Apple in many cases simply does not permit non-Apple products to be connected with its phones, pads and other hardware. It is only sometimes possible after a long and expensive process, but even if we would try to go through such a process it is not sure, that it would be possible to get Apple’s cooperation to connect a Pocket Science Lab. Due to Apple’s restrictive policies and proprietary approach that restricts the freedom of users of Apple products we are not currently able to provide an iOS app. The community regularly discusses new approaches, but unfortunately we have not found a solution yet. Apple does not have an interest to support users due to its main objective of profit generation instead of allowing users to use their devices in a way that they want. Apple’s behavior is seen by some in a way that it restricts basic human rights and the freedom of people who happen to be users of Apple products.</item>
-        <item>To connect to the device you need an OTG USB cable (&lt;a href = \"https://en.wikipedia.org/wiki/USB_On-The-Go\"&gt;OTG = On the go&lt;/a&gt;) which is a USB cable that allows connected devices to switch back and forth between the roles of host and device. &lt;u&gt;USB cables that are not OTG compatible will NOT work&lt;/u&gt;. It is also possible to extend the PSLab with an ESP WiFi chip or a Bluetooth chip and communicate through these gateways using the Android app. You can refer to the &lt;a href = \"https://github.com/fossasia/pslab-hardware\"&gt;hardware developer documentation and code on GitHub for more details here&lt;/a&gt;.</item>
-        <item>We have issue trackers in all our projects. They are currently hosted on GitHub. In order to submit a bug or feature request you need to login to the service. &lt;a href = \"https://github.com/fossasia?utf8=%E2%9C%93&amp;q=pslab\"&gt;A list of our PSLab repositories is here&lt;/a&gt; (scroll down a bit, when you access this page).</item>
-        <item>Yes, we have implemented a record and play function or a way to save and open configurations in the instruments on the Android and desktop app. Data you record can be imported into the apps and viewed. This feature is still under heavy development, but works well in most places. You can find it in the top bar of the apps. There are buttons to record, play, save and open data.</item>
-        <item>Yes, absolutely. You can install the PSLab Android app (&lt;a href = \"https://play.google.com/store/apps/details?id=io.pslab\"&gt;Play Store&lt;/a&gt;, &lt;a href = \"https://f-droid.org/en/packages/io.pslab/\"&gt;Fdroid&lt;/a&gt;) on your phone and use it with devices such as Luxmeter or Compass. We are adding support for more built-in sensors step by step.</item>
-        <item>In our apps we use the industry standard I²C (&lt;a href = \"https://en.wikipedia.org/wiki/I%C2%B2C\"&gt;Wikipedia&lt;/a&gt;). You can get the data from sensors that are connected to the device through the USB port using an OTG USB cable (OTG = On the go) which is a USB cable that allows connected devices to switch back and forth between the roles of host and device. For the transfer we use UART (universal asynchronous receiver-transmitter, &lt;a href = \"https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter\"&gt;Wikipedia&lt;/a&gt;). Many sensors can be used with specific instruments, e.g. Barometer, Thermometer, Gyroscope etc. You can access the configuration for sensors in the instrument settings on the top right burger menu of each instrument. All sensors using the I²C standard are compatible with the device. There are connection pins for analogue and digital sensors. You find the description of the pins on the back of the device. Even if there is no specific instrument in one of our apps yet, you can still view and store the raw data using the Oscilloscope instrument component. There is &lt;a href = \"https://pslab.io/sensors/\"&gt;a page with a list of recommended sensors on the website&lt;/a&gt;.</item>
-        <item>We have already implemented this functionality, however it is still in prototype stage. You can generate a config file in the Android app and transfer it to the PSLab device (you might have to update the firmware that you find on our Github org). You can power the PSLab device with an USB battery and it can collect data independently of the app. Once you connect the app you can download the data collected. Future versions of the device will come with a SD card to store the data locally as well. At the moment there are still limits to using this feature, but we are continuously working on it 🙂</item>
-        <item>The PSLab hardware is developed using &lt;a href = \"http://www.kicad-pcb.org/\"&gt;KiCad&lt;/a&gt;. The software can generate all kinds of formats and components lists. You can find the schematics and source files in the &lt;a href = \"https://github.com/fossasia/pslab-hardware\"&gt;hardware Git repository here&lt;/a&gt;.</item>
-        <item>PSLab is developed with a community at &lt;a href = \"https://fossasia.org/\"&gt;FOSSASIA&lt;/a&gt;. There are over 100 developers who have contributed to the project across different repositories. The project was started after Praveen Kumar, a physics teacher from India, introduced the idea of an open physics lab device inspired by the ExpEYES project at the FOSSASIA Summit in Cambodia 2014. He helped to get the project moving forward and worked with early contributors on the software components. The Open Hardware board was released in 2017 as part of a GSoC project by Jithin B P who used the ExpEYES boards he developed earlier as a basis to create the first version of PSLab. In the following years hardware components were updated, the size and design was adjusted resulting in much lower production costs and many features were added in the firmware. An Android app was developed from scratch and most of the desktop app re-implemented with a new cross-platform Electron frontend. &lt;a href = \"https://twitter.com/Cloudypadmal\"&gt;Padmal M&lt;/a&gt; from Sri Lanka is leading the tech team since 2018 and defines the roadmap together with &lt;a href = \"https://twitter.com/mariobehling\">Mario Behling&lt;/a&gt;, core developers and contributors from the wider community. Since 2019 FOSSASIA produces batches of the boards in large quantities. It is our goal to set an example as an Open Hardware project, to make it commercially sustainable and inspire others to create Open Hardware and Free and Open Source software.</item>
-        <item>We use issue trackers for most of our work. You can submit &lt;a href = \"https://github.com/fossasia/pslab.io/issues\"&gt;issues you find regarding the website on our issue tracker here&lt;/a&gt;.</item>
-    </string-array>
-
-    <string name="date_of_recording">DATE OF RECORDING</string>
-    <string name="time_of_recording">TIME OF RECORDING</string>
-    <string name="date_of_rec">Date of Rec</string>
-    <string name="latitude">Latitude</string>
-    <string name="longitude">Longitude</string>
-    <string name="location">Location</string>
-
-    <string name="start_time">Start Time</string>
-    <string name="end_time">End Time</string>
-    <string name="timezone">Timezone</string>
-    <string name="dev_model">Device Model</string>
-    <string name="dev_brand">Device Brand</string>
-    <string name="dev_android_sdk">Device Android SDK</string>
-
-    <string name="logged_data">Logged Data</string>
-    <string name="no_logs_to_display">There are no data logs to display</string>
-    <string name="show_logged_data">Show Logged Data</string>
-    <string name="time_elapsed">Time Elapsed</string>
-
-    <string name="no_baro_sensor">Device does not have a barometer</string>
-
-    <string name="gas_sensor">Gas Sensor</string>
-    <string name="gas_sensor_description">Air quality sensor for detecting a wide range of gases, including NH3, NOx, alcohol, benzene, smoke and CO2</string>
-    <string name="gas_sensor_label">Gas Contents (PPM)</string>
-    <string name="gas_sensor_unit">PPM</string>
-
-    <string name="dust_sensor">Dust Sensor</string>
-    <string name="dust_sensor_intro">Dust Sensor is used to measure air quality</string>
-    <string name="dust_sensor_desc">Connect pins according to pin diagram and start measuring. Power up the sensor using VCC pin in PSLab and connect data pin to CH1. Make sure the ground wire is connected to one of the GND pins in PSLab.</string>
-    <string name="dust_sensor_description">Dust sensor is used to measure air quality in terms of particles per square meter</string>
-    <string name="dust_sensor_label">Particles (PPM)</string>
-    <string name="dust_sensor_unit">PPM</string>
-    <string name="dust_sensor_default">1000</string>
-    <string name="dust_sensor_status_label">Air Quality</string>
-    <string name="setting_dust_update_period">setting_dust_update_period</string>
-    <string name="setting_dust_high_limit">setting_dust_high_limit</string>
-    <string name="setting_dust_sensor_type">setting_dust_sensor_type</string>
-    <string name="dust_summary">1000 ms</string>
-    <string name="dialogue_msg_dust">Please provide threshold value for dust particle value to be recorded (0.0~5.0)</string>
-    <string-array name="dust_sensor_list">
-        <item>DSM-501A</item>
-        <item>Other</item>
-    </string-array>
-    <string-array name="dust_sensor_list_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
-    <string name="robotic_arm">Robotic Arm</string>
-    <string name="robotic_arm_intro">A robotic arm is a type of mechanical arm, usually programmable, with similar functions to a human arm.</string>
-    <string name="robotic_arm_desc">Your arm\'s job is to move your hand from place to place. Similarly, the robotic arm\'s job is to move an end effector from place to place. You can outfit robotic arms with all sorts of end effectors, which are suited to a particular application. One common end effector is a simplified version of the hand, which can grasp and carry different objects.</string>
-    <string name="robotic_arm_description">Controls servos of a robotic arm</string>
-    <string name="servo1_title">Servo 1</string>
-    <string name="servo2_title">Servo 2</string>
-    <string name="servo3_title">Servo 3</string>
-    <string name="servo4_title">Servo 4</string>
-    <string name="invalid_servo_value">Kindly select a value between 0 and 360</string>
-    <string-array name="baro_sensors">
-        <item>Built-In</item>
-        <item>BMP180</item>
-    </string-array>
-    <string-array name="baro_sensor_list_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="accelerometer_sensors">
-        <item>Built-In</item>
-        <item>MPU6050</item>
-    </string-array>
-    <string-array name="accelerometer_sensor_list_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="compass_sensors">
-        <item>Built-In</item>
-        <item>HMC5883L</item>
-    </string-array>
-    <string-array name="compass_sensors_list_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
-    <string name="multimeter_default_1000">1000</string>
-    <string name="multimeter_summary">1000 ms</string>
-    <string name="setting_multimeter_update">setting_multimeter_update_period</string>
-    <string name="time_string_multimeter">Please provide time interval at which data will be updated (100 ms to 2000 ms)</string>
-
-    <string name="timebase_title">Timebase</string>
-
-    <string name="delete_all">Delete All Data</string>
-    <string name="delete_all_message">Are You Sure?</string>
-    <string name="baro_meter">Barometer</string>
-    <string name="alti_unit">m</string>
-    <string name="baro_unit">atm</string>
-    <string name="avg_baro">Avg (atm)</string>
-    <string name="avg_alti">Altitude (m)</string>
-    <string name="min_baro">Min (atm)</string>
-    <string name="max_baro">Max (atm)</string>
-    <string name="baro_meter_description">Measures the atmospheric pressure</string>
-    <string name="baro_meter_intro">\u2022 The Barometer can be used to measure Atmospheric pressure. This instrument
-    is compatible with either the built in pressure sensor on any android device or the BMP-180 pressure sensor.\n\n
-    \u2022 If you want to use the sensor BMP-180, connect the sensor to PSLab device as shown in the figure.</string>
-    <string name="baro_meter_desc">\u2022 The above pin configuration has to be same except for the pin
-    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
-    \u2022 Select the sensor by going to the <b>Configure</b> tab from the bottom navigation bar and choose BMP-180 in the drop down menu under <b>Select Sensor</b>.</string>
-    <string name="gyroscope">Gyroscope</string>
-    <string name="gyroscope_description">Measures rate of rotation about XYZ axis</string>
-    <string name="gyroscope_intro">Gyroscope is used to measure rate of rotation of a body along X, Y and Z axis.</string>
-    <string name="gyroscope_description_text">Orientation of the positive X, Y, and Z axes. For any positive axis on the device, clockwise rotation outputs negative values, and counterclockwise rotation outputs positive values.</string>
-    <string name="gyroscope_config">Gyroscope Configuration</string>
-    <string name="no_gyroscope_sensor">Your device does not have sensor required for this functionality</string>
-    <string name="no_data_recorded_gyro">No data recorded as the sensor is not present in the device. Try with an external sensor.</string>
-    <string name="lux_meter">Lux Meter</string>
-    <string name="lux_default_1000">1000</string>
-    <string name="lux_default_2000">2000</string>
-    <string name="gyro_default_20">20</string>
-    <string name="lux_default_0">0</string>
-    <string name="lux_summary">1000 ms</string>
-    <string name="log_saved_directory">Log saved in\n</string>
-    <string name="log_saved_failed">Could not save the log. Please check storage permission.</string>
-    <string name="open">Open</string>
-    <string name="play">Play</string>
-    <string name="save_graph">Save Graph</string>
-    <string name="lux_meter_intro">\u2022 The Lux meter can be used to measure the ambient light intensity. This instruments
-    is compatible with either the built in light sensor on any android device or the BH-1750 light sensor.\n\n
-    \u2022 If you want to use the sensor BH-1750, connect the sensor to PSLab device as shown below</string>
-    <string name="lux_meter_desc">\u2022 The above pin configuration has to be same except for the pin
-    GND. GND is meant for Ground and any of the PSLab device GND pins can be used since they are common.\n\n
-    \u2022 Select sensor by going to the Configure tab from the bottom navigation bar and choose BHT-1750 in the drop down menu under Select Sensor.\n</string>
-    <string name="no_data_fetched">No Data Fetched</string>
-    <string name="accelerometer_configurations">Accelerometer Configurations</string>
-    <string name="view_map">View Map</string>
-    <string name="thermometer_desc">To measure the ambient temperature</string>
-    <string name="thermometer">Thermometer</string>
-    <string name="thermometer_bottom_sheet_text">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
-    <string name="thermometer_bottom_sheet_desc">Thermometer instrument is used to measure ambient temprature. It can be measured using inbuilt ambient temprature sensor or through SHT21.</string>
-    <string name="no_thermometer_sensor">Device does not have Thermometer Sensor</string>
-    <string name="thermo_unit_celcius">°C</string>
-    <string name="thermo_unit_fahrenheit">°F</string>
-    <string name="avg_thermo_celcius">Avg (°C)</string>
-    <string name="max_thermo_celcius">Max (°C)</string>
-    <string name="min_thermo_celcius">Min (°C)</string>
-    <string name="avg_thermo_fahrenheit">Avg (°F)</string>
-    <string name="max_thermo_fahrenheit">Max (°F)</string>
-    <string name="min_thermo_fahrenheit">Min (°F)</string>
-    <string name="setting_thermo_type">setting_thermo_sensor_type</string>
-    <string name="select_unit">select_temp_unit</string>
-    <string name="select_temp_unit">Select the temperature unit</string>
-    <string name="unit_select">Unit</string>
-    <string name="thermo_default_1000">1000</string>
-    <string name="time_string_thermo">Please provide time interval at which data will be updated (100 ms to 1000 ms)</string>
-    <string name="setting_thermo_update">setting_thermo_update_period</string>
-    <string name="thermo_summary">1000 ms</string>
-    <string name="setting_thermo_sensor_gain">setting_thermo_sensor_gain</string>
-    <string name="default_value_thermo">0</string>
-    <string name="thermo_default">°C</string>
-
-    <string name="title_activity_google_maps">Map</string>
-    <string name="map_service_key">map_services</string>
-    <string name="map_service">Map Services</string>
-
-    <string-array name="map_service_list">
-        <item>OpenStreetMap</item>
-        <item>Google Map</item>
-    </string-array>
-
-    <string-array name="map_service_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
-    <string name="google_map">Google Map</string>
-    <string name="osm_map">OpenStreetMap</string>
-    <string name="no_location_specified">Location not specified</string>
-    <string name="compass_default_0">0</string>
-    <string name="unknown">Unknown</string>
-    <string name="rateapp">Rate App</string>
+    </ string-array >
+
+    < string-array  name = " లాజిక్_అనలైజర్_పారామ్స్_టైటిల్ " >
+       item>లాజిక్ ఎనలైజర్ పిన్ 1</item>
+        <item>లాజిక్ ఎనలైజర్ పిన్ 2</item>
+        <item>లాజిక్ ఎనలైజర్ పిన్ 3</item>
+        <item>లాజిక్ ఎనలైజర్ పిన్ 4</item>
+    </ string-array >
+
+    < string-array  name = " barometer_params " >
+        < అంశం > ఒత్తిడి </ అంశం >
+    </ string-array >
+
+    < string-array  name = " యాక్సిలెరోమీటర్_పారామ్స్ " >
+        < అంశం > గొడ్డలి </ అంశం >
+        < అంశం > అయ్ </ అంశం >
+        < అంశం > అజ్ </ అంశం >
+    </ string-array >
+
+    < string-array  name = " యాక్సిలెరోమీటర్_పారామ్స్_టైటిల్ " >
+        < అంశం > త్వరణం X అక్షం </ అంశం >
+        < అంశం > త్వరణం Y అక్షం </ అంశం >
+        < అంశం > త్వరణం Z అక్షం </ అంశం >
+    </ string-array >
+
+    < string-array  name = " luxmeter_params " >
+        < అంశం > లక్స్ </ అంశం >
+    </ string-array >
+
+    < string-array  name = " interval_units " >
+        < అంశం > సెకను </ అంశం >
+        < అంశం > నిమి </ అంశం >
+        < అంశం > గం </ అంశం >
+        < అంశం > రోజు </ అంశం >
+    </ string-array >
+    < string  name = " select_instrument_title " > పరికరం: </ string >
+    < string  name = " time_interval_title " > సమయ విరామం: </ string >
+    < string  name = " time_interval_hint " > లాగింగ్ విరామం </ string >
+    < string  name = " create_config_btn_text " > కాన్ఫిగర్ ఫైల్‌ను సృష్టించండి </ string >
+    < string  name = " select_params_title " > పారామ్‌లను ఎంచుకోండి </ string >
+    < string  name = " no_interval_message " > దయచేసి లాగింగ్ విరామం </ string > ఎంచుకోండి
+    < string  name = " file_created_success_message " > కాన్ఫిగర్ ఫైల్ విజయవంతంగా సృష్టించబడింది </ string >
+    < string  name = " file_created_fail_message " > కాన్ఫిగర్ ఫైల్‌ను సృష్టించండి విఫలమైంది </ string >
+
+    < string  name = " id1 " > ID1 </ string >
+    < string  name = " id2 " > ID2 </ string >
+    < string  name = " id3 " > ID3 </ string >
+    < string  name = " id4 " > ID4 </ string >
+    < string  name = " count_pulse " > పల్స్ లెక్కించు </ string >
+    < string  name = " capacityitance_unit " > ఫరాడ్ </ string >
+    < string  name = " frequency_unit " > Hz </ string >
+    < string  name = " multimeter_voltage_unit " > వోల్ట్‌లు </ string >
+    < string  name = " voltage_channels " > వోల్టేజ్ </ string >
+    < string  name = " resistance_abbreviation " > \ u2126 </ string >
+    < string  name = " multimeter_measure " > కొలత </ string >
+
+    < string  name = " multimeter_angle_1 " > 33 </ string >
+    < string  name = " multimeter_angle_3 " > 65 </ string >
+    < string  name = " multimeter_angle_4 " > 98 </ string >
+    < string  name = " multimeter_angle_5 " > 131 </ string >
+    < string  name = " multimeter_angle_6 " > 164 </ string >
+    < string  name = " multimeter_angle_7 " > 196 </ string >
+    < string  name = " multimeter_angle_8 " > 229 </ string >
+    < string  name = " multimeter_angle_9 " > 262 </ string >
+    < string  name = " multimeter_angle_10 " > 294 </ string >
+    < string  name = " multimeter_angle_11 " > 327 </ string >
+    < string  name = " multimeter_angle_12 " > 0 </ string >
+
+    < string  name = " set " > SET </ string >
+    < string  name = " read " > చదవండి </ string >
+    < string  name = " resistance " > ప్రతిఘటన </ string >
+    < string  name = " కెపాసిటెన్స్ " > కెపాసిటెన్స్ </ string >
+    < string  name = " frequency " > ఫ్రీక్వెన్సీ </ string >
+    < string  name = " count_pulses " > పప్పుధాన్యాలను లెక్కించండి </ string >
+    < string-array  name = " ID " >
+        < అంశం > ID1 </ అంశం >
+        < అంశం > ID2 </ item >
+        < అంశం > ID3 </ అంశం >
+        < అంశం > ID4 </ అంశం >
+    </ string-array >
+    < string  name = " reset " > రీసెట్ </ string >
+    < string  name = " వోల్టేజ్ " > వోల్టేజ్ </ string >
+    < string  name = " ch1 " > CH1 </ string >
+    < string  name = " ch2 " > CH2 </ string >
+    < string  name = " ch3 " > CH3 </ string >
+    < string  name = " cap " > CAP </ string >
+    < string  name = " sen " > SEN </ string >
+    < string  name = " an8 " > AN8 </ string >
+    < string  name = " w1 " > వేవ్ 1 </ string >
+    < string  name = " w2 " > వేవ్ 2 </ string >
+    < string  name = " phase " > దశ </ string >
+    < string  name = " output " > అవుట్పుట్ </ string >
+    < string  name = " dutycycle " > విధి చక్రం </ string >
+    < string  name = " sqr1 " > SQR1 </ string >
+    < string  name = " sqr2 " > SQR2 </ string >
+    < string  name = " sqr3 " > SQR3 </ string >
+    < string  name = " sqr4 " > SQR4 </ string >
+    < string  name = " freq_range " > 10Hz-5kHz </ string >
+    < string  name = " సున్నా " > 0 </ string >
+    < string-array  name = " wave_type " >
+        < అంశం > SINE </ item >
+        < అంశం > స్క్వేర్ </ అంశం >
+    </ string-array >
+    < string  name = " Digital_outputs " > డిజిటల్ అవుట్‌పుట్‌లు </ string >
+    < string  name = " configure_PWM " > PWM ను కాన్ఫిగర్ చేయండి </ string >
+    < string  name = " waveform_generator " > ఏకపక్ష తరంగ రూప జనరేటర్ </ string >
+    < string  name = " autoscan " > ఆటోస్కాన్ </ string >
+    < string  name = " select_sensor " > సెన్సార్ ఎంచుకోండి </ string >
+
+    < string  name = " యాక్సిలెరోమీటర్ " > యాక్సిలెరోమీటర్ </ string >
+    < string  name = " x_axis " > X అక్షం </ string >
+    < string  name = " y_axis " > Y అక్షం </ string >
+    < string  name = " z_axis " > Z అక్షం </ string >
+    < string  name = " text_max " > గరిష్టంగా </ string >
+    < string  name = " text_min " > కనిష్ట </ string >
+    < string  name = " eters_per_sec_text " > ms & lt; sup & gt; & lt; చిన్న & జిటి; -2 & lt; / చిన్న & gt; & lt; / sup & gt; </ string >
+    < string  name = " eters_per_sec_html " > ms < sup > < small > -2 </ small > </ sup > </ string >
+    < string  name = " radian_per_sec_text " > రాడ్లు & lt; sup & gt; & lt; చిన్న & జిటి; -1 & lt; / చిన్న & gt; & lt; / sup & gt; </ string >
+    < string  name = " radian_per_sec_html " > రాడ్లు < sup > < small > -1 </ small > </ sup > </ string >
+    < string  name = " time_seconds " > సమయం (లు) </ string >
+    < string  name = " celerometer_intro " > X, Y మరియు Z అక్షంతో పాటు శరీరం యొక్క త్వరణాన్ని కొలవడానికి యాక్సిలెరోమీటర్ ఉపయోగించబడుతుంది. \ n </ string >
+    < string  name = " celerometer_description_text " > \ n \ n మొబైల్ నిటారుగా ఉంచినప్పుడు పైన ఉన్న బొమ్మ మూడు అక్షాల దిశను చూపుతుంది. PS n PS n PSLab అనువర్తనంలో త్వరణాన్ని కొలవడానికి అడుగులు: \ n \ n \ u2022 పరికరాన్ని ఇలా పట్టుకోండి పై చిత్రంలో చూపబడింది. one n \ n \ u2022 ఏదైనా ఒకటి లేదా బహుళ అక్షంతో పాటు పరికరాన్ని వేగవంతం చేయండి. \ n \ n \ u2022 కార్డులలోని విలువలను లేదా ఏదైనా నిర్దిష్ట అక్షం యొక్క ప్లాట్ చేసిన గ్రాఫ్‌ను గమనించండి. \ n \ n యాక్సిలెరోమీటర్ పరికరం పరికరాన్ని శరీరంపై / లోపల ఉంచడం ద్వారా మరియు శరీరాన్ని వేగవంతం చేయడం ద్వారా కదిలే శరీరం యొక్క త్వరణాన్ని కొలవడానికి కూడా ఉపయోగించబడుతుంది. \ n \ n గమనిక: పరికరం సరిగ్గా పరికరం జతచేయకపోతే శరీరాన్ని వేగవంతం చేయవద్దు దెబ్బతినవచ్చు. </ string >
+    < string  name = " no_accelerometer_sensor " > పరికరానికి యాక్సిలెరోమీటర్ సెన్సార్ లేదు </ string >
+
+    < string  name = " not_connected " > కనెక్ట్ కాలేదు </ string >
+    < string  name = " initializing_ wait " > ప్రారంభించడం వేచి ఉండండి… </ string >
+    < string  name = " device_connected_successfully " > పరికరం విజయవంతంగా కనెక్ట్ చేయబడింది </ string >
+    < string  name = " device_not_found " > USB పరికరం కనుగొనబడలేదు </ string >
+    < string  name = " sens_not_connected_tls " > సెన్సార్ కనెక్ట్ కాలేదు </ string >
+
+    < string  name = " time_unit_la " > సమయం (ms) </ string >
+    < string  name = " view " > VIEW </ string >
+
+    <! - ప్రయోగ శీర్షికలు ->
+    <! - ప్రయోగాలు ->
+
+
+    < string  name = " hmc5883l " > hmc5883l </ string >
+    < string  name = " mpu6050 " > mpu6050 </ string >
+    < string  name = " sht21 " > sht21 </ string >
+    < string  name = " tsl2561 " > tsl2561 </ string >
+    < string  name = " ads1115 " > ads1115 </ string >
+    < string  name = " mlx90614 " > mlx90614 </ string >
+    < string  name = " bmp180 " > bmp180 </ string >
+    < string  name = " mpu925x " > mpu925x </ string >
+
+    < string  name = " raw_data " > రా డేటా </ string >
+    < string  name = " configure " > ఆకృతీకరించు </ string >
+    < string  name = " plot " > ప్లాట్ </ string >
+
+    < string  name = " data " > డేటా </ string >
+    < string  name = " bx " > Bx </ string >
+    < string  name = " by " > ద్వారా </ string >
+    < string  name = " bz " > Bz </ string >
+    < string  name = " ax " > గొడ్డలి </ string >
+    < string  name = " ay " > అయ్ </ string >
+    < string  name = " az " > అజ్ </ string >
+    < string  name = " gx " > Gx </ string >
+    < string  name = " gy " > Gy </ string >
+    < string  name = " gz " > Gz </ string >
+    < string  name = " temp " > టెంప్ </ string >
+    < string  name = " luminosity " > ప్రకాశం </ string >
+    < string  name = " తేమ " > తేమ </ string >
+    < string  name = " object_temp " > ఆబ్జెక్ట్ టెంప్ </ string >
+    < string  name = " ambient_temp " > పరిసర టెంప్ </ string >
+    < string  name = " temperature " > ఉష్ణోగ్రత </ string >
+    < string  name = " altitude " > ఎత్తు </ string >
+    < string  name = " pressure " > ఒత్తిడి </ string >
+    < string  name = " gyro_range " > గైరో పరిధిని సెట్ చేయండి </ string >
+    < string  name = " accel_range " > యాక్సెల్ పరిధిని సెట్ చేయండి </ string >
+    < string  name = " kalman " > కల్మన్ ఫిల్టర్ </ string >
+    < string  name = " power_up " > పవర్ అప్ </ string >
+    < string  name = " full_spectrum " > పూర్తి స్పెక్ట్రం </ string >
+    < string  name = " పరారుణ " > పరారుణ </ string >
+    < string  name = " కనిపించే " > కనిపించే </ string >
+    < string  name = " set_gain " > సెట్ లాభం </ string >
+    < string  name = " set_timing " > సెట్ టైమింగ్ </ string >
+    < string  name = " set_channel " > ఛానెల్ సెట్ </ string >
+    < string  name = " set_rate " > సెట్ రేట్ </ string >
+    < string  name = " plot_accelerometer " > ప్లాట్ - యాక్సిలెరోమీటర్ </ string >
+    < string  name = " plot_gyroscope " > ప్లాట్ - గైరోస్కోప్ </ string >
+    < string  name = " rad " > (రాడ్) </ string >
+    < string  name = " angle " > కోణం </ string >
+    < string  name = " time " > సమయం (సెకను) </ string >
+    < string  name = " infinite_symbol " > ∞ </ string >
+    < string  name = " timegap " > టైమ్‌గాప్ </ string >
+    < string  name = " no_of_samples " > లేదు. నమూనాల </ string >
+    < string  name = " temp2 " > టెంప్. </ string >
+    < string  name = " alt " > Alt. </ string >
+    < string  name = " మీటర్ " > (m) </ string >
+    < string  name = " pascal " > (Pa) </ string >
+
+    < string-array  name = " tsl2561_gain_spinner " >
+        < అంశం > లాభం లేదు </ అంశం >
+        < అంశం > 1x </ అంశం >
+        < అంశం > 16x </ అంశం >
+    </ string-array >
+    < string-array  name = " mpu6050_gyro_spinner " >
+        < అంశం > 250 </ అంశం >
+        < అంశం > 500 </ అంశం >
+        < అంశం > 1000 </ అంశం >
+        < అంశం > 2000 </ అంశం >
+    </ string-array >
+
+    < string-array  name = " mpu6050_accel_spinner " >
+        < అంశం > 2 </ అంశం >
+        < అంశం > 4 </ అంశం >
+        < అంశం > 8 </ అంశం >
+        < అంశం > 16 </ అంశం >
+    </ string-array >
+
+    < string-array  name = " mpu6050_kalman_spinner " >
+        < అంశం > 0.01 </ అంశం >
+        < అంశం > 0.1 </ అంశం >
+        < అంశం > 1 </ అంశం >
+        < అంశం > 10 </ అంశం >
+        < అంశం > 100 </ అంశం >
+        < అంశం > 1000 </ అంశం >
+        < అంశం > 10000 </ అంశం >
+        < అంశం > శూన్య </ అంశం >
+    </ string-array >
+
+    < string-array  name = " mpu6050_power_spinner " >
+        < అంశం > </ అంశం >
+        < అంశం > </ అంశం >
+    </ string-array >
+
+    < string-array  name = " mpu925x_gyro_spinner " >
+        < అంశం > 250 </ అంశం >
+        < అంశం > 500 </ అంశం >
+        < అంశం > 1000 </ అంశం >
+        < అంశం > 2000 </ అంశం >
+    </ string-array >
+
+    < string-array  name = " mpu925x_accel_spinner " >
+        < అంశం > 2 </ అంశం >
+        < అంశం > 4 </ అంశం >
+        < అంశం > 8 </ అంశం >
+        < అంశం > 16 </ అంశం >
+    </ string-array >
+
+    < string-array  name = " mpu925x_kalman_spinner " >
+        < అంశం > 0.01 </ అంశం >
+        < అంశం > 0.1 </ అంశం >
+        < అంశం > 1 </ అంశం >
+        < అంశం > 10 </ అంశం >
+        < అంశం > 100 </ అంశం >
+        < అంశం > 1000 </ అంశం >
+        < అంశం > 10000 </ అంశం >
+        < అంశం > శూన్య </ అంశం >
+    </ string-array >
+
+    < string-array  name = " mpu925x_power_spinner " >
+        < అంశం > </ అంశం >
+        < అంశం > </ అంశం >
+    </ string-array >
+
+
+    < string-array  name = " ads1115_gain_spinner " >
+        < అంశం > GAIN_TWOTHIRDS </ అంశం >
+        < అంశం > GAIN_ONE </ అంశం >
+        < అంశం > GAIN_TWO </ అంశం >
+        < అంశం > GAIN_FOUR </ అంశం >
+        < అంశం > GAIN_EIGHT </ అంశం >
+        < అంశం > GAIN_SIXTEEN </ అంశం >
+    </ string-array >
+
+    < string-array  name = " ads1115_channel_spinner " >
+        < అంశం > UNI_0 </ అంశం >
+        < అంశం > UNI_1 </ అంశం >
+        < అంశం > UNI_2 </ అంశం >
+        < అంశం > UNI_3 </ అంశం >
+        < అంశం > DIFF_01 </ అంశం >
+        < అంశం > DIFF_23 </ అంశం >
+    </ string-array >
+
+    < string-array  name = " ads1115_rate_spinner " >
+        < అంశం > 8 </ అంశం >
+        < అంశం > 16 </ అంశం >
+        < అంశం > 32 </ అంశం >
+        < అంశం > 64 </ అంశం >
+        < అంశం > 128 </ అంశం >
+        < అంశం > 250 </ అంశం >
+        < అంశం > 475 </ అంశం >
+        < అంశం > 860 </ అంశం >
+    </ string-array >
+
+    < string-array  name = " lux_sensor_list " >
+        < అంశం > అంతర్నిర్మిత సెన్సార్ </ అంశం >
+        < అంశం > BH1750 </ అంశం >
+        < అంశం > TSL2561 </ అంశం >
+    </ string-array >
+
+    < string-array  name = " thermo_sensor_list " >
+        < అంశం > అంతర్నిర్మిత సెన్సార్ </ అంశం >
+        < అంశం > SHT21 </ అంశం >
+    </ string-array >
+
+    < string-array  name = " thermo_unit_list " >
+        < అంశం > ° F </ item >
+        < అంశం > ° C </ item >
+    </ string-array >
+
+    < string-array  name = " lux_sensor_list_values " >
+        < అంశం > 0 </ అంశం >
+        < అంశం > 1 </ అంశం >
+        < అంశం > 2 </ అంశం >
+    </ string-array >
+
+    < string-array  name = " thermo_sensor_list_values " >
+        < అంశం > 0 </ అంశం >
+        < అంశం > 1 </ అంశం >
+    </ string-array >
+
+    < string  name = " device_not_connected " > పరికరం కనెక్ట్ కాలేదు </ string >
+    < string  name = " use_autoscan " > PSLab పరికరానికి కనెక్ట్ చేయబడిన సెన్సార్లను కనుగొనడానికి ఆటోస్కాన్ బటన్‌ను ఉపయోగించండి </ string >
+    < string  name = " sens_not_connected " > I2C ద్వారా సెన్సార్లు కనెక్ట్ కాలేదు. దిగువ నుండి సెన్సార్‌ను ఎంచుకోవడానికి ప్రయత్నించండి
+        ఇంటర్-ఇంటిగ్రేటెడ్ సర్క్యూట్ (I2C) బస్సును ఎలా ఉపయోగించాలో జాబితా చేయండి మరియు తెలుసుకోండి. కనెక్ట్ చేసిన తర్వాత, ఆటోస్కాన్ </ string > క్లిక్ చేయండి
+    < string  name = " scanning " > స్కానింగ్ ... </ string >
+
+    < string  name = " voltage_unit " > (V) </ string >
+    < string  name = " volts " > వోల్ట్‌లు </ string >
+    < string  name = " seconds " > (లు) </ string >
+    < string  name = " lux " > Lx </ string >
+    < string  name = " pressure2 " > నొక్కండి. </ string >
+    < string  name = " plot_altitude " > ప్లాట్ - ఎత్తు </ string >
+    < string  name = " celcius " > (° C) </ string >
+    < string  name = " plot_temperature " > ప్లాట్ - ఉష్ణోగ్రత </ string >
+    < string  name = " guass " > Guass </ string >
+    < string  name = " guass_unit " > (Ga) </ string >
+    < string  name = " humid " > తేమ. </ string >
+    < string  name = " humid_unit " > (RH) </ string >
+    < string  name = " plot_humidity " > ప్లాట్ - తేమ </ string >
+    < string  name = " illum " > ఇల్లమ్ . </ string >
+    < string  name = " lux2 " > (లక్స్) </ string >
+    < string  name = " త్వరణం " > Acc. </ string >
+    < string  name = " celeration_unit " > (m / s²) </ string >
+    < string  name = " range " > పరిధి </ string >
+    < string  name = " wave1 " > Wave1 </ string >
+    < string  name = " wave2 " > వేవ్ 2 </ string >
+
+    < string  name = " start_logging " > లాగింగ్ ప్రారంభించండి </ string >
+    < string  name = " stop_logging " > లాగింగ్ ఆపు </ string >
+    < string  name = " stop " > ఆపు </ string >
+    < string  name = " cancel " > రద్దు </ string >
+    < string  name = " ok " > సరే </ string >
+    < string  name = " save_data " > డేటాను సేవ్ చేయండి </ string >
+    < string  name = " view_logged_data " > లాగ్ చేసిన డేటాను చూడండి </ string >
+    < string  name = " export_logged_data " > లాగ్ చేసిన డేటాను ఎగుమతి చేయండి </ string >
+    < string  name = " sens_logged_data " > సెన్సార్ లాగ్ చేసిన డేటా </ string >
+
+    < string  name = " full " > పూర్తి </ string >
+
+    < string  name = " cket_science_logo " > పాకెట్ సైన్స్ లోగో </ string >
+
+    < string  name = " timebase_microsec " >% 1 $ .2f <s </ string >
+    < string  name = " timebase_milisec " >% 1 $ .2f ms </ string >
+    < string  name = " time_space " > సమయం </ string >
+    < string  name = " unit_μs " > (μs) </ string >
+    < string  name = " label_ch1 " > CH1 </ string >
+    < string  name = " label_V " > (V) </ string >
+    < string  name = " label_ch2 " > CH2 </ string >
+    < string  name = " channel_parameters " > ఛానెల్ పారామితులు </ string >
+    < string  name = " timebase_and_trigger " > టైమ్‌బేస్ మరియు ట్రిగ్గర్ </ string >
+    < string  name = " data_analysis " > డేటా విశ్లేషణ </ string >
+    < string  name = " xy_plot " > XY ప్లాట్ </ string >
+    < string  name = " వంద_ms " > 100ms </ string >
+    < string  name = " hyphen " > - </ string >
+    < string  name = " plus " > + </ string >
+    < string  name = " select_a_value " > విలువను ఎంచుకోండి </ string >
+    < string  name = " ch3_value " > CH3 (+/-% 1 $ .1fV) </ string >
+    < string  name = " one_value " > 1.0 </ string >
+    < string  name = " fourier_transforms " > ఫోరియర్ ట్రాన్స్ఫార్మ్స్ </ string >
+    < string  name = " timebase " > టైమ్‌బేస్ </ string >
+    < string  name = " text_view " > టెక్స్ట్ వ్యూ </ string >
+    < string  name = " device_status_text " > PSLab పరికరం కనుగొనబడలేదు </ string >
+    < string  name = " select_mic " > [MIC ఎంచుకోండి] </ string >
+    < string  name = " oscilloscope_intro " > PS u2022 PSLab లోని ఓసిల్లోస్కోప్ a యొక్క అనేక కార్యాచరణలను ఇస్తుంది
+        వాణిజ్యపరంగా లభించే ఓసిల్లోస్కోప్. ఇది MIC ఇన్, 2 సైన్ వేవ్ జనరేటర్లతో 4-ఛానెళ్లను కలిగి ఉంది
+        4 పిడబ్ల్యుఎం స్క్వేర్ వేవ్ జనరేటర్లు, టైమ్‌బేస్‌ను మార్చగలవు, సిగ్నల్‌ను విశ్లేషిస్తాయి మరియు సైన్ మరియు స్క్వేర్ వేవ్ చేస్తాయి
+        ఛానెల్ వోల్టేజ్‌కు ఛానెల్‌ను అమర్చడం మరియు ప్లాట్ చేయడం. \ n \ n \ u2022 సైన్ వేవ్ లేదా చదరపు వేవ్ నుండి చదవడానికి, మీరు
+        అవుట్పుట్ వేవ్ పిన్ మరియు ఛానెల్‌ను ఓసిల్లోస్కోప్‌కు ఈ క్రింది విధంగా కనెక్ట్ చేయవచ్చు. </ string >
+    < string  name = " oscilloscope_desc " > shown u2022 చూపిన చిత్రానికి పైన SQ1 నుండి CH1 మరియు SI1 కు కనెక్షన్ ఉంది
+        CH2 కు. \ n \ n
+        20 u2022 మీరు వేవ్ జనరేటర్ పరికరం నుండి తరంగాన్ని సృష్టించిన తర్వాత సంబంధిత పిన్‌లను కనెక్ట్ చేయండి
+        మరియు ఛానెల్ పారామితులలో సంబంధిత ఛానెల్‌ను టిక్ చేయడం ద్వారా ఓసిల్లోస్కోప్ నుండి గమనించండి. ఒకవేళ నువ్వు
+        CH1 పిన్ను ఉపయోగిస్తున్నారు, ఛానెల్ పారామితుల నుండి CH1 ని ఎంచుకోండి. </ string >
+    < string  name = " channel_param_desc " > ఈ సెట్టింగ్ నుండి, మీరు అవసరమైన ఛానెల్‌ని మార్చవచ్చు
+        the n \ n \ u2022 సంబంధిత ఛానెల్‌ను ప్లాట్ చేయడానికి చెక్ బాక్స్‌లను టిక్ చేయండి. \ n \ n
+        \ u2022 ఛానెల్ పక్కన ఉన్న స్పిన్నర్‌ను ఉపయోగించి ప్లాట్‌లోని Y- యాక్సిస్ వోల్టేజ్ పరిధిని మార్చవచ్చు. \ n \ n
+        the u2022 నాల్గవ ఛానెల్ కోసం, మీరు అంతర్నిర్మిత మైక్రోఫోన్ లేదా బాహ్య మైక్ ఎంచుకోవచ్చు. ఉంటే
+        మీరు బాహ్య మైక్రోఫోన్‌ను ఉపయోగించాలి, కనెక్షన్ ఈ క్రింది విధంగా ఉంటుంది. </ string >
+    < string  name = " channel_param_mic " > \ u2022 MIC యొక్క పాజిటివ్ టెర్మినల్ MIC పిన్‌తో అనుసంధానించబడాలి
+        మరియు నెగటివ్ టెర్మినల్‌ను PSLab పరికరం </ string > యొక్క GND పిన్‌తో అనుసంధానించాలి
+    < string  name = " timebase_desc " > ఈ సెట్టింగ్ మీకు సమయ అక్షం (X- అక్షం) పరిధిని నియంత్రిస్తుంది \ n \ n
+        signal u2022 సిగ్నల్ సంగ్రహించే సమయాన్ని పెంచడానికి లేదా తగ్గించడానికి టైమ్‌బేస్ స్లిడర్‌ని ఉపయోగించవచ్చు.
+        పరిధిని 875.0 మైక్రో సెకన్ల నుండి 102.4 మిల్లీ సెకన్లకు మార్చవచ్చు. \ N \ n
+        analysis u2022 విశ్లేషణ కోసం ఇచ్చిన పరిధిలో ఆవర్తన తరంగ సంకేతాలను సంగ్రహించడానికి ఇది ఉపయోగపడుతుంది. \ n \ n
+        voltage u2022 వోల్టేజ్ విలువను సెట్ చేయడానికి మీరు ట్రిగ్గర్ను ఉపయోగించవచ్చు, తద్వారా సిగ్నల్ ఇచ్చినదానిని మించినప్పుడు
+        విలువ, ప్లాట్ ఆగిపోతుంది. </ string >
+    < string  name = " data_analysis_desc " > \ u2022 ఈ సెట్టింగ్‌ను ఉపయోగించి, విశ్లేషించబడిన సిగ్నల్ యొక్క గణిత ఫంక్షన్
+        దొరుకుతుంది. సైన్ లేదా స్క్వేర్ మరియు విశ్లేషించాల్సిన ఛానెల్ నుండి వేవ్ రకాన్ని ఎంచుకోవచ్చు. \ N \ n
+        \ u2022 ఇంకా, ఫోరియర్ ట్రాన్స్‌ఫ్రామ్స్ చెక్ బాక్స్‌ను తనిఖీ చేయడం ద్వారా విశ్లేషించబడిన సిగ్నల్ యొక్క ఫోరియర్ పరివర్తనను గమనించవచ్చు. </ string >
+    < string  name = " xy_plot_desc " > \ u2022 ఇది XY ప్లాట్ కలిగి ఉన్న ఛానెల్‌ను ఛానల్ వోల్టేజ్‌కు ప్లాట్ చేయడానికి ఉపయోగించబడుతుంది
+        సంబంధిత ఛానెల్‌లకు సంబంధించిన రెండు అక్షాలకు యూనిట్‌గా వోల్టేజ్. </ string >
+
+    < string-array  name = " sens_click_list " >
+        < అంశం > ఎగుమతి డేటా </ item >
+        < అంశం > డేటాను భాగస్వామ్యం చేయండి </ అంశం >
+    </ string-array >
+
+    < string  name = " no_permission_for_maps " > మ్యాప్‌ను లోడ్ చేయడానికి తగిన అనుమతి లేదు </ string >
+
+    < string-array  name = " export_data_format_list " >
+        < అంశం > TXT ఆకృతి </ అంశం >
+        < అంశం > CSV ఆకృతి </ అంశం >
+    </ string-array >
+    < string-array  name = " export_data_format_values " >
+        < అంశం > 0 </ అంశం >
+        < అంశం > 1 </ అంశం >
+    </ string-array >
+
+    < string  name = " other " > ఇతర </ string >
+    < string  name = " ట్రిగ్గర్ " > ట్రిగ్గర్ </ string >
+    < string  name = " enable_xy_plot " > XY ప్లాట్‌ను ప్రారంభించండి </ string >
+    < string  name = " plot_hyphen_pressure " > ప్లాట్ - ఒత్తిడి </ string >
+    < string  name = " plot_object_temperature " > ప్లాట్ - ఆబ్జెక్ట్ ఉష్ణోగ్రత </ string >
+    < string  name = " plot_ambient_temperature " > ప్లాట్ - పరిసర ఉష్ణోగ్రత </ string >
+
+    < string  name = " search_menu_title " > శోధించండి </ string >
+
+    < string  name = " oscilloscope_description " > విభిన్న సిగ్నల్ వోల్టేజ్‌ల పరిశీలనను అనుమతిస్తుంది </ string >
+    < string  name = " multimeter_description " > కొలత వోల్టేజ్, ప్రస్తుత, నిరోధకత మరియు కెపాసిటెన్స్ </ string >
+    < string  name = " log_analyzer_description " > డిజిటల్ వ్యవస్థల నుండి సంకేతాలను సంగ్రహిస్తుంది మరియు ప్రదర్శిస్తుంది </ string >
+    < string  name = " sensors_description " > కనెక్ట్ చేయబడిన సెన్సార్ ద్వారా తిరిగి వచ్చిన డేటాను లాగింగ్ చేయడానికి అనుమతిస్తుంది </ string >
+    < string  name = " wave_generator_description " > ఏకపక్ష అనలాగ్ మరియు డిజిటల్ తరంగ రూపాలను ఉత్పత్తి చేస్తుంది </ string >
+    < string  name = " power_source_description " > ప్రోగ్రామబుల్ వోల్టేజ్ మరియు ప్రవాహాలను ఉత్పత్తి చేస్తుంది </ string >
+    < string  name = " lux_meter_description " > పరిసర కాంతి తీవ్రతను కొలుస్తుంది </ string >
+    < string  name = " కంపాస్_డిస్క్రిప్షన్ " > అయస్కాంత ఉత్తరానికి సూచించే మూడు అక్షాలు మాగ్నెటోమీటర్ </ string >
+
+    < string  name = " tile_instrument_horizontal_bars " > చిహ్నాన్ని సరిపోల్చడానికి క్షితిజసమాంతర బార్లు </ string >
+    < string  name = " tile_instrument_vertical_bars " > టైల్ చిహ్నాన్ని సరిపోల్చడానికి లంబ బార్లు </ string >
+
+    < string  name = " celerometer_description " > XYZ దిశలలో సరళ త్వరణాన్ని కొలుస్తుంది </ string >
+    < string  name = " web_view_link_text " > PSLab పరికరం అంటే ఏమిటి? </ string >
+    < string  name = " pslab_connect_text " > PSLab పరికరాన్ని కనెక్ట్ చేయడానికి దశలు </ string >
+    < string  name = " pslab_instruction_1 " > PSLab కు మైక్రో USB (మినీ B) ను కనెక్ట్ చేయండి </ string >
+    < string  name = " pslab_instruction_2 " > మైక్రో USB కేబుల్ యొక్క మరొక చివరను OTG కి కనెక్ట్ చేయండి </ string >
+    < string  name = " pslab_instruction_3 " > ఫోన్‌కు OTG ని కనెక్ట్ చేయండి </ string >
+    < string  name = " number_one " > 1. </ string >
+    < string  name = " number_two " > 2. </ string >
+    < string  name = " number_three " > 3. </ string >
+
+    < string  name = " దిక్సూచి " > కంపాస్ </ string >
+    < string  name = " text_parallel_axes " > భూమికి సమాంతరంగా గొడ్డలిని ఎంచుకోండి </ string >
+    < string  name = " కంపాస్_టెస్ట్_వాల్యూ " > 360 ° </ string >
+    < string  name = " show_axis_help " > ప్రస్తుత అక్షం పొందండి </ string >
+
+    < string  name = " కంపాస్_బోటమ్_షీట్_హేడింగ్ " > కంపాస్ </ string >
+    < స్ట్రింగ్  పేరు = " కంపాస్_బోటమ్_షీట్_టెక్స్ట్ " > నావిగేట్ చేయడానికి మరియు అక్షం వెంట అయస్కాంత క్షేత్రాన్ని కనుగొనడానికి కంపాస్ పరికరం ఉపయోగించబడుతుంది. PSLab అనువర్తనం లో కంపాస్ వాయిద్యం తో ఉపయోగించవచ్చు అంతర్నిర్మిత మొబైల్ సెన్సార్లు లేదా సెన్సార్ HMC5883L తో. </ స్ట్రింగ్ >
+    < స్ట్రింగ్  పేరు = " కంపాస్_బోటమ్_షీట్_డిస్క్రిప్షన్ " > \ n అంతర్నిర్మిత సెన్సార్‌ను ఉపయోగిస్తున్నప్పుడు అక్షాన్ని క్రమాంకనం చేయడానికి అడుగులు: \ n \ n
+        figure u2022 పై చిత్రంలో చూపినట్లుగా, పరికరాన్ని నిలువు స్థానంలో ఉంచండి. \ n \ n
+        \ u2022 ఇప్పుడు, దిక్సూచి పని చేయాల్సిన అక్షాన్ని ఎంచుకోండి. \ n \ n
+        last u2022 చివరగా, కంపాస్ వాయిద్యానికి వెళ్లి, ఎంచుకున్న అక్షం పక్కన ఉన్న రేడియో బటన్‌ను ఎంచుకోండి. \ n \ n
+        20 u2022 ఎంచుకున్న అక్షం చుట్టూ పరికరాన్ని తరలించండి మరియు వాస్తవ అక్షంతో పరికరం చేసిన కోణాన్ని చూపించే దిక్సూచి తిరిగేటట్లు చూడండి. </ string >
+    < string  name = " no_compass_sensor " > కంపాస్‌కు మద్దతు ఇవ్వడానికి మీ పరికరానికి సెన్సార్ లేదు </ string >
+    < string  name = " కంపాస్_ఎక్స్_ఆక్సిస్ " > ఎక్స్-యాక్సిస్ </ string >
+    < string  name = " కంపాస్_వై_ఆక్సిస్ " > వై-యాక్సిస్ </ string >
+    < string  name = " కంపాస్_జెడ్_యాక్సిస్ " > Z- అక్షం </ string >
+    < string  name = " value_null " > 0 </ string >
+    < string  name = " indicator_description " > పరికర కనెక్షన్‌ను సూచిస్తుంది </ string >
+
+    < string-array  name = " edge_choices " >
+        < అంశం > ప్రతి ఎడ్జ్ </ అంశం >
+        < అంశం > ప్రతి ఫాలింగ్ ఎడ్జ్ </ item >
+        < అంశం > ప్రతి రైజింగ్ ఎడ్జ్ </ item >
+        < అంశం > ప్రతి నాలుగవ రైజింగ్ ఎడ్జ్ </ అంశం >
+        < అంశం > నిలిపివేయబడింది </ అంశం >
+    </ string-array >
+
+    < string-array  name = " channel_choices " >
+        < అంశం > ID1 </ అంశం >
+        < అంశం > ID2 </ item >
+        < అంశం > ID3 </ అంశం >
+        < అంశం > ID4 </ అంశం >
+    </ string-array >
+
+    < string  name = " no_data_generated " > డేటా సృష్టించబడలేదు </ string >
+    < string  name = " needs_implementation " > ఇంకా అమలు చేయబడలేదు </ string >
+
+    < string  name = " analysis_input " > విశ్లేషించండి </ string >
+    < string  name = " channel_selection_heading " > ఛానెల్ ఎంపిక </ string >
+
+    < string  name = " power_card_pv1 " > PV1 </ string >
+    < string  name = " power_card_pv2 " > PV2 </ string >
+    < string  name = " power_card_pv3 " > PV3 </ string >
+    < string  name = " power_card_pcs " > PCS </ string >
+
+    < string  name = " schematic_desc " > స్కీమాటిక్ చిత్రం ఇక్కడకు వెళుతుంది </ string >
+    < string  name = " donot_show_again " > మళ్ళీ చూపించవద్దు </ string >
+    < string  name = " ok_button_text " > సరే </ string >
+
+    < string  name = " multimeter_dialog_heading " > మల్టిమీటర్ </ string >
+    < string  name = " multimeter_default_value " > 0.00 </ string >
+    < string  name = " multimeter_configurations " > మల్టీమీటర్ కాన్ఫిగరేషన్లు </ string >
+    < string  name = " multimeter_dialog_text " > పివి 1, పివి 2, పివి 3 ని వాడండి కనెక్ట్ చేయబడిన మూలకం యొక్క ప్రతిఘటన లేదా కెపాసిటెన్స్‌ను కొలవడానికి చిత్రంలో చూపిన విధంగా వరుసగా SEN మరియు CAP పిన్‌లను రెసిస్టర్ మరియు కెపాసిటర్‌కు కనెక్ట్ చేయండి. CH n \ n \ u2022 CH1 మరియు CH2 ఉచిత వోల్టేజ్‌ను చదవగలవు. CH3, SEN, CAP, AN8 0V నుండి 3.30V </ string > వరకు మాత్రమే చదవగలవు
+    < string  name = " multimeter_dialog_description " > \ u2022 వోల్టేజ్‌ను కొలవడానికి చిత్రంలో చూపిన విధంగా విద్యుత్ వనరును (ఉదా. పివి 1, పివి 2 మరియు పివి 3) ఛానల్ పిన్‌లకు కనెక్ట్ చేయండి. \ n \ n \ u2022 అదేవిధంగా ఫ్రీక్వెన్సీని కొలవడానికి లేదా పల్స్ లెక్కించడానికి SQ1, SQ2, SQ3 లేదా SQ4 పిన్‌లను ID1, ID2, ID3 లేదా ID4 కి కనెక్ట్ చేయండి. \ n \ n
+        < b > విభిన్న విభాగాలు </ b > \ n \ n
+        < b > ప్రతిఘటన: </ b > PSLab పరికరం యొక్క SEN మరియు GND పిన్‌ల మధ్య అనుసంధానించబడిన మూలకం యొక్క నిరోధకతను కొలుస్తుంది. \ n \ n
+        < b > కెపాసిటెన్స్: </ b > PSLab పరికరం యొక్క CAP మరియు GND పిన్‌ల మధ్య అనుసంధానించబడిన మూలకం యొక్క కెపాసిటెన్స్‌ను కొలుస్తుంది. \ n \ n
+        < b > వోల్టేజ్: </ b > ఏదైనా ఛానెల్ మరియు GND పిన్స్ మరియు AN8 వంటి ఇతర పిన్‌ల మధ్య కనెక్ట్ చేయబడిన ఏదైనా మూలకాల వోల్టేజ్‌ను కొలుస్తుంది. \ n \ n
+        < b > ఫ్రీక్వెన్సీ: </ b > ఏదైనా ID మరియు GND పిన్‌ల మధ్య అనుసంధానించబడిన ఏదైనా మూలకం అంతటా పౌన frequency పున్యాన్ని కొలుస్తుంది. \ n \ n
+        < b > పల్స్ కౌంట్: </ b > ఏదైనా ID మరియు GND పిన్‌ల మధ్య అనుసంధానించబడిన మూలకం ద్వారా ఏదైనా వేవ్ యొక్క పల్స్ కొలుస్తుంది. \ n \ n
+    </ string >
+
+    < string  name = " show_guide " > గైడ్ చూపించు </ string >
+    < string  name = " powerource_dialog_heading " > శక్తి మూలం </ string >
+    < స్ట్రింగ్  పేరు = " powersource_dialog_text " > PSLab పరికరం నుండి -5V + 5V వోల్టేజ్లు 10mV రిజల్యూషన్ వద్ద రూపొందించవచ్చు </ స్ట్రింగ్ >
+    < string  name = " powerource_dialog_description " >
+        5 u2022 + 5V నుండి -5V మధ్య వోల్టేజ్‌లను ఉత్పత్తి చేయడానికి ఒక తీగను PV1 కి మరియు మరొక తీగను GND కి కనెక్ట్ చేయండి. \ n \ n
+        3. u2022 అదేవిధంగా + 3.3V నుండి -3.3V మధ్య వోల్టేజ్‌లను ఉత్పత్తి చేయడానికి PV2 మధ్య వైర్‌లను కనెక్ట్ చేయండి \ n \ n
+        V u2022 0V నుండి + 3.3V మధ్య వోల్టేజ్‌లను ఉత్పత్తి చేయడానికి PV3 పిన్‌ని ఉపయోగించండి \ n \ n
+        S u2022 PCS పిన్ 3.3mA పరిధిలో PCS పిన్ మరియు GND పిన్ మధ్య స్థిరమైన విద్యుత్తును సరఫరా చేయడానికి ఉపయోగించబడుతుంది.
+    </ string >
+
+    < string  name = " log_analyzer_dialog_text " > లాజిక్ ఎనలైజర్ అనేది వివిధ డిజిటల్ పప్పుల మధ్య సమయ సంబంధాన్ని తెలుసుకోవడానికి ఉపయోగించే ఒక పరికరం. PSLab అనువర్తనంలో లభించే లాజిక్ ఎనలైజర్‌ను ఈ క్రింది విధంగా ఆపరేట్ చేయవచ్చు: \ n </ string >
+    < string  name = " log_analyzer_dialog_description " > \ n \ u2022 డిజిటల్ పప్పులను ఉత్పత్తి చేసే మూలం / లను కొలిచే పిన్ / లతో అంటే ID1, ID2, ID3 మరియు / లేదా ID4 తో కనెక్ట్ చేయడం మొదటి దశ. \ n \ n \ u2022 లో చూపిన విధంగా డిజిటల్ పప్పులను ఉత్పత్తి చేయడానికి ఇతర వనరులు అందుబాటులో లేనట్లయితే ఫిగర్, స్క్వేర్ వేవ్ పిన్స్ SQR1, SQR2, SQR3 మరియు / లేదా SQR4 ఉపయోగించబడతాయి. \ n \ n \ u2022 తదుపరి దశ ఛానల్ మోడ్‌ను ఎంచుకోవడం అంటే ఐడిక్స్ పిన్‌ల సంఖ్య ఉపయోగం. \ n \ n \ u2022 చివరి దశ ఉపయోగంలో ఉన్న ప్రతి పిన్‌కు అందించిన జాబితా నుండి సరైన ఛానెల్ మరియు అంచులను (విశ్లేషించాల్సిన అవసరం) కలయికను ఎంచుకోవడం. \ n \ n \ u2022 ఇప్పుడు "విశ్లేషించు" బటన్‌ను నొక్కండి మరియు వేచి ఉండండి పరికరం నుండి డేటాను పొందడం కోసం. డేటా పొందిన తర్వాత, డేటా విశ్లేషించడానికి పన్నాగం చేయబడుతుంది. <
+
+    < string  name = " wave_name_holder " > త్రిభుజాకార </ string >
+    < string  name = " freq_text " > ఫ్రీక్వెన్సీ: </ string >
+    < string  name = " unit_hz " > Hz </ string >
+    < string  name = " text_phase_colon " > దశ: </ string >
+    < string  name = " text_phase " > దశ </ string >
+    < string  name = " deg_text " > \ u00b0 </ string >
+    < string  name = " select_text_holder " > వేవ్ ఫ్రీక్వెన్సీ: </ string >
+    < string  name = " text_sq1 " > SQR1 </ string >
+    < string  name = " text_sq2 " > SQR2 </ string >
+    < string  name = " text_sq3 " > SQR3 </ string >
+    < string  name = " text_sq4 " > SQR4 </ string >
+    < string  name = " text_duty_colon " > విధి: </ string >
+    < string  name = " text_duty " > డ్యూటీ </ string >
+    < string  name = " frequecy_colon " > ఫ్రీక్వెన్సీ: </ string >
+    < string  name = " set_lowercase " > సెట్ </ string >
+    < string  name = " unit_percent " >% </ string >
+    < string  name = " text_freq " > ఫ్రీక్ </ string >
+    < string  name = " text_waveform " > తరంగ రూపం </ string >
+    < string  name = " text_analog " > అనలాగ్ </ string >
+    < string  name = " text_pwm " > PWM </ string >
+    < string  name = " view_text " > </ string > చూడండి
+    < string  name = " product_sound_text " > ధ్వనిని ఉత్పత్తి చేయండి </ string >
+    < string  name = " stop_sound_text " > ఆపు ధ్వని </ string >
+    < string  name = " save_text " > సేవ్ </ string >
+    < string  name = " phase_holder_text " > 45 \ u00b0 </ string >
+    < string  name = " duty_holder_text " > 50% </ string >
+    < string  name = " open_instrument " > ఓపెన్ ఇన్స్ట్రుమెంట్ </ string >
+
+    < string  name = " reference_wave_title " > సూచన </ string >
+    < string  name = " build_in_mic_option " > అంతర్నిర్మిత MIC </ string >
+    < string  name = " pslab_mic_option " > PSLab MIC </ string >
+    < string  name = " sine " > సైన్ </ string >
+    < string  name = " triangular " > త్రిభుజాకార </ string >
+    < string  name = " square " > స్క్వేర్ </ string >
+    < string  name = " wave_frequency " > వేవ్ ఫ్రీక్వెన్సీ: </ string >
+    < string  name = " phase_offset " > దశ ఆఫ్‌సెట్: </ string >
+    < string  name = " pwm_phase " > PWM దశ: </ string >
+    < string  name = " duty_cycle " > డ్యూటీ సైకిల్: </ string >
+    < string  name = " mode " > మోడ్ </ string >
+    < string  name = " text_digital " > డిజిటల్ </ string >
+
+    < string  name = " text_connected " > కనెక్ట్ చేయబడింది </ string >
+    < string  name = " text_disconnected " > డిస్‌కనెక్ట్ చేయబడింది </ string >
+
+    < string  name = " ir_thermometer " > థర్మామీటర్ </ string >
+    < string  name = " ir_thermometer_intro " > \ u2022 ఉష్ణోగ్రతను కొలవడానికి థర్మామీటర్ ఉపయోగించవచ్చు. ఈ వాయిద్యాలు
+    MLX-90614 పరారుణ థర్మో సెన్సార్‌తో అనుకూలంగా ఉంటుంది. \ n \ n
+    L u2022 సెన్సార్ MLX-90614 ఉపయోగిస్తున్నప్పుడు, క్రింద చూపిన విధంగా సెన్సార్‌ను PSLab పరికరానికి కనెక్ట్ చేయండి </ string >
+    < string  name = " ir_thermometer_desc " > \ u2022 పిన్ మినహా పై పిన్ కాన్ఫిగరేషన్ ఒకేలా ఉండాలి
+    GND. మీరు ఏదైనా PSLab పరికరం GND పిన్‌లను ఉపయోగించవచ్చు. \ N </ string >
+
+    < string  name = " robotic_arm_second_unit " > లు </ string >
+    < string  name = " robotic_arm_degree_symbol " > \ u00B0 </ string >
+
+    < string  name = " high_limit " > అధిక పరిమితి </ string >
+    < string  name = " update_period " > నవీకరణ కాలం </ string >
+    < string  name = " max_lx " > గరిష్టంగా (Lx) </ string >
+    < string  name = " min_lx " > కనిష్ట (Lx) </ string >
+    < string  name = " avg_lx " > సగటు (Lx) </ string >
+    < string  name = " no_lux_sensor " > పరికరానికి లక్స్ సెన్సార్ లేదు </ string >
+    < string  name = " active_sensor " > యాక్టివ్ సెన్సార్ </ string >
+    < string  name = " setting_baro " > setting_baro_sensor_type </ string >
+    < string  name = " setting_compass " > setting_compass_sensor_type </ string >
+    < string  name = " setting_accelerometer " > setting_accelerometer_sensor_type </ string >
+    < string  name = " include_location " > లాగిన్ అయిన ఫైల్‌లో స్థాన డేటాను చేర్చండి </ string >
+    < స్ట్రింగ్  పేరు = " location_sensor " > include_location_sensor_data </ స్ట్రింగ్ >
+    < string  name = " include_cap " > స్థాన డేటాను చేర్చండి </ string >
+    < string  name = " time_string_accelerometer " > దయచేసి డేటా నవీకరించబడే సమయ వ్యవధిని అందించండి </ string >
+    < string  name = " time_string_lux " > దయచేసి డేటా నవీకరించబడే సమయ విరామాన్ని అందించండి (100 ms నుండి 1000 ms వరకు) </ string >
+    < string  name = " time_string_baro " > దయచేసి డేటా నవీకరించబడే సమయ విరామాన్ని అందించండి (100 ms నుండి 2000 ms వరకు) </ string >
+    < string  name = " setting_baro_update " > setting_baro_update_period </ string >
+    < string  name = " setting_lux_update " > setting_lux_update_period </ string >
+    < string  name = " setting_gyro_update " > setting_gyro_update_period </ string >
+    < string  name = " setting_accelerometer_update " > setting_accelerometer_update_period </ string >
+    < string  name = " default_value_baro " > 1.10 </ string >
+    < string  name = " default_value_lux " > 1 </ string >
+    < string  name = " default_value_acceleration " > 10 </ string >
+    < string  name = " dialog_msg_acceleration " > దయచేసి రికార్డ్ చేయవలసిన గరిష్ట త్వరణం విలువను అందించండి </ string >
+    < string  name = " dialog_msg_atm " > దయచేసి రికార్డ్ చేయవలసిన గరిష్ట atm విలువ పరిమితిని అందించండి </ string >
+    < string  name = " dialog_msg_lux " > దయచేసి రికార్డ్ చేయడానికి లక్స్ విలువ యొక్క గరిష్ట పరిమితిని అందించండి (10 Lx నుండి 10000 Lx వరకు) </ string >
+    < string  name = " dialog_msg_gyro " > దయచేసి రికార్డ్ చేయవలసిన కోణీయ వేగం యొక్క గరిష్ట పరిమితిని అందించండి (0 rad / s నుండి 1000 rad / s వరకు) </ string >
+    < string  name = " update_period_msg " > ఎంటర్ చేసిన నవీకరణ కాలం పరిమితుల్లో లేదు! </ string >
+    < string  name = " high_limit_msg " > ప్రవేశించిన అధిక పరిమితి పరిమితుల్లో లేదు! </ string >
+    < string  name = " high_limit_baro " > setting_baro_high_limit </ string >
+    < string  name = " high_limit_lux " > setting_lux_high_limit </ string >
+    < string  name = " high_limit_gyro " > setting_gyro_high_limit </ string >
+    < string  name = " high_limit_acceleration " > setting_accelerometer_high_limit </ string >
+    < string  name = " setting_lux_type " > setting_lux_sensor_type </ string >
+    < string  name = " no_file_selected " > ఫైల్ ఏదీ ఎంచుకోబడలేదు </ string >
+    < string  name = " setting_lux_sensor_gain " > setting_lux_sensor_gain </ string >
+    < string  name = " setting_gyro_sensor_gain " > setting_gyro_sensor_gain </ string >
+    < string  name = " setting_accelerometer_sensor_gain " > setting_accelerometer_sensor_gain </ string >
+    < string  name = " set_gain_sensor " > దయచేసి సెన్సార్ యొక్క లాభం సెట్ చేయండి </ string >
+    < string  name = " sens_gain " > సెన్సార్ లాభం </ string >
+    < string-array  name = " lux_sensors " >
+        < అంశం > అంతర్నిర్మిత </ అంశం >
+        < అంశం > BH1750 </ అంశం >
+        < అంశం > TSL2561 </ అంశం >
+    </ string-array >
+    < string-array  name = " thermo_sensors " >
+        < అంశం > అంతర్నిర్మిత </ అంశం >
+        < అంశం > TSL2561 </ అంశం >
+    </ string-array >
+
+    < string  name = " save_csv_data " > ఎగుమతి డేటా </ string >
+    < string  name = " delete_csv_data " > CSV డేటాను తొలగించు </ string >
+    < string  name = " record_csv_data " > రికార్డ్ డేటా </ string >
+
+    < string  name = " wrong_import_format " > ఫైల్ ఫార్మాట్ పరికర లాగ్ ఆకృతికి సరిపోలలేదు </ string >
+    < string  name = " import_log_action " > దిగుమతి లాగ్ </ string >
+    < string  name = " import_data_log_no_selection_error " > దయచేసి పరికరాల్లో ఒకదాన్ని ఎంచుకోండి </ string >
+    < string  name = " import_log_positive_button " > </ string > ఎంచుకోండి
+
+    < string  name = " data_recording_with_location " > స్థానంతో డేటా రికార్డింగ్ ప్రారంభమైంది </ string >
+    < string  name = " data_recording_with_nogps " > డేటా రికార్డింగ్ ప్రారంభమైంది కాని GPS ఆపివేయబడింది </ string >
+    < string  name = " data_recording_with_gps_off " > రికార్డ్ చేసిన డేటా స్థానం కలిగి ఉండదు </ string >
+    < string  name = " data_recording_without_location " > స్థానం లేకుండా డేటా రికార్డింగ్ ప్రారంభమైంది </ string >
+    < string  name = " no_location_data " > ఈ లాగ్‌లో స్థాన డేటా లేదు </ string >
+
+    < string  name = " data_recording_start " > డేటా రికార్డింగ్: ప్రారంభమైంది </ string >
+    < string  name = " data_recording_paused " > డేటా రికార్డింగ్: పాజ్ చేయబడింది </ string >
+    < string  name = " data_deleted " > రికార్డ్ చేయబడిన డేటా విజయవంతంగా తొలగించబడింది </ string >
+    < string  name = " nothing_to_delete " > తొలగించడానికి ఏమీ లేదు </ string >
+    < string  name = " log_deleted " > లాగ్ తొలగించబడింది </ string >
+    < string  name = " nothing_to_export " > దయచేసి కొంత డేటాను రికార్డ్ చేయండి </ string >
+    < string  name = " csv_store_text " > CSV ఫైల్ </ string > వద్ద నిల్వ చేయబడింది
+
+    < string  name = " delete_warning " > మీరు ఖచ్చితంగా ఈ ఫైల్‌ను తొలగించాలనుకుంటున్నారా? </ string >
+    < string  name = " delete_file " > ఫైల్‌ను తొలగించు </ string >
+    < string  name = " delete_capital " > తొలగించు </ string >
+    < string  name = " delete " > తొలగించు </ string >
+    < string  name = " delete_confirmation " > మీరు ఖచ్చితంగా ఈ లాగ్‌ను తొలగించాలనుకుంటున్నారా </ string >
+
+    < string  name = " allow_gps " > GPS ని అనుమతించు </ string >
+    < string  name = " allow_gps_info " > లాగిన్ అయిన ఫైల్‌లో ప్రస్తుత స్థానాన్ని చేర్చడానికి దయచేసి GPS ని ప్రారంభించండి </ string >
+    < string  name = " prmsn_denied_storage " > నిల్వ కోసం అనుమతి నిరాకరించబడింది </ string >
+
+    < string  name = " show_guide_text " > గైడ్ చూపించు </ string >
+    < string  name = " hide_guide_text " > గైడ్‌ను దాచు </ string >
+
+    < string  name = " wave_gen_guide_intro " > వేవ్ జెనరేటర్ వంటి వివిధ రకాల తరంగాలను ఉత్పత్తి చేయడానికి ఉపయోగించవచ్చు
+        సైన్ వేవ్, స్క్వేర్ వేవ్, టూ టూత్ వేవ్ మరియు ఫ్రీక్వెన్సీ, ఫేజ్, డ్యూటీ వంటి వాటి లక్షణాలను మార్చడానికి మాకు అనుమతిస్తాయి.
+        phase n ఇది వేర్వేరు దశ మరియు విధిని కలిగి ఉన్న PWM సంకేతాలను ఉత్పత్తి చేయడానికి కూడా అనుమతిస్తుంది. </ string >
+
+    < string  name = " sine_wave_instn " >
+        figure u2022 పై చిత్రంలో చూపిన విధంగా వేవ్ పిన్స్ S1 మరియు S2 ను ఛానల్ పిన్స్ CH1, CH2 తో కనెక్ట్ చేయండి \ n \ n
+        1 u2022 S1 పిన్ కోసం Wave1 బటన్ మరియు S2 పిన్ కోసం Wave2 బటన్‌ను ఎంచుకోండి \ n \ n
+        wave u2022 సైన్ వేవ్ కోసం సైన్ ఇమేజ్ బటన్ మరియు సా-టూత్ వేవ్ కోసం సా-టూత్ ఇమేజ్ బటన్ నొక్కండి \ n \ n
+        wave u2022 వేవ్‌ఫార్మ్ ప్యానెల్‌లోని బటన్లను ఉపయోగించి వాటి సంబంధిత పౌన encies పున్యాలు మరియు దశ వ్యత్యాసాన్ని (ఐచ్ఛికం) సెట్ చేయండి \ n \ n
+        os u2022 ఓసిల్లోస్కోప్‌లో తరంగాలను వీక్షించడానికి వీక్షణ బటన్‌ను నొక్కండి
+    </ string >
+
+    < string  name = " square_wave_instn " >
+        figure u2022 పై చిత్రంలో చూపిన విధంగా వేవ్ పిన్స్ SQ1 ను ఛానల్ పిన్ CH1 కి కనెక్ట్ చేయండి \ n \ n
+        Square u2022 స్క్వేర్ మోడ్‌కు మారడానికి మోడ్ బటన్‌ను నొక్కకపోతే మోడ్‌ను స్క్వేర్‌కు ఎంచుకున్నారని నిర్ధారించుకోండి \ n \ n
+        Q u2022 SQ1 బటన్‌ను ఎంచుకోండి \ n \ n
+        20 u2022 దాని ఫ్రీక్వెన్సీ మరియు డ్యూటీ సైకిల్‌ను సెట్ చేయండి \ n \ n
+        os u2022 ఓసిల్లోస్కోప్‌లో చదరపు తరంగాన్ని వీక్షించడానికి బటన్‌ను నొక్కండి
+    </ string >
+
+    < string  name = " pwm_wave_inst " >
+        W u2022 PWM మోడ్‌కు మారండి (ఈ మోడ్‌లో S1 మరియు S2 పిన్ నిలిపివేయబడతాయి) \ n \ n
+        S u2022 అన్ని SQ పిన్‌ల కోసం సాధారణ పౌన frequency పున్యాన్ని సెట్ చేయండి \ n \ n
+        S u2022 అన్ని SQ పిన్‌ల కోసం విధి మరియు దశను సెట్ చేయండి \ n \ n
+        W u2022 PWM సిగ్నల్స్ </ string > ను రూపొందించడానికి వీక్షణ బటన్ నొక్కండి
+
+    < string  name = " gen_sine_wave_text " > సైన్ వేవ్ లేదా సా-టూత్ వేవ్‌ను రూపొందించడానికి: </ string >
+    < string  name = " gen_sq_text " > స్క్వేర్ వేవ్ </ string > ను రూపొందించడానికి
+    < string  name = " gen_pwm_text " > అదేవిధంగా, నాలుగు వేర్వేరు PWM సిగ్నల్‌ను ఉత్పత్తి చేయడానికి </ string >
+
+    < string  name = " question " > Q: </ string >
+    < string-array  name = " faq_questions " >
+        < అంశం > పాకెట్ సైన్స్ ల్యాబ్ అంటే ఏమిటి? నేను దానితో ఏమి చేయగలను? </ Item >
+        < అంశం > నేను పాకెట్ సైన్స్ ల్యాబ్‌ను ఎక్కడ కొనగలను? </ item >
+        < అంశం > పాకెట్ సైన్స్ ల్యాబ్ కోసం Android అనువర్తనాన్ని నేను ఎక్కడ డౌన్‌లోడ్ చేయగలను? </ item >
+        < అంశం > విండోస్, లైనక్స్ మరియు మాక్ కోసం పాకెట్ సైన్స్ ల్యాబ్ కోసం డెస్క్‌టాప్ అనువర్తనాన్ని నేను ఎక్కడ డౌన్‌లోడ్ చేయగలను? </ item >
+        < అంశం > మీకు ఆపిల్ పరికరాల కోసం iOS అనువర్తనం ఉందా? </ item >
+        < అంశం > నేను పరికరానికి ఎలా కనెక్ట్ చేయగలను? నాకు ఎలాంటి యుఎస్‌బి కేబుల్ అవసరం? OTG USB కేబుల్ అంటే ఏమిటి? </ అంశం >
+        < అంశం > మీ అనువర్తనాలు లేదా హార్డ్‌వేర్‌లలో ఒకదానిలో నేను బగ్‌ను కనుగొన్నాను. ఏం చేయాలి? నేను ఎక్కడ నివేదించాలి? </ అంశం >
+        < అంశం > నేను అనువర్తనాల్లో డేటాను రికార్డ్ చేయగలను లేదా సేవ్ చేయగలను మరియు ఎగుమతి చేయవచ్చా లేదా దిగుమతి చేసుకోవచ్చా? </ item >
+        < అంశం > నా Android ఫోన్‌లో ఇప్పటికే కొన్ని సెన్సార్లు ఉన్నాయి, నేను వాటిని PSLab అనువర్తనంతో కూడా ఉపయోగించవచ్చా? </ item >
+        < అంశం > నేను PSLab పరికరం మరియు అనువర్తనాలతో ఏ బాహ్య సెన్సార్లను ఉపయోగించగలను? ఏవి అనుకూలంగా ఉంటాయి? </ అంశం >
+        < అంశం > ఫోన్ లేదా డెస్క్‌టాప్ కనెక్ట్ చేయకుండా పాకెట్ సైన్స్ ల్యాబ్‌ను స్వతంత్ర డేటా లాగర్‌గా ఎలా ఉపయోగించగలను? </ item >
+        < అంశం > ఇది బాగుంది, PSLab ఓపెన్ హార్డ్‌వేర్! పాకెట్ సైన్స్ ల్యాబ్ యొక్క స్కీమాటిక్స్ మరియు భాగాల జాబితాను నేను ఎక్కడ కనుగొనగలను? </ Item >
+        < అంశం > PSLab ను ఎవరు అభివృద్ధి చేస్తారు? మీరు ఎప్పుడు ప్రారంభించారు? దీని వెనుక కథ ఏమిటి? </ Item >
+        < అంశం > వెబ్‌సైట్‌లో నేను పొరపాటును కనుగొన్నాను, సమస్యను నేను ఎక్కడ సమర్పించగలను? </ item >
+    </ string-array >
+
+    < string  name = " answer " > A: </ string >
+    < string-array  name = " faq_answers " >
+        < అంశం> పాకెట్ సైన్స్ ల్యాబ్ (పిఎస్‌ల్యాబ్) ఒక చిన్న యుఎస్‌బి ఆధారిత హార్డ్‌వేర్ బోర్డు, దీనిని కొలతలు మరియు ప్రయోగాలకు ఉపయోగించవచ్చు. ఇది Android ఫోన్‌లు లేదా PC లకు పొడిగింపుగా పనిచేస్తుంది. PSLab అంతర్నిర్మిత ఓసిల్లోస్కోప్, మల్టీమీటర్, వేవ్ జనరేటర్, లాజిక్ ఎనలైజర్, పవర్ సోర్స్ మరియు మరెన్నో సాధనాలతో వస్తుంది. దీనిని రోబోటిక్స్ నియంత్రణ అనువర్తనంగా కూడా ఉపయోగించవచ్చు. మరియు, మేము నిరంతరం ఎక్కువ డిజిటల్ పరికరాలను జోడిస్తున్నాము. PSLab ఒకటి చాలా పరికరాలు. సంబంధిత పిన్‌లకు రెండు వైర్లను కనెక్ట్ చేయండి (వివరణ PSLab బోర్డు వెనుక భాగంలో ఉంది) మరియు కొలత ప్రారంభించండి. డేటాను వీక్షించడానికి మరియు సేకరించడానికి మీరు మా ఓపెన్ సోర్స్ ఆండ్రాయిడ్ లేదా డెస్క్‌టాప్ అనువర్తనాన్ని ఉపయోగించవచ్చు. మీరు PSLab పిన్ స్లాట్‌లకు వందలాది అనుకూల I²C ప్రామాణిక సెన్సార్‌లను ప్లగ్ చేయవచ్చు. ఇది ప్రోగ్రామింగ్ అవసరం లేకుండా పనిచేస్తుంది. కాబట్టి, మీరు చేసే ప్రయోగాలు మీ ination హకు మాత్రమే పరిమితం! </ అంశం>
+        < అంశం > షాపుల కోసం ఒక అవలోకనం పేజీ ఉంది, ఇక్కడ మీరు & lt; లో వివిధ ప్రాంతాలలో పాకెట్ సైన్స్ ల్యాబ్ పరికరాన్ని కొనుగోలు చేయవచ్చు . a href = \ "https: //pslab.io/shop/ \" & gt; వెబ్‌సైట్ https://pslab.io/shop/ & lt; / a & gt; . </ అంశం >
+        < అంశం > అనువర్తనాన్ని & lt; a href = \ "https: //f-droid.org/en/packages/io.pslab/ \" & gt; ఎఫ్-డ్రాయిడ్ & lt; / a & gt; లేదా & lt; a href = \ "https: //play.google.com/store/apps/details? id = io.pslab \" & gt; ప్లే స్టోర్ & lt; / a & gt; . దర్శకత్వం వహించాల్సిన లింక్‌లపై క్లిక్ చేయండి! </ Item >
+        < అంశం > మేము విండోస్, లైనక్స్ మరియు మాక్ కోసం డెస్క్‌టాప్ అనువర్తనాన్ని అభివృద్ధి చేస్తున్నాము & lt; a href = \ "https: //github.com/fossasia/pslab-desktop/tree/install \" & gt; మా డెస్క్‌టాప్ జిట్ రిపోజిటరీ. మీరు దీన్ని ప్రాజెక్ట్ యొక్క ఇన్‌స్టాల్ బ్రాంచ్‌లో ఇక్కడ కనుగొనవచ్చు & lt; / a & gt; . అనువర్తనం ఇంకా అభివృద్ధిలో ఉంది. మేము అన్ని ప్లాట్‌ఫామ్‌లలో పనిచేసే ఎలక్ట్రాన్ మరియు పైథాన్ వంటి సాంకేతికతలను ఉపయోగిస్తున్నాము. ఏదేమైనా, ప్రతిచోటా తుది ఇన్స్టాలర్ పని చేయడానికి ఇక్కడ మరియు అక్కడ కొన్ని సర్దుబాట్లు మరియు మెరుగుదలలు అవసరం. కాబట్టి, దయచేసి కొన్ని అవాంతరాలను ఆశించండి. సమస్యలు, దోషాలు మరియు ఫీచర్ అభ్యర్థనలను సమర్పించడానికి మీరు రిపోజిటరీలోని ట్రాకర్‌ను ఉపయోగించవచ్చు. </ Item >
+        <item> దురదృష్టవశాత్తు ఆపిల్ కఠినమైన ఆంక్షలను కలిగి ఉంది మరియు వినియోగదారులను వారి స్వంత ఆపిల్ పరికరాలకు ఇతర హార్డ్‌వేర్‌లను కనెక్ట్ చేయకుండా నిరోధించే విధంగా నియంత్రిస్తుంది. ఇది వినియోగదారుల స్వేచ్ఛకు విరుద్ధమని చాలా మంది వాదించారు. హార్డ్వేర్ ఉత్పత్తిదారులలో ఎక్కువమంది తమ ఉత్పత్తులను ఆపిల్ పరికరాలతో కనెక్ట్ చేయడానికి ఎంపికలను అందించలేరు. ఆపిల్ చాలా సందర్భాల్లో ఆపిల్ కాని ఉత్పత్తులను దాని ఫోన్లు, ప్యాడ్‌లు మరియు ఇతర హార్డ్‌వేర్‌లతో అనుసంధానించడానికి అనుమతించదు. ఇది సుదీర్ఘమైన మరియు ఖరీదైన ప్రక్రియ తర్వాత మాత్రమే కొన్నిసార్లు సాధ్యమవుతుంది, కాని మేము అలాంటి ప్రక్రియ ద్వారా వెళ్ళడానికి ప్రయత్నించినా అది ఖచ్చితంగా తెలియదు, పాకెట్ సైన్స్ ల్యాబ్‌ను అనుసంధానించడానికి ఆపిల్ యొక్క సహకారాన్ని పొందడం సాధ్యమవుతుంది. ఆపిల్ యొక్క నిర్బంధ విధానాలు మరియు యాపిల్ ఉత్పత్తుల వినియోగదారుల స్వేచ్ఛను పరిమితం చేసే యాజమాన్య విధానం కారణంగా మేము ప్రస్తుతం iOS అనువర్తనాన్ని అందించలేము. సంఘం క్రమం తప్పకుండా కొత్త విధానాలను చర్చిస్తుంది, కానీ దురదృష్టవశాత్తు మేము ఇంకా పరిష్కారం కనుగొనలేదు. వినియోగదారులు తమ పరికరాలను వారు కోరుకున్న విధంగా ఉపయోగించడానికి అనుమతించకుండా, లాభాల ఉత్పత్తి యొక్క ప్రధాన లక్ష్యం కారణంగా వినియోగదారులకు మద్దతు ఇవ్వడానికి ఆపిల్కు ఆసక్తి లేదు. ఆపిల్ యొక్క ప్రవర్తన కొంతమంది ప్రాథమిక మానవ హక్కులను మరియు ఆపిల్ ఉత్పత్తుల వినియోగదారులుగా మారే ప్రజల స్వేచ్ఛను పరిమితం చేసే విధంగా చూస్తారు. </ Itm
+        < ఐటెమ్ > పరికరానికి కనెక్ట్ అవ్వడానికి మీకు OTG USB కేబుల్ అవసరం ( & lt; a href = \ "https: //en.wikipedia.org/wiki/USB_On-The-Go \" & gt; OTG = ప్రయాణంలో & lt; / a & gt; ) ఇది USB కేబుల్, ఇది కనెక్ట్ చేయబడిన పరికరాలను హోస్ట్ మరియు పరికరం పాత్రల మధ్య ముందుకు వెనుకకు మార్చడానికి అనుమతిస్తుంది. & lt; u & gt; OTG అనుకూలత లేని USB కేబుల్స్ పనిచేయవు & lt; / u & gt; . పిఎస్‌ల్యాబ్‌ను ఇఎస్‌పి వైఫై చిప్ లేదా బ్లూటూత్ చిప్‌తో విస్తరించడం మరియు ఆండ్రాయిడ్ యాప్‌ను ఉపయోగించి ఈ గేట్‌వేల ద్వారా కమ్యూనికేట్ చేయడం కూడా సాధ్యమే. మీరు & lt; a href = \ "https: // github.హార్డ్వేర్ డెవలపర్ డాక్యుమెంటేషన్ మరియు మరిన్ని వివరాల కోసం GitHub లో కోడ్ & lt; / a & gt; . </ అంశం >
+        < అంశం > మా అన్ని ప్రాజెక్టులలో ఇష్యూ ట్రాకర్స్ ఉన్నాయి. వారు ప్రస్తుతం GitHub లో హోస్ట్ చేయబడ్డారు. బగ్ లేదా ఫీచర్ అభ్యర్థనను సమర్పించడానికి మీరు సేవకు లాగిన్ అవ్వాలి. & lt; a href = \ "https://github.com/fossasia?utf8=%E2%9C%93 & amp; q = pslab \" & gt; మా PSLab రిపోజిటరీల జాబితా ఇక్కడ ఉంది & lt; / a & gt; (మీరు ఈ పేజీని యాక్సెస్ చేసినప్పుడు కొంచెం క్రిందికి స్క్రోల్ చేయండి). </ item >
+        < అంశం > అవును, మేము రికార్డ్ మరియు ప్లే ఫంక్షన్ లేదా Android మరియు డెస్క్‌టాప్ అనువర్తనంలోని సాధనాల్లో కాన్ఫిగరేషన్‌లను సేవ్ చేయడానికి మరియు తెరవడానికి ఒక మార్గాన్ని అమలు చేసాము. మీరు రికార్డ్ చేసిన డేటాను అనువర్తనాల్లోకి దిగుమతి చేసుకోవచ్చు మరియు చూడవచ్చు. ఈ లక్షణం ఇప్పటికీ భారీ అభివృద్ధిలో ఉంది, కానీ చాలా చోట్ల బాగా పనిచేస్తుంది. మీరు దీన్ని అనువర్తనాల ఎగువ పట్టీలో కనుగొనవచ్చు. డేటాను రికార్డ్ చేయడానికి, ప్లే చేయడానికి, సేవ్ చేయడానికి మరియు తెరవడానికి బటన్లు ఉన్నాయి. </ Item >
+        < అంశం > అవును, ఖచ్చితంగా. మీరు PSLab Android అనువర్తనాన్ని ఇన్స్టాల్ చేయవచ్చు ( ; & lt ఒక href = \ "? Https: //play.google.com/store/apps/details id = io.pslab \" & gt; ప్లే స్టోర్ & lt; / a & gt; , & lt ; a href = \ "https: //f-droid.org/en/packages/io.pslab/ \" & gt; Fdroid & lt; / a & gt; ) మీ ఫోన్‌లో మరియు లక్స్మీటర్ లేదా కంపాస్ వంటి పరికరాలతో ఉపయోగించండి. దశల వారీగా మరింత అంతర్నిర్మిత సెన్సార్ల కోసం మేము మద్దతును జోడిస్తున్నాము. </ Item >
+        <item> మా అనువర్తనాల్లో మేము పరిశ్రమ ప్రమాణం I²C ని ఉపయోగిస్తాము (& lt; a href = \ "https: //en.wikipedia.org/wiki/I%C2%B2C \" & gt; వికీపీడియా & lt; / a & gt;). మీరు OTG USB కేబుల్ (OTG = ప్రయాణంలో ఉన్నప్పుడు) ఉపయోగించి USB పోర్ట్ ద్వారా పరికరానికి అనుసంధానించబడిన సెన్సార్ల నుండి డేటాను పొందవచ్చు, ఇది USB కేబుల్, ఇది కనెక్ట్ చేయబడిన పరికరాలను హోస్ట్ మరియు పరికర పాత్రల మధ్య ముందుకు వెనుకకు మార్చడానికి అనుమతిస్తుంది. . బదిలీ కోసం మేము UART (యూనివర్సల్ ఎసిన్క్రోనస్ రిసీవర్-ట్రాన్స్మిటర్, & lt; a href = \ "https: //en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter \" & gt; వికీపీడియా & lt; / a & gt;) ఉపయోగిస్తాము. నిర్దిష్ట పరికరాలతో చాలా సెన్సార్లను ఉపయోగించవచ్చు, ఉదా. బారోమీటర్, థర్మామీటర్, గైరోస్కోప్ మొదలైనవి. మీరు ప్రతి పరికరం యొక్క కుడి ఎగువ బర్గర్ మెనూలోని ఇన్స్ట్రుమెంట్ సెట్టింగులలో సెన్సార్ల కోసం కాన్ఫిగరేషన్‌ను యాక్సెస్ చేయవచ్చు. I²C ప్రమాణాన్ని ఉపయోగించే అన్ని సెన్సార్లు పరికరానికి అనుకూలంగా ఉంటాయి. అనలాగ్ మరియు డిజిటల్ సెన్సార్ల కోసం కనెక్షన్ పిన్స్ ఉన్నాయి. మీరు పరికరం వెనుక భాగంలో పిన్స్ యొక్క వివరణను కనుగొంటారు. మా అనువర్తనాల్లో ఒకదానిలో ఇంకా నిర్దిష్ట పరికరం లేనప్పటికీ, మీరు ఇప్పటికీ ఓసిల్లోస్కోప్ ఇన్స్ట్రుమెంట్ భాగాన్ని ఉపయోగించి ముడి డేటాను చూడవచ్చు మరియు నిల్వ చేయవచ్చు. & Lt; a href = \ "https: //pslab.io/sensors/ \" & gt; వెబ్‌సైట్‌లో సిఫార్సు చేసిన సెన్సార్ల జాబితా ఉన్న పేజీ & lt; / a & gt;. </ Itm
+        < అంశం > మేము ఇప్పటికే ఈ కార్యాచరణను అమలు చేసాము, అయితే ఇది ఇప్పటికీ ప్రోటోటైప్ దశలో ఉంది. మీరు Android అనువర్తనంలో కాన్ఫిగర్ ఫైల్‌ను రూపొందించవచ్చు మరియు దానిని PSLab పరికరానికి బదిలీ చేయవచ్చు (మీరు మా గితుబ్ ఆర్గ్‌లో కనుగొన్న ఫర్మ్‌వేర్‌ను నవీకరించవలసి ఉంటుంది). మీరు USB బ్యాటరీతో PSLab పరికరానికి శక్తినివ్వవచ్చు మరియు ఇది అనువర్తనం నుండి స్వతంత్రంగా డేటాను సేకరించగలదు. మీరు అనువర్తనాన్ని కనెక్ట్ చేసిన తర్వాత మీరు సేకరించిన డేటాను డౌన్‌లోడ్ చేసుకోవచ్చు. పరికరం యొక్క భవిష్యత్తు సంస్కరణలు డేటాను స్థానికంగా నిల్వ చేయడానికి SD కార్డుతో వస్తాయి. ప్రస్తుతానికి ఈ లక్షణాన్ని ఉపయోగించడానికి ఇంకా పరిమితులు ఉన్నాయి, కాని మేము దానిపై నిరంతరం పని చేస్తున్నాము 🙂 </ item >
+        < అంశం > PSLab హార్డ్‌వేర్ & lt; a href = \ "http: //www.kicad-pcb.org/ \" & gt; కికాడ్ & lt; / a & gt; . సాఫ్ట్‌వేర్ అన్ని రకాల ఫార్మాట్‌లు మరియు భాగాల జాబితాలను సృష్టించగలదు. మీరు స్కీమాటిక్స్ మరియు సోర్స్ ఫైళ్ళను & lt; a href = \ "https: //github.com/fossasia/pslab-hardware \" & gt; హార్డ్వేర్ Git రిపోజిటరీ ఇక్కడ & lt; / a & gt; . </ అంశం >
+        <item> PSLab & lt; a href = \ "https: //fossasia.org/ \" & gt; FOSSASIA & lt; / a & gt;. వివిధ రిపోజిటరీలలో ఈ ప్రాజెక్టుకు సహకరించిన 100 మందికి పైగా డెవలపర్లు ఉన్నారు. భారతదేశానికి చెందిన భౌతిక ఉపాధ్యాయుడు ప్రవీణ్ కుమార్, కంబోడియాలో జరిగిన ఫోసాసియా సమ్మిట్‌లో ఎక్స్పీస్ ప్రాజెక్ట్ నుండి ప్రేరణ పొందిన ఓపెన్ ఫిజిక్స్ ల్యాబ్ పరికరం యొక్క ఆలోచనను ప్రవేశపెట్టిన తరువాత ఈ ప్రాజెక్ట్ ప్రారంభించబడింది. ఈ ప్రాజెక్ట్ ముందుకు సాగడానికి అతను సహాయం చేసాడు మరియు ప్రారంభ సహాయకులతో కలిసి పనిచేశాడు సాఫ్ట్‌వేర్ భాగాలు. పిఎస్‌లాబ్ యొక్క మొదటి సంస్కరణను రూపొందించడానికి ఒక ప్రాతిపదికగా తాను ఇంతకుముందు అభివృద్ధి చేసిన ఎక్స్‌పీస్ బోర్డులను ఉపయోగించిన జితిన్ బిపి జిఎస్‌ఒసి ప్రాజెక్టులో భాగంగా ఓపెన్ హార్డ్‌వేర్ బోర్డును 2017 లో విడుదల చేశారు. తరువాతి సంవత్సరాల్లో హార్డ్‌వేర్ భాగాలు నవీకరించబడ్డాయి, పరిమాణం మరియు రూపకల్పన సర్దుబాటు చేయబడింది, దీని ఫలితంగా చాలా తక్కువ ఉత్పత్తి ఖర్చులు ఏర్పడతాయి మరియు ఫర్మ్వేర్లో అనేక లక్షణాలు జోడించబడ్డాయి. ఆండ్రాయిడ్ అనువర్తనం మొదటి నుండి అభివృద్ధి చేయబడింది మరియు డెస్క్‌టాప్ అనువర్తనం చాలావరకు కొత్త క్రాస్-ప్లాట్‌ఫాం ఎలక్ట్రాన్ ఫ్రంటెండ్‌తో తిరిగి అమలు చేయబడింది. & lt; a href = \ "https: //twitter.com/Cloudypadmal \" & gt; పద్మల్ M & lt; / a & gt; శ్రీలంక నుండి 2018 నుండి టెక్ బృందానికి నాయకత్వం వహిస్తుంది మరియు & lt; a href = \ "https: //twitter.com/mariobehling \"> మారియో బెహ్లింగ్ & lt; / a & gt;, కోర్ డెవలపర్లు మరియు విస్తృత సమాజం నుండి సహకారి . 2019 నుండి ఫోసాసియా పెద్ద మొత్తంలో బోర్డుల బ్యాచ్‌లను ఉత్పత్తి చేస్తుంది. ఓపెన్ హార్డ్‌వేర్ ప్రాజెక్ట్‌గా ఒక ఉదాహరణను సెట్ చేయడం, వాణిజ్యపరంగా స్థిరంగా ఉండటానికి మరియు ఓపెన్ హార్డ్‌వేర్ మరియు ఉచిత మరియు ఓపెన్ సోర్స్ సాఫ్ట్‌వేర్‌ను రూపొందించడానికి ఇతరులను ప్రేరేపించడం మా లక్ష్యం. </ Itm
+        < అంశం > మేము మా పనిలో ఎక్కువ భాగం ఇష్యూ ట్రాకర్లను ఉపయోగిస్తాము. మీరు సమర్పించవచ్చు & lt; a href = \ "https: //github.com/fossasia/pslab.io/issues \" & gt; మా ఇష్యూ ట్రాకర్‌లో వెబ్‌సైట్‌కు సంబంధించి మీరు కనుగొన్న సమస్యలు ఇక్కడ & lt; / a & gt; . </ అంశం >
+    </ string-array >
+
+    < string  name = " date_of_recording " > రికార్డ్ చేసిన తేదీ </ string >
+    < string  name = " time_of_recording " > TIME OF RECORDING </ string >
+    < string  name = " date_of_rec " > రికార్డ్ తేదీ </ string >
+    < string  name = " అక్షాంశం " > అక్షాంశం </ string >
+    < string  name = " longitude " > రేఖాంశం </ string >
+    < string  name = " location " > స్థానం </ string >
+
+    < string  name = " start_time " > ప్రారంభ సమయం </ string >
+    < string  name = " end_time " > ముగింపు సమయం </ string >
+    < string  name = " timezone " > టైమ్‌జోన్ </ string >
+    < string  name = " dev_model " > పరికర మోడల్ </ string >
+    < string  name = " dev_brand " > పరికర బ్రాండ్ </ string >
+    < string  name = " dev_android_sdk " > పరికర Android SDK </ string >
+
+    < string  name = " log_data " > లాగ్ చేసిన డేటా </ string >
+    < string  name = " no_logs_to_display " > ప్రదర్శించడానికి డేటా లాగ్‌లు లేవు </ string >
+    < string  name = " show_logged_data " > లాగ్ చేసిన డేటాను చూపించు </ string >
+    < string  name = " time_elapsed " > సమయం గడిచిపోయింది </ string >
+
+    < string  name = " no_baro_sensor " > పరికరానికి బేరోమీటర్ లేదు </ string >
+
+    < string  name = " gas_sensor " > గ్యాస్ సెన్సార్ </ string >
+    < string  name = " gas_sensor_description " > NH3, NOx, ఆల్కహాల్, బెంజీన్, పొగ మరియు CO2 తో సహా విస్తృత శ్రేణి వాయువులను గుర్తించడానికి గాలి నాణ్యత సెన్సార్ </ string >
+    < string  name = " gas_sensor_label " > గ్యాస్ విషయాలు (PPM) </ string >
+    < string  name = " gas_sensor_unit " > PPM </ string >
+
+    < string  name = " dust_sensor " > డస్ట్ సెన్సార్ </ string >
+    < string  name = " dust_sensor_intro " > గాలి నాణ్యతను కొలవడానికి డస్ట్ సెన్సార్ ఉపయోగించబడుతుంది </ string >
+    < string  name = " dust_sensor_desc " > పిన్ రేఖాచిత్రం ప్రకారం పిన్‌లను కనెక్ట్ చేయండి మరియు కొలత ప్రారంభించండి. PSLab లో VCC పిన్ ఉపయోగించి సెన్సార్‌ను శక్తివంతం చేయండి మరియు డేటా పిన్‌ను CH1 కి కనెక్ట్ చేయండి. నిర్ధారించుకోండి గ్రౌండ్ వైర్ లో PSLab GND పిన్నుల ఒక అనుసంధానించబడిన. </ స్ట్రింగ్ >
+    < string  name = " dust_sensor_description " > చదరపు మీటరుకు కణాల పరంగా గాలి నాణ్యతను కొలవడానికి డస్ట్ సెన్సార్ ఉపయోగించబడుతుంది </ string >
+    < string  name = " dust_sensor_label " > కణాలు (PPM) </ string >
+    < string  name = " dust_sensor_unit " > PPM </ string >
+    < string  name = " dust_sensor_default " > 1000 </ string >
+    < string  name = " dust_sensor_status_label " > గాలి నాణ్యత </ string >
+    < string  name = " setting_dust_update_period " > setting_dust_update_period </ string >
+    < string  name = " setting_dust_high_limit " > setting_dust_high_limit </ string >
+    < string  name = " setting_dust_sensor_type " > setting_dust_sensor_type </ string >
+    < string  name = " dust_summary " > 1000 ms </ string >
+    < string  name = " dialog_msg_dust " > దయచేసి ధూళి కణ విలువను రికార్డ్ చేయడానికి ప్రవేశ విలువను అందించండి (0.0 ~ 5.0) </ string >
+    < string-array  name = " dust_sensor_list " >
+        < అంశం > DSM-501A </ అంశం >
+        < అంశం > ఇతర </ అంశం >
+    </ string-array >
+    < string-array  name = " dust_sensor_list_values " >
+        < అంశం > 0 </ అంశం >
+        < అంశం > 1 </ అంశం >
+    </ string-array >
+
+    < string  name = " robotic_arm " > రోబోటిక్ ఆర్మ్ </ string >
+    < string  name = " robotic_arm_intro " > రోబోటిక్ చేయి అనేది ఒక రకమైన యాంత్రిక చేయి, సాధారణంగా ప్రోగ్రామబుల్, మానవ చేయికి సమానమైన విధులు. </ string >
+    < string  name = " robotic_arm_desc " > మీ చేతిని స్థలం నుండి మరొక ప్రదేశానికి తరలించడం మీ చేయి పని. అదేవిధంగా, రోబోటిక్ ఆర్మ్ యొక్క పని ఎండ్ ఎఫెక్టర్‌ను స్థలం నుండి మరొక ప్రదేశానికి తరలించడం. మీరు రోబోటిక్ ఆయుధాలను అన్ని రకాల ఎండ్ ఎఫెక్టర్లతో తయారు చేయవచ్చు, ఇవి ఒక నిర్దిష్ట అనువర్తనానికి సరిపోతాయి. ఒక సాధారణ ముగింపు ప్రభావం అనేది చేతి యొక్క సరళీకృత సంస్కరణ, ఇది విభిన్న వస్తువులను గ్రహించి తీసుకువెళ్ళగలదు. </ String >
+    < string  name = " robotic_arm_description " > రోబోటిక్ చేయి యొక్క సర్వోలను నియంత్రిస్తుంది </ string >
+    < string  name = " servo1_title " > సర్వో 1 </ string >
+    < string  name = " servo2_title " > సర్వో 2 </ string >
+    < string  name = " servo3_title " > సర్వో 3 </ string >
+    < string  name = " servo4_title " > సర్వో 4 </ string >
+    < string  name = " invalid_servo_value " > దయచేసి 0 మరియు 360 మధ్య విలువను ఎంచుకోండి </ string >
+    < string-array  name = " baro_sensors " >
+        < అంశం > అంతర్నిర్మిత </ అంశం >
+        < అంశం > BMP180 </ అంశం >
+    </ string-array >
+    < string-array  name = " baro_sensor_list_values " >
+        < అంశం > 0 </ అంశం >
+        < అంశం > 1 </ అంశం >
+    </ string-array >
+    < string-array  name = " celerometer_sensors " >
+        < అంశం > అంతర్నిర్మిత </ అంశం >
+        < అంశం > MPU6050 </ అంశం >
+    </ string-array >
+    < string-array  name = " celerometer_sensor_list_values " >
+        < అంశం > 0 </ అంశం >
+        < అంశం > 1 </ అంశం >
+    </ string-array >
+    < string-array  name = " కంపాస్_సెన్సర్లు " >
+        < అంశం > అంతర్నిర్మిత </ అంశం >
+        < అంశం > HMC5883L </ item >
+    </ string-array >
+    < string-array  name = " కంపాస్_సెన్సర్స్_లిస్ట్_వాల్యూస్ " >
+        < అంశం > 0 </ అంశం >
+        < అంశం > 1 </ అంశం >
+    </ string-array >
+
+    < string  name = " multimeter_default_1000 " > 1000 </ string >
+    < string  name = " multimeter_summary " > 1000 ms </ string >
+    < string  name = " setting_multimeter_update " > setting_multimeter_update_period </ string >
+    < string  name = " time_string_multimeter " > దయచేసి డేటా నవీకరించబడే సమయ విరామాన్ని అందించండి (100 ms నుండి 2000 ms) </ string >
+
+    < string  name = " timebase_title " > టైమ్‌బేస్ </ string >
+
+    < string  name = " delete_all " > మొత్తం డేటాను తొలగించు </ string >
+    < string  name = " delete_all_message " > మీకు ఖచ్చితంగా తెలుసా? </ string >
+    < string  name = " baro_meter " > బేరోమీటర్ </ string >
+    < string  name = " alti_unit " > m </ string >
+    < string  name = " baro_unit " > atm </ string >
+    < string  name = " avg_baro " > సగటు (atm) </ string >
+    < string  name = " avg_alti " > ఎత్తు (m) </ string >
+    < string  name = " min_baro " > కనిష్ట (atm) </ string >
+    < string  name = " max_baro " > గరిష్టంగా (atm) </ string >
+    < string  name = " baro_meter_description " > వాతావరణ పీడనాన్ని కొలుస్తుంది </ string >
+    < string  name = " baro_meter_intro " > \ u2022 వాతావరణ పీడనాన్ని కొలవడానికి బేరోమీటర్ ఉపయోగించవచ్చు. ఈ పరికరం
+    ఏదైనా Android పరికరంలో అంతర్నిర్మిత ప్రెజర్ సెన్సార్ లేదా BMP-180 ప్రెజర్ సెన్సార్‌తో అనుకూలంగా ఉంటుంది. \ n \ n
+    MP u2022 మీరు సెన్సార్ BMP-180 ను ఉపయోగించాలనుకుంటే, చిత్రంలో చూపిన విధంగా సెన్సార్‌ను PSLab పరికరానికి కనెక్ట్ చేయండి. </ string >
+    < string  name = " baro_meter_desc " > \ u2022 పిన్ మినహా పై పిన్ కాన్ఫిగరేషన్ ఒకేలా ఉండాలి
+    GND. GND గ్రౌండ్ కోసం ఉద్దేశించబడింది మరియు ఏదైనా PSLab పరికరం GND పిన్‌లు సాధారణమైనవి కాబట్టి వాటిని ఉపయోగించవచ్చు. \ N \ n
+navigation     u2022 దిగువ నావిగేషన్ బార్ నుండి < b > కాన్ఫిగర్ </ b > టాబ్‌కు వెళ్లి సెన్సార్‌ను ఎంచుకోండి మరియు < b > సెన్సార్ </ b > కింద డ్రాప్ డౌన్ మెనులో BMP-180 ఎంచుకోండి . </ string >
+    < string  name = " గైరోస్కోప్ " > గైరోస్కోప్ </ string >
+    < string  name = " gyroscope_description " > XYZ అక్షం </ string > గురించి భ్రమణ రేటును కొలుస్తుంది
+    < string  name = " gyroscope_intro " > X, Y మరియు Z అక్షాలతో పాటు శరీరం యొక్క భ్రమణ రేటును కొలవడానికి గైరోస్కోప్ ఉపయోగించబడుతుంది. </ string >
+    < స్ట్రింగ్  పేరు = " గైరోస్కోప్_డిస్క్రిప్షన్_టెక్స్ట్ " > సానుకూల X, Y మరియు Z అక్షాల దిశ. పరికరంలోని ఏదైనా సానుకూల అక్షం కోసం, సవ్యదిశలో భ్రమణం ప్రతికూల విలువలను అందిస్తుంది మరియు అపసవ్య దిశలో భ్రమణం సానుకూల విలువలను అందిస్తుంది. </ String >
+    < string  name = " gyroscope_config " > గైరోస్కోప్ కాన్ఫిగరేషన్ </ string >
+    < string  name = " no_gyroscope_sensor " > ఈ కార్యాచరణకు మీ పరికరానికి సెన్సార్ అవసరం లేదు </ string >
+    < string  name = " no_data_recorded_gyro " > పరికరంలో సెన్సార్ లేనందున డేటా ఏదీ నమోదు చేయబడలేదు. బాహ్య సెన్సార్‌తో ప్రయత్నించండి. </ String >
+    < string  name = " lux_meter " > లక్స్ మీటర్ </ string >
+    < string  name = " lux_default_1000 " > 1000 </ string >
+    < string  name = " lux_default_2000 " > 2000 </ string >
+    < string  name = " gyro_default_20 " > 20 </ string >
+    < string  name = " lux_default_0 " > 0 </ string >
+    < string  name = " lux_summary " > 1000 ms </ string >
+    < string  name = " log_saved_directory " > లాగ్ \ n </ string > లో సేవ్ చేయబడింది
+    < string  name = " log_saved_failed " > లాగ్‌ను సేవ్ చేయలేకపోయింది. దయచేసి నిల్వ అనుమతి తనిఖీ చేయండి. </ String >
+    < string  name = " open " > ఓపెన్ </ string >
+    < string  name = " play " > ప్లే </ string >
+    < string  name = " save_graph " > గ్రాఫ్‌ను సేవ్ చేయండి </ string >
+    < string  name = " lux_meter_intro " > \ u2022 లక్స్ మీటర్ పరిసర కాంతి తీవ్రతను కొలవడానికి ఉపయోగించవచ్చు. ఈ వాయిద్యాలు
+    ఏదైనా Android పరికరంలో అంతర్నిర్మిత లైట్ సెన్సార్ లేదా BH-1750 లైట్ సెన్సార్‌తో అనుకూలంగా ఉంటుంది. \ n \ n
+    20 u2022 మీరు సెన్సార్ BH-1750 ను ఉపయోగించాలనుకుంటే, క్రింద చూపిన విధంగా సెన్సార్‌ను PSLab పరికరానికి కనెక్ట్ చేయండి </ string >
+    < string  name = " lux_meter_desc " > \ u2022 పిన్ మినహా పై పిన్ కాన్ఫిగరేషన్ ఒకేలా ఉండాలి
+    GND. GND గ్రౌండ్ కోసం ఉద్దేశించబడింది మరియు ఏదైనా PSLab పరికరం GND పిన్‌లు సాధారణమైనవి కాబట్టి వాటిని ఉపయోగించవచ్చు. \ N \ n
+    navigation u2022 దిగువ నావిగేషన్ బార్ నుండి కాన్ఫిగర్ టాబ్‌కు వెళ్లి సెన్సార్‌ను ఎంచుకోండి మరియు సెలెక్ట్ సెన్సార్ కింద డ్రాప్ డౌన్ మెనులో BHT-1750 ని ఎంచుకోండి. \ n </ string >
+    < string  name = " no_data_fetched " > డేటా పొందలేదు </ string >
+    < string  name = " celerometer_configurations " > యాక్సిలెరోమీటర్ కాన్ఫిగరేషన్లు </ string >
+    < string  name = " view_map " > మ్యాప్‌ను చూడండి </ string >
+    < string  name = " thermometer_desc " > పరిసర ఉష్ణోగ్రతను కొలవడానికి </ string >
+    < string  name = " థర్మామీటర్ " > థర్మామీటర్ </ string >
+    < string  name = " thermometer_bottom_sheet_text " > పరిసర తాత్కాలికతను కొలవడానికి థర్మామీటర్ పరికరం ఉపయోగించబడుతుంది. ఇది పరిసర శరీరోష్ణోగ్రత సెన్సార్ భాగంగా నిర్మిచబడిన లేదా SHT21 ద్వారా కొలవవచ్చు. </ స్ట్రింగ్ >
+    < string  name = " thermometer_bottom_sheet_desc " > పరిసర తాత్కాలికతను కొలవడానికి థర్మామీటర్ పరికరం ఉపయోగించబడుతుంది. ఇది పరిసర శరీరోష్ణోగ్రత సెన్సార్ భాగంగా నిర్మిచబడిన లేదా SHT21 ద్వారా కొలవవచ్చు. </ స్ట్రింగ్ >
+    < string  name = " no_thermometer_sensor " > పరికరానికి థర్మామీటర్ సెన్సార్ లేదు </ string >
+    < string  name = " thermo_unit_celcius " > ° C </ string >
+    < string  name = " thermo_unit_fahrenheit " > ° F </ string >
+    < string  name = " avg_thermo_celcius " > సగటు (° C) </ string >
+    < string  name = " max_thermo_celcius " > గరిష్టంగా (° C) </ string >
+    < string  name = " min_thermo_celcius " > కనిష్ట (° C) </ string >
+    < string  name = " avg_thermo_fahrenheit " > సగటు (° F) </ string >
+    < string  name = " max_thermo_fahrenheit " > గరిష్టంగా (° F) </ string >
+    < string  name = " min_thermo_fahrenheit " > కనిష్ట (° F) </ string >
+    < string  name = " setting_thermo_type " > setting_thermo_sensor_type </ string >
+    < string  name = " select_unit " > select_temp_unit </ string >
+    < string  name = " select_temp_unit " > ఉష్ణోగ్రత యూనిట్‌ను ఎంచుకోండి </ string >
+    < string  name = " unit_select " > యూనిట్ </ string >
+    < string  name = " thermo_default_1000 " > 1000 </ string >
+    < string  name = " time_string_thermo " > దయచేసి డేటా నవీకరించబడే సమయ విరామాన్ని అందించండి (100 ms నుండి 1000 ms వరకు) </ string >
+    < string  name = " setting_thermo_update " > setting_thermo_update_period </ string >
+    < string  name = " thermo_summary " > 1000 ms </ string >
+    < string  name = " setting_thermo_sensor_gain " > setting_thermo_sensor_gain </ string >
+    < string  name = " default_value_thermo " > 0 </ string >
+    < string  name = " thermo_default " > ° C </ string >
+
+    < string  name = " title_activity_google_maps " > మ్యాప్ </ string >
+    < string  name = " map_service_key " > map_services </ string >
+    < string  name = " map_service " > మ్యాప్ సేవలు </ string >
+
+    < string-array  name = " map_service_list " >
+        < అంశం > ఓపెన్‌స్ట్రీట్ మ్యాప్ </ item >
+        < అంశం > గూగుల్ మ్యాప్ </ item >
+    </ string-array >
+
+    < string-array  name = " map_service_values " >
+        < అంశం > 0 </ అంశం >
+        < అంశం > 1 </ అంశం >
+    </ string-array >
+
+    < string  name = " google_map " > గూగుల్ మ్యాప్ </ string >
+    < string  name = " osm_map " > ఓపెన్ స్ట్రీట్ మ్యాప్ </ string >
+    < string  name = " no_location_specified " > స్థానం పేర్కొనబడలేదు </ string >
+    < string  name = " కంపాస్_డిఫాల్ట్_0 " > 0 </ string >
+    < string  name = " unknown " > తెలియని </ string >
+    < string  name = " rateapp " > రేట్ అనువర్తనం </ string >
 </resources>
