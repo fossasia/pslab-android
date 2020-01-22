@@ -12,6 +12,7 @@
         android:layout_height="@dimen/instrument_tile_card_height"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
+        android:foreground="?android:attr/selectableItemBackground"
         card_view:cardCornerRadius="@dimen/instrument_tile_card_radius">
 
         <RelativeLayout
