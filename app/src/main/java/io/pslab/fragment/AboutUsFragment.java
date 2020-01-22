@@ -39,7 +39,6 @@ public class AboutUsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about_us, container, false);
-        simulateDayNight(0);
         ButterKnife.bind(this, view);
         View aboutPage = new AboutPage(getActivity())
                 .isRTL(false)
@@ -65,24 +64,4 @@ public class AboutUsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
-
-    private void simulateDayNight(int currentSetting) {
-        final int DAY = 0;
-        final int NIGHT = 1;
-        final int FOLLOW_SYSTEM = 3;
-
-        int currentNightMode = getResources().getConfiguration().uiMode
-                & Configuration.UI_MODE_NIGHT_MASK;
-        if (currentSetting == DAY && currentNightMode != Configuration.UI_MODE_NIGHT_NO) {
-            AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_NO);
-        } else if (currentSetting == NIGHT && currentNightMode != Configuration.UI_MODE_NIGHT_YES) {
-            AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_YES);
-        } else if (currentSetting == FOLLOW_SYSTEM) {
-            AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        }
-    }
-
 }
