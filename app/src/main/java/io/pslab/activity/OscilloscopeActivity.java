@@ -68,6 +68,7 @@ import io.pslab.fragment.XYPlotFragment;
 import io.pslab.models.OscilloscopeData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.AudioJack;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
@@ -89,6 +90,16 @@ import static io.pslab.others.MathUtils.map;
 public class OscilloscopeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String PREF_NAME = "OscilloscopeActivity";
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("Mode")
+            .add("Channel")
+            .add("xData")
+            .add("yData")
+            .add("Timebase")
+            .add("lat")
+            .add("lon");
     private final Object lock = new Object();
     @BindView(R.id.chart_os)
     public LineChart mChart;
@@ -189,7 +200,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private long block;
     private Timer recordTimer;
     private long recordPeriod = 100;
-    private String oscilloscopeCSVHeader = "Timestamp,DateTime,Mode,Channel,xData,yData,Timebase,lat,lon";
     private String loggingXdata = "";
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
@@ -539,7 +549,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     csvLogger = new CSVLogger(getResources().getString(R.string.oscilloscope));
                     csvLogger.prepareLogFile();
                     csvLogger.writeMetaData(getResources().getString(R.string.oscilloscope));
-                    csvLogger.writeCSVFile(oscilloscopeCSVHeader);
+                    csvLogger.writeCSVFile(CSV_HEADER);
                     recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.oscilloscope)));
                     CustomSnackBar.showSnackBar(mainLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
                 }
@@ -679,12 +689,21 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private void logChannelData(String[] channels) {
         long timestamp = System.currentTimeMillis();
         int noOfChannels = channels.length;
-        String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-        String locationData = lat + "," + lon;
+        String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
         for (int i = 0; i < noOfChannels; i++) {
             recordSensorData(new OscilloscopeData(timestamp + i, block, noOfChannels, channels[i], loggingXdata, loggingYdata[i], xAxisScale, lat, lon));
-            String data = timeData + "," + noOfChannels + "," + channels[i] + "," + loggingXdata + "," + loggingYdata[i] + "," + xAxisScale + "," + locationData;
-            csvLogger.writeCSVFile(data);
+            csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(timestamp)
+                            .add(dateTime)
+                            .add(noOfChannels)
+                            .add(channels[i])
+                            .add(loggingXdata)
+                            .add(loggingYdata[i])
+                            .add(xAxisScale)
+                            .add(lat)
+                            .add(lon)
+            );
         }
     }
 
@@ -978,7 +997,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 String[] xDataString = null;
                 maxAmp = 0;
                 scienceLab.captureTraces(4, samples, timeGap, channel, isTriggerSelected, null);
-                Thread.sleep((long)(samples*timeGap*1e-3));
+                Thread.sleep((long) (samples * timeGap * 1e-3));
                 for (int i = 0; i < noOfChannels; i++) {
                     entries.add(new ArrayList<>());
                     channel = channels[i];
@@ -1052,12 +1071,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         double max = xData[xData.length - 1];
                         for (int j = 0; j < 500; j++) {
                             double x = j * max / 500;
-                            double t = 2*Math.PI*freq*(x - phase);
+                            double t = 2 * Math.PI * freq * (x - phase);
                             double y;
-                            if (t%(2*Math.PI) < 2*Math.PI*dc) {
+                            if (t % (2 * Math.PI) < 2 * Math.PI * dc) {
                                 y = offset + amp;
                             } else {
-                                y = offset - 2*amp;
+                                y = offset - 2 * amp;
                             }
                             curveFitEntries.get(curveFitEntries.size() - 1).add(new Entry((float) x, (float) y));
                         }
@@ -1097,7 +1116,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         float audioValue = (float) map(buffer[i], -32768, 32767, -3, 3);
                         if (!isFourierTransformSelected) {
                             if (noOfChannels == 1) {
-                                xDataString[i] = String.valueOf(2.0*i);
+                                xDataString[i] = String.valueOf(2.0 * i);
                             }
                             entries.get(entries.size() - 1).add(new Entry(i, audioValue));
                         } else {

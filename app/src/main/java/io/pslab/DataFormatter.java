@@ -12,6 +12,6 @@ public class DataFormatter {
     public static final char decSeparator = DecimalFormatSymbols.getInstance().getDecimalSeparator();
 
     public static String formatDouble(double value, String format) {
-        return String.format(Locale.getDefault(), format, value);
+        return String.format(Locale.ROOT, format, value);
     }
 }

@@ -43,6 +43,7 @@ import io.pslab.communication.ScienceLab;
 import io.pslab.models.DustSensorData;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
@@ -50,6 +51,14 @@ import io.pslab.others.ScienceLabCommon;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class DustSensorDataFragment extends Fragment {
+
+    private static final CSVDataLine CSV_HEADER =
+            new CSVDataLine()
+                    .add("Timestamp")
+                    .add("DateTime")
+                    .add("ppmValue")
+                    .add("Latitude")
+                    .add("Longitude");
 
     @BindView(R.id.dust_sensor_value)
     TextView dustValue;
@@ -108,8 +117,8 @@ public class DustSensorDataFragment extends Fragment {
         scienceLab = ScienceLabCommon.scienceLab;
         entries = new ArrayList<>();
         setupInstruments();
-        if(!scienceLab.isConnected())
-            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),getString(R.string.not_connected),null,null,Snackbar.LENGTH_SHORT);
+        if (!scienceLab.isConnected())
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content), getString(R.string.not_connected), null, null, Snackbar.LENGTH_SHORT);
         return rootView;
     }
 
@@ -155,7 +164,7 @@ public class DustSensorDataFragment extends Fragment {
                 float ppm = d.getPpmValue();
                 dustSensorMeter.setSpeedAt(ppm);
                 dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
-                dustValue.setText(String.valueOf(String.format(Locale.getDefault(), "%.2f", ppm)));
+                dustValue.setText(String.format(Locale.getDefault(), "%.2f", ppm));
                 String status = ppm > highLimit ? "Good" : "Bad";
                 dustStatus.setText(status);
             }
@@ -189,7 +198,7 @@ public class DustSensorDataFragment extends Fragment {
             }
         } catch (IllegalArgumentException e) {
             CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                    getString(R.string.no_data_fetched),null,null,Snackbar.LENGTH_SHORT);
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -212,7 +221,7 @@ public class DustSensorDataFragment extends Fragment {
                                 turns++;
                                 float ppm = d.getPpmValue();
                                 dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
-                                dustValue.setText(String.valueOf(String.format(Locale.getDefault(), "%.2f", ppm)));
+                                dustValue.setText(String.format(Locale.getDefault(), "%.2f", ppm));
                                 String status = ppm > highLimit ? "Good" : "Bad";
                                 dustStatus.setText(status);
 
@@ -264,7 +273,7 @@ public class DustSensorDataFragment extends Fragment {
             }
         } catch (IllegalArgumentException e) {
             CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                    getString(R.string.no_data_fetched),null,null,Snackbar.LENGTH_SHORT);
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -285,13 +294,16 @@ public class DustSensorDataFragment extends Fragment {
     public void saveGraph() {
         dustSensorActivity.csvLogger.prepareLogFile();
         dustSensorActivity.csvLogger.writeMetaData(getResources().getString(R.string.gas_sensor));
-        dustSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+        dustSensorActivity.csvLogger.writeCSVFile(CSV_HEADER);
         for (DustSensorData dustSensorData : dustSensorActivity.recordedDustSensorData) {
-            dustSensorActivity.csvLogger.writeCSVFile(dustSensorData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(dustSensorData.getTime())) + ","
-                    + dustSensorData.getPpmValue() + ","
-                    + dustSensorData.getLat() + ","
-                    + dustSensorData.getLon());
+            dustSensorActivity.csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(dustSensorData.getTime())
+                            .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(dustSensorData.getTime())))
+                            .add(dustSensorData.getPpmValue())
+                            .add(dustSensorData.getLat())
+                            .add(dustSensorData.getLon())
+            );
         }
         View view = rootView.findViewById(R.id.gas_sensor_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -341,21 +353,31 @@ public class DustSensorDataFragment extends Fragment {
         if (getActivity() != null && dustSensorActivity.isRecording) {
             if (dustSensorActivity.writeHeaderToFile) {
                 dustSensorActivity.csvLogger.prepareLogFile();
-                dustSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+                dustSensorActivity.csvLogger.writeCSVFile(CSV_HEADER);
                 block = timestamp;
                 dustSensorActivity.recordSensorDataBlockID(new SensorDataBlock(timestamp, dustSensorActivity.getSensorName()));
                 dustSensorActivity.writeHeaderToFile = !dustSensorActivity.writeHeaderToFile;
             }
             if (dustSensorActivity.addLocation && dustSensorActivity.gpsLogger.isGPSEnabled()) {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = dustSensorActivity.gpsLogger.getDeviceLocation();
-                dustSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + ppmValue + "," + location.getLatitude() + "," + location.getLongitude());
+                dustSensorActivity.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(ppmValue)
+                                .add(location.getLatitude())
+                                .add(location.getLongitude())
+                );
                 sensorData = new GasSensorData(timestamp, block, ppmValue, location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                dustSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + ppmValue + ",0.0,0.0");
+                dustSensorActivity.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(ppmValue)
+                                .add(0.0)
+                                .add(0.0)
+                );
                 sensorData = new GasSensorData(timestamp, block, ppmValue, 0.0, 0.0);
             }
             dustSensorActivity.recordSensorData(sensorData);
@@ -368,7 +390,7 @@ public class DustSensorDataFragment extends Fragment {
         if (scienceLab.isConnected()) {
             double ppm = scienceLab.getVoltage("CH1", 1);
             dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
-            dustValue.setText(String.valueOf(String.format(Locale.getDefault(), "%.2f", ppm)));
+            dustValue.setText(String.format(Locale.getDefault(), "%.2f", ppm));
             String status = ppm > highLimit ? "Good" : "Bad";
             dustStatus.setText(status);
             dustSensorMeter.setWithTremble(false);
