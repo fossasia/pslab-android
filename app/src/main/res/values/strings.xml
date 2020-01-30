@@ -1038,4 +1038,6 @@
     <string name="compass_default_0">0</string>
     <string name="unknown">Unknown</string>
     <string name="rateapp">Rate App</string>
+    <string name="developers">Developers</string>
+    <string name="github_developers_link">https://github.com/fossasia/pslab-android/graphs/contributors</string>
 </resources>
