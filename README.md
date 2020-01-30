@@ -133,7 +133,7 @@ There are 2 flavors (build variants) of PSLab Android application.
 Before you begin, you should already have the Android Studio SDK downloaded and set up correctly. You can find a guide on how to do this here: [Setting up Android Studio](http://developer.android.com/sdk/installing/index.html?pkg=studio)
 
 ### Setting up the Android Project
-For setting up the PSLab android project you may follow any of the two methods listed below, that is, you may download the repository zip file or you may directly clone the repository to Android Studio.
+For setting up the PSLab Android project you may follow any of the two methods listed below, that is, you may download the repository zip file or you may directly clone the repository to Android Studio.
 
 ### By downloading the zip file
 
