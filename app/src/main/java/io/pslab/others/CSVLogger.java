@@ -22,7 +22,7 @@ public class CSVLogger {
 
     public static final String CSV_DIRECTORY = "PSLab";
     public static final SimpleDateFormat FILE_NAME_FORMAT = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
+            "yyyy-MM-dd HH:mm:ss.SSS", Locale.ROOT);
 
     /**
      * Constructor initiate logger with a category folder
@@ -79,12 +79,12 @@ public class CSVLogger {
      *
      * @param data comma separated data line ends with a new line character
      */
-    public void writeCSVFile(String data) {
+    public void writeCSVFile(CSVDataLine data) {
         if (csvFile.exists()) {
             try {
                 PrintWriter out
                         = new PrintWriter(new BufferedWriter(new FileWriter(csvFile, true)));
-                out.write(data + "\n");
+                out.write(data.toString());
                 out.flush();
                 out.close();
             } catch (IOException e) {
@@ -105,7 +105,10 @@ public class CSVLogger {
     public void writeMetaData(String instrumentName) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String metaDataTime = sdf.format(System.currentTimeMillis());
-        String metaData = instrumentName + "," + metaDataTime.split(" ")[0] + "," + metaDataTime.split(" ")[1];
+        CSVDataLine metaData = new CSVDataLine()
+                .add(instrumentName)
+                .add(metaDataTime.split(" ")[0])
+                .add(metaDataTime.split(" ")[1]);
         writeCSVFile(metaData);
     }
 }

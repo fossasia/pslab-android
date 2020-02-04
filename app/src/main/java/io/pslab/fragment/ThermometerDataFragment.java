@@ -50,6 +50,7 @@ import io.pslab.communication.sensors.SHT21;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ThermometerData;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
@@ -59,7 +60,13 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class ThermometerDataFragment extends Fragment {
 
-    private static final String TEMPERATURE = "temperature" ;
+    private static final String TEMPERATURE = "temperature";
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("Readings")
+            .add("Latitude")
+            .add("Longitude");
     private static int sensorType = 0;
     private static int highLimit = 50;
     private static int updatePeriod = 1000;
@@ -177,7 +184,7 @@ public class ThermometerDataFragment extends Fragment {
     private void plotAllRecordedData() {
         recordedThermoArray.addAll(thermoSensor.recordedThermometerData);
         if (recordedThermoArray.size() != 0) {
-            for (ThermometerData d: recordedThermoArray) {
+            for (ThermometerData d : recordedThermoArray) {
                 if (currentMax < d.getTemp()) {
                     currentMax = d.getTemp();
                 }
@@ -197,7 +204,7 @@ public class ThermometerDataFragment extends Fragment {
             statMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, currentMin));
             statMean.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / recordedThermoArray.size())));
 
-            LineDataSet dataSet = new LineDataSet(entries,PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT.toString(),"°C"));
+            LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT, "°C"));
             dataSet.setDrawCircles(false);
             dataSet.setDrawValues(false);
             dataSet.setLineWidth(2);
@@ -223,7 +230,7 @@ public class ThermometerDataFragment extends Fragment {
             }
         } catch (IllegalArgumentException e) {
             CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                    getString(R.string.no_data_fetched),null,null, Snackbar.LENGTH_SHORT);
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -264,7 +271,7 @@ public class ThermometerDataFragment extends Fragment {
                                 sum += entry.getY();
                                 statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.THERMOMETER_DATA_FORMAT));
 
-                                LineDataSet dataSet = new LineDataSet(entries,PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT.toString(),"°C"));
+                                LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT.toString(), "°C"));
                                 dataSet.setDrawCircles(false);
                                 dataSet.setDrawValues(false);
                                 dataSet.setLineWidth(2);
@@ -317,20 +324,23 @@ public class ThermometerDataFragment extends Fragment {
             }
         } catch (IllegalArgumentException e) {
             CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                    getString(R.string.no_data_fetched),null,null, Snackbar.LENGTH_SHORT);
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
     public void saveGraph() {
         thermoSensor.csvLogger.prepareLogFile();
         thermoSensor.csvLogger.writeMetaData(getResources().getString(R.string.thermometer));
-        thermoSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+        thermoSensor.csvLogger.writeCSVFile(CSV_HEADER);
         for (ThermometerData thermometerData : thermoSensor.recordedThermometerData) {
-            thermoSensor.csvLogger.writeCSVFile(thermometerData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(thermometerData.getTime())) + ","
-                    + thermometerData.getTemp() + ","
-                    + thermometerData.getLat() + ","
-                    + thermometerData.getLon());
+            thermoSensor.csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(thermometerData.getTime())
+                            .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(thermometerData.getTime())))
+                            .add(thermometerData.getTemp())
+                            .add(thermometerData.getLat())
+                            .add(thermometerData.getLon())
+            );
         }
         View view = rootView.findViewById(R.id.thermometer_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -338,7 +348,7 @@ public class ThermometerDataFragment extends Fragment {
         try {
             b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + CSV_DIRECTORY + File.separator + thermoSensor.getSensorName() +
-                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg" ));
+                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -423,7 +433,7 @@ public class ThermometerDataFragment extends Fragment {
             if (thermoSensor.writeHeaderToFile) {
                 thermoSensor.csvLogger.prepareLogFile();
                 thermoSensor.csvLogger.writeMetaData(getResources().getString(R.string.thermometer));
-                thermoSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+                thermoSensor.csvLogger.writeCSVFile(CSV_HEADER);
                 block = timestamp;
                 thermoSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, thermoSensor.getSensorName()));
                 thermoSensor.writeHeaderToFile = !thermoSensor.writeHeaderToFile;
@@ -431,13 +441,24 @@ public class ThermometerDataFragment extends Fragment {
             if (thermoSensor.addLocation && thermoSensor.gpsLogger.isGPSEnabled()) {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = thermoSensor.gpsLogger.getDeviceLocation();
-                thermoSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + "," + location.getLatitude() + "," + location.getLongitude());
+                thermoSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(dateTime)
+                                .add(sensorReading)
+                                .add(location.getLatitude())
+                                .add(location.getLongitude())
+                );
                 sensorData = new ThermometerData(timestamp, block, tempValue, location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                thermoSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + ",0.0,0.0");
+                thermoSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(sensorReading)
+                                .add(0.0)
+                                .add(0.0)
+                );
                 sensorData = new ThermometerData(timestamp, block, tempValue, 0.0, 0.0);
             }
             thermoSensor.recordSensorData(sensorData);
@@ -476,7 +497,7 @@ public class ThermometerDataFragment extends Fragment {
                 sum += entry.getY();
                 statMean.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / count)));
 
-                LineDataSet dataSet = new LineDataSet(entries,PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT.toString(),"°C"));
+                LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT, "°C"));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
                 dataSet.setLineWidth(2);
@@ -533,7 +554,7 @@ public class ThermometerDataFragment extends Fragment {
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
                 if (sensor == null) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.no_thermometer_sensor),null,null, Snackbar.LENGTH_LONG);
+                            getString(R.string.no_thermometer_sensor), null, null, Snackbar.LENGTH_LONG);
                 } else {
                     float max = sensor.getMaximumRange();
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(thermoSensor.THERMOMETER_MAX_LIMIT, max).apply();
@@ -556,7 +577,7 @@ public class ThermometerDataFragment extends Fragment {
                             sensorType = 1;
                         } else {
                             CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                                    getString(R.string.sensor_not_connected_tls),null,null, Snackbar.LENGTH_SHORT);
+                                    getString(R.string.sensor_not_connected_tls), null, null, Snackbar.LENGTH_SHORT);
                             sensorType = 0;
                         }
                     } catch (IOException | InterruptedException e) {
@@ -564,7 +585,7 @@ public class ThermometerDataFragment extends Fragment {
                     }
                 } else {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.device_not_found),null,null, Snackbar.LENGTH_SHORT);
+                            getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                     sensorType = 0;
                 }
                 break;
@@ -573,21 +594,21 @@ public class ThermometerDataFragment extends Fragment {
         }
     }
 
-    public void setUnit(){
-        if("°F".equals(ThermometerDataFragment.unit)){
+    public void setUnit() {
+        if ("°F".equals(ThermometerDataFragment.unit)) {
             currentMax = 257;
             currentMin = -40;
             thermometer.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MAX_LIMIT, 257));
-            thermometer.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT,-40));
+            thermometer.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT, -40));
             label_statAvg.setText(R.string.avg_thermo_fahrenheit);
             label_statMax.setText(R.string.max_thermo_fahrenheit);
             label_statMin.setText(R.string.min_thermo_fahrenheit);
             thermometer.setUnit("°F");
-        }else{
+        } else {
             currentMax = 125;
             currentMin = -40;
             thermometer.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MAX_LIMIT, 125));
-            thermometer.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT,-40));
+            thermometer.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT, -40));
             label_statAvg.setText(R.string.avg_thermo_celcius);
             label_statMax.setText(R.string.max_thermo_celcius);
             label_statMin.setText(R.string.min_thermo_celcius);

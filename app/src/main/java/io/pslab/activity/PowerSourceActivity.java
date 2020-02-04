@@ -44,6 +44,7 @@ import io.pslab.communication.ScienceLab;
 import io.pslab.items.SquareImageButton;
 import io.pslab.models.PowerSourceData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
@@ -58,6 +59,15 @@ import io.realm.RealmResults;
 public class PowerSourceActivity extends AppCompatActivity {
 
     public static final String POWER_PREFERENCES = "Power_Preferences";
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("PV1")
+            .add("PV2")
+            .add("PV3")
+            .add("PCS")
+            .add("Latitude")
+            .add("Longitude");
 
     private final int CONTROLLER_MIN = 1;
     private final int PV1_CONTROLLER_MAX = 1001;
@@ -210,11 +220,11 @@ public class PowerSourceActivity extends AppCompatActivity {
                     float voltage = Float.parseFloat(voltageValue);
                     if (voltage < -5.00f) {
                         voltage = -5.00f;
-                        displayPV1.setText(String.valueOf(voltage) + " V");
+                        displayPV1.setText(voltage + " V");
                     }
                     if (voltage > 5.00f) {
                         voltage = 5.00f;
-                        displayPV1.setText(String.valueOf(voltage) + " V");
+                        displayPV1.setText(voltage + " V");
                     }
                     controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
                             5.00f, -5.00f));
@@ -232,11 +242,11 @@ public class PowerSourceActivity extends AppCompatActivity {
                     float voltage = Float.parseFloat(voltageValue);
                     if (voltage < -3.30f) {
                         voltage = -3.30f;
-                        displayPV2.setText(String.valueOf(voltage) + " V");
+                        displayPV2.setText(voltage + " V");
                     }
                     if (voltage > 3.30f) {
                         voltage = 3.30f;
-                        displayPV2.setText(String.valueOf(voltage) + " V");
+                        displayPV2.setText(voltage + " V");
                     }
                     controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
                             3.30f, -3.30f));
@@ -254,11 +264,11 @@ public class PowerSourceActivity extends AppCompatActivity {
                     float voltage = Float.parseFloat(voltageValue);
                     if (voltage < 0.00f) {
                         voltage = 0.00f;
-                        displayPV3.setText(String.valueOf(voltage) + " V");
+                        displayPV3.setText(voltage + " V");
                     }
                     if (voltage > 3.30f) {
                         voltage = 3.30f;
-                        displayPV3.setText(String.valueOf(voltage) + " V");
+                        displayPV3.setText(voltage + " V");
                     }
                     controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
                             3.30f, 0.00f));
@@ -276,11 +286,11 @@ public class PowerSourceActivity extends AppCompatActivity {
                     float current = Float.parseFloat(currentValue);
                     if (current < 0.00f) {
                         current = 0.00f;
-                        displayPCS.setText(String.valueOf(current) + " mA");
+                        displayPCS.setText(current + " mA");
                     }
                     if (current > 3.30f) {
                         current = 3.30f;
-                        displayPCS.setText(String.valueOf(current) + " mA");
+                        displayPCS.setText(current + " mA");
                     }
                     controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
                             3.30f, 0.00f));
@@ -571,6 +581,7 @@ public class PowerSourceActivity extends AppCompatActivity {
         displayPV3.setCursorVisible(false);
         displayPCS.setCursorVisible(false);
     }
+
     /**
      * Click listeners to increment and decrement buttons
      *
@@ -909,7 +920,7 @@ public class PowerSourceActivity extends AppCompatActivity {
      */
     private float limitDigits(float number) {
         try {
-            return Float.valueOf(String.format(Locale.US, "%.2f", number));
+            return Float.valueOf(String.format(Locale.ROOT, "%.2f", number));
         } catch (NumberFormatException e) {
             return 0.00f;
         }
@@ -957,7 +968,7 @@ public class PowerSourceActivity extends AppCompatActivity {
             powerSourceLogger = new CSVLogger(getString(R.string.power_source));
             powerSourceLogger.prepareLogFile();
             powerSourceLogger.writeMetaData(getString(R.string.power_source));
-            powerSourceLogger.writeCSVFile("Timestamp,DateTime,PV1,PV2,PV2,PCS,Latitude,Longitude");
+            powerSourceLogger.writeCSVFile(CSV_HEADER);
             writeHeaderToFile = !writeHeaderToFile;
             recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.power_source)));
         }
@@ -975,9 +986,17 @@ public class PowerSourceActivity extends AppCompatActivity {
             lon = 0.0;
         }
         timestamp = System.currentTimeMillis();
-        String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(System.currentTimeMillis()));
-        powerSourceLogger.writeCSVFile(System.currentTimeMillis() + "," + dateTime + "," + String.valueOf(voltagePV1)
-                + "," + String.valueOf(voltagePV2) + "," + String.valueOf(voltagePV3) + "," + String.valueOf(currentPCS) + "," + lat + "," + lon);
+        powerSourceLogger.writeCSVFile(
+                new CSVDataLine()
+                        .add(System.currentTimeMillis())
+                        .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(System.currentTimeMillis())))
+                        .add(voltagePV1)
+                        .add(voltagePV2)
+                        .add(voltagePV3)
+                        .add(currentPCS)
+                        .add(lat)
+                        .add(lon)
+        );
         recordSensorData(new PowerSourceData(timestamp, block, voltagePV1, voltagePV2, voltagePV3, currentPCS, lat, lon));
     }
 

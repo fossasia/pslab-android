@@ -247,7 +247,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         map = new Intent(this, MapsActivity.class);
         csvLogger = new CSVLogger(getSensorName());
         realm = LocalDataLog.with().getRealm();
-        titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
         sensorParentView = coordinatorLayout;
         setUpBottomSheet();
         fillUpFragment();

@@ -214,7 +214,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 getFileData(file);
             } else
                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                    getString(R.string.no_file_selected),null,null, Snackbar.LENGTH_SHORT);
+                        getString(R.string.no_file_selected), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -236,12 +236,12 @@ public class DataLoggerActivity extends AppCompatActivity {
                             realm.copyToRealm(object);
                         } else {
                             CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                                    getString(R.string.incorrect_import_format),null,null, Snackbar.LENGTH_SHORT);
+                                    getString(R.string.incorrect_import_format), null, null, Snackbar.LENGTH_SHORT);
                         }
                         realm.commitTransaction();
                     } catch (Exception e) {
                         CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                                getString(R.string.incorrect_import_format),null,null, Snackbar.LENGTH_SHORT);
+                                getString(R.string.incorrect_import_format), null, null, Snackbar.LENGTH_SHORT);
                     }
                 } else if (i == 0) {
                     block = System.currentTimeMillis();
@@ -277,7 +277,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 returnObject = new GyroData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
                 break;
             case "Compass":
-                returnObject = new CompassData(time, block, data[2].equals("null") ? "0" : data[2], data[3].equals("null") ? "0" : data[3], data[4].equals("null") ? "0" : data[4], data[5], Double.valueOf(data[6]), Double.valueOf(data[7]));
+                returnObject = new CompassData(time, block, data[2].equals("null") ? 0f : Float.valueOf(data[2]), data[3].equals("null") ? 0f : Float.valueOf(data[3]), data[4].equals("null") ? 0f : Float.valueOf(data[4]), data[5], Double.valueOf(data[6]), Double.valueOf(data[7]));
                 break;
             case "Thermometer":
                 returnObject = new ThermometerData(time, block, Float.valueOf(data[2]), Double.valueOf(data[5]), Double.valueOf(data[6]));
