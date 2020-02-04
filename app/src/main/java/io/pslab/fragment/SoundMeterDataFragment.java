@@ -42,6 +42,7 @@ import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.SoundData;
 import io.pslab.others.AudioJack;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 
@@ -53,6 +54,13 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 public class SoundMeterDataFragment extends Fragment {
 
     public static final String TAG = "SoundMeterFragment";
+    private static final CSVDataLine CSV_HEADER =
+            new CSVDataLine()
+                    .add("Timestamp")
+                    .add("DateTime")
+                    .add("Readings")
+                    .add("Latitude")
+                    .add("Longitude");
     @BindView(R.id.sound_max)
     TextView statMax;
     @BindView(R.id.sound_min)
@@ -102,7 +110,7 @@ public class SoundMeterDataFragment extends Fragment {
         /**
          * TODO: Parameters yet to be determined
          */
-        Log.i(TAG,"parameters yet to be determined");
+        Log.i(TAG, "parameters yet to be determined");
     }
 
     /**********************************************************************************************
@@ -112,7 +120,7 @@ public class SoundMeterDataFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        soundMeter = (SoundMeterActivity)getActivity();
+        soundMeter = (SoundMeterActivity) getActivity();
     }
 
     @Override
@@ -120,7 +128,7 @@ public class SoundMeterDataFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_sound_meter_data, container, false);
-        unbinder = ButterKnife.bind(this,rootView);
+        unbinder = ButterKnife.bind(this, rootView);
         setupInstruments();
         return rootView;
     }
@@ -179,11 +187,11 @@ public class SoundMeterDataFragment extends Fragment {
         audioJack = new AudioJack("input");
         recordStartTime = System.currentTimeMillis();
         chartQ = new ArrayDeque<>();
-        bgThreadHandler.post(()->{
-            while(isRecording) {
+        bgThreadHandler.post(() -> {
+            while (isRecording) {
                 short[] buffer = audioJack.read();
                 Bundle bundle = new Bundle();
-                bundle.putShortArray("buffer",buffer);
+                bundle.putShortArray("buffer", buffer);
                 Message msg = new Message();
                 msg.setData(bundle);
                 uiHandler.sendMessage(msg);
@@ -205,23 +213,23 @@ public class SoundMeterDataFragment extends Fragment {
      *********************************************************************************************
      */
     private void startBackgroundThread() {
-        Log.i(TAG,"starting background thread");
+        Log.i(TAG, "starting background thread");
         bgThread = new HandlerThread("Audio Recorder Thread");
         bgThread.start();
         bgThreadHandler = new Handler(bgThread.getLooper());
         uiHandler = new UIHandler(this);
-        Log.i(TAG,"background Thread started");
+        Log.i(TAG, "background Thread started");
     }
 
     private void stopBackgroundThread() {
-        Log.i(TAG,"stopping background thread");
-        if(bgThread!=null) {
+        Log.i(TAG, "stopping background thread");
+        if (bgThread != null) {
             bgThread.quitSafely();
             bgThread = null;
         }
         bgThreadHandler = null;
         uiHandler = null;
-        Log.i(TAG,"Background Thread Stopped");
+        Log.i(TAG, "Background Thread Stopped");
     }
 
     /**********************************************************************************************
@@ -231,36 +239,36 @@ public class SoundMeterDataFragment extends Fragment {
     private void updateMeter(short[] buffer) {
         double sqrsum = 0.0;
         for (int i = 0; i < buffer.length; ++i) {
-            sqrsum += Math.pow(buffer[i],2);
+            sqrsum += Math.pow(buffer[i], 2);
         }
-        double rmsamp = Math.sqrt((sqrsum/buffer.length));
+        double rmsamp = Math.sqrt((sqrsum / buffer.length));
 
-        maxRmsAmp = Math.max(rmsamp,maxRmsAmp);
-        minRmsAmp = Math.min(rmsamp,minRmsAmp);
-        rmsSum = (count<Integer.MAX_VALUE)?(rmsSum+rmsamp):rmsamp;
-        count = (count<Integer.MAX_VALUE)?(count+1):1;
-        double avgRmsAmp = rmsSum/count;
+        maxRmsAmp = Math.max(rmsamp, maxRmsAmp);
+        minRmsAmp = Math.min(rmsamp, minRmsAmp);
+        rmsSum = (count < Integer.MAX_VALUE) ? (rmsSum + rmsamp) : rmsamp;
+        count = (count < Integer.MAX_VALUE) ? (count + 1) : 1;
+        double avgRmsAmp = rmsSum / count;
 
-        double loudness = rmsamp>0?(10*Math.log10(rmsamp/1d)):1;
-        double maxLoudness = maxRmsAmp>0?(10*Math.log10(maxRmsAmp/1d)):1;
-        double minLoudness = minRmsAmp>0?(10*Math.log10(minRmsAmp/1d)):1;
-        double avgLoudness = avgRmsAmp>0?(10*Math.log10(avgRmsAmp/1d)):1;
+        double loudness = rmsamp > 0 ? (10 * Math.log10(rmsamp / 1d)) : 1;
+        double maxLoudness = maxRmsAmp > 0 ? (10 * Math.log10(maxRmsAmp / 1d)) : 1;
+        double minLoudness = minRmsAmp > 0 ? (10 * Math.log10(minRmsAmp / 1d)) : 1;
+        double avgLoudness = avgRmsAmp > 0 ? (10 * Math.log10(avgRmsAmp / 1d)) : 1;
 
-        decibelMeter.setSpeedAt((float)loudness);
-        statMax.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT,maxLoudness));
-        statMin.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT,minLoudness));
-        statMean.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT,avgLoudness));
-        writeLog(System.currentTimeMillis(),(float)loudness);
+        decibelMeter.setSpeedAt((float) loudness);
+        statMax.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT, maxLoudness));
+        statMin.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT, minLoudness));
+        statMean.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT, avgLoudness));
+        writeLog(System.currentTimeMillis(), (float) loudness);
     }
 
     private void updateChart(short[] buffer) {
         for (int i = 0; i < buffer.length; ++i) {
-            float x = (System.currentTimeMillis() - recordStartTime)/1000f;
-            float y = buffer[i]/1000f;
-            if(chartQ.size()>=buffer.length)
+            float x = (System.currentTimeMillis() - recordStartTime) / 1000f;
+            float y = buffer[i] / 1000f;
+            if (chartQ.size() >= buffer.length)
                 chartQ.removeFirst();
-            chartQ.addLast(new Entry(x,y));
-            Log.i(TAG,"x : "+x+"  "+"y : "+y);
+            chartQ.addLast(new Entry(x, y));
+            Log.i(TAG, "x : " + x + "  " + "y : " + y);
         }
         List<Entry> entries = new ArrayList<>(chartQ);
         LineDataSet dataSet = new LineDataSet(entries, "Amplitude");
@@ -277,8 +285,8 @@ public class SoundMeterDataFragment extends Fragment {
      * Method to play data which was previously recorded
      */
     public void playData() {
-        CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),getString(R.string.in_progress),
-                null,null,Snackbar.LENGTH_SHORT);
+        CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content), getString(R.string.in_progress),
+                null, null, Snackbar.LENGTH_SHORT);
         /**
          * TODO: To be implemented
          */
@@ -290,7 +298,7 @@ public class SoundMeterDataFragment extends Fragment {
      */
     public void stopData() {
         CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content), getString(R.string.in_progress),
-                null,null,Snackbar.LENGTH_SHORT);
+                null, null, Snackbar.LENGTH_SHORT);
         /**
          * TODO: To be implemented
          */
@@ -306,7 +314,7 @@ public class SoundMeterDataFragment extends Fragment {
             if (soundMeter.writeHeaderToFile) {
                 soundMeter.csvLogger.prepareLogFile();
                 soundMeter.csvLogger.writeMetaData(getResources().getString(R.string.lux_meter));
-                soundMeter.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+                soundMeter.csvLogger.writeCSVFile(CSV_HEADER);
                 block = timestamp;
                 soundMeter.recordSensorDataBlockID(new SensorDataBlock(timestamp, soundMeter.getSensorName()));
                 soundMeter.writeHeaderToFile = !soundMeter.writeHeaderToFile;
@@ -314,13 +322,23 @@ public class SoundMeterDataFragment extends Fragment {
             if (soundMeter.addLocation && soundMeter.gpsLogger.isGPSEnabled()) {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = soundMeter.gpsLogger.getDeviceLocation();
-                soundMeter.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + dB + "," + location.getLatitude() + "," + location.getLongitude());
+                soundMeter.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(dateTime)
+                                .add(dB)
+                                .add(location.getLatitude())
+                                .add(location.getLongitude()));
                 soundData = new SoundData(timestamp, block, dB, location.getLatitude(), location.getLongitude());
             } else {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                soundMeter.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + dB + ",0.0,0.0");
+                soundMeter.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(dateTime)
+                                .add(dB)
+                                .add(0.0)
+                                .add(0.0));
                 soundData = new SoundData(timestamp, block, dB, 0.0, 0.0);
             }
             soundMeter.recordSensorData(soundData);
@@ -332,13 +350,15 @@ public class SoundMeterDataFragment extends Fragment {
     public void saveGraph() {
         soundMeter.csvLogger.prepareLogFile();
         soundMeter.csvLogger.writeMetaData(getResources().getString(R.string.lux_meter));
-        soundMeter.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+        soundMeter.csvLogger.writeCSVFile(CSV_HEADER);
         for (SoundData soundData : soundMeter.recordedSoundData) {
-            soundMeter.csvLogger.writeCSVFile(soundData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(soundData.getTime())) + ","
-                    + soundData.getdB() + ","
-                    + soundData.getLat() + ","
-                    + soundData.getLon());
+            soundMeter.csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(soundData.getTime())
+                            .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(soundData.getTime())))
+                            .add(soundData.getdB())
+                            .add(soundData.getLat())
+                            .add(soundData.getLon()));
         }
         View view = rootView.findViewById(R.id.soundmeter_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -346,7 +366,7 @@ public class SoundMeterDataFragment extends Fragment {
         try {
             b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + CSV_DIRECTORY + File.separator + soundMeter.getSensorName() +
-                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg" ));
+                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -354,19 +374,21 @@ public class SoundMeterDataFragment extends Fragment {
 
     private static class UIHandler extends Handler {
         private SoundMeterDataFragment soundMeterDataFragment;
+
         UIHandler(SoundMeterDataFragment fragment) {
             this.soundMeterDataFragment = fragment;
         }
+
         @Override
         public void handleMessage(Message msg) { //handle the message passed by the background thread which is recording the audio
-            if(soundMeterDataFragment.isResumed()) {
+            if (soundMeterDataFragment.isResumed()) {
                 short[] buffer = msg.getData().getShortArray("buffer");
                 soundMeterDataFragment.updateMeter(buffer);
                 /**
                  * TODO: smooth animation for the graph required
                  */
                 soundMeterDataFragment.updateChart(buffer);
-                Log.i(TAG,"handling message "+buffer.length+buffer[0]);
+                Log.i(TAG, "handling message " + buffer.length + buffer[0]);
             }
         }
     }
