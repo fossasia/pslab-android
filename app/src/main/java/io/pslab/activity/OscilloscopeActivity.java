@@ -45,6 +45,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.complex.Complex;
 
 import java.util.ArrayList;
@@ -978,7 +979,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 String[] xDataString = null;
                 maxAmp = 0;
                 scienceLab.captureTraces(4, samples, timeGap, channel, isTriggerSelected, null);
-                Thread.sleep((long)(samples*timeGap*1e-3));
+                Thread.sleep((long) (samples * timeGap * 1e-3));
                 for (int i = 0; i < noOfChannels; i++) {
                     entries.add(new ArrayList<>());
                     channel = channels[i];
@@ -1052,12 +1053,12 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         double max = xData[xData.length - 1];
                         for (int j = 0; j < 500; j++) {
                             double x = j * max / 500;
-                            double t = 2*Math.PI*freq*(x - phase);
+                            double t = 2 * Math.PI * freq * (x - phase);
                             double y;
-                            if (t%(2*Math.PI) < 2*Math.PI*dc) {
+                            if (t % (2 * Math.PI) < 2 * Math.PI * dc) {
                                 y = offset + amp;
                             } else {
-                                y = offset - 2*amp;
+                                y = offset - 2 * amp;
                             }
                             curveFitEntries.get(curveFitEntries.size() - 1).add(new Entry((float) x, (float) y));
                         }
@@ -1097,7 +1098,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                         float audioValue = (float) map(buffer[i], -32768, 32767, -3, 3);
                         if (!isFourierTransformSelected) {
                             if (noOfChannels == 1) {
-                                xDataString[i] = String.valueOf(2.0*i);
+                                xDataString[i] = String.valueOf(2.0 * i);
                             }
                             entries.get(entries.size() - 1).add(new Entry(i, audioValue));
                         } else {
@@ -1117,9 +1118,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
                 }
                 if (isRecording) {
-                    loggingXdata = String.join(" ", xDataString);
+                    loggingXdata = StringUtils.join(" ", xDataString);
                     for (int i = 0; i < yDataString.size(); i++) {
-                        loggingYdata[i] = String.join(" ", yDataString.get(i));
+                        loggingYdata[i] = StringUtils.join(" ", yDataString.get(i));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
