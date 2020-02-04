@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -99,7 +101,7 @@ public class CreateConfigActivity extends AppCompatActivity {
                 interval = intervalEditText.getText().toString();
                 if (interval.length() == 0) {
                     CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                            getString(R.string.no_interval_message),null,null, Snackbar.LENGTH_SHORT);
+                            getString(R.string.no_interval_message), null, null, Snackbar.LENGTH_SHORT);
                 } else {
                     ArrayList<String> selectedParamsList = new ArrayList<>();
                     for (int i = 0; i < paramsListContainer.getChildCount(); i++) {
@@ -184,7 +186,7 @@ public class CreateConfigActivity extends AppCompatActivity {
             FileWriter writer = new FileWriter(configFile);
             writer.write("instrument: " + instrumentName + "\n");
             writer.write("interval: " + interval + " " + intervalUnit + "\n");
-            String param = String.join(",", params);
+            String param = StringUtils.join(",", params);
             writer.write("params: " + param);
             writer.flush();
             writer.close();
