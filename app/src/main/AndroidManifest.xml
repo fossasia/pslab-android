@@ -26,8 +26,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
-        <activity android:name=".activity.CreateConfigActivity"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        <activity android:name=".activity.SoundMeterActivity"></activity>
+        <activity android:name=".activity.CreateConfigActivity" />
         <activity
             android:name=".activity.ThermometerActivity"
             android:screenOrientation="portrait"
@@ -105,7 +108,7 @@
         <activity android:name=".activity.MapsActivity" />
         <activity
             android:name=".activity.DustSensorActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <receiver android:name=".receivers.USBDetachReceiver" />
 
