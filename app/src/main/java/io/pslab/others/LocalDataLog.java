@@ -13,6 +13,7 @@ import io.pslab.interfaces.sensorloggers.OscilloscopeRecordables;
 import io.pslab.interfaces.sensorloggers.PowerSourceRecordables;
 import io.pslab.interfaces.sensorloggers.SensorRecordables;
 import io.pslab.interfaces.sensorloggers.ServoRecordables;
+import io.pslab.interfaces.sensorloggers.SoundMeterRecordables;
 import io.pslab.interfaces.sensorloggers.ThermometerRecordables;
 import io.pslab.interfaces.sensorloggers.WaveGeneratorRecordables;
 import io.pslab.models.AccelerometerData;
@@ -28,6 +29,7 @@ import io.pslab.models.OscilloscopeData;
 import io.pslab.models.PowerSourceData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
+import io.pslab.models.SoundData;
 import io.pslab.models.ThermometerData;
 import io.pslab.models.WaveGeneratorData;
 import io.realm.Realm;
@@ -38,7 +40,7 @@ import io.realm.Sort;
  * Created by Padmal on 11/5/18.
  */
 
-public class LocalDataLog implements DustSensorRecordables, LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables, OscilloscopeRecordables, PowerSourceRecordables, MultimeterRecordables, LogicAnalyzerRecordables, GasSensorRecordables {
+public class LocalDataLog implements SoundMeterRecordables, DustSensorRecordables, LuxMeterRecordables, BaroMeterRecordables, SensorRecordables, CompassRecordables, AccelerometerRecordables, GyroscopeRecordables, ThermometerRecordables, ServoRecordables, WaveGeneratorRecordables, OscilloscopeRecordables, PowerSourceRecordables, MultimeterRecordables, LogicAnalyzerRecordables, GasSensorRecordables {
 
     private static LocalDataLog instance;
     private final Realm realm;
@@ -614,6 +616,41 @@ public class LocalDataLog implements DustSensorRecordables, LuxMeterRecordables,
     public RealmResults<DustSensorData> getBlockOfDustSensorRecords(long block) {
         return realm.where(DustSensorData.class)
                 .equalTo("block", block)
+                .findAll();
+    }
+
+
+    /***********************************************************************************************
+     * Sound Meter Section
+     ***********************************************************************************************/
+    @Override
+    public SoundData getSoundMeterData(long timeStamp) {
+        return realm.where(SoundData.class).equalTo("time",timeStamp).findFirst();
+    }
+
+    @Override
+    public void clearAllSoundRecords() {
+        realm.beginTransaction();
+        realm.delete(SoundData.class);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void clearBlockOfSoundRecords(long block) {
+        realm.beginTransaction();
+        RealmResults<SoundData> data = getBlockOfSoundRecords(block);
+        data.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    @Override
+    public RealmResults<SoundData> getAllSoundRecords() {
+        return realm.where(SoundData.class).findAll();
+    }
+
+    @Override
+    public RealmResults<SoundData> getBlockOfSoundRecords(long block) {
+        return realm.where(SoundData.class).equalTo("block",block)
                 .findAll();
     }
 }

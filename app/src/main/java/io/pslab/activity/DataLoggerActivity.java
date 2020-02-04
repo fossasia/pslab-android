@@ -132,6 +132,9 @@ public class DataLoggerActivity extends AppCompatActivity {
             case "Dust Sensor":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.dust_sensor));
                 break;
+            case "Sound Meter":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.sound_meter));
+                break;
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
                 getSupportActionBar().setTitle(getString(R.string.logged_data));
