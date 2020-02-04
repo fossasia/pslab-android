@@ -38,6 +38,7 @@ import io.pslab.R;
 import io.pslab.activity.GyroscopeActivity;
 import io.pslab.models.GyroData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 
@@ -46,6 +47,14 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class GyroscopeDataFragment extends Fragment {
 
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("ReadingsX")
+            .add("ReadingsY")
+            .add("ReadingsZ")
+            .add("Latitude")
+            .add("Longitude");
     private static int updatePeriod = 1000;
     private static float highLimit = 1.2f;
     private static float gain = 1;
@@ -186,7 +195,7 @@ public class GyroscopeDataFragment extends Fragment {
             }
         } catch (IllegalArgumentException e) {
             CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                    getString(R.string.no_data_fetched),null,null, Snackbar.LENGTH_SHORT);
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -276,7 +285,7 @@ public class GyroscopeDataFragment extends Fragment {
             }
         } catch (IllegalArgumentException e) {
             CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                    getString(R.string.no_data_fetched),null,null,Snackbar.LENGTH_SHORT);
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -299,15 +308,18 @@ public class GyroscopeDataFragment extends Fragment {
     public void saveGraph() {
         gyroSensor.csvLogger.prepareLogFile();
         gyroSensor.csvLogger.writeMetaData(getResources().getString(R.string.gyroscope));
-        gyroSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
+        gyroSensor.csvLogger.writeCSVFile(CSV_HEADER);
         for (GyroData gyroData : gyroSensor.recordedGyroData) {
-            gyroSensor.csvLogger.writeCSVFile(gyroData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(gyroData.getTime())) + ","
-                    + gyroData.getGyroX() + ","
-                    + gyroData.getGyroY() + ","
-                    + gyroData.getGyroZ() + ","
-                    + gyroData.getLat() + ","
-                    + gyroData.getLon());
+            gyroSensor.csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(gyroData.getTime())
+                            .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(gyroData.getTime())))
+                            .add(gyroData.getGyroX())
+                            .add(gyroData.getGyroY())
+                            .add(gyroData.getGyroZ())
+                            .add(gyroData.getLat())
+                            .add(gyroData.getLon())
+            );
         }
         View view = rootView.findViewById(R.id.gyro_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -368,21 +380,36 @@ public class GyroscopeDataFragment extends Fragment {
             if (gyroSensor.writeHeaderToFile) {
                 gyroSensor.csvLogger.prepareLogFile();
                 gyroSensor.csvLogger.writeMetaData(getResources().getString(R.string.gyroscope));
-                gyroSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
+                gyroSensor.csvLogger.writeCSVFile(CSV_HEADER);
+                gyroSensor.csvLogger.writeCSVFile(CSV_HEADER);
                 block = timestamp;
                 gyroSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, gyroSensor.getSensorName()));
                 gyroSensor.writeHeaderToFile = !gyroSensor.writeHeaderToFile;
             }
             if (gyroSensor.addLocation && gyroSensor.gpsLogger.isGPSEnabled()) {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = gyroSensor.gpsLogger.getDeviceLocation();
-                gyroSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + readingX + "," + readingY + "," + readingZ + "," + location.getLatitude() + "," + location.getLongitude());
+                gyroSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(readingX)
+                                .add(readingY)
+                                .add(readingZ)
+                                .add(location.getLatitude())
+                                .add(location.getLongitude())
+                );
                 sensorData = new GyroData(timestamp, block, gyroscopeViewFragments.get(0).getCurrentValue(), gyroscopeViewFragments.get(1).getCurrentValue(), gyroscopeViewFragments.get(2).getCurrentValue(), location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                gyroSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + readingX + "," + readingY + "," + readingZ + "," + ",0.0,0.0");
+                gyroSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(readingX)
+                                .add(readingY)
+                                .add(readingZ)
+                                .add(0.0)
+                                .add(0.0)
+                );
                 sensorData = new GyroData(timestamp, block, gyroscopeViewFragments.get(0).getCurrentValue(), gyroscopeViewFragments.get(1).getCurrentValue(), gyroscopeViewFragments.get(2).getCurrentValue(), 0.0, 0.0);
             }
             gyroSensor.recordSensorData(sensorData);
@@ -463,7 +490,7 @@ public class GyroscopeDataFragment extends Fragment {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
             if (sensor == null) {
                 CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        getString(R.string.no_gyroscope_sensor),null,null,Snackbar.LENGTH_LONG);
+                        getString(R.string.no_gyroscope_sensor), null, null, Snackbar.LENGTH_LONG);
             } else {
                 sensorManager.registerListener(gyroScopeSensorEventListener,
                         sensor, SensorManager.SENSOR_DELAY_FASTEST);

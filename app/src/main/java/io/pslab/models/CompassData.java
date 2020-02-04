@@ -3,9 +3,9 @@ package io.pslab.models;
 import io.realm.RealmObject;
 
 public class CompassData extends RealmObject {
-    private String Bx;
-    private String By;
-    private String Bz;
+    private Float Bx;
+    private Float By;
+    private Float Bz;
     private String Axis = "X-axis";
     private long time;
     private long block;
@@ -13,7 +13,7 @@ public class CompassData extends RealmObject {
 
     public CompassData() {/**/}
 
-    public CompassData(long time, long block, String Bx, String By, String Bz, String axis, double lat, double lon) {
+    public CompassData(long time, long block, float Bx, float By, float Bz, String axis, double lat, double lon) {
         this.Bx = Bx;
         this.By = By;
         this.Bz = Bz;
@@ -24,27 +24,27 @@ public class CompassData extends RealmObject {
         this.Axis = axis;
     }
 
-    public String getBx() {
+    public Float getBx() {
         return Bx;
     }
 
-    public void setBx(String Bx) {
+    public void setBx(Float Bx) {
         this.Bx = Bx;
     }
 
-    public String getBy() {
+    public Float getBy() {
         return By;
     }
 
-    public void setBy(String By) {
+    public void setBy(Float By) {
         this.By = By;
     }
 
-    public String getBz() {
+    public Float getBz() {
         return Bz;
     }
 
-    public void setBz(String Bz) {
+    public void setBz(Float Bz) {
         this.Bz = Bz;
     }
 

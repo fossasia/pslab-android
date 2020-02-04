@@ -48,6 +48,7 @@ import io.pslab.fragment.DustSensorDataFragment;
 import io.pslab.fragment.GasSensorDataFragment;
 import io.pslab.fragment.GyroscopeDataFragment;
 import io.pslab.fragment.LuxMeterDataFragment;
+import io.pslab.fragment.SoundMeterDataFragment;
 import io.pslab.fragment.ThermometerDataFragment;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
@@ -115,6 +116,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String MULTIMETER = "Multimeter";
     public static final String LOGIC_ANALYZER = "Logic Analyzer";
     public static final String GAS_SENSOR = "Gas Sensor";
+    public static final String SOUND_METER = "Sound Meter";
+    public static final String SOUNDMETER_CONFIGURATIONS = "Sound Meter Configurations";
+    public static final String SOUNDMETER_DATA_FORMAT = "%.2f";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -247,7 +251,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         map = new Intent(this, MapsActivity.class);
         csvLogger = new CSVLogger(getSensorName());
         realm = LocalDataLog.with().getRealm();
-        titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
         sensorParentView = coordinatorLayout;
         setUpBottomSheet();
         fillUpFragment();
@@ -353,7 +357,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
                         ((GasSensorDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
                     } else if (getSensorFragment() instanceof DustSensorDataFragment) {
-                        ((DustSensorDataFragment) getSupportFragmentManager().findFragmentByTag(getSensorName())).playData();
+                        ((DustSensorDataFragment) getSupportFragmentManager()
+                                .findFragmentByTag(getSensorName())).playData();
+                    } else if(getSensorFragment() instanceof SoundMeterDataFragment) {
+                        ((SoundMeterDataFragment) getSupportFragmentManager()
+                                .findFragmentByTag(getSensorName())).playData();
                     }
                 }
                 invalidateOptionsMenu();
@@ -380,9 +388,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 } else if (getSensorFragment() instanceof GasSensorDataFragment){
                     ((GasSensorDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).stopData();
-
                 } else if (getSensorFragment() instanceof DustSensorDataFragment) {
-                    ((DustSensorDataFragment) getSupportFragmentManager().findFragmentByTag(getSensorName())).stopData();
+                    ((DustSensorDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
+                } else if(getSensorFragment() instanceof SoundMeterDataFragment) {
+                    ((SoundMeterDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).stopData();
                 }
                 break;
             case R.id.show_map:
@@ -431,7 +442,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     ((GasSensorDataFragment) getSupportFragmentManager()
                             .findFragmentByTag(getSensorName())).saveGraph();
                 } else if (getSensorFragment() instanceof DustSensorDataFragment) {
-                    ((DustSensorDataFragment) getSupportFragmentManager().findFragmentByTag(getSensorName())).saveGraph();
+                    ((DustSensorDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).saveGraph();
+                } else if(getSensorFragment() instanceof SoundMeterDataFragment) {
+                    ((SoundMeterDataFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName())).saveGraph();
                 }
                 break;
             case android.R.id.home:

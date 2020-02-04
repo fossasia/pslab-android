@@ -54,6 +54,7 @@ import io.pslab.communication.ScienceLab;
 import io.pslab.communication.digitalChannel.DigitalChannel;
 import io.pslab.models.LogicAnalyzerData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
@@ -75,6 +76,17 @@ public class LALogicLinesFragment extends Fragment {
     private static final int EVERY_FOURTH_RISING_EDGE = 4;
     private static final int EVERY_RISING_EDGE = 3;
     private static final int EVERY_FALLING_EDGE = 2;
+
+    private static final CSVDataLine CSV_HEADER =
+            new CSVDataLine()
+                    .add("Timestamp")
+                    .add("DateTime")
+                    .add("Channel")
+                    .add("ChannelMode")
+                    .add("xData")
+                    .add("yData")
+                    .add("lat")
+                    .add("lon");
 
     private final Object lock = new Object();
     List<Entry> tempInput;
@@ -112,7 +124,6 @@ public class LALogicLinesFragment extends Fragment {
     private ArrayList<Integer> recordChannelMode;
     private String[] channels = new String[]{"ID1", "ID2", "ID3", "ID4"};
     private HashMap<String, Integer> channelMap;
-    private String csvHeader = "Timestamp,DateTime,Channel,ChannelMode,xData,yData,lat,lon";
     private ArrayList<Spinner> channelSelectSpinners;
     private ArrayList<Spinner> edgeSelectSpinners;
     private View rootView;
@@ -229,14 +240,21 @@ public class LALogicLinesFragment extends Fragment {
         }
         csvLogger.prepareLogFile();
         csvLogger.writeMetaData(getContext().getResources().getString(R.string.logical_analyzer));
-        csvLogger.writeCSVFile(csvHeader);
+        csvLogger.writeCSVFile(CSV_HEADER);
         recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.logical_analyzer)));
         long timestamp = System.currentTimeMillis();
         String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-        String locationData = lat + "," + lon;
         for (int i = 0; i < recordXAxis.size(); i++) {
             recordSensorData(new LogicAnalyzerData(timestamp + i, block, channels[i], recordChannelMode.get(i), recordXAxis.get(i), recordYAxis.get(i), lat, lon));
-            String data = timeData + "," + channels[i] + "," + recordChannelMode.get(i) + "," + recordXAxis.get(i) + "," + recordYAxis.get(i) + "," + locationData;
+
+            CSVDataLine data = new CSVDataLine()
+                    .add(timeData)
+                    .add(channels[i])
+                    .add(recordChannelMode.get(i))
+                    .add(recordXAxis.get(i))
+                    .add(recordYAxis.get(i))
+                    .add(lat)
+                    .add(lon);
             csvLogger.writeCSVFile(data);
         }
         CustomSnackBar.showSnackBar(rootView,
@@ -479,7 +497,7 @@ public class LALogicLinesFragment extends Fragment {
                                 break;
                             default:
                                 CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                                        getString(R.string.needs_implementation),null,null, Snackbar.LENGTH_SHORT);
+                                        getString(R.string.needs_implementation), null, null, Snackbar.LENGTH_SHORT);
                                 break;
                         }
 
@@ -499,7 +517,7 @@ public class LALogicLinesFragment extends Fragment {
                         logicLinesChart.setOnChartValueSelectedListener(listener);
                     } else
                         CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                                getString(R.string.device_not_found),null,null, Snackbar.LENGTH_SHORT);
+                                getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                 }
             }
         });
@@ -1018,7 +1036,7 @@ public class LALogicLinesFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
                 CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        getString(R.string.no_data_generated),null,null, Snackbar.LENGTH_SHORT);
+                        getString(R.string.no_data_generated), null, null, Snackbar.LENGTH_SHORT);
                 analyze_button.setClickable(true);
             }
 
@@ -1150,7 +1168,7 @@ public class LALogicLinesFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
                 CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        getString(R.string.no_data_generated),null,null, Snackbar.LENGTH_SHORT);
+                        getString(R.string.no_data_generated), null, null, Snackbar.LENGTH_SHORT);
             }
 
             analyze_button.setClickable(true);
@@ -1289,7 +1307,7 @@ public class LALogicLinesFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
                 CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        getString(R.string.no_data_generated),null,null, Snackbar.LENGTH_SHORT);
+                        getString(R.string.no_data_generated), null, null, Snackbar.LENGTH_SHORT);
             }
 
             analyze_button.setClickable(true);
@@ -1439,7 +1457,7 @@ public class LALogicLinesFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
                 CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        getString(R.string.no_data_generated),null,null, Snackbar.LENGTH_SHORT);
+                        getString(R.string.no_data_generated), null, null, Snackbar.LENGTH_SHORT);
             }
 
             analyze_button.setClickable(true);

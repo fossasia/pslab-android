@@ -28,11 +28,11 @@ import io.pslab.activity.OscilloscopeActivity;
 import io.pslab.activity.PowerSourceActivity;
 import io.pslab.activity.RoboticArmActivity;
 import io.pslab.activity.SensorActivity;
+import io.pslab.activity.SoundMeterActivity;
 import io.pslab.activity.ThermometerActivity;
 import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.adapters.ApplicationAdapter;
 import io.pslab.items.ApplicationItem;
-import io.pslab.models.PSLabSensor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +97,8 @@ public class InstrumentsFragment extends Fragment {
                         intent = new Intent(context, GasSensorActivity.class);
                     if (applicationName.equals(getString(R.string.dust_sensor)))
                         intent = new Intent(context, DustSensorActivity.class);
-
+                    if(applicationName.equals(getString(R.string.sound_meter)))
+                        intent = new Intent(context, SoundMeterActivity.class);
                     if (intent != null)
                         startActivity(intent);
                 });
@@ -143,7 +144,8 @@ public class InstrumentsFragment extends Fragment {
                     R.string.thermometer_desc,
                     R.string.robotic_arm_description,
                     R.string.gas_sensor_description,
-                    R.string.dust_sensor_description
+                    R.string.dust_sensor_description,
+                    R.string.sound_meter_desc
             };
 
             applicationItemList.add(new ApplicationItem(
@@ -190,6 +192,9 @@ public class InstrumentsFragment extends Fragment {
             ));
             applicationItemList.add(new ApplicationItem(
                     getResources().getString(R.string.dust_sensor), R.drawable.tile_icon_gas, getResources().getString(descriptions[14])
+            ));
+            applicationItemList.add(new ApplicationItem(
+                    getString(R.string.sound_meter), R.drawable.tile_icon_gas, getString(descriptions[15])
             ));
             return null;
         }
