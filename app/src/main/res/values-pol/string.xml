@@ -1036,5 +1036,6 @@
     <string name="no_location_specified">Lokalizacja nie jest określona</string>
     <string name="compass_default_0">0</string>
     <string name="unknown">Nieznany</string>
+    <string name="developers">Deweloperzy</string>
 
 </resources>
