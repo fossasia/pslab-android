@@ -510,7 +510,7 @@
         dopasowanie i wykres napięcia między kanałami.\n\n\u2022 Aby odczytać z fali sinusoidalnej lub fali prostokątnej, możesz podłączyć
         pin fali wyjściowej i kanał do oscyloskopu w następujący sposób.</string>
     <string name="oscilloscope_desc">\u2022 Powyższy rysunek ma połączenie z SQ1 do CH1 i SI1
-        do CH2.\n\n
+        do CH2.\n\n
         \u2022 Po wygenerowaniu fali z przyrządu Wave Generator podłącz odpowiednie piny i obserwuj ją z Oscyloskopu,
         zaznaczając odpowiedni kanał w parametrach kanału. Jeśli używasz styku CH1, wybierz CH1 z parametrów kanału.</string>
     <string name="channel_param_desc">W tym ustawieniu możesz zmienić Kanał, który musi być obserwowany na wykresie.
@@ -960,7 +960,7 @@
     <string name="max_baro">Max (atm)</string>
     <string name="baro_meter_description">Mierzy ciśnienie atmosferyczne</string>
     <string name="baro_meter_intro">\u2022 Barometr może być używany do pomiaru ciśnienia atmosferycznego. Ten pryrząd
-    jest kompatybilny z wbudowanym czujnikiem ciśnienia na dowolnym urządzeniu z Androidem lub czujnikiem ciśnienia BMP-180\n\n
+    jest kompatybilny z wbudowanym czujnikiem ciśnienia na dowolnym urządzeniu z Androidem lub czujnikiem ciśnienia BMP-180\n\n
     \u2022 Jeśli chcesz użyć czujnika BMP-180, podłącz czujnik do urządzenia PSLab, jak pokazano na rysunku.</string>
     <string name="baro_meter_desc">\u2022 Powyższa konfiguracja pinów musi być taka sama, z wyjątkiem pin GND.
         GND jest przeznaczony do uziemienia i można użyć dowolnego z pinów GND urządzenia PSLab, ponieważ są one powszechne.\n\n
@@ -1036,6 +1036,5 @@
     <string name="no_location_specified">Lokalizacja nie jest określona</string>
     <string name="compass_default_0">0</string>
     <string name="unknown">Nieznany</string>
-    <string name="developers">Deweloperzy</string>
 
 </resources>
