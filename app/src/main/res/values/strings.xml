@@ -1046,8 +1046,11 @@
     <string name="max_dB">Max (dB)</string>
     <string name="min_dB">Min (dB)</string>
     <string name="avg_dB">Avg (dB)</string>
+    <string name="sound_chart_label">Sound Level(dB)</string>
     <string name="in_progress">This feature is in progress</string>
 
     <string name="developers">Developers</string>
     <string name="github_developers_link">https://github.com/fossasia/pslab-android/graphs/contributors</string>
+    <string name="limit_dangerous">\"Dangerous\"</string>
+    <string name="limit_average">Average</string>
 </resources>
