@@ -45,6 +45,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.complex.Complex;
 
 import java.util.ArrayList;
@@ -1136,9 +1137,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
                 }
                 if (isRecording) {
-                    loggingXdata = String.join(" ", xDataString);
+                    loggingXdata = StringUtils.join(" ", xDataString);
                     for (int i = 0; i < yDataString.size(); i++) {
-                        loggingYdata[i] = String.join(" ", yDataString.get(i));
+                        loggingYdata[i] = StringUtils.join(" ", yDataString.get(i));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
