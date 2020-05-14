@@ -40,6 +40,7 @@ import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.GasSensorActivity;
 import io.pslab.communication.ScienceLab;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVDataLine;
@@ -49,7 +50,7 @@ import io.pslab.others.ScienceLabCommon;
 
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
-public class GasSensorDataFragment extends Fragment {
+public class GasSensorDataFragment extends Fragment implements OperationCallback {
 
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
             .add("Timestamp")
@@ -238,6 +239,7 @@ public class GasSensorDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         gasSensorActivity.startedPlay = true;
@@ -255,6 +257,7 @@ public class GasSensorDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -269,6 +272,7 @@ public class GasSensorDataFragment extends Fragment {
         gasSensorActivity.invalidateOptionsMenu();
     }
 
+    @Override
     public void saveGraph() {
         gasSensorActivity.csvLogger.prepareLogFile();
         gasSensorActivity.csvLogger.writeMetaData(getResources().getString(R.string.gas_sensor));

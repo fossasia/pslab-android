@@ -38,6 +38,7 @@ import io.pslab.R;
 import io.pslab.activity.CompassActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.CompassData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVDataLine;
@@ -48,7 +49,7 @@ import io.pslab.others.ScienceLabCommon;
 import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
-public class CompassDataFragment extends Fragment {
+public class CompassDataFragment extends Fragment implements OperationCallback {
 
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
             .add("Timestamp")
@@ -246,6 +247,7 @@ public class CompassDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void saveGraph() {
         compassActivity.csvLogger.prepareLogFile();
         compassActivity.csvLogger.writeMetaData(getResources().getString(R.string.compass));
@@ -382,6 +384,7 @@ public class CompassDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         compassActivity.startedPlay = true;
@@ -399,6 +402,7 @@ public class CompassDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
