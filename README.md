@@ -98,10 +98,10 @@ This repository holds the Android App for performing experiments with [PSLab](ht
   </table>
 
 ## Video Demo
-- [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k)
-- [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ)
-- [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo)
-- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y)
+- [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k).
+- [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ).
+- [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo).
+- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y).
 
 ## Features
 |   **Feature**          | **Description**                                                   | **Status**         |
@@ -144,10 +144,10 @@ For setting up the PSLab Android project you may follow any of the two methods l
 
 1. Download the _pslab-android_ project source. You can do this either by forking and cloning the repository (recommended if you plan on pushing changes) or by downloading it as a ZIP file and extracting it.
 
-2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select _Import Project (Eclipse ADT, Gradle, etc.)To debug over Wi-Fi follow the steps given in this [Blog](http://blog.fossasia.org/android-app-debugging-over-wifi-fo)
+2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select _Import Project (Eclipse ADT, Gradle, etc.)To debug over Wi-Fi follow the steps given in this [Blog](http://blog.fossasia.org/android-app-debugging-over-wifi-fo).
 
 * **Note :**
-If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java)
+If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java).
 
 ### By direct cloning
 
@@ -181,7 +181,7 @@ You can't debug the usual way as PSLab device is connected to micro-USB port thr
 To debug over Wi-Fi follow the steps given in this [Blog](http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/). 
 
 * **Note :**
-If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java)
+If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java).
 
 ### Permissions Required
 
@@ -199,7 +199,7 @@ To use PSLab device with Android, you simply need an OTG cable, an Android Devic
 
 Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
 
- * Single commit per pull request
+ * Single commit per pull request.
  * Reference the issue numbers in the commit message. Follow the pattern ``` Fixes #<issue number> <commit message>```
  * Follow uniform design practices. The design language must be consistent throughout the app.
  * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
@@ -214,7 +214,7 @@ As a tip for new developers those who struggle with squashing commits into one, 
 
 Despite any reason, follow the steps given below to squash all commits into one adhering to our best practices.
 
- * Setup remote to upstream branch if not set before;
+ * Setup remote to upstream branch if not set before
 
 `$ git remote add upstream https://github.com/fossasia/pslab-android.git`
 
@@ -234,7 +234,7 @@ Despite any reason, follow the steps given below to squash all commits into one 
 
 `$ git commit -m "tag: commit message"`
 
- * If you have already made a pull request,
+ * If you have already made a pull request
 
 `$ git push -f origin <branch-name>`
 
