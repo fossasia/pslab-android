@@ -339,20 +339,20 @@ public abstract class PSLabSensor extends AppCompatActivity {
             case R.id.play_data:
                 playingData = !playingData;
                 if (!startedPlay) {
-                     fragment=getSupportFragmentManager()
+                    fragment = getSupportFragmentManager()
                             .findFragmentByTag(getSensorName());
 
-                    if (fragment instanceof OperationCallback){
+                    if (fragment instanceof OperationCallback) {
                         ((OperationCallback) fragment).playData();
                     }
                 }
                 invalidateOptionsMenu();
                 break;
             case R.id.stop_data:
-                 fragment=getSupportFragmentManager()
+                fragment = getSupportFragmentManager()
                         .findFragmentByTag(getSensorName());
 
-                if (fragment instanceof OperationCallback){
+                if (fragment instanceof OperationCallback) {
                     ((OperationCallback) fragment).stopData();
                 }
                 break;
@@ -380,10 +380,10 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 break;
             case R.id.save_graph:
                 displayLogLocationOnSnackBar();
-                 fragment=getSupportFragmentManager()
+                fragment = getSupportFragmentManager()
                         .findFragmentByTag(getSensorName());
 
-                if (fragment instanceof OperationCallback){
+                if (fragment instanceof OperationCallback) {
                     ((OperationCallback) fragment).saveGraph();
                 }
                 break;
@@ -461,7 +461,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     startActivity(map);
                 } else {
                     CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                            getString(R.string.no_permission_for_maps),null,null,Snackbar.LENGTH_LONG);
+                            getString(R.string.no_permission_for_maps), null, null, Snackbar.LENGTH_LONG);
                 }
                 break;
             case PSLabPermission.LOG_PERMISSION:
@@ -614,7 +614,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
             getDataFromDataLogger();
         } catch (ArrayIndexOutOfBoundsException e) {
             CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                    getString(R.string.no_data_fetched),null,null,Snackbar.LENGTH_LONG);
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_LONG);
         }
         if (checkGPSOnResume) {
             isRecording = true;
