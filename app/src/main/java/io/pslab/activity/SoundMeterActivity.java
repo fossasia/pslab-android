@@ -114,12 +114,9 @@ public class SoundMeterActivity extends PSLabSensor {
     }
 
     private void reinstateConfigurations() {
-        SharedPreferences luxMeterConfigurations;
-        luxMeterConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        locationEnabled = luxMeterConfigurations.getBoolean(SoundmeterSettingsFragment.KEY_INCLUDE_LOCATION, true);
-        SoundMeterDataFragment.setParameters();
-        /**
-         * TODO: set parameters
-         */
+        SharedPreferences soundMeterConfigurations;
+        soundMeterConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        locationEnabled = soundMeterConfigurations.getBoolean(SoundmeterSettingsFragment.KEY_INCLUDE_LOCATION, true);
+        SoundMeterDataFragment.setParameters(1d, 100);
     }
 }

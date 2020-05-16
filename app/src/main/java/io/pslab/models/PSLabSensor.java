@@ -363,6 +363,16 @@ public abstract class PSLabSensor extends AppCompatActivity {
                         ((SoundMeterDataFragment) getSupportFragmentManager()
                                 .findFragmentByTag(getSensorName())).playData();
                     }
+                } else {
+                    if(getSensorFragment() instanceof SoundMeterDataFragment) {
+                        if(!playingData) {
+                            ((SoundMeterDataFragment) getSupportFragmentManager()
+                                    .findFragmentByTag(getSensorName())).pause();
+                        } else {
+                            ((SoundMeterDataFragment) getSupportFragmentManager()
+                                    .findFragmentByTag(getSensorName())).resume();
+                        }
+                    }
                 }
                 invalidateOptionsMenu();
                 break;
