@@ -46,6 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.pslab.R;
 import io.pslab.activity.SoundMeterActivity;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.SoundData;
@@ -58,7 +59,7 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 /**
  * @author reckoner1429
  */
-public class SoundMeterDataFragment extends Fragment {
+public class SoundMeterDataFragment extends Fragment implements OperationCallback {
 
     public static final String TAG = "SoundMeterFragment";
     private static final CSVDataLine CSV_HEADER =
@@ -481,6 +482,7 @@ public class SoundMeterDataFragment extends Fragment {
     /**
      * Method to play data which was previously recorded
      */
+    @Override
     public void playData() {
         startPlaying();
     }
@@ -502,6 +504,7 @@ public class SoundMeterDataFragment extends Fragment {
     /**
      * Method to stop playing the previously recorded data
      */
+    @Override
     public void stopData() {
         stopPlaying();
     }
@@ -551,6 +554,7 @@ public class SoundMeterDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void saveGraph() {
         soundMeter.csvLogger.prepareLogFile();
         soundMeter.csvLogger.writeMetaData(getResources().getString(R.string.lux_meter));

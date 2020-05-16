@@ -48,6 +48,7 @@ import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.BH1750;
 import io.pslab.communication.sensors.TSL2561;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.LuxData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
@@ -63,7 +64,7 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
  * Created by Padmal on 11/2/18.
  */
 
-public class LuxMeterDataFragment extends Fragment {
+public class LuxMeterDataFragment extends Fragment implements OperationCallback {
 
     private static final CSVDataLine CSV_HEADER =
             new CSVDataLine()
@@ -298,6 +299,7 @@ public class LuxMeterDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -312,6 +314,7 @@ public class LuxMeterDataFragment extends Fragment {
         luxSensor.invalidateOptionsMenu();
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         luxSensor.startedPlay = true;
@@ -329,6 +332,7 @@ public class LuxMeterDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void saveGraph() {
         luxSensor.csvLogger.prepareLogFile();
         luxSensor.csvLogger.writeMetaData(getResources().getString(R.string.lux_meter));

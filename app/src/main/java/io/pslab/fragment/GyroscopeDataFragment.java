@@ -36,6 +36,7 @@ import java.util.TimerTask;
 
 import io.pslab.R;
 import io.pslab.activity.GyroscopeActivity;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.GyroData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVDataLine;
@@ -45,7 +46,7 @@ import io.pslab.others.CustomSnackBar;
 import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
-public class GyroscopeDataFragment extends Fragment {
+public class GyroscopeDataFragment extends Fragment implements OperationCallback {
 
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
             .add("Timestamp")
@@ -272,6 +273,7 @@ public class GyroscopeDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         gyroSensor.startedPlay = true;
@@ -289,6 +291,7 @@ public class GyroscopeDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -305,6 +308,7 @@ public class GyroscopeDataFragment extends Fragment {
         gyroSensor.invalidateOptionsMenu();
     }
 
+    @Override
     public void saveGraph() {
         gyroSensor.csvLogger.prepareLogFile();
         gyroSensor.csvLogger.writeMetaData(getResources().getString(R.string.gyroscope));

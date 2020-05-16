@@ -34,6 +34,7 @@ import java.util.TimerTask;
 
 import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVDataLine;
@@ -47,7 +48,7 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
  * Created by Kunal on 18-12-18
  */
 
-public class AccelerometerDataFragment extends Fragment {
+public class AccelerometerDataFragment extends Fragment implements OperationCallback {
 
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
             .add("Timestamp")
@@ -267,6 +268,7 @@ public class AccelerometerDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         accelerometerSensor.startedPlay = true;
@@ -284,6 +286,7 @@ public class AccelerometerDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -300,6 +303,7 @@ public class AccelerometerDataFragment extends Fragment {
         accelerometerSensor.invalidateOptionsMenu();
     }
 
+    @Override
     public void saveGraph() {
         accelerometerSensor.csvLogger.prepareLogFile();
         accelerometerSensor.csvLogger.writeMetaData(getResources().getString(R.string.accelerometer));

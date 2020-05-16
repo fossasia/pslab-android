@@ -49,6 +49,7 @@ import io.pslab.activity.BarometerActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.BMP180;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.BaroData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
@@ -64,7 +65,7 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
  * Created by Padmal on 12/13/18.
  */
 
-public class BaroMeterDataFragment extends Fragment {
+public class BaroMeterDataFragment extends Fragment implements OperationCallback {
 
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
             .add("Timestamp")
@@ -331,6 +332,7 @@ public class BaroMeterDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         baroSensor.startedPlay = true;
@@ -348,6 +350,7 @@ public class BaroMeterDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -362,6 +365,7 @@ public class BaroMeterDataFragment extends Fragment {
         baroSensor.invalidateOptionsMenu();
     }
 
+    @Override
     public void saveGraph() {
         baroSensor.csvLogger.prepareLogFile();
         baroSensor.csvLogger.writeMetaData(getResources().getString(R.string.baro_meter));
