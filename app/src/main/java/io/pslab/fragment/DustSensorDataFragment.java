@@ -40,6 +40,7 @@ import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.DustSensorActivity;
 import io.pslab.communication.ScienceLab;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.DustSensorData;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.SensorDataBlock;
@@ -50,7 +51,7 @@ import io.pslab.others.ScienceLabCommon;
 
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
-public class DustSensorDataFragment extends Fragment {
+public class DustSensorDataFragment extends Fragment implements OperationCallback {
 
     private static final CSVDataLine CSV_HEADER =
             new CSVDataLine()
@@ -260,6 +261,7 @@ public class DustSensorDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         dustSensorActivity.startedPlay = true;
@@ -277,6 +279,7 @@ public class DustSensorDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -291,6 +294,7 @@ public class DustSensorDataFragment extends Fragment {
         dustSensorActivity.invalidateOptionsMenu();
     }
 
+    @Override
     public void saveGraph() {
         dustSensorActivity.csvLogger.prepareLogFile();
         dustSensorActivity.csvLogger.writeMetaData(getResources().getString(R.string.gas_sensor));

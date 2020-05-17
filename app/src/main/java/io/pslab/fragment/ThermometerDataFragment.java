@@ -47,6 +47,7 @@ import io.pslab.activity.ThermometerActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.SHT21;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ThermometerData;
@@ -58,7 +59,7 @@ import io.pslab.others.ScienceLabCommon;
 import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
-public class ThermometerDataFragment extends Fragment {
+public class ThermometerDataFragment extends Fragment implements OperationCallback {
 
     private static final String TEMPERATURE = "temperature";
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
@@ -297,6 +298,7 @@ public class ThermometerDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -311,6 +313,7 @@ public class ThermometerDataFragment extends Fragment {
         thermoSensor.invalidateOptionsMenu();
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         thermoSensor.startedPlay = true;
@@ -328,6 +331,7 @@ public class ThermometerDataFragment extends Fragment {
         }
     }
 
+    @Override
     public void saveGraph() {
         thermoSensor.csvLogger.prepareLogFile();
         thermoSensor.csvLogger.writeMetaData(getResources().getString(R.string.thermometer));
