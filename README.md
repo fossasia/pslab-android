@@ -98,10 +98,10 @@ This repository holds the Android App for performing experiments with [PSLab](ht
   </table>
 
 ## Video Demo
-- [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k)
-- [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ)
-- [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo)
-- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y)
+- [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k).
+- [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ).
+- [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo).
+- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y).
 
 ## Features
 |   **Feature**          | **Description**                                                   | **Status**         |
