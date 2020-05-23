@@ -203,8 +203,9 @@ public class SensorMLX90614 extends AppCompatActivity {
 
     private boolean shouldPlay() {
         if (play) {
-            if (indefiniteSamplesCheckBox.isChecked())
+            if (indefiniteSamplesCheckBox.isChecked()) {
                 return true;
+            }
             else if (counter >= 0) {
                 counter--;
                 return true;
