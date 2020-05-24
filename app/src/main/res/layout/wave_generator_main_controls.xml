@@ -51,4 +51,21 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/wave_gen_control_text_size" />
+
+    <Button
+        android:id="@+id/use_phone_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_btn"
+        android:layout_marginTop="@dimen/margin_btn"
+        android:layout_marginEnd="@dimen/margin_btn"
+        android:layout_marginBottom="@dimen/margin_btn"
+        android:layout_weight="1"
+        android:background="@drawable/btn_back_rounded"
+        android:minWidth="@dimen/btn_min_width"
+        android:stateListAnimator="@animator/selector_animator"
+        android:text="@string/text_use_phone"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/wave_gen_control_text_size" />
 </LinearLayout>
