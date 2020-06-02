@@ -3,7 +3,6 @@ package io.pslab.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
@@ -33,9 +35,6 @@ import io.pslab.activity.ThermometerActivity;
 import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.adapters.ApplicationAdapter;
 import io.pslab.items.ApplicationItem;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -97,7 +96,7 @@ public class InstrumentsFragment extends Fragment {
                         intent = new Intent(context, GasSensorActivity.class);
                     if (applicationName.equals(getString(R.string.dust_sensor)))
                         intent = new Intent(context, DustSensorActivity.class);
-                    if(applicationName.equals(getString(R.string.sound_meter)))
+                    if (applicationName.equals(getString(R.string.sound_meter)))
                         intent = new Intent(context, SoundMeterActivity.class);
                     if (intent != null)
                         startActivity(intent);
@@ -106,7 +105,7 @@ public class InstrumentsFragment extends Fragment {
                 == Configuration.ORIENTATION_PORTRAIT ? 1 : 2;
 
         initiateViews(view, rows);
-        new loadList().execute();
+
         return view;
     }
 
@@ -117,17 +116,16 @@ public class InstrumentsFragment extends Fragment {
         RecyclerView listView = view.findViewById(R.id.applications_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, rows);
         listView.setLayoutManager(mLayoutManager);
-        listView.setItemAnimator(new DefaultItemAnimator());
-        listView.setAdapter(applicationAdapter);
+        new LoadList().doTask(listView);
+
     }
 
     /**
-     * Generate an array of Application Items and add them to the adapter in background
+     * Generate an array of Application Items and add them to the adapter
      */
-    private class loadList extends AsyncTask<Void, Void, Void> {
+    private class LoadList {
 
-        @Override
-        protected Void doInBackground(Void... params) {
+        private void doTask(RecyclerView listView) {
 
             int[] descriptions = new int[]{
                     R.string.oscilloscope_description,
@@ -196,13 +194,9 @@ public class InstrumentsFragment extends Fragment {
             applicationItemList.add(new ApplicationItem(
                     getString(R.string.sound_meter), R.drawable.tile_icon_gas, getString(descriptions[15])
             ));
-            return null;
-        }
+            listView.setItemAnimator(new DefaultItemAnimator());
+            listView.setAdapter(applicationAdapter);
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            applicationAdapter.notifyDataSetChanged();
         }
     }
 

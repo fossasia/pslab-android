@@ -40,9 +40,9 @@ import io.pslab.activity.ThermometerActivity;
 import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
+import io.pslab.models.CompassData;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.GyroData;
-import io.pslab.models.CompassData;
 import io.pslab.models.LogicAnalyzerData;
 import io.pslab.models.LuxData;
 import io.pslab.models.MultimeterData;
@@ -234,9 +234,9 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             gasSensorIntent.putExtra(KEY_LOG, true);
             gasSensorIntent.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(gasSensorIntent);
-        } else if(block.getSensorType().equalsIgnoreCase(context.getString(R.string.sound_meter))) {
+        } else if (block.getSensorType().equalsIgnoreCase(context.getString(R.string.sound_meter))) {
             Intent soundMeterIntent = new Intent(context, SoundMeterActivity.class);
-            soundMeterIntent.putExtra(KEY_LOG,true);
+            soundMeterIntent.putExtra(KEY_LOG, true);
             soundMeterIntent.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(soundMeterIntent);
         }
@@ -255,8 +255,8 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                                         File.separator + block.getSensorType() +
                                         File.separator + CSVLogger.FILE_NAME_FORMAT.format(block.getBlock()) + ".csv");
                         CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content),
-                                logDirectory.delete()?context.getString(R.string.log_deleted)
-                                :context.getString(R.string.nothing_to_delete),null,null, Snackbar.LENGTH_LONG);
+                                logDirectory.delete() ? context.getString(R.string.log_deleted)
+                                        : context.getString(R.string.nothing_to_delete), null, null, Snackbar.LENGTH_LONG);
                         if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LUXMETER)) {
                             LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.BAROMETER)) {
@@ -302,6 +302,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
     }
 
     private void populateMapData(SensorDataBlock block) {
+
         if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LUXMETER)) {
             RealmResults<LuxData> data = LocalDataLog.with().getBlockOfLuxRecords(block.getBlock());
             JSONArray array = new JSONArray();
@@ -372,7 +373,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 }
             }
             setMapDataToIntent(array);
-        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER_CONFIGURATIONS)) {
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER)) {
             RealmResults<AccelerometerData> data = LocalDataLog.with().getBlockOfAccelerometerRecords(block.getBlock());
             JSONArray array = new JSONArray();
             for (AccelerometerData d : data) {
@@ -564,7 +565,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
         } else {
             map.putExtra("hasMarkers", false);
             CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content),
-                    context.getString(R.string.no_location_data),null,null,Snackbar.LENGTH_LONG);
+                    context.getString(R.string.no_location_data), null, null, Snackbar.LENGTH_LONG);
         }
     }
 

@@ -200,6 +200,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private boolean isPlayingSound = false;
     private ProduceSoundTask produceSoundTask;
 
+    private AudioTrack track;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1311,8 +1313,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
     private class ProduceSoundTask extends AsyncTask<Void, Void, Void> {
 
-        private AudioTrack track;
-
         @Override
         protected Void doInBackground(Void... voids) {
             short[] buffer = new short[1024];
@@ -1349,9 +1349,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            track.flush();
-            track.stop();
-            track.release();
+            if (track != null) {
+                track.flush();
+                track.stop();
+                track.release();
+            }
         }
     }
 }
