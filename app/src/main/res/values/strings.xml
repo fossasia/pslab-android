@@ -297,9 +297,9 @@
     <string name="pressure">Pressure</string>
     <string name="gyro_range">Set Gyro Range</string>
     <string name="accel_range">Set Accel Range</string>
-    <string name="kalman">Kalman filter</string>
+    <string name="kalman">Kalman Filter</string>
     <string name="power_up">Power Up</string>
-    <string name="full_spectrum">Full spectrum</string>
+    <string name="full_spectrum">Full Spectrum</string>
     <string name="infrared">Infrared</string>
     <string name="visible">Visible</string>
     <string name="set_gain">Set Gain</string>
@@ -448,7 +448,7 @@
     <string name="scanning">Scanning...</string>
 
     <string name="voltage_unit">(V)</string>
-    <string name="volts">volts</string>
+    <string name="volts">Volts</string>
     <string name="seconds">(s)</string>
     <string name="lux">Lx</string>
     <string name="pressure2">Press.</string>
