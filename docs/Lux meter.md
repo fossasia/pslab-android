@@ -39,7 +39,7 @@ Data view is to display the light value read from either the built-in sensor or 
 ### Configure
 Configure view is used to control the lux meter by changing variuos parameters.
 1. Select sensor
-    - Used to select between sensors built-in, BH-1750 and TSL-2561
+    - Used to select between sensors built-in, BH-1750 and TSL-2561.
 2. Gain range
     - When using sensors via PSLab device, can change the gain of the sensor to amplify the signal captured from the sensor. For the BH-1750 can select from `500`, `1000` and `4000`. For the TSL-2561 can choose from `1` and `16`. 
 3. High limit
