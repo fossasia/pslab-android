@@ -49,8 +49,8 @@ These features can be used using four components in the oscilloscope. Note that 
 
 ### 1. Channel Parameters
 Channel parameters can be used to select the following settings.
-- *Channel/s* that needs to be observerd
-- *Voltage range* or *Amplitude* in the graph plot 
+- *Channel/s* that needs to be observerd.
+- *Voltage range* or *Amplitude* in the graph plot.
 
 When the check boxes selected from the items below the graph plot, user will be able to find the live plotting of the input read through the relevant channel. 
 For `CH1` and `CH2`, user can adjust the voltage range/amplitude of the graphs 'y axis' using the drop down menus next to the check boxes. 
