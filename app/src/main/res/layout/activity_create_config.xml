@@ -14,36 +14,40 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="vertical"
             android:padding="@dimen/config_activity_padding">
 
             <LinearLayout
                 android:id="@+id/select_instrument"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/select_instrument_title"
                     style="@style/Base.TextAppearance.AppCompat.Title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="17sp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/select_instrument_title" />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/select_instrument_spinner"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textAlignment="center" />
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/create_config_margin1"
                 android:orientation="horizontal">
 
@@ -51,6 +55,7 @@
                     android:id="@+id/time_interval_title"
                     style="@style/Base.TextAppearance.AppCompat.Title"
                     android:layout_width="wrap_content"
+                    android:textSize="17sp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/time_interval_title" />
@@ -58,17 +63,18 @@
                 <EditText
                     android:id="@+id/interval_edit_text"
                     android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="wrap_content"
                     android:hint="@string/time_interval_hint"
                     android:imeOptions="actionDone"
                     android:inputType="number"
                     android:textAlignment="center"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"/>
+                    android:layout_gravity="center"/>
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/interval_unit_spinner"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
             </LinearLayout>
@@ -79,13 +85,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textSize="20sp"
                 android:layout_marginTop="@dimen/create_config_margin2"
                 android:text="@string/select_params_title" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/params_list_container"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/create_config_recycler_view"
+                android:layout_height="0dp"
+                android:layout_weight="4"
                 android:layout_marginTop="@dimen/create_config_margin1" />
 
             <Button

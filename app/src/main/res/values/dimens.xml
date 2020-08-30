@@ -359,7 +359,7 @@
     <dimen name="create_config_margin4">12dp</dimen>
     <dimen name="create_config_recycler_view">280dp</dimen>
     <dimen name="check_box_width">0dp</dimen>
-    <dimen name="check_box_magin">4dp</dimen>
+    <dimen name="check_box_magin">5dp</dimen>
     <dimen name="check_box_corner">5dp</dimen>
     <dimen name="sensor_sht21_margin">5dp</dimen>
     <dimen name="sht21_height">40dp</dimen>
