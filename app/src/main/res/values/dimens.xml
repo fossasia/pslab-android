@@ -81,6 +81,14 @@
     <dimen name="device_status_height">80dp</dimen>
     <dimen name="device_status_textsize">20sp</dimen>
     <dimen name="config_activity_padding">9dp</dimen>
+    <dimen name="height_zero">0dp</dimen>
+    <dimen name="width_zero">0dp</dimen>
+    <dimen name="weight_one">1</dimen>
+    <dimen name="weight_two">2</dimen>
+    <dimen name="weight_three">3</dimen>
+    <dimen name="weight_four">4</dimen>
+    <dimen name="text_size_of_label">17sp</dimen>
+    <dimen name="text_size_of_heading">20sp</dimen>
 
     <dimen name="multimeter_layout_margin">20dp</dimen>
     <dimen name="multimeter_line_width">1dp</dimen>
