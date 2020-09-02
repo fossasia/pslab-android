@@ -277,6 +277,7 @@
     <dimen name="list_group_layout_width">52dp</dimen>
     <dimen name="list_item_padding">5dp</dimen>
     <dimen name="faq_question_text_size">20dp</dimen>
+    <dimen name="faq_question_left_margin">20dp</dimen>
     <dimen name="faq_question_margin_top">10dp</dimen>
     <dimen name="faq_answer_margin">20dp</dimen>
     <dimen name="faq_answer_margin_start">15dp</dimen>
