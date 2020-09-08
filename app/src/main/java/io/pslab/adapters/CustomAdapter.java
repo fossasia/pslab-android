@@ -1,10 +1,12 @@
-package io.pslab.fragment;
+package io.pslab.adapters;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
@@ -81,6 +83,7 @@ public class CustomAdapter extends BaseExpandableListAdapter {
         }
 
         TextView answerTextView = view.findViewById(R.id.lblListItem);
+        answerTextView.setMovementMethod(LinkMovementMethod.getInstance());
         answerTextView.setText(Html.fromHtml(answer));
 
         return view;

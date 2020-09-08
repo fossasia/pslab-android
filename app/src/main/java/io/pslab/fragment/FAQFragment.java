@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.pslab.R;
+import io.pslab.adapters.CustomAdapter;
 
 public class FAQFragment extends Fragment {
 

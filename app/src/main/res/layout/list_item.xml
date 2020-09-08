@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background"
@@ -28,6 +29,7 @@
             android:paddingLeft="@dimen/text_padding_top"
             android:paddingRight="@dimen/text_padding_top"
             android:paddingTop="@dimen/list_item_padding"
+            android:linksClickable="true"
             android:textSize="@dimen/text_size_wavegen" />
 
     </LinearLayout>
