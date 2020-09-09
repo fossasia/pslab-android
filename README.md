@@ -27,6 +27,7 @@ This repository holds the Android App for performing experiments with [PSLab](ht
 * Please also join us on the [PSLab Mailing List](https://groups.google.com/forum/#!forum/pslab-fossasia).
 
 ## Roadmap
+
  - [x] First we need to get communication between Android App and PSLab working.
  - [x] Implement Applications and expose PSLab Hardware functionality to the user.
  - [ ] Implement wireless connectivity
@@ -98,6 +99,7 @@ This repository holds the Android App for performing experiments with [PSLab](ht
   </table>
 
 ## Video Demo
+
 - [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k).
 - [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ).
 - [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo).
