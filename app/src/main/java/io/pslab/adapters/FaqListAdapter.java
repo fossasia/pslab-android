@@ -15,11 +15,11 @@ import java.util.List;
 
 import io.pslab.R;
 
-public class CustomAdapter extends BaseExpandableListAdapter {
+public class FaqListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> listHeader;
     private HashMap<String,List<String>> listChild;
-    public CustomAdapter(Context context, List<String> listHeader, HashMap<String, List<String>> listChild) {
+    public FaqListAdapter(Context context, List<String> listHeader, HashMap<String, List<String>> listChild) {
         this.context = context;
         this.listHeader = listHeader;
         this.listChild = listChild;

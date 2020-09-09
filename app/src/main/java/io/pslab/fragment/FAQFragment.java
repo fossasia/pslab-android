@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.pslab.R;
-import io.pslab.adapters.CustomAdapter;
+import io.pslab.adapters.FaqListAdapter;
 
 public class FAQFragment extends Fragment {
 
@@ -22,7 +22,7 @@ public class FAQFragment extends Fragment {
     private List<String> listHeader;
     private HashMap<String,List<String>> listChild;
     private ExpandableListView expandableListView;
-    private CustomAdapter customAdapter;
+    private FaqListAdapter faqListAdapter;
 
     public static FAQFragment newInstance() {
         return new FAQFragment();
@@ -55,8 +55,8 @@ public class FAQFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_faq, container, false);
         expandableListView = rootView.findViewById(R.id.expListView);
         prepareListData();
-        customAdapter = new CustomAdapter(getContext(),listHeader,listChild);
-        expandableListView.setAdapter(customAdapter);
+        faqListAdapter = new FaqListAdapter(getContext(),listHeader,listChild);
+        expandableListView.setAdapter(faqListAdapter);
         return rootView;
     }
 
