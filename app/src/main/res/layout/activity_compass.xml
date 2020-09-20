@@ -76,9 +76,8 @@
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
+                            android:gravity="center"
                             android:text="@string/bx"
-                            android:textAlignment="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -86,9 +85,8 @@
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
+                            android:gravity="center"
                             android:text="@string/by"
-                            android:textAlignment="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -96,9 +94,8 @@
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
+                            android:gravity="center"
                             android:text="@string/bz"
-                            android:textAlignment="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -120,8 +117,7 @@
                             android:layout_marginRight="@dimen/compass_tv_value_margin"
                             android:layout_weight="1"
                             android:background="@drawable/tv_border"
-                            android:gravity="center_vertical"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -135,8 +131,7 @@
                             android:layout_marginRight="@dimen/compass_tv_value_margin"
                             android:layout_weight="1"
                             android:background="@drawable/tv_border"
-                            android:gravity="center_vertical"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -150,8 +145,7 @@
                             android:layout_marginRight="@dimen/compass_tv_value_margin"
                             android:layout_weight="1"
                             android:background="@drawable/tv_border"
-                            android:gravity="center_vertical"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
