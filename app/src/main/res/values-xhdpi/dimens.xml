@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <dimen name="multimeter_margin">60dp</dimen>
+    <dimen name="multimeter_textbox_height">120dp</dimen>
+    <dimen name="multimeter_constraint_2">16dp</dimen>
+    <dimen name="multimeter_layout_margin">20dp</dimen>
+</resources>
