@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -282,7 +283,10 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_12"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2_xhdpi"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="290dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -294,7 +298,7 @@
                 android:textSize="@dimen/multimeter_bottombutton_textsize"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_4"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xhdpi" />
 
             <ImageView
                 android:id="@+id/cap_symbol"
@@ -303,7 +307,7 @@
                 android:rotation="-90"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_5"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xl"
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xhdpi"
                 app:srcCompat="@drawable/capacitor" />
 
             <TextView
@@ -317,7 +321,7 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_1"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xhdpi" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -329,7 +333,7 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_11"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3_xhdpi" />
 
             <TextView
                 android:id="@+id/ch3"
@@ -341,7 +345,7 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_10"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3_xhdpi" />
 
             <TextView
                 android:id="@+id/an8"
@@ -354,7 +358,7 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_3"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3_xhdpi" />
 
             <TextView
                 android:id="@+id/id4"
@@ -367,7 +371,7 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_9"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xhdpi" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -380,7 +384,7 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_8"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_1_xhdpi" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -393,7 +397,7 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_7"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2_xhdpi" />
 
             <TextView
                 android:id="@+id/id1"
@@ -407,7 +411,7 @@
                 android:textStyle="bold"
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_6"
-                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2_xl" />
+                app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2_xhdpi" />
 
             <TextView
                 android:id="@+id/measure"
