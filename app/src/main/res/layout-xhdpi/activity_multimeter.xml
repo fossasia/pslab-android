@@ -284,9 +284,7 @@
                 app:layout_constraintCircle="@id/knobs"
                 app:layout_constraintCircleAngle="@string/multimeter_angle_12"
                 app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2_xhdpi"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="290dp"/>
+               />
 
             <TextView
                 android:layout_width="wrap_content"

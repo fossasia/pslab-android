@@ -13,4 +13,5 @@
     <dimen name="multimeter_symbol_height">25dp</dimen>
     <dimen name="multimeter_heading_ll_text_size">25sp</dimen>
     <dimen name="multimeter_measure_textsize">20sp</dimen>
+
 </resources>
