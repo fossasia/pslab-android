@@ -372,9 +372,10 @@ public class GasSensorDataFragment extends Fragment implements OperationCallback
     }
 
     private void visualizeData() {
+        double ppmValue = 0d;
         if (scienceLab.isConnected()) {
             double volt = scienceLab.getVoltage("CH1", 1);
-            double ppmValue = (volt / 3.3) * 1024.0;
+            ppmValue = (volt / 3.3) * 1024.0;
             gasValue.setText(String.format(Locale.getDefault(), "%.2f", ppmValue));
             gasSensorMeter.setWithTremble(false);
             gasSensorMeter.setSpeedAt((float) ppmValue);
@@ -383,7 +384,6 @@ public class GasSensorDataFragment extends Fragment implements OperationCallback
                 previousTimeElapsed = timeElapsed;
                 Entry entry = new Entry((float) timeElapsed, (float) ppmValue);
                 entries.add(entry);
-                writeLogToFile(System.currentTimeMillis(), (float) ppmValue);
                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.gas_sensor_unit));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
@@ -397,6 +397,7 @@ public class GasSensorDataFragment extends Fragment implements OperationCallback
                 mChart.invalidate();
             }
         }
+        writeLogToFile(System.currentTimeMillis(), (float) ppmValue);
     }
 
     private void setupInstruments() {
