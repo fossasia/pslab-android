@@ -256,8 +256,8 @@
 
             <View
                 android:id="@+id/knob_marker"
-                android:layout_width="@dimen/multimeter_knob_width_xhdpi"
-                android:layout_height="@dimen/multimeter_knob_height_xhdpi"
+                android:layout_width="@dimen/multimeter_knob_width"
+                android:layout_height="@dimen/multimeter_knob_height"
                 android:layout_marginStart="@dimen/multimeter_constraint_1"
                 android:layout_marginLeft="@dimen/multimeter_constraint_1"
                 android:layout_marginTop="@dimen/multimeter_constraint_1"
@@ -298,7 +298,7 @@
 
             <ImageView
                 android:id="@+id/cap_symbol"
-                android:layout_width="@dimen/multimeter_symol_width"
+                android:layout_width="@dimen/multimeter_symbol_width"
                 android:layout_height="@dimen/multimeter_symbol_height"
                 android:rotation="-90"
                 app:layout_constraintCircle="@id/knobs"
