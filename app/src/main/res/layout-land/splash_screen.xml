@@ -15,7 +15,7 @@
         android:alpha="0"/>
 
     <ImageView
-        android:id="@+id/PSLabText_land"
+        android:id="@+id/PSLabText"
         android:layout_width="320dp"
         android:layout_height="94dp"
         android:contentDescription="@string/app_name"
