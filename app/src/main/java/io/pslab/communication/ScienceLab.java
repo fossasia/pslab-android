@@ -1420,7 +1420,7 @@ public class ScienceLab {
      * Also good for lower frequencies, but avoid using it since the oscilloscope cannot be used simultaneously due to hardware limitations.
      * The input frequency is fed to a 32 bit counter for a period of 100mS.
      * The value of the counter at the end of 100mS is used to calculate the frequency.
-     * @param pin The input pin to measure frequency from : ['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param pin The input pin to measure frequency from : ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @return frequency
      */
     public Double getHighFrequency(String pin) {
@@ -1449,7 +1449,7 @@ public class ScienceLab {
      * Frequency measurement on IDx.
      * Measures time taken for 16 rising edges of input signal.
      * Returns the frequency in Hertz
-     * @param channel The input to measure frequency from. ['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel The input to measure frequency from. ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param timeout This is a blocking call which will wait for one full wavelength before returning the calculated frequency. Use the timeout option if you're unsure of the input signal. Returns 0 if timed out
      * @return frequency
      */
@@ -1459,7 +1459,7 @@ public class ScienceLab {
 		Measures time taken for 16 rising edges of input signal.
 		returns the frequency in Hertz
         */
-        if (channel == null) channel = "CNTR";
+        if (channel == null) channel = "FRQ";
         if (timeout == null) timeout = 2;
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
@@ -1484,7 +1484,7 @@ public class ScienceLab {
 
     /**
      * Stores a list of rising edges that occurred within the timeout period.
-     * @param channel The input to measure time between two rising edges.['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel The input to measure time between two rising edges.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param skipCycle Number of points to skip. eg. Pendulums pass through light barriers twice every cycle. SO 1 must be skipped
      * @param timeout Number of seconds to wait for datapoints. (Maximum 60 seconds)
      * @return
@@ -1528,7 +1528,7 @@ public class ScienceLab {
 
     /**
      * Stores a list of falling edges that occured within the timeout period.
-     * @param channel The input to measure time between two falling edges.['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel The input to measure time between two falling edges.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param skipCycle Number of points to skip. eg. Pendulums pass through light barriers twice every cycle. SO 1 must be skipped
      * @param timeout Number of seconds to wait for datapoints. (Maximum 60 seconds)
      * @return
@@ -1575,7 +1575,7 @@ public class ScienceLab {
      * For example, one can measure the time interval between the occurrence of a rising edge on LA1, and a falling edge on LA3.
      * If the returned time is negative, it simply means that the event corresponding to channel2 occurred first.
      * @param channel1 The input pin to measure first logic level change
-     * @param channel2 The input pin to measure second logic level change -['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel2 The input pin to measure second logic level change -['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param edge1 The type of level change to detect in order to start the timer - ['rising', 'falling', 'four rising edges']
      * @param edge2 The type of level change to detect in order to stop the timer - ['rising', 'falling', 'four rising edges']
      * @param timeout Use the timeout option if you're unsure of the input signal time period. Returns -1 if timed out
@@ -1628,7 +1628,7 @@ public class ScienceLab {
     /**
      * Duty cycle measurement on channel. Returns wavelength(seconds), and length of first half of pulse(high time)
      * Low time = (wavelength - high time)
-     * @param channel The input pin to measure wavelength and high time.['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel The input pin to measure wavelength and high time.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param timeout Use the timeout option if you're unsure of the input signal time period. Returns 0 if timed out
      * @return Wavelength, Duty cycle
      */
@@ -1675,7 +1675,7 @@ public class ScienceLab {
     /**
      * Duty cycle measurement on channel. Returns wavelength(seconds), and length of first half of pulse(high time)
      * Low time = (wavelength - high time)
-     * @param channel The input pin to measure wavelength and high time.['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel The input pin to measure wavelength and high time.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param pulseType Type of pulse to detect. May be 'HIGH' or 'LOW'
      * @param timeout Use the timeout option if you're unsure of the input signal time period. Returns 0 if timed out
      * @return Pulse width
@@ -1711,7 +1711,7 @@ public class ScienceLab {
     /**
      * Measures a set of timestamped logic level changes(Type can be selected) from two different digital inputs.
      * @param channel1 The input pin to measure first logic level change
-     * @param channel2 The input pin to measure second logic level change -['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel2 The input pin to measure second logic level change -['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param edgeType1 The type of level change that should be recorded - ['rising', 'falling', 'four rising edges(default)']
      * @param edgeType2 The type of level change that should be recorded - ['rising', 'falling', 'four rising edges(default)']
      * @param points1 Number of data points to obtain for input 1 (Max 4)
@@ -1840,7 +1840,7 @@ public class ScienceLab {
     /**
      * Start logging timestamps of rising/falling edges on LA1
      * @param trigger Bool . Enable edge trigger on LA1. use keyword argument edge = 'rising' or 'falling'
-     * @param channel ['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param maximumTime Total time to sample. If total time exceeds 67 seconds, a prescaler will be used in the reference clock.
      * @param triggerChannels array of digital input names that can trigger the acquisition. Eg, trigger = ['LA1','LA2','LA3'] will triggger when a logic change specified by the keyword argument 'edge' occurs on either or the three specified trigger inputs.
      * @param edge 'rising' or 'falling' . trigger edge type for trigger_channels.
@@ -1881,7 +1881,7 @@ public class ScienceLab {
 
     /**
      * Start logging timestamps of rising/falling edges on LA1.
-     * @param channel ['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param channelMode acquisition mode default value: 1(EVERY_EDGE)
                         - EVERY_SIXTEENTH_RISING_EDGE = 5
                         - EVERY_FOURTH_RISING_EDGE    = 4
@@ -1889,7 +1889,7 @@ public class ScienceLab {
                         - EVERY_FALLING_EDGE          = 2
                         - EVERY_EDGE                  = 1
                         - DISABLED                    = 0
-     * @param triggerChannel ['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param triggerChannel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param triggerMode    1=Falling edge, 0=Rising Edge, -1=Disable Trigger
      */
     public void startOneChannelLA(String channel, Integer channelMode, String triggerChannel, Integer triggerMode) {
@@ -1996,7 +1996,7 @@ public class ScienceLab {
                     - EVERY_FALLING_EDGE          = 2
                     - EVERY_EDGE                  = 1
                     - DISABLED                    = 0
-     * @param triggerChannel ['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param triggerChannel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param triggerMode same as modes(previously documented keyword argument)
     default_value : 3
      */
@@ -2068,7 +2068,7 @@ public class ScienceLab {
                     - EVERY_EDGE                  = 1
                     - DISABLED                    = 0
      * @param edge 'rising' or 'falling'. Trigger edge type for trigger_channels.
-     * @param triggerChannel ['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param triggerChannel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      */
     public void startFourChannelLA(Integer trigger, Double maximumTime, ArrayList<Integer> modes, String edge, ArrayList<Boolean> triggerChannel) {
         if (trigger == null) trigger = 1;
@@ -2409,7 +2409,7 @@ public class ScienceLab {
 
     /**
      * Count pulses on a digital input. Retrieve total pulses using readPulseCount.
-     * @param channel The input pin to measure rising edges on : ['LA1','LA2','LA3','LA4','RES','EXT','CNTR']
+     * @param channel The input pin to measure rising edges on : ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      */
     public void countPulses(String channel) {
         if (channel == null) channel = "RES";
