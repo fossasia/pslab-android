@@ -57,7 +57,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
-import static android.content.Context.RESSOR_SERVICE;
+import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 /**
@@ -557,7 +557,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
         switch (s) {
             case INBUILT_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[0]);
-                sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
+                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
                 if (sensor == null) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
@@ -567,7 +567,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(luxSensor.LUXMETER_LIMIT, max).apply();
                     lightMeter.setMaxSpeed(max);
                     sensorManager.registerListener(lightSensorEventListener,
-                            sensor, SensorManager.RESSOR_DELAY_FASTEST);
+                            sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
             case BH1750_RESSOR:

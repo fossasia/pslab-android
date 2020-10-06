@@ -46,7 +46,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
-import static android.content.Context.RESSOR_SERVICE;
+import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class CompassDataFragment extends Fragment implements OperationCallback {
@@ -632,13 +632,13 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
         switch (s) {
             case INBUILT_RESSOR:
                 degreeIndicator.setText(getResources().getStringArray(R.array.compass_sensors)[0]);
-                sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
+                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
                 if (sensor == null) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
                             getString(R.string.no_compass_sensor), null, null, Snackbar.LENGTH_LONG);
                 } else {
-                    sensorManager.registerListener(compassEventListner, sensor, SensorManager.RESSOR_DELAY_GAME);
+                    sensorManager.registerListener(compassEventListner, sensor, SensorManager.SENSOR_DELAY_GAME);
                 }
                 break;
             case HMC5883L_RESSOR:

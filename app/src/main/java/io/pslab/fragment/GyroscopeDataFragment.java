@@ -43,7 +43,7 @@ import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 
-import static android.content.Context.RESSOR_SERVICE;
+import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class GyroscopeDataFragment extends Fragment implements OperationCallback {
@@ -487,7 +487,7 @@ public class GyroscopeDataFragment extends Fragment implements OperationCallback
 
     private void initiateGyroSensor() {
         resetInstrumentData();
-        sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
+        sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
         if (sensorManager == null) {
             noSensorLayoutUpdate();
         } else {
@@ -497,7 +497,7 @@ public class GyroscopeDataFragment extends Fragment implements OperationCallback
                         getString(R.string.no_gyroscope_sensor), null, null, Snackbar.LENGTH_LONG);
             } else {
                 sensorManager.registerListener(gyroScopeSensorEventListener,
-                        sensor, SensorManager.RESSOR_DELAY_FASTEST);
+                        sensor, SensorManager.SENSOR_DELAY_FASTEST);
             }
         }
     }

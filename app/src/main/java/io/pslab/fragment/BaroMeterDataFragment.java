@@ -58,7 +58,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
-import static android.content.Context.RESSOR_SERVICE;
+import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 /**
@@ -610,7 +610,7 @@ public class BaroMeterDataFragment extends Fragment implements OperationCallback
         switch (s) {
             case INBUILT_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.baro_sensors)[0]);
-                sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
+                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
                 if (sensor == null) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
@@ -620,7 +620,7 @@ public class BaroMeterDataFragment extends Fragment implements OperationCallback
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(baroSensor.BAROMETER_LIMIT, max).apply();
                     baroMeter.setMaxSpeed(max);
                     sensorManager.registerListener(baroSensorEventListener,
-                            sensor, SensorManager.RESSOR_DELAY_FASTEST);
+                            sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
             case BMP180_RESSOR:

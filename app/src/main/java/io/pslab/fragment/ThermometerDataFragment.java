@@ -56,7 +56,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
-import static android.content.Context.RESSOR_SERVICE;
+import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class ThermometerDataFragment extends Fragment implements OperationCallback {
@@ -554,7 +554,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
         switch (s) {
             case INBUILT_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.thermo_sensors)[0]);
-                sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
+                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
                 if (sensor == null) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
@@ -564,7 +564,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(thermoSensor.THERMOMETER_MAX_LIMIT, max).apply();
                     thermometer.setMaxSpeed(max);
                     sensorManager.registerListener(thermoSensorEventListener,
-                            sensor, SensorManager.RESSOR_DELAY_FASTEST);
+                            sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
             case SHT21_RESSOR:
