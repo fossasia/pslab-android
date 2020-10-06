@@ -111,6 +111,6 @@ public class CompassActivity extends PSLabSensor {
         compassConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         locationEnabled = compassConfigurations.getBoolean(CompassSettingsFragment.KEY_INCLUDE_LOCATION, true);
         CompassDataFragment.setParameters(
-                compassConfigurations.getString(CompassSettingsFragment.KEY_COMPASS_RESSOR_TYPE, "0"));
+                compassConfigurations.getString(CompassSettingsFragment.KEY_COMPASS_SENSOR_TYPE, "0"));
     }
 }

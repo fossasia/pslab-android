@@ -3478,7 +3478,7 @@ public class ScienceLab {
     public void writeUART(char character) {
         try {
             mPacketHandler.sendByte(mCommandsProto.UART_2);
-            mPacketHandler.sendByte(mCommandsProto.RESD_BYTE);
+            mPacketHandler.sendByte(mCommandsProto.SEND_BYTE);
             mPacketHandler.sendByte(character);
             mPacketHandler.getAcknowledgement();
         } catch (IOException e) {

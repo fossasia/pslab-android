@@ -18,7 +18,7 @@ public class ThermometerSettingsFragment extends PreferenceFragmentCompat implem
 
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
     public static final String KEY_UPDATE_PERIOD = "setting_thermo_update_period";
-    public static final String KEY_THERMO_RESSOR_TYPE = "setting_thermo_sensor_type";
+    public static final String KEY_THERMO_SENSOR_TYPE = "setting_thermo_sensor_type";
     public static final String KEY_THERMO_UNIT = "select_temp_unit";
 
     private PSLabPermission psLabPermission;
@@ -34,7 +34,7 @@ public class ThermometerSettingsFragment extends PreferenceFragmentCompat implem
         setPreferencesFromResource(R.xml.thermometer_settings, rootKey);
         updatePeriodPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_UPDATE_PERIOD);
         locationPreference = (CheckBoxPreference) getPreferenceScreen().findPreference(KEY_INCLUDE_LOCATION);
-        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_THERMO_RESSOR_TYPE);
+        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_THERMO_SENSOR_TYPE);
         unitPref = (ListPreference) getPreferenceScreen().findPreference(KEY_THERMO_UNIT);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -90,7 +90,7 @@ public class ThermometerSettingsFragment extends PreferenceFragmentCompat implem
                     editor.commit();
                 }
                 break;
-            case KEY_THERMO_RESSOR_TYPE:
+            case KEY_THERMO_SENSOR_TYPE:
                 sensorTypePreference.setSummary(sensorTypePreference.getEntry());
                 break;
             case KEY_THERMO_UNIT:

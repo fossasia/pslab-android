@@ -85,7 +85,7 @@ public class BaroMeterDataFragment extends Fragment implements OperationCallback
 
     private float baroValue = -1;
 
-    private enum BARO_RESSOR {INBUILT_RESSOR, BMP180_RESSOR}
+    private enum BARO_SENSOR {INBUILT_SENSOR, BMP180_SENSOR}
 
     @BindView(R.id.baro_max)
     TextView statMax;
@@ -604,11 +604,11 @@ public class BaroMeterDataFragment extends Fragment implements OperationCallback
     }
 
     private void initiateBaroSensor(int type) {
-        BaroMeterDataFragment.BARO_RESSOR s = BaroMeterDataFragment.BARO_RESSOR.values()[type];
+        BARO_SENSOR s = BARO_SENSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
-            case INBUILT_RESSOR:
+            case INBUILT_SENSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.baro_sensors)[0]);
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
@@ -623,7 +623,7 @@ public class BaroMeterDataFragment extends Fragment implements OperationCallback
                             sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
-            case BMP180_RESSOR:
+            case BMP180_SENSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.baro_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {

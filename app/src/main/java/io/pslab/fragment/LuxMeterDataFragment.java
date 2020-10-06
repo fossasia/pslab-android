@@ -85,7 +85,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
 
     private float luxValue = -1;
 
-    private enum LUX_RESSOR {INBUILT_RESSOR, BH1750_RESSOR, TSL2561_RESSOR}
+    private enum LUX_SENSOR {INBUILT_SENSOR, BH1750_SENSOR, TSL2561_SENSOR}
 
     @BindView(R.id.lux_max)
     TextView statMax;
@@ -551,11 +551,11 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
     }
 
     private void initiateLuxSensor(int type) {
-        LUX_RESSOR s = LUX_RESSOR.values()[type];
+        LUX_SENSOR s = LUX_SENSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
-            case INBUILT_RESSOR:
+            case INBUILT_SENSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[0]);
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -570,7 +570,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                             sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
-            case BH1750_RESSOR:
+            case BH1750_SENSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {
@@ -597,7 +597,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                 }
 
                 break;
-            case TSL2561_RESSOR:
+            case TSL2561_SENSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[2]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {

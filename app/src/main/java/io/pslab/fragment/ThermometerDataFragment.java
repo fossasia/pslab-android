@@ -78,7 +78,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
     private static String unit = "°C";
     private float tempValue = -1;
 
-    private enum THERMOMETER_RESSOR {INBUILT_RESSOR, SHT21_RESSOR}
+    private enum THERMOMETER_SENSOR {INBUILT_SENSOR, SHT21_SENSOR}
 
     @BindView(R.id.thermo_max)
     TextView statMax;
@@ -548,11 +548,11 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
     }
 
     private void initiateThermoSensor(int type) {
-        THERMOMETER_RESSOR s = THERMOMETER_RESSOR.values()[type];
+        THERMOMETER_SENSOR s = THERMOMETER_SENSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
-            case INBUILT_RESSOR:
+            case INBUILT_SENSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.thermo_sensors)[0]);
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
@@ -567,7 +567,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                             sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
-            case SHT21_RESSOR:
+            case SHT21_SENSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.thermo_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {

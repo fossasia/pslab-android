@@ -40,22 +40,22 @@ public class CommandsProto {
 
     public int SPI_HEADER = 3;
     public int START_SPI = 1;
-    public int RESD_SPI8 = 2;
-    public int RESD_SPI16 = 3;
+    public int SEND_SPI8 = 2;
+    public int SEND_SPI16 = 3;
     public int STOP_SPI = 4;
     public int SET_SPI_PARAMETERS = 5;
-    public int RESD_SPI8_BURST = 6;
-    public int RESD_SPI16_BURST = 7;
+    public int SEND_SPI8_BURST = 6;
+    public int SEND_SPI16_BURST = 7;
 
     public int I2C_HEADER = 4;
     public int I2C_START = 1;
-    public int I2C_RESD = 2;
+    public int I2C_SEND = 2;
     public int I2C_STOP = 3;
     public int I2C_RESTART = 4;
     public int I2C_READ_END = 5;
     public int I2C_READ_MORE = 6;
     public int I2C_WAIT = 7;
-    public int I2C_RESD_BURST = 8;
+    public int I2C_SEND_BURST = 8;
     public int I2C_CONFIG = 9;
     public int I2C_STATUS = 10;
     public int I2C_READ_BULK = 11;
@@ -68,9 +68,9 @@ public class CommandsProto {
 
 
     public int UART_2 = 5;
-    public int RESD_BYTE = 1;
-    public int RESD_INT = 2;
-    public int RESD_ADDRESS = 3;
+    public int SEND_BYTE = 1;
+    public int SEND_INT = 2;
+    public int SEND_ADDRESS = 3;
     public int SET_BAUD = 4;
     public int SET_MODE = 5;
     public int READ_BYTE = 6;

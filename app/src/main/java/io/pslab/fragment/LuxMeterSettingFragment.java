@@ -22,8 +22,8 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
     public static final String KEY_UPDATE_PERIOD = "setting_lux_update_period";
     public static final String KEY_HIGH_LIMIT = "setting_lux_high_limit";
-    public static final String KEY_LUX_RESSOR_TYPE = "setting_lux_sensor_type";
-    public static final String KEY_LUX_RESSOR_GAIN = "setting_lux_sensor_gain";
+    public static final String KEY_LUX_SENSOR_TYPE = "setting_lux_sensor_type";
+    public static final String KEY_LUX_SENSOR_GAIN = "setting_lux_sensor_gain";
 
     private PSLabPermission psLabPermission;
 
@@ -39,9 +39,9 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
         setPreferencesFromResource(R.xml.lux_meter_settings, rootKey);
         updatePeriodPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_UPDATE_PERIOD);
         higLimitPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_HIGH_LIMIT);
-        sensorGainPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_LUX_RESSOR_GAIN);
+        sensorGainPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_LUX_SENSOR_GAIN);
         locationPreference = (CheckBoxPreference) getPreferenceScreen().findPreference(KEY_INCLUDE_LOCATION);
-        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_LUX_RESSOR_TYPE);
+        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_LUX_SENSOR_TYPE);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         psLabPermission = PSLabPermission.getInstance();
@@ -97,7 +97,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                     editor.commit();
                 }
                 break;
-            case KEY_LUX_RESSOR_GAIN:
+            case KEY_LUX_SENSOR_GAIN:
                 try {
                     Integer gain = Integer.parseInt(sensorGainPref.getText());
                     sensorGainPref.setSummary(String.valueOf(gain));
@@ -105,7 +105,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                     sensorGainPref.setSummary("1");
                     sensorGainPref.setText("1");
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(KEY_LUX_RESSOR_GAIN, "1");
+                    editor.putString(KEY_LUX_SENSOR_GAIN, "1");
                     editor.commit();
                 }
                 break;
@@ -127,7 +127,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                     editor.commit();
                 }
                 break;
-            case KEY_LUX_RESSOR_TYPE:
+            case KEY_LUX_SENSOR_TYPE:
                 sensorTypePreference.setSummary(sensorTypePreference.getEntry());
                 break;
             default:

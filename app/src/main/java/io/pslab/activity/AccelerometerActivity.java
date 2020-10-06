@@ -117,6 +117,6 @@ public class AccelerometerActivity extends PSLabSensor {
         AccelerometerDataFragment.setParameters(
                 Float.valueOf(accelerometerConfigurations.getString(AccelerometerSettingsFragment.KEY_HIGH_LIMIT, "20")),
                 Integer.valueOf(accelerometerConfigurations.getString(AccelerometerSettingsFragment.KEY_UPDATE_PERIOD, "1000")),
-                accelerometerConfigurations.getString(AccelerometerSettingsFragment.KEY_ACCELEROMETER_RESSOR_GAIN, "1"));
+                accelerometerConfigurations.getString(AccelerometerSettingsFragment.KEY_ACCELEROMETER_SENSOR_GAIN, "1"));
     }
 }

@@ -120,8 +120,8 @@ public class LuxMeterActivity extends PSLabSensor {
                         10, 10000),
                 getValueFromText(luxMeterConfigurations.getString(LuxMeterSettingFragment.KEY_UPDATE_PERIOD, "1000"),
                         100, 1000),
-                luxMeterConfigurations.getString(LuxMeterSettingFragment.KEY_LUX_RESSOR_TYPE, "0"),
-                luxMeterConfigurations.getString(LuxMeterSettingFragment.KEY_LUX_RESSOR_GAIN, "1"));
+                luxMeterConfigurations.getString(LuxMeterSettingFragment.KEY_LUX_SENSOR_TYPE, "0"),
+                luxMeterConfigurations.getString(LuxMeterSettingFragment.KEY_LUX_SENSOR_GAIN, "1"));
     }
 
     private int getValueFromText(String strValue, int lowerBound, int upperBound) {

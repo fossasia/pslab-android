@@ -66,7 +66,7 @@ public class SPI {
 
     public byte send8(int value) throws IOException {
         packetHandler.sendByte(commandsProto.SPI_HEADER);
-        packetHandler.sendByte(commandsProto.RESD_SPI8);
+        packetHandler.sendByte(commandsProto.SEND_SPI8);
         packetHandler.sendByte(value);
         byte retValue = packetHandler.getByte();
         packetHandler.getAcknowledgement();
@@ -75,7 +75,7 @@ public class SPI {
 
     public int send16(int value) throws IOException {
         packetHandler.sendByte(commandsProto.SPI_HEADER);
-        packetHandler.sendByte(commandsProto.RESD_SPI16);
+        packetHandler.sendByte(commandsProto.SEND_SPI16);
         packetHandler.sendInt(value);
         int retValue = packetHandler.getInt();
         packetHandler.getAcknowledgement();
@@ -84,13 +84,13 @@ public class SPI {
 
     public void send8Burst(int value) throws IOException {
         packetHandler.sendByte(commandsProto.SPI_HEADER);
-        packetHandler.sendByte(commandsProto.RESD_SPI8_BURST);
+        packetHandler.sendByte(commandsProto.SEND_SPI8_BURST);
         packetHandler.sendByte(value);
     }
 
     public void send16Burst(int value) throws IOException {
         packetHandler.sendByte(commandsProto.SPI_HEADER);
-        packetHandler.sendByte(commandsProto.RESD_SPI16_BURST);
+        packetHandler.sendByte(commandsProto.SEND_SPI16_BURST);
         packetHandler.sendInt(value);
     }
 

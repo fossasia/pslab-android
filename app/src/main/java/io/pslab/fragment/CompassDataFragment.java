@@ -82,7 +82,7 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
     @BindView(R.id.tv_sensor_hmc5883l_bz)
     TextView zAxisMagneticField;
 
-    private enum COMPASS_RESSOR {INBUILT_RESSOR, HMC5883L_RESSOR}
+    private enum COMPASS_SENSOR {INBUILT_SENSOR, HMC5883L_SENSOR}
 
     private float currentDegree = 0f;
     private int direction;
@@ -626,11 +626,11 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
 
     private void initiateCompassSensor(int type) {
 
-        CompassDataFragment.COMPASS_RESSOR s = CompassDataFragment.COMPASS_RESSOR.values()[type];
+        COMPASS_SENSOR s = COMPASS_SENSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
-            case INBUILT_RESSOR:
+            case INBUILT_SENSOR:
                 degreeIndicator.setText(getResources().getStringArray(R.array.compass_sensors)[0]);
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
@@ -641,7 +641,7 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
                     sensorManager.registerListener(compassEventListner, sensor, SensorManager.SENSOR_DELAY_GAME);
                 }
                 break;
-            case HMC5883L_RESSOR:
+            case HMC5883L_SENSOR:
                 degreeIndicator.setText(getResources().getStringArray(R.array.compass_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {

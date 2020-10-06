@@ -109,14 +109,14 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String THERMOMETER = "Thermometer";
     public static final String THERMOMETER_CONFIGURATIONS = "Thermometer Configurations";
     public static final String THERMOMETER_DATA_FORMAT = "%.2f";
-    public static final String DUSTRESSOR_CONFIGURATIONS = "Dust Sensor Configurations";
+    public static final String DUSTSENSOR_CONFIGURATIONS = "Dust Sensor Configurations";
     public static final String ROBOTIC_ARM = "Robotic Arm";
     public static final String WAVE_GENERATOR = "Wave Generator";
     public static final String OSCILLOSCOPE = "Oscilloscope";
     public static final String POWER_SOURCE = "Power Source";
     public static final String MULTIMETER = "Multimeter";
     public static final String LOGIC_ANALYZER = "Logic Analyzer";
-    public static final String GAS_RESSOR = "Gas Sensor";
+    public static final String GAS_SENSOR = "Gas Sensor";
     public static final String SOUND_METER = "Sound Meter";
     public static final String SOUNDMETER_CONFIGURATIONS = "Sound Meter Configurations";
     public static final String SOUNDMETER_DATA_FORMAT = "%.2f";

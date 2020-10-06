@@ -19,7 +19,7 @@ public class DustSensorSettingsFragment extends PreferenceFragmentCompat impleme
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
     public static final String KEY_UPDATE_PERIOD = "setting_dust_update_period";
     public static final String KEY_HIGH_LIMIT = "setting_dust_high_limit";
-    public static final String KEY_DUST_RESSOR_TYPE = "setting_dust_sensor_type";
+    public static final String KEY_DUST_SENSOR_TYPE = "setting_dust_sensor_type";
 
     private PSLabPermission psLabPermission;
 
@@ -35,7 +35,7 @@ public class DustSensorSettingsFragment extends PreferenceFragmentCompat impleme
         updatePeriodPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_UPDATE_PERIOD);
         highLimitPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_HIGH_LIMIT);
         locationPreference = (CheckBoxPreference) getPreferenceScreen().findPreference(KEY_INCLUDE_LOCATION);
-        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_DUST_RESSOR_TYPE);
+        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_DUST_SENSOR_TYPE);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         psLabPermission = PSLabPermission.getInstance();
@@ -108,7 +108,7 @@ public class DustSensorSettingsFragment extends PreferenceFragmentCompat impleme
                     editor.commit();
                 }
                 break;
-            case KEY_DUST_RESSOR_TYPE:
+            case KEY_DUST_SENSOR_TYPE:
                 sensorTypePreference.setSummary(sensorTypePreference.getEntry());
                 break;
             default:

@@ -117,6 +117,6 @@ public class BarometerActivity extends PSLabSensor {
         BaroMeterDataFragment.setParameters(
                 Float.valueOf(BaroMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_HIGH_LIMIT, "1.1")),
                 Integer.valueOf(BaroMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_UPDATE_PERIOD, "1000")),
-                BaroMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_BARO_RESSOR_TYPE, "0"));
+                BaroMeterConfigurations.getString(BaroMeterSettingsFragment.KEY_BARO_SENSOR_TYPE, "0"));
     }
 }
