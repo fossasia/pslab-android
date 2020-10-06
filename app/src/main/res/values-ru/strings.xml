@@ -68,13 +68,13 @@
     <string-array name="multimeter_knob_states">
         <item>CH1</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
         <item>CH3</item>
         <item>CH2</item>
     </string-array>
@@ -85,7 +85,7 @@
         <item>CH3</item>
         <item>MIC</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
         <item>LA1</item>
@@ -172,10 +172,10 @@
     <string name="file_created_success_message">Файл конфигурации успешно создан</string>
     <string name="file_created_fail_message">Не удалось создать файл конфигурации</string>
 
-    <string name="id1">ID1</string>
-    <string name="id2">ID2</string>
-    <string name="id3">ID3</string>
-    <string name="id4">ID4</string>
+    <string name="id1">LA1</string>
+    <string name="id2">LA2</string>
+    <string name="id3">LA3</string>
+    <string name="id4">LA4</string>
     <string name="count_pulse">Импульс</string>
     <string name="capacitance_unit">Емкость</string>
     <string name="frequency_unit">Частота</string>
@@ -203,10 +203,10 @@
     <string name="frequency">Частота</string>
     <string name="count_pulses">Импульсы</string>
     <string-array name="ID">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
     <string name="reset">СБРОС</string>
     <string name="voltage">Напряжение</string>
@@ -214,8 +214,8 @@
     <string name="ch2">CH2</string>
     <string name="ch3">CH3</string>
     <string name="cap">CAP</string>
-    <string name="sen">SEN</string>
-    <string name="an8">AN8</string>
+    <string name="sen">RES</string>
+    <string name="an8">VOL</string>
     <string name="w1">Волна 1</string>
     <string name="w2">Волна 2</string>
     <string name="phase">Фаза</string>
@@ -618,10 +618,10 @@
     </string-array>
 
     <string-array name="channel_choices">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
 
     <string name = "no_data_generated">Данные не созданы</string>
@@ -642,17 +642,17 @@
     <string name="multimeter_dialog_heading">Мультиметр</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">Multimeter Configurations</string>
-    <string name = "multimeter_dialog_text"> Используйте PV1, PV2, PV3. Подсоедините выводы SEN и CAP к резистору и конденсатору соответственно,
+    <string name = "multimeter_dialog_text"> Используйте PV1, PV2, PV3. Подсоедините выводы RES и CAP к резистору и конденсатору соответственно,
         как показано на рисунке, для измерения сопротивления или емкости
         подключенного элемента. \n\n\u2022 CH1 и CH2 могут считывать свободный диапазон
-        напряжения. CH3, SEN, CAP, AN8 могут читать только от 0 В до 3,30 В </string>
+        напряжения. CH3, RES, CAP, VOL могут читать только от 0 В до 3,30 В </string>
     <string name = "multimeter_dialog_description"> \u2022 Для измерения напряжения подключите источник питания (например, PV1, PV2 и PV3) напрямую к выводам канала, как показано на рисунке.
         \n\n\u2022 Аналогично измерению частоты или импульса счета подключите контакты
-        SQ1, SQ2, SQ3 или SQ4 к ID1, ID2, ID3 или ID4. \n\n
+        SQ1, SQ2, SQ3 или SQ4 к LA1, LA2, LA3 или LA4. \n\n
         <b> Различные разделы </b> \n\n
-        <b> Сопротивление: </b> Измеряет сопротивление элемента, подключенного между контактом SEN и GND устройства PSLab. \n\n
+        <b> Сопротивление: </b> Измеряет сопротивление элемента, подключенного между контактом RES и GND устройства PSLab. \n\n
         <b> Емкость: </b> Измеряет емкость элемента, подключенного между выводом CAP и GND устройства PSLab. \n\n
-        <b> Напряжение: </b> измеряет напряжение любых элементов, подключенных между любым каналом и выводами GND и другими выводами, такими как AN8. \n\n
+        <b> Напряжение: </b> измеряет напряжение любых элементов, подключенных между любым каналом и выводами GND и другими выводами, такими как VOL. \n\n
         <b> Частота: </b> Измеряет частоту любого элемента, подключенного между любым из выводов ID и GND. \n\n
         <b> Импульс : </b> Измеряет импульс любой волны через элемент, подключенный между любым из выводов ID и GND. \n\n
     </string>
@@ -668,7 +668,7 @@
     </string>
 
     <string name = "logic_analyzer_dialog_text"> Логический анализатор - это инструмент, используемый для определения временной зависимости между различными цифровыми импульсами. Логический анализатор, доступный в приложении PSLab, может работать следующим образом: : \n </string>
-    <string name = "logic_analyzer_dialog_description"> \n\u2022 Первым шагом является подключение источника / источников, генерирующих цифровые импульсы, к измерительному выводу / выводам, т. е. ID1, ID2, ID3 и / или ID4. \ n \ n \ u2022 Как показано в рисунок, прямоугольные выводы SQR1, SQR2, SQR3 и / или SQR4 можно использовать, если для генерации цифровых импульсов нет другого источника. \n\n\u2022 Следующим шагом является выбор режима канала, то есть количества выводов IDx в use. \n\n\u2022 Последний шаг - выбрать правильную комбинацию канала и ребер (которые необходимо проанализировать) из списка, предоставленного для каждого используемого вывода. \n\n\u2022 Теперь нажмите кнопку «Анализ» и подождите для данных, которые будут получены с устройства. После того, как данные извлечены, данные будут подготовлены для анализа. </string>
+    <string name = "logic_analyzer_dialog_description"> \n\u2022 Первым шагом является подключение источника / источников, генерирующих цифровые импульсы, к измерительному выводу / выводам, т. е. LA1, LA2, LA3 и / или LA4. \ n \ n \ u2022 Как показано в рисунок, прямоугольные выводы SQR1, SQR2, SQR3 и / или SQR4 можно использовать, если для генерации цифровых импульсов нет другого источника. \n\n\u2022 Следующим шагом является выбор режима канала, то есть количества выводов IDx в use. \n\n\u2022 Последний шаг - выбрать правильную комбинацию канала и ребер (которые необходимо проанализировать) из списка, предоставленного для каждого используемого вывода. \n\n\u2022 Теперь нажмите кнопку «Анализ» и подождите для данных, которые будут получены с устройства. После того, как данные извлечены, данные будут подготовлены для анализа. </string>
 
     <string name="wave_name_holder">Треугольный</string>
     <string name="freq_text">Частота :</string>

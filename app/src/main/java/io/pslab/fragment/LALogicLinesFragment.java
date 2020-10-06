@@ -122,7 +122,7 @@ public class LALogicLinesFragment extends Fragment {
     private ArrayList<String> recordXAxis;
     private ArrayList<String> recordYAxis;
     private ArrayList<Integer> recordChannelMode;
-    private String[] channels = new String[]{"ID1", "ID2", "ID3", "ID4"};
+    private String[] channels = new String[]{"LA1", "LA2", "LA3", "LA4"};
     private HashMap<String, Integer> channelMap;
     private ArrayList<Spinner> channelSelectSpinners;
     private ArrayList<Spinner> edgeSelectSpinners;

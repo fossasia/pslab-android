@@ -68,13 +68,13 @@
     <string-array name="multimeter_knob_states">
         <item>CH1</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
         <item>CH3</item>
         <item>CH2</item>
     </string-array>
@@ -85,7 +85,7 @@
         <item>CH3</item>
         <item>MIC</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
         <item>LA1</item>
@@ -172,10 +172,10 @@
     <string name="file_created_success_message">වින්‍යාස ගොනුව සාර්ථකව නිර්මාණය කරන ලදි</string>
     <string name="file_created_fail_message">වින්‍යාස ගොනුව සෑදීම අසාර්ථක විය</string>
 
-    <string name="id1">ID1</string>
-    <string name="id2">ID2</string>
-    <string name="id3">ID3</string>
-    <string name="id4">ID4</string>
+    <string name="id1">LA1</string>
+    <string name="id2">LA2</string>
+    <string name="id3">LA3</string>
+    <string name="id4">LA4</string>
     <string name="count_pulse">ස්පන්දනය ගණන් කරන්න</string>
     <string name="capacitance_unit">ෆැරඩ්</string>
     <string name="frequency_unit">Hz</string>
@@ -203,10 +203,10 @@
     <string name="frequency">සංඛ්‍යාතය</string>
     <string name="count_pulses">ස්පන්දනය ගණන් කරන්න</string>
     <string-array name="ID">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
     <string name="reset">නැවත සකසන්න</string>
     <string name="voltage">වෝල්ටියතාවය</string>
@@ -214,8 +214,8 @@
     <string name="ch2">CH2</string>
     <string name="ch3">CH3</string>
     <string name="cap">CAP</string>
-    <string name="sen">SEN</string>
-    <string name="an8">AN8</string>
+    <string name="sen">RES</string>
+    <string name="an8">VOL</string>
     <string name="w1">තරංග 1</string>
     <string name="w2">තරංග 2</string>
     <string name="phase">අදියර</string>
@@ -596,10 +596,10 @@
     </string-array>
 
     <string-array name="channel_choices">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
 
     <string name="no_data_generated">දත්ත ජනනය කර නැත</string>
@@ -620,13 +620,13 @@
     <string name="multimeter_dialog_heading">මල්ටිමීටරය</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">බහුමාපක වින්‍යාසයන්</string>
-    <string name="multimeter_dialog_text">PV1, PV2, PV3 භාවිතා කරන්න සම්බන්ධිත ද්‍රව්‍යයේ ප්‍රතිරෝධය හෝ ධාරිතාව මැනීම සඳහා රූපයේ පෙන්වා ඇති පරිදි පිළිවෙලින් ප්‍රතිරෝධකයට හා ධාරිත්‍රකයට SEN සහ CAP අග්‍රයන් සම්බන්ධ කරන්න.. \n\n\u2022 CH1 සහ CH2 වලට නිදහස් වෝල්ටීයතා පරාසයක් කියවිය හැකිය. CH3, SEN, CAP, AN8 කියවිය හැක්කේ 0V සිට 3.30V දක්වා පමණි</string>
+    <string name="multimeter_dialog_text">PV1, PV2, PV3 භාවිතා කරන්න සම්බන්ධිත ද්‍රව්‍යයේ ප්‍රතිරෝධය හෝ ධාරිතාව මැනීම සඳහා රූපයේ පෙන්වා ඇති පරිදි පිළිවෙලින් ප්‍රතිරෝධකයට හා ධාරිත්‍රකයට RES සහ CAP අග්‍රයන් සම්බන්ධ කරන්න.. \n\n\u2022 CH1 සහ CH2 වලට නිදහස් වෝල්ටීයතා පරාසයක් කියවිය හැකිය. CH3, RES, CAP, VOL කියවිය හැක්කේ 0V සිට 3.30V දක්වා පමණි</string>
     <string name="multimeter_dialog_description">\u2022 වෝල්ටීයතාවය සෘජුවම මැනීම සඳහා රූපයේ පෙන්වා ඇති පරිදි බල ප්‍රභවය (උදා: පීවී 1, පීවී 2 සහ පීවී 3) නාලිකා
-අග්‍ර වලට සම්බන්ධ කරන්න.\n\n\u2022 ඒ ආකාරයටම, සංඛ්‍යාතය මැනීමට හෝ ස්පන්දනය ගණනන් කිරීමට SQ1, SQ2, SQ3 හෝ SQ4  අග්‍රයයන්   ID1, ID2, ID3 හෝ ID4 සමඟ සම්බන්ධ කරන්න.\n\n
+අග්‍ර වලට සම්බන්ධ කරන්න.\n\n\u2022 ඒ ආකාරයටම, සංඛ්‍යාතය මැනීමට හෝ ස්පන්දනය ගණනන් කිරීමට SQ1, SQ2, SQ3 හෝ SQ4  අග්‍රයයන්   LA1, LA2, LA3 හෝ LA4 සමඟ සම්බන්ධ කරන්න.\n\n
         <b>විවිධ අංශ</b>\n\n
-        <b>ප්‍රතිරෝධය:</b> PSLab උපාංගයේ SEN සහ GND  අග්‍ර අතර සම්බන්ධිත ද්‍රව්‍යයේ ප්‍රතිරෝධය මනින්න.\n\n
+        <b>ප්‍රතිරෝධය:</b> PSLab උපාංගයේ RES සහ GND  අග්‍ර අතර සම්බන්ධිත ද්‍රව්‍යයේ ප්‍රතිරෝධය මනින්න.\n\n
         <b>Capacitance:</b> PSLab උපාංගයේ CAP සහ GND අග්‍ර අතර සම්බන්ධිත ද්‍රව්‍යයේ ධාරිතාව මැනීම.\n\n
-        <b>Voltage:</b> ඕනෑම නාලිකාවක්, GND අග්‍රයන්  හා AN8 වැනි අනෙකුත් අග්‍ර සමග  සම්බන්ධිත ඕනෑම ද්‍රව්‍යයක වෝල්ටීයතාව මැනීම.\n\n
+        <b>Voltage:</b> ඕනෑම නාලිකාවක්, GND අග්‍රයන්  හා VOL වැනි අනෙකුත් අග්‍ර සමග  සම්බන්ධිත ඕනෑම ද්‍රව්‍යයක වෝල්ටීයතාව මැනීම.\n\n
         <b>Frequency:</b> ඕනෑම ID සහ GND අග්‍ර  අතර සම්බන්ධිත  ද්‍රව්‍යයක් හරහා සංඛ්‍යාතය මැනීම.\n\n
         <b>Count Pulse:</b> ඕනෑම ID සහ GND අග්‍ර අතර සම්බන්ධිත ද්‍රව්‍යයක් හරහා ඇති ඕනෑම තරංගයක ස්පන්දනය මැනීම.\n\n
     </string>
@@ -642,7 +642,7 @@
     </string>
 
     <string name="logic_analyzer_dialog_text">තාර්කික විශ්ලේෂකය යනු විවිධ ඩිජිටල් ස්පන්දන අතර කාල සම්බන්ධතාවය සොයා ගැනීමට භාවිතා කරන මෙවලමකි. PSLab යෙදුමේ ඇති තාර්කික විශ්ලේෂකය පහත පරිදි ක්‍රියාත්මක කළ හැකිය :\n</string>
-    <string name="logic_analyzer_dialog_description">\n\u2022 පළමු පියවර වන්නේ, ඩිජිටල් ස්පන්දන නිපදවන ප්‍රභවයන් මිනුම් අග්‍්‍ර සමඟ සම්බන්ධ කිරීමයි, එනම් ID1, ID2, ID3 සහ / හෝ ID4.\n\n\u2022 රූපයේ දැක්වෙන පරිදි, ඩිජිටල් ස්පන්දන උත්පාදනය සඳහා වෙනත් ප්‍රභවයක් නොමැති නම් ‌කොටු තරංග අග්‍ර SQR1, SQR2, SQR3 සහ / හෝ SQR4 භාවිතා කළ හැකිය..\n\n\u2022 ඊළඟ පියවර වන්නේ නාලිකා මාදිලිය තෝරා ගැනීමයි, එනම් භාවිතයේ ඇති IDx අග්‍ර ගණන.\n\n\u2022 අවසාන පියවර වන්නේ භාවිතයේ ඇති එක් එක් අග්‍රය සඳහා ලබා දී ඇති ලැයිස්තුවෙන් නිසි නාලිකා සහ දාර (විශ්ලේෂණය කළ යුතු) සංයෝජනය තෝරා ගැනීමයි.\n\n\u2022 දැන් "විශ්ලේෂණය" බොත්තම ඔබා උපාංගයෙන් දත්ත ලබා ගන්නා තෙක් බලා සිටින්න. දත්ත ලබාගත් පසු, දත්ත විශ්ලේෂණය කිරීමට සැලසුම් කරනු ලැබේ.</string>
+    <string name="logic_analyzer_dialog_description">\n\u2022 පළමු පියවර වන්නේ, ඩිජිටල් ස්පන්දන නිපදවන ප්‍රභවයන් මිනුම් අග්‍්‍ර සමඟ සම්බන්ධ කිරීමයි, එනම් LA1, LA2, LA3 සහ / හෝ LA4.\n\n\u2022 රූපයේ දැක්වෙන පරිදි, ඩිජිටල් ස්පන්දන උත්පාදනය සඳහා වෙනත් ප්‍රභවයක් නොමැති නම් ‌කොටු තරංග අග්‍ර SQR1, SQR2, SQR3 සහ / හෝ SQR4 භාවිතා කළ හැකිය..\n\n\u2022 ඊළඟ පියවර වන්නේ නාලිකා මාදිලිය තෝරා ගැනීමයි, එනම් භාවිතයේ ඇති IDx අග්‍ර ගණන.\n\n\u2022 අවසාන පියවර වන්නේ භාවිතයේ ඇති එක් එක් අග්‍රය සඳහා ලබා දී ඇති ලැයිස්තුවෙන් නිසි නාලිකා සහ දාර (විශ්ලේෂණය කළ යුතු) සංයෝජනය තෝරා ගැනීමයි.\n\n\u2022 දැන් "විශ්ලේෂණය" බොත්තම ඔබා උපාංගයෙන් දත්ත ලබා ගන්නා තෙක් බලා සිටින්න. දත්ත ලබාගත් පසු, දත්ත විශ්ලේෂණය කිරීමට සැලසුම් කරනු ලැබේ.</string>
 
     <string name="wave_name_holder">ත්‍රිකෝණාකාර</string>
     <string name="freq_text">සංඛ්‍යාතය :</string>

@@ -68,13 +68,13 @@
     <string-array name="multimeter_knob_states">
         <item>CH1</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
         <item>CH3</item>
         <item>CH2</item>
     </string-array>
@@ -85,7 +85,7 @@
         <item>CH3</item>
         <item>MIC</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
         <item>LA1</item>
@@ -172,10 +172,10 @@
     <string name="file_created_success_message">تم تكوين ملف التكوين بنجاح</string>
     <string name="file_created_fail_message">فشل إنشاء ملف التكوين</string>
 
-    <string name="id1">ID1</string>
-    <string name="id2">ID2</string>
-    <string name="id3">ID3</string>
-    <string name="id4">ID4</string>
+    <string name="id1">LA1</string>
+    <string name="id2">LA2</string>
+    <string name="id3">LA3</string>
+    <string name="id4">LA4</string>
     <string name="count_pulse">عدد النبض</string>
     <string name="capacitance_unit">الفاراد وحدة السعة الكهربائية</string>
     <string name="frequency_unit">هرتز</string>
@@ -203,10 +203,10 @@
     <string name="frequency">تكرر</string>
     <string name="count_pulses">عد البقول</string>
     <string-array name="ID">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
     <string name="reset">إعادة تعيين</string>
     <string name="voltage">الجهد االكهربى</string>
@@ -215,7 +215,7 @@
     <string name="ch3">CH3</string>
     <string name="cap">الرأس</string>
     <string name="sen">ITS</string>
-    <string name="an8">AN8</string>
+    <string name="an8">VOL</string>
     <string name="w1">الموجة 1</string>
     <string name="w2">موجة 2</string>
     <string name="phase">مرحلة</string>
@@ -579,10 +579,10 @@
     </string-array>
 
     <string-array name="channel_choices">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
 
     <string name="no_data_generated">لا توجد بيانات</string>
@@ -603,11 +603,11 @@
     <string name="multimeter_dialog_heading">المقياس المتعدد</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">تكوينات متعدد المتر</string>
-    <string name="multimeter_dialog_text">استخدم PV1 ، PV2 ، PV3 قم بتوصيل دبابيس SEN و CAP بالمقاوم والمكثف على التوالي كما هو موضح في الشكل لقياس مقاومة أو سعة العنصر المتصل. \ n \ n \ u2022 CH1 و CH2 يمكن قراءة مجموعة خالية من الجهد. يمكن قراءة CH3 ، SEN ، CAP ، AN8 فقط من 0V إلى 3.30V</string>
-    <string name="multimeter_dialog_description">\ u2022 لقياس الجهد ، قم بتوصيل مصدر الطاقة مباشرة (مثل PV1 و PV2 و PV3) بدبابيس القناة كما هو موضح في الشكل. \ n \ n \ u2022 على نحو مشابه لقياس التردد أو نبضة العد ، قم بتوصيل SQ1 أو SQ2 أو SQ3 أو SQ4 دبابيس إلى ID1 أو ID2 أو ID3 أو ID4. \ n \ n<b>Different Sections</b>\n\n
-        <b>Resistance:</b> Measures the resistance of the element connected between the SEN and GND pin of the PSLab device.\n\n
+    <string name="multimeter_dialog_text">استخدم PV1 ، PV2 ، PV3 قم بتوصيل دبابيس RES و CAP بالمقاوم والمكثف على التوالي كما هو موضح في الشكل لقياس مقاومة أو سعة العنصر المتصل. \ n \ n \ u2022 CH1 و CH2 يمكن قراءة مجموعة خالية من الجهد. يمكن قراءة CH3 ، RES ، CAP ، VOL فقط من 0V إلى 3.30V</string>
+    <string name="multimeter_dialog_description">\ u2022 لقياس الجهد ، قم بتوصيل مصدر الطاقة مباشرة (مثل PV1 و PV2 و PV3) بدبابيس القناة كما هو موضح في الشكل. \ n \ n \ u2022 على نحو مشابه لقياس التردد أو نبضة العد ، قم بتوصيل SQ1 أو SQ2 أو SQ3 أو SQ4 دبابيس إلى LA1 أو LA2 أو LA3 أو LA4. \ n \ n<b>Different Sections</b>\n\n
+        <b>Resistance:</b> Measures the resistance of the element connected between the RES and GND pin of the PSLab device.\n\n
         <b>Capacitance:</b> Measures the capacitance of the element connected between the CAP and GND pin of the PSLab device.\n\n
-        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as AN8.\n\n
+        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as VOL.\n\n
         <b>Frequency:</b> Measures the frequency across any element connected between any of ID and GND pins.\n\n
         <b>Count Pulse:</b> Measures the pulse of any wave through an element connected between any of ID and GND pins.\n\n
     </string>
@@ -618,7 +618,7 @@
     <string name="powersource_dialog_description">\ u2022 قم بتوصيل سلك واحد بـ PV1 وسلك آخر بـ GND لإنشاء فولتات بين 5 فولت إلى -5 فولت. \ n \ n         \ u2022 بالمثل قم بتوصيل الأسلاك بين PV2 لإنشاء الفولتية بين 3.3V إلى -3.3V \ n \ n         \ u2022 استخدم دبوس PV3 لإنشاء الفولتية بين 0V إلى 3.3V \ n \ n         \ u2022 PCS pin يستخدم لتوفير تيار ثابت بين دبوس PCS ودبوس GND في نطاق 3.3mA</string>
 
     <string name="logic_analyzer_dialog_text">المنطق محلل هو أداة تستخدم لمعرفة العلاقة الزمنية بين النبضات الرقمية المختلفة. يمكن تشغيل Logic Analyzer المتاح في تطبيق PSLab على النحو التالي: \ n</string>
-    <string name="logic_analyzer_dialog_description">\ n \ u2022 تتمثل الخطوة الأولى في توصيل النبضات الرقمية المنتجة للمصدر / المرسِل بدبوس / قياسات القياس ، مثل ID1 و ID2 و ID3 و / أو ID4. \ n \ n \ u2022 كما هو موضح في الشكل ، دبابيس الموجات المربعة SQR1 ، يمكن استخدام SQR2 و SQR3 و / أو SQR4 في حالة عدم توفر مصدر آخر لتوليد نبضات رقمية. \ n \ n \ u2022 الخطوة التالية هي تحديد وضع القناة أي عدد دبابيس IDx المستخدمة. \ n \ n \ u2022 الخطوة الأخيرة هي اختيار مجموعة القنوات والحواف المناسبة (التي تحتاج إلى تحليل) من القائمة المتوفرة لكل دبوس قيد الاستخدام. \ n \ n \ u2022 الآن اضغط على الزر "تحليل" وانتظر حتى يتم جلب البيانات من جهاز. بمجرد جلب البيانات ، سيتم رسم البيانات لتحليلها.</string>
+    <string name="logic_analyzer_dialog_description">\ n \ u2022 تتمثل الخطوة الأولى في توصيل النبضات الرقمية المنتجة للمصدر / المرسِل بدبوس / قياسات القياس ، مثل LA1 و LA2 و LA3 و / أو LA4. \ n \ n \ u2022 كما هو موضح في الشكل ، دبابيس الموجات المربعة SQR1 ، يمكن استخدام SQR2 و SQR3 و / أو SQR4 في حالة عدم توفر مصدر آخر لتوليد نبضات رقمية. \ n \ n \ u2022 الخطوة التالية هي تحديد وضع القناة أي عدد دبابيس IDx المستخدمة. \ n \ n \ u2022 الخطوة الأخيرة هي اختيار مجموعة القنوات والحواف المناسبة (التي تحتاج إلى تحليل) من القائمة المتوفرة لكل دبوس قيد الاستخدام. \ n \ n \ u2022 الآن اضغط على الزر "تحليل" وانتظر حتى يتم جلب البيانات من جهاز. بمجرد جلب البيانات ، سيتم رسم البيانات لتحليلها.</string>
 
     <string name="wave_name_holder">ثلاثي</string>
     <string name="freq_text">تكرر :</string>

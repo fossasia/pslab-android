@@ -68,13 +68,13 @@
     <string-array name="multimeter_knob_states">
         <item>CH1</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
         <item>CH3</item>
         <item>CH2</item>
     </string-array>
@@ -85,7 +85,7 @@
         <item>CH3</item>
         <item>MIC</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
         <item>LA1</item>
@@ -172,10 +172,10 @@
     <string name="file_created_success_message">Plik konfiguracji został utworzony pomyślnie</string>
     <string name="file_created_fail_message">Utworzenie pliku konfiguracyjnego nie powiodło się</string>
 
-    <string name="id1">ID1</string>
-    <string name="id2">ID2</string>
-    <string name="id3">ID3</string>
-    <string name="id4">ID4</string>
+    <string name="id1">LA1</string>
+    <string name="id2">LA2</string>
+    <string name="id3">LA3</string>
+    <string name="id4">LA4</string>
     <string name="count_pulse">Oblicz impuls</string>
     <string name="capacitance_unit">Farad</string>
     <string name="frequency_unit">Hz</string>
@@ -203,10 +203,10 @@
     <string name="frequency">Częstotliwość</string>
     <string name="count_pulses">Oblicz Impulsy</string>
     <string-array name="ID">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
     <string name="reset">ZRESETUJ</string>
     <string name="voltage">Napięcie</string>
@@ -214,8 +214,8 @@
     <string name="ch2">CH2</string>
     <string name="ch3">CH3</string>
     <string name="cap">CAP</string>
-    <string name="sen">SEN</string>
-    <string name="an8">AN8</string>
+    <string name="sen">RES</string>
+    <string name="an8">VOL</string>
     <string name="w1">Fala 1</string>
     <string name="w2">Fala 2</string>
     <string name="phase">Faza</string>
@@ -607,10 +607,10 @@
     </string-array>
 
     <string-array name="channel_choices">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
 
     <string name="no_data_generated">Nie wygenerowano żadnych danych</string>
@@ -631,12 +631,12 @@
     <string name="multimeter_dialog_heading">Multimetr</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">Konfiguracje multimetrów</string>
-    <string name="multimeter_dialog_text">Użyj PV1, PV2, PV3 Podłącz styki SEN i CAP odpowiednio do rezystora i kondensatora, jak pokazano na rysunku, aby zmierzyć rezystancję lub pojemność podłączonego elementu. \n\n\u2022 CH1 i CH2 mogą odczytać dowolny zakres napięcia. CH3, SEN, CAP, AN8 mogą odczytywać tylko od 0 V do 3,30 V.</string>
-    <string name="multimeter_dialog_description">\u2022 Aby zmierzyć napięcie, podłącz bezpośrednio źródło zasilania (np. PV1, PV2 i PV3) do pinów kanału, jak pokazano na rysunku.\n\n\u2022 Podobnie do pomiaru częstotliwości lub zliczania impulsu podłącz piny SQ1, SQ2, SQ3 lub SQ4 do ID1, ID2, ID3 lub ID4.\n\n
+    <string name="multimeter_dialog_text">Użyj PV1, PV2, PV3 Podłącz styki RES i CAP odpowiednio do rezystora i kondensatora, jak pokazano na rysunku, aby zmierzyć rezystancję lub pojemność podłączonego elementu. \n\n\u2022 CH1 i CH2 mogą odczytać dowolny zakres napięcia. CH3, RES, CAP, VOL mogą odczytywać tylko od 0 V do 3,30 V.</string>
+    <string name="multimeter_dialog_description">\u2022 Aby zmierzyć napięcie, podłącz bezpośrednio źródło zasilania (np. PV1, PV2 i PV3) do pinów kanału, jak pokazano na rysunku.\n\n\u2022 Podobnie do pomiaru częstotliwości lub zliczania impulsu podłącz piny SQ1, SQ2, SQ3 lub SQ4 do LA1, LA2, LA3 lub LA4.\n\n
         <b>Różne sekcje</b>\n\n
-        <b>Opór:</b> Mierzy rezystancję elementu podłączonego między stykiem SEN i GND urządzenia PSLab.\n\n
+        <b>Opór:</b> Mierzy rezystancję elementu podłączonego między stykiem RES i GND urządzenia PSLab.\n\n
         <b>Pojemność Elektryczna:</b> Mierzy pojemność elementu podłączonego między stykiem CAP a GND urządzenia PSLab.\n\n
-        <b>Napięcie:</b> Mierzy napięcie dowolnych elementów połączonych między dowolnym pinem kanału i pinów GND i innymi pinami, takimi jak AN8.\n\n
+        <b>Napięcie:</b> Mierzy napięcie dowolnych elementów połączonych między dowolnym pinem kanału i pinów GND i innymi pinami, takimi jak VOL.\n\n
         <b>Częstotliwość:</b> Mierzy częstotliwość w dowolnym elemencie podłączonym między dowolnym pinem ID i GND.\n\n
         <b>Oblicz impuls:</b> Mierzy puls dowolnej fali przez element połączony między dowolnym z pinów ID i GND.\n\n
     </string>
@@ -652,7 +652,7 @@
     </string>
 
     <string name="logic_analyzer_dialog_text">Logic Analyzer to przyrząd służący do ustalenia zależności czasowej między różnymi impulsami cyfrowymi. Analizator logiczny dostępny w aplikacji PSLab można obsługiwać w następujący sposób :\n</string>
-    <string name="logic_analyzer_dialog_description">\n\u2022 Pierwszym krokiem jest połączenie źródła/sygnałów generujących impulsy cyfrowe z pinem pomiarowym, tj. ID1, ID2, ID3 i/lub ID4.\n\n\u2022 Jak pokazano na rysunku, można zastosować piny SQR1, SQR2, SQR3 i/lub SQR4 fali prostokątnej, jeśli żadne inne źródło nie jest dostępne do generowania impulsów cyfrowych.\n\n\u2022 Następnym krokiem jest wybranie trybu kanału, tj. Liczby używanych pinów IDx.\n\n\u2022 Ostatnim krokiem jest wybranie odpowiedniej kombinacji kanału i krawędzi (które należy przeanalizować) z listy podanej dla każdego używanego pinu.\n\n\u2022 Teraz naciśnij przycisk „Analizuj” i poczekaj, aż dane zostaną pobrane z urządzenia. Po pobraniu danych zostaną one wykreślone w celu analizy.</string>
+    <string name="logic_analyzer_dialog_description">\n\u2022 Pierwszym krokiem jest połączenie źródła/sygnałów generujących impulsy cyfrowe z pinem pomiarowym, tj. LA1, LA2, LA3 i/lub LA4.\n\n\u2022 Jak pokazano na rysunku, można zastosować piny SQR1, SQR2, SQR3 i/lub SQR4 fali prostokątnej, jeśli żadne inne źródło nie jest dostępne do generowania impulsów cyfrowych.\n\n\u2022 Następnym krokiem jest wybranie trybu kanału, tj. Liczby używanych pinów IDx.\n\n\u2022 Ostatnim krokiem jest wybranie odpowiedniej kombinacji kanału i krawędzi (które należy przeanalizować) z listy podanej dla każdego używanego pinu.\n\n\u2022 Teraz naciśnij przycisk „Analizuj” i poczekaj, aż dane zostaną pobrane z urządzenia. Po pobraniu danych zostaną one wykreślone w celu analizy.</string>
 
     <string name="wave_name_holder">Trójkątny</string>
     <string name="freq_text">Częstotliwość :</string>
