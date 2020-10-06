@@ -113,6 +113,6 @@ public class GyroscopeActivity extends PSLabSensor {
         GyroscopeDataFragment.setParameters(
                 Float.valueOf(gyroscopeConfigurations.getString(GyroscopeSettingsFragment.KEY_HIGH_LIMIT, "20")),
                 Integer.valueOf(gyroscopeConfigurations.getString(GyroscopeSettingsFragment.KEY_UPDATE_PERIOD, "1000")),
-                gyroscopeConfigurations.getString(GyroscopeSettingsFragment.KEY_GYROSCOPE_SENSOR_GAIN, "1"));
+                gyroscopeConfigurations.getString(GyroscopeSettingsFragment.KEY_GYROSCOPE_RESSOR_GAIN, "1"));
     }
 }

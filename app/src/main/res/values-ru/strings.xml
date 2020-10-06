@@ -214,7 +214,7 @@
     <string name="ch2">CH2</string>
     <string name="ch3">CH3</string>
     <string name="cap">CAP</string>
-    <string name="sen">SEN</string>
+    <string name="sen">RES</string>
     <string name="an8">AN8</string>
     <string name="w1">Волна 1</string>
     <string name="w2">Волна 2</string>
@@ -642,15 +642,15 @@
     <string name="multimeter_dialog_heading">Мультиметр</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">Multimeter Configurations</string>
-    <string name = "multimeter_dialog_text"> Используйте PV1, PV2, PV3. Подсоедините выводы SEN и CAP к резистору и конденсатору соответственно,
+    <string name = "multimeter_dialog_text"> Используйте PV1, PV2, PV3. Подсоедините выводы RES и CAP к резистору и конденсатору соответственно,
         как показано на рисунке, для измерения сопротивления или емкости
         подключенного элемента. \n\n\u2022 CH1 и CH2 могут считывать свободный диапазон
-        напряжения. CH3, SEN, CAP, AN8 могут читать только от 0 В до 3,30 В </string>
+        напряжения. CH3, RES, CAP, AN8 могут читать только от 0 В до 3,30 В </string>
     <string name = "multimeter_dialog_description"> \u2022 Для измерения напряжения подключите источник питания (например, PV1, PV2 и PV3) напрямую к выводам канала, как показано на рисунке.
         \n\n\u2022 Аналогично измерению частоты или импульса счета подключите контакты
         SQ1, SQ2, SQ3 или SQ4 к LA1, LA2, LA3 или LA4. \n\n
         <b> Различные разделы </b> \n\n
-        <b> Сопротивление: </b> Измеряет сопротивление элемента, подключенного между контактом SEN и GND устройства PSLab. \n\n
+        <b> Сопротивление: </b> Измеряет сопротивление элемента, подключенного между контактом RES и GND устройства PSLab. \n\n
         <b> Емкость: </b> Измеряет емкость элемента, подключенного между выводом CAP и GND устройства PSLab. \n\n
         <b> Напряжение: </b> измеряет напряжение любых элементов, подключенных между любым каналом и выводами GND и другими выводами, такими как AN8. \n\n
         <b> Частота: </b> Измеряет частоту любого элемента, подключенного между любым из выводов ID и GND. \n\n

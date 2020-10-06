@@ -57,7 +57,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
-import static android.content.Context.SENSOR_SERVICE;
+import static android.content.Context.RESSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 /**
@@ -85,7 +85,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
 
     private float luxValue = -1;
 
-    private enum LUX_SENSOR {INBUILT_SENSOR, BH1750_SENSOR, TSL2561_SENSOR}
+    private enum LUX_RESSOR {INBUILT_RESSOR, BH1750_RESSOR, TSL2561_RESSOR}
 
     @BindView(R.id.lux_max)
     TextView statMax;
@@ -551,13 +551,13 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
     }
 
     private void initiateLuxSensor(int type) {
-        LUX_SENSOR s = LUX_SENSOR.values()[type];
+        LUX_RESSOR s = LUX_RESSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
-            case INBUILT_SENSOR:
+            case INBUILT_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[0]);
-                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
+                sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
                 if (sensor == null) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
@@ -567,10 +567,10 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(luxSensor.LUXMETER_LIMIT, max).apply();
                     lightMeter.setMaxSpeed(max);
                     sensorManager.registerListener(lightSensorEventListener,
-                            sensor, SensorManager.SENSOR_DELAY_FASTEST);
+                            sensor, SensorManager.RESSOR_DELAY_FASTEST);
                 }
                 break;
-            case BH1750_SENSOR:
+            case BH1750_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {
@@ -597,7 +597,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                 }
 
                 break;
-            case TSL2561_SENSOR:
+            case TSL2561_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[2]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {

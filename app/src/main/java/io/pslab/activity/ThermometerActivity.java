@@ -114,7 +114,7 @@ public class ThermometerActivity extends PSLabSensor {
         ThermometerDataFragment.setParameters(
                 getValueFromText(thermometerConfigurations.getString(ThermometerSettingsFragment.KEY_UPDATE_PERIOD, "1000"),
                         100, 1000),
-                thermometerConfigurations.getString(ThermometerSettingsFragment.KEY_THERMO_SENSOR_TYPE, "0"),
+                thermometerConfigurations.getString(ThermometerSettingsFragment.KEY_THERMO_RESSOR_TYPE, "0"),
                 thermometerConfigurations.getString(ThermometerSettingsFragment.KEY_THERMO_UNIT, "°C"));
     }
 

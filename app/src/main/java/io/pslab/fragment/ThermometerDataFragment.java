@@ -56,7 +56,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
-import static android.content.Context.SENSOR_SERVICE;
+import static android.content.Context.RESSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class ThermometerDataFragment extends Fragment implements OperationCallback {
@@ -78,7 +78,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
     private static String unit = "°C";
     private float tempValue = -1;
 
-    private enum THERMOMETER_SENSOR {INBUILT_SENSOR, SHT21_SENSOR}
+    private enum THERMOMETER_RESSOR {INBUILT_RESSOR, SHT21_RESSOR}
 
     @BindView(R.id.thermo_max)
     TextView statMax;
@@ -548,13 +548,13 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
     }
 
     private void initiateThermoSensor(int type) {
-        THERMOMETER_SENSOR s = THERMOMETER_SENSOR.values()[type];
+        THERMOMETER_RESSOR s = THERMOMETER_RESSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
-            case INBUILT_SENSOR:
+            case INBUILT_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.thermo_sensors)[0]);
-                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
+                sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
                 if (sensor == null) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
@@ -564,10 +564,10 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(thermoSensor.THERMOMETER_MAX_LIMIT, max).apply();
                     thermometer.setMaxSpeed(max);
                     sensorManager.registerListener(thermoSensorEventListener,
-                            sensor, SensorManager.SENSOR_DELAY_FASTEST);
+                            sensor, SensorManager.RESSOR_DELAY_FASTEST);
                 }
                 break;
-            case SHT21_SENSOR:
+            case SHT21_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.thermo_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {

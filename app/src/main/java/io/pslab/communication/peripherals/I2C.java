@@ -84,7 +84,7 @@ public class I2C {
 
     public int send(int data) throws IOException {
         packetHandler.sendByte(commandsProto.I2C_HEADER);
-        packetHandler.sendByte(commandsProto.I2C_SEND);
+        packetHandler.sendByte(commandsProto.I2C_RESD);
         packetHandler.sendByte(data);
         return (packetHandler.getAcknowledgement() >> 4);
     }
@@ -183,7 +183,7 @@ public class I2C {
 
     public void sendBurst(int data) throws IOException {
         packetHandler.sendByte(commandsProto.I2C_HEADER);
-        packetHandler.sendByte(commandsProto.I2C_SEND);
+        packetHandler.sendByte(commandsProto.I2C_RESD);
         packetHandler.sendByte(data);
     }
 

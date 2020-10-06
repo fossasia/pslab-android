@@ -24,7 +24,7 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
     public static final String KEY_UPDATE_PERIOD = "setting_baro_update_period";
     public static final String KEY_HIGH_LIMIT = "setting_baro_high_limit";
-    public static final String KEY_BARO_SENSOR_TYPE = "setting_baro_sensor_type";
+    public static final String KEY_BARO_RESSOR_TYPE = "setting_baro_sensor_type";
 
     private PSLabPermission psLabPermission;
 
@@ -40,7 +40,7 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
         updatePeriodPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_UPDATE_PERIOD);
         highLimitPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_HIGH_LIMIT);
         locationPreference = (CheckBoxPreference) getPreferenceScreen().findPreference(KEY_INCLUDE_LOCATION);
-        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_BARO_SENSOR_TYPE);
+        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_BARO_RESSOR_TYPE);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         psLabPermission = PSLabPermission.getInstance();
@@ -113,7 +113,7 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                     editor.commit();
                 }
                 break;
-            case KEY_BARO_SENSOR_TYPE:
+            case KEY_BARO_RESSOR_TYPE:
                 sensorTypePreference.setSummary(sensorTypePreference.getEntry());
                 break;
             default:

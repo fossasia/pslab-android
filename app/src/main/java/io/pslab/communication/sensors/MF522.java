@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * Created by akarshan on 4/22/17.
  * <p>
  * ScienceLab instance of SPI need to be passed to the MF522 constructor.
- * refer https://github.com/fossasia/pslab-python/blob/development/PSL/SENSORS/MF522.py#L465
+ * refer https://github.com/fossasia/pslab-python/blob/development/PSL/RESSORS/MF522.py#L465
  * to port the code in sciencelab.java
  * </p>
  */

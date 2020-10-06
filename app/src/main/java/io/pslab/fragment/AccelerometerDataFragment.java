@@ -41,7 +41,7 @@ import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 
-import static android.content.Context.SENSOR_SERVICE;
+import static android.content.Context.RESSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 /**
@@ -481,14 +481,14 @@ public class AccelerometerDataFragment extends Fragment implements OperationCall
 
     private void initiateAccelerometerSensor() {
         resetInstrumentData();
-        sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
+        sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (sensor == null) {
             CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
                     getResources().getString(R.string.no_accelerometer_sensor), null, null, Snackbar.LENGTH_LONG);
         } else {
             sensorManager.registerListener(accelerometerSensorEventListener,
-                    sensor, SensorManager.SENSOR_DELAY_FASTEST);
+                    sensor, SensorManager.RESSOR_DELAY_FASTEST);
         }
 
     }

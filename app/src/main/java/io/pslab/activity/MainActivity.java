@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
-                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        Intent shareIntent = new Intent(Intent.ACTION_RESD);
                         shareIntent.setType("text/plain");
                         shareIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
                         String shareMessage = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;

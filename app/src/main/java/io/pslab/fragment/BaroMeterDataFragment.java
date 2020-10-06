@@ -58,7 +58,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
-import static android.content.Context.SENSOR_SERVICE;
+import static android.content.Context.RESSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 /**
@@ -85,7 +85,7 @@ public class BaroMeterDataFragment extends Fragment implements OperationCallback
 
     private float baroValue = -1;
 
-    private enum BARO_SENSOR {INBUILT_SENSOR, BMP180_SENSOR}
+    private enum BARO_RESSOR {INBUILT_RESSOR, BMP180_RESSOR}
 
     @BindView(R.id.baro_max)
     TextView statMax;
@@ -604,13 +604,13 @@ public class BaroMeterDataFragment extends Fragment implements OperationCallback
     }
 
     private void initiateBaroSensor(int type) {
-        BaroMeterDataFragment.BARO_SENSOR s = BaroMeterDataFragment.BARO_SENSOR.values()[type];
+        BaroMeterDataFragment.BARO_RESSOR s = BaroMeterDataFragment.BARO_RESSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
-            case INBUILT_SENSOR:
+            case INBUILT_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.baro_sensors)[0]);
-                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
+                sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
                 if (sensor == null) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
@@ -620,10 +620,10 @@ public class BaroMeterDataFragment extends Fragment implements OperationCallback
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(baroSensor.BAROMETER_LIMIT, max).apply();
                     baroMeter.setMaxSpeed(max);
                     sensorManager.registerListener(baroSensorEventListener,
-                            sensor, SensorManager.SENSOR_DELAY_FASTEST);
+                            sensor, SensorManager.RESSOR_DELAY_FASTEST);
                 }
                 break;
-            case BMP180_SENSOR:
+            case BMP180_RESSOR:
                 sensorLabel.setText(getResources().getStringArray(R.array.baro_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {

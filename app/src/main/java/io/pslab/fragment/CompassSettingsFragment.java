@@ -12,7 +12,7 @@ import io.pslab.others.PSLabPermission;
 
 public class CompassSettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public static final String KEY_COMPASS_SENSOR_TYPE = "setting_compass_sensor_type";
+    public static final String KEY_COMPASS_RESSOR_TYPE = "setting_compass_sensor_type";
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
 
     private PSLabPermission psLabPermission;
@@ -23,7 +23,7 @@ public class CompassSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.compass_settings, rootKey);
-        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_COMPASS_SENSOR_TYPE);
+        sensorTypePreference = (ListPreference) getPreferenceScreen().findPreference(KEY_COMPASS_RESSOR_TYPE);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         psLabPermission = PSLabPermission.getInstance();
@@ -51,7 +51,7 @@ public class CompassSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         switch (s) {
-            case KEY_COMPASS_SENSOR_TYPE:
+            case KEY_COMPASS_RESSOR_TYPE:
                 sensorTypePreference.setSummary(sensorTypePreference.getEntry());
                 break;
             default:

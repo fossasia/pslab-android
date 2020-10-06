@@ -46,7 +46,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
-import static android.content.Context.SENSOR_SERVICE;
+import static android.content.Context.RESSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class CompassDataFragment extends Fragment implements OperationCallback {
@@ -82,7 +82,7 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
     @BindView(R.id.tv_sensor_hmc5883l_bz)
     TextView zAxisMagneticField;
 
-    private enum COMPASS_SENSOR {INBUILT_SENSOR, HMC5883L_SENSOR}
+    private enum COMPASS_RESSOR {INBUILT_RESSOR, HMC5883L_RESSOR}
 
     private float currentDegree = 0f;
     private int direction;
@@ -626,22 +626,22 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
 
     private void initiateCompassSensor(int type) {
 
-        CompassDataFragment.COMPASS_SENSOR s = CompassDataFragment.COMPASS_SENSOR.values()[type];
+        CompassDataFragment.COMPASS_RESSOR s = CompassDataFragment.COMPASS_RESSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
-            case INBUILT_SENSOR:
+            case INBUILT_RESSOR:
                 degreeIndicator.setText(getResources().getStringArray(R.array.compass_sensors)[0]);
-                sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
+                sensorManager = (SensorManager) getContext().getSystemService(RESSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
                 if (sensor == null) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
                             getString(R.string.no_compass_sensor), null, null, Snackbar.LENGTH_LONG);
                 } else {
-                    sensorManager.registerListener(compassEventListner, sensor, SensorManager.SENSOR_DELAY_GAME);
+                    sensorManager.registerListener(compassEventListner, sensor, SensorManager.RESSOR_DELAY_GAME);
                 }
                 break;
-            case HMC5883L_SENSOR:
+            case HMC5883L_RESSOR:
                 degreeIndicator.setText(getResources().getStringArray(R.array.compass_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {

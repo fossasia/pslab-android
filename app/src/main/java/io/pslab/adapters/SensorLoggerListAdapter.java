@@ -136,7 +136,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 holder.sensor.setText(R.string.logical_analyzer);
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_logic_analyzer));
                 break;
-            case PSLabSensor.GAS_SENSOR:
+            case PSLabSensor.GAS_RESSOR:
                 holder.sensor.setText(R.string.gas_sensor);
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_gas));
                 break;
@@ -279,7 +279,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfMultimeterRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LOGIC_ANALYZER)) {
                             LocalDataLog.with().clearBlockOfLARecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GAS_SENSOR)) {
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GAS_RESSOR)) {
                             LocalDataLog.with().clearBlockOfGasSensorRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.SOUND_METER)) {
                             LocalDataLog.with().clearBlockOfSoundRecords(block.getBlock());
@@ -521,7 +521,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 }
             }
             setMapDataToIntent(array);
-        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GAS_SENSOR)) {
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GAS_RESSOR)) {
             RealmResults<GasSensorData> data = LocalDataLog.with().getBlockOfGasSensorRecords(block.getBlock());
             JSONArray array = new JSONArray();
             for (GasSensorData d : data) {

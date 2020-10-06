@@ -103,7 +103,7 @@ public class DustSensorActivity extends PSLabSensor {
                         0.0, 5.0),
                 getValueFromText(luxMeterConfigurations.getString(DustSensorSettingsFragment.KEY_UPDATE_PERIOD, "1000"),
                         100, 1000),
-                luxMeterConfigurations.getString(DustSensorSettingsFragment.KEY_DUST_SENSOR_TYPE, "0"));
+                luxMeterConfigurations.getString(DustSensorSettingsFragment.KEY_DUST_RESSOR_TYPE, "0"));
     }
 
     private int getValueFromText(String strValue, int lowerBound, int upperBound) {

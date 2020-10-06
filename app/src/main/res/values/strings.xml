@@ -213,7 +213,7 @@
     <string name="ch2">CH2</string>
     <string name="ch3">CH3</string>
     <string name="cap">CAP</string>
-    <string name="sen">SEN</string>
+    <string name="sen">RES</string>
     <string name="an8">AN8</string>
     <string name="w1">Wave 1</string>
     <string name="w2">Wave 2</string>
@@ -632,10 +632,10 @@
     <string name="multimeter_dialog_heading">Multimeter</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">Multimeter Configurations</string>
-    <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element. \n\n\u2022 CH1 and CH2 can read a free range of voltage. CH3, SEN, CAP, AN8 can only read from 0V to 3.30V</string>
+    <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the RES and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element. \n\n\u2022 CH1 and CH2 can read a free range of voltage. CH3, RES, CAP, AN8 can only read from 0V to 3.30V</string>
     <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to LA1,LA2,LA3 or LA4.\n\n
         <b>Different Sections</b>\n\n
-        <b>Resistance:</b> Measures the resistance of the element connected between the SEN and GND pin of the PSLab device.\n\n
+        <b>Resistance:</b> Measures the resistance of the element connected between the RES and GND pin of the PSLab device.\n\n
         <b>Capacitance:</b> Measures the capacitance of the element connected between the CAP and GND pin of the PSLab device.\n\n
         <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as AN8.\n\n
         <b>Frequency:</b> Measures the frequency across any element connected between any of ID and GND pins.\n\n

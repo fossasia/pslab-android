@@ -214,7 +214,7 @@
     <string name="ch2">CH2</string>
     <string name="ch3">CH3</string>
     <string name="cap">CAP</string>
-    <string name="sen">SEN</string>
+    <string name="sen">RES</string>
     <string name="an8">AN8</string>
     <string name="w1">තරංග 1</string>
     <string name="w2">තරංග 2</string>
@@ -620,11 +620,11 @@
     <string name="multimeter_dialog_heading">මල්ටිමීටරය</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">බහුමාපක වින්‍යාසයන්</string>
-    <string name="multimeter_dialog_text">PV1, PV2, PV3 භාවිතා කරන්න සම්බන්ධිත ද්‍රව්‍යයේ ප්‍රතිරෝධය හෝ ධාරිතාව මැනීම සඳහා රූපයේ පෙන්වා ඇති පරිදි පිළිවෙලින් ප්‍රතිරෝධකයට හා ධාරිත්‍රකයට SEN සහ CAP අග්‍රයන් සම්බන්ධ කරන්න.. \n\n\u2022 CH1 සහ CH2 වලට නිදහස් වෝල්ටීයතා පරාසයක් කියවිය හැකිය. CH3, SEN, CAP, AN8 කියවිය හැක්කේ 0V සිට 3.30V දක්වා පමණි</string>
+    <string name="multimeter_dialog_text">PV1, PV2, PV3 භාවිතා කරන්න සම්බන්ධිත ද්‍රව්‍යයේ ප්‍රතිරෝධය හෝ ධාරිතාව මැනීම සඳහා රූපයේ පෙන්වා ඇති පරිදි පිළිවෙලින් ප්‍රතිරෝධකයට හා ධාරිත්‍රකයට RES සහ CAP අග්‍රයන් සම්බන්ධ කරන්න.. \n\n\u2022 CH1 සහ CH2 වලට නිදහස් වෝල්ටීයතා පරාසයක් කියවිය හැකිය. CH3, RES, CAP, AN8 කියවිය හැක්කේ 0V සිට 3.30V දක්වා පමණි</string>
     <string name="multimeter_dialog_description">\u2022 වෝල්ටීයතාවය සෘජුවම මැනීම සඳහා රූපයේ පෙන්වා ඇති පරිදි බල ප්‍රභවය (උදා: පීවී 1, පීවී 2 සහ පීවී 3) නාලිකා
 අග්‍ර වලට සම්බන්ධ කරන්න.\n\n\u2022 ඒ ආකාරයටම, සංඛ්‍යාතය මැනීමට හෝ ස්පන්දනය ගණනන් කිරීමට SQ1, SQ2, SQ3 හෝ SQ4  අග්‍රයයන්   LA1, LA2, LA3 හෝ LA4 සමඟ සම්බන්ධ කරන්න.\n\n
         <b>විවිධ අංශ</b>\n\n
-        <b>ප්‍රතිරෝධය:</b> PSLab උපාංගයේ SEN සහ GND  අග්‍ර අතර සම්බන්ධිත ද්‍රව්‍යයේ ප්‍රතිරෝධය මනින්න.\n\n
+        <b>ප්‍රතිරෝධය:</b> PSLab උපාංගයේ RES සහ GND  අග්‍ර අතර සම්බන්ධිත ද්‍රව්‍යයේ ප්‍රතිරෝධය මනින්න.\n\n
         <b>Capacitance:</b> PSLab උපාංගයේ CAP සහ GND අග්‍ර අතර සම්බන්ධිත ද්‍රව්‍යයේ ධාරිතාව මැනීම.\n\n
         <b>Voltage:</b> ඕනෑම නාලිකාවක්, GND අග්‍රයන්  හා AN8 වැනි අනෙකුත් අග්‍ර සමග  සම්බන්ධිත ඕනෑම ද්‍රව්‍යයක වෝල්ටීයතාව මැනීම.\n\n
         <b>Frequency:</b> ඕනෑම ID සහ GND අග්‍ර  අතර සම්බන්ධිත  ද්‍රව්‍යයක් හරහා සංඛ්‍යාතය මැනීම.\n\n

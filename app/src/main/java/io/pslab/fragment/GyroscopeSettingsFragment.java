@@ -18,7 +18,7 @@ public class GyroscopeSettingsFragment extends PreferenceFragmentCompat implemen
     public static final String KEY_INCLUDE_LOCATION = "include_location_sensor_data";
     public static final String KEY_UPDATE_PERIOD = "setting_gyro_update_period";
     public static final String KEY_HIGH_LIMIT = "setting_gyro_high_limit";
-    public static final String KEY_GYROSCOPE_SENSOR_GAIN = "setting_gyro_sensor_gain";
+    public static final String KEY_GYROSCOPE_RESSOR_GAIN = "setting_gyro_sensor_gain";
 
     private PSLabPermission psLabPermission;
 
@@ -33,7 +33,7 @@ public class GyroscopeSettingsFragment extends PreferenceFragmentCompat implemen
         setPreferencesFromResource(R.xml.gyro_scope_settings, rootKey);
         updatePeriodPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_UPDATE_PERIOD);
         higLimitPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_HIGH_LIMIT);
-        sensorGainPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_GYROSCOPE_SENSOR_GAIN);
+        sensorGainPref = (EditTextPreference) getPreferenceScreen().findPreference(KEY_GYROSCOPE_RESSOR_GAIN);
         locationPreference = (CheckBoxPreference) getPreferenceScreen().findPreference(KEY_INCLUDE_LOCATION);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -89,7 +89,7 @@ public class GyroscopeSettingsFragment extends PreferenceFragmentCompat implemen
                     editor.commit();
                 }
                 break;
-            case KEY_GYROSCOPE_SENSOR_GAIN:
+            case KEY_GYROSCOPE_RESSOR_GAIN:
                 try {
                     Integer gain = Integer.valueOf(sensorGainPref.getText());
                     sensorGainPref.setSummary(String.valueOf(gain));
@@ -97,7 +97,7 @@ public class GyroscopeSettingsFragment extends PreferenceFragmentCompat implemen
                     sensorGainPref.setSummary("1");
                     sensorGainPref.setText("1");
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(KEY_GYROSCOPE_SENSOR_GAIN, "1");
+                    editor.putString(KEY_GYROSCOPE_RESSOR_GAIN, "1");
                     editor.commit();
                 }
                 break;

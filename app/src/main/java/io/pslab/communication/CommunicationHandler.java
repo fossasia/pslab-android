@@ -35,7 +35,7 @@ public class CommunicationHandler {
     private static final int SET_LINE_CODING = 0x20;  // USB CDC 1.1 section 6.2
     private static final int GET_LINE_CODING = 0x21;
     private static final int SET_CONTROL_LINE_STATE = 0x22;
-    private static final int SEND_BREAK = 0x23;
+    private static final int RESD_BREAK = 0x23;
 
     private static final int DEFAULT_READ_BUFFER_SIZE = 32 * 1024;
     private static final int DEFAULT_WRITE_BUFFER_SIZE = 32 * 1024;

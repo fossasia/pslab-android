@@ -82,7 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
             case PSLabSensor.COMPASS_CONFIGURATIONS:
                 fragment = new CompassSettingsFragment();
                 break;
-            case PSLabSensor.DUSTSENSOR_CONFIGURATIONS:
+            case PSLabSensor.DUSTRESSOR_CONFIGURATIONS:
                 fragment = new DustSensorSettingsFragment();
                 break;
             case PSLabSensor.SOUNDMETER_CONFIGURATIONS:
