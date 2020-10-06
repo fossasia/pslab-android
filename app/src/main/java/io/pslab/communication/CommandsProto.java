@@ -114,7 +114,7 @@ public class CommandsProto {
 
     public int LA1 = 0;
     public int LA2 = 1;
-    public int ID3 = 2;
+    public int LA3 = 2;
     public int ID4 = 3;
     public int LMETER = 4;
 

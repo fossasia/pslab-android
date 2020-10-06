@@ -73,7 +73,7 @@
         <item>C</item>
         <item>LA1</item>
         <item>LA2</item>
-        <item>ID3</item>
+        <item>LA3</item>
         <item>ID4</item>
         <item>CH3</item>
         <item>CH2</item>
@@ -174,7 +174,7 @@
 
     <string name="id1">LA1</string>
     <string name="id2">LA2</string>
-    <string name="id3">ID3</string>
+    <string name="id3">LA3</string>
     <string name="id4">ID4</string>
     <string name="count_pulse">Oblicz impuls</string>
     <string name="capacitance_unit">Farad</string>
@@ -205,7 +205,7 @@
     <string-array name="ID">
         <item>LA1</item>
         <item>LA2</item>
-        <item>ID3</item>
+        <item>LA3</item>
         <item>ID4</item>
     </string-array>
     <string name="reset">ZRESETUJ</string>
@@ -609,7 +609,7 @@
     <string-array name="channel_choices">
         <item>LA1</item>
         <item>LA2</item>
-        <item>ID3</item>
+        <item>LA3</item>
         <item>ID4</item>
     </string-array>
 
@@ -632,7 +632,7 @@
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">Konfiguracje multimetrów</string>
     <string name="multimeter_dialog_text">Użyj PV1, PV2, PV3 Podłącz styki SEN i CAP odpowiednio do rezystora i kondensatora, jak pokazano na rysunku, aby zmierzyć rezystancję lub pojemność podłączonego elementu. \n\n\u2022 CH1 i CH2 mogą odczytać dowolny zakres napięcia. CH3, SEN, CAP, AN8 mogą odczytywać tylko od 0 V do 3,30 V.</string>
-    <string name="multimeter_dialog_description">\u2022 Aby zmierzyć napięcie, podłącz bezpośrednio źródło zasilania (np. PV1, PV2 i PV3) do pinów kanału, jak pokazano na rysunku.\n\n\u2022 Podobnie do pomiaru częstotliwości lub zliczania impulsu podłącz piny SQ1, SQ2, SQ3 lub SQ4 do LA1, LA2, ID3 lub ID4.\n\n
+    <string name="multimeter_dialog_description">\u2022 Aby zmierzyć napięcie, podłącz bezpośrednio źródło zasilania (np. PV1, PV2 i PV3) do pinów kanału, jak pokazano na rysunku.\n\n\u2022 Podobnie do pomiaru częstotliwości lub zliczania impulsu podłącz piny SQ1, SQ2, SQ3 lub SQ4 do LA1, LA2, LA3 lub ID4.\n\n
         <b>Różne sekcje</b>\n\n
         <b>Opór:</b> Mierzy rezystancję elementu podłączonego między stykiem SEN i GND urządzenia PSLab.\n\n
         <b>Pojemność Elektryczna:</b> Mierzy pojemność elementu podłączonego między stykiem CAP a GND urządzenia PSLab.\n\n
@@ -652,7 +652,7 @@
     </string>
 
     <string name="logic_analyzer_dialog_text">Logic Analyzer to przyrząd służący do ustalenia zależności czasowej między różnymi impulsami cyfrowymi. Analizator logiczny dostępny w aplikacji PSLab można obsługiwać w następujący sposób :\n</string>
-    <string name="logic_analyzer_dialog_description">\n\u2022 Pierwszym krokiem jest połączenie źródła/sygnałów generujących impulsy cyfrowe z pinem pomiarowym, tj. LA1, LA2, ID3 i/lub ID4.\n\n\u2022 Jak pokazano na rysunku, można zastosować piny SQR1, SQR2, SQR3 i/lub SQR4 fali prostokątnej, jeśli żadne inne źródło nie jest dostępne do generowania impulsów cyfrowych.\n\n\u2022 Następnym krokiem jest wybranie trybu kanału, tj. Liczby używanych pinów IDx.\n\n\u2022 Ostatnim krokiem jest wybranie odpowiedniej kombinacji kanału i krawędzi (które należy przeanalizować) z listy podanej dla każdego używanego pinu.\n\n\u2022 Teraz naciśnij przycisk „Analizuj” i poczekaj, aż dane zostaną pobrane z urządzenia. Po pobraniu danych zostaną one wykreślone w celu analizy.</string>
+    <string name="logic_analyzer_dialog_description">\n\u2022 Pierwszym krokiem jest połączenie źródła/sygnałów generujących impulsy cyfrowe z pinem pomiarowym, tj. LA1, LA2, LA3 i/lub ID4.\n\n\u2022 Jak pokazano na rysunku, można zastosować piny SQR1, SQR2, SQR3 i/lub SQR4 fali prostokątnej, jeśli żadne inne źródło nie jest dostępne do generowania impulsów cyfrowych.\n\n\u2022 Następnym krokiem jest wybranie trybu kanału, tj. Liczby używanych pinów IDx.\n\n\u2022 Ostatnim krokiem jest wybranie odpowiedniej kombinacji kanału i krawędzi (które należy przeanalizować) z listy podanej dla każdego używanego pinu.\n\n\u2022 Teraz naciśnij przycisk „Analizuj” i poczekaj, aż dane zostaną pobrane z urządzenia. Po pobraniu danych zostaną one wykreślone w celu analizy.</string>
 
     <string name="wave_name_holder">Trójkątny</string>
     <string name="freq_text">Częstotliwość :</string>

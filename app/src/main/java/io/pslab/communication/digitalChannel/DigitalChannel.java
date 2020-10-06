@@ -15,7 +15,7 @@ public class DigitalChannel {
     private static final int EVERY_FOURTH_RISING_EDGE = 4;
     private static final int EVERY_RISING_EDGE = 3;
     private static final int EVERY_FALLING_EDGE = 2;
-    public static String[] digitalChannelNames = {"LA1", "LA2", "ID3", "ID4", "SEN", "EXT", "CNTR"};
+    public static String[] digitalChannelNames = {"LA1", "LA2", "LA3", "ID4", "SEN", "EXT", "CNTR"};
     public String channelName, dataType;
     public int initialStateOverride, channelNumber, length, prescalar, trigger, dlength, plotLength, maxTime, mode;
     public double xAxis[], yAxis[], timestamps[];
