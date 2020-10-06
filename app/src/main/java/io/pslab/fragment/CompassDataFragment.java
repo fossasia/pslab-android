@@ -626,7 +626,7 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
 
     private void initiateCompassSensor(int type) {
 
-        COMPASS_SENSOR s = COMPASS_SENSOR.values()[type];
+        CompassDataFragment.COMPASS_SENSOR s = CompassDataFragment.COMPASS_SENSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {

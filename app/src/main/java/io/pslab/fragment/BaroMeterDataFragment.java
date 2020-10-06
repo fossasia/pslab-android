@@ -604,7 +604,7 @@ public class BaroMeterDataFragment extends Fragment implements OperationCallback
     }
 
     private void initiateBaroSensor(int type) {
-        BARO_SENSOR s = BARO_SENSOR.values()[type];
+        BaroMeterDataFragment.BARO_SENSOR s = BaroMeterDataFragment.BARO_SENSOR.values()[type];
         resetInstrumentData();
         ScienceLab scienceLab;
         switch (s) {
