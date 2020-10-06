@@ -1395,7 +1395,7 @@ public class ScienceLab {
         if (Arrays.asList(DigitalChannel.digitalChannelNames).contains(name))
             return Arrays.asList(DigitalChannel.digitalChannelNames).indexOf(name);
         else {
-            Log.v(TAG, "Invalid channel " + name + " , selecting ID1 instead ");
+            Log.v(TAG, "Invalid channel " + name + " , selecting LA1 instead ");
             return null;
         }
     }
@@ -1416,16 +1416,16 @@ public class ScienceLab {
     }
 
     /**
-     * Retrieves the frequency of the signal connected to ID1. For frequencies > 1MHz
+     * Retrieves the frequency of the signal connected to LA1. For frequencies > 1MHz
      * Also good for lower frequencies, but avoid using it since the oscilloscope cannot be used simultaneously due to hardware limitations.
      * The input frequency is fed to a 32 bit counter for a period of 100mS.
      * The value of the counter at the end of 100mS is used to calculate the frequency.
-     * @param pin The input pin to measure frequency from : ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param pin The input pin to measure frequency from : ['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @return frequency
      */
     public Double getHighFrequency(String pin) {
         /*
-        Retrieves the frequency of the signal connected to ID1. for frequencies > 1MHz
+        Retrieves the frequency of the signal connected to LA1. for frequencies > 1MHz
 		also good for lower frequencies, but avoid using it since
 		the oscilloscope cannot be used simultaneously due to hardware limitations.
 		The input frequency is fed to a 32 bit counter for a period of 100mS.
@@ -1449,7 +1449,7 @@ public class ScienceLab {
      * Frequency measurement on IDx.
      * Measures time taken for 16 rising edges of input signal.
      * Returns the frequency in Hertz
-     * @param channel The input to measure frequency from. ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param channel The input to measure frequency from. ['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param timeout This is a blocking call which will wait for one full wavelength before returning the calculated frequency. Use the timeout option if you're unsure of the input signal. Returns 0 if timed out
      * @return frequency
      */
@@ -1484,7 +1484,7 @@ public class ScienceLab {
 
     /**
      * Stores a list of rising edges that occurred within the timeout period.
-     * @param channel The input to measure time between two rising edges.['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param channel The input to measure time between two rising edges.['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param skipCycle Number of points to skip. eg. Pendulums pass through light barriers twice every cycle. SO 1 must be skipped
      * @param timeout Number of seconds to wait for datapoints. (Maximum 60 seconds)
      * @return
@@ -1505,7 +1505,7 @@ public class ScienceLab {
             if (initialStates.get("A") >= skipCycle + 2) {
                 long[] data = this.fetchLongDataFromLA(initialStates.get("A"), 1);
                 LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
-                tempMap.put("ID1", initialStates.get("ID1"));
+                tempMap.put("LA1", initialStates.get("LA1"));
                 tempMap.put("ID2", initialStates.get("ID2"));
                 tempMap.put("ID3", initialStates.get("ID3"));
                 tempMap.put("ID4", initialStates.get("ID4"));
@@ -1528,7 +1528,7 @@ public class ScienceLab {
 
     /**
      * Stores a list of falling edges that occured within the timeout period.
-     * @param channel The input to measure time between two falling edges.['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param channel The input to measure time between two falling edges.['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param skipCycle Number of points to skip. eg. Pendulums pass through light barriers twice every cycle. SO 1 must be skipped
      * @param timeout Number of seconds to wait for datapoints. (Maximum 60 seconds)
      * @return
@@ -1549,7 +1549,7 @@ public class ScienceLab {
             if (initialStates.get("A") >= skipCycle + 2) {
                 long[] data = this.fetchLongDataFromLA(initialStates.get("A"), 1);
                 LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
-                tempMap.put("ID1", initialStates.get("ID1"));
+                tempMap.put("LA1", initialStates.get("LA1"));
                 tempMap.put("ID2", initialStates.get("ID2"));
                 tempMap.put("ID3", initialStates.get("ID3"));
                 tempMap.put("ID4", initialStates.get("ID4"));
@@ -1572,10 +1572,10 @@ public class ScienceLab {
 
     /**
      * Measures time intervals between two logic level changes on any two digital inputs(both can be the same) and returns the calculated time.
-     * For example, one can measure the time interval between the occurrence of a rising edge on ID1, and a falling edge on ID3.
+     * For example, one can measure the time interval between the occurrence of a rising edge on LA1, and a falling edge on ID3.
      * If the returned time is negative, it simply means that the event corresponding to channel2 occurred first.
      * @param channel1 The input pin to measure first logic level change
-     * @param channel2 The input pin to measure second logic level change -['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param channel2 The input pin to measure second logic level change -['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param edge1 The type of level change to detect in order to start the timer - ['rising', 'falling', 'four rising edges']
      * @param edge2 The type of level change to detect in order to stop the timer - ['rising', 'falling', 'four rising edges']
      * @param timeout Use the timeout option if you're unsure of the input signal time period. Returns -1 if timed out
@@ -1584,7 +1584,7 @@ public class ScienceLab {
     public Double measureInterval(String channel1, String channel2, String edge1, String edge2, Float timeout) {
         /*
         Measures time intervals between two logic level changes on any two digital inputs(both can be the same)
-		For example, one can measure the time interval between the occurence of a rising edge on ID1, and a falling edge on ID3.
+		For example, one can measure the time interval between the occurence of a rising edge on LA1, and a falling edge on ID3.
 		If the returned time is negative, it simply means that the event corresponding to channel2 occurred first.
 		Returns the calculated time
         */
@@ -1628,7 +1628,7 @@ public class ScienceLab {
     /**
      * Duty cycle measurement on channel. Returns wavelength(seconds), and length of first half of pulse(high time)
      * Low time = (wavelength - high time)
-     * @param channel The input pin to measure wavelength and high time.['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param channel The input pin to measure wavelength and high time.['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param timeout Use the timeout option if you're unsure of the input signal time period. Returns 0 if timed out
      * @return Wavelength, Duty cycle
      */
@@ -1638,7 +1638,7 @@ public class ScienceLab {
 		returns wavelength(seconds), and length of first half of pulse(high time)
 		low time = (wavelength - high time)
         */
-        if (channel == null) channel = "ID1";
+        if (channel == null) channel = "LA1";
         if (timeout == null) timeout = 1.;
         Map<String, double[]> data = this.measureMultipleDigitalEdges(channel, channel, "rising", "falling", 2, 2, timeout, null, true);
         double[] retData = new double[2];
@@ -1675,13 +1675,13 @@ public class ScienceLab {
     /**
      * Duty cycle measurement on channel. Returns wavelength(seconds), and length of first half of pulse(high time)
      * Low time = (wavelength - high time)
-     * @param channel The input pin to measure wavelength and high time.['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param channel The input pin to measure wavelength and high time.['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param pulseType Type of pulse to detect. May be 'HIGH' or 'LOW'
      * @param timeout Use the timeout option if you're unsure of the input signal time period. Returns 0 if timed out
      * @return Pulse width
      */
     public Double pulseTime(String channel, String pulseType, Double timeout) {
-        if (channel == null) channel = "ID1";
+        if (channel == null) channel = "LA1";
         if (pulseType == null) pulseType = "LOW";
         if (timeout == null) timeout = 0.1;
 
@@ -1711,7 +1711,7 @@ public class ScienceLab {
     /**
      * Measures a set of timestamped logic level changes(Type can be selected) from two different digital inputs.
      * @param channel1 The input pin to measure first logic level change
-     * @param channel2 The input pin to measure second logic level change -['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param channel2 The input pin to measure second logic level change -['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param edgeType1 The type of level change that should be recorded - ['rising', 'falling', 'four rising edges(default)']
      * @param edgeType2 The type of level change that should be recorded - ['rising', 'falling', 'four rising edges(default)']
      * @param points1 Number of data points to obtain for input 1 (Max 4)
@@ -1801,8 +1801,8 @@ public class ScienceLab {
     /**
      * Log timestamps of rising/falling edges on one digital input
      * @param waitingTime Total time to allow the logic analyzer to collect data. This is implemented using a simple sleep routine, so if large delays will be involved, refer to startOneChannelLA() to start the acquisition, and fetchLAChannels() to retrieve data from the hardware after adequate time. The retrieved data is stored in the array self.dchans[0].timestamps.
-     * @param aquireChannel ID1',...,'ID4'
-     * @param triggerChannel ID1',...,'ID4'
+     * @param aquireChannel LA1',...,'ID4'
+     * @param triggerChannel LA1',...,'ID4'
      * @param aquireMode EVERY_SIXTEENTH_RISING_EDGE = 5
      *                   EVERY_FOURTH_RISING_EDGE = 4
      *                   EVERY_RISING_EDGE = 3
@@ -1818,7 +1818,7 @@ public class ScienceLab {
         Log timestamps of rising/falling edges on one digital input
         */
         if (waitingTime == null) waitingTime = 1;
-        if (aquireChannel == null) aquireChannel = "ID1";
+        if (aquireChannel == null) aquireChannel = "LA1";
         if (triggerChannel == null) triggerChannel = aquireChannel;
         if (aquireMode == null) aquireMode = 3;
         if (triggerMode == null) triggerMode = 3;
@@ -1838,16 +1838,16 @@ public class ScienceLab {
     }
 
     /**
-     * Start logging timestamps of rising/falling edges on ID1
-     * @param trigger Bool . Enable edge trigger on ID1. use keyword argument edge = 'rising' or 'falling'
-     * @param channel ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * Start logging timestamps of rising/falling edges on LA1
+     * @param trigger Bool . Enable edge trigger on LA1. use keyword argument edge = 'rising' or 'falling'
+     * @param channel ['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param maximumTime Total time to sample. If total time exceeds 67 seconds, a prescaler will be used in the reference clock.
-     * @param triggerChannels array of digital input names that can trigger the acquisition. Eg, trigger = ['ID1','ID2','ID3'] will triggger when a logic change specified by the keyword argument 'edge' occurs on either or the three specified trigger inputs.
+     * @param triggerChannels array of digital input names that can trigger the acquisition. Eg, trigger = ['LA1','ID2','ID3'] will triggger when a logic change specified by the keyword argument 'edge' occurs on either or the three specified trigger inputs.
      * @param edge 'rising' or 'falling' . trigger edge type for trigger_channels.
      */
     public void startOneChannelLABackup(Integer trigger, String channel, Integer maximumTime, ArrayList<String> triggerChannels, String edge) {
         /*
-        start logging timestamps of rising/falling edges on ID1
+        start logging timestamps of rising/falling edges on LA1
         */
         try {
             this.clearBuffer(0, this.MAX_SAMPLES / 2);
@@ -1855,7 +1855,7 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.START_ONE_CHAN_LA);
             mPacketHandler.sendInt(this.MAX_SAMPLES / 4);
             if (triggerChannels != null & (trigger & 1) != 0) {
-                if (triggerChannels.contains("ID1")) trigger |= (1 << 4);
+                if (triggerChannels.contains("LA1")) trigger |= (1 << 4);
                 if (triggerChannels.contains("ID2")) trigger |= (1 << 5);
                 if (triggerChannels.contains("ID3")) trigger |= (1 << 6);
             } else {
@@ -1880,8 +1880,8 @@ public class ScienceLab {
     }
 
     /**
-     * Start logging timestamps of rising/falling edges on ID1.
-     * @param channel ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * Start logging timestamps of rising/falling edges on LA1.
+     * @param channel ['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param channelMode acquisition mode default value: 1(EVERY_EDGE)
                         - EVERY_SIXTEENTH_RISING_EDGE = 5
                         - EVERY_FOURTH_RISING_EDGE    = 4
@@ -1889,13 +1889,13 @@ public class ScienceLab {
                         - EVERY_FALLING_EDGE          = 2
                         - EVERY_EDGE                  = 1
                         - DISABLED                    = 0
-     * @param triggerChannel ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param triggerChannel ['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param triggerMode    1=Falling edge, 0=Rising Edge, -1=Disable Trigger
      */
     public void startOneChannelLA(String channel, Integer channelMode, String triggerChannel, Integer triggerMode) {
-        if (channel == null) channel = "ID1";
+        if (channel == null) channel = "LA1";
         if (channelMode == null) channelMode = 1;
-        if (triggerChannel == null) triggerChannel = "ID1";
+        if (triggerChannel == null) triggerChannel = "LA1";
         if (triggerMode == null) triggerMode = 3;
         try {
             this.clearBuffer(0, this.MAX_SAMPLES / 2);
@@ -1927,8 +1927,8 @@ public class ScienceLab {
     }
 
     /**
-     * Start logging timestamps of rising/falling edges on ID1,ID2
-     * @param channels Channels to acquire data from . default ['ID1','ID2']
+     * Start logging timestamps of rising/falling edges on LA1,ID2
+     * @param channels Channels to acquire data from . default ['LA1','ID2']
      * @param modes modes for each channel. Array . default value: [1,1]
                     - EVERY_SIXTEENTH_RISING_EDGE = 5
                     - EVERY_FOURTH_RISING_EDGE    = 4
@@ -1937,7 +1937,7 @@ public class ScienceLab {
                     - EVERY_EDGE                  = 1
                     - DISABLED                    = 0
      * @param maximumTime Total time to sample. If total time exceeds 67 seconds, a prescaler will be used in the reference clock
-     * @param trigger Bool . Enable rising edge trigger on ID1
+     * @param trigger Bool . Enable rising edge trigger on LA1
      * @param edge 'rising' or 'falling' . trigger edge type for trigger_channels.
      * @param triggerChannel channel to trigger on . Any digital input. default CH1
      */
@@ -1947,7 +1947,7 @@ public class ScienceLab {
         if (edge == null) edge = "rising";
         if (channels == null) {
             channels = new ArrayList<>();
-            channels.add("ID1");
+            channels.add("LA1");
             channels.add("ID2");
         }
         if (modes == null) {
@@ -1988,7 +1988,7 @@ public class ScienceLab {
     }
 
     /**
-     * Start logging timestamps of rising/falling edges on ID1,ID2,ID3
+     * Start logging timestamps of rising/falling edges on LA1,ID2,ID3
      * @param modes  modes for each channel. Array. default value: [1,1,1]
                     - EVERY_SIXTEENTH_RISING_EDGE = 5
                     - EVERY_FOURTH_RISING_EDGE    = 4
@@ -1996,7 +1996,7 @@ public class ScienceLab {
                     - EVERY_FALLING_EDGE          = 2
                     - EVERY_EDGE                  = 1
                     - DISABLED                    = 0
-     * @param triggerChannel ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param triggerChannel ['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      * @param triggerMode same as modes(previously documented keyword argument)
     default_value : 3
      */
@@ -2008,7 +2008,7 @@ public class ScienceLab {
             modes.add(1);
         }
         if (triggerChannel == null) {
-            triggerChannel = "ID1";
+            triggerChannel = "LA1";
         }
         if (triggerMode == null) {
             triggerMode = 3;
@@ -2048,11 +2048,11 @@ public class ScienceLab {
 
     /**
      * Four channel Logic Analyzer.
-        Start logging timestamps from a 64MHz counter to record level changes on ID1,ID2,ID3,ID4.
-            triggerChannel[0] -> ID1
+        Start logging timestamps from a 64MHz counter to record level changes on LA1,ID2,ID3,ID4.
+            triggerChannel[0] -> LA1
             triggerChannel[1] -> ID2
             triggerChannel[2] -> ID3
-     * @param trigger Bool. Enable rising edge trigger on ID1.
+     * @param trigger Bool. Enable rising edge trigger on LA1.
      * @param maximumTime Maximum delay expected between two logic level changes.
                          If total time exceeds 1 mS, a prescaler will be used in the reference clock.
                          However, this only refers to the maximum time between two successive level changes. If a delay larger
@@ -2068,7 +2068,7 @@ public class ScienceLab {
                     - EVERY_EDGE                  = 1
                     - DISABLED                    = 0
      * @param edge 'rising' or 'falling'. Trigger edge type for trigger_channels.
-     * @param triggerChannel ['ID1','ID2','ID3','ID4','SEN','EXT','CNTR']
+     * @param triggerChannel ['LA1','ID2','ID3','ID4','SEN','EXT','CNTR']
      */
     public void startFourChannelLA(Integer trigger, Double maximumTime, ArrayList<Integer> modes, String edge, ArrayList<Boolean> triggerChannel) {
         if (trigger == null) trigger = 1;
@@ -2093,7 +2093,7 @@ public class ScienceLab {
             if (triggerChannel.get(1)) triggerOptions |= 8;
             if (triggerChannel.get(2)) triggerOptions |= 16;
             if (triggerOptions == 0)
-                triggerOptions |= 4;  // Select one trigger channel(ID1) if none selected
+                triggerOptions |= 4;  // Select one trigger channel(LA1) if none selected
             if ("rising".equals(edge)) triggerOptions |= 2;
             trigger |= triggerOptions;
             mPacketHandler.sendByte(trigger);
@@ -2117,7 +2117,7 @@ public class ScienceLab {
     /**
      * Fetches the initial states of digital inputs that were recorded right before the Logic analyzer was started,
         and the total points each channel recorded.
-     * @return CH1 progress,CH2 progress,CH3 progress,CH4 progress,[ID1,ID2,ID3,ID4]. eg. [1,0,1,1]
+     * @return CH1 progress,CH2 progress,CH3 progress,CH4 progress,[LA1,ID2,ID3,ID4]. eg. [1,0,1,1]
      */
     public LinkedHashMap<String, Integer> getLAInitialStates() {
         try {
@@ -2150,9 +2150,9 @@ public class ScienceLab {
 
             // putting 1 -> true & 0 -> false
             if ((s & 1) != 0)
-                retData.put("ID1", 1);
+                retData.put("LA1", 1);
             else
-                retData.put("ID1", 0);
+                retData.put("LA1", 0);
 
             if ((s & 2) != 0)
                 retData.put("ID2", 1);
@@ -2301,14 +2301,14 @@ public class ScienceLab {
 
     /**
      * @param channelNumber Channel number being used e.g. CH1, CH2, CH3, CH4.
-     * @param initialStates State of the digital inputs. returns dictionary with keys 'ID1','ID2','ID3','ID4','SEN'
+     * @param initialStates State of the digital inputs. returns dictionary with keys 'LA1','ID2','ID3','ID4','SEN'
      * @return true if data fetched/loaded successfully.
      */
     public boolean fetchLAChannel(Integer channelNumber, LinkedHashMap<String, Integer> initialStates) {
         DigitalChannel dChan = this.dChannels.get(channelNumber);
 
         LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
-        tempMap.put("ID1", initialStates.get("ID1"));
+        tempMap.put("LA1", initialStates.get("LA1"));
         tempMap.put("ID2", initialStates.get("ID2"));
         tempMap.put("ID3", initialStates.get("ID3"));
         tempMap.put("ID4", initialStates.get("ID4"));
@@ -2346,7 +2346,7 @@ public class ScienceLab {
 
     /**
      * Gets the state of the digital inputs.
-     * @return dictionary with keys 'ID1','ID2','ID3','ID4'.
+     * @return dictionary with keys 'LA1','ID2','ID3','ID4'.
      */
     public Map<String, Boolean> getStates() {
         try {
@@ -2355,7 +2355,7 @@ public class ScienceLab {
             byte state = mPacketHandler.getByte();
             mPacketHandler.getAcknowledgement();
             Map<String, Boolean> states = new LinkedHashMap<>();
-            states.put("ID1", ((state & 1) != 0));
+            states.put("LA1", ((state & 1) != 0));
             states.put("ID2", ((state & 2) != 0));
             states.put("ID3", ((state & 4) != 0));
             states.put("ID4", ((state & 8) != 0));
@@ -2369,9 +2369,9 @@ public class ScienceLab {
     /**
      * Fetch the state of given input ID.
      * @param inputID the input channel
-                        'ID1' -> state of ID1
+                        'LA1' -> state of LA1
                         'ID4' -> state of ID4
-     * @return the logic level on the specified input (ID1,ID2,ID3, or ID4)
+     * @return the logic level on the specified input (LA1,ID2,ID3, or ID4)
      */
     public Boolean getState(String inputID) {
         return this.getStates().get(inputID);
@@ -2409,7 +2409,7 @@ public class ScienceLab {
 
     /**
      * Count pulses on a digital input. Retrieve total pulses using readPulseCount.
-     * @param channel The input pin to measure rising edges on : ['ID1','ID2','ID3','ID4','RES','EXT','CNTR']
+     * @param channel The input pin to measure rising edges on : ['LA1','ID2','ID3','ID4','RES','EXT','CNTR']
      */
     public void countPulses(String channel) {
         if (channel == null) channel = "SEN";
