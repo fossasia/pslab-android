@@ -68,7 +68,7 @@
     <string-array name="multimeter_knob_states">
         <item>CH1</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
         <item>LA1</item>
@@ -85,7 +85,7 @@
         <item>CH3</item>
         <item>MIC</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
         <item>LA1</item>
@@ -215,7 +215,7 @@
     <string name="ch3">CH3</string>
     <string name="cap">CAP</string>
     <string name="sen">RES</string>
-    <string name="an8">AN8</string>
+    <string name="an8">VOL</string>
     <string name="w1">Fala 1</string>
     <string name="w2">Fala 2</string>
     <string name="phase">Faza</string>
@@ -631,12 +631,12 @@
     <string name="multimeter_dialog_heading">Multimetr</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">Konfiguracje multimetrów</string>
-    <string name="multimeter_dialog_text">Użyj PV1, PV2, PV3 Podłącz styki RES i CAP odpowiednio do rezystora i kondensatora, jak pokazano na rysunku, aby zmierzyć rezystancję lub pojemność podłączonego elementu. \n\n\u2022 CH1 i CH2 mogą odczytać dowolny zakres napięcia. CH3, RES, CAP, AN8 mogą odczytywać tylko od 0 V do 3,30 V.</string>
+    <string name="multimeter_dialog_text">Użyj PV1, PV2, PV3 Podłącz styki RES i CAP odpowiednio do rezystora i kondensatora, jak pokazano na rysunku, aby zmierzyć rezystancję lub pojemność podłączonego elementu. \n\n\u2022 CH1 i CH2 mogą odczytać dowolny zakres napięcia. CH3, RES, CAP, VOL mogą odczytywać tylko od 0 V do 3,30 V.</string>
     <string name="multimeter_dialog_description">\u2022 Aby zmierzyć napięcie, podłącz bezpośrednio źródło zasilania (np. PV1, PV2 i PV3) do pinów kanału, jak pokazano na rysunku.\n\n\u2022 Podobnie do pomiaru częstotliwości lub zliczania impulsu podłącz piny SQ1, SQ2, SQ3 lub SQ4 do LA1, LA2, LA3 lub LA4.\n\n
         <b>Różne sekcje</b>\n\n
         <b>Opór:</b> Mierzy rezystancję elementu podłączonego między stykiem RES i GND urządzenia PSLab.\n\n
         <b>Pojemność Elektryczna:</b> Mierzy pojemność elementu podłączonego między stykiem CAP a GND urządzenia PSLab.\n\n
-        <b>Napięcie:</b> Mierzy napięcie dowolnych elementów połączonych między dowolnym pinem kanału i pinów GND i innymi pinami, takimi jak AN8.\n\n
+        <b>Napięcie:</b> Mierzy napięcie dowolnych elementów połączonych między dowolnym pinem kanału i pinów GND i innymi pinami, takimi jak VOL.\n\n
         <b>Częstotliwość:</b> Mierzy częstotliwość w dowolnym elemencie podłączonym między dowolnym pinem ID i GND.\n\n
         <b>Oblicz impuls:</b> Mierzy puls dowolnej fali przez element połączony między dowolnym z pinów ID i GND.\n\n
     </string>

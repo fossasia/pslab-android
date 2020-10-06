@@ -68,7 +68,7 @@
     <string-array name="multimeter_knob_states">
         <item>CH1</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
         <item>LA1</item>
@@ -85,7 +85,7 @@
         <item>CH3</item>
         <item>MIC</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
         <item>LA1</item>
@@ -215,7 +215,7 @@
     <string name="ch3">CH3</string>
     <string name="cap">الرأس</string>
     <string name="sen">ITS</string>
-    <string name="an8">AN8</string>
+    <string name="an8">VOL</string>
     <string name="w1">الموجة 1</string>
     <string name="w2">موجة 2</string>
     <string name="phase">مرحلة</string>
@@ -603,11 +603,11 @@
     <string name="multimeter_dialog_heading">المقياس المتعدد</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">تكوينات متعدد المتر</string>
-    <string name="multimeter_dialog_text">استخدم PV1 ، PV2 ، PV3 قم بتوصيل دبابيس RES و CAP بالمقاوم والمكثف على التوالي كما هو موضح في الشكل لقياس مقاومة أو سعة العنصر المتصل. \ n \ n \ u2022 CH1 و CH2 يمكن قراءة مجموعة خالية من الجهد. يمكن قراءة CH3 ، RES ، CAP ، AN8 فقط من 0V إلى 3.30V</string>
+    <string name="multimeter_dialog_text">استخدم PV1 ، PV2 ، PV3 قم بتوصيل دبابيس RES و CAP بالمقاوم والمكثف على التوالي كما هو موضح في الشكل لقياس مقاومة أو سعة العنصر المتصل. \ n \ n \ u2022 CH1 و CH2 يمكن قراءة مجموعة خالية من الجهد. يمكن قراءة CH3 ، RES ، CAP ، VOL فقط من 0V إلى 3.30V</string>
     <string name="multimeter_dialog_description">\ u2022 لقياس الجهد ، قم بتوصيل مصدر الطاقة مباشرة (مثل PV1 و PV2 و PV3) بدبابيس القناة كما هو موضح في الشكل. \ n \ n \ u2022 على نحو مشابه لقياس التردد أو نبضة العد ، قم بتوصيل SQ1 أو SQ2 أو SQ3 أو SQ4 دبابيس إلى LA1 أو LA2 أو LA3 أو LA4. \ n \ n<b>Different Sections</b>\n\n
         <b>Resistance:</b> Measures the resistance of the element connected between the RES and GND pin of the PSLab device.\n\n
         <b>Capacitance:</b> Measures the capacitance of the element connected between the CAP and GND pin of the PSLab device.\n\n
-        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as AN8.\n\n
+        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as VOL.\n\n
         <b>Frequency:</b> Measures the frequency across any element connected between any of ID and GND pins.\n\n
         <b>Count Pulse:</b> Measures the pulse of any wave through an element connected between any of ID and GND pins.\n\n
     </string>
