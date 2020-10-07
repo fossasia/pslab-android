@@ -80,17 +80,17 @@
         <activity android:name=".activity.SensorDataLoggerActivity" />
         <activity
             android:name=".activity.MultimeterActivity"
-            android:screenOrientation="user" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PowerSourceActivity"
-            android:screenOrientation="user"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.LuxMeterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WaveGeneratorActivity"
-            android:screenOrientation="user" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AccelerometerActivity"
             android:screenOrientation="portrait" />

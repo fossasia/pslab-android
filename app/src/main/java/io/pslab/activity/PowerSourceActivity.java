@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -328,6 +329,10 @@ public class PowerSourceActivity extends AppCompatActivity {
                     .getBlockOfPowerRecords(getIntent().getExtras().getLong(DATA_BLOCK));
             isPlayingBack = true;
             disableButtons();
+        }
+
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
     }
 
