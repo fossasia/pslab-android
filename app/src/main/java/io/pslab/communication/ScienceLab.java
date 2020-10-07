@@ -182,7 +182,7 @@ public class ScienceLab {
             for (String temp : new String[]{"CH1", "CH2"}) {
                 this.setGain(temp, 0, true);
             }
-            for (String temp : new String[]{"SI1", "SI2"}) {
+            for (String temp : new String[]{"SI1", "W2"}) {
                 loadEquation(temp, "sine");
             }
             spi.setParameters(1, 7, 1, 0, null);
@@ -2775,8 +2775,8 @@ public class ScienceLab {
     public void setWave(String channel, double frequency) {
         if ("SI1".equals(channel))
             this.setSI1(frequency, null);
-        else if ("SI2".equals(channel))
-            this.setSI2(frequency, null);
+        else if ("W2".equals(channel))
+            this.setW2(frequency, null);
     }
 
     public double setSine1(double frequency) {
@@ -2784,7 +2784,7 @@ public class ScienceLab {
     }
 
     public double setSine2(double frequency) {
-        return this.setSI2(frequency, "sine");
+        return this.setW2(frequency, "sine");
     }
 
     public double setSI1(double frequency, String waveType) {
@@ -2834,7 +2834,7 @@ public class ScienceLab {
         return -1;
     }
 
-    public double setSI2(double frequency, String waveType) {
+    public double setW2(double frequency, String waveType) {
         int HIGHRES;
         int tableSize;
         if (frequency < 0.1) {
@@ -2849,8 +2849,8 @@ public class ScienceLab {
         }
         if (waveType != null) {
             if ("sine".equals(waveType) | "tria".equals(waveType)) {
-                if (!(this.waveType.get("SI2").equals(waveType))) {
-                    this.loadEquation("SI2", waveType);
+                if (!(this.waveType.get("W2").equals(waveType))) {
+                    this.loadEquation("W2", waveType);
                 }
             } else {
                 Log.v(TAG, "Not a valid waveform. try sine or tria");
@@ -2885,7 +2885,7 @@ public class ScienceLab {
     public double readBackWaveform(String channel) {
         if ("SI1".equals(channel))
             return this.sin1Frequency;
-        else if ("SI2".equals(channel))
+        else if ("W2".equals(channel))
             return this.sin2Frequency;
         else if ("SQR".startsWith(channel))
             return this.squareWaveFrequency.get(channel);
@@ -3001,12 +3001,12 @@ public class ScienceLab {
         ArrayList<String> channels = new ArrayList<>();
         ArrayList<Double> points = y;
         channels.add("SI1");
-        channels.add("SI2");
+        channels.add("W2");
         int num;
         if (channels.contains(channel)) {
             num = channels.indexOf(channel) + 1;
         } else {
-            Log.e(TAG, "Channel does not exist. Try SI1 or SI2");
+            Log.e(TAG, "Channel does not exist. Try SI1 or W2");
             return;
         }
 
