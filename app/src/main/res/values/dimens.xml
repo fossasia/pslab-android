@@ -125,6 +125,9 @@
     <dimen name="multimeter_knobcircle_radius_1_xl">115dp</dimen>
     <dimen name="multimeter_knobcircle_radius_2_xl">111dp</dimen>
     <dimen name="multimeter_knobcircle_radius_3_xl">117dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_2_xhdpi">249dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_1_xhdpi">253dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_3_xhdpi">255dp</dimen>
     <dimen name="multimeter_left_box_endmargin">4dp</dimen>
     <dimen name="multimeter_end_box_rightmargin">12dp</dimen>
     <dimen name="multimeter_layout_margin_2">10dp</dimen>
