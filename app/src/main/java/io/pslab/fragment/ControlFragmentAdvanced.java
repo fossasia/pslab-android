@@ -304,22 +304,22 @@ public class ControlFragmentAdvanced extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    Double frequencyW1 = Double.parseDouble(etWidgetControlAdvanced1.getText().toString());
-                    Double frequencyW2 = Double.parseDouble(etWidgetControlAdvanced2.getText().toString());
+                    Double frequencySI1 = Double.parseDouble(etWidgetControlAdvanced1.getText().toString());
+                    Double frequencySI2 = Double.parseDouble(etWidgetControlAdvanced2.getText().toString());
                     float phase = Float.parseFloat(etWidgetControlAdvanced3.getText().toString());
 
-                    String wavetypeW1 = spinnerControlAdvanced1.getSelectedItem().toString();
-                    String wavetypeW2 = spinnerControlAdvanced2.getSelectedItem().toString();
+                    String wavetypeSI1 = spinnerControlAdvanced1.getSelectedItem().toString();
+                    String wavetypeSI2 = spinnerControlAdvanced2.getSelectedItem().toString();
 
-                    if ("SINE".equals(wavetypeW1) && scienceLab.isConnected())
-                        scienceLab.setSine1(frequencyW1);
-                    else if ("SQUARE".equals(wavetypeW1) && scienceLab.isConnected())
-                        scienceLab.setSqr1(frequencyW1, -1, false);
+                    if ("SINE".equals(wavetypeSI1) && scienceLab.isConnected())
+                        scienceLab.setSine1(frequencySI1);
+                    else if ("SQUARE".equals(wavetypeSI1) && scienceLab.isConnected())
+                        scienceLab.setSqr1(frequencySI1, -1, false);
 
-                    if ("SINE".equals(wavetypeW2) && scienceLab.isConnected())
-                        scienceLab.setSine2(frequencyW2);
-                    else if ("SQUARE".equals(wavetypeW2) && scienceLab.isConnected())
-                        scienceLab.setSqr2(frequencyW2, -1);
+                    if ("SINE".equals(wavetypeSI2) && scienceLab.isConnected())
+                        scienceLab.setSine2(frequencySI2);
+                    else if ("SQUARE".equals(wavetypeSI2) && scienceLab.isConnected())
+                        scienceLab.setSqr2(frequencySI2, -1);
                 } catch (NumberFormatException e) {
                     etWidgetControlAdvanced1.setText("0");
                     etWidgetControlAdvanced2.setText("0");
