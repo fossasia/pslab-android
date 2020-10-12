@@ -48,7 +48,7 @@ public class ChannelParametersFragment extends Fragment {
 
         final String[] ranges = {"+/-16V", "+/-8V", "+/-4V", "+/-3V", "+/-2V",
                 "+/-1" + DataFormatter.decSeparator + "5V", "+/-1V", "+/-500mV", "+/-160V"};
-        final String[] channels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
+        final String[] channels = {"CH1", "CH2", "CH3", "MIC", "CAP", "RES", "VOL"};
         final String[] mics = {"MICROPHONE", "IN-BUILT MIC"};
 
         spinnerRangeCh1 = v.findViewById(R.id.spinner_range_ch1_cp);

@@ -636,8 +636,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         if (scienceLab.isConnected()) {
             if (digital_mode == WaveConst.SQUARE) {
                 if (phase == WaveData.PHASE_MIN.getValue()) {
-                    scienceLab.setW1(freq1, waveType1);
-                    scienceLab.setW2(freq2, waveType2);
+                    scienceLab.setSI1(freq1, waveType1);
+                    scienceLab.setSI2(freq2, waveType2);
                 } else {
                     scienceLab.setWaves(freq1, phase, freq2);
                 }

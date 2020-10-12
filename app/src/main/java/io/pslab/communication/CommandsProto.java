@@ -112,10 +112,10 @@ public class CommandsProto {
     public int GET_STATES = 2;
 
 
-    public int ID1 = 0;
-    public int ID2 = 1;
-    public int ID3 = 2;
-    public int ID4 = 3;
+    public int LA1 = 0;
+    public int LA2 = 1;
+    public int LA3 = 2;
+    public int LA4 = 3;
     public int LMETER = 4;
 
 

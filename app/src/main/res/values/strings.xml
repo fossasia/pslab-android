@@ -67,13 +67,13 @@
     <string-array name="multimeter_knob_states">
         <item>CH1</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
         <item>CH3</item>
         <item>CH2</item>
     </string-array>
@@ -84,7 +84,7 @@
         <item>CH3</item>
         <item>MIC</item>
         <item>CAP</item>
-        <item>AN8</item>
+        <item>VOL</item>
         <item>RES</item>
         <item>C</item>
         <item>LA1</item>
@@ -171,10 +171,10 @@
     <string name="file_created_success_message">Config file created successfully</string>
     <string name="file_created_fail_message">Create config file failed</string>
 
-    <string name="id1">ID1</string>
-    <string name="id2">ID2</string>
-    <string name="id3">ID3</string>
-    <string name="id4">ID4</string>
+    <string name="id1">LA1</string>
+    <string name="id2">LA2</string>
+    <string name="id3">LA3</string>
+    <string name="id4">LA4</string>
     <string name="count_pulse">Count Pulse</string>
     <string name="capacitance_unit">Farad</string>
     <string name="frequency_unit">Hz</string>
@@ -202,10 +202,10 @@
     <string name="frequency">Frequency</string>
     <string name="count_pulses">Count Pulses</string>
     <string-array name="ID">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
     <string name="reset">RESET</string>
     <string name="voltage">Voltage</string>
@@ -213,8 +213,8 @@
     <string name="ch2">CH2</string>
     <string name="ch3">CH3</string>
     <string name="cap">CAP</string>
-    <string name="sen">SEN</string>
-    <string name="an8">AN8</string>
+    <string name="sen">RES</string>
+    <string name="an8">VOL</string>
     <string name="w1">Wave 1</string>
     <string name="w2">Wave 2</string>
     <string name="phase">Phase</string>
@@ -608,10 +608,10 @@
     </string-array>
 
     <string-array name="channel_choices">
-        <item>ID1</item>
-        <item>ID2</item>
-        <item>ID3</item>
-        <item>ID4</item>
+        <item>LA1</item>
+        <item>LA2</item>
+        <item>LA3</item>
+        <item>LA4</item>
     </string-array>
 
     <string name="no_data_generated">No Data Generated</string>
@@ -632,12 +632,12 @@
     <string name="multimeter_dialog_heading">Multimeter</string>
     <string name="multimeter_default_value">0.00</string>
     <string name="multimeter_configurations">Multimeter Configurations</string>
-    <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the SEN and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element. \n\n\u2022 CH1 and CH2 can read a free range of voltage. CH3, SEN, CAP, AN8 can only read from 0V to 3.30V</string>
-    <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to ID1,ID2,ID3 or ID4.\n\n
+    <string name="multimeter_dialog_text">Use PV1, PV2, PV3 Connect the RES and CAP pins to the resistor and capacitor respectively as shown in the figure to measure the resistance or capacitance of the connected element. \n\n\u2022 CH1 and CH2 can read a free range of voltage. CH3, RES, CAP, VOL can only read from 0V to 3.30V</string>
+    <string name="multimeter_dialog_description">\u2022 To measure the voltage directly connect the power source(eg PV1,PV2 and PV3) to the channel pins as shown in the figure.\n\n\u2022 Similarly to measure frequency or count pulse connect SQ1,SQ2,SQ3 or SQ4 pins to LA1,LA2,LA3 or LA4.\n\n
         <b>Different Sections</b>\n\n
-        <b>Resistance:</b> Measures the resistance of the element connected between the SEN and GND pin of the PSLab device.\n\n
+        <b>Resistance:</b> Measures the resistance of the element connected between the RES and GND pin of the PSLab device.\n\n
         <b>Capacitance:</b> Measures the capacitance of the element connected between the CAP and GND pin of the PSLab device.\n\n
-        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as AN8.\n\n
+        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as VOL.\n\n
         <b>Frequency:</b> Measures the frequency across any element connected between any of ID and GND pins.\n\n
         <b>Count Pulse:</b> Measures the pulse of any wave through an element connected between any of ID and GND pins.\n\n
     </string>
@@ -653,7 +653,7 @@
     </string>
 
     <string name="logic_analyzer_dialog_text">Logic Analyzer is an instrument used to find out the time relationship between different digital pulses. The Logic Analyzer available in the PSLab app can be operated as follows :\n</string>
-    <string name="logic_analyzer_dialog_description">\n\u2022 First step is to connect the source/s producing digital pulses with the measuring pin/s i.e. ID1, ID2, ID3 and/or ID4.\n\n\u2022 As shown in the figure, square wave pins SQR1, SQR2, SQR3 and/or SQR4 can be used if no other source is available for generating digital pulses.\n\n\u2022 Next step is to select the channel mode i.e. the number of IDx pins in use.\n\n\u2022 The last step is to select proper channel and edges (that needs to be analyzed) combination from the list provided for each pin in use.\n\n\u2022 Now press "Analyze" button and wait for the data to be fetched from the device. Once the data is fetched, the data will be plotted to analyze.</string>
+    <string name="logic_analyzer_dialog_description">\n\u2022 First step is to connect the source/s producing digital pulses with the measuring pin/s i.e. LA1, LA2, LA3 and/or LA4.\n\n\u2022 As shown in the figure, square wave pins SQR1, SQR2, SQR3 and/or SQR4 can be used if no other source is available for generating digital pulses.\n\n\u2022 Next step is to select the channel mode i.e. the number of IDx pins in use.\n\n\u2022 The last step is to select proper channel and edges (that needs to be analyzed) combination from the list provided for each pin in use.\n\n\u2022 Now press "Analyze" button and wait for the data to be fetched from the device. Once the data is fetched, the data will be plotted to analyze.</string>
 
     <string name="wave_name_holder">Triangular</string>
     <string name="freq_text">Frequency :</string>
