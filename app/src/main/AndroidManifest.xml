@@ -29,7 +29,10 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
-        <activity android:name=".activity.SoundMeterActivity"></activity>
+
+        <activity
+            android:name=".activity.SoundMeterActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.CreateConfigActivity" />
         <activity
             android:name=".activity.ThermometerActivity"
@@ -37,10 +40,10 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.RoboticArmActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.SplashActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@style/AppThemeSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,7 +76,7 @@
         <activity
             android:name=".activity.LogicalAnalyzerActivity"
             android:configChanges="screenSize|orientation"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity android:name=".activity.SensorDataLoggerActivity" />
         <activity
             android:name=".activity.MultimeterActivity"

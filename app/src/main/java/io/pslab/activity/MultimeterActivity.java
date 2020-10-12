@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -201,6 +202,9 @@ public class MultimeterActivity extends AppCompatActivity {
             isPlayingBack = false;
             checkConfig();
             logTimer();
+        }
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
     }
 

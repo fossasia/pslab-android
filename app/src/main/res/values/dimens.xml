@@ -135,6 +135,12 @@
     <dimen name="multimeter_length_0">0dp</dimen>
     <dimen name="multimeter_knob_width_xhdpi">208dp</dimen>
     <dimen name="multimeter_knob_height_xhdpi">206dp</dimen>
+    
+    <dimen name="multimeter_knobcircle_radius_1_xl_tablet">173dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_2_xl_tablet">167dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_3_xl_tablet">176dp</dimen>
+    <dimen name="multimeter_left_button_margin_bottom_tablet">8dp</dimen>
+
     <dimen name="wave_gen_control_text_size">14sp</dimen>
     <dimen name="button_bg_radius">5dp</dimen>
 
