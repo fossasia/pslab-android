@@ -488,6 +488,9 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
             thermometer.setSpeedAt(tempValue);
             if (tempValue > highLimit)
                 thermometer.setBackgroundCircleColor(Color.RED);
+            else {
+                thermometer.setBackgroundCircleColor(getResources().getColor(R.color.primaryBlue));
+            }
 
             timeElapsed = ((System.currentTimeMillis() - startTime) / updatePeriod);
             if (timeElapsed != previousTimeElapsed) {
