@@ -7,11 +7,11 @@
     <dimen name="multimeter_layout_margin">20dp</dimen>
     <dimen name="multimeter_knob_width">450dp</dimen>
     <dimen name="multimeter_knob_height">450dp</dimen>
-    <dimen name="control_textsize_tiny">25sp</dimen>
+    <dimen name="control_textsize_tiny">17sp</dimen>
     <dimen name="multimeter_bottombutton_textsize">25sp</dimen>
     <dimen name="multimeter_symbol_width">25dp</dimen>
     <dimen name="multimeter_symbol_height">25dp</dimen>
-    <dimen name="multimeter_heading_ll_text_size">25sp</dimen>
+    <dimen name="multimeter_heading_ll_text_size">18sp</dimen>
     <dimen name="multimeter_measure_textsize">20sp</dimen>
 
 </resources>
