@@ -24,7 +24,9 @@
 		<img src="https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square" alt="Twitter Follow">
 	</a>
 </p>
------
+
+--------
+
 Repository for the PSLab Android App for performing experiments with the [Pocket Science Lab](https://pslab.io) open-hardware platform.  
 
 This repository holds the Android App for performing experiments with [PSLab](https://pslab.io/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at [https://pslab.io](https://pslab.io)
