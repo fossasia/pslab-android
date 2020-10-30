@@ -1,6 +1,6 @@
 <p align="center">
 	<a href="https://pslab.io">
-		<img src="https://f-droid.org/repo/io.pslab/en-US/icon_LZNDzTOI8ri-vh0j3_N_rZWoYFARnZ6fC4Wtnhd1I-s=.png" alt="logo" width="25%">
+		<img src="https://f-droid.org/repo/io.pslab/en-US/icon_LZNDzTOI8ri-vh0j3_N_rZWoYFARnZ6fC4Wtnhd1I-s=.png" alt="logo" width="20%">
 	</a>
 </p>
 <h1 align="center">PSLab Android App</h1>
