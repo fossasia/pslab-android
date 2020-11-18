@@ -11,7 +11,7 @@ Repository for the PSLab Android App for performing experiments with the [Pocket
 [![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
 
-This repository holds the Android App for performing experiments with [PSLab](https://pslab.io/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage and current source and also as a data logger. Our website is at https://pslab.io
+This repository holds the Android App for performing experiments with [PSLab](https://pslab.io/). PSLab is a tiny pocket science lab that provides an array of equipment for doing science and engineering experiments. It can function like an oscilloscope, waveform generator, frequency counter, programmable voltage, and current source and also as a data logger. Our website is at https://pslab.io
 
 <a href="https://play.google.com/store/apps/details?id=io.pslab"><img alt="Get it on Google Play" height="80" src="/docs/images/playstore_badge.png"></a>
 <a href="https://f-droid.org/app/io.pslab"><img alt="Get it on F-Droid" height="80" src="/docs/images/fdroid_badge.png"></a>
@@ -126,12 +126,12 @@ This repository holds the Android App for performing experiments with [PSLab](ht
 
 ### Application Flavors
 
-There are 2 flavors (build variants) of PSLab Android application.
+There are 2 flavors (build variants) of the PSLab Android application.
 
 1. #### Play Store Flavor
-  - Play Store flavor uses Google Maps to display location stored in logs in Data logger.
+  - Play Store flavor uses Google Maps to display locations stored in logs in Datalogger.
 2. #### Fdroid Flavors
-  - Fdroid flavor uses Open Street Maps to display location stored in logs in Data logger.
+  - Fdroid flavor uses Open Street Maps to display locations stored in logs in Datalogger.
 
 ### Development Setup
 
@@ -146,59 +146,60 @@ For setting up the PSLab Android project you may follow any of the two methods l
 
 2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select _Import Project (Eclipse ADT, Gradle, etc.)To debug over Wi-Fi follow the steps given in this [Blog](http://blog.fossasia.org/android-app-debugging-over-wifi-fo).
 
-* **Note :**
-If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java).
+* **Note:**
+If you built your own hardware, change VendorID, and/or ProductID in [CommunicationHandler.java](blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java).
 
 ### By direct cloning
 
-
-1. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select "check out project from version control".
-
-2. Select git from the drop down menu that appeared.
-
-3. Go to the repository and click clone or download button.
-
+1. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select "check out the project from version control".
+ 
+2. Select git from the drop-down menu that appeared.
+ 
+3. Go to the repository and click the clone or download button.
+ 
 4. From the dropdown that appeared, copy the link.
-
+ 
 5. Paste the URL that you copied and press clone.
-
-6. Android studio should now begin building the project with gradle.
-
+ 
+6. Android studio should now begin building the project with Gradle.
+ 
 7. Once this process is complete and Android Studio opens, check the Console for any build errors.
-
+ 
  - _Note:_ If you receive a Gradle sync error titled, "failed to find ...", you should click on the link below the error message (if available) that says _Install missing platform(s) and sync project_ and allow Android studio to fetch you what is missing.
-
+ 
 8. Once all build errors have been resolved, you should be all set to build the app and test it.
-
+ 
 9. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
-
+ 
 10.  If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
 
-If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
 
-You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through USB cable.
+If you want to build apk only, go to Build>Build apk and apk would be build and the directory where apk is generated would be prompted by Android Studio.
 
-To debug over Wi-Fi follow the steps given in this [Blog](http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/). 
+You can't debug the usual way as the PSLab device is connected to a micro-USB port through an OTG cable. So Android Device is not connected to the PC through a USB cable.
 
-* **Note :**
-If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java).
+To debug over Wi-Fi follow the steps given in this [Blog](http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/).
+
+* **Note:**
+If you built your own hardware, change VendorID, and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java).
 
 ### Permissions Required
 
-1. Record_Audio : It is required for oscilloscope to accept inputs from the phone inbuilt microphone. You can find its implementation in [AudioJack.java](https://github.com/fossasia/pslab-android/blob/development/app/src/main/java/io/pslab/others/AudioJack.java).
-2. Access_Fine_Location and Internet : It is required for use in lux meter and compass to get the coordinates for tagging the data on the map. You can find its implementation in [GPSLogger.java](https://github.com/fossasia/pslab-android/blob/development/app/src/main/java/io/pslab/others/GPSLogger.java).
-3. Write_External_Storage : It is required for storing log files from instruments that can be transferred out for future analysis.
-4. Read_External_Storage : While writing logs in the storage, [CSVLogger.java](https://github.com/fossasia/pslab-android/blob/development/app/src/main/java/io/pslab/others/CSVLogger.java) first checks whether there is any CSVLogger directory exist or not and that require this read permission.  
-
+1. Record_Audio: It is required for the oscilloscope to accept inputs from the phone inbuilt microphone. You can find its implementation in [AudioJack.java](https://github.com/fossasia/pslab-android/blob/development/app/src/main/java/io/pslab/others/AudioJack.java).
+2. Access_Fine_Location and Internet: It is required for use in lux meter and compass to get the coordinates for tagging the data on the map. You can find its implementation in [GPSLogger.java](https://github.com/fossasia/pslab-android/blob/development/app/src/main/java/io/pslab/others/GPSLogger.java).
+3. Write_External_Storage: It is required for storing log files from instruments that can be transferred out for future analysis.
+4. Read_External_Storage: While writing logs in the storage, [CSVLogger.java](https://github.com/fossasia/pslab-android/blob/development/app/src/main/java/io/pslab/others/CSVLogger.java) first checks whether there is any CSVLogger directory exist or not, and that requires this read permission.
+ 
+ 
 ## Setup to use PSLab with Android App
-To use PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ) and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.
-
+To use a PSLab device with Android, you simply need an OTG cable, an Android Device with USB Host feature enabled ( most modern phones have OTG support ), and PSLab Android App. Connect PSLab device to Android Phone via OTG cable. Rest is handled by App itself.
+ 
 ## Contributions Best Practices
-
+ 
 ### Code practices
-
+ 
 Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
-
+ 
  * Single commit per pull request.
  * Reference the issue numbers in the commit message. Follow the pattern ``` Fixes #<issue number> <commit message>```
  * Follow uniform design practices. The design language must be consistent throughout the app.
@@ -207,52 +208,54 @@ Please help us follow the best practice to make it easy for the reviewer as well
 
 #### How to `git squash`?
 
-As a tip for new developers those who struggle with squashing commits into one, multiple commits may appear in your pull request mostly due to following reasons.
-
+As a tip for new developers who struggle with squashing commits into one, multiple commits may appear in your pull request mostly due to the following reasons.
+ 
  * Intentionally adding multiple commit messages after each change without just `git add`ing.
  * Updating the current branch with the remote so a merge commit takes place.
-
+ 
 Despite any reason, follow the steps given below to squash all commits into one adhering to our best practices.
-
+ 
  * Setup remote to upstream branch if not set before
-
+ 
 `$ git remote add upstream https://github.com/fossasia/pslab-android.git`
-
+ 
  * Check into the branch related to the pull request
-
+ 
 `$ git checkout <branch-name>`
-
+ 
  * Perform a soft reset to retain the changes while removing all the commit details
-
+ 
 `$ git reset --soft upstream/development`
-
+ 
  * Add files to the staging area
-
+ 
 `$ git add <file paths or "." to add everything>`
-
+ 
  * Create a new commit with a proper message following commit message guidelines
-
+ 
 `$ git commit -m "tag: commit message"`
-
+ 
  * If you have already made a pull request
-
+ 
 `$ git push -f origin <branch-name>`
+ 
 
 ### Branch Policy
 
 We have the following branches
 * **development** All development goes on in this branch. If you're making a contribution, you are supposed to make a pull request to _development_. Make sure it passes a build check on Travis.
 * **master** This contains the stable code. After significant features/bugfixes are accumulated on development, we move it to master.
-* **apk** This branch contains automatically generated apk file for testing.
+* **apk** This branch contains an automatically generated apk file for testing.
 
 ### Code style
 
-Please try to follow the mentioned guidelines while writing and submitting your code as it makes easier for the reviewer and other developers to understand.
-
- * While naming the layout files, ensure that the convention followed is (activity/fragment) _ (name).xml like ```activity_oscilloscope.xml``` , ```fragment_control_main.xml``` .
+Please try to follow the mentioned guidelines while writing and submitting your code as it makes it easier for the reviewer and other developers to understand.
+ 
+ * While naming the layout files, ensure that the convention followed is (activity/fragment) _ (name).xml like ```activity_oscilloscope.xml```, ```fragment_control_main.xml```.
  * Name the views and widgets defined in the layout files as (viewtype/widget) _ (fragment/activity name) _ (no. in the file) like ```spinner_channel_select_la1``` , ```button_activity_oscilloscope1``` .
- * The activity/fragment file name corresponding to the layout files should be named as                       (activity/fragment name)(activity/fragment).java like ```ChannelsParameterFragment.java``` corresponding to the layout file ```fragment_channels_parameter.xml``` .
+ * The activity/fragment file name corresponding to the layout files should be named as                       (activity/fragment name)(activity/fragment).java like ```ChannelsParameterFragment.java``` corresponding to the layout file ```fragment_channels_parameter.xml```.
  * The corresponding widgets for buttons, textboxes, checkboxes etc. in activity files should be named as (viewtype/widget)(fragment/activity name)(no. in the file) like ```spinnerChannelSelect1``` corresponding to ```spinner_channel_select1``` .
+ 
 
 ## Developers
 
