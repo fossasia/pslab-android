@@ -5,14 +5,8 @@
     android:id="@+id/first_chart"
     android:layout_width="match_parent"
     android:layout_height="@dimen/accel_card_height"
-    android:layout_marginEnd="@dimen/card_margin"
-    android:layout_marginLeft="@dimen/card_margin"
-    android:layout_marginRight="@dimen/card_margin"
-    android:layout_marginStart="@dimen/card_margin"
-    android:layout_marginTop="@dimen/card_margin"
     app:cardCornerRadius="@dimen/accel_card_radius"
-    app:cardElevation="@dimen/card_elevation"
-    android:layout_weight="1">
+    app:cardElevation="@dimen/card_elevation">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -40,7 +34,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/acceleration_axis_image"
-                android:gravity="end"
+                android:gravity="center_horizontal"
                 android:paddingBottom="@dimen/card_margin"
                 android:paddingLeft="@dimen/card_margin"
                 android:paddingTop="@dimen/card_margin"

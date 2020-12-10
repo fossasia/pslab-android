@@ -6,11 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/accel_card_height"
     android:layout_below="@+id/top_app_bar_layout"
-    android:layout_marginEnd="@dimen/card_margin"
-    android:layout_marginLeft="@dimen/card_margin"
-    android:layout_marginRight="@dimen/card_margin"
-    android:layout_marginStart="@dimen/card_margin"
-    android:layout_marginTop="@dimen/card_margin"
     app:cardCornerRadius="@dimen/accel_card_radius"
     app:cardElevation="@dimen/card_elevation">
 
@@ -40,7 +35,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/axis_image"
-                android:gravity="end"
+                android:gravity="center_horizontal"
                 android:text="@string/multimeter_default_value"
                 android:paddingBottom="@dimen/card_margin"
                 android:paddingLeft="@dimen/card_margin"
