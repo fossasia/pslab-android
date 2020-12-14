@@ -53,7 +53,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void exitSplashScreen() {
         handler = new Handler();
-        int SPLASH_TIME_OUT = 2000;
+        int SPLASH_TIME_OUT = 4000;
         handler.postDelayed(runnable = new Runnable() {
             @Override
             public void run() {

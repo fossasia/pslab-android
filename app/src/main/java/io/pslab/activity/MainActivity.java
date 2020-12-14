@@ -72,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static int navItemIndex = 0;
 
-    private static final String TAG_DEVICE = "device";
-    private static final String TAG_INSTRUMENTS = "instruments";
-    private static final String TAG_ABOUTUS = "aboutUs";
-    private static final String TAG_PINLAYOUT = "pinLayout";
-    private static final String TAG_FAQ = "faq";
+    private static final String TAG_DEVICE = "DEVICE";
+    private static final String TAG_INSTRUMENTS = "INSTRUMENTS";
+    private static final String TAG_ABOUTUS = "ABOUT US";
+    private static final String TAG_PINLAYOUT = "PIN LAYOUT";
+    private static final String TAG_FAQ = "FAQ";
     private static String CURRENT_TAG = TAG_INSTRUMENTS;
     private String[] activityTitles;
 
