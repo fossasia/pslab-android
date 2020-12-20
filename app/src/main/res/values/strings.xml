@@ -1038,7 +1038,7 @@
     <string name="compass_default_0">0</string>
     <string name="unknown">Unknown</string>
     <string name="rateapp">Rate App</string>
-   
+
     <string name="sound_meter">Sound Meter</string>
     <string name="sound_meter_desc">To measure the loudness in the environment in decibel(dB)</string>
     <string name="sound_meter_intro">Sound meter Introduction</string>
@@ -1053,4 +1053,7 @@
     <string name="github_developers_link">https://github.com/fossasia/pslab-android/graphs/contributors</string>
     <string name="limit_dangerous">\"Dangerous\"</string>
     <string name="limit_average">Average</string>
+
+    <string name="speedometer">Speedometer</string>
+    <string name="speedometer_description">Speedometer, instrument that indicates the speed of a vehicle</string>
 </resources>

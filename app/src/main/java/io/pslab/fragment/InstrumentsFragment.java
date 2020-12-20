@@ -31,6 +31,7 @@ import io.pslab.activity.PowerSourceActivity;
 import io.pslab.activity.RoboticArmActivity;
 import io.pslab.activity.SensorActivity;
 import io.pslab.activity.SoundMeterActivity;
+import io.pslab.activity.SpeedometerActivity;
 import io.pslab.activity.ThermometerActivity;
 import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.adapters.ApplicationAdapter;
@@ -98,6 +99,8 @@ public class InstrumentsFragment extends Fragment {
                         intent = new Intent(context, DustSensorActivity.class);
                     if (applicationName.equals(getString(R.string.sound_meter)))
                         intent = new Intent(context, SoundMeterActivity.class);
+                    if (applicationName.equals(getString(R.string.speedometer)))
+                        intent = new Intent(context, SpeedometerActivity.class);
                     if (intent != null)
                         startActivity(intent);
                 });
@@ -143,7 +146,9 @@ public class InstrumentsFragment extends Fragment {
                     R.string.robotic_arm_description,
                     R.string.gas_sensor_description,
                     R.string.dust_sensor_description,
-                    R.string.sound_meter_desc
+                    R.string.sound_meter_desc,
+                    R.string.speedometer_description
+
             };
 
             applicationItemList.add(new ApplicationItem(
@@ -193,6 +198,9 @@ public class InstrumentsFragment extends Fragment {
             ));
             applicationItemList.add(new ApplicationItem(
                     getString(R.string.sound_meter), R.drawable.tile_icon_gas, getString(descriptions[15])
+            ));
+            applicationItemList.add(new ApplicationItem(
+                    getString(R.string.speedometer), R.drawable.tile_icon_gas, getString(descriptions[16])
             ));
             listView.setItemAnimator(new DefaultItemAnimator());
             listView.setAdapter(applicationAdapter);
