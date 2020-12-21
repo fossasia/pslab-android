@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.SpeedometerActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -19,5 +20,41 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.CardView
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="10dp"
+            android:layout_margin="10dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/heading_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Speedometer"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="32sp"
+                    android:textStyle="italic|bold"
+                    android:fontFamily="sans-serif-light"/>
+
+                <com.github.anastr.speedviewlib.AwesomeSpeedometer
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:id="@+id/speedometer_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    app:sv_maxSpeed="450"
+                    app:sv_speedometerColor="@android:color/holo_red_dark"
+                    app:sv_trianglesColor="@android:color/holo_orange_dark" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
 </LinearLayout>
