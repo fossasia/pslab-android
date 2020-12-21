@@ -11,9 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.github.anastr.speedviewlib.AwesomeSpeedometer;
+import com.github.anastr.speedviewlib.Speedometer;
 
 import io.pslab.R;
 
@@ -51,15 +53,18 @@ public class SpeedometerActivity extends AppCompatActivity implements LocationLi
 
     @Override
     public void onLocationChanged(Location location) {
-        TextView textView = findViewById(R.id.speedometer_id);
-
         if (location == null){
-            textView.setText("_,_ m/s");
+           displaySpeed((float) 0.0);
         }else {
             float mCurrentSpeed = location.getSpeed();
-            textView.setText(mCurrentSpeed + "m/s");
+            displaySpeed((float) (mCurrentSpeed * 3.6));
         }
 
+    }
+
+    private void displaySpeed(float speed){
+        Speedometer speedometer = (AwesomeSpeedometer) findViewById(R.id.speedometer_id);
+        speedometer.speedTo(speed);
     }
 
     @Override
