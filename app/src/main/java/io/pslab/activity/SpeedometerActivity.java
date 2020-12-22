@@ -20,7 +20,7 @@ import com.github.anastr.speedviewlib.Speedometer;
 import io.pslab.R;
 
 public class SpeedometerActivity extends AppCompatActivity implements LocationListener {
-    private static final int MY_PERMISSION_REQUEST_CODE=1;
+    private static final int MY_PERMISSION_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class SpeedometerActivity extends AppCompatActivity implements LocationLi
         setContentView(R.layout.activity_speedometer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.speedometer);
+        getSupportActionBar().setTitle(R.string.speedometer_heading);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -47,22 +47,22 @@ public class SpeedometerActivity extends AppCompatActivity implements LocationLi
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
-        },MY_PERMISSION_REQUEST_CODE);
+        }, MY_PERMISSION_REQUEST_CODE);
 
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        if (location == null){
-           displaySpeed((float) 0.0);
-        }else {
+        if (location == null) {
+            displaySpeed((float) 0.0);
+        } else {
             float mCurrentSpeed = location.getSpeed();
             displaySpeed((float) (mCurrentSpeed * 3.6));
         }
 
     }
 
-    private void displaySpeed(float speed){
+    private void displaySpeed(float speed) {
         Speedometer speedometer = (AwesomeSpeedometer) findViewById(R.id.speedometer_id);
         speedometer.speedTo(speed);
     }

@@ -1056,4 +1056,5 @@
 
     <string name="speedometer">Speedometer</string>
     <string name="speedometer_description">Speedometer, instrument that indicates the speed of a vehicle</string>
+    <string name="speedometer_heading">Speedometer</string>
 </resources>

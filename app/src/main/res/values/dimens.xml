@@ -396,4 +396,8 @@
     <dimen name="sound_guage_font_size">8sp</dimen>
     <dimen name="sound_sensor_label_title_size">16sp</dimen>
     <dimen name="sound_width_0">0dp</dimen>
+    <dimen name="speedometer_card_corner_radius">10dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="speedometer_heading_text_size">32sp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
 </resources>
