@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,61 +26,62 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.AppBarLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/margin_of_sensor_main_layout"
             android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button_sensor_autoscan"
-            android:layout_width="@dimen/stat_card_height"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dialog_space_width"
-            android:background="@color/colorPrimaryDark"
-            android:padding="@dimen/margin_of_sensor_main_layout"
-            android:text="@string/autoscan"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            <Button
+                android:id="@+id/button_sensor_autoscan"
+                android:layout_width="@dimen/stat_card_height"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dialog_space_width"
+                android:background="@color/colorPrimaryDark"
+                android:padding="@dimen/margin_of_sensor_main_layout"
+                android:text="@string/autoscan"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
 
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_of_sensor_main_layout"
-            android:layout_marginLeft="@dimen/margin_of_sensor_main_layout"
-            android:layout_marginTop="@dimen/dialog_space_width"
-            android:layout_marginEnd="@dimen/margin_of_sensor_main_layout"
-            android:layout_marginRight="@dimen/margin_of_sensor_main_layout">
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_of_sensor_main_layout"
+                android:layout_marginLeft="@dimen/margin_of_sensor_main_layout"
+                android:layout_marginTop="@dimen/dialog_space_width"
+                android:layout_marginEnd="@dimen/margin_of_sensor_main_layout"
+                android:layout_marginRight="@dimen/margin_of_sensor_main_layout">
+
+                <TextView
+                    android:id="@+id/tv_sensor_scan"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/control_custom_border"
+                    android:gravity="center"
+                    android:text="@string/use_autoscan"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/sensor_body_font" />
+            </android.support.v4.widget.NestedScrollView>
 
             <TextView
-                android:id="@+id/tv_sensor_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="@string/select_sensor"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_sensor_list"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/lv_sensor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/control_custom_border"
-                android:gravity="center"
-                android:text="@string/use_autoscan"
-                android:textAlignment="center"
-                android:textSize="@dimen/sensor_body_font" />
-        </android.support.v4.widget.NestedScrollView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="@string/select_sensor"
-            android:textAllCaps="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_sensor_list"
-            android:textStyle="bold" />
-
-        <ListView
-            android:id="@+id/lv_sensor"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_of_sensor_main_layout" />
+                android:layout_marginTop="@dimen/margin_of_sensor_main_layout" />
 
         </LinearLayout>
     </LinearLayout>
