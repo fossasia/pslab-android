@@ -338,26 +338,20 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/sensor_control_doc_height"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="@dimen/sensor_dock_margin_bottom"
-        android:layout_marginEnd="@dimen/sensor_dock_margin_right"
-        android:layout_marginLeft="@dimen/sensor_dock_margin_left"
-        android:layout_marginRight="@dimen/sensor_dock_margin_right"
-        android:layout_marginStart="@dimen/sensor_dock_margin_left"
-        android:layout_marginTop="@dimen/sensor_dock_margin_top"
+        android:layout_margin="5dp"
         android:background="@drawable/la_custom_border"
         android:gravity="top">
 
         <ImageButton
             android:id="@+id/imageButton_play_pause_sensor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_width="@dimen/sensor_control_dock_image_button_width"
+            android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:scaleType="fitCenter"
             android:background="@null"
-            app:srcCompat="@drawable/play" />
+            app:srcCompat="@drawable/circle_play_button" />
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/editBox_samples_sensors"

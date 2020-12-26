@@ -397,4 +397,5 @@
     <dimen name="sound_guage_font_size">8sp</dimen>
     <dimen name="sound_sensor_label_title_size">16sp</dimen>
     <dimen name="sound_width_0">0dp</dimen>
+    <dimen name="sensor_control_dock_image_button_width">60dp</dimen>
 </resources>
