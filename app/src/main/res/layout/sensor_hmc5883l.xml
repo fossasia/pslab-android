@@ -117,8 +117,7 @@
                             android:layout_width="80dp"
                             android:layout_height="30dp"
                             android:background="@drawable/tv_border"
-                            android:gravity="center_vertical"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font"
                             android:textStyle="bold" />
@@ -128,8 +127,7 @@
                             android:layout_width="80dp"
                             android:layout_height="30dp"
                             android:background="@drawable/tv_border"
-                            android:gravity="center_vertical"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font"
                             android:textStyle="bold" />
@@ -139,8 +137,7 @@
                             android:layout_width="80dp"
                             android:layout_height="30dp"
                             android:background="@drawable/tv_border"
-                            android:gravity="center_vertical"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font"
                             android:textStyle="bold" />
