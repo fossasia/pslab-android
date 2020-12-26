@@ -272,13 +272,13 @@ public class SensorMPU925X extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (play && scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.play);
+                    playPauseButton.setImageResource(R.drawable.circle_play_button);
                     play = false;
                 } else if (!scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.play);
+                    playPauseButton.setImageResource(R.drawable.circle_play_button);
                     play = false;
                 } else {
-                    playPauseButton.setImageResource(R.drawable.pause);
+                    playPauseButton.setImageResource(R.drawable.circle_pause_button);
                     play = true;
                     if (!indefiniteSamplesCheckBox.isChecked()) {
                         counter = Integer.parseInt(samplesEditBox.getText().toString());
@@ -405,7 +405,7 @@ public class SensorMPU925X extends AppCompatActivity {
             samplesEditBox.setText(String.valueOf(counter));
             if (counter == 0 && !runIndefinitely) {
                 play = false;
-                playPauseButton.setImageResource(R.drawable.play);
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
             }
             synchronized (lock) {
                 lock.notify();
