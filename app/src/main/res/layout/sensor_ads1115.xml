@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="@dimen/margin_50dp">
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
