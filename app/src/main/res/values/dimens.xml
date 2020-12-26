@@ -399,4 +399,8 @@
     <dimen name="sound_width_0">0dp</dimen>
     <dimen name="sensor_control_dock_image_button_width">60dp</dimen>
     <dimen name="margin_50dp">50dp</dimen>
+    <dimen name="margin_5dp">5dp</dimen>
+    <dimen name="text_size_8sp">8sp</dimen>
+    <dimen name="sensor_image_height">90dp</dimen>
+    <dimen name="text_size_9sp">9sp</dimen>
 </resources>

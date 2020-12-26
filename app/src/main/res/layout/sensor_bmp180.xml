@@ -66,7 +66,6 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
                         android:orientation="vertical">
 
@@ -102,7 +101,6 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
                         android:layout_marginStart="30dp"
                         android:orientation="vertical">
 
@@ -140,7 +138,7 @@
 
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="90dp"
+                        android:layout_height="@dimen/sensor_image_height"
                         android:src="@drawable/bmp180" />
 
                 </LinearLayout>
@@ -175,7 +173,6 @@
                         android:id="@+id/chart_xaxis_layout_temp_bmp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="#000"
@@ -192,7 +189,7 @@
                             android:gravity="center_vertical|center_horizontal|center"
                             android:text="@string/time"
                             android:textColor="#ffff"
-                            android:textSize="9sp"
+                            android:textSize="@dimen/text_size_9sp"
                             android:textStyle="normal|bold"
                             tools:layout_editor_absoluteX="288dp"
                             tools:layout_editor_absoluteY="0dp" />
@@ -203,10 +200,9 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_toEndOf="@+id/tv_graph_label_xaxis_temp_bmp"
-                            android:layout_toRightOf="@+id/tv_graph_label_xaxis_temp_bmp"
                             android:text="@string/seconds"
                             android:textColor="#ffff"
-                            android:textSize="9sp"
+                            android:textSize="@dimen/text_size_9sp"
                             android:textStyle="normal|bold"
                             app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_temp_bmp"
                             tools:layout_editor_absoluteY="0dp" />
@@ -217,7 +213,6 @@
                         android:id="@+id/chart_yaxis_layout_temp_bmp"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="#000"
@@ -236,7 +231,7 @@
                             android:rotation="-90"
                             android:text="@string/temp2"
                             android:textColor="#ffff"
-                            android:textSize="8sp"
+                            android:textSize="@dimen/text_size_8sp"
                             android:textStyle="normal|bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
@@ -252,7 +247,7 @@
                             android:rotation="-90"
                             android:text="@string/celcius"
                             android:textColor="#fff"
-                            android:textSize="8sp"
+                            android:textSize="@dimen/text_size_8sp"
                             android:textStyle="normal|bold"
                             app:layout_constraintBottom_toTopOf="@+id/tv_label_left_yaxis_temp_bmp"
                             app:layout_constraintLeft_toLeftOf="parent"
@@ -266,7 +261,6 @@
                         android:layout_height="match_parent"
                         android:layout_below="@+id/chart_xaxis_layout_temp_bmp"
                         android:layout_toEndOf="@+id/chart_yaxis_layout_temp_bmp"
-                        android:layout_toRightOf="@+id/chart_yaxis_layout_temp_bmp"
                         android:background="#000" />
 
                 </RelativeLayout>
@@ -301,7 +295,6 @@
                         android:id="@+id/chart_xaxis_layout_alt_bmp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="#000"
@@ -318,7 +311,7 @@
                             android:gravity="center_vertical|center_horizontal|center"
                             android:text="@string/time"
                             android:textColor="#ffff"
-                            android:textSize="9sp"
+                            android:textSize="@dimen/text_size_9sp"
                             android:textStyle="normal|bold"
                             tools:layout_editor_absoluteX="288dp"
                             tools:layout_editor_absoluteY="0dp" />
@@ -329,10 +322,9 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_toEndOf="@+id/tv_graph_label_xaxis_alt_bmp"
-                            android:layout_toRightOf="@+id/tv_graph_label_xaxis_alt_bmp"
                             android:text="@string/seconds"
                             android:textColor="#ffff"
-                            android:textSize="9sp"
+                            android:textSize="@dimen/text_size_9sp"
                             android:textStyle="normal|bold"
                             app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_alt_bmp"
                             tools:layout_editor_absoluteY="0dp" />
@@ -343,7 +335,6 @@
                         android:id="@+id/chart_yaxis_layout_alt_bmp"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="#000"
@@ -362,7 +353,7 @@
                             android:rotation="-90"
                             android:text="@string/alt"
                             android:textColor="#ffff"
-                            android:textSize="8sp"
+                            android:textSize="@dimen/text_size_8sp"
                             android:textStyle="normal|bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
@@ -378,7 +369,7 @@
                             android:rotation="-90"
                             android:text="@string/meter"
                             android:textColor="#fff"
-                            android:textSize="8sp"
+                            android:textSize="@dimen/text_size_8sp"
                             android:textStyle="normal|bold"
                             app:layout_constraintBottom_toTopOf="@+id/tv_label_left_yaxis_alt_bmp"
                             app:layout_constraintLeft_toLeftOf="parent"
@@ -392,7 +383,6 @@
                         android:layout_height="match_parent"
                         android:layout_below="@+id/chart_xaxis_layout_alt_bmp"
                         android:layout_toEndOf="@+id/chart_yaxis_layout_alt_bmp"
-                        android:layout_toRightOf="@+id/chart_yaxis_layout_alt_bmp"
                         android:background="#000" />
 
                 </RelativeLayout>
@@ -429,7 +419,6 @@
                         android:id="@+id/chart_xaxis_layout_pre_bmp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="#000"
@@ -446,7 +435,7 @@
                             android:gravity="center_vertical|center_horizontal|center"
                             android:text="@string/time"
                             android:textColor="#ffff"
-                            android:textSize="9sp"
+                            android:textSize="@dimen/text_size_9sp"
                             android:textStyle="normal|bold"
                             tools:layout_editor_absoluteX="288dp"
                             tools:layout_editor_absoluteY="0dp" />
@@ -457,10 +446,9 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_toEndOf="@+id/tv_graph_label_xaxis_pre_bmp"
-                            android:layout_toRightOf="@+id/tv_graph_label_xaxis_pre_bmp"
                             android:text="@string/seconds"
                             android:textColor="#ffff"
-                            android:textSize="9sp"
+                            android:textSize="@dimen/text_size_9sp"
                             android:textStyle="normal|bold"
                             app:layout_constraintLeft_toRightOf="@+id/tv_graph_label_xaxis_pre_bmp"
                             tools:layout_editor_absoluteY="0dp" />
@@ -471,7 +459,6 @@
                         android:id="@+id/chart_yaxis_layout_pre_bmp"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="#000"
@@ -490,7 +477,7 @@
                             android:rotation="-90"
                             android:text="@string/pressure2"
                             android:textColor="#ffff"
-                            android:textSize="8sp"
+                            android:textSize="@dimen/text_size_8sp"
                             android:textStyle="normal|bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
@@ -506,7 +493,7 @@
                             android:rotation="-90"
                             android:text="@string/pascal"
                             android:textColor="#fff"
-                            android:textSize="8sp"
+                            android:textSize="@dimen/text_size_8sp"
                             android:textStyle="normal|bold"
                             app:layout_constraintBottom_toTopOf="@+id/tv_label_left_yaxis_pre_bmp"
                             app:layout_constraintLeft_toLeftOf="parent"
@@ -520,7 +507,6 @@
                         android:layout_height="match_parent"
                         android:layout_below="@+id/chart_xaxis_layout_pre_bmp"
                         android:layout_toEndOf="@+id/chart_yaxis_layout_pre_bmp"
-                        android:layout_toRightOf="@+id/chart_yaxis_layout_pre_bmp"
                         android:background="#000" />
 
                 </RelativeLayout>
@@ -536,37 +522,28 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/sensor_control_doc_height"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="@dimen/sensor_dock_margin_bottom"
-        android:layout_marginEnd="@dimen/sensor_dock_margin_right"
-        android:layout_marginLeft="@dimen/sensor_dock_margin_left"
-        android:layout_marginRight="@dimen/sensor_dock_margin_right"
-        android:layout_marginStart="@dimen/sensor_dock_margin_left"
-        android:layout_marginTop="@dimen/sensor_dock_margin_top"
+        android:layout_margin="@dimen/margin_5dp"
         android:background="@drawable/la_custom_border"
         android:gravity="top">
 
         <ImageButton
             android:id="@+id/imageButton_play_pause_sensor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_width="@dimen/sensor_control_dock_image_button_width"
+            android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:background="@null"
-            app:srcCompat="@drawable/play" />
+            app:srcCompat="@drawable/circle_play_button"
+            android:scaleType="fitCenter"/>
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/editBox_samples_sensors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/control_margin_small"
             android:layout_marginStart="@dimen/control_margin_small"
             android:layout_toEndOf="@+id/imageButton_play_pause_sensor"
-            android:layout_toLeftOf="@+id/tv_timegap_label"
-            android:layout_toRightOf="@+id/imageButton_play_pause_sensor"
             android:layout_toStartOf="@+id/tv_timegap_label"
             android:hint="@string/no_of_samples"
             android:inputType="numberSigned|numberDecimal"
@@ -579,7 +556,6 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/editBox_samples_sensors"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:text="@string/infinite_symbol" />
 
         <TextView
@@ -587,7 +563,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/imageButton_play_pause_sensor"
-            android:layout_alignLeft="@+id/editBox_samples_sensors"
             android:layout_alignStart="@+id/editBox_samples_sensors"
             android:text="@string/timegap" />
 
@@ -598,8 +573,6 @@
             android:layout_alignBottom="@+id/textView4"
             android:layout_alignTop="@+id/textView4"
             android:layout_toEndOf="@+id/textView4"
-            android:layout_toLeftOf="@+id/tv_timegap_label"
-            android:layout_toRightOf="@+id/textView4"
             android:layout_toStartOf="@+id/tv_timegap_label" />
 
         <TextView
@@ -607,9 +580,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/seekBar_timegap_sensor"
-            android:layout_alignLeft="@+id/checkBox_samples_sensor"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_alignStart="@+id/checkBox_samples_sensor"
             android:text="@string/hundred_ms"
             android:textSize="@dimen/textsize_edittext" />
