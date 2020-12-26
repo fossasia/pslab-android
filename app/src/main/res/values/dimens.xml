@@ -286,7 +286,7 @@
     <dimen name="extra_space_top">20dp</dimen>
     <dimen name="power_source_space_top">120dp</dimen>
 
-    <dimen name="sensor_params_top">10dp</dimen>
+    <dimen name="margin_of_sensor_main_layout">10dp</dimen>
 
     <dimen name="bluetooth_dialog_margin">10dp</dimen>
     <dimen name="bluetooth_list_divider_height">2dp</dimen>
