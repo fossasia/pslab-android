@@ -1,4 +1,5 @@
 # PSLab Android App
+<img height='175' src="https://play-lh.googleusercontent.com/GPd0gDZVO9sbRPcbCFa8TWjh2KK9bgHkbPTb2RFGbo5CiV37cbKiQ6vouur0DC0hBhg=s360-rw" align="center" hspace="1" vspace="1">
 
 Repository for the PSLab Android App for performing experiments with the [Pocket Science Lab](https://pslab.io) open-hardware platform.
 
