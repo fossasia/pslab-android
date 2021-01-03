@@ -1,6 +1,7 @@
 package io.pslab.models;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,8 +16,10 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +30,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 
 import org.json.JSONArray;
 
@@ -39,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
+import io.pslab.activity.GasSensorActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
 import io.pslab.fragment.AccelerometerDataFragment;
@@ -60,6 +65,8 @@ import io.pslab.others.PSLabPermission;
 import io.pslab.others.SwipeGestureDetector;
 import io.realm.Realm;
 import io.realm.RealmObject;
+
+import static io.pslab.others.ScienceLabCommon.scienceLab;
 
 /**
  * Created by Padmal on 10/20/18.
@@ -120,6 +127,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String SOUND_METER = "Sound Meter";
     public static final String SOUNDMETER_CONFIGURATIONS = "Sound Meter Configurations";
     public static final String SOUNDMETER_DATA_FORMAT = "%.2f";
+    public static final String NOT_CONNECTED = "Not Connected";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -326,6 +334,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
               will fire up. If user declines to give permission, don't do anything.
              */
             case R.id.record_data:
+            if (!getSensorName().equals(GAS_SENSOR) || scienceLab.isConnected()) {
                 if (!isRecording) {
                     dataRecordingCycle();
                 } else {
@@ -334,6 +343,41 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     isRecording = false;
                     prepareMarkers();
                 }
+            }
+            else
+            {
+                try {
+                    CustomSnackBar.showSnackBar(sensorParentView, NOT_CONNECTED, null, null, Snackbar.LENGTH_LONG);
+
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+                    builder1.setTitle(R.string.gas_sensor_not_connected);
+                    builder1.setMessage(R.string.gas_sensor_not_connected_description);
+                    builder1.setCancelable(true);
+
+                    builder1.setPositiveButton(
+                            R.string.gas_sensor_configure_button,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    builder1.setNegativeButton(
+                            R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    builder1.setIcon(android.R.drawable.ic_dialog_alert);
+                    AlertDialog alert11 = builder1.create();
+                    alert11.show();
+                }catch (IllegalStateException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
                 invalidateOptionsMenu();
                 break;
             case R.id.play_data:
