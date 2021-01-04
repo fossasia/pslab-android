@@ -91,6 +91,8 @@ public class HomeFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         stepsHeader.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         deviceDescription.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+        wvProgressBar = (ProgressBar) view.findViewById(R.id.web_view_progress);
+
         if (deviceFound & deviceConnected) {
             tvConnectMsg.setVisibility(View.GONE);
             try {
