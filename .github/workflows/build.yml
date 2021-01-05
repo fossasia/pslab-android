@@ -1,0 +1,19 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: build for github actions
+
+on: [pull_request, push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checking code
+      uses: actions/checkout@v2
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build the app with Gradle
+      run: ./gradlew build
