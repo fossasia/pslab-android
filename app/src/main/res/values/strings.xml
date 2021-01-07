@@ -886,9 +886,6 @@
     <string name="gas_sensor_description">Air quality sensor for detecting a wide range of gases, including NH3, NOx, alcohol, benzene, smoke and CO2</string>
     <string name="gas_sensor_label">Gas Contents (PPM)</string>
     <string name="gas_sensor_unit">PPM</string>
-    <string name="gas_sensor_not_connected">Sensor not Found</string>
-    <string name="gas_sensor_not_connected_description">Please connect a device or choose an phone sensor (if available)</string>
-    <string name="gas_sensor_configure_button">Configure Active Sensor</string>
 
     <string name="dust_sensor">Dust Sensor</string>
     <string name="dust_sensor_intro">Dust Sensor is used to measure air quality</string>

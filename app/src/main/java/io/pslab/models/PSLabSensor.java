@@ -19,7 +19,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -349,29 +348,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 try {
                     CustomSnackBar.showSnackBar(sensorParentView, NOT_CONNECTED, null, null, Snackbar.LENGTH_LONG);
 
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-                    builder1.setTitle(R.string.gas_sensor_not_connected);
-                    builder1.setMessage(R.string.gas_sensor_not_connected_description);
-                    builder1.setCancelable(true);
-
-                    builder1.setPositiveButton(
-                            R.string.gas_sensor_configure_button,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                    builder1.setNegativeButton(
-                            R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    builder1.setIcon(android.R.drawable.ic_dialog_alert);
-                    AlertDialog alert11 = builder1.create();
-                    alert11.show();
                 }catch (IllegalStateException e)
                 {
                     e.printStackTrace();
