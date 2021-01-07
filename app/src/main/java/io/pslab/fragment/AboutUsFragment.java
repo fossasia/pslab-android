@@ -1,6 +1,7 @@
 package io.pslab.fragment;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -47,8 +48,10 @@ public class AboutUsFragment extends Fragment {
                 .isRTL(false)
                 .setImage(R.drawable.logo200x200)
                 .addWebsite("https://goo.gl/forms/sHlmRAPFmzcGQ27u2", getString(R.string.nav_report))
-                .addItem(new Element(getString(R.string.version), R.drawable.ic_widgets_black_24dp))
-                .addItem(new Element(getString(R.string.flavor), R.drawable.ic_android_black_24dp))
+                .addItem(versionupdate())
+                .addItem(Fdroidversion())
+                //.addItem(new Element(getString(R.string.version), R.drawable.ic_widgets_black_24dp))
+                //.addItem(new Element(getString(R.string.flavor), R.drawable.ic_android_black_24dp))
                 .setDescription(getString(R.string.about_us_description))
                 .addGroup("Connect with us")
                 .addEmail("pslab-fossasia@googlegroups.com")
@@ -60,13 +63,47 @@ public class AboutUsFragment extends Fragment {
                 .addItem(addDevelopers())
                 .create();
 
+
         appBarLayout.addView(aboutPage, -1);
         return view;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+    private Element versionupdate() {
+        Element developersElement = new Element();
+        developersElement.setTitle(getString(R.string.version));
+        developersElement.setIconDrawable(R.drawable.ic_widgets_black_24dp);
+        developersElement.setOnClickListener(v -> {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext(), R.style.AlertDialog);
+
+            builder.setIcon(R.drawable.ic_widgets_black_24dp);
+            builder.setTitle(R.string.version);
+            builder.setMessage("New Changes : ");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
+        return developersElement;
+
+    }
+
+    private Element Fdroidversion() {
+        Element developersElement = new Element();
+        developersElement.setTitle(getString(R.string.flavor));
+        developersElement.setIconDrawable(R.drawable.ic_android_black_24dp);
+        developersElement.setOnClickListener(v -> {
+            String url = getString(R.string.fdroidurl);
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                url = "https://" + url;
+            }
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        });
+        return developersElement;
     }
 
     private void simulateDayNight(int currentSetting) {
@@ -91,6 +128,7 @@ public class AboutUsFragment extends Fragment {
     private Element addDevelopers() {
         Element developersElement = new Element();
         developersElement.setTitle(getString(R.string.developers));
+        developersElement.setIconDrawable(R.drawable.ic_baseline_group_24);
         developersElement.setOnClickListener(v -> {
             String url = getString(R.string.github_developers_link);
             if (!url.startsWith("http://") && !url.startsWith("https://")) {

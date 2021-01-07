@@ -1051,6 +1051,8 @@
 
     <string name="developers">Developers</string>
     <string name="github_developers_link">https://github.com/fossasia/pslab-android/graphs/contributors</string>
+
+    <string name="fdroidurl">https://f-droid.org/packages/io.pslab/</string>
     <string name="limit_dangerous">\"Dangerous\"</string>
     <string name="limit_average">Average</string>
 </resources>
