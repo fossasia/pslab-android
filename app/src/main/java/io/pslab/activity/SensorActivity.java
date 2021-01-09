@@ -116,6 +116,7 @@ public class SensorActivity extends AppCompatActivity {
         sensorAddr.put(0x68, "MPU6050");
         sensorAddr.put(0x40, "SHT21");
         sensorAddr.put(0x39, "TSL2561");
+        sensorAddr.put(0x69, "MPU925x");
 
         adapter = new ArrayAdapter<>(getApplication(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataName);
 

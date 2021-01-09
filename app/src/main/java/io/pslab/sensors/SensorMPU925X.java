@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -98,6 +99,7 @@ public class SensorMPU925X extends AppCompatActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
         try {
+            if (i2c == null) throw new IOException("i2c not found");
             sensorMPU925X = new MPU925x(i2c);
         } catch (IOException e) {
             e.printStackTrace();
