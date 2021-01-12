@@ -334,26 +334,26 @@ public abstract class PSLabSensor extends AppCompatActivity {
              */
             case R.id.record_data:
             if (!getSensorName().equals(GAS_SENSOR) || scienceLab.isConnected()) {
-                if (!isRecording) {
+                if (!isRecording)
+                {
                     dataRecordingCycle();
-                } else {
-                    stopRecordSensorData();
-                    displayLogLocationOnSnackBar();
-                    isRecording = false;
-                    prepareMarkers();
-                }
+                } else
+                    {
+                        stopRecordSensorData();
+                        displayLogLocationOnSnackBar();
+                        isRecording = false;
+                        prepareMarkers();
+                    }
             }
             else
             {
                 try {
-                    CustomSnackBar.showSnackBar(sensorParentView, NOT_CONNECTED, null, null, Snackbar.LENGTH_LONG);
-
-                }catch (IllegalStateException e)
-                {
-                    e.printStackTrace();
-                }
+                        CustomSnackBar.showSnackBar(sensorParentView, NOT_CONNECTED, null, null, Snackbar.LENGTH_LONG);
+                    } catch (IllegalStateException e)
+                        {
+                            e.printStackTrace();
+                        }
             }
-
                 invalidateOptionsMenu();
                 break;
             case R.id.play_data:
