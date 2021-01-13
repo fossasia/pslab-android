@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
             case 5:
                 return AboutUsFragment.newInstance();
-            case 7:
+            case 8:
                 return FAQFragment.newInstance();
             default:
                 return InstrumentsFragment.newInstance();
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             case 5:
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
-            case 7:
+            case 8:
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             default:
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                             drawer.closeDrawers();
                         }
                     case R.id.nav_help_feedback:
-                        navItemIndex = 7;
+                        navItemIndex = 8;
                         CURRENT_TAG = TAG_FAQ;
                         break;
                     case R.id.nav_buy_pslab:
