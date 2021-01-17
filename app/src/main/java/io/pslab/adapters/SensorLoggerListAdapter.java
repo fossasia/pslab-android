@@ -254,9 +254,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                                         File.separator + CSVLogger.CSV_DIRECTORY +
                                         File.separator + block.getSensorType() +
                                         File.separator + CSVLogger.FILE_NAME_FORMAT.format(block.getBlock()) + ".csv");
-                        CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content),
-                                logDirectory.delete() ? context.getString(R.string.log_deleted)
-                                        : context.getString(R.string.nothing_to_delete), null, null, Snackbar.LENGTH_LONG);
+                        CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content), context.getString(R.string.log_deleted), null, null, Snackbar.LENGTH_LONG);
                         if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LUXMETER)) {
                             LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.BAROMETER)) {
