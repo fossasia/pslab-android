@@ -637,7 +637,7 @@
         <b>Different Sections</b>\n\n
         <b>Resistance:</b> Measures the resistance of the element connected between the RES and GND pin of the PSLab device.\n\n
         <b>Capacitance:</b> Measures the capacitance of the element connected between the CAP and GND pin of the PSLab device.\n\n
-        <b>Voltage:</b> Measures the voltage of any elements connect connected between any of the channel and GND pins and other pins such as VOL.\n\n
+        <b>Voltage:</b> Measures the voltage of any element connected between any of the channel and GND pins and other pins such as VOL.\n\n
         <b>Frequency:</b> Measures the frequency across any element connected between any of ID and GND pins.\n\n
         <b>Count Pulse:</b> Measures the pulse of any wave through an element connected between any of ID and GND pins.\n\n
     </string>
