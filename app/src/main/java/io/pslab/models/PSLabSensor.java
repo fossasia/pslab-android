@@ -588,6 +588,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
         bottomSheetText.setText(getGuideAbstract());
         bottomSheetSchematic.setImageResource(getGuideSchematics());
         bottomSheetDesc.setText(getGuideDescription());
+        // if sensor doesn't image in it's guide and hence returns 0 for getGuideSchematics(), hide the visibility of bottomSheetSchematic
+        if (getGuideSchematics() != 0) {
+            bottomSheetSchematic.setImageResource(getGuideSchematics());
+        }else{
+            bottomSheetSchematic.setVisibility(View.GONE);
+        }
         // If a sensor has extra content than provided in the standard layout, create a new layout
         // and attach the layout id with getGuideExtraContent()
         if (getGuideExtraContent() != 0) {
