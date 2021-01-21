@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,8 +46,7 @@ public class ESPFragment extends DialogFragment {
             public void onClick(View v) {
                 espIPAddress = espIPEditText.getText().toString();
                 if (espIPAddress.length() == 0) {
-                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.incorrect_IP_address_message),null,null, Snackbar.LENGTH_SHORT);
+                    espIPEditText.setError( getString(R.string.incorrect_IP_address_message));
                 } else {
                     new ESPTask().execute();
                 }
@@ -96,10 +96,11 @@ public class ESPFragment extends DialogFragment {
         protected void onPostExecute(String result) {
             espConnectProgressBar.setVisibility(View.GONE);
             espConnectBtn.setVisibility(View.VISIBLE);
+            TextInputLayout errormsg = (TextInputLayout) getView().findViewById(R.id.input_layout_password);
             if (result.length() == 0) {
-                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        getString(R.string.incorrect_IP_address_message),null,null,Snackbar.LENGTH_SHORT);
+                errormsg.setError( getString(R.string.incorrect_IP_address_message));
             } else {
+                errormsg.setError(null);
                 Log.v("Response", result);
             }
         }
