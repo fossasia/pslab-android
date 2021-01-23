@@ -320,9 +320,11 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     if (isInBuiltMicSelected && audioJack == null) {
                         audioJack = new AudioJack("input");
                     }
-                    if(!scienceLab.isDeviceFound()&& findViewById(R.id.pslab_mic_cb)!= null){
-                            findViewById(R.id.pslab_mic_cb).setVisibility(View.GONE);
-                        }
+                    
+                    if (!scienceLab.isDeviceFound() && findViewById(R.id.pslab_mic_cb) != null) {
+                        findViewById(R.id.pslab_mic_cb).setVisibility(View.GONE);
+                    }
+                    
                     if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isAudioInputSelected && !isXYPlotSelected) {
                         captureTask = new CaptureTask();
                         captureTask.execute(CHANNEL.CH1.toString());
