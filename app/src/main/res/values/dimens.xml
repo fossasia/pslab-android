@@ -270,7 +270,7 @@
 
     <dimen name="compass_padding">4dp</dimen>
     <dimen name="compass_tv_height">30dp</dimen>
-    <dimen name="compass_tv_value_margin">20dp</dimen>
+    <dimen name="compass_tv_value_margin">8dp</dimen>
     <dimen name="compass_select_axes_text_size">18sp</dimen>
     <dimen name="compass_text_size_large">25sp</dimen>
     <dimen name="compass_space_top">120dp</dimen>
@@ -396,4 +396,7 @@
     <dimen name="sound_guage_font_size">8sp</dimen>
     <dimen name="sound_sensor_label_title_size">16sp</dimen>
     <dimen name="sound_width_0">0dp</dimen>
+    <dimen name="compass_margin">15dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+
 </resources>
