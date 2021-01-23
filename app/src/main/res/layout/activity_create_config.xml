@@ -47,7 +47,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_zero"
-                android:layout_weight="@dimen/weight_one"
+                android:layout_weight="@dimen/weight_two"
                 android:layout_marginTop="@dimen/create_config_margin1"
                 android:orientation="horizontal">
 
@@ -77,36 +77,46 @@
                     android:layout_weight="@dimen/weight_one"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/select_params_title"
-                style="@style/Base.TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAlignment="center"
-                android:textSize="@dimen/text_size_of_heading"
-                android:layout_marginTop="@dimen/create_config_margin2"
-                android:text="@string/select_params_title" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/params_list_container"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_zero"
-                android:layout_weight="@dimen/weight_four"
-                android:layout_marginTop="@dimen/create_config_margin1" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="@dimen/weight_one">
 
-            <Button
-                android:id="@+id/create_config_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/create_config_margin2"
-                android:background="@drawable/btn_back_rounded"
-                android:padding="@dimen/margin_btn"
-                android:text="@string/create_config_btn_text"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/select_params_title"
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/text_size_of_heading"
+                    android:layout_marginTop="@dimen/create_config_margin2"
+                    android:text="@string/select_params_title" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/params_list_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_zero"
+                    android:layout_weight="@dimen/weight_four"
+                    android:layout_marginTop="@dimen/create_config_margin1" />
+
+                <Button
+                    android:id="@+id/create_config_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/create_config_margin2"
+                    android:background="@drawable/btn_back_rounded"
+                    android:padding="@dimen/margin_btn"
+                    android:text="@string/create_config_btn_text"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>
