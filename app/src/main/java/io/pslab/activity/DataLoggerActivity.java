@@ -174,20 +174,26 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             case R.id.delete_all:
                 Context context = DataLoggerActivity.this;
-                new AlertDialog.Builder(context)
-                        .setTitle(context.getString(R.string.delete))
-                        .setMessage(context.getString(R.string.delete_all_message))
-                        .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteAllProgressBar.setVisibility(View.VISIBLE);
-                                new DeleteAllTask().execute();
-                            }
-                        }).setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
+                if(LocalDataLog.with().getAllSensorBlocks().size() <= 0){
+                    CustomSnackBar.showSnackBar(findViewById(android.R.id.content), context.getString(R.string.nothing_to_delete),
+                            null, null, Snackbar.LENGTH_SHORT);
+                    new DeleteAllTask().execute();
+                } else{
+                    new AlertDialog.Builder(context)
+                            .setTitle(context.getString(R.string.delete))
+                            .setMessage(context.getString(R.string.delete_all_message))
+                            .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteAllProgressBar.setVisibility(View.VISIBLE);
+                                    new DeleteAllTask().execute();
+                                }
+                            }).setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
