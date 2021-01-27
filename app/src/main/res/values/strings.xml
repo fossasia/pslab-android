@@ -1053,4 +1053,7 @@
     <string name="github_developers_link">https://github.com/fossasia/pslab-android/graphs/contributors</string>
     <string name="limit_dangerous">\"Dangerous\"</string>
     <string name="limit_average">Average</string>
+
+    <string name="no_log_data_found">No Logged Data Found</string>
+
 </resources>

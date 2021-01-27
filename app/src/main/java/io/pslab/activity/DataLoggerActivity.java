@@ -174,20 +174,33 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             case R.id.delete_all:
                 Context context = DataLoggerActivity.this;
-                new AlertDialog.Builder(context)
-                        .setTitle(context.getString(R.string.delete))
-                        .setMessage(context.getString(R.string.delete_all_message))
-                        .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteAllProgressBar.setVisibility(View.VISIBLE);
-                                new DeleteAllTask().execute();
-                            }
-                        }).setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
+                if(categoryData.size()>0){
+                    new AlertDialog.Builder(context)
+                            .setTitle(context.getString(R.string.delete))
+                            .setMessage(context.getString(R.string.delete_all_message))
+                            .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteAllProgressBar.setVisibility(View.VISIBLE);
+                                    new DeleteAllTask().execute();
+                                }
+                            }).setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+                }
+                else{
+                    new AlertDialog.Builder(context)
+                            .setTitle(context.getString(R.string.no_log_data_found))
+                            .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
+                                }
+                            }).create().show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
