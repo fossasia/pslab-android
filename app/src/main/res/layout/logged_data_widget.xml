@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:text="@string/logged_data"
+        android:background="@color/colorPrimary"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:id="@+id/loggedDataWidget_textView"
+        />
+    <TextView
+        android:id="@+id/data_logger_blank_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_below="@+id/loggedDataWidget_textView"
+        android:text="@string/no_logs_to_display" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/loggedDataWidget_textView"
+        android:id="@+id/data_logger_list_view"
+        />
+</RelativeLayout>

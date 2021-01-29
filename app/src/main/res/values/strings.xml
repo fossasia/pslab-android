@@ -2,10 +2,8 @@
     <string name="app_name">PSLab</string>
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
-
     <string name="Toast_double_tap">Press again to close PSLab</string>
     <string name="Toast_magnetic_not_present">"The sensor required for this instrument is not present in your device"</string>
-
     <string name="nav_device">Connect Device</string>
     <string name="nav_instruments">Instruments</string>
     <string name="nav_settings">Settings</string>
@@ -1031,14 +1029,12 @@
         <item>0</item>
         <item>1</item>
     </string-array>
-
     <string name="google_map">Google Map</string>
     <string name="osm_map">OpenStreetMap</string>
     <string name="no_location_specified">Location not specified</string>
     <string name="compass_default_0">0</string>
     <string name="unknown">Unknown</string>
     <string name="rateapp">Rate App</string>
-   
     <string name="sound_meter">Sound Meter</string>
     <string name="sound_meter_desc">To measure the loudness in the environment in decibel(dB)</string>
     <string name="sound_meter_intro">Sound meter Introduction</string>
@@ -1048,12 +1044,12 @@
     <string name="avg_dB">Avg (dB)</string>
     <string name="sound_chart_label">Sound Level(dB)</string>
     <string name="in_progress">This feature is in progress</string>
-
     <string name="developers">Developers</string>
     <string name="github_developers_link">https://github.com/fossasia/pslab-android/graphs/contributors</string>
     <string name="limit_dangerous">\"Dangerous\"</string>
     <string name="limit_average">Average</string>
-
     <string name="no_log_data_found">No Logged Data Found</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

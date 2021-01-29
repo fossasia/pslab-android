@@ -26,6 +26,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <receiver android:name=".widgets.loggedData.LoggedDataWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/logged_data_widget_info" />
+        </receiver>
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
