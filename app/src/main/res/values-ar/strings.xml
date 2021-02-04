@@ -3,7 +3,8 @@
     <string name="app_name">PSLab</string>
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
-
+    <string name="report_or_bug">Report Or Bug</string>
+    <string name="help">Help</string>
     <string name="Toast_double_tap">اضغط مرة أخرى لإغلاق PSLab</string>
     <string name="Toast_magnetic_not_present">"المستشعرات المطلوبة لهذا الجهاز غير موجودة في جهازك"</string>
 

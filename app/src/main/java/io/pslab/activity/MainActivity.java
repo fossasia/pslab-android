@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -70,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
     private CustomTabService customTabService;
     private CustomTabsServiceConnection customTabsServiceConnection;
-
+    private String url1 = "https://github.com/fossasia/pslab-android/issues/new";
+    private String url= "https://gitter.im/fossasia/fossasia";
     public static int navItemIndex = 0;
 
     private static final String TAG_DEVICE = "device";
@@ -259,6 +261,14 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
+                    case R.id.item_help:
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(i);
+                        break;
+                    case R.id.report_or_bug:
+                            Intent r = new Intent(Intent.ACTION_VIEW, Uri.parse(url1));
+                            startActivity(r);
+                            break;
  		    case R.id.nav_rate:
                         customTabService.launchUrl("https://play.google.com/store/apps/details?id=io.pslab");
                         if (drawer != null) {
