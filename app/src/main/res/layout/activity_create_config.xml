@@ -74,7 +74,7 @@
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/interval_unit_spinner"
                     android:layout_width="@dimen/width_zero"
-                    android:layout_weight="@dimen/weight_one"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
             </LinearLayout>
