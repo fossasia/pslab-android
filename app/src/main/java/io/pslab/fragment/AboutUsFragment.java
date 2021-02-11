@@ -50,7 +50,7 @@ public class AboutUsFragment extends Fragment {
                 .addItem(new Element(getString(R.string.version), R.drawable.ic_widgets_black_24dp))
                 .addItem(new Element(getString(R.string.flavor), R.drawable.ic_android_black_24dp))
                 .setDescription(getString(R.string.about_us_description))
-                .addGroup("Connect with us")
+                .addGroup("Connect With Us")
                 .addEmail("pslab-fossasia@googlegroups.com")
                 .addWebsite("https://pslab.io/")
                 .addGitHub("fossasia?utf8=✓&q=pslab")
@@ -90,7 +90,11 @@ public class AboutUsFragment extends Fragment {
 
     private Element addDevelopers() {
         Element developersElement = new Element();
+       // developersElement.addItem(new Element(getString(R.string.version), R.drawable.ic_widgets_black_24dp))
         developersElement.setTitle(getString(R.string.developers));
+        developersElement.setIconDrawable(R.drawable.ic_developers_24dp);
+        //.addItem(new Element(getString(R.string.version), R.drawable.ic_widgets_black_24dp))
+        //new Element("Developer",R.drawable.ic_development).addItem(developersElement);
         developersElement.setOnClickListener(v -> {
             String url = getString(R.string.github_developers_link);
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
