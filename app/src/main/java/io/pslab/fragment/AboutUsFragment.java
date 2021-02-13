@@ -91,7 +91,7 @@ public class AboutUsFragment extends Fragment {
     private Element addDevelopers() {
         Element developersElement = new Element();
         developersElement.setTitle(getString(R.string.developers));
-        developersElement.setIconDrawable(R.drawable.ic_developers_24dp);
+        developersElement.setIconDrawable(R.drawable.ic_user__24dp);
         developersElement.setOnClickListener(v -> {
             String url = getString(R.string.github_developers_link);
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
