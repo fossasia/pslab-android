@@ -178,24 +178,20 @@ public class DataLoggerActivity extends AppCompatActivity {
                 selectFile();
                 break;
             case R.id.delete_all:
-                Context context = DataLoggerActivity.this;
-                new AlertDialog.Builder(context)
-                        .setTitle(context.getString(R.string.delete))
-                        .setMessage(context.getString(R.string.delete_all_message))
-                        .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteAllProgressBar.setVisibility(View.VISIBLE);
-                                new DeleteAllTask().execute();
-                            }
-                        }).setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
+                displayAlertDialog(DataLoggerActivity.this);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void displayAlertDialog(Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.delete))
+                .setMessage(context.getString(R.string.delete_all_message))
+                .setPositiveButton(context.getString(R.string.delete), (dialog, which) -> {
+                    deleteAllProgressBar.setVisibility(View.VISIBLE);
+                    new DeleteAllTask().execute();
+                }).setNegativeButton(context.getString(R.string.cancel), (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     @Override
