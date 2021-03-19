@@ -86,9 +86,16 @@ public class DataLoggerActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        if (caller == null) caller = "";
+
+        if (caller == null)
+            caller = getResources().getString(R.string.logged_data);
 
         getSupportActionBar().setTitle(caller);
+        setCategoryData();
+        fillData();
+    }
+
+    private void setCategoryData() {
         switch (caller) {
             case "Lux Meter":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.lux_meter));
@@ -137,9 +144,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
-                getSupportActionBar().setTitle(getString(R.string.logged_data));
         }
-        fillData();
     }
 
     private void fillData() {
