@@ -16,7 +16,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -53,7 +52,7 @@ public class BluetoothScanFragment extends DialogFragment {
         }
     };
     private BluetoothAdapter bluetoothAdapter;
-    private boolean isScanning = false;
+    private boolean startScanning = false;
     private BluetoothDevice bluetoothDevice;
     private BluetoothSocket mSocket;
     private OutputStream mOutputStream;
@@ -78,36 +77,29 @@ public class BluetoothScanFragment extends DialogFragment {
         bluetoothScanStopButton = rootView.findViewById(R.id.bluetooth_scan_stop_button);
 
 
-        bluetoothScanStopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isScanning) {
-                    if (bluetoothAdapter != null) {
-                        bluetoothAdapter.cancelDiscovery();
-                    }
-                    scanProgressBar.setVisibility(View.GONE);
-                    isScanning = false;
-                    bluetoothScanStopButton.setText(getResources().getString(R.string.bluetooth_scan_text));
-                    scannedDevicesListView.setClickable(true);
-                } else {
-                    scanDevices();
-                }
-            }
+        bluetoothScanStopButton.setOnClickListener(v -> {
+            if (startScanning) {
+                if (bluetoothAdapter != null)
+                    bluetoothAdapter.cancelDiscovery();
+
+                scanProgressBar.setVisibility(View.GONE);
+                startScanning = false;
+                bluetoothScanStopButton.setText(getResources().getString(R.string.bluetooth_scan_text));
+                scannedDevicesListView.setClickable(true);
+            } else
+                scanDevices();
         });
 
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         getContext().registerReceiver(broadcastReceiver, filter);
 
-        scannedDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        bluetoothDevices.get(position).getAddress(),null,null, Snackbar.LENGTH_SHORT);
-                bluetoothDevice = bluetoothDevices.get(position);
-                getDialog().cancel();
-                connectBluetooth();
-            }
+        scannedDevicesListView.setOnItemClickListener((parent, view, position, id) -> {
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    bluetoothDevices.get(position).getAddress(), null, null, Snackbar.LENGTH_SHORT);
+            bluetoothDevice = bluetoothDevices.get(position);
+            getDialog().cancel();
+            connectBluetooth();
         });
         scanDevices();
         return rootView;
@@ -119,21 +111,23 @@ public class BluetoothScanFragment extends DialogFragment {
     }
 
     private void scanDevices() {
+        deviceList.clear();
+        bluetoothDevices.clear();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-            isScanning = false;
+            startScanning = false;
             CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                    getString(R.string.bluetooth_not_supported),null,null,Snackbar.LENGTH_SHORT);
+                    getString(R.string.bluetooth_not_supported), null, null, Snackbar.LENGTH_SHORT);
         } else {
             if (!bluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 int BLUETOOTH_REQUEST_CODE = 100;
                 startActivityForResult(enableBtIntent, BLUETOOTH_REQUEST_CODE);
-                isScanning = false;
+                startScanning = false;
                 bluetoothScanStopButton.setText(getResources().getString(R.string.bluetooth_scan_text));
                 scannedDevicesListView.setClickable(true);
             } else {
-                isScanning = true;
+                startScanning = true;
                 scannedDevicesListView.setClickable(false);
                 bluetoothAdapter.startDiscovery();
                 scanProgressBar.setVisibility(View.VISIBLE);
