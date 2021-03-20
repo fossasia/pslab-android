@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -727,11 +728,11 @@ public class RoboticArmActivity extends AppCompatActivity {
             case R.id.play_data:
                 if (isPlaying) {
                     isPlaying = false;
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_play_arrow_white_24dp,null));
                     timeLine.onFinish();
                 } else {
                     isPlaying = true;
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_pause_white_24dp,null));
                     timeLine.start();
                 }
                 break;
@@ -741,7 +742,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
                 isPlaying = false;
-                playMenu.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                playMenu.setIcon(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_play_arrow_white_24dp,null));
                 timelinePosition = 0;
                 break;
             case R.id.show_guide:

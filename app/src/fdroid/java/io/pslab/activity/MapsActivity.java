@@ -1,6 +1,7 @@
 package io.pslab.activity;
 
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import org.json.JSONArray;
@@ -58,7 +59,7 @@ public class MapsActivity extends AppCompatActivity {
             JSONObject marker = markers.getJSONObject(i);
             m.setPosition(new GeoPoint(marker.getDouble("lat"), marker.getDouble("lon")));
             m.setTitle(marker.getString("data") + " @ " + marker.getString("date"));
-            m.setIcon(getResources().getDrawable(R.drawable.action_item_read));
+            m.setIcon(ResourcesCompat.getDrawable(getResources(),R.drawable.action_item_read,null));
             m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
             map.getOverlays().add(m);
         }
