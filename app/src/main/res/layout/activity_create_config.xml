@@ -18,66 +18,85 @@
             android:orientation="vertical"
             android:padding="@dimen/config_activity_padding">
 
-            <LinearLayout
-                android:id="@+id/select_instrument"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_zero"
-                android:layout_weight="@dimen/weight_one"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/card_margin"
+                android:padding="@dimen/card_margin"
+                app:cardCornerRadius="@dimen/accel_card_radius"
+                app:cardElevation="@dimen/card_elevation">
 
-                <TextView
-                    android:id="@+id/select_instrument_title"
-                    style="@style/Base.TextAppearance.AppCompat.Title"
-                    android:layout_width="@dimen/width_zero"
-                    android:layout_weight="@dimen/weight_one"
-                    android:textSize="@dimen/text_size_of_label"
+                <LinearLayout
+                    android:id="@+id/select_instrument"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/select_instrument_title" />
+                    android:paddingTop="@dimen/create_config_padding"
+                    android:paddingBottom="@dimen/create_config_padding"
+                    android:layout_marginStart="@dimen/create_config_margin1">
 
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/select_instrument_spinner"
-                    android:layout_width="@dimen/width_zero"
-                    android:layout_weight="@dimen/weight_two"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textAlignment="center" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/select_instrument_title"
+                        style="@style/Base.TextAppearance.AppCompat.Title"
+                        android:layout_width="@dimen/width_zero"
+                        android:layout_weight="@dimen/weight_one"
+                        android:textSize="@dimen/text_size_of_label"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/select_instrument_title" />
 
-            <LinearLayout
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/select_instrument_spinner"
+                        android:layout_width="@dimen/width_zero"
+                        android:layout_weight="@dimen/weight_two"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textAlignment="center" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_zero"
-                android:layout_weight="@dimen/weight_one"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/card_margin"
                 android:layout_marginTop="@dimen/create_config_margin1"
-                android:orientation="horizontal">
+                app:cardCornerRadius="@dimen/accel_card_radius"
+                app:cardElevation="@dimen/card_elevation">
 
-                <TextView
-                    android:id="@+id/time_interval_title"
-                    style="@style/Base.TextAppearance.AppCompat.Title"
-                    android:layout_width="wrap_content"
-                    android:textSize="@dimen/text_size_of_label"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/time_interval_title" />
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/create_config_margin1">
 
-                <EditText
-                    android:id="@+id/interval_edit_text"
-                    android:layout_width="@dimen/width_zero"
-                    android:layout_weight="@dimen/weight_three"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/time_interval_hint"
-                    android:imeOptions="actionDone"
-                    android:inputType="number"
-                    android:textAlignment="center"
-                    android:layout_gravity="center"/>
+                    <TextView
+                        android:id="@+id/time_interval_title"
+                        style="@style/Base.TextAppearance.AppCompat.Title"
+                        android:layout_width="wrap_content"
+                        android:textSize="@dimen/text_size_of_label"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/time_interval_title" />
 
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/interval_unit_spinner"
-                    android:layout_width="@dimen/width_zero"
-                    android:layout_weight="@dimen/weight_one"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
-            </LinearLayout>
+                    <EditText
+                        android:id="@+id/interval_edit_text"
+                        android:layout_width="@dimen/width_zero"
+                        android:layout_weight="@dimen/weight_three"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/time_interval_hint"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:textAlignment="center"
+                        android:layout_gravity="center" />
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/interval_unit_spinner"
+                        android:layout_width="@dimen/width_zero"
+                        android:layout_weight="@dimen/weight_one"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
             <TextView
                 android:id="@+id/select_params_title"
@@ -93,8 +112,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/params_list_container"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_zero"
-                android:layout_weight="@dimen/weight_four"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/create_config_margin1" />
 
             <Button
