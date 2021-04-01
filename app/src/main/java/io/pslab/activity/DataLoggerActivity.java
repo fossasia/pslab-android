@@ -178,7 +178,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                     CustomSnackBar.showSnackBar(findViewById(android.R.id.content), context.getString(R.string.nothing_to_delete),
                             null, null, Snackbar.LENGTH_SHORT);
                     new DeleteAllTask().execute();
-                } else{
+                } else {
                     new AlertDialog.Builder(context)
                             .setTitle(context.getString(R.string.delete))
                             .setMessage(context.getString(R.string.delete_all_message))
