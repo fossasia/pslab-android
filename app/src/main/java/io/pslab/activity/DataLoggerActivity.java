@@ -174,7 +174,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 break;
             case R.id.delete_all:
                 Context context = DataLoggerActivity.this;
-                if(LocalDataLog.with().getAllSensorBlocks().size() <= 0){
+                if (LocalDataLog.with().getAllSensorBlocks().size() == 0) {
                     CustomSnackBar.showSnackBar(findViewById(android.R.id.content), context.getString(R.string.nothing_to_delete),
                             null, null, Snackbar.LENGTH_SHORT);
                     new DeleteAllTask().execute();
