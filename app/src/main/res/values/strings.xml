@@ -529,7 +529,7 @@
         value, plot will halt.</string>
     <string name="data_analysis_desc">\u2022 Using this Setting, the mathematical function of the analysed signal
         can be found. Can choose the Wave type from Sine or Square and the Channel that needs to be analyzed.\n\n
-        \u2022 Furthermore, analyzed signal\'s Fourier transform can be observed by checking Fourier Transfroms check box.</string>
+        \u2022 Furthermore, analyzed signal\'s Fourier transform can be observed by checking Fourier Transforms check box.</string>
     <string name="xy_plot_desc">\u2022 This is used to plot the Channel to Channel voltage in a X-Y plot having
         voltage as the unit for the both axes relevant for the corresponding Channels.</string>
 
