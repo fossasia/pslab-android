@@ -10,6 +10,7 @@
     <dimen name="profile_height">80dp</dimen>
 
     <dimen name="card_margin">10dp</dimen>
+    <dimen name="card_margin_bottom">60dp</dimen>
     <dimen name="card_radius">10dp</dimen>
     <dimen name="title_padding">10dp</dimen>
     <dimen name="text_size">17sp</dimen>
@@ -286,7 +287,7 @@
     <dimen name="extra_space_top">20dp</dimen>
     <dimen name="power_source_space_top">120dp</dimen>
 
-    <dimen name="sensor_params_top">10dp</dimen>
+    <dimen name="margin_of_sensor_main_layout">10dp</dimen>
 
     <dimen name="bluetooth_dialog_margin">10dp</dimen>
     <dimen name="bluetooth_list_divider_height">2dp</dimen>
@@ -396,7 +397,15 @@
     <dimen name="sound_guage_font_size">8sp</dimen>
     <dimen name="sound_sensor_label_title_size">16sp</dimen>
     <dimen name="sound_width_0">0dp</dimen>
+
     <dimen name="compass_margin">15dp</dimen>
     <dimen name="margin_10dp">10dp</dimen>
+
+    <dimen name="sensor_control_dock_image_button_width">60dp</dimen>
+    <dimen name="margin_50dp">50dp</dimen>
+    <dimen name="margin_5dp">5dp</dimen>
+    <dimen name="text_size_8sp">8sp</dimen>
+    <dimen name="sensor_image_height">90dp</dimen>
+    <dimen name="text_size_9sp">9sp</dimen>
 
 </resources>
