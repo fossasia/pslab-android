@@ -7,12 +7,15 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -47,14 +50,25 @@ public class ESPFragment extends DialogFragment {
                 if (espIPAddress.length() == 0) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
                             getString(R.string.incorrect_IP_address_message),null,null, Snackbar.LENGTH_SHORT);
+
                 } else {
                     new ESPTask().execute();
                 }
             }
+
+        });
+        espIPEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        espConnectBtn.performClick();
+                        return true;
+                    }
+                    return false;
+                }
         });
         return rootView;
     }
-
     @Override
     public void onResume() {
         super.onResume();

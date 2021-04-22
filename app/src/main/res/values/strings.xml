@@ -529,7 +529,7 @@
         value, plot will halt.</string>
     <string name="data_analysis_desc">\u2022 Using this Setting, the mathematical function of the analysed signal
         can be found. Can choose the Wave type from Sine or Square and the Channel that needs to be analyzed.\n\n
-        \u2022 Furthermore, analyzed signal\'s Fourier transform can be observed by checking Fourier Transfroms check box.</string>
+        \u2022 Furthermore, analyzed signal\'s Fourier transform can be observed by checking Fourier Transforms check box.</string>
     <string name="xy_plot_desc">\u2022 This is used to plot the Channel to Channel voltage in a X-Y plot having
         voltage as the unit for the both axes relevant for the corresponding Channels.</string>
 
@@ -796,7 +796,7 @@
     <string name="hide_guide_text">Hide Guide</string>
 
     <string name="wave_gen_guide_intro">The wave generator can be used to generate different types of waves like
-        Sine wave, Square wave, Saw Tooth wave and allow us to changes their characteristics like frequency, phase, duty.
+        Sine wave, square wave and saw-tooth wave allow us to change their characteristics like frequency, phase and duty.
         \nIt also allows us to produce PWM signals having different phase and duty.</string>
 
     <string name="sine_wave_instn">
