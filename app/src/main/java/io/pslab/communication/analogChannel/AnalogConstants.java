@@ -10,7 +10,7 @@ import java.util.Map;
 public class AnalogConstants {
 
     public double[] gains = {1, 2, 4, 5, 8, 10, 16, 32, 1 / 11.};
-    public String[] allAnalogChannels = {"CH1", "CH2", "CH3", "MIC", "CAP", "SEN", "AN8"};
+    public String[] allAnalogChannels = {"CH1", "CH2", "CH3", "MIC", "CAP", "RES", "VOL"};
     public String[] biPolars = {"CH1", "CH2", "CH3", "MIC"};
     public Map<String, double[]> inputRanges = new HashMap<>();
     public Map<String, Integer> picADCMultiplex = new HashMap<>();
@@ -22,17 +22,17 @@ public class AnalogConstants {
         inputRanges.put("CH3", new double[]{-3.3, 3.3});
         inputRanges.put("MIC", new double[]{-3.3, 3.3});
         inputRanges.put("CAP", new double[]{0, 3.3});
-        inputRanges.put("SEN", new double[]{0, 3.3});
-        inputRanges.put("AN8", new double[]{0, 3.3});
+        inputRanges.put("RES", new double[]{0, 3.3});
+        inputRanges.put("VOL", new double[]{0, 3.3});
 
         picADCMultiplex.put("CH1", 3);
         picADCMultiplex.put("CH2", 0);
         picADCMultiplex.put("CH3", 1);
         picADCMultiplex.put("MIC", 2);
         picADCMultiplex.put("AN4", 4);
-        picADCMultiplex.put("SEN", 7);
+        picADCMultiplex.put("RES", 7);
         picADCMultiplex.put("CAP", 5);
-        picADCMultiplex.put("AN8", 8);
+        picADCMultiplex.put("VOL", 8);
 
     }
 }

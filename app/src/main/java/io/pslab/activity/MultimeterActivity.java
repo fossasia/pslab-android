@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -46,6 +47,7 @@ import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.MultimeterSettingsFragment;
 import io.pslab.models.MultimeterData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
@@ -67,6 +69,14 @@ public class MultimeterActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "customDialogPreference";
     public static final String NAME = "savingData";
     private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
+    private static final CSVDataLine CSV_HEADER =
+            new CSVDataLine()
+                    .add("Timestamp")
+                    .add("DateTime")
+                    .add("Data")
+                    .add("Value")
+                    .add("Latitude")
+                    .add("Longitude");
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
     public boolean recordData = false;
@@ -105,7 +115,7 @@ public class MultimeterActivity extends AppCompatActivity {
     SharedPreferences multimeter_data;
     private ScienceLab scienceLab;
     private int knobState;
-    private String dataRecorded;
+    private CSVDataLine dataRecorded;
     private String defaultValue;
     private Menu menu;
     private Boolean switchIsChecked;
@@ -116,7 +126,6 @@ public class MultimeterActivity extends AppCompatActivity {
     private boolean locationEnabled = true;
     private long recordPeriod;
     private double lat = 0, lon = 0;
-    private String multimeterCSVheader = "Timestamp,DateTime,Data,Value,Latitude,Longitude";
     private GPSLogger gpsLogger;
     private Realm realm;
     private long block;
@@ -153,7 +162,7 @@ public class MultimeterActivity extends AppCompatActivity {
         });
 
         multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
-        dataRecorded = multimeterCSVheader;
+        dataRecorded = CSV_HEADER;
         knobState = multimeter_data.getInt("KnobState", 2);
         switchIsChecked = multimeter_data.getBoolean("SwitchState", false);
         aSwitch.setChecked(switchIsChecked);
@@ -193,6 +202,9 @@ public class MultimeterActivity extends AppCompatActivity {
             isPlayingBack = false;
             checkConfig();
             logTimer();
+        }
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
     }
 
@@ -445,7 +457,13 @@ public class MultimeterActivity extends AppCompatActivity {
             lon = 0.0;
         }
         long timestamp = System.currentTimeMillis();
-        dataRecorded = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)) + "," + data + "," + value + "," + lat + "," + lon;
+        dataRecorded = new CSVDataLine()
+                .add(timestamp)
+                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                .add(data)
+                .add(value)
+                .add(lat)
+                .add(lon);
         multimeterLogger.writeCSVFile(dataRecorded);
         recordSensorData(new MultimeterData(timestamp, block, data, value, lat, lon));
     }
@@ -491,7 +509,7 @@ public class MultimeterActivity extends AppCompatActivity {
                         if (isDataRecorded) {
                             MenuItem item1 = menu.findItem(R.id.record_pause_data);
                             item1.setIcon(R.drawable.ic_record_white);
-                            dataRecorded = multimeterCSVheader;
+                            dataRecorded = CSV_HEADER;
                             // Export Data
                             CustomSnackBar.showSnackBar(coordinatorLayout,
                                     getString(R.string.csv_store_text) + " " + multimeterLogger.getCurrentFilePath()
@@ -513,7 +531,7 @@ public class MultimeterActivity extends AppCompatActivity {
                             multimeterLogger = new CSVLogger(getString(R.string.multimeter));
                             multimeterLogger.prepareLogFile();
                             multimeterLogger.writeMetaData(getResources().getString(R.string.multimeter));
-                            multimeterLogger.writeCSVFile(multimeterCSVheader);
+                            multimeterLogger.writeCSVFile(CSV_HEADER);
                             block = System.currentTimeMillis();
                             recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.multimeter)));
                             isRecordingStarted = true;

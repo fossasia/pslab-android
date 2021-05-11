@@ -10,15 +10,15 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:alpha="0"
         android:contentDescription="@string/pocket_science_logo"
-        android:src="@drawable/logo"
-        android:alpha="0"/>
+        android:src="@drawable/logo" />
 
     <ImageView
-        android:id="@+id/PSLabText_land"
+        android:id="@+id/PSLabText"
         android:layout_width="320dp"
         android:layout_height="94dp"
+        android:alpha="0"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/text"
-        android:alpha="0"/>
+        android:src="@drawable/text" />
 </LinearLayout>
