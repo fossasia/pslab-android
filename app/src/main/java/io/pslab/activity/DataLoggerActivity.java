@@ -46,6 +46,8 @@ import io.pslab.models.ThermometerData;
 import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.LocalDataLog;
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -133,6 +135,14 @@ public class DataLoggerActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(getString(R.string.logged_data));
         }
         fillData();
+        categoryData.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SensorDataBlock>>() {
+            @Override
+            public void onChange(RealmResults<SensorDataBlock> sensorDataBlocks, OrderedCollectionChangeSet changeSet) {
+                if(categoryData.size()==0) {
+                    DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
+                }
+            }
+        });
     }
 
     private void fillData() {
