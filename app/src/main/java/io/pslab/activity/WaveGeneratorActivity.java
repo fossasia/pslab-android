@@ -658,6 +658,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                produceSoundTask.cancel(true);
+                produceSoundTask = null;
+                isPlayingSound = false;
                 finish();
                 break;
             case R.id.save_data:
@@ -1342,5 +1345,13 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             track.stop();
             track.release();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        produceSoundTask.cancel(true);
+        produceSoundTask = null;
+        isPlayingSound = false;
     }
 }
