@@ -516,7 +516,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         timestamp = System.currentTimeMillis();
         String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
         String locationData = lat + "," + lon;
-        if (scienceLab.isConnected()) {
             if (digital_mode == WaveConst.SQUARE) {
                 data += timeData + ",Square,Wave1," + waveType1 + "," + String.valueOf(freq1) + ",0,0," + locationData + "\n"; //wave1
                 recordSensorData(new WaveGeneratorData(timestamp, block, "Square", "Wave1", waveType1, String.valueOf(freq1), "0", "0", lat, lon));
@@ -552,10 +551,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     }, Snackbar.LENGTH_SHORT);
-
-        } else {
-            Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void setReceivedData() {
