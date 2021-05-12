@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/create_config_root_view"
@@ -10,6 +10,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/top_app_bar_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_below="@+id/top_app_bar_layout">
 
         <LinearLayout
@@ -29,12 +32,14 @@
                     style="@style/Base.TextAppearance.AppCompat.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/create_config_margin1"
                     android:text="@string/select_instrument_title" />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/select_instrument_spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
 
             </LinearLayout>
 
@@ -47,6 +52,7 @@
                 <TextView
                     android:id="@+id/time_interval_title"
                     style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_marginTop="@dimen/create_config_margin1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/time_interval_title" />
@@ -57,12 +63,14 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/time_interval_hint"
                     android:imeOptions="actionDone"
+                    android:layout_marginTop="@dimen/create_config_margin1"
                     android:inputType="number"
                     android:textAlignment="center" />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/interval_unit_spinner"
                     android:layout_width="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
@@ -109,4 +117,4 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
