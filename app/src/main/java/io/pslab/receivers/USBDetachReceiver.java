@@ -1,19 +1,21 @@
 package io.pslab.receivers;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.widget.Toast;
 
 import io.pslab.R;
 import io.pslab.activity.MainActivity;
 import io.pslab.activity.PowerSourceActivity;
 import io.pslab.communication.PacketHandler;
 import io.pslab.fragment.HomeFragment;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
 /**
@@ -39,7 +41,8 @@ public class USBDetachReceiver extends BroadcastReceiver {
                     ScienceLabCommon.scienceLab.close();
                     // Clear saved values in Power Source Instrument
                     context.getSharedPreferences(PowerSourceActivity.POWER_PREFERENCES, Context.MODE_PRIVATE).edit().clear().apply();
-                    Toast.makeText(context, "USB Device Disconnected", Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(((Activity)context).findViewById(android.R.id.content),
+                            "USB Device Disconnected",null,null, Snackbar.LENGTH_SHORT);
 
                     PacketHandler.version = "";
 

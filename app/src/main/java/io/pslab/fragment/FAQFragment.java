@@ -116,7 +116,7 @@ public class FAQFragment extends Fragment {
 
             holder.text.setClickable(true);
             holder.text.setMovementMethod(LinkMovementMethod.getInstance());
-            holder.text.setText(Html.fromHtml(getChild(questionPosition, childPosition).toString(), Html.FROM_HTML_MODE_COMPACT));
+            holder.text.setText(Html.fromHtml(getChild(questionPosition, childPosition).toString()));
 
             return v;
         }

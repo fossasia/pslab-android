@@ -35,8 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/scanned_devices_list_title"
         android:layout_marginTop="@dimen/bluetooth_dialog_margin"
-        android:background="@drawable/rectangle_border_black"
-        android:divider="@color/dark_grey"
+        android:background="@drawable/rectangle_border"
+        android:divider="@color/colorPrimary"
         android:dividerHeight="@dimen/bluetooth_list_divider_height"
         android:padding="@dimen/bluetooth_dialog_margin" />
 

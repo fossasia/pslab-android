@@ -11,15 +11,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import io.pslab.DataFormatter;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -45,15 +43,19 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.BarometerActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.BMP180;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.BaroData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -63,7 +65,15 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
  * Created by Padmal on 12/13/18.
  */
 
-public class BaroMeterDataFragment extends Fragment {
+public class BaroMeterDataFragment extends Fragment implements OperationCallback {
+
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("Pressure")
+            .add("Altitude")
+            .add("Latitude")
+            .add("Longitude");
 
     private static int sensorType = 0;
     private static float highLimit = 1.2f;
@@ -108,7 +118,6 @@ public class BaroMeterDataFragment extends Fragment {
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private BarometerActivity baroSensor;
     private View rootView;
-    private String csvHeader = "Timestamp,DateTime,Pressure,Altitude,Latitude,Longitude";
 
     public static BaroMeterDataFragment newInstance() {
         return new BaroMeterDataFragment();
@@ -241,8 +250,8 @@ public class BaroMeterDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getActivity().getResources().getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -323,6 +332,7 @@ public class BaroMeterDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         baroSensor.startedPlay = true;
@@ -335,11 +345,12 @@ public class BaroMeterDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getActivity().getResources().getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -354,17 +365,21 @@ public class BaroMeterDataFragment extends Fragment {
         baroSensor.invalidateOptionsMenu();
     }
 
+    @Override
     public void saveGraph() {
         baroSensor.csvLogger.prepareLogFile();
         baroSensor.csvLogger.writeMetaData(getResources().getString(R.string.baro_meter));
-        baroSensor.csvLogger.writeCSVFile(csvHeader);
+        baroSensor.csvLogger.writeCSVFile(CSV_HEADER);
         for (BaroData baroData : baroSensor.recordedBaroData) {
-            baroSensor.csvLogger.writeCSVFile(baroData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())) + ","
-                    + baroData.getBaro() + ","
-                    + baroData.getAltitude() + ","
-                    + baroData.getLat() + ","
-                    + baroData.getLon());
+            baroSensor.csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(baroData.getTime())
+                            .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())))
+                            .add(baroData.getBaro())
+                            .add(baroData.getAltitude())
+                            .add(baroData.getLat())
+                            .add(baroData.getLon())
+            );
         }
         View view = rootView.findViewById(R.id.barometer_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -372,11 +387,12 @@ public class BaroMeterDataFragment extends Fragment {
         try {
             b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + CSV_DIRECTORY + File.separator + baroSensor.getSensorName() +
-                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg" ));
+                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
+
     private void setupInstruments() {
         baroMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(baroSensor.BAROMETER_LIMIT, 2));
         XAxis x = mChart.getXAxis();
@@ -457,21 +473,33 @@ public class BaroMeterDataFragment extends Fragment {
         if (getActivity() != null && baroSensor.isRecording) {
             if (baroSensor.writeHeaderToFile) {
                 baroSensor.csvLogger.prepareLogFile();
-                baroSensor.csvLogger.writeCSVFile(csvHeader);
+                baroSensor.csvLogger.writeCSVFile(CSV_HEADER);
                 block = timestamp;
                 baroSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, baroSensor.getSensorName()));
                 baroSensor.writeHeaderToFile = !baroSensor.writeHeaderToFile;
             }
             if (baroSensor.addLocation && baroSensor.gpsLogger.isGPSEnabled()) {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = baroSensor.gpsLogger.getDeviceLocation();
-                baroSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + "," + getAltitude(sensorReading) + "," + location.getLatitude() + "," + location.getLongitude());
+                baroSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(sensorReading)
+                                .add(getAltitude(sensorReading))
+                                .add(location.getLatitude())
+                                .add(location.getLongitude())
+                );
                 sensorData = new BaroData(timestamp, block, baroValue, getAltitude(baroValue), location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                baroSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + "," + getAltitude(sensorReading) + ",0.0,0.0");
+                baroSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(sensorReading)
+                                .add(getAltitude(sensorReading))
+                                .add(0.0)
+                                .add(0.0)
+                );
                 sensorData = new BaroData(timestamp, block, baroValue, getAltitude(baroValue), 0.0, 0.0);
             }
             baroSensor.recordSensorData(sensorData);
@@ -549,7 +577,7 @@ public class BaroMeterDataFragment extends Fragment {
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
-                baroValue = Float.valueOf(String.format(Locale.US, PSLabSensor.BAROMETER_DATA_FORMAT, event.values[0] / 1000));
+                baroValue = Float.valueOf(String.format(Locale.ROOT, PSLabSensor.BAROMETER_DATA_FORMAT, event.values[0] / 1000));
             }
         }
     };
@@ -585,7 +613,8 @@ public class BaroMeterDataFragment extends Fragment {
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
                 if (sensor == null) {
-                    Toast.makeText(getContext(), getResources().getString(R.string.no_baro_sensor), Toast.LENGTH_LONG).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getResources().getString(R.string.no_baro_sensor), null, null, Snackbar.LENGTH_LONG);
                 } else {
                     float max = sensor.getMaximumRange() / 1000;
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(baroSensor.BAROMETER_LIMIT, max).apply();
@@ -607,14 +636,16 @@ public class BaroMeterDataFragment extends Fragment {
                             sensorBMP180.setOversampling(10);
                             sensorType = 0;
                         } else {
-                            Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
+                            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                    getString(R.string.sensor_not_connected_tls), null, null, Snackbar.LENGTH_SHORT);
                             sensorType = 0;
                         }
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                     sensorType = 0;
                 }
                 break;
@@ -625,7 +656,7 @@ public class BaroMeterDataFragment extends Fragment {
 
     private float getAltitude(float pressure) {
         if (pressure <= 0.0) {
-            return  0;
+            return 0;
         } else {
             return (float) (44330 * (1 - Math.pow(pressure, 1.0 / 5.255)));
         }

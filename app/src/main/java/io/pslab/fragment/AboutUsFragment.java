@@ -1,7 +1,9 @@
 package io.pslab.fragment;
 
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -55,6 +57,7 @@ public class AboutUsFragment extends Fragment {
                 .addFacebook("pslabio")
                 .addTwitter("pslabio")
                 .addYoutube("UCQprMsG-raCIMlBudm20iLQ")
+                .addItem(addDevelopers())
                 .create();
 
         appBarLayout.addView(aboutPage, -1);
@@ -83,6 +86,21 @@ public class AboutUsFragment extends Fragment {
             AppCompatDelegate.setDefaultNightMode(
                     AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
+    }
+
+    private Element addDevelopers() {
+        Element developersElement = new Element();
+        developersElement.setTitle(getString(R.string.developers));
+        developersElement.setIconDrawable(R.drawable.ic_user__24dp);
+        developersElement.setOnClickListener(v -> {
+            String url = getString(R.string.github_developers_link);
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                url = "https://" + url;
+            }
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        });
+        return developersElement;
     }
 
 }

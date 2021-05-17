@@ -9,8 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,11 +23,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
@@ -77,6 +80,14 @@ public class SensorActivity extends AppCompatActivity {
         setContentView(R.layout.sensor_main);
         scienceLab = ScienceLabCommon.scienceLab;
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.sensors);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         // Bottom Sheet guide
         bottomSheet = findViewById(R.id.bottom_sheet);
         tvShadow = findViewById(R.id.shadow);
@@ -105,6 +116,7 @@ public class SensorActivity extends AppCompatActivity {
         sensorAddr.put(0x68, "MPU6050");
         sensorAddr.put(0x40, "SHT21");
         sensorAddr.put(0x39, "TSL2561");
+        sensorAddr.put(0x69, "MPU925x");
 
         adapter = new ArrayAdapter<>(getApplication(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataName);
 
@@ -162,7 +174,8 @@ public class SensorActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     default:
-                        Toast.makeText(getApplication(), "Sensor Not Supported", Toast.LENGTH_SHORT).show();
+                        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                "Sensor Not Supported",null,null, Snackbar.LENGTH_SHORT);
                 }
             }
         });
@@ -286,5 +299,13 @@ public class SensorActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             buttonSensorAutoScan.setClickable(true);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return true;
     }
 }

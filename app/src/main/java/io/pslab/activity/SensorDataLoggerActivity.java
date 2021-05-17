@@ -27,7 +27,6 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -38,6 +37,7 @@ import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.MPU6050;
 import io.pslab.models.DataMPU6050;
 import io.pslab.models.SensorLogged;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
 import java.io.IOException;
@@ -157,7 +157,8 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
 
     private void handleClick(int position) {
         String sensor = sensorList.get(position);
-        Toast.makeText(context, sensor, Toast.LENGTH_SHORT).show();
+        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                sensor,null,null,Snackbar.LENGTH_SHORT);
         switch (sensor) {
             case "MPU6050":
                 MaterialDialog dialog = new MaterialDialog.Builder(context)
@@ -235,7 +236,8 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                                     realm.copyToRealm(sensorLogged);
                                 }
                                 realm.commitTransaction();
-                                Toast.makeText(SensorDataLoggerActivity.this, "Data Logged Successfully", Toast.LENGTH_SHORT).show();
+                                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                        "Data Logged Successfully",null,null,Snackbar.LENGTH_SHORT);
                                 dialog.dismiss();
                             }
                         })
@@ -300,7 +302,8 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                 hasPermission = true;
             } else {
                 hasPermission = false;
-                Toast.makeText(this, "Can't log data", Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                        "Can't log data",null,null,Snackbar.LENGTH_SHORT);
             }
         }
     }

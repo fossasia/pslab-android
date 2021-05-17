@@ -8,12 +8,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,15 +40,24 @@ import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.GasSensorActivity;
 import io.pslab.communication.ScienceLab;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
-public class GasSensorDataFragment extends Fragment {
+public class GasSensorDataFragment extends Fragment implements OperationCallback {
 
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("ppmValue")
+            .add("Latitude")
+            .add("Longitude");
     @BindView(R.id.gas_sensor_value)
     TextView gasValue;
     @BindView(R.id.label_gas_sensor)
@@ -92,7 +102,8 @@ public class GasSensorDataFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         scienceLab = ScienceLabCommon.scienceLab;
         if (!scienceLab.isConnected()) {
-            Toast.makeText(getContext(), R.string.not_connected, Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.not_connected), null, null, Snackbar.LENGTH_SHORT);
         }
         entries = new ArrayList<>();
         setupInstruments();
@@ -139,7 +150,7 @@ public class GasSensorDataFragment extends Fragment {
                 entries.add(entry);
                 gasSensorMeter.setWithTremble(false);
                 gasSensorMeter.setSpeedAt(d.getPpmValue());
-                gasValue.setText(String.valueOf(String.format("%.2f", d.getPpmValue())));
+                gasValue.setText(String.format(Locale.getDefault(), "%.2f", d.getPpmValue()));
             }
             y.setAxisMaximum(1024);
             y.setAxisMinimum(0);
@@ -170,8 +181,8 @@ public class GasSensorDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -192,7 +203,7 @@ public class GasSensorDataFragment extends Fragment {
                             try {
                                 GasSensorData d = recordedGasSensorArray.get(turns);
                                 turns++;
-                                gasValue.setText(String.valueOf(String.format("%.2f", d.getPpmValue())));
+                                gasValue.setText(String.format(Locale.getDefault(), "%.2f", d.getPpmValue()));
                                 y.setAxisMaximum(1024);
                                 y.setAxisMinimum(0);
                                 y.setLabelCount(10);
@@ -228,6 +239,7 @@ public class GasSensorDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         gasSensorActivity.startedPlay = true;
@@ -240,11 +252,12 @@ public class GasSensorDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -259,16 +272,20 @@ public class GasSensorDataFragment extends Fragment {
         gasSensorActivity.invalidateOptionsMenu();
     }
 
+    @Override
     public void saveGraph() {
         gasSensorActivity.csvLogger.prepareLogFile();
         gasSensorActivity.csvLogger.writeMetaData(getResources().getString(R.string.gas_sensor));
-        gasSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+        gasSensorActivity.csvLogger.writeCSVFile(CSV_HEADER);
         for (GasSensorData baroData : gasSensorActivity.recordedGasSensorData) {
-            gasSensorActivity.csvLogger.writeCSVFile(baroData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())) + ","
-                    + baroData.getPpmValue() + ","
-                    + baroData.getLat() + ","
-                    + baroData.getLon());
+            gasSensorActivity.csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(baroData.getTime())
+                            .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(baroData.getTime())))
+                            .add(baroData.getPpmValue())
+                            .add(baroData.getLat())
+                            .add(baroData.getLon())
+            );
         }
         View view = rootView.findViewById(R.id.gas_sensor_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -321,21 +338,31 @@ public class GasSensorDataFragment extends Fragment {
         if (getActivity() != null && gasSensorActivity.isRecording) {
             if (gasSensorActivity.writeHeaderToFile) {
                 gasSensorActivity.csvLogger.prepareLogFile();
-                gasSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+                gasSensorActivity.csvLogger.writeCSVFile(CSV_HEADER);
                 block = timestamp;
                 gasSensorActivity.recordSensorDataBlockID(new SensorDataBlock(timestamp, gasSensorActivity.getSensorName()));
                 gasSensorActivity.writeHeaderToFile = !gasSensorActivity.writeHeaderToFile;
             }
             if (gasSensorActivity.addLocation && gasSensorActivity.gpsLogger.isGPSEnabled()) {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = gasSensorActivity.gpsLogger.getDeviceLocation();
-                gasSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + ppmValue + "," + location.getLatitude() + "," + location.getLongitude());
+                gasSensorActivity.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(ppmValue)
+                                .add(location.getLatitude())
+                                .add(location.getLongitude())
+                );
                 sensorData = new GasSensorData(timestamp, block, ppmValue, location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                gasSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + ppmValue + ",0.0,0.0");
+                gasSensorActivity.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(ppmValue)
+                                .add(0.0)
+                                .add(0.0)
+                );
                 sensorData = new GasSensorData(timestamp, block, ppmValue, 0.0, 0.0);
             }
             gasSensorActivity.recordSensorData(sensorData);
@@ -345,10 +372,11 @@ public class GasSensorDataFragment extends Fragment {
     }
 
     private void visualizeData() {
+        double ppmValue = 0d;
         if (scienceLab.isConnected()) {
             double volt = scienceLab.getVoltage("CH1", 1);
-            double ppmValue = (volt / 3.3) * 1024.0;
-            gasValue.setText(String.valueOf(String.format("%.2f", ppmValue)));
+            ppmValue = (volt / 3.3) * 1024.0;
+            gasValue.setText(String.format(Locale.getDefault(), "%.2f", ppmValue));
             gasSensorMeter.setWithTremble(false);
             gasSensorMeter.setSpeedAt((float) ppmValue);
             timeElapsed = ((System.currentTimeMillis() - startTime) / updatePeriod);
@@ -356,7 +384,6 @@ public class GasSensorDataFragment extends Fragment {
                 previousTimeElapsed = timeElapsed;
                 Entry entry = new Entry((float) timeElapsed, (float) ppmValue);
                 entries.add(entry);
-                writeLogToFile(System.currentTimeMillis(), (float) ppmValue);
                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.gas_sensor_unit));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
@@ -370,6 +397,7 @@ public class GasSensorDataFragment extends Fragment {
                 mChart.invalidate();
             }
         }
+        writeLogToFile(System.currentTimeMillis(), (float) ppmValue);
     }
 
     private void setupInstruments() {
