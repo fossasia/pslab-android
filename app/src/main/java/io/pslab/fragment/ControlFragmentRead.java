@@ -141,9 +141,9 @@ public class ControlFragmentRead extends Fragment {
                     tvControlRead5.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH1", 1), DataFormatter.LOW_PRECISION_FORMAT));
                     tvControlRead6.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CAP", 1), DataFormatter.LOW_PRECISION_FORMAT));
                     tvControlRead7.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH2", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                    tvControlRead8.setText(DataFormatter.formatDouble(scienceLab.getVoltage("SEN", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                    tvControlRead8.setText(DataFormatter.formatDouble(scienceLab.getVoltage("RES", 1), DataFormatter.LOW_PRECISION_FORMAT));
                     tvControlRead9.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH3", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                    tvControlRead10.setText(DataFormatter.formatDouble(scienceLab.getVoltage("AN8", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                    tvControlRead10.setText(DataFormatter.formatDouble(scienceLab.getVoltage("VOL", 1), DataFormatter.LOW_PRECISION_FORMAT));
                 }
 
             }

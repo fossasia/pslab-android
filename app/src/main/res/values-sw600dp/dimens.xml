@@ -11,5 +11,7 @@
     <dimen name="ctrl_title_text_margin">3dp</dimen>
     <dimen name="btn_min_width">80dp</dimen>
     <dimen name="mon_title_sep_margin">16dp</dimen>
-
+    <dimen name="extra_space_top">72dp</dimen>
+    <dimen name="osc_chart_width">1000dp</dimen>
+    <dimen name="osc_chart_height">600dp</dimen>
 </resources>

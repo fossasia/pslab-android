@@ -11,13 +11,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -30,11 +31,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 
 import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
@@ -43,8 +48,16 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
  * Created by Kunal on 18-12-18
  */
 
-public class AccelerometerDataFragment extends Fragment {
+public class AccelerometerDataFragment extends Fragment implements OperationCallback {
 
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("ReadingsX")
+            .add("ReadingsY")
+            .add("ReadingsZ")
+            .add("Latitude")
+            .add("Longitude");
     private static int updatePeriod = 1000;
     private static float highLimit = 1.2f;
     private static float gain = 1;
@@ -110,9 +123,9 @@ public class AccelerometerDataFragment extends Fragment {
             resetInstrumentData();
             playRecordedData();
         } else if (accelerometerSensor.viewingData) {
-                recordedAccelerometerArray = new ArrayList<>();
-                resetInstrumentData();
-                plotAllRecordedData();
+            recordedAccelerometerArray = new ArrayList<>();
+            resetInstrumentData();
+            plotAllRecordedData();
         } else if (!accelerometerSensor.isRecording) {
             updateGraphs();
             initiateAccelerometerSensor();
@@ -177,8 +190,8 @@ public class AccelerometerDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -255,6 +268,7 @@ public class AccelerometerDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         accelerometerSensor.startedPlay = true;
@@ -267,11 +281,12 @@ public class AccelerometerDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getActivity().getResources().getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -288,18 +303,22 @@ public class AccelerometerDataFragment extends Fragment {
         accelerometerSensor.invalidateOptionsMenu();
     }
 
+    @Override
     public void saveGraph() {
         accelerometerSensor.csvLogger.prepareLogFile();
         accelerometerSensor.csvLogger.writeMetaData(getResources().getString(R.string.accelerometer));
-        accelerometerSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
+        accelerometerSensor.csvLogger.writeCSVFile(CSV_HEADER);
         for (AccelerometerData accelerometerData : accelerometerSensor.recordedAccelerometerData) {
-            accelerometerSensor.csvLogger.writeCSVFile(accelerometerData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(accelerometerData.getTime())) + ","
-                    + accelerometerData.getAccelerometerX() + ","
-                    + accelerometerData.getAccelerometerY() + ","
-                    + accelerometerData.getAccelerometerZ() + ","
-                    + accelerometerData.getLat() + ","
-                    + accelerometerData.getLon());
+            accelerometerSensor.csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(accelerometerData.getTime())
+                            .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(accelerometerData.getTime())))
+                            .add(accelerometerData.getAccelerometerX())
+                            .add(accelerometerData.getAccelerometerY())
+                            .add(accelerometerData.getAccelerometerZ())
+                            .add(accelerometerData.getLat())
+                            .add(accelerometerData.getLon())
+            );
         }
         View view = rootView.findViewById(R.id.accelerometer_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -360,21 +379,35 @@ public class AccelerometerDataFragment extends Fragment {
             if (accelerometerSensor.writeHeaderToFile) {
                 accelerometerSensor.csvLogger.prepareLogFile();
                 accelerometerSensor.csvLogger.writeMetaData(getResources().getString(R.string.accelerometer));
-                accelerometerSensor.csvLogger.writeCSVFile("Timestamp,DateTime,ReadingsX,ReadingsY,ReadingsZ,Latitude,Longitude");
+                accelerometerSensor.csvLogger.writeCSVFile(CSV_HEADER);
                 block = timestamp;
                 accelerometerSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, accelerometerSensor.getSensorName()));
                 accelerometerSensor.writeHeaderToFile = !accelerometerSensor.writeHeaderToFile;
             }
             if (accelerometerSensor.addLocation && accelerometerSensor.gpsLogger.isGPSEnabled()) {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = accelerometerSensor.gpsLogger.getDeviceLocation();
-                accelerometerSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + readingX + "," + readingY + "," + readingZ + "," + location.getLatitude() + "," + location.getLongitude());
+                accelerometerSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(readingX)
+                                .add(readingY)
+                                .add(readingZ)
+                                .add(location.getLatitude())
+                                .add(location.getLongitude())
+                );
                 sensorData = new AccelerometerData(timestamp, block, accelerometerViewFragments.get(0).getCurrentValue(), accelerometerViewFragments.get(1).getCurrentValue(), accelerometerViewFragments.get(2).getCurrentValue(), location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                accelerometerSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + readingX + "," + readingY + "," + readingZ + "," + ",0.0,0.0");
+                accelerometerSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(readingX)
+                                .add(readingY)
+                                .add(readingZ)
+                                .add(0.0)
+                                .add(0.0)
+                );
                 sensorData = new AccelerometerData(timestamp, block, accelerometerViewFragments.get(0).getCurrentValue(), accelerometerViewFragments.get(1).getCurrentValue(), accelerometerViewFragments.get(2).getCurrentValue(), 0.0, 0.0);
             }
             accelerometerSensor.recordSensorData(sensorData);
@@ -451,7 +484,8 @@ public class AccelerometerDataFragment extends Fragment {
         sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (sensor == null) {
-            Toast.makeText(getContext(), getResources().getString(R.string.no_accelerometer_sensor), Toast.LENGTH_LONG).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getResources().getString(R.string.no_accelerometer_sensor), null, null, Snackbar.LENGTH_LONG);
         } else {
             sensorManager.registerListener(accelerometerSensorEventListener,
                     sensor, SensorManager.SENSOR_DELAY_FASTEST);

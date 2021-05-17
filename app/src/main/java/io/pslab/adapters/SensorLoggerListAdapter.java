@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,13 +35,14 @@ import io.pslab.activity.MultimeterActivity;
 import io.pslab.activity.OscilloscopeActivity;
 import io.pslab.activity.PowerSourceActivity;
 import io.pslab.activity.RoboticArmActivity;
+import io.pslab.activity.SoundMeterActivity;
 import io.pslab.activity.ThermometerActivity;
 import io.pslab.activity.WaveGeneratorActivity;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
+import io.pslab.models.CompassData;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.GyroData;
-import io.pslab.models.CompassData;
 import io.pslab.models.LogicAnalyzerData;
 import io.pslab.models.LuxData;
 import io.pslab.models.MultimeterData;
@@ -50,9 +51,11 @@ import io.pslab.models.PSLabSensor;
 import io.pslab.models.PowerSourceData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
+import io.pslab.models.SoundData;
 import io.pslab.models.ThermometerData;
 import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.LocalDataLog;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -136,6 +139,10 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             case PSLabSensor.GAS_SENSOR:
                 holder.sensor.setText(R.string.gas_sensor);
                 holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_gas));
+                break;
+            case PSLabSensor.SOUND_METER:
+                holder.sensor.setText(R.string.sound_meter);
+                holder.tileIcon.setImageDrawable(context.getDrawable(R.drawable.tile_icon_gas));
                 break;
             default:
                 break;
@@ -227,6 +234,11 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             gasSensorIntent.putExtra(KEY_LOG, true);
             gasSensorIntent.putExtra(DATA_BLOCK, block.getBlock());
             context.startActivity(gasSensorIntent);
+        } else if (block.getSensorType().equalsIgnoreCase(context.getString(R.string.sound_meter))) {
+            Intent soundMeterIntent = new Intent(context, SoundMeterActivity.class);
+            soundMeterIntent.putExtra(KEY_LOG, true);
+            soundMeterIntent.putExtra(DATA_BLOCK, block.getBlock());
+            context.startActivity(soundMeterIntent);
         }
     }
 
@@ -242,10 +254,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                                         File.separator + CSVLogger.CSV_DIRECTORY +
                                         File.separator + block.getSensorType() +
                                         File.separator + CSVLogger.FILE_NAME_FORMAT.format(block.getBlock()) + ".csv");
-                        Toast.makeText(context, logDirectory.delete()
-                                        ? context.getString(R.string.log_deleted)
-                                        : context.getString(R.string.nothing_to_delete),
-                                Toast.LENGTH_LONG).show();
+                        CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content), context.getString(R.string.log_deleted), null, null, Snackbar.LENGTH_LONG);
                         if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LUXMETER)) {
                             LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.BAROMETER)) {
@@ -270,6 +279,8 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                             LocalDataLog.with().clearBlockOfLARecords(block.getBlock());
                         } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GAS_SENSOR)) {
                             LocalDataLog.with().clearBlockOfGasSensorRecords(block.getBlock());
+                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.SOUND_METER)) {
+                            LocalDataLog.with().clearBlockOfSoundRecords(block.getBlock());
                         }
                         LocalDataLog.with().clearSensorBlock(block.getBlock());
                         dialog.dismiss();
@@ -289,6 +300,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
     }
 
     private void populateMapData(SensorDataBlock block) {
+
         if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LUXMETER)) {
             RealmResults<LuxData> data = LocalDataLog.with().getBlockOfLuxRecords(block.getBlock());
             JSONArray array = new JSONArray();
@@ -359,7 +371,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 }
             }
             setMapDataToIntent(array);
-        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER_CONFIGURATIONS)) {
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER)) {
             RealmResults<AccelerometerData> data = LocalDataLog.with().getBlockOfAccelerometerRecords(block.getBlock());
             JSONArray array = new JSONArray();
             for (AccelerometerData d : data) {
@@ -523,6 +535,22 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 }
             }
             setMapDataToIntent(array);
+        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.SOUND_METER)) {
+            RealmResults<SoundData> data = LocalDataLog.with().getBlockOfSoundRecords(block.getBlock());
+            JSONArray array = new JSONArray();
+            for (SoundData d : data) {
+                try {
+                    JSONObject i = new JSONObject();
+                    i.put("date", CSVLogger.FILE_NAME_FORMAT.format(d.getTime()));
+                    i.put("dB", d.getdB());
+                    i.put("lon", d.getLon());
+                    i.put("lat", d.getLat());
+                    if (d.getLat() != 0.0 && d.getLon() != 0.0) array.put(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setMapDataToIntent(array);
         }
     }
 
@@ -534,7 +562,8 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             context.startActivity(map);
         } else {
             map.putExtra("hasMarkers", false);
-            Toast.makeText(context, context.getResources().getString(R.string.no_location_data), Toast.LENGTH_LONG).show();
+            CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content),
+                    context.getString(R.string.no_location_data), null, null, Snackbar.LENGTH_LONG);
         }
     }
 

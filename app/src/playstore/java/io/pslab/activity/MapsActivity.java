@@ -2,7 +2,7 @@ package io.pslab.activity;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.design.widget.Snackbar;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.pslab.R;
+import io.pslab.others.CustomSnackBar;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -42,7 +43,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(this, R.string.no_location_specified, Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.no_location_specified),null,null, Snackbar.LENGTH_SHORT);
         }
     }
 

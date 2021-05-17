@@ -12,7 +12,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
-import android.widget.Toast;
 
 import io.pslab.R;
 import io.pslab.models.PSLabSensor;
@@ -141,9 +140,8 @@ public class GPSLogger {
             locationManager.requestLocationUpdates(provider, UPDATE_INTERVAL_IN_MILLISECONDS, MIN_DISTANCE_CHANGE_FOR_UPDATES,
                     locationListener);
         } else {
-            Toast.makeText(context.getApplicationContext(),
-                    context.getResources().getString(R.string.no_permission_for_maps),
-                    Toast.LENGTH_LONG).show();
+            CustomSnackBar.showSnackBar(((Activity) context).findViewById(android.R.id.content),
+                    context.getString(R.string.no_permission_for_maps),null,null,Snackbar.LENGTH_LONG);
         }
     }
 }

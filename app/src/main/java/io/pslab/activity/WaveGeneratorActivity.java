@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -39,7 +40,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -61,6 +61,7 @@ import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.WaveGeneratorData;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
@@ -80,6 +81,17 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public static final int TRIANGULAR = 2;
     public static final int PWM = 3;
     public static final String PREFS_NAME = "customDialogPreference";
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("Mode")
+            .add("Wave")
+            .add("Shape")
+            .add("Freq")
+            .add("Phase")
+            .add("Duty")
+            .add("lat")
+            .add("lon");
     private static boolean waveMonSelected;
     private final long LONG_CLICK_DELAY = 100;
     private final String KEY_LOG = "has_log";
@@ -188,6 +200,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private LineChart previewChart;
     private boolean isPlayingSound = false;
     private ProduceSoundTask produceSoundTask;
+
+    private AudioTrack track;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -482,6 +496,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+        }
     }
 
     public void saveWaveConfig() {
@@ -490,7 +508,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         csvLogger.writeMetaData(getResources().getString(R.string.wave_generator));
         long timestamp;
         double lat, lon;
-        String data = "Timestamp,DateTime,Mode,Wave,Shape,Freq,Phase,Duty,lat,lon\n";
+        csvLogger.writeCSVFile(CSV_HEADER);
         recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.wave_generator)));
         double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
         double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
@@ -514,13 +532,12 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         }
 
         timestamp = System.currentTimeMillis();
-        String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-        String locationData = lat + "," + lon;
+        String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
         if (scienceLab.isConnected()) {
             if (digital_mode == WaveConst.SQUARE) {
-                data += timeData + ",Square,Wave1," + waveType1 + "," + String.valueOf(freq1) + ",0,0," + locationData + "\n"; //wave1
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("Square").add("Wave1").add(waveType1).add(freq1).add(0).add(0).add(lat).add(lon)); //wave1
                 recordSensorData(new WaveGeneratorData(timestamp, block, "Square", "Wave1", waveType1, String.valueOf(freq1), "0", "0", lat, lon));
-                data += timeData + ",Square,Wave2," + waveType2 + "," + String.valueOf(freq2) + "," + String.valueOf(phase) + ",0," + locationData + "\n";//wave2
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("Square").add("Wave2").add(waveType2).add(freq2).add(phase).add(0).add(lat).add(lon)); //wave2
                 recordSensorData(new WaveGeneratorData(timestamp + 1, block, "Square", "Wave2", waveType2, String.valueOf(freq2), String.valueOf(phase), "0", lat, lon));
             } else {
                 double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
@@ -532,16 +549,15 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
                 double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
 
-                data += timeData + ",PWM,Sq1,PWM," + String.valueOf(freqSqr1) + ",0," + String.valueOf(dutySqr1) + "," + locationData + "\n";
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("PWM").add("Sq1").add("PWM").add(freqSqr1).add(0).add(dutySqr1).add(lat).add(lon));
                 recordSensorData(new WaveGeneratorData(timestamp, block, "PWM", "Sq1", "PWM", String.valueOf(freqSqr1), "0", String.valueOf(dutySqr1), lat, lon));
-                data += timeData + ",PWM,Sq2,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr2) + "," + String.valueOf(dutySqr2) + "," + locationData + "\n";
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("PWM").add("Sq2").add("PWM").add(freqSqr1).add(phaseSqr2).add(dutySqr2).add(lat).add(lon));
                 recordSensorData(new WaveGeneratorData(timestamp + 1, block, "PWM", "Sq2", "PWM", String.valueOf(freqSqr1), String.valueOf(phaseSqr2), String.valueOf(dutySqr2), lat, lon));
-                data += timeData + ",PWM,Sq3,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr3) + "," + String.valueOf(dutySqr3) + "," + locationData + "\n";
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("PWM").add("Sq3").add("PWM").add(freqSqr1).add(phaseSqr3).add(dutySqr3).add(lat).add(lon));
                 recordSensorData(new WaveGeneratorData(timestamp + 2, block, "PWM", "Sq3", "PWM", String.valueOf(freqSqr1), String.valueOf(phaseSqr3), String.valueOf(dutySqr3), lat, lon));
-                data += timeData + ",PWM,Sq4,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr4) + "," + String.valueOf(dutySqr4) + "," + locationData;
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("PWM").add("Sq4").add("PWM").add(freqSqr1).add(phaseSqr4).add(dutySqr4).add(lat).add(lon));
                 recordSensorData(new WaveGeneratorData(timestamp + 3, block, "PWM", "Sq4", "PWM", String.valueOf(freqSqr1), String.valueOf(phaseSqr4), String.valueOf(dutySqr4), lat, lon));
             }
-            csvLogger.writeCSVFile(data);
             CustomSnackBar.showSnackBar(coordinatorLayout,
                     getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
                     , getString(R.string.open), new View.OnClickListener() {
@@ -554,7 +570,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                     }, Snackbar.LENGTH_SHORT);
 
         } else {
-            Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -619,8 +636,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         if (scienceLab.isConnected()) {
             if (digital_mode == WaveConst.SQUARE) {
                 if (phase == WaveData.PHASE_MIN.getValue()) {
-                    scienceLab.setW1(freq1, waveType1);
-                    scienceLab.setW2(freq2, waveType2);
+                    scienceLab.setSI1(freq1, waveType1);
+                    scienceLab.setSI2(freq2, waveType2);
                 } else {
                     scienceLab.setWaves(freq1, phase, freq2);
                 }
@@ -668,7 +685,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 if (scienceLab.isConnected()) {
                     viewWaveDialog();
                 } else {
-                    Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                            getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
                 }
                 break;
             case R.id.show_guide:
@@ -949,10 +967,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         String valueText;
         switch (unit) {
             case "\u00b0":
-                valueText = String.valueOf(dValue.intValue()) + unit;
+                valueText = dValue.intValue() + unit;
                 break;
             default:
-                valueText = String.valueOf(dValue.intValue()) + " " + unit;
+                valueText = dValue.intValue() + " " + unit;
         }
         activePropTv.setText(valueText);
     }
@@ -1300,8 +1318,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
     private class ProduceSoundTask extends AsyncTask<Void, Void, Void> {
 
-        private AudioTrack track;
-
         @Override
         protected Void doInBackground(Void... voids) {
             short[] buffer = new short[1024];
@@ -1338,9 +1354,11 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            track.flush();
-            track.stop();
-            track.release();
+            if (track != null) {
+                track.flush();
+                track.stop();
+                track.release();
+            }
         }
     }
 }

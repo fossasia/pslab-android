@@ -11,13 +11,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -48,10 +48,13 @@ import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.BH1750;
 import io.pslab.communication.sensors.TSL2561;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.LuxData;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -61,7 +64,15 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
  * Created by Padmal on 11/2/18.
  */
 
-public class LuxMeterDataFragment extends Fragment {
+public class LuxMeterDataFragment extends Fragment implements OperationCallback {
+
+    private static final CSVDataLine CSV_HEADER =
+            new CSVDataLine()
+                    .add("Timestamp")
+                    .add("DateTime")
+                    .add("Readings")
+                    .add("Latitude")
+                    .add("Longitude");
 
     private static int sensorType = 0;
     private static int highLimit = 2000;
@@ -175,7 +186,7 @@ public class LuxMeterDataFragment extends Fragment {
     private void plotAllRecordedData() {
         recordedLuxArray.addAll(luxSensor.recordedLuxData);
         if (recordedLuxArray.size() != 0) {
-            for (LuxData d: recordedLuxArray) {
+            for (LuxData d : recordedLuxArray) {
                 if (currentMax < d.getLux()) {
                     currentMax = d.getLux();
                 }
@@ -220,8 +231,8 @@ public class LuxMeterDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -288,6 +299,7 @@ public class LuxMeterDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -302,6 +314,7 @@ public class LuxMeterDataFragment extends Fragment {
         luxSensor.invalidateOptionsMenu();
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         luxSensor.startedPlay = true;
@@ -314,21 +327,25 @@ public class LuxMeterDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
+    @Override
     public void saveGraph() {
         luxSensor.csvLogger.prepareLogFile();
         luxSensor.csvLogger.writeMetaData(getResources().getString(R.string.lux_meter));
-        luxSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+        luxSensor.csvLogger.writeCSVFile(CSV_HEADER);
         for (LuxData luxData : luxSensor.recordedLuxData) {
-            luxSensor.csvLogger.writeCSVFile(luxData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(luxData.getTime())) + ","
-                    + luxData.getLux() + ","
-                    + luxData.getLat() + ","
-                    + luxData.getLon());
+            luxSensor.csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(luxData.getTime())
+                            .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(luxData.getTime())))
+                            .add(luxData.getLux())
+                            .add(luxData.getLat())
+                            .add(luxData.getLon())
+            );
         }
         View view = rootView.findViewById(R.id.luxmeter_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -336,7 +353,7 @@ public class LuxMeterDataFragment extends Fragment {
         try {
             b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
-                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg" ));
+                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(new Date()) + "_graph.jpg"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -421,21 +438,31 @@ public class LuxMeterDataFragment extends Fragment {
             if (luxSensor.writeHeaderToFile) {
                 luxSensor.csvLogger.prepareLogFile();
                 luxSensor.csvLogger.writeMetaData(getResources().getString(R.string.lux_meter));
-                luxSensor.csvLogger.writeCSVFile("Timestamp,DateTime,Readings,Latitude,Longitude");
+                luxSensor.csvLogger.writeCSVFile(CSV_HEADER);
                 block = timestamp;
                 luxSensor.recordSensorDataBlockID(new SensorDataBlock(timestamp, luxSensor.getSensorName()));
                 luxSensor.writeHeaderToFile = !luxSensor.writeHeaderToFile;
             }
             if (luxSensor.addLocation && luxSensor.gpsLogger.isGPSEnabled()) {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = luxSensor.gpsLogger.getDeviceLocation();
-                luxSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + "," + location.getLatitude() + "," + location.getLongitude());
+                luxSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(sensorReading)
+                                .add(location.getLatitude())
+                                .add(location.getLongitude())
+                );
                 sensorData = new LuxData(timestamp, block, luxValue, location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                luxSensor.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + sensorReading + ",0.0,0.0");
+                luxSensor.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(sensorReading)
+                                .add(0.0)
+                                .add(0.0)
+                );
                 sensorData = new LuxData(timestamp, block, luxValue, 0.0, 0.0);
             }
             luxSensor.recordSensorData(sensorData);
@@ -533,7 +560,8 @@ public class LuxMeterDataFragment extends Fragment {
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
                 if (sensor == null) {
-                    Toast.makeText(getContext(), getResources().getString(R.string.no_lux_sensor), Toast.LENGTH_LONG).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.no_lux_sensor), null, null, Snackbar.LENGTH_LONG);
                 } else {
                     float max = sensor.getMaximumRange() * 10000;
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(luxSensor.LUXMETER_LIMIT, max).apply();
@@ -555,14 +583,16 @@ public class LuxMeterDataFragment extends Fragment {
                             sensorBH1750.setRange(String.valueOf(gain));
                             sensorType = 0;
                         } else {
-                            Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
+                            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                    getString(R.string.sensor_not_connected_tls), null, null, Snackbar.LENGTH_SHORT);
                             sensorType = 0;
                         }
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                     sensorType = 0;
                 }
 
@@ -580,14 +610,16 @@ public class LuxMeterDataFragment extends Fragment {
                             sensorTSL2561.setGain(String.valueOf(gain));
                             sensorType = 2;
                         } else {
-                            Toast.makeText(getContext(), getResources().getText(R.string.sensor_not_connected_tls), Toast.LENGTH_SHORT).show();
+                            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                    getString(R.string.sensor_not_connected_tls), null, null, Snackbar.LENGTH_SHORT);
                             sensorType = 0;
                         }
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getContext(), getResources().getText(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                            getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                     sensorType = 0;
                 }
                 break;

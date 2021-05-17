@@ -84,6 +84,11 @@ This repository holds the Android App for performing experiments with [PSLab](ht
      <td><img src="/docs/images/instrument_compass_view.png" width = "500"></td>
      <td><img src="/docs/images/instrument_thermo_view.png" width = "500"></td>
     </tr>
+     <tr>
+     <td><img src="/docs/images/instrument_sensors_view.png" width = "500"></td>
+     <td><img src="/docs/images/instrument_gas_sensor_view.png" width = "500"></td>
+     <td><img src="/docs/images/instrument_dust_sensor_view.png" width = "500"></td>
+    </tr>
   </table>
   <table>
     <tr>
@@ -93,10 +98,10 @@ This repository holds the Android App for performing experiments with [PSLab](ht
   </table>
 
 ## Video Demo
-- [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k)
-- [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ)
-- [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo)
-- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y)
+- [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k).
+- [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ).
+- [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo).
+- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y).
 
 ## Features
 |   **Feature**          | **Description**                                                   | **Status**         |
@@ -133,31 +138,50 @@ There are 2 flavors (build variants) of PSLab Android application.
 Before you begin, you should already have the Android Studio SDK downloaded and set up correctly. You can find a guide on how to do this here: [Setting up Android Studio](http://developer.android.com/sdk/installing/index.html?pkg=studio)
 
 ### Setting up the Android Project
+For setting up the PSLab Android project you may follow any of the two methods listed below, that is, you may download the repository zip file or you may directly clone the repository to Android Studio.
+
+### By downloading the zip file
 
 1. Download the _pslab-android_ project source. You can do this either by forking and cloning the repository (recommended if you plan on pushing changes) or by downloading it as a ZIP file and extracting it.
 
-2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select _Import Project (Eclipse ADT, Gradle, etc.)_
+2. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select _Import Project (Eclipse ADT, Gradle, etc.)To debug over Wi-Fi follow the steps given in this [Blog](http://blog.fossasia.org/android-app-debugging-over-wifi-fo).
 
-3. Navigate to the directory where you saved the pslab-android project, select the "pslab-android" folder, and hit OK. Android Studio should now begin building the project with Gradle.
+* **Note :**
+If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java).
 
-4. Once this process is complete and Android Studio opens, check the Console for any build errors.
+### By direct cloning
 
-  - _Note:_ If you receive a Gradle sync error titled, "failed to find ...", you should click on the link below the error message (if available) that says _Install missing platform(s) and sync project_ and allow Android studio to fetch you what is missing.
 
-5. Once all build errors have been resolved, you should be all set to build the app and test it.
+1. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select "check out project from version control".
 
-6. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
+2. Select git from the drop down menu that appeared.
 
-7. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
+3. Go to the repository and click clone or download button.
+
+4. From the dropdown that appeared, copy the link.
+
+5. Paste the URL that you copied and press clone.
+
+6. Android studio should now begin building the project with gradle.
+
+7. Once this process is complete and Android Studio opens, check the Console for any build errors.
+
+ - _Note:_ If you receive a Gradle sync error titled, "failed to find ...", you should click on the link below the error message (if available) that says _Install missing platform(s) and sync project_ and allow Android studio to fetch you what is missing.
+
+8. Once all build errors have been resolved, you should be all set to build the app and test it.
+
+9. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
+
+10.  If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
 
 If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
 
 You can't debug the usual way as PSLab device is connected to micro-USB port through OTG cable. So Android Device is not connected to PC through USB cable.
 
-To debug over Wi-Fi: http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/
+To debug over Wi-Fi follow the steps given in this [Blog](http://blog.fossasia.org/android-app-debugging-over-wifi-for-pslab/). 
 
-Note :
-1. If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java)
+* **Note :**
+If you built your own hardware, change VendorID and/or ProductID in [CommunicationHandler.java](https://github.com/fossasia/pslab-android/blob/master/app/src/main/java/io/pslab/communication/CommunicationHandler.java).
 
 ### Permissions Required
 
@@ -175,7 +199,7 @@ To use PSLab device with Android, you simply need an OTG cable, an Android Devic
 
 Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
 
- * Single commit per pull request
+ * Single commit per pull request.
  * Reference the issue numbers in the commit message. Follow the pattern ``` Fixes #<issue number> <commit message>```
  * Follow uniform design practices. The design language must be consistent throughout the app.
  * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
@@ -190,7 +214,7 @@ As a tip for new developers those who struggle with squashing commits into one, 
 
 Despite any reason, follow the steps given below to squash all commits into one adhering to our best practices.
 
- * Setup remote to upstream branch if not set before;
+ * Setup remote to upstream branch if not set before
 
 `$ git remote add upstream https://github.com/fossasia/pslab-android.git`
 
@@ -210,7 +234,7 @@ Despite any reason, follow the steps given below to squash all commits into one 
 
 `$ git commit -m "tag: commit message"`
 
- * If you have already made a pull request,
+ * If you have already made a pull request
 
 `$ git push -f origin <branch-name>`
 
