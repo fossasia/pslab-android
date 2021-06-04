@@ -532,6 +532,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         }
 
         timestamp = System.currentTimeMillis();
+        String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
+        String locationData = lat + "," + lon;
         String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
         if (scienceLab.isConnected()) {
             if (digital_mode == WaveConst.SQUARE) {
@@ -568,7 +570,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     }, Snackbar.LENGTH_SHORT);
-
         } else {
             CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
                     getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
