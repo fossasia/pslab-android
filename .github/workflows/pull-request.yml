@@ -1,0 +1,28 @@
+name: pslab-android-pull-requests
+
+on:
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download repository
+      uses: actions/checkout@v2
+    
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+        
+    - name: Build with Gradle
+      run: bash ./gradlew build --stacktrace
+      
+    - name: Upload APK
+      uses: actions/upload-artifact@v1
+      with:
+        path: app/build/outputs/apk/debug/app-debug.apk
