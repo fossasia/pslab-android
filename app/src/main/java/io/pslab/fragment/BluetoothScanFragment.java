@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import io.pslab.R;
@@ -35,8 +36,8 @@ public class BluetoothScanFragment extends DialogFragment {
     private ProgressBar scanProgressBar;
     private ListView scannedDevicesListView;
     private ArrayAdapter<String> deviceListAdapter;
-    private ArrayList<String> deviceList;
-    private ArrayList<BluetoothDevice> bluetoothDevices;
+    private List<String> deviceList;
+    private List<BluetoothDevice> bluetoothDevices;
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -44,7 +45,7 @@ public class BluetoothScanFragment extends DialogFragment {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (device != null) {
                     String deviceName = device.getName();
-                    deviceList.add(deviceName);
+                    deviceList.add(deviceName == null ? device.getAddress() : deviceName);
                     bluetoothDevices.add(device);
                     deviceListAdapter.notifyDataSetChanged();
                 }
