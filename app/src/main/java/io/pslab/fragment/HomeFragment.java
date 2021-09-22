@@ -1,5 +1,7 @@
 package io.pslab.fragment;
 
+import static io.pslab.others.ScienceLabCommon.scienceLab;
+
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -27,8 +29,6 @@ import butterknife.Unbinder;
 import io.pslab.R;
 import io.pslab.others.InitializationVariable;
 import io.pslab.others.ScienceLabCommon;
-
-import static io.pslab.others.ScienceLabCommon.scienceLab;
 
 /**
  * Created by viveksb007 on 15/3/17.
@@ -107,9 +107,22 @@ public class HomeFragment extends Fragment {
             imgViewDeviceStatus.setImageResource(R.drawable.icons_usb_disconnected_100);
             tvDeviceStatus.setText(getString(R.string.device_not_found));
         }
+
+        /*
+         * The null-checks in the OnClickListener may seem unnecessary, but even though the
+         * respective variables are initialized before the setter is called, they may contain null
+         * in later phases of the lifecycle of this Fragment and cause NullPointerExceptions if not
+         * checked before access.
+         *
+         * See: https://github.com/fossasia/pslab-android/issues/2211
+         */
         deviceDescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (webView == null) {
+                    return;
+                }
+
                 webView.loadUrl("https://pslab.io");
                 webView.getSettings().setDomStorageEnabled(true);
                 webView.getSettings().setJavaScriptEnabled(true);
@@ -117,13 +130,19 @@ public class HomeFragment extends Fragment {
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                        wvProgressBar.setIndeterminate(true);
-                        wvProgressBar.setVisibility(View.VISIBLE);
+                        if (wvProgressBar != null) {
+                            wvProgressBar.setIndeterminate(true);
+                            wvProgressBar.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     public void onPageFinished(WebView view, String url) {
-                        wvProgressBar.setVisibility(View.GONE);
-                        webView.setVisibility(View.VISIBLE);
+                        if (wvProgressBar != null) {
+                            wvProgressBar.setVisibility(View.GONE);
+                        }
+                        if (webView != null) {
+                            webView.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
                 isWebViewShowing = true;
