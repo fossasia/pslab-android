@@ -4,9 +4,19 @@
 # https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
-updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "daily"
+# Updates for Github Actions used in the repo
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      schedule:
+        interval: "daily"
+      reviewers:
+      - "mariobehling"  
+# Updates for Gradle dependencies used in the app      
+    - package-ecosystem: gradle
+      directory: "/"
+      schedule:
+        interval: "daily"
+      reviewers:
+      - "mariobehling" 
+
 
