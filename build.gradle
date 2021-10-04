@@ -71,6 +71,6 @@ ext {
     // Test dependencies
     testRunnerRulesVersion = '0.5'
     junitVersion = '4.12'
-    espressoVersion = '2.2.2'
+    espressoVersion = '3.0.2'
     mockitoVersion = '2.8.9'
 }
