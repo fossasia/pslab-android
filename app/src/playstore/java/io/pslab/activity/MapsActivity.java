@@ -1,6 +1,6 @@
 package io.pslab.activity;
 
-import androidx.core.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
 import com.google.android.material.snackbar.Snackbar;
 
