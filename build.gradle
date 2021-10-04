@@ -56,7 +56,7 @@ ext {
     seekBarLibraryVersion = '1.2.9'
     carouselPickerVersion = 'v1.0'
     speedView = '1.2.0'
-    realmAdapter = '2.1.1'
+    realmAdapter = '4.0.0'
     okHttpVersion = '4.0.1'
 
     // Map related versions
