@@ -113,13 +113,11 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == GPSLogger.PSLAB_PERMISSION_FOR_MAPS) {
-            if (grantResults.length <= 0
-                    || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
-                editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, false);
-                editor.apply();
-            }
+        if (requestCode == GPSLogger.PSLAB_PERMISSION_FOR_MAPS && (grantResults.length <= 0
+                || grantResults[0] != PackageManager.PERMISSION_GRANTED)) {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
+            editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, false);
+            editor.apply();
         }
     }
 }
