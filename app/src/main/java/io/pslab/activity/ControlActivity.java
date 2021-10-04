@@ -1,13 +1,15 @@
 package io.pslab.activity;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import io.pslab.fragment.ControlFragmentAdvanced;
 import io.pslab.fragment.ControlFragmentMain;
@@ -18,10 +20,6 @@ import io.pslab.others.ControlActivityCommon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * Created by viveksb007 on 10/5/17.
- */
 
 public class ControlActivity extends AppCompatActivity {
     ControlActivityCommon common = new ControlActivityCommon();

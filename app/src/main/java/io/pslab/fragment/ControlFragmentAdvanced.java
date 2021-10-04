@@ -2,10 +2,6 @@ package io.pslab.fragment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +11,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import io.pslab.DataFormatter;
 import io.pslab.R;
@@ -26,9 +28,6 @@ import io.pslab.others.ScienceLabCommon;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by asitava on 6/6/17.
- */
 
 public class ControlFragmentAdvanced extends Fragment {
 

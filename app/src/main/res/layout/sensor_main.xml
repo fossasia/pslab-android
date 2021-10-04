@@ -46,7 +46,7 @@
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
-            <android.support.v4.widget.NestedScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_of_sensor_main_layout"
@@ -64,7 +64,7 @@
                     android:text="@string/use_autoscan"
                     android:textAlignment="center"
                     android:textSize="@dimen/sensor_body_font" />
-            </android.support.v4.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -35,7 +35,7 @@
             android:textSize="@dimen/text_size_wavegen"
             android:textStyle="bold" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/contol_title_text"
@@ -182,7 +182,7 @@
                 app:layout_constraintStart_toStartOf="@id/guideline4_3"
                 app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.ConstraintLayout>
 
     </RelativeLayout>
 
@@ -217,7 +217,7 @@
             android:textSize="@dimen/text_size_wavegen"
             android:textStyle="bold" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/control_title_pwm"
@@ -392,7 +392,7 @@
                 app:layout_constraintStart_toStartOf="@id/cr_guideline3_1"
                 app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.ConstraintLayout>
 
     </RelativeLayout>
 

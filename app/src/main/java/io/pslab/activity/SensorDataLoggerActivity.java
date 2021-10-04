@@ -9,15 +9,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +29,8 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
@@ -49,9 +50,6 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-/**
- * Created by viveksb007 on 23/7/17.
- */
 
 public class SensorDataLoggerActivity extends AppCompatActivity {
 
@@ -138,7 +136,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                 } else {
                     Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
                     View snackBarView = snackbar.getView();
-                    TextView snackBarTextView = snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+                    TextView snackBarTextView = snackBarView.findViewById(R.id.snackbar_text);
                     snackBarTextView.setTextColor(Color.YELLOW);
                     snackbar.show();
                 }
@@ -297,13 +295,14 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 hasPermission = true;
             } else {
                 hasPermission = false;
                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                        "Can't log data",null,null,Snackbar.LENGTH_SHORT);
+                        "Can't log data", null, null, Snackbar.LENGTH_SHORT);
             }
         }
     }
