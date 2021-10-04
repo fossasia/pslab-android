@@ -1,8 +1,13 @@
-name: pslab-android-pull-requests
+name: Build
 
 on:
+  push:
+    branches:
+      - master
   pull_request:
-    branches: [ development ]
+    branches:
+      - master
+      - development
 
 jobs:
   build:
@@ -23,7 +28,11 @@ jobs:
       run: bash ./gradlew build --stacktrace
       
     - name: Upload APK
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
-        name: pslab-android-debug-apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+        name: pslab-android-apk
+        path: |
+          app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
+          app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk
+          app/build/outputs/apk/playstore/debug/app-playstore-debug.apk
+          app/build/outputs/apk/playstore/release/app-playstore-release-unsigned.apk
