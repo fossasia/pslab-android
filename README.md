@@ -2,7 +2,7 @@
 
 Repository for the PSLab Android App for performing experiments with the [Pocket Science Lab](https://pslab.io) open-hardware platform.
 
-[![Build Status](https://travis-ci.org/fossasia/pslab-android.svg?branch=development)](https://travis-ci.org/fossasia/pslab-android)
+[![Build](https://github.com/fossasia/pslab-android/actions/workflows/pull-request.yml/badge.svg?branch=development)](https://github.com/fossasia/pslab-android/actions/workflows/pull-request.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3383ddffb53b4c82a822f3a5991fe0a1)](https://www.codacy.com/gh/fossasia/pslab-android/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/pslab-fossasia)
 ![Minimum API Level](https://img.shields.io/badge/Min%20API%20Level-23-green)
