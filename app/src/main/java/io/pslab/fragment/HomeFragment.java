@@ -5,9 +5,6 @@ import static io.pslab.others.ScienceLabCommon.scienceLab;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +18,10 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -29,10 +30,6 @@ import butterknife.Unbinder;
 import io.pslab.R;
 import io.pslab.others.InitializationVariable;
 import io.pslab.others.ScienceLabCommon;
-
-/**
- * Created by viveksb007 on 15/3/17.
- */
 
 public class HomeFragment extends Fragment {
 

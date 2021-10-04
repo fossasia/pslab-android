@@ -8,15 +8,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +18,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 
@@ -41,15 +43,7 @@ import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
-import io.pslab.fragment.AccelerometerDataFragment;
-import io.pslab.fragment.BaroMeterDataFragment;
-import io.pslab.fragment.CompassDataFragment;
-import io.pslab.fragment.DustSensorDataFragment;
-import io.pslab.fragment.GasSensorDataFragment;
-import io.pslab.fragment.GyroscopeDataFragment;
-import io.pslab.fragment.LuxMeterDataFragment;
 import io.pslab.fragment.SoundMeterDataFragment;
-import io.pslab.fragment.ThermometerDataFragment;
 import io.pslab.interfaces.OperationCallback;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
@@ -60,10 +54,6 @@ import io.pslab.others.PSLabPermission;
 import io.pslab.others.SwipeGestureDetector;
 import io.realm.Realm;
 import io.realm.RealmObject;
-
-/**
- * Created by Padmal on 10/20/18.
- */
 
 public abstract class PSLabSensor extends AppCompatActivity {
 
@@ -77,7 +67,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public boolean startedPlay = false;
 
     public CoordinatorLayout sensorParentView;
-    public BottomSheetBehavior bottomSheetBehavior;
+    public BottomSheetBehavior<View> bottomSheetBehavior;
     public GestureDetector gestureDetector;
 
     public JSONArray markers;
@@ -464,6 +454,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PSLabPermission.MAP_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {

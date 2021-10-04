@@ -81,7 +81,7 @@
                 </RelativeLayout>
 
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.ConstraintLayout
                     android:id="@+id/chart_yaxis_layout1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -127,9 +127,9 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.ConstraintLayout>
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.ConstraintLayout
                     android:id="@+id/chart_yaxis_layout2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -172,7 +172,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/show_guide_oscilloscope"

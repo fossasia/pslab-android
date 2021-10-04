@@ -96,7 +96,7 @@
 
         </RelativeLayout>
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.ConstraintLayout
             android:id="@+id/accelerometer_chart_y_axis_layout_hmc"
             android:layout_width="@dimen/tv_chart_height"
             android:layout_height="match_parent"
@@ -125,7 +125,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.ConstraintLayout>
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart_accelerometer"

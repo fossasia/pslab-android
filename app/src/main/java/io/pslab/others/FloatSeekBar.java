@@ -1,12 +1,11 @@
 package io.pslab.others;
 
-/**
- * Created by akarshan on 6/10/17.
- */
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+
+import androidx.appcompat.widget.AppCompatSeekBar;
 
 import io.pslab.R;
 
@@ -15,7 +14,7 @@ import io.pslab.R;
  * Created by akarshan on 4/10/17.
  */
 
-public class FloatSeekBar extends android.support.v7.widget.AppCompatSeekBar {
+public class FloatSeekBar extends AppCompatSeekBar {
     private double max = 3.0;
     private double min = 0.0;
 
