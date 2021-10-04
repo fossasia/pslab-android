@@ -8,14 +8,14 @@ version: 2
     - package-ecosystem: "github-actions"
       directory: "/"
       schedule:
-        interval: "daily"
+        interval: "weekly"
       reviewers:
       - "mariobehling"  
 # Updates for Gradle dependencies used in the app      
-    - package-ecosystem: gradle
+    - package-ecosystem: "gradle"
       directory: "/"
       schedule:
-        interval: "daily"
+        interval: "weekly"
       reviewers:
       - "mariobehling" 
 
