@@ -54,7 +54,7 @@ ext {
     crollerVersion = '1.0.7'
     knobLibraryVersion = '1.9.0'
     seekBarLibraryVersion = '1.2.9'
-    carouselPickerVersion = 'v1.0'
+    carouselPickerVersion = '1.2'
     speedView = '1.2.0'
     realmAdapter = '2.1.1'
     okHttpVersion = '4.0.1'
