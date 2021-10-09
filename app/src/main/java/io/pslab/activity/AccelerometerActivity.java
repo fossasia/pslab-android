@@ -1,8 +1,9 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
-import android.support.v7.preference.PreferenceManager;
+import androidx.fragment.app.Fragment;
+
+import androidx.preference.PreferenceManager;
 import io.pslab.R;
 import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.AccelerometerSettingsFragment;

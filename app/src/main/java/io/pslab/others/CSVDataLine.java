@@ -1,7 +1,8 @@
 package io.pslab.others;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+
+import androidx.annotation.Nullable;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
