@@ -18,7 +18,7 @@
             android:orientation="vertical"
             android:padding="@dimen/config_activity_padding">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/card_margin"
@@ -45,7 +45,7 @@
                         android:layout_gravity="center"
                         android:text="@string/select_instrument_title" />
 
-                    <android.support.v7.widget.AppCompatSpinner
+                    <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/select_instrument_spinner"
                         android:layout_width="@dimen/width_zero"
                         android:layout_weight="@dimen/weight_two"
@@ -53,9 +53,9 @@
                         android:layout_gravity="center"
                         android:textAlignment="center" />
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/card_margin"
@@ -89,14 +89,14 @@
                         android:textAlignment="center"
                         android:layout_gravity="center" />
 
-                    <android.support.v7.widget.AppCompatSpinner
+                    <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/interval_unit_spinner"
                         android:layout_width="@dimen/width_zero"
                         android:layout_weight="@dimen/weight_one"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center" />
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/select_params_title"
@@ -129,18 +129,18 @@
 
     </ScrollView>
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/top_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 </RelativeLayout>
