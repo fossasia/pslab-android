@@ -23,7 +23,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/activity_compass_include"
         layout="@layout/activity_compass" />
 
     <View
