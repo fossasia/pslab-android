@@ -34,13 +34,12 @@ ext {
     minSdkVersion = 23
     targetSdkVersion = 28
     compileSdkVersion = 28
-    buildToolsVersion = '29.0.2'
 
     // App dependencies
     supportLibraryVersion = '28.0.0'
     picassoVersion = '2.5.2'
     butterKnifeVersion = '10.2.3'
-    circleImageViewVersion = '3.0.0'
+    circleImageViewVersion = '3.1.0'
     mpAndroidChartVersion = 'v3.0.3'
     commonMathVersion = '3.6.1'
     commonLangVersion = '3.5'
@@ -70,7 +69,7 @@ ext {
 
     // Test dependencies
     testRunnerRulesVersion = '1.0.2'
-    junitVersion = '4.12'
+    junitVersion = '4.13.2'
     espressoVersion = '3.0.2'
     mockitoVersion = '2.8.9'
 }
