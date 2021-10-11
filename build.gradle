@@ -70,7 +70,7 @@ ext {
 
     // Test dependencies
     testRunnerRulesVersion = '1.0.2'
-    junitVersion = '4.12'
+    junitVersion = '4.13.2'
     espressoVersion = '3.0.2'
     mockitoVersion = '2.8.9'
 }
