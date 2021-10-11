@@ -53,13 +53,13 @@ ext {
     okHttpVersion = '4.0.1'
     picassoVersion = '2.5.2'
     realmAdapter = '4.0.0'
-    searchDialogVersion = '1.1'
+    searchDialogVersion = '1.2.4'
     seekBarLibraryVersion = '2.1.2'
     speedView = '1.5.52'
     supportLibraryVersion = '28.0.0'
 
     // Map related versions
-    osmVersion = '5.1'
+    osmVersion = '6.1.11'
     mapsforgeVersion = '6.1.11'
     geoPackageVersion = '6.1.11'
     googleMapsVersion = '17.0.1'
