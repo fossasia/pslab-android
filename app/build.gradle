@@ -8,7 +8,6 @@ def LOCAL_KEY_PRESENT = project.hasProperty('SIGNING_KEY_FILE') && rootProject.f
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "io.pslab"
         minSdkVersion rootProject.ext.minSdkVersion
