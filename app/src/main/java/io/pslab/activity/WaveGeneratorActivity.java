@@ -24,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -460,12 +461,12 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
-
+                // Unused method override
             }
 
             @Override
             public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
-
+                // Unused method override
             }
         });
 
