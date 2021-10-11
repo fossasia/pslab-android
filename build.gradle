@@ -41,7 +41,7 @@ ext {
     picassoVersion = '2.5.2'
     butterKnifeVersion = '10.2.3'
     circleImageViewVersion = '3.1.0'
-    mpAndroidChartVersion = 'v3.0.3'
+    mpAndroidChartVersion = 'v3.1.0'
     commonMathVersion = '3.6.1'
     commonLangVersion = '3.5'
     materialDialogsVersion = '0.9.6.0'
