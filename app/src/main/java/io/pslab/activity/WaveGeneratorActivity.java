@@ -49,6 +49,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 import com.warkiz.widget.IndicatorSeekBar;
+import com.warkiz.widget.OnSeekChangeListener;
+import com.warkiz.widget.SeekParams;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -438,16 +440,14 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
         monitorLongClicks(imgBtnUp, imgBtnDown);
 
-        seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
+        seekBar.setOnSeekChangeListener(new OnSeekChangeListener() {
             @Override
-            public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
+            public void onSeeking(SeekParams seekParams) {
                 String valueText;
-                switch (unit) {
-                    case "\u00b0":
-                        valueText = progress + unit;
-                        break;
-                    default:
-                        valueText = progress + " " + unit;
+                if ("\u00b0".equals(unit)) {
+                    valueText = seekParams.progress + unit;
+                } else {
+                    valueText = seekParams.progress + " " + unit;
                 }
 
                 if (waveMonSelected) {
@@ -459,18 +459,13 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSectionChanged(IndicatorSeekBar seekBar, int thumbPosOnTick, String textBelowTick, boolean fromUserTouch) {
-                //do nothing
-            }
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
 
-            @Override
-            public void onStartTrackingTouch(IndicatorSeekBar seekBar, int thumbPosOnTick) {
-                //do nothing
             }
 
             @Override
             public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
-                //do nothing
+
             }
         });
 
@@ -911,7 +906,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 numTicks = 51;
                 leastCount = 1;
         }
-        seekBar.getBuilder().setMin(seekMin).setMax(seekMax).setTickNum(numTicks).apply();
+
+        seekBar.setMin(seekMin);
+        seekBar.setMax(seekMax);
+        seekBar.setTickCount(numTicks);
 
         if (!waveMonSelected) {
             waveMonPropSelect.setText("");
