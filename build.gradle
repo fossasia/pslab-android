@@ -53,7 +53,7 @@ ext {
     searchDialogVersion = '1.1'
     crollerVersion = '1.0.7'
     knobLibraryVersion = '1.9.0'
-    seekBarLibraryVersion = '1.2.9'
+    seekBarLibraryVersion = '2.1.2'
     carouselPickerVersion = '1.2'
     speedView = '1.2.0'
     realmAdapter = '4.0.0'
