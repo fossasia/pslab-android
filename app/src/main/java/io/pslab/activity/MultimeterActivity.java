@@ -21,6 +21,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -565,13 +567,13 @@ public class MultimeterActivity extends AppCompatActivity {
                 if (playClicked) {
                     playClicked = false;
                     stopMenu.setVisible(true);
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                     if (playBackTimer != null) {
                         playBackTimer.cancel();
                     }
                 } else {
                     playClicked = true;
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_white_24dp, null));
                     stopMenu.setVisible(true);
                     if (playBackTimer != null) {
                         playBackTimer.cancel();
@@ -590,7 +592,7 @@ public class MultimeterActivity extends AppCompatActivity {
                                         playBackTimer.cancel();
                                         currentPosition = 0;
                                         stopMenu.setVisible(false);
-                                        item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                                        item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                                     }
                                 }
                             });
@@ -606,7 +608,7 @@ public class MultimeterActivity extends AppCompatActivity {
                 }
                 currentPosition = 0;
                 playClicked = false;
-                playMenu.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                playMenu.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
             default:
                 break;
         }

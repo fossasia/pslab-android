@@ -15,6 +15,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.TextViewCompat;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -451,7 +452,7 @@ public class PowerSourceActivity extends AppCompatActivity {
                 break;
             case R.id.power_source_record_data:
                 if (!isRecording) {
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_record_stop_white));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_record_stop_white, null));
                     isRecording = true;
                     if (recordTimer == null) {
                         recordTimer = new Timer();
@@ -474,7 +475,7 @@ public class PowerSourceActivity extends AppCompatActivity {
                         }
                     }, 0, recordPeriod);
                 } else {
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_record_white));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_record_white, null));
                     recordTimer.cancel();
                     recordTimer = null;
                     isRecording = false;
@@ -496,7 +497,7 @@ public class PowerSourceActivity extends AppCompatActivity {
                 if (!playClicked) {
                     playClicked = true;
                     stopMenu.setVisible(true);
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_white_24dp, null));
                     if (playbackTimer == null) {
                         playbackTimer = new Timer();
                     } else {
@@ -517,7 +518,7 @@ public class PowerSourceActivity extends AppCompatActivity {
                                         currentPosition = 0;
                                         playClicked = false;
                                         stopMenu.setVisible(false);
-                                        item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                                        item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                                     }
                                 }
                             });
@@ -527,7 +528,7 @@ public class PowerSourceActivity extends AppCompatActivity {
                 } else {
                     playClicked = false;
                     stopMenu.setVisible(false);
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                     if (playbackTimer != null) {
                         playbackTimer.cancel();
                         playbackTimer = null;
@@ -539,7 +540,7 @@ public class PowerSourceActivity extends AppCompatActivity {
                     playbackTimer.cancel();
                     currentPosition = 0;
                     playClicked = false;
-                    playMenu.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    playMenu.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                     stopMenu.setVisible(false);
                 }
                 break;
