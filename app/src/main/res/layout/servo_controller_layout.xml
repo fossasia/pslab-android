@@ -20,7 +20,7 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/servo_image_margin"
         android:src="@drawable/servo_drag_handle"
-        android:tint="@color/grey_light" />
+        app:tint="@color/grey_light" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
