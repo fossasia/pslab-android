@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,59 +93,59 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
         switch (block.getSensorType()) {
             case PSLabSensor.LUXMETER:
                 holder.sensor.setText(context.getResources().getString(R.string.lux_meter));
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_lux_meter_log));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_lux_meter_log, null));
                 break;
             case PSLabSensor.BAROMETER:
                 holder.sensor.setText(context.getResources().getString(R.string.baro_meter));
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_barometer_log));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_barometer_log, null));
                 break;
             case PSLabSensor.GYROSCOPE:
                 holder.sensor.setText(context.getResources().getString(R.string.gyroscope));
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.gyroscope_logo));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.gyroscope_logo, null));
                 break;
             case PSLabSensor.COMPASS:
                 holder.sensor.setText(context.getResources().getString(R.string.compass));
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_compass_log));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_compass_log, null));
                 break;
             case PSLabSensor.ACCELEROMETER:
                 holder.sensor.setText(context.getResources().getString(R.string.accelerometer));
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_accelerometer));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_accelerometer, null));
                 break;
             case PSLabSensor.THERMOMETER:
                 holder.sensor.setText(R.string.thermometer);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.thermometer_logo));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.thermometer_logo, null));
                 break;
             case PSLabSensor.ROBOTIC_ARM:
                 holder.sensor.setText(R.string.robotic_arm);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.robotic_arm));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.robotic_arm, null));
                 break;
             case PSLabSensor.WAVE_GENERATOR:
                 holder.sensor.setText(R.string.wave_generator);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_wave_generator));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_wave_generator, null));
                 break;
             case PSLabSensor.OSCILLOSCOPE:
                 holder.sensor.setText(R.string.oscilloscope);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_oscilloscope));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_oscilloscope, null));
                 break;
             case PSLabSensor.POWER_SOURCE:
                 holder.sensor.setText(R.string.power_source);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_power_source));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_power_source, null));
                 break;
             case PSLabSensor.MULTIMETER:
                 holder.sensor.setText(R.string.multimeter);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_multimeter));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_multimeter, null));
                 break;
             case PSLabSensor.LOGIC_ANALYZER:
                 holder.sensor.setText(R.string.logical_analyzer);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_logic_analyzer));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_logic_analyzer, null));
                 break;
             case PSLabSensor.GAS_SENSOR:
                 holder.sensor.setText(R.string.gas_sensor);
-                holder.tileIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.tile_icon_gas));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_gas, null));
                 break;
             case PSLabSensor.SOUND_METER:
                 holder.sensor.setText(R.string.sound_meter);
-                holder.tileIcon.setImageDrawable(context.getDrawable(R.drawable.tile_icon_gas));
+                holder.tileIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.tile_icon_gas, null));
                 break;
             default:
                 break;
