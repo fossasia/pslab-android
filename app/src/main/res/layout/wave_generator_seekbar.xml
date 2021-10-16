@@ -31,7 +31,7 @@
         app:isb_show_indicator="none"
         app:isb_thumb_color="@color/colorPrimary"
         app:isb_tick_marks_color="@color/colorPrimary"
-        app:isb_ticks_count="51" />
+        app:isb_ticks_count="50" />
 
 
     <ImageButton
