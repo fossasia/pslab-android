@@ -51,7 +51,7 @@ ext {
     mpAndroidChartVersion = 'v3.1.0'
     navTabStripVersion = '1.0.4'
     okHttpVersion = '4.0.1'
-    picassoVersion = '2.5.2'
+    picassoVersion = '2.71828'
     realmAdapter = '4.0.0'
     searchDialogVersion = '1.2.4'
     seekBarLibraryVersion = '2.1.2'
