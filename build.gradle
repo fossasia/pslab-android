@@ -41,7 +41,7 @@ ext {
     butterKnifeVersion = '10.2.3'
     carouselPickerVersion = '1.2'
     circleImageViewVersion = '3.1.0'
-    commonLangVersion = '3.5'
+    commonLangVersion = '3.12.0'
     commonMathVersion = '3.6.1'
     constraintLayoutVersion = '2.0.4'
     crollerVersion = '1.0.7'
