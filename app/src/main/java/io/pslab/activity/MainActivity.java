@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
             case 5:
                 return AboutUsFragment.newInstance();
-            case 7:
+            case 8:
                 return FAQFragment.newInstance();
             default:
                 return InstrumentsFragment.newInstance();
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             case 5:
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
-            case 7:
+            case 8:
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             default:
@@ -263,14 +263,14 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
- 		            case R.id.nav_rate:
+                    case R.id.nav_rate:
                         customTabService.launchUrl("https://play.google.com/store/apps/details?id=io.pslab");
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
                         break;
                     case R.id.nav_help_feedback:
-                        navItemIndex = 7;
+                        navItemIndex = 8;
                         CURRENT_TAG = TAG_FAQ;
                         break;
                     case R.id.nav_buy_pslab:
@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             } else {
                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                        getString(R.string.Toast_double_tap),null,null, Snackbar.LENGTH_SHORT);
+                        getString(R.string.Toast_double_tap), null, null, Snackbar.LENGTH_SHORT);
             }
             mBackPressed = System.currentTimeMillis();
         }
@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_pslab_connected:
                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                        getString(R.string.device_connected_successfully),null,null, Snackbar.LENGTH_SHORT);
+                        getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
                 break;
             case R.id.menu_pslab_disconnected:
                 attemptToConnectPSLab();
@@ -403,7 +403,7 @@ public class MainActivity extends AppCompatActivity {
         if (communicationHandler.isConnected()) {
             initialisationDialog.dismiss();
             CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                    getString(R.string.device_connected_successfully),null,null, Snackbar.LENGTH_SHORT);
+                    getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
         } else {
             communicationHandler = new CommunicationHandler(usbManager);
             if (communicationHandler.isDeviceFound()) {
@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 initialisationDialog.dismiss();
                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                        getString(R.string.device_not_found),null,null, Snackbar.LENGTH_SHORT);
+                        getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                 navItemIndex = 2;
                 CURRENT_TAG = TAG_DEVICE;
                 loadHomeFragment();
@@ -494,21 +494,21 @@ public class MainActivity extends AppCompatActivity {
                             initialisationDialog.dismiss();
                             invalidateOptionsMenu();
                             CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                                    getString(R.string.device_connected_successfully),null,null, Snackbar.LENGTH_SHORT);
+                                    getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
                             if (navItemIndex == 0) {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, InstrumentsFragment.newInstance()).commit();
                             } else if (navItemIndex == 1) {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(true, true)).commitAllowingStateLoss();
                             } else {
                                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                                        getString(R.string.device_connected_successfully),null,null, Snackbar.LENGTH_SHORT);
+                                        getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
                             }
                         }
                     } else {
                         initialisationDialog.dismiss();
                         Log.d(TAG, "permission denied for device " + device);
                         CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                                getString(R.string.device_not_found),null,null, Snackbar.LENGTH_SHORT);
+                                getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                     }
                 }
             }
@@ -531,7 +531,7 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(true, true)).commitAllowingStateLoss();
                 }
                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                        getString(R.string.device_connected_successfully),null,null, Snackbar.LENGTH_SHORT);
+                        getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
             }
         }
     }
