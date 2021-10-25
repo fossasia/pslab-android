@@ -50,7 +50,7 @@ ext {
     materialDialogsVersion = '0.9.6.0'
     mpAndroidChartVersion = 'v3.1.0'
     navTabStripVersion = '1.0.4'
-    okHttpVersion = '4.0.1'
+    okHttpVersion = '4.9.2'
     picassoVersion = '2.71828'
     realmAdapter = '4.0.0'
     searchDialogVersion = '1.2.4'
