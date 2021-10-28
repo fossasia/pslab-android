@@ -883,21 +883,21 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case FREQUENCY:
                 seekMin = WaveData.FREQ_MIN.getValue();
                 seekMax = WaveData.FREQ_MAX.getValue();
-                numTicks = 100;
+                numTicks = 50;
                 leastCount = 1;
                 break;
 
             case PHASE:
                 seekMin = WaveData.PHASE_MIN.getValue();
                 seekMax = WaveData.PHASE_MAX.getValue();
-                numTicks = 73;
+                numTicks = 50;
                 leastCount = 1;
                 break;
 
             case DUTY:
                 seekMin = WaveData.DUTY_MIN.getValue();
                 seekMax = WaveData.DUTY_MAX.getValue();
-                numTicks = 100;
+                numTicks = 50;
                 leastCount = 1;
                 unit = getString(R.string.unit_percent);
                 break;
@@ -905,7 +905,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             default:
                 seekMin = 0;
                 seekMax = 5000;
-                numTicks = 51;
+                numTicks = 50;
                 leastCount = 1;
         }
 
