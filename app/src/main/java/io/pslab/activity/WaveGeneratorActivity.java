@@ -1370,7 +1370,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        produceSoundTask.cancel(true);
+        if(produceSoundTask != null)
+            produceSoundTask.cancel(true);
         produceSoundTask = null;
         isPlayingSound = false;
     }
