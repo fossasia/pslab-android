@@ -674,7 +674,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(produceSoundTask!=null)
+                if(produceSoundTask != null)
                     produceSoundTask.cancel(true);
                 produceSoundTask = null;
                 isPlayingSound = false;
