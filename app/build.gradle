@@ -76,15 +76,15 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Android stock libraries
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'androidx.browser:browser:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.appcompat:appcompat:$rootProject.appcompatVersion'
+    implementation 'androidx.cardview:cardview:$rootProject.cardviewVersion'
+    implementation 'androidx.recyclerview:recyclerview:$rootProject.recyclerviewVersion'
+    implementation 'com.google.android.material:material:$rootProject.materialVersion'
+    implementation 'androidx.legacy:legacy-support-v13:$rootProject.legacyVersion'
+    implementation 'androidx.legacy:legacy-support-v4:$rootProject.legacyVersion'
+    implementation 'androidx.legacy:legacy-preference-v14:$rootProject.legacyVersion'
+    implementation 'androidx.browser:browser:$rootProject.browserVersion'
+    implementation 'androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion'
 
     // Custom tools libraries
     implementation "com.github.PhilJay:MPAndroidChart:$rootProject.mpAndroidChartVersion"
