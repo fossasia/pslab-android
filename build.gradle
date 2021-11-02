@@ -62,7 +62,7 @@ ext {
     osmVersion = '6.1.11'
     mapsforgeVersion = '6.1.11'
     geoPackageVersion = '6.1.11'
-    googleMapsVersion = '17.0.1'
+    googleMapsVersion = '18.0.0'
 
     // MultiDex
     multiDexVersion = '1.0.3'
