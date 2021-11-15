@@ -40,7 +40,7 @@ public class AboutUsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about_us, container, false);
-        simulateDayNight(0);
+        simulateDayNight(3);
         ButterKnife.bind(this, view);
         View aboutPage = new AboutPage(getActivity())
                 .isRTL(false)
