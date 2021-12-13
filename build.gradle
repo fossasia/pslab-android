@@ -8,7 +8,7 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "io.realm:realm-gradle-plugin:10.8.1"
         classpath "gradle.plugin.com.github.b3er.local.properties:local-properties-plugin:1.1"
         // NOTE: Do not place your application dependencies here; they belong
