@@ -44,7 +44,8 @@
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="user"
-            android:theme="@style/AppThemeSplash">
+            android:theme="@style/AppThemeSplash"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,7 +55,8 @@
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>

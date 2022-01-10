@@ -3,12 +3,13 @@
 buildscript {
 
     repositories {
-        jcenter()
         google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "io.realm:realm-gradle-plugin:10.8.1"
         classpath "gradle.plugin.com.github.b3er.local.properties:local-properties-plugin:1.1"
         // NOTE: Do not place your application dependencies here; they belong
@@ -16,13 +17,16 @@ buildscript {
     }
 }
 
+
 allprojects {
     repositories {
-        jcenter()
         google()
+        mavenCentral()
         maven { url "https://jitpack.io" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
-}
+    }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir
@@ -32,8 +36,8 @@ task clean(type: Delete) {
 ext {
     // Sdk and tools
     minSdkVersion = 23
-    targetSdkVersion = 28
-    compileSdkVersion = 28
+    targetSdkVersion = 31
+    compileSdkVersion = 31
 
     // App dependencies
     androidAboutPageVersion = '1.3.1'
