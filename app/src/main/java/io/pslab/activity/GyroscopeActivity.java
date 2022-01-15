@@ -1,8 +1,9 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
+import android.hardware.SensorManager;
+import android.hardware.Sensor;
 import androidx.fragment.app.Fragment;
-
 import androidx.preference.PreferenceManager;
 
 import io.pslab.R;
@@ -99,6 +100,12 @@ public class GyroscopeActivity extends PSLabSensor {
             String title = titleFormat.format(recordedGyroData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    @Override
+    public boolean sensorFound() {
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        return sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null;
     }
 
     @Override

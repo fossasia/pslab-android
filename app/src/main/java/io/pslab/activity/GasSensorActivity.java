@@ -98,4 +98,9 @@ public class GasSensorActivity extends PSLabSensor {
             getSupportActionBar().setTitle(title);
         }
     }
+
+    @Override
+    public boolean sensorFound() {
+        return false;
+    }
 }
