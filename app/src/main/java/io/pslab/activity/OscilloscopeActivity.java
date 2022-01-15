@@ -527,6 +527,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                                     startActivity(intent);
                                 }
                             }, Snackbar.LENGTH_SHORT);
+                } else if (!isRecording && !scienceLab.isConnected()) {
+                    CustomSnackBar.showSnackBar(mainLayout, getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
+
                 } else {
                     isRecording = true;
                     item.setIcon(R.drawable.ic_record_stop_white);

@@ -13,18 +13,16 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java-version: [ 11 ]
+
     steps:
     - name: Download repository
       uses: actions/checkout@v2
     
-    - name: Setup Java ${{ matrix.java-version }}
+    - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: 'zulu'
-        java-version: ${{ matrix.java-version }}
+        distribution: 'adopt'
+        java-version: '11'
         
     - name: Build with Gradle
       run: bash ./gradlew build --stacktrace
