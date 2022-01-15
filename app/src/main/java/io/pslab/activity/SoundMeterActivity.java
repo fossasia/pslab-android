@@ -104,6 +104,11 @@ public class SoundMeterActivity extends PSLabSensor {
         }
     }
 
+    @Override
+    public boolean sensorFound() {
+        return true;
+    }
+
     /**
      * Once settings have been changed, those changes can be captured from onResume method.
      * reinstateConfigurations() will update the logs with new settings

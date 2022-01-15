@@ -133,4 +133,9 @@ public class DustSensorActivity extends PSLabSensor {
             getSupportActionBar().setTitle(title);
         }
     }
+
+    @Override
+    public boolean sensorFound() {
+        return false;
+    }
 }
