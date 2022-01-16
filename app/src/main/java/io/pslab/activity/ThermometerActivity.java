@@ -1,8 +1,6 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import androidx.fragment.app.Fragment;
 
 import androidx.preference.PreferenceManager;
@@ -102,12 +100,6 @@ public class ThermometerActivity extends PSLabSensor {
             String title = titleFormat.format(recordedThermometerData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
-    }
-
-    @Override
-    public boolean sensorNotFound() {
-        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        return sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) == null;
     }
 
     @Override

@@ -9,6 +9,14 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.widget.TextViewCompat;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -21,14 +29,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.widget.TextViewCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
@@ -451,7 +451,7 @@ public class PowerSourceActivity extends AppCompatActivity {
                         BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.power_source_record_data:
-                if (!isRecording && scienceLab.isConnected()) {
+                if (!isRecording) {
                     item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_record_stop_white, null));
                     isRecording = true;
                     if (recordTimer == null) {
@@ -474,8 +474,6 @@ public class PowerSourceActivity extends AppCompatActivity {
                             });
                         }
                     }, 0, recordPeriod);
-                } else if (!isRecording && !scienceLab.isConnected()) {
-                    CustomSnackBar.showSnackBar(coordinatorLayout, getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
                 } else {
                     item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_record_white, null));
                     recordTimer.cancel();

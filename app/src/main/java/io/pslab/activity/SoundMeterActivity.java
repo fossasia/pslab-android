@@ -2,6 +2,7 @@ package io.pslab.activity;
 
 import android.content.SharedPreferences;
 import androidx.fragment.app.Fragment;
+
 import androidx.preference.PreferenceManager;
 
 import io.pslab.R;
@@ -101,11 +102,6 @@ public class SoundMeterActivity extends PSLabSensor {
             String title = titleFormat.format(recordedSoundData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
-    }
-
-    @Override
-    public boolean sensorNotFound() {
-        return false;
     }
 
     /**
