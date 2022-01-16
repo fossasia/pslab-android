@@ -43,6 +43,7 @@ import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
+import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.SoundMeterDataFragment;
 import io.pslab.interfaces.OperationCallback;
 import io.pslab.others.CSVLogger;
@@ -51,37 +52,12 @@ import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
 import io.pslab.others.MathUtils;
 import io.pslab.others.PSLabPermission;
+import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
 import io.realm.Realm;
 import io.realm.RealmObject;
 
 public abstract class PSLabSensor extends AppCompatActivity {
-
-    public boolean isRecording = false;
-    public boolean locationEnabled = true;
-    public boolean addLocation = true;
-    public boolean checkGPSOnResume = false;
-    public boolean writeHeaderToFile = true;
-    public boolean playingData = false;
-    public boolean viewingData = false;
-    public boolean startedPlay = false;
-
-    public CoordinatorLayout sensorParentView;
-    public BottomSheetBehavior<View> bottomSheetBehavior;
-    public GestureDetector gestureDetector;
-
-    public JSONArray markers;
-
-    public Fragment sensorFragment;
-    public PSLabPermission psLabPermission;
-    public GPSLogger gpsLogger;
-    public CSVLogger csvLogger;
-    public Realm realm;
-    private Intent map;
-
-    public SimpleDateFormat titleFormat;
-    public final String KEY_LOG = "has_log";
-    public final String DATA_BLOCK = "data_block";
 
     public static final String LUXMETER = "Lux Meter";
     public static final String LUXMETER_CONFIGURATIONS = "Lux Meter Configurations";
@@ -110,12 +86,30 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String SOUND_METER = "Sound Meter";
     public static final String SOUNDMETER_CONFIGURATIONS = "Sound Meter Configurations";
     public static final String SOUNDMETER_DATA_FORMAT = "%.2f";
-
+    public final String KEY_LOG = "has_log";
+    public final String DATA_BLOCK = "data_block";
+    public boolean isRecording = false;
+    public boolean locationEnabled = true;
+    public boolean addLocation = true;
+    public boolean checkGPSOnResume = false;
+    public boolean writeHeaderToFile = true;
+    public boolean playingData = false;
+    public boolean viewingData = false;
+    public boolean startedPlay = false;
+    public CoordinatorLayout sensorParentView;
+    public BottomSheetBehavior<View> bottomSheetBehavior;
+    public GestureDetector gestureDetector;
+    public JSONArray markers;
+    public Fragment sensorFragment;
+    public PSLabPermission psLabPermission;
+    public GPSLogger gpsLogger;
+    public CSVLogger csvLogger;
+    public Realm realm;
+    public SimpleDateFormat titleFormat;
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
     @BindView(R.id.sensor_cl)
     CoordinatorLayout coordinatorLayout;
-
     @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
     @BindView(R.id.shadow)
@@ -134,6 +128,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
     TextView bottomSheetDesc;
     @BindView(R.id.custom_dialog_additional_content)
     LinearLayout bottomSheetAdditionalContent;
+    private Intent map;
+    private ScienceLab scienceLab;
 
     /**
      * Getting menu layout distinct to each sensor
@@ -227,6 +223,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
      */
     public abstract void getDataFromDataLogger();
 
+    /**
+     * This method will check if the device has an in-built sensor or not
+     */
+    public abstract boolean sensorNotFound();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -247,6 +248,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         setUpBottomSheet();
         fillUpFragment();
         invalidateOptionsMenu();
+        scienceLab = ScienceLabCommon.scienceLab;
     }
 
     /**
@@ -316,9 +318,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
               will fire up. If user declines to give permission, don't do anything.
              */
             case R.id.record_data:
-                if (!isRecording) {
+                if (!isRecording && (!sensorNotFound() || scienceLab.isConnected())) {
                     dataRecordingCycle();
-                } else {
+                } else if (!isRecording && sensorNotFound() && !scienceLab.isConnected())
+                    CustomSnackBar.showSnackBar(sensorParentView,
+                            getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_LONG);
+                else {
                     stopRecordSensorData();
                     displayLogLocationOnSnackBar();
                     isRecording = false;
@@ -336,8 +341,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
                         ((OperationCallback) fragment).playData();
                     }
                 } else {
-                    if(getSensorFragment() instanceof SoundMeterDataFragment) {
-                        if(!playingData) {
+                    if (getSensorFragment() instanceof SoundMeterDataFragment) {
+                        if (!playingData) {
                             ((SoundMeterDataFragment) getSupportFragmentManager()
                                     .findFragmentByTag(getSensorName())).pause();
                         } else {
@@ -582,7 +587,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         // if sensor doesn't image in it's guide and hence returns 0 for getGuideSchematics(), hide the visibility of bottomSheetSchematic
         if (getGuideSchematics() != 0) {
             bottomSheetSchematic.setImageResource(getGuideSchematics());
-        }else{
+        } else {
             bottomSheetSchematic.setVisibility(View.GONE);
         }
         // If a sensor has extra content than provided in the standard layout, create a new layout

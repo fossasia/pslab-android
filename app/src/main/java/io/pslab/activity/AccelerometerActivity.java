@@ -1,9 +1,12 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
-import androidx.fragment.app.Fragment;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+
 import io.pslab.R;
 import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.AccelerometerSettingsFragment;
@@ -100,6 +103,12 @@ public class AccelerometerActivity extends PSLabSensor {
             String title = titleFormat.format(recordedAccelerometerData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    @Override
+    public boolean sensorNotFound() {
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        return sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null;
     }
 
     /**

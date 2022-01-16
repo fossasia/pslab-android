@@ -1,8 +1,10 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
-import androidx.fragment.app.Fragment;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import io.pslab.R;
@@ -99,6 +101,12 @@ public class CompassActivity extends PSLabSensor {
             String title = titleFormat.format(recordedCompassData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    @Override
+    public boolean sensorNotFound() {
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        return sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION) == null;
     }
 
     @Override

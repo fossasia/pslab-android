@@ -2,8 +2,8 @@ package io.pslab.activity;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.Fragment;
 
+import androidx.fragment.app.Fragment;
 
 import io.pslab.R;
 import io.pslab.fragment.DustSensorDataFragment;
@@ -132,5 +132,10 @@ public class DustSensorActivity extends PSLabSensor {
             String title = titleFormat.format(recordedDustSensorData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    @Override
+    public boolean sensorNotFound() {
+        return true;
     }
 }

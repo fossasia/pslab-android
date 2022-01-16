@@ -3,7 +3,6 @@ package io.pslab.activity;
 import android.content.SharedPreferences;
 import androidx.fragment.app.Fragment;
 
-
 import io.pslab.R;
 import io.pslab.fragment.GasSensorDataFragment;
 import io.pslab.models.GasSensorData;
@@ -97,5 +96,10 @@ public class GasSensorActivity extends PSLabSensor {
             String title = titleFormat.format(recordedGasSensorData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    @Override
+    public boolean sensorNotFound() {
+        return true;
     }
 }

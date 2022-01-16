@@ -1,8 +1,10 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
-import androidx.fragment.app.Fragment;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import io.pslab.R;
@@ -100,6 +102,12 @@ public class LuxMeterActivity extends PSLabSensor {
             String title = titleFormat.format(recordedLuxData.get(0).getTime());
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    @Override
+    public boolean sensorNotFound() {
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        return sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) == null;
     }
 
     /**

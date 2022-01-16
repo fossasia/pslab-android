@@ -1,6 +1,8 @@
 package io.pslab.activity;
 
 
+import static io.pslab.others.MathUtils.map;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -83,8 +85,6 @@ import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
-import static io.pslab.others.MathUtils.map;
-
 public class OscilloscopeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String PREF_NAME = "OscilloscopeActivity";
@@ -99,6 +99,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
             .add("lat")
             .add("lon");
     private final Object lock = new Object();
+    private final String KEY_LOG = "has_log";
+    private final String DATA_BLOCK = "data_block";
     @BindView(R.id.chart_os)
     public LineChart mChart;
     @BindView(R.id.tv_label_left_yaxis_os)
@@ -126,7 +128,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public boolean isTriggerSelected;
     public boolean isFourierTransformSelected;
     public boolean isXYPlotSelected;
-    private boolean isDataAnalysisFragSelected;
     public boolean sineFit;
     public boolean squareFit;
     public boolean isCH1FrequencyRequired;
@@ -138,6 +139,10 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     public String xyPlotYAxisChannel;
     public double trigger;
     public Plot2D graph;
+    public RealmResults<OscilloscopeData> recordedOscilloscopeData;
+    public boolean isPlaybackFourierChecked = false;
+    public String xyPlotAxis1 = "CH1";
+    public String xyPlotAxis2 = "CH2";
     @BindView(R.id.layout_dock_os1)
     LinearLayout linearLayout;
     @BindView(R.id.layout_dock_os2)
@@ -168,13 +173,14 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     View parentLayout;
     @BindView(R.id.bottom_sheet_oscilloscope)
     LinearLayout bottomSheet;
+    @BindView(R.id.show_guide_oscilloscope)
+    TextView showText;
+    private boolean isDataAnalysisFragSelected;
     private Fragment channelParametersFragment;
     private Fragment timebaseTriggerFragment;
     private Fragment dataAnalysisFragment;
     private Fragment xyPlotFragment;
     private Fragment playbackFragment;
-    @BindView(R.id.show_guide_oscilloscope)
-    TextView showText;
     private ScienceLab scienceLab;
     private int height;
     private int width;
@@ -192,31 +198,23 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private double maxAmp, maxFreq;
     private boolean isRecording = false;
     private Realm realm;
-    public RealmResults<OscilloscopeData> recordedOscilloscopeData;
     private CSVLogger csvLogger;
     private GPSLogger gpsLogger;
     private long block;
     private Timer recordTimer;
     private long recordPeriod = 100;
     private String loggingXdata = "";
-    private final String KEY_LOG = "has_log";
-    private final String DATA_BLOCK = "data_block";
     private int currentPosition = 0;
     private Timer playbackTimer;
     private View mainLayout;
     private double lat;
     private double lon;
-    public boolean isPlaybackFourierChecked = false;
     private HashMap<String, Integer> channelIndexMap;
     private Integer[] channelColors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.MAGENTA};
     private String[] loggingYdata = new String[4];
-    public String xyPlotAxis1 = "CH1";
-    public String xyPlotAxis2 = "CH2";
     private boolean isPlayingback = false;
     private boolean isPlaying = false;
     private MenuItem playMenu;
-
-    private enum CHANNEL {CH1, CH2, CH3, MIC}
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -527,7 +525,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                                     startActivity(intent);
                                 }
                             }, Snackbar.LENGTH_SHORT);
-                } else {
+                } else if (!isRecording && scienceLab.isConnected()) {
                     isRecording = true;
                     item.setIcon(R.drawable.ic_record_stop_white);
                     block = System.currentTimeMillis();
@@ -550,7 +548,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                     csvLogger.writeCSVFile(CSV_HEADER);
                     recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.oscilloscope)));
                     CustomSnackBar.showSnackBar(mainLayout, getString(R.string.data_recording_start), null, null, Snackbar.LENGTH_SHORT);
-                }
+                } else
+                    CustomSnackBar.showSnackBar(mainLayout, getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
                 break;
             case R.id.show_guide:
                 bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
@@ -974,6 +973,57 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         return super.onTouchEvent(event);
     }
 
+    public Complex[] fft(Complex[] input) {
+        Complex[] x = input;
+        int n = x.length;
+
+        if (n == 1) return new Complex[]{x[0]};
+
+        if (n % 2 != 0) {
+            x = Arrays.copyOfRange(x, 0, x.length - 1);
+        }
+
+        Complex[] halfArray = new Complex[n / 2];
+        for (int k = 0; k < n / 2; k++) {
+            halfArray[k] = x[2 * k];
+        }
+        Complex[] q = fft(halfArray);
+
+        for (int k = 0; k < n / 2; k++) {
+            halfArray[k] = x[2 * k + 1];
+        }
+        Complex[] r = fft(halfArray);
+
+        Complex[] y = new Complex[n];
+        for (int k = 0; k < n / 2; k++) {
+            double kth = -2 * k * Math.PI / n;
+            Complex wk = new Complex(Math.cos(kth), Math.sin(kth));
+            if (r[k] == null) {
+                r[k] = new Complex(1);
+            }
+            if (q[k] == null) {
+                q[k] = new Complex(1);
+            }
+            y[k] = q[k].add(wk.multiply(r[k]));
+            y[k + n / 2] = q[k].subtract(wk.multiply(r[k]));
+        }
+        return y;
+    }
+
+    public void recordSensorDataBlockID(SensorDataBlock block) {
+        realm.beginTransaction();
+        realm.copyToRealm(block);
+        realm.commitTransaction();
+    }
+
+    public void recordSensorData(RealmObject sensorData) {
+        realm.beginTransaction();
+        realm.copyToRealm((OscilloscopeData) sensorData);
+        realm.commitTransaction();
+    }
+
+    private enum CHANNEL {CH1, CH2, CH3, MIC}
+
     public class CaptureTask extends AsyncTask<String, Void, Void> {
         private ArrayList<ArrayList<Entry>> entries = new ArrayList<>();
         private ArrayList<ArrayList<Entry>> curveFitEntries = new ArrayList<>();
@@ -1266,54 +1316,5 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 lock.notify();
             }
         }
-    }
-
-    public Complex[] fft(Complex[] input) {
-        Complex[] x = input;
-        int n = x.length;
-
-        if (n == 1) return new Complex[]{x[0]};
-
-        if (n % 2 != 0) {
-            x = Arrays.copyOfRange(x, 0, x.length - 1);
-        }
-
-        Complex[] halfArray = new Complex[n / 2];
-        for (int k = 0; k < n / 2; k++) {
-            halfArray[k] = x[2 * k];
-        }
-        Complex[] q = fft(halfArray);
-
-        for (int k = 0; k < n / 2; k++) {
-            halfArray[k] = x[2 * k + 1];
-        }
-        Complex[] r = fft(halfArray);
-
-        Complex[] y = new Complex[n];
-        for (int k = 0; k < n / 2; k++) {
-            double kth = -2 * k * Math.PI / n;
-            Complex wk = new Complex(Math.cos(kth), Math.sin(kth));
-            if (r[k] == null) {
-                r[k] = new Complex(1);
-            }
-            if (q[k] == null) {
-                q[k] = new Complex(1);
-            }
-            y[k] = q[k].add(wk.multiply(r[k]));
-            y[k + n / 2] = q[k].subtract(wk.multiply(r[k]));
-        }
-        return y;
-    }
-
-    public void recordSensorDataBlockID(SensorDataBlock block) {
-        realm.beginTransaction();
-        realm.copyToRealm(block);
-        realm.commitTransaction();
-    }
-
-    public void recordSensorData(RealmObject sensorData) {
-        realm.beginTransaction();
-        realm.copyToRealm((OscilloscopeData) sensorData);
-        realm.commitTransaction();
     }
 }
