@@ -40,13 +40,11 @@ android {
         debug {
             versionNameSuffix "Version: "
             resValue "string", "version", "${versionNameSuffix}${defaultConfig.versionName}"
-            resValue "string", "google_maps_key", google_key
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "version", "${defaultConfig.versionName}"
-            resValue "string", "google_maps_key", google_key
             if (LOCAL_KEY_PRESENT || TRAVIS_BUILD)
                 signingConfig signingConfigs.release
         }
@@ -114,10 +112,9 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
     // Map libraries
-    fdroidImplementation "org.osmdroid:osmdroid-android:$rootProject.osmVersion"
-    fdroidImplementation "org.osmdroid:osmdroid-mapsforge:$rootProject.mapsforgeVersion"
-    fdroidImplementation "org.osmdroid:osmdroid-geopackage:$rootProject.geoPackageVersion"
-    playstoreImplementation "com.google.android.gms:play-services-maps:$rootProject.googleMapsVersion"
+    implementation "org.osmdroid:osmdroid-android:$rootProject.osmVersion"
+    implementation "org.osmdroid:osmdroid-mapsforge:$rootProject.mapsforgeVersion"
+    implementation "org.osmdroid:osmdroid-geopackage:$rootProject.geoPackageVersion"
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "io.realm:android-adapters:$rootProject.realmAdapter"
