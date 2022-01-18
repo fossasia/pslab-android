@@ -40,13 +40,11 @@ android {
         debug {
             versionNameSuffix "Version: "
             resValue "string", "version", "${versionNameSuffix}${defaultConfig.versionName}"
-            //resValue "string", "google_maps_key", google_key
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "version", "${defaultConfig.versionName}"
-            //resValue "string", "google_maps_key", google_key
             if (LOCAL_KEY_PRESENT || TRAVIS_BUILD)
                 signingConfig signingConfigs.release
         }
