@@ -32,7 +32,22 @@ jobs:
       with:
         name: pslab-android-apk
         path: |
-          app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
-          app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk
-          app/build/outputs/apk/playstore/debug/app-playstore-debug.apk
-          app/build/outputs/apk/playstore/release/app-playstore-release-unsigned.apk
+          app/build/outputs/apk/debug/app-debug.apk
+          app/build/outputs/apk/release/app-release-unsigned.apk
+
+    - name: Download repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git switch --orphan temp
+        git push origin --delete apk
+        git branch -m apk
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add app-debug.apk
+        git commit -m "gen"
+        git push -u origin apk
