@@ -48,6 +48,7 @@ jobs:
         git branch -m apk
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git add app/build/outputs/apk/debug/app-debug.apk
+        git add .
+        git status
         git commit -m "gen"
         git push -u origin apk
