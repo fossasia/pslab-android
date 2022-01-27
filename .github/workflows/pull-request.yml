@@ -17,22 +17,47 @@ jobs:
     steps:
     - name: Download repository
       uses: actions/checkout@v2
-    
+
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
         java-version: '11'
-        
+
     - name: Build with Gradle
-      run: bash ./gradlew build --stacktrace
-      
+      run: |
+        bash ./gradlew build --stacktrace
+        bash ./gradlew bundle --stacktrace
+
     - name: Upload APK
       uses: actions/upload-artifact@v2
       with:
         name: pslab-android-apk
         path: |
-          app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
-          app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk
-          app/build/outputs/apk/playstore/debug/app-playstore-debug.apk
-          app/build/outputs/apk/playstore/release/app-playstore-release-unsigned.apk
+          app/build/outputs/apk/debug/app-debug.apk
+          app/build/outputs/apk/release/app-release-unsigned.apk
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: pslab-android-apk
+
+    - name: Add APK files to apk branch
+      if: github.ref=='refs/heads/master'
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git stash
+        git switch --orphan temp
+        git push origin --delete apk
+        git branch -m apk
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add app/build/outputs/bundle/debug/app-debug.aab
+        git add app/build/outputs/bundle/release/app-release.aab
+        git add debug/app-debug.apk
+        git add release/app-release-unsigned.apk
+        git commit -m "Updated Build"
+        git push origin apk --force
+
+
