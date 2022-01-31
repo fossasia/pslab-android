@@ -1,0 +1,109 @@
+name: Push
+
+on:
+  push:
+    branches:
+      - master
+      - development
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.branch-name.outputs.current_branch }}
+
+    steps:
+    - name: Download repository
+      uses: actions/checkout@v2
+
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: Build with Gradle
+      run: |
+        bash ./gradlew build --stacktrace
+        bash ./gradlew bundle --stacktrace
+    
+    - name: Store APK files
+      uses: actions/upload-artifact@v2
+      with:
+        name: apk-files
+        path: |
+          app/build/outputs/apk/debug/app-debug.apk
+          app/build/outputs/apk/release/app-release-unsigned.apk
+          app/build/outputs/bundle/debug/app-debug.aab
+          app/build/outputs/bundle/release/app-release.aab
+          
+    - name: Define branch
+      id: branch-name
+      run: echo "::set-output name=current_branch::${{ github.ref_name }}"
+
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone APK branch
+      uses: actions/checkout@v2
+      with:
+        repository: fossasia/pslab-android
+        ref: apk
+    
+    - name: Clean APK branch for master builds
+      if: ${{ needs.build.outputs.branch == 'master' }}
+      run: |
+        rm -rf app-debug-master.apk || true
+        rm -rf app-release-unsigned-master.apk || true
+        rm -rf app-debug-master.aab || true
+        rm -rf app-release-master.aab || true
+        
+    - name: Clean APK branch for development builds
+      if: ${{ needs.build.outputs.branch == 'development' }}
+      run: |
+        rm -rf app-debug-development.apk || true
+        rm -rf app-release-unsigned-development.apk || true
+        rm -rf app-debug-development.aab || true
+        rm -rf app-release-development.aab || true
+
+    - name: Retrieve APK files
+      uses: actions/download-artifact@v2
+      with:
+        name: apk-files
+        
+    - name: Rename files in master branch
+      if: ${{ needs.build.outputs.branch == 'master' }}
+      run: |
+        mv apk/debug/app-debug.apk app-debug-master.apk
+        mv apk/release/app-release-unsigned.apk app-release-unsigned-master.apk
+        mv bundle/debug/app-debug.aab app-debug-master.aab
+        mv bundle/release/app-release.aab app-release-master.aab
+        
+    - name: Rename files in development branch
+      if: ${{ needs.build.outputs.branch == 'development' }}
+      run: |
+        mv apk/debug/app-debug.apk app-debug-development.apk
+        mv apk/release/app-release-unsigned.apk app-release-unsigned-development.apk
+        mv bundle/debug/app-debug.aab app-debug-development.aab
+        mv bundle/release/app-release.aab app-release-development.aab
+    
+    - name: Setup credentials
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email 'github-actions[bot]@users.noreply.github.com'
+        
+    - name: Update APK branch
+      run: |
+        git remote set-url --push origin https://github-actions[bot]:$GITHUB_TOKEN@github.com/${GITHUB_REPOSITORY}
+        git checkout --orphan temporary
+        git add .
+        git commit -m "release: build files from ${{ needs.build.outputs.branch }} branch"
+        git branch -D apk
+        git branch -m apk
+        git push origin apk -f --quiet > /dev/null
+
