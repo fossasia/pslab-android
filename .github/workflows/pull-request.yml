@@ -1,9 +1,6 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
@@ -11,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -27,37 +23,3 @@ jobs:
     - name: Build with Gradle
       run: |
         bash ./gradlew build --stacktrace
-        bash ./gradlew bundle --stacktrace
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v2
-      with:
-        name: pslab-android-apk
-        path: |
-          app/build/outputs/apk/debug/app-debug.apk
-          app/build/outputs/apk/release/app-release-unsigned.apk
-
-    - name: Download Artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: pslab-android-apk
-
-    - name: Add APK files to apk branch
-      if: github.ref=='refs/heads/master'
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git stash
-        git switch --orphan temp
-        git push origin --delete apk
-        git branch -m apk
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git add app/build/outputs/bundle/debug/app-debug.aab
-        git add app/build/outputs/bundle/release/app-release.aab
-        git add debug/app-debug.apk
-        git add release/app-release-unsigned.apk
-        git commit -m "Updated Build"
-        git push origin apk --force
-
-
