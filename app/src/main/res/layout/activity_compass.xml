@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -8,57 +8,50 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/compass_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginTop="@dimen/card_margin"
-                android:layout_marginEnd="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin">
+                android:layout_margin="@dimen/card_margin">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:paddingBottom="@dimen/card_margin">
 
                     <ImageView
                         android:id="@+id/compass"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/compass_svg" />
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/compass_margin"
+                        android:src="@drawable/compass_icon" />
 
                     <TextView
                         android:id="@+id/degree_indicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/compass"
-                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/card_margin"
                         android:text="@string/compass_test_value"
                         android:textAlignment="center"
                         android:textSize="@dimen/compass_text_size_large" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/card_compass_raw_values"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/compass_card"
-                android:layout_marginStart="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginTop="@dimen/card_margin"
-                android:layout_marginEnd="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin">
+                android:layout_margin="@dimen/card_margin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -76,9 +69,8 @@
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
+                            android:gravity="center"
                             android:text="@string/bx"
-                            android:textAlignment="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -86,9 +78,8 @@
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
+                            android:gravity="center"
                             android:text="@string/by"
-                            android:textAlignment="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -96,9 +87,8 @@
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
+                            android:gravity="center"
                             android:text="@string/bz"
-                            android:textAlignment="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -114,14 +104,10 @@
                             android:id="@+id/tv_sensor_hmc5883l_bx"
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
-                            android:layout_marginStart="@dimen/compass_tv_value_margin"
-                            android:layout_marginLeft="@dimen/compass_tv_value_margin"
-                            android:layout_marginEnd="@dimen/compass_tv_value_margin"
-                            android:layout_marginRight="@dimen/compass_tv_value_margin"
+                            android:layout_margin="@dimen/compass_tv_value_margin"
                             android:layout_weight="1"
                             android:background="@drawable/tv_border"
-                            android:gravity="center_vertical"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -129,14 +115,10 @@
                             android:id="@+id/tv_sensor_hmc5883l_by"
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
-                            android:layout_marginStart="@dimen/compass_tv_value_margin"
-                            android:layout_marginLeft="@dimen/compass_tv_value_margin"
-                            android:layout_marginEnd="@dimen/compass_tv_value_margin"
-                            android:layout_marginRight="@dimen/compass_tv_value_margin"
+                            android:layout_margin="@dimen/compass_tv_value_margin"
                             android:layout_weight="1"
                             android:background="@drawable/tv_border"
-                            android:gravity="center_vertical"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -144,14 +126,10 @@
                             android:id="@+id/tv_sensor_hmc5883l_bz"
                             android:layout_width="@dimen/dimen_zero_dp"
                             android:layout_height="@dimen/compass_tv_height"
-                            android:layout_marginStart="@dimen/compass_tv_value_margin"
-                            android:layout_marginLeft="@dimen/compass_tv_value_margin"
-                            android:layout_marginEnd="@dimen/compass_tv_value_margin"
-                            android:layout_marginRight="@dimen/compass_tv_value_margin"
+                            android:layout_margin="@dimen/compass_tv_value_margin"
                             android:layout_weight="1"
                             android:background="@drawable/tv_border"
-                            android:gravity="center_vertical"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sensor_body_font" />
 
@@ -159,41 +137,31 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/card_select_axes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/card_compass_raw_values"
-                android:layout_marginStart="@dimen/card_margin"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginTop="@dimen/card_margin"
-                android:layout_marginEnd="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
-                android:layout_marginBottom="@dimen/header_padding_top">
+                android:layout_margin="@dimen/card_margin">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/card_margin"
-                    android:layout_marginLeft="@dimen/card_margin"
-                    android:layout_marginTop="@dimen/card_margin"
-                    android:layout_marginBottom="@dimen/card_margin">
+                    android:layout_margin="@dimen/margin_10dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_select_axes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/compass_padding"
-                        android:layout_marginLeft="@dimen/compass_padding"
+                        android:layout_marginBottom="@dimen/margin_10dp"
                         android:text="@string/text_parallel_axes"
                         android:textSize="@dimen/compass_select_axes_text_size" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_select_axes"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -218,12 +186,12 @@
                             android:text="@string/z_axis" />
                     </LinearLayout>
 
-                </RelativeLayout>
+                </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </ScrollView>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

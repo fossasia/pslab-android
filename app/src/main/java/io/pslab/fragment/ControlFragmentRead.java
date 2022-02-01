@@ -1,8 +1,6 @@
 package io.pslab.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +8,15 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.ScienceLabCommon;
 
 import java.text.DecimalFormat;
-
-/**
- * Created by asitava on 6/6/17.
- */
 
 public class ControlFragmentRead extends Fragment {
 
@@ -141,9 +138,9 @@ public class ControlFragmentRead extends Fragment {
                     tvControlRead5.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH1", 1), DataFormatter.LOW_PRECISION_FORMAT));
                     tvControlRead6.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CAP", 1), DataFormatter.LOW_PRECISION_FORMAT));
                     tvControlRead7.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH2", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                    tvControlRead8.setText(DataFormatter.formatDouble(scienceLab.getVoltage("SEN", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                    tvControlRead8.setText(DataFormatter.formatDouble(scienceLab.getVoltage("RES", 1), DataFormatter.LOW_PRECISION_FORMAT));
                     tvControlRead9.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH3", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                    tvControlRead10.setText(DataFormatter.formatDouble(scienceLab.getVoltage("AN8", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                    tvControlRead10.setText(DataFormatter.formatDouble(scienceLab.getVoltage("VOL", 1), DataFormatter.LOW_PRECISION_FORMAT));
                 }
 
             }

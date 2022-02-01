@@ -2,9 +2,6 @@ package io.pslab.fragment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +11,23 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.EditTextWidget;
 import io.pslab.others.ScienceLabCommon;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by asitava on 6/6/17.
- */
 
 public class ControlFragmentAdvanced extends Fragment {
 
@@ -303,22 +303,22 @@ public class ControlFragmentAdvanced extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    Double frequencyW1 = Double.parseDouble(etWidgetControlAdvanced1.getText().toString());
-                    Double frequencyW2 = Double.parseDouble(etWidgetControlAdvanced2.getText().toString());
+                    Double frequencySI1 = Double.parseDouble(etWidgetControlAdvanced1.getText().toString());
+                    Double frequencySI2 = Double.parseDouble(etWidgetControlAdvanced2.getText().toString());
                     float phase = Float.parseFloat(etWidgetControlAdvanced3.getText().toString());
 
-                    String wavetypeW1 = spinnerControlAdvanced1.getSelectedItem().toString();
-                    String wavetypeW2 = spinnerControlAdvanced2.getSelectedItem().toString();
+                    String wavetypeSI1 = spinnerControlAdvanced1.getSelectedItem().toString();
+                    String wavetypeSI2 = spinnerControlAdvanced2.getSelectedItem().toString();
 
-                    if ("SINE".equals(wavetypeW1) && scienceLab.isConnected())
-                        scienceLab.setSine1(frequencyW1);
-                    else if ("SQUARE".equals(wavetypeW1) && scienceLab.isConnected())
-                        scienceLab.setSqr1(frequencyW1, -1, false);
+                    if ("SINE".equals(wavetypeSI1) && scienceLab.isConnected())
+                        scienceLab.setSine1(frequencySI1);
+                    else if ("SQUARE".equals(wavetypeSI1) && scienceLab.isConnected())
+                        scienceLab.setSqr1(frequencySI1, -1, false);
 
-                    if ("SINE".equals(wavetypeW2) && scienceLab.isConnected())
-                        scienceLab.setSine2(frequencyW2);
-                    else if ("SQUARE".equals(wavetypeW2) && scienceLab.isConnected())
-                        scienceLab.setSqr2(frequencyW2, -1);
+                    if ("SINE".equals(wavetypeSI2) && scienceLab.isConnected())
+                        scienceLab.setSine2(frequencySI2);
+                    else if ("SQUARE".equals(wavetypeSI2) && scienceLab.isConnected())
+                        scienceLab.setSqr2(frequencySI2, -1);
                 } catch (NumberFormatException e) {
                     etWidgetControlAdvanced1.setText("0");
                     etWidgetControlAdvanced2.setText("0");
@@ -424,14 +424,14 @@ public class ControlFragmentAdvanced extends Fragment {
 
                                 if (Double.parseDouble(input) > maxima) {
                                     input = DataFormatter.formatDouble(maxima, DataFormatter.LOW_PRECISION_FORMAT);
-                                    Toast.makeText(getContext(), "The Maximum value for this field is " + maxima, Toast.LENGTH_SHORT).show();
+                                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                            "The Maximum value for this field is " + maxima,null,null, Snackbar.LENGTH_SHORT);
                                 }
                                 if (Double.parseDouble(input) < minima) {
                                     input = DataFormatter.formatDouble(minima, DataFormatter.MEDIUM_PRECISION_FORMAT);
-                                    Toast.makeText(getContext(), "The Minimum value for this field is " + minima, Toast.LENGTH_SHORT).show();
+                                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                            "The Minimum value for this field is " + minima,null,null, Snackbar.LENGTH_SHORT);
                                 }
-
-
                                 et.setText(input);
                             }
                         })

@@ -8,15 +8,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +18,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 
@@ -42,27 +43,19 @@ import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
-import io.pslab.fragment.AccelerometerDataFragment;
-import io.pslab.fragment.BaroMeterDataFragment;
-import io.pslab.fragment.CompassDataFragment;
-import io.pslab.fragment.DustSensorDataFragment;
-import io.pslab.fragment.GasSensorDataFragment;
-import io.pslab.fragment.GyroscopeDataFragment;
-import io.pslab.fragment.LuxMeterDataFragment;
-import io.pslab.fragment.ThermometerDataFragment;
+import io.pslab.fragment.SoundMeterDataFragment;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
 import io.pslab.others.MathUtils;
 import io.pslab.others.PSLabPermission;
+import io.pslab.others.ScienceLabCommon;
 import io.pslab.others.SwipeGestureDetector;
+import io.pslab.communication.ScienceLab;
 import io.realm.Realm;
 import io.realm.RealmObject;
-
-/**
- * Created by Padmal on 10/20/18.
- */
 
 public abstract class PSLabSensor extends AppCompatActivity {
 
@@ -76,8 +69,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public boolean startedPlay = false;
 
     public CoordinatorLayout sensorParentView;
-    public BottomSheetBehavior bottomSheetBehavior;
+    public BottomSheetBehavior<View> bottomSheetBehavior;
     public GestureDetector gestureDetector;
+    public ScienceLab scienceLab;
 
     public JSONArray markers;
 
@@ -108,7 +102,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String THERMOMETER = "Thermometer";
     public static final String THERMOMETER_CONFIGURATIONS = "Thermometer Configurations";
     public static final String THERMOMETER_DATA_FORMAT = "%.2f";
-    public static final String DUSTSENSOR = "Dust Sensor";
     public static final String DUSTSENSOR_CONFIGURATIONS = "Dust Sensor Configurations";
     public static final String ROBOTIC_ARM = "Robotic Arm";
     public static final String WAVE_GENERATOR = "Wave Generator";
@@ -117,6 +110,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public static final String MULTIMETER = "Multimeter";
     public static final String LOGIC_ANALYZER = "Logic Analyzer";
     public static final String GAS_SENSOR = "Gas Sensor";
+    public static final String SOUND_METER = "Sound Meter";
+    public static final String SOUNDMETER_CONFIGURATIONS = "Sound Meter Configurations";
+    public static final String SOUNDMETER_DATA_FORMAT = "%.2f";
 
     @BindView(R.id.sensor_toolbar)
     Toolbar sensorToolBar;
@@ -234,6 +230,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
      */
     public abstract void getDataFromDataLogger();
 
+    /**
+     * This method will check whether the device has in-built sensor or not
+     **/
+    public abstract boolean sensorFound();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -249,11 +250,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
         map = new Intent(this, MapsActivity.class);
         csvLogger = new CSVLogger(getSensorName());
         realm = LocalDataLog.with().getRealm();
-        titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
         sensorParentView = coordinatorLayout;
         setUpBottomSheet();
         fillUpFragment();
         invalidateOptionsMenu();
+        scienceLab = ScienceLabCommon.scienceLab;
     }
 
     /**
@@ -312,6 +314,9 @@ public abstract class PSLabSensor extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        Fragment fragment;
+
         switch (item.getItemId()) {
             /*
               When record data button has been pressed, check if the device has write permission
@@ -320,8 +325,10 @@ public abstract class PSLabSensor extends AppCompatActivity {
               will fire up. If user declines to give permission, don't do anything.
              */
             case R.id.record_data:
-                if (!isRecording) {
+                if (!isRecording && (sensorFound() || scienceLab.isConnected())) {
                     dataRecordingCycle();
+                } else if (!isRecording && !sensorFound() && !scienceLab.isConnected()) {
+                    CustomSnackBar.showSnackBar(sensorParentView, getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
                 } else {
                     stopRecordSensorData();
                     displayLogLocationOnSnackBar();
@@ -333,58 +340,31 @@ public abstract class PSLabSensor extends AppCompatActivity {
             case R.id.play_data:
                 playingData = !playingData;
                 if (!startedPlay) {
-                    if (getSensorFragment() instanceof LuxMeterDataFragment) {
-                        ((LuxMeterDataFragment) getSupportFragmentManager()
-                                .findFragmentByTag(getSensorName())).playData();
-                    } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
-                        ((BaroMeterDataFragment) getSupportFragmentManager()
-                                .findFragmentByTag(getSensorName())).playData();
-                    } else if (getSensorFragment() instanceof GyroscopeDataFragment) {
-                        ((GyroscopeDataFragment) getSupportFragmentManager()
-                                .findFragmentByTag(getSensorName())).playData();
-                    } else if (getSensorFragment() instanceof CompassDataFragment) {
-                        ((CompassDataFragment) getSupportFragmentManager()
-                                .findFragmentByTag(getSensorName())).playData();
-                    } else if (getSensorFragment() instanceof AccelerometerDataFragment) {
-                        ((AccelerometerDataFragment) getSupportFragmentManager()
-                                .findFragmentByTag(getSensorName())).playData();
-                    } else if (getSensorFragment() instanceof ThermometerDataFragment){
-                        ((ThermometerDataFragment) getSupportFragmentManager()
-                        .findFragmentByTag(getSensorName())).playData();
-                    } else if (getSensorFragment() instanceof GasSensorDataFragment){
-                        ((GasSensorDataFragment) getSupportFragmentManager()
-                                .findFragmentByTag(getSensorName())).playData();
-                    } else if (getSensorFragment() instanceof DustSensorDataFragment) {
-                        ((DustSensorDataFragment) getSupportFragmentManager().findFragmentByTag(getSensorName())).playData();
+                    fragment = getSupportFragmentManager()
+                            .findFragmentByTag(getSensorName());
+
+                    if (fragment instanceof OperationCallback) {
+                        ((OperationCallback) fragment).playData();
+                    }
+                } else {
+                    if (getSensorFragment() instanceof SoundMeterDataFragment) {
+                        if (!playingData) {
+                            ((SoundMeterDataFragment) getSupportFragmentManager()
+                                    .findFragmentByTag(getSensorName())).pause();
+                        } else {
+                            ((SoundMeterDataFragment) getSupportFragmentManager()
+                                    .findFragmentByTag(getSensorName())).resume();
+                        }
                     }
                 }
                 invalidateOptionsMenu();
                 break;
             case R.id.stop_data:
-                if (getSensorFragment() instanceof LuxMeterDataFragment) {
-                    ((LuxMeterDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).stopData();
-                } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
-                    ((BaroMeterDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).stopData();
-                } else if (getSensorFragment() instanceof GyroscopeDataFragment) {
-                    ((GyroscopeDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).stopData();
-                } else if (getSensorFragment() instanceof CompassDataFragment) {
-                    ((CompassDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).stopData();
-                } else if (getSensorFragment() instanceof AccelerometerDataFragment) {
-                    ((AccelerometerDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).stopData();
-                } else if (getSensorFragment() instanceof ThermometerDataFragment){
-                    ((ThermometerDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).stopData();
-                } else if (getSensorFragment() instanceof GasSensorDataFragment){
-                    ((GasSensorDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).stopData();
+                fragment = getSupportFragmentManager()
+                        .findFragmentByTag(getSensorName());
 
-                } else if (getSensorFragment() instanceof DustSensorDataFragment) {
-                    ((DustSensorDataFragment) getSupportFragmentManager().findFragmentByTag(getSensorName())).stopData();
+                if (fragment instanceof OperationCallback) {
+                    ((OperationCallback) fragment).stopData();
                 }
                 break;
             case R.id.show_map:
@@ -411,29 +391,11 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 break;
             case R.id.save_graph:
                 displayLogLocationOnSnackBar();
-                if (getSensorFragment() instanceof LuxMeterDataFragment) {
-                    ((LuxMeterDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                } else if (getSensorFragment() instanceof BaroMeterDataFragment) {
-                    ((BaroMeterDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                } else if (getSensorFragment() instanceof GyroscopeDataFragment) {
-                    ((GyroscopeDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                } else if (getSensorFragment() instanceof CompassDataFragment) {
-                    ((CompassDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                } else if (getSensorFragment() instanceof AccelerometerDataFragment) {
-                    ((AccelerometerDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                } else if (getSensorFragment() instanceof ThermometerDataFragment) {
-                    ((ThermometerDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                } else if (getSensorFragment() instanceof GasSensorDataFragment){
-                    ((GasSensorDataFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getSensorName())).saveGraph();
-                } else if (getSensorFragment() instanceof DustSensorDataFragment) {
-                    ((DustSensorDataFragment) getSupportFragmentManager().findFragmentByTag(getSensorName())).saveGraph();
+                fragment = getSupportFragmentManager()
+                        .findFragmentByTag(getSensorName());
+
+                if (fragment instanceof OperationCallback) {
+                    ((OperationCallback) fragment).saveGraph();
                 }
                 break;
             case android.R.id.home:
@@ -487,6 +449,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(PSLabSensor.this, DataLoggerActivity.class);
+                        intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getSensorName());
                         startActivity(intent);
                     }
                 }, Snackbar.LENGTH_INDEFINITE);
@@ -502,15 +465,15 @@ public abstract class PSLabSensor extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PSLabPermission.MAP_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent map = new Intent(getApplicationContext(), MapsActivity.class);
                     startActivity(map);
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            getResources().getString(R.string.no_permission_for_maps),
-                            Toast.LENGTH_LONG).show();
+                    CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                            getString(R.string.no_permission_for_maps), null, null, Snackbar.LENGTH_LONG);
                 }
                 break;
             case PSLabPermission.LOG_PERMISSION:
@@ -627,6 +590,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
         bottomSheetText.setText(getGuideAbstract());
         bottomSheetSchematic.setImageResource(getGuideSchematics());
         bottomSheetDesc.setText(getGuideDescription());
+        // if sensor doesn't image in it's guide and hence returns 0 for getGuideSchematics(), hide the visibility of bottomSheetSchematic
+        if (getGuideSchematics() != 0) {
+            bottomSheetSchematic.setImageResource(getGuideSchematics());
+        } else {
+            bottomSheetSchematic.setVisibility(View.GONE);
+        }
         // If a sensor has extra content than provided in the standard layout, create a new layout
         // and attach the layout id with getGuideExtraContent()
         if (getGuideExtraContent() != 0) {
@@ -662,7 +631,8 @@ public abstract class PSLabSensor extends AppCompatActivity {
         try {
             getDataFromDataLogger();
         } catch (ArrayIndexOutOfBoundsException e) {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_data_fetched), Toast.LENGTH_LONG).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_LONG);
         }
         if (checkGPSOnResume) {
             isRecording = true;

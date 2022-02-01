@@ -8,6 +8,7 @@
     <color name="gray">#F2ECEC</color>
     <color name="black">#000000</color>
     <color name="background">#FAFAFA</color>
+    <color name="primaryBlue">#FF48CCE9</color>
 
     <!-- Power Source Colors -->
     <color name="back_circle_color">#EDEDED</color>

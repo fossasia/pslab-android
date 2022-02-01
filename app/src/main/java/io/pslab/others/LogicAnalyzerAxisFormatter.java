@@ -1,11 +1,11 @@
 package io.pslab.others;
 
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 
-public class LogicAnalyzerAxisFormatter implements IAxisValueFormatter {
+public class LogicAnalyzerAxisFormatter extends ValueFormatter {
 
     private ArrayList<String> laChannelNames;
 

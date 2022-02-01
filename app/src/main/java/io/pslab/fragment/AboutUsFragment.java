@@ -1,15 +1,19 @@
 package io.pslab.fragment;
 
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import io.pslab.R;
 
@@ -18,9 +22,6 @@ import butterknife.ButterKnife;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
-/**
- * Created by Abhinav on 12-05-2018.
- */
 
 public class AboutUsFragment extends Fragment {
 
@@ -39,14 +40,13 @@ public class AboutUsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about_us, container, false);
-        simulateDayNight(0);
+        simulateDayNight(3);
         ButterKnife.bind(this, view);
         View aboutPage = new AboutPage(getActivity())
                 .isRTL(false)
                 .setImage(R.drawable.logo200x200)
                 .addWebsite("https://goo.gl/forms/sHlmRAPFmzcGQ27u2", getString(R.string.nav_report))
                 .addItem(new Element(getString(R.string.version), R.drawable.ic_widgets_black_24dp))
-                .addItem(new Element(getString(R.string.flavor), R.drawable.ic_android_black_24dp))
                 .setDescription(getString(R.string.about_us_description))
                 .addGroup("Connect with us")
                 .addEmail("pslab-fossasia@googlegroups.com")
@@ -55,6 +55,7 @@ public class AboutUsFragment extends Fragment {
                 .addFacebook("pslabio")
                 .addTwitter("pslabio")
                 .addYoutube("UCQprMsG-raCIMlBudm20iLQ")
+                .addItem(addDevelopers())
                 .create();
 
         appBarLayout.addView(aboutPage, -1);
@@ -83,6 +84,21 @@ public class AboutUsFragment extends Fragment {
             AppCompatDelegate.setDefaultNightMode(
                     AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
+    }
+
+    private Element addDevelopers() {
+        Element developersElement = new Element();
+        developersElement.setTitle(getString(R.string.developers));
+        developersElement.setIconDrawable(R.drawable.ic_user__24dp);
+        developersElement.setOnClickListener(v -> {
+            String url = getString(R.string.github_developers_link);
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                url = "https://" + url;
+            }
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        });
+        return developersElement;
     }
 
 }

@@ -6,12 +6,13 @@
     android:clickable="true"
     android:focusable="true">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/instrument_tile_card_height"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
+        android:foreground="?android:attr/selectableItemBackground"
         card_view:cardCornerRadius="@dimen/instrument_tile_card_radius">
 
         <RelativeLayout
@@ -90,6 +91,6 @@
 
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

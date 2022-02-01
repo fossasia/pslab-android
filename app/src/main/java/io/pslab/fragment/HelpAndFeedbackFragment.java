@@ -2,21 +2,22 @@ package io.pslab.fragment;
 
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.appbar.AppBarLayout;
+
+import org.jetbrains.annotations.NotNull;
 
 import io.pslab.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Harsh on 16-05-2018.
- */
 
 public class HelpAndFeedbackFragment extends Fragment {
 
@@ -41,7 +42,7 @@ public class HelpAndFeedbackFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
 

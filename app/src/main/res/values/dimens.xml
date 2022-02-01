@@ -10,6 +10,7 @@
     <dimen name="profile_height">80dp</dimen>
 
     <dimen name="card_margin">10dp</dimen>
+    <dimen name="card_margin_bottom">60dp</dimen>
     <dimen name="card_radius">10dp</dimen>
     <dimen name="title_padding">10dp</dimen>
     <dimen name="text_size">17sp</dimen>
@@ -81,6 +82,14 @@
     <dimen name="device_status_height">80dp</dimen>
     <dimen name="device_status_textsize">20sp</dimen>
     <dimen name="config_activity_padding">9dp</dimen>
+    <dimen name="height_zero">0dp</dimen>
+    <dimen name="width_zero">0dp</dimen>
+    <dimen name="weight_one">1</dimen>
+    <dimen name="weight_two">2</dimen>
+    <dimen name="weight_three">3</dimen>
+    <dimen name="weight_four">4</dimen>
+    <dimen name="text_size_of_label">17sp</dimen>
+    <dimen name="text_size_of_heading">20sp</dimen>
 
     <dimen name="multimeter_layout_margin">20dp</dimen>
     <dimen name="multimeter_line_width">1dp</dimen>
@@ -117,13 +126,23 @@
     <dimen name="multimeter_knobcircle_radius_1_xl">115dp</dimen>
     <dimen name="multimeter_knobcircle_radius_2_xl">111dp</dimen>
     <dimen name="multimeter_knobcircle_radius_3_xl">117dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_2_xhdpi">249dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_1_xhdpi">253dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_3_xhdpi">255dp</dimen>
     <dimen name="multimeter_left_box_endmargin">4dp</dimen>
     <dimen name="multimeter_end_box_rightmargin">12dp</dimen>
     <dimen name="multimeter_layout_margin_2">10dp</dimen>
+    <dimen name="multimeter_layout_margin_1">5dp</dimen>
     <dimen name="multimeter_constraint_4">15dp</dimen>
     <dimen name="multimeter_length_0">0dp</dimen>
-    <dimen name="multimeter_knob_width_xhdpi">208dp</dimen>
-    <dimen name="multimeter_knob_height_xhdpi">206dp</dimen>
+    <dimen name="multimeter_knob_width_xhdpi">192dp</dimen>
+    <dimen name="multimeter_knob_height_xhdpi">190dp</dimen>
+    
+    <dimen name="multimeter_knobcircle_radius_1_xl_tablet">173dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_2_xl_tablet">167dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_3_xl_tablet">176dp</dimen>
+    <dimen name="multimeter_left_button_margin_bottom_tablet">8dp</dimen>
+
     <dimen name="wave_gen_control_text_size">14sp</dimen>
     <dimen name="button_bg_radius">5dp</dimen>
 
@@ -252,7 +271,7 @@
 
     <dimen name="compass_padding">4dp</dimen>
     <dimen name="compass_tv_height">30dp</dimen>
-    <dimen name="compass_tv_value_margin">20dp</dimen>
+    <dimen name="compass_tv_value_margin">8dp</dimen>
     <dimen name="compass_select_axes_text_size">18sp</dimen>
     <dimen name="compass_text_size_large">25sp</dimen>
     <dimen name="compass_space_top">120dp</dimen>
@@ -268,7 +287,7 @@
     <dimen name="extra_space_top">20dp</dimen>
     <dimen name="power_source_space_top">120dp</dimen>
 
-    <dimen name="sensor_params_top">10dp</dimen>
+    <dimen name="margin_of_sensor_main_layout">10dp</dimen>
 
     <dimen name="bluetooth_dialog_margin">10dp</dimen>
     <dimen name="bluetooth_list_divider_height">2dp</dimen>
@@ -358,8 +377,9 @@
     <dimen name="create_config_margin3">22dp</dimen>
     <dimen name="create_config_margin4">12dp</dimen>
     <dimen name="create_config_recycler_view">280dp</dimen>
+    <dimen name="create_config_padding">6dp</dimen>
     <dimen name="check_box_width">0dp</dimen>
-    <dimen name="check_box_magin">4dp</dimen>
+    <dimen name="check_box_margin">5dp</dimen>
     <dimen name="check_box_corner">5dp</dimen>
     <dimen name="sensor_sht21_margin">5dp</dimen>
     <dimen name="sht21_height">40dp</dimen>
@@ -371,4 +391,22 @@
 
     <dimen name="sensorlist_text_size">14sp</dimen>
     <dimen name="text_size_sensor_list">14sp</dimen>
+
+    <dimen name="tv_sound_height">10dp</dimen>
+    <dimen name="sound_chart_height">200dp</dimen>
+    <dimen name="sound_display_font_size">16sp</dimen>
+    <dimen name="sound_guage_font_size">8sp</dimen>
+    <dimen name="sound_sensor_label_title_size">16sp</dimen>
+    <dimen name="sound_width_0">0dp</dimen>
+
+    <dimen name="compass_margin">15dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+
+    <dimen name="sensor_control_dock_image_button_width">60dp</dimen>
+    <dimen name="margin_50dp">50dp</dimen>
+    <dimen name="margin_5dp">5dp</dimen>
+    <dimen name="text_size_8sp">8sp</dimen>
+    <dimen name="sensor_image_height">90dp</dimen>
+    <dimen name="text_size_9sp">9sp</dimen>
+
 </resources>

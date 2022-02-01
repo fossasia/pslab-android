@@ -6,14 +6,16 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -40,15 +42,26 @@ import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.DustSensorActivity;
 import io.pslab.communication.ScienceLab;
+import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.DustSensorData;
 import io.pslab.models.GasSensorData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
-public class DustSensorDataFragment extends Fragment {
+public class DustSensorDataFragment extends Fragment implements OperationCallback {
+
+    private static final CSVDataLine CSV_HEADER =
+            new CSVDataLine()
+                    .add("Timestamp")
+                    .add("DateTime")
+                    .add("ppmValue")
+                    .add("Latitude")
+                    .add("Longitude");
 
     @BindView(R.id.dust_sensor_value)
     TextView dustValue;
@@ -107,6 +120,8 @@ public class DustSensorDataFragment extends Fragment {
         scienceLab = ScienceLabCommon.scienceLab;
         entries = new ArrayList<>();
         setupInstruments();
+        if (!scienceLab.isConnected())
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content), getString(R.string.not_connected), null, null, Snackbar.LENGTH_SHORT);
         return rootView;
     }
 
@@ -152,7 +167,7 @@ public class DustSensorDataFragment extends Fragment {
                 float ppm = d.getPpmValue();
                 dustSensorMeter.setSpeedAt(ppm);
                 dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
-                dustValue.setText(String.valueOf(String.format(Locale.getDefault(), "%.2f", ppm)));
+                dustValue.setText(String.format(Locale.getDefault(), "%.2f", ppm));
                 String status = ppm > highLimit ? "Good" : "Bad";
                 dustStatus.setText(status);
             }
@@ -185,8 +200,8 @@ public class DustSensorDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -209,7 +224,7 @@ public class DustSensorDataFragment extends Fragment {
                                 turns++;
                                 float ppm = d.getPpmValue();
                                 dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
-                                dustValue.setText(String.valueOf(String.format(Locale.getDefault(), "%.2f", ppm)));
+                                dustValue.setText(String.format(Locale.getDefault(), "%.2f", ppm));
                                 String status = ppm > highLimit ? "Good" : "Bad";
                                 dustStatus.setText(status);
 
@@ -248,6 +263,7 @@ public class DustSensorDataFragment extends Fragment {
         }, 0, timeGap);
     }
 
+    @Override
     public void playData() {
         resetInstrumentData();
         dustSensorActivity.startedPlay = true;
@@ -260,11 +276,12 @@ public class DustSensorDataFragment extends Fragment {
                 processRecordedData(0);
             }
         } catch (IllegalArgumentException e) {
-            Toast.makeText(getActivity(),
-                    getActivity().getResources().getString(R.string.no_data_fetched), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                    getString(R.string.no_data_fetched), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
+    @Override
     public void stopData() {
         if (graphTimer != null) {
             graphTimer.cancel();
@@ -279,16 +296,20 @@ public class DustSensorDataFragment extends Fragment {
         dustSensorActivity.invalidateOptionsMenu();
     }
 
+    @Override
     public void saveGraph() {
         dustSensorActivity.csvLogger.prepareLogFile();
         dustSensorActivity.csvLogger.writeMetaData(getResources().getString(R.string.gas_sensor));
-        dustSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+        dustSensorActivity.csvLogger.writeCSVFile(CSV_HEADER);
         for (DustSensorData dustSensorData : dustSensorActivity.recordedDustSensorData) {
-            dustSensorActivity.csvLogger.writeCSVFile(dustSensorData.getTime() + ","
-                    + CSVLogger.FILE_NAME_FORMAT.format(new Date(dustSensorData.getTime())) + ","
-                    + dustSensorData.getPpmValue() + ","
-                    + dustSensorData.getLat() + ","
-                    + dustSensorData.getLon());
+            dustSensorActivity.csvLogger.writeCSVFile(
+                    new CSVDataLine()
+                            .add(dustSensorData.getTime())
+                            .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(dustSensorData.getTime())))
+                            .add(dustSensorData.getPpmValue())
+                            .add(dustSensorData.getLat())
+                            .add(dustSensorData.getLon())
+            );
         }
         View view = rootView.findViewById(R.id.gas_sensor_linearlayout);
         view.setDrawingCacheEnabled(true);
@@ -338,21 +359,31 @@ public class DustSensorDataFragment extends Fragment {
         if (getActivity() != null && dustSensorActivity.isRecording) {
             if (dustSensorActivity.writeHeaderToFile) {
                 dustSensorActivity.csvLogger.prepareLogFile();
-                dustSensorActivity.csvLogger.writeCSVFile("Timestamp,DateTime,ppmValue,Latitude,Longitude");
+                dustSensorActivity.csvLogger.writeCSVFile(CSV_HEADER);
                 block = timestamp;
                 dustSensorActivity.recordSensorDataBlockID(new SensorDataBlock(timestamp, dustSensorActivity.getSensorName()));
                 dustSensorActivity.writeHeaderToFile = !dustSensorActivity.writeHeaderToFile;
             }
             if (dustSensorActivity.addLocation && dustSensorActivity.gpsLogger.isGPSEnabled()) {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 Location location = dustSensorActivity.gpsLogger.getDeviceLocation();
-                dustSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + ppmValue + "," + location.getLatitude() + "," + location.getLongitude());
+                dustSensorActivity.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(ppmValue)
+                                .add(location.getLatitude())
+                                .add(location.getLongitude())
+                );
                 sensorData = new GasSensorData(timestamp, block, ppmValue, location.getLatitude(), location.getLongitude());
             } else {
-                String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
-                dustSensorActivity.csvLogger.writeCSVFile(timestamp + "," + dateTime + ","
-                        + ppmValue + ",0.0,0.0");
+                dustSensorActivity.csvLogger.writeCSVFile(
+                        new CSVDataLine()
+                                .add(timestamp)
+                                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                                .add(ppmValue)
+                                .add(0.0)
+                                .add(0.0)
+                );
                 sensorData = new GasSensorData(timestamp, block, ppmValue, 0.0, 0.0);
             }
             dustSensorActivity.recordSensorData(sensorData);
@@ -365,7 +396,7 @@ public class DustSensorDataFragment extends Fragment {
         if (scienceLab.isConnected()) {
             double ppm = scienceLab.getVoltage("CH1", 1);
             dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
-            dustValue.setText(String.valueOf(String.format(Locale.getDefault(), "%.2f", ppm)));
+            dustValue.setText(String.format(Locale.getDefault(), "%.2f", ppm));
             String status = ppm > highLimit ? "Good" : "Bad";
             dustStatus.setText(status);
             dustSensorMeter.setWithTremble(false);
@@ -388,8 +419,6 @@ public class DustSensorDataFragment extends Fragment {
                 mChart.moveViewToX(data.getEntryCount());
                 mChart.invalidate();
             }
-        } else {
-            Toast.makeText(getContext(), R.string.not_connected, Toast.LENGTH_SHORT).show();
         }
     }
 

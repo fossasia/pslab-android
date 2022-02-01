@@ -7,19 +7,21 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,14 +47,13 @@ import io.pslab.models.ServoData;
 import io.pslab.models.ThermometerData;
 import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.LocalDataLog;
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
-
-/**
- * Created by Avjeet on 05/08/18.
- */
 
 public class DataLoggerActivity extends AppCompatActivity {
 
@@ -85,9 +86,16 @@ public class DataLoggerActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        if (caller == null) caller = "";
+
+        if (caller == null)
+            caller = getResources().getString(R.string.logged_data);
 
         getSupportActionBar().setTitle(caller);
+        setCategoryData();
+        fillData();
+    }
+
+    private void setCategoryData() {
         switch (caller) {
             case "Lux Meter":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.lux_meter));
@@ -128,11 +136,24 @@ public class DataLoggerActivity extends AppCompatActivity {
             case "Gas Sensor":
                 categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.gas_sensor));
                 break;
+            case "Dust Sensor":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.dust_sensor));
+                break;
+            case "Sound Meter":
+                categoryData = LocalDataLog.with().getTypeOfSensorBlocks(getString(R.string.sound_meter));
+                break;
             default:
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
-                getSupportActionBar().setTitle(getString(R.string.logged_data));
         }
         fillData();
+        categoryData.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SensorDataBlock>>() {
+            @Override
+            public void onChange(RealmResults<SensorDataBlock> sensorDataBlocks, OrderedCollectionChangeSet changeSet) {
+                if(categoryData.size()==0) {
+                    DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
+                }
+            }
+        });
     }
 
     private void fillData() {
@@ -166,24 +187,20 @@ public class DataLoggerActivity extends AppCompatActivity {
                 selectFile();
                 break;
             case R.id.delete_all:
-                Context context = DataLoggerActivity.this;
-                new AlertDialog.Builder(context)
-                        .setTitle(context.getString(R.string.delete))
-                        .setMessage(context.getString(R.string.delete_all_message))
-                        .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteAllProgressBar.setVisibility(View.VISIBLE);
-                                new DeleteAllTask().execute();
-                            }
-                        }).setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
+                displayAlertDialog(DataLoggerActivity.this);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void displayAlertDialog(Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.delete))
+                .setMessage(context.getString(R.string.delete_all_message))
+                .setPositiveButton(context.getString(R.string.delete), (dialog, which) -> {
+                    deleteAllProgressBar.setVisibility(View.VISIBLE);
+                    new DeleteAllTask().execute();
+                }).setNegativeButton(context.getString(R.string.cancel), (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     @Override
@@ -201,6 +218,7 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
             if (resultCode == RESULT_OK) {
                 Uri uri = data.getData();
@@ -209,7 +227,8 @@ public class DataLoggerActivity extends AppCompatActivity {
                 File file = new File(path);
                 getFileData(file);
             } else
-                Toast.makeText(this, this.getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                        getString(R.string.no_file_selected), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -230,11 +249,13 @@ public class DataLoggerActivity extends AppCompatActivity {
                         if (object != null) {
                             realm.copyToRealm(object);
                         } else {
-                            Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                    getString(R.string.incorrect_import_format), null, null, Snackbar.LENGTH_SHORT);
                         }
                         realm.commitTransaction();
                     } catch (Exception e) {
-                        Toast.makeText(this, getResources().getString(R.string.incorrect_import_format), Toast.LENGTH_SHORT).show();
+                        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                getString(R.string.incorrect_import_format), null, null, Snackbar.LENGTH_SHORT);
                     }
                 } else if (i == 0) {
                     block = System.currentTimeMillis();
@@ -270,7 +291,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 returnObject = new GyroData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
                 break;
             case "Compass":
-                returnObject = new CompassData(time, block, data[2].equals("null") ? "0" : data[2], data[3].equals("null") ? "0" : data[3], data[4].equals("null") ? "0" : data[4], data[5], Double.valueOf(data[6]), Double.valueOf(data[7]));
+                returnObject = new CompassData(time, block, data[2].equals("null") ? 0f : Float.valueOf(data[2]), data[3].equals("null") ? 0f : Float.valueOf(data[3]), data[4].equals("null") ? 0f : Float.valueOf(data[4]), data[5], Double.valueOf(data[6]), Double.valueOf(data[7]));
                 break;
             case "Thermometer":
                 returnObject = new ThermometerData(time, block, Float.valueOf(data[2]), Double.valueOf(data[5]), Double.valueOf(data[6]));

@@ -35,7 +35,7 @@
             android:textSize="@dimen/text_size_wavegen"
             android:textStyle="bold" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/contol_title_text"
@@ -44,7 +44,7 @@
             android:layout_marginBottom="@dimen/ctrl_inside_rl_padding"
             android:padding="@dimen/margin_btn">
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.5" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline4_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.33" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline4_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.66" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline4_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.83" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
                 app:layout_constraintStart_toStartOf="@id/guideline4_3"
                 app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
 
@@ -217,7 +217,7 @@
             android:textSize="@dimen/text_size_wavegen"
             android:textStyle="bold" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/control_title_pwm"
@@ -226,7 +226,7 @@
             android:layout_marginBottom="@dimen/ctrl_inside_rl_padding"
             android:padding="@dimen/margin_btn">
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/cr_guideline2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -234,7 +234,7 @@
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.25" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/cr_guideline14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -242,7 +242,7 @@
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.5" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/cr_guideline15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -250,7 +250,7 @@
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.5" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/cr_guideline3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -258,7 +258,7 @@
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.75" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/cr_guideline3_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -266,7 +266,7 @@
                 app:layout_constraintGuide_begin="@dimen/constraint_guide_begin"
                 app:layout_constraintGuide_percent="0.33" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/cr_guideline3_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -392,7 +392,7 @@
                 app:layout_constraintStart_toStartOf="@id/cr_guideline3_1"
                 app:layout_constraintTop_toTopOf="@+id/cr_guideline14" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
 

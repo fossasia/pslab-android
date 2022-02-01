@@ -3,7 +3,9 @@ package io.pslab.sensors;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -75,6 +77,14 @@ public class SensorMPU6050 extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sensor_mpu6050);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.mpu6050);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         sensorDock = (RelativeLayout) findViewById(R.id.sensor_control_dock_layout);
         indefiniteSamplesCheckBox = (CheckBox) findViewById(R.id.checkBox_samples_sensor);
@@ -262,13 +272,13 @@ public class SensorMPU6050 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (play && scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.play);
+                    playPauseButton.setImageResource(R.drawable.circle_play_button);
                     play = false;
                 } else if (!scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.play);
+                    playPauseButton.setImageResource(R.drawable.circle_play_button);
                     play = false;
                 } else {
-                    playPauseButton.setImageResource(R.drawable.pause);
+                    playPauseButton.setImageResource(R.drawable.circle_pause_button);
                     play = true;
                     if (!indefiniteSamplesCheckBox.isChecked()) {
                         counter = Integer.parseInt(samplesEditBox.getText().toString());
@@ -393,11 +403,19 @@ public class SensorMPU6050 extends AppCompatActivity {
             samplesEditBox.setText(String.valueOf(counter));
             if (counter == 0 && !runIndefinitely) {
                 play = false;
-                playPauseButton.setImageResource(R.drawable.play);
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
             }
             synchronized (lock) {
                 lock.notify();
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return true;
     }
 }

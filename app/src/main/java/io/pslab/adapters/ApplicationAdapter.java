@@ -1,22 +1,20 @@
 package io.pslab.adapters;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.RecyclerView;
+
 import io.pslab.items.ApplicationItem;
 import io.pslab.R;
 
 import java.util.List;
 
-/**
- * Created by Padmal on 5/7/17.
- */
 
 public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.Holder> {
 

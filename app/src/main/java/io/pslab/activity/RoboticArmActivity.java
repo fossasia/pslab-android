@@ -7,14 +7,10 @@ import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.DragEvent;
@@ -33,8 +29,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
 import com.triggertrap.seekarc.SeekArc;
 
 import java.util.ArrayList;
@@ -42,10 +44,12 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.InputMinMaxFilter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
@@ -60,6 +64,15 @@ import io.realm.RealmResults;
 public class RoboticArmActivity extends AppCompatActivity {
 
     private static final String PREF_NAME = "RoboticArmActivity";
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("Servo1")
+            .add("Servo2")
+            .add("Servo3")
+            .add("Servo4")
+            .add("Latitude")
+            .add("Longitude");
     private EditText degreeText1, degreeText2, degreeText3, degreeText4;
     private SeekArc seekArc1, seekArc2, seekArc3, seekArc4;
     private LinearLayout servo1TimeLine, servo2TimeLine, servo3TimeLine, servo4TimeLine;
@@ -115,7 +128,8 @@ public class RoboticArmActivity extends AppCompatActivity {
 
         scienceLab = ScienceLabCommon.scienceLab;
         if (!scienceLab.isConnected()) {
-            Toast.makeText(this, getResources().getString(R.string.device_not_connected), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
         }
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -155,6 +169,11 @@ public class RoboticArmActivity extends AppCompatActivity {
         degreeText3.setText(getResources().getString(R.string.zero));
         degreeText4.setText(getResources().getString(R.string.zero));
 
+        degreeText1.setFilters(new InputFilter[]{new InputMinMaxFilter(0,360)});
+        degreeText2.setFilters(new InputFilter[]{new InputMinMaxFilter(0,360)});
+        degreeText3.setFilters(new InputFilter[]{new InputMinMaxFilter(0,360)});
+        degreeText4.setFilters(new InputFilter[]{new InputMinMaxFilter(0,360)});
+
         LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
         servoControllerParams.setMargins(2, 5, 2, 0);
         servo1Layout.setLayoutParams(servoControllerParams);
@@ -178,7 +197,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             timeLineBox.setLayoutParams(servoTimeLineBoxParams);
             timeLineBox.setPadding(5, 5, 5, 5);
             TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
-            timeText.setText(String.valueOf(i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
+            timeText.setText((i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
             timeLineBox.setOnDragListener(servo1DragListener);
             servo1TimeLine.addView(timeLineBox, i);
         }
@@ -188,7 +207,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             timeLineBox.setLayoutParams(servoTimeLineBoxParams);
             timeLineBox.setPadding(5, 5, 5, 5);
             TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
-            timeText.setText(String.valueOf(i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
+            timeText.setText((i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
             timeLineBox.setOnDragListener(servo2DragListener);
             servo2TimeLine.addView(timeLineBox, i);
         }
@@ -198,7 +217,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             timeLineBox.setLayoutParams(servoTimeLineBoxParams);
             timeLineBox.setPadding(5, 5, 5, 5);
             TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
-            timeText.setText(String.valueOf(i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
+            timeText.setText((i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
             timeLineBox.setOnDragListener(servo3DragListener);
             servo3TimeLine.addView(timeLineBox, i);
         }
@@ -208,7 +227,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             timeLineBox.setLayoutParams(servoTimeLineBoxParams);
             timeLineBox.setPadding(5, 5, 5, 5);
             TextView timeText = timeLineBox.findViewById(R.id.timeline_box_time_text);
-            timeText.setText(String.valueOf(i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
+            timeText.setText((i + 1) + getResources().getString(R.string.robotic_arm_second_unit));
             timeLineBox.setOnDragListener(servo4DragListener);
             servo4TimeLine.addView(timeLineBox, i);
         }
@@ -565,7 +584,8 @@ public class RoboticArmActivity extends AppCompatActivity {
     }
 
     private void toastInvalidValueMessage() {
-        Toast.makeText(RoboticArmActivity.this, getResources().getString(R.string.invalid_servo_value), Toast.LENGTH_SHORT).show();
+        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                getString(R.string.invalid_servo_value), null, null, Snackbar.LENGTH_SHORT);
     }
 
     private void setReceivedData() {
@@ -583,11 +603,11 @@ public class RoboticArmActivity extends AppCompatActivity {
         long block = System.currentTimeMillis();
         servoCSVLogger.prepareLogFile();
         servoCSVLogger.writeMetaData(getResources().getString(R.string.robotic_arm));
-        String data = "Timestamp,DateTime,Servo1,Servo2,Servo3,Servo4,Latitude,Longitude\n";
         long timestamp;
         recordSensorDataBlockID(new SensorDataBlock(block, getString(R.string.robotic_arm)));
         String degree1, degree2, degree3, degree4;
         double lat, lon;
+        servoCSVLogger.writeCSVFile(CSV_HEADER);
         for (int i = 0; i < 60; i++) {
             timestamp = System.currentTimeMillis();
             degree1 = degree2 = degree3 = degree4 = getResources().getString(R.string.zero);
@@ -621,13 +641,8 @@ public class RoboticArmActivity extends AppCompatActivity {
                 lon = 0.0;
             }
             recordSensorData(new ServoData(timestamp, block, degree1, degree2, degree3, degree4, lat, lon));
-            if (i == 59) {
-                data += timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)) + "," + degree1 + "," + degree2 + "," + degree3 + "," + degree4 + "," + lat + "," + lon;
-            } else {
-                data += timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)) + "," + degree1 + "," + degree2 + "," + degree3 + "," + degree4 + "," + lat + "," + lon + "\n";
-            }
+            servoCSVLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp))).add(degree1).add(degree2).add(degree3).add(degree4).add(lat).add(lon));
         }
-        servoCSVLogger.writeCSVFile(data);
         CustomSnackBar.showSnackBar(findViewById(R.id.robotic_arm_coordinator),
                 getString(R.string.csv_store_text) + " " + servoCSVLogger.getCurrentFilePath()
                 , getString(R.string.open), new View.OnClickListener() {
@@ -714,11 +729,11 @@ public class RoboticArmActivity extends AppCompatActivity {
             case R.id.play_data:
                 if (isPlaying) {
                     isPlaying = false;
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                     timeLine.onFinish();
                 } else {
                     isPlaying = true;
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_white_24dp, null));
                     timeLine.start();
                 }
                 break;
@@ -728,7 +743,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 timeIndicatorLayout.setLayoutParams(timeIndicatorParams);
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
                 isPlaying = false;
-                playMenu.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                playMenu.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                 timelinePosition = 0;
                 break;
             case R.id.show_guide:

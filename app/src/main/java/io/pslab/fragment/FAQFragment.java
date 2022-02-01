@@ -1,7 +1,6 @@
 package io.pslab.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -10,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import io.pslab.R;
 
@@ -116,7 +117,7 @@ public class FAQFragment extends Fragment {
 
             holder.text.setClickable(true);
             holder.text.setMovementMethod(LinkMovementMethod.getInstance());
-            holder.text.setText(Html.fromHtml(getChild(questionPosition, childPosition).toString(), Html.FROM_HTML_MODE_COMPACT));
+            holder.text.setText(Html.fromHtml(getChild(questionPosition, childPosition).toString()));
 
             return v;
         }

@@ -4,23 +4,25 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
+import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +33,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -46,6 +51,7 @@ import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.MultimeterSettingsFragment;
 import io.pslab.models.MultimeterData;
 import io.pslab.models.SensorDataBlock;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
@@ -67,6 +73,14 @@ public class MultimeterActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "customDialogPreference";
     public static final String NAME = "savingData";
     private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
+    private static final CSVDataLine CSV_HEADER =
+            new CSVDataLine()
+                    .add("Timestamp")
+                    .add("DateTime")
+                    .add("Data")
+                    .add("Value")
+                    .add("Latitude")
+                    .add("Longitude");
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
     public boolean recordData = false;
@@ -100,12 +114,12 @@ public class MultimeterActivity extends AppCompatActivity {
     ImageView bottomSheetSchematic;
     @BindView(R.id.custom_dialog_desc)
     TextView bottomSheetDesc;
-    BottomSheetBehavior bottomSheetBehavior;
+    BottomSheetBehavior<View> bottomSheetBehavior;
     GestureDetector gestureDetector;
     SharedPreferences multimeter_data;
     private ScienceLab scienceLab;
     private int knobState;
-    private String dataRecorded;
+    private CSVDataLine dataRecorded;
     private String defaultValue;
     private Menu menu;
     private Boolean switchIsChecked;
@@ -116,7 +130,6 @@ public class MultimeterActivity extends AppCompatActivity {
     private boolean locationEnabled = true;
     private long recordPeriod;
     private double lat = 0, lon = 0;
-    private String multimeterCSVheader = "Timestamp,DateTime,Data,Value,Latitude,Longitude";
     private GPSLogger gpsLogger;
     private Realm realm;
     private long block;
@@ -153,7 +166,7 @@ public class MultimeterActivity extends AppCompatActivity {
         });
 
         multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
-        dataRecorded = multimeterCSVheader;
+        dataRecorded = CSV_HEADER;
         knobState = multimeter_data.getInt("KnobState", 2);
         switchIsChecked = multimeter_data.getBoolean("SwitchState", false);
         aSwitch.setChecked(switchIsChecked);
@@ -193,6 +206,9 @@ public class MultimeterActivity extends AppCompatActivity {
             isPlayingBack = false;
             checkConfig();
             logTimer();
+        }
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
     }
 
@@ -406,7 +422,7 @@ public class MultimeterActivity extends AppCompatActivity {
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
+                float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
                 tvShadow.setVisibility(View.VISIBLE);
                 tvShadow.setAlpha(value);
                 arrowUpDown.setRotation(slideOffset * 180);
@@ -445,7 +461,13 @@ public class MultimeterActivity extends AppCompatActivity {
             lon = 0.0;
         }
         long timestamp = System.currentTimeMillis();
-        dataRecorded = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)) + "," + data + "," + value + "," + lat + "," + lon;
+        dataRecorded = new CSVDataLine()
+                .add(timestamp)
+                .add(CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp)))
+                .add(data)
+                .add(value)
+                .add(lat)
+                .add(lon);
         multimeterLogger.writeCSVFile(dataRecorded);
         recordSensorData(new MultimeterData(timestamp, block, data, value, lat, lon));
     }
@@ -491,7 +513,7 @@ public class MultimeterActivity extends AppCompatActivity {
                         if (isDataRecorded) {
                             MenuItem item1 = menu.findItem(R.id.record_pause_data);
                             item1.setIcon(R.drawable.ic_record_white);
-                            dataRecorded = multimeterCSVheader;
+                            dataRecorded = CSV_HEADER;
                             // Export Data
                             CustomSnackBar.showSnackBar(coordinatorLayout,
                                     getString(R.string.csv_store_text) + " " + multimeterLogger.getCurrentFilePath()
@@ -513,7 +535,7 @@ public class MultimeterActivity extends AppCompatActivity {
                             multimeterLogger = new CSVLogger(getString(R.string.multimeter));
                             multimeterLogger.prepareLogFile();
                             multimeterLogger.writeMetaData(getResources().getString(R.string.multimeter));
-                            multimeterLogger.writeCSVFile(multimeterCSVheader);
+                            multimeterLogger.writeCSVFile(CSV_HEADER);
                             block = System.currentTimeMillis();
                             recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.multimeter)));
                             isRecordingStarted = true;
@@ -545,13 +567,13 @@ public class MultimeterActivity extends AppCompatActivity {
                 if (playClicked) {
                     playClicked = false;
                     stopMenu.setVisible(true);
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                     if (playBackTimer != null) {
                         playBackTimer.cancel();
                     }
                 } else {
                     playClicked = true;
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_white_24dp, null));
                     stopMenu.setVisible(true);
                     if (playBackTimer != null) {
                         playBackTimer.cancel();
@@ -570,7 +592,7 @@ public class MultimeterActivity extends AppCompatActivity {
                                         playBackTimer.cancel();
                                         currentPosition = 0;
                                         stopMenu.setVisible(false);
-                                        item.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                                        item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                                     }
                                 }
                             });
@@ -586,7 +608,7 @@ public class MultimeterActivity extends AppCompatActivity {
                 }
                 currentPosition = 0;
                 playClicked = false;
-                playMenu.setIcon(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                playMenu.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
             default:
                 break;
         }

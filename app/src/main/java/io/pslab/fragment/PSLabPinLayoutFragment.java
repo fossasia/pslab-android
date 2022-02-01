@@ -6,10 +6,12 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AlertDialog;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,10 +24,6 @@ import java.util.ArrayList;
 
 import io.pslab.R;
 import io.pslab.items.PinDetails;
-
-/**
- * Created by Padmal on 5/22/18.
- */
 
 public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchListener {
 
@@ -78,10 +76,10 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
         pinDetails.add(new PinDetails("SQ2", "PWM generator pin 2", Color.parseColor("#406743"), Color.parseColor("#22ba6d")));
         pinDetails.add(new PinDetails("SQ3", "PWM generator pin 3", Color.parseColor("#406743"), Color.parseColor("#aa44aa")));
         pinDetails.add(new PinDetails("SQ4", "PWM generator pin 4", Color.parseColor("#406743"), Color.parseColor("#d28080")));
-        pinDetails.add(new PinDetails("LA1", "Logic analyzer pin 1", Color.parseColor("#406743"), Color.parseColor("#e7a41a")));
-        pinDetails.add(new PinDetails("LA2", "Logic analyzer pin 2", Color.parseColor("#406743"), Color.parseColor("#e7a4ff")));
-        pinDetails.add(new PinDetails("LA3", "Logic analyzer pin 3", Color.parseColor("#406743"), Color.parseColor("#ad2d00")));
-        pinDetails.add(new PinDetails("LA4", "Logic analyzer pin 4", Color.parseColor("#406743"), Color.parseColor("#0053ad")));
+        pinDetails.add(new PinDetails("LA1", "Logic analyzer pin 1", Color.parseColor("#406743"), Color.parseColor("#0053ad")));
+        pinDetails.add(new PinDetails("LA2", "Logic analyzer pin 2", Color.parseColor("#406743"), Color.parseColor("#ad2d00")));
+        pinDetails.add(new PinDetails("LA3", "Logic analyzer pin 3", Color.parseColor("#406743"), Color.parseColor("#e7a4ff")));
+        pinDetails.add(new PinDetails("LA4", "Logic analyzer pin 4", Color.parseColor("#406743"), Color.parseColor("#e7a41a")));
         pinDetails.add(new PinDetails("AC1", "Alternative channel input", Color.parseColor("#ffe040"), Color.parseColor("#b01498")));
         pinDetails.add(new PinDetails("CH1", "Oscilloscope channel input 1", Color.parseColor("#ffe040"), Color.parseColor("#0b4189")));
         pinDetails.add(new PinDetails("CH2", "Oscilloscope channel input 2", Color.parseColor("#ffe040"), Color.parseColor("#410b89")));

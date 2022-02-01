@@ -10,17 +10,17 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsServiceConnection;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.browser.customtabs.CustomTabsServiceConnection;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,9 +28,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
+
+import javax.annotation.Nullable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +46,7 @@ import io.pslab.fragment.FAQFragment;
 import io.pslab.fragment.HomeFragment;
 import io.pslab.fragment.InstrumentsFragment;
 import io.pslab.fragment.PSLabPinLayoutFragment;
+import io.pslab.others.CustomSnackBar;
 import io.pslab.others.CustomTabService;
 import io.pslab.others.InitializationVariable;
 import io.pslab.others.ScienceLabCommon;
@@ -186,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 return HomeFragment.newInstance(ScienceLabCommon.scienceLab.isConnected(), ScienceLabCommon.scienceLab.isDeviceFound());
             case 5:
                 return AboutUsFragment.newInstance();
-            case 7:
+            case 8:
                 return FAQFragment.newInstance();
             default:
                 return InstrumentsFragment.newInstance();
@@ -224,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             case 5:
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
-            case 7:
+            case 8:
                 navigationView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             default:
@@ -258,8 +263,14 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
+                    case R.id.nav_rate:
+                        customTabService.launchUrl("https://play.google.com/store/apps/details?id=io.pslab");
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
+                        break;
                     case R.id.nav_help_feedback:
-                        navItemIndex = 7;
+                        navItemIndex = 8;
                         CURRENT_TAG = TAG_FAQ;
                         break;
                     case R.id.nav_buy_pslab:
@@ -348,7 +359,8 @@ public class MainActivity extends AppCompatActivity {
                 super.onBackPressed();
                 return;
             } else {
-                Toast.makeText(getBaseContext(), getString(R.string.Toast_double_tap), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                        getString(R.string.Toast_double_tap), null, null, Snackbar.LENGTH_SHORT);
             }
             mBackPressed = System.currentTimeMillis();
         }
@@ -365,7 +377,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_pslab_connected:
-                Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                        getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
                 break;
             case R.id.menu_pslab_disconnected:
                 attemptToConnectPSLab();
@@ -389,14 +402,16 @@ public class MainActivity extends AppCompatActivity {
         mScienceLabCommon = ScienceLabCommon.getInstance();
         if (communicationHandler.isConnected()) {
             initialisationDialog.dismiss();
-            Toast.makeText(this, getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
         } else {
             communicationHandler = new CommunicationHandler(usbManager);
             if (communicationHandler.isDeviceFound()) {
                 attemptToGetUSBPermission();
             } else {
                 initialisationDialog.dismiss();
-                Toast.makeText(this, getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                        getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                 navItemIndex = 2;
                 CURRENT_TAG = TAG_DEVICE;
                 loadHomeFragment();
@@ -478,19 +493,22 @@ public class MainActivity extends AppCompatActivity {
                             PSLabisConnected = mScienceLabCommon.openDevice(communicationHandler);
                             initialisationDialog.dismiss();
                             invalidateOptionsMenu();
-                            Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
+                            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                    getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
                             if (navItemIndex == 0) {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, InstrumentsFragment.newInstance()).commit();
                             } else if (navItemIndex == 1) {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(true, true)).commitAllowingStateLoss();
                             } else {
-                                Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
+                                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                        getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
                             }
                         }
                     } else {
                         initialisationDialog.dismiss();
                         Log.d(TAG, "permission denied for device " + device);
-                        Toast.makeText(getApplicationContext(), getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                                getString(R.string.device_not_found), null, null, Snackbar.LENGTH_SHORT);
                     }
                 }
             }
@@ -512,7 +530,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (navItemIndex == 1) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(true, true)).commitAllowingStateLoss();
                 }
-                Toast.makeText(getApplicationContext(), getString(R.string.device_connected_successfully), Toast.LENGTH_SHORT).show();
+                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                        getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
             }
         }
     }

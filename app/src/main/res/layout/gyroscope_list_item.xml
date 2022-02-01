@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/first_chart"
     android:layout_width="match_parent"
     android:layout_height="@dimen/accel_card_height"
     android:layout_below="@+id/top_app_bar_layout"
-    android:layout_marginEnd="@dimen/card_margin"
-    android:layout_marginLeft="@dimen/card_margin"
-    android:layout_marginRight="@dimen/card_margin"
-    android:layout_marginStart="@dimen/card_margin"
-    android:layout_marginTop="@dimen/card_margin"
     app:cardCornerRadius="@dimen/accel_card_radius"
     app:cardElevation="@dimen/card_elevation">
 
@@ -40,7 +35,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/axis_image"
-                android:gravity="end"
+                android:gravity="center_horizontal"
                 android:text="@string/multimeter_default_value"
                 android:paddingBottom="@dimen/card_margin"
                 android:paddingLeft="@dimen/card_margin"
@@ -102,7 +97,7 @@
 
         </RelativeLayout>
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/chart_yaxis_layout_hmc"
             android:layout_width="@dimen/tv_chart_height"
             android:layout_height="match_parent"
@@ -130,7 +125,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart_gyroscope"
@@ -143,4 +138,4 @@
 
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

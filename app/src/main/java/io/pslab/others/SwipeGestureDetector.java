@@ -1,14 +1,16 @@
 package io.pslab.others;
 
-import android.support.design.widget.BottomSheetBehavior;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
 
     private BottomSheetBehavior bottomSheet;
 
-    public SwipeGestureDetector(BottomSheetBehavior bt) {
+    public SwipeGestureDetector(BottomSheetBehavior<View> bt) {
         bottomSheet = bt;
     }
 

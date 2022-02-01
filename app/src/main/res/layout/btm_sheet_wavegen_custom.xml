@@ -9,7 +9,7 @@
     android:orientation="vertical"
     app:behavior_hideable="true"
     app:behavior_peekHeight="@dimen/peek_height"
-    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+    app:layout_behavior="@string/bottom_sheet_behavior">
 
     <Space
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
 
     </LinearLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -137,6 +137,6 @@
 
         </io.pslab.others.ZoomLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

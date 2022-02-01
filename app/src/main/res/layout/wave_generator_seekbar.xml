@@ -21,18 +21,17 @@
 
     <com.warkiz.widget.IndicatorSeekBar
         android:id="@+id/seek_bar_wave_gen"
-        android:layout_width="@dimen/dimen_zero_dp"
-        android:layout_height="@dimen/seekbar_height_wave"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/seekbar_margin"
         android:layout_marginBottom="@dimen/seekbar_margin"
         android:layout_weight="1"
         app:isb_max="5000"
         app:isb_min="0"
-        app:isb_seek_bar_type="discrete_ticks"
-        app:isb_show_indicator="false"
+        app:isb_show_indicator="none"
         app:isb_thumb_color="@color/colorPrimary"
-        app:isb_tick_color="@color/colorPrimary"
-        app:isb_tick_num="51" />
+        app:isb_tick_marks_color="@color/colorPrimary"
+        app:isb_ticks_count="50" />
 
 
     <ImageButton

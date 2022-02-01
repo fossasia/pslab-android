@@ -4,14 +4,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,13 +26,11 @@ import io.pslab.fragment.GyroscopeSettingsFragment;
 import io.pslab.fragment.LuxMeterSettingFragment;
 import io.pslab.fragment.MultimeterSettingsFragment;
 import io.pslab.fragment.SettingsFragment;
+import io.pslab.fragment.SoundmeterSettingsFragment;
 import io.pslab.fragment.ThermometerSettingsFragment;
 import io.pslab.models.PSLabSensor;
 import io.pslab.others.GPSLogger;
 
-/**
- * Created by Avjeet on 7/7/18.
- */
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -84,6 +83,9 @@ public class SettingsActivity extends AppCompatActivity {
             case PSLabSensor.DUSTSENSOR_CONFIGURATIONS:
                 fragment = new DustSensorSettingsFragment();
                 break;
+            case PSLabSensor.SOUNDMETER_CONFIGURATIONS:
+                fragment = new SoundmeterSettingsFragment();
+                break;
             default:
                 fragment = new SettingsFragment();
                 break;
@@ -110,15 +112,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case GPSLogger.PSLAB_PERMISSION_FOR_MAPS: {
-                if (grantResults.length <= 0
-                        || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
-                    editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, false);
-                    editor.apply();
-                }
-            }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == GPSLogger.PSLAB_PERMISSION_FOR_MAPS && (grantResults.length <= 0
+                || grantResults[0] != PackageManager.PERMISSION_GRANTED)) {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
+            editor.putBoolean(LuxMeterSettingFragment.KEY_INCLUDE_LOCATION, false);
+            editor.apply();
         }
     }
 }

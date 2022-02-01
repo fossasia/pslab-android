@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -15,15 +16,16 @@ import android.media.AudioTrack;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -39,7 +41,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -47,7 +48,11 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
 import com.warkiz.widget.IndicatorSeekBar;
+import com.warkiz.widget.OnSeekChangeListener;
+import com.warkiz.widget.SeekParams;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,6 +66,7 @@ import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.WaveGeneratorData;
+import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
@@ -80,6 +86,17 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public static final int TRIANGULAR = 2;
     public static final int PWM = 3;
     public static final String PREFS_NAME = "customDialogPreference";
+    private static final CSVDataLine CSV_HEADER = new CSVDataLine()
+            .add("Timestamp")
+            .add("DateTime")
+            .add("Mode")
+            .add("Wave")
+            .add("Shape")
+            .add("Freq")
+            .add("Phase")
+            .add("Duty")
+            .add("lat")
+            .add("lon");
     private static boolean waveMonSelected;
     private final long LONG_CLICK_DELAY = 100;
     private final String KEY_LOG = "has_log";
@@ -189,6 +206,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     private boolean isPlayingSound = false;
     private ProduceSoundTask produceSoundTask;
 
+    private AudioTrack track;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -257,8 +276,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         imgBtnSin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imgBtnSin.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                imgBtnTri.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                imgBtnSin.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                imgBtnTri.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, SIN);
                 selectWaveform(SIN);
             }
@@ -267,8 +286,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         imgBtnTri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imgBtnSin.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                imgBtnTri.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                imgBtnSin.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                imgBtnTri.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, TRIANGULAR);
                 selectWaveform(TRIANGULAR);
             }
@@ -283,8 +302,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = waveFreqValue;
                 waveMonPropSelect.setText(getString(R.string.wave_frequency));
                 setSeekBar(seekBar);
-                btnCtrlFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                btnCtrlPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnCtrlFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                btnCtrlPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
             }
         });
 
@@ -297,8 +316,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = wavePhaseValue;
                 waveMonPropSelect.setText(getString(R.string.phase_offset));
                 setSeekBar(seekBar);
-                btnCtrlFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnCtrlPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnCtrlFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnCtrlPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
             }
         });
 
@@ -312,8 +331,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 imgBtnSin.setEnabled(true);
                 imgBtnTri.setEnabled(true);
                 toggleDigitalMode(WaveConst.SQUARE);
-                btnDigitalMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnAnalogMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnDigitalMode.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnAnalogMode.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
             }
         });
 
@@ -329,8 +348,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 imgBtnTri.setEnabled(false);
                 pwmBtnActive = WaveConst.SQR1;
                 selectBtn(WaveConst.SQR1);
-                btnDigitalMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                btnAnalogMode.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnDigitalMode.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                btnAnalogMode.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
             }
         });
 
@@ -383,9 +402,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = pwmFreqValue;
                 pwmMonPropSelect.setText(getString(R.string.frequecy_colon));
                 setSeekBar(seekBar);
-                pwmBtnFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                pwmBtnPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                pwmBtnDuty.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
             }
         });
 
@@ -398,9 +417,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = pwmPhaseValue;
                 pwmMonPropSelect.setText(getString(R.string.pwm_phase));
                 setSeekBar(seekBar);
-                pwmBtnFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                pwmBtnPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                pwmBtnDuty.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
             }
         });
 
@@ -413,9 +432,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 activePropTv = pwmDutyValue;
                 pwmMonPropSelect.setText(getString(R.string.duty_cycle));
                 setSeekBar(seekBar);
-                pwmBtnFreq.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                pwmBtnPhase.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                pwmBtnDuty.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
             }
         });
 
@@ -423,16 +442,14 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
         monitorLongClicks(imgBtnUp, imgBtnDown);
 
-        seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
+        seekBar.setOnSeekChangeListener(new OnSeekChangeListener() {
             @Override
-            public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
+            public void onSeeking(SeekParams seekParams) {
                 String valueText;
-                switch (unit) {
-                    case "\u00b0":
-                        valueText = progress + unit;
-                        break;
-                    default:
-                        valueText = progress + " " + unit;
+                if ("\u00b0".equals(unit)) {
+                    valueText = seekParams.progress + unit;
+                } else {
+                    valueText = seekParams.progress + " " + unit;
                 }
 
                 if (waveMonSelected) {
@@ -444,18 +461,13 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSectionChanged(IndicatorSeekBar seekBar, int thumbPosOnTick, String textBelowTick, boolean fromUserTouch) {
-                //do nothing
-            }
-
-            @Override
-            public void onStartTrackingTouch(IndicatorSeekBar seekBar, int thumbPosOnTick) {
-                //do nothing
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
+                // Unused method override
             }
 
             @Override
             public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
-                //do nothing
+                // Unused method override
             }
         });
 
@@ -482,6 +494,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+        }
     }
 
     public void saveWaveConfig() {
@@ -490,7 +506,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         csvLogger.writeMetaData(getResources().getString(R.string.wave_generator));
         long timestamp;
         double lat, lon;
-        String data = "Timestamp,DateTime,Mode,Wave,Shape,Freq,Phase,Duty,lat,lon\n";
+        csvLogger.writeCSVFile(CSV_HEADER);
         recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.wave_generator)));
         double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
         double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
@@ -516,11 +532,12 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         timestamp = System.currentTimeMillis();
         String timeData = timestamp + "," + CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
         String locationData = lat + "," + lon;
+        String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
         if (scienceLab.isConnected()) {
             if (digital_mode == WaveConst.SQUARE) {
-                data += timeData + ",Square,Wave1," + waveType1 + "," + String.valueOf(freq1) + ",0,0," + locationData + "\n"; //wave1
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("Square").add("Wave1").add(waveType1).add(freq1).add(0).add(0).add(lat).add(lon)); //wave1
                 recordSensorData(new WaveGeneratorData(timestamp, block, "Square", "Wave1", waveType1, String.valueOf(freq1), "0", "0", lat, lon));
-                data += timeData + ",Square,Wave2," + waveType2 + "," + String.valueOf(freq2) + "," + String.valueOf(phase) + ",0," + locationData + "\n";//wave2
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("Square").add("Wave2").add(waveType2).add(freq2).add(phase).add(0).add(lat).add(lon)); //wave2
                 recordSensorData(new WaveGeneratorData(timestamp + 1, block, "Square", "Wave2", waveType2, String.valueOf(freq2), String.valueOf(phase), "0", lat, lon));
             } else {
                 double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
@@ -532,16 +549,15 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
                 double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
 
-                data += timeData + ",PWM,Sq1,PWM," + String.valueOf(freqSqr1) + ",0," + String.valueOf(dutySqr1) + "," + locationData + "\n";
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("PWM").add("Sq1").add("PWM").add(freqSqr1).add(0).add(dutySqr1).add(lat).add(lon));
                 recordSensorData(new WaveGeneratorData(timestamp, block, "PWM", "Sq1", "PWM", String.valueOf(freqSqr1), "0", String.valueOf(dutySqr1), lat, lon));
-                data += timeData + ",PWM,Sq2,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr2) + "," + String.valueOf(dutySqr2) + "," + locationData + "\n";
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("PWM").add("Sq2").add("PWM").add(freqSqr1).add(phaseSqr2).add(dutySqr2).add(lat).add(lon));
                 recordSensorData(new WaveGeneratorData(timestamp + 1, block, "PWM", "Sq2", "PWM", String.valueOf(freqSqr1), String.valueOf(phaseSqr2), String.valueOf(dutySqr2), lat, lon));
-                data += timeData + ",PWM,Sq3,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr3) + "," + String.valueOf(dutySqr3) + "," + locationData + "\n";
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("PWM").add("Sq3").add("PWM").add(freqSqr1).add(phaseSqr3).add(dutySqr3).add(lat).add(lon));
                 recordSensorData(new WaveGeneratorData(timestamp + 2, block, "PWM", "Sq3", "PWM", String.valueOf(freqSqr1), String.valueOf(phaseSqr3), String.valueOf(dutySqr3), lat, lon));
-                data += timeData + ",PWM,Sq4,PWM," + String.valueOf(freqSqr1) + "," + String.valueOf(phaseSqr4) + "," + String.valueOf(dutySqr4) + "," + locationData;
+                csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("PWM").add("Sq4").add("PWM").add(freqSqr1).add(phaseSqr4).add(dutySqr4).add(lat).add(lon));
                 recordSensorData(new WaveGeneratorData(timestamp + 3, block, "PWM", "Sq4", "PWM", String.valueOf(freqSqr1), String.valueOf(phaseSqr4), String.valueOf(dutySqr4), lat, lon));
             }
-            csvLogger.writeCSVFile(data);
             CustomSnackBar.showSnackBar(coordinatorLayout,
                     getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
                     , getString(R.string.open), new View.OnClickListener() {
@@ -552,9 +568,9 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     }, Snackbar.LENGTH_SHORT);
-
         } else {
-            Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+            CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                    getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -619,8 +635,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         if (scienceLab.isConnected()) {
             if (digital_mode == WaveConst.SQUARE) {
                 if (phase == WaveData.PHASE_MIN.getValue()) {
-                    scienceLab.setW1(freq1, waveType1);
-                    scienceLab.setW2(freq2, waveType2);
+                    scienceLab.setSI1(freq1, waveType1);
+                    scienceLab.setSI2(freq2, waveType2);
                 } else {
                     scienceLab.setWaves(freq1, phase, freq2);
                 }
@@ -658,6 +674,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if(produceSoundTask != null)
+                    produceSoundTask.cancel(true);
+                produceSoundTask = null;
+                isPlayingSound = false;
                 finish();
                 break;
             case R.id.save_data:
@@ -668,7 +688,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 if (scienceLab.isConnected()) {
                     viewWaveDialog();
                 } else {
-                    Toast.makeText(WaveGeneratorActivity.this, R.string.device_not_connected, Toast.LENGTH_SHORT).show();
+                    CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                            getString(R.string.device_not_connected), null, null, Snackbar.LENGTH_SHORT);
                 }
                 break;
             case R.id.show_guide:
@@ -699,8 +720,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
                 waveBtnActive = WaveConst.WAVE1;
 
-                btnCtrlWave1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                btnCtrlWave2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnCtrlWave1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                btnCtrlWave2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
 
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
@@ -715,8 +736,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
                 waveBtnActive = WaveConst.WAVE2;
 
-                btnCtrlWave2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                btnCtrlWave1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnCtrlWave2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                btnCtrlWave1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
 
                 btnCtrlPhase.setEnabled(true); // enable phase for wave2
 
@@ -729,10 +750,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
             case SQR1:
                 pwmBtnActive = WaveConst.SQR1;
-                btnPwmSq1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                btnPwmSq2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnPwmSq3.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnPwmSq4.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                btnPwmSq2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(false);  //phase disabled for sq1
                 pwmPhaseValue.setText("--");
                 fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
@@ -742,10 +763,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case SQR2:
 
                 pwmBtnActive = WaveConst.SQR2;
-                btnPwmSq1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnPwmSq2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                btnPwmSq3.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnPwmSq4.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnPwmSq2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -754,10 +775,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case SQR3:
 
                 pwmBtnActive = WaveConst.SQR3;
-                btnPwmSq1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnPwmSq2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnPwmSq3.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                btnPwmSq4.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnPwmSq1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnPwmSq2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -766,10 +787,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case SQR4:
 
                 pwmBtnActive = WaveConst.SQR4;
-                btnPwmSq1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnPwmSq2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnPwmSq3.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
-                btnPwmSq4.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
+                btnPwmSq1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnPwmSq2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 pwmBtnPhase.setEnabled(true);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -777,8 +798,8 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
             default:
                 waveBtnActive = WaveConst.WAVE1;
-                btnCtrlWave1.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded));
-                btnCtrlWave2.setBackground(getResources().getDrawable(R.drawable.btn_back_rounded_light));
+                btnCtrlWave1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                btnCtrlWave2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
                 selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
@@ -798,21 +819,21 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         switch (waveType) {
             case SIN:
                 waveFormText = getString(R.string.sine);
-                image = getResources().getDrawable(R.drawable.ic_sin);
+                image = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sin, null);
                 break;
 
             case TRIANGULAR:
                 waveFormText = getString(R.string.triangular);
-                image = getResources().getDrawable(R.drawable.ic_triangular);
+                image = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_triangular, null);
                 break;
             case PWM:
                 waveFormText = getResources().getString(R.string.text_pwm);
-                image = getResources().getDrawable(R.drawable.ic_pwm_pic);
+                image = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pwm_pic, null);
                 break;
 
             default:
                 waveFormText = getString(R.string.sine);
-                image = getResources().getDrawable(R.drawable.ic_sin);
+                image = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sin, null);
         }
         selectedWaveText.setText(waveFormText);
         selectedWaveImg.setImageDrawable(image);
@@ -863,21 +884,21 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             case FREQUENCY:
                 seekMin = WaveData.FREQ_MIN.getValue();
                 seekMax = WaveData.FREQ_MAX.getValue();
-                numTicks = 100;
+                numTicks = 50;
                 leastCount = 1;
                 break;
 
             case PHASE:
                 seekMin = WaveData.PHASE_MIN.getValue();
                 seekMax = WaveData.PHASE_MAX.getValue();
-                numTicks = 73;
+                numTicks = 50;
                 leastCount = 1;
                 break;
 
             case DUTY:
                 seekMin = WaveData.DUTY_MIN.getValue();
                 seekMax = WaveData.DUTY_MAX.getValue();
-                numTicks = 100;
+                numTicks = 50;
                 leastCount = 1;
                 unit = getString(R.string.unit_percent);
                 break;
@@ -885,10 +906,13 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             default:
                 seekMin = 0;
                 seekMax = 5000;
-                numTicks = 51;
+                numTicks = 50;
                 leastCount = 1;
         }
-        seekBar.getBuilder().setMin(seekMin).setMax(seekMax).setTickNum(numTicks).apply();
+
+        seekBar.setMin(seekMin);
+        seekBar.setMax(seekMax);
+        seekBar.setTickCount(numTicks);
 
         if (!waveMonSelected) {
             waveMonPropSelect.setText("");
@@ -949,10 +973,10 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         String valueText;
         switch (unit) {
             case "\u00b0":
-                valueText = String.valueOf(dValue.intValue()) + unit;
+                valueText = dValue.intValue() + unit;
                 break;
             default:
-                valueText = String.valueOf(dValue.intValue()) + " " + unit;
+                valueText = dValue.intValue() + " " + unit;
         }
         activePropTv.setText(valueText);
     }
@@ -1300,8 +1324,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
     private class ProduceSoundTask extends AsyncTask<Void, Void, Void> {
 
-        private AudioTrack track;
-
         @Override
         protected Void doInBackground(Void... voids) {
             short[] buffer = new short[1024];
@@ -1338,9 +1360,20 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            track.flush();
-            track.stop();
-            track.release();
+            if (track != null) {
+                track.flush();
+                track.stop();
+                track.release();
+            }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(produceSoundTask != null)
+            produceSoundTask.cancel(true);
+        produceSoundTask = null;
+        isPlayingSound = false;
     }
 }

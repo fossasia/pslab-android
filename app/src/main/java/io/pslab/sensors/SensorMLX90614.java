@@ -5,9 +5,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,6 +17,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -37,9 +40,6 @@ import io.pslab.others.ScienceLabCommon;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by Harsh on 6/6/18.
- */
 
 public class SensorMLX90614 extends AppCompatActivity {
 
@@ -73,6 +73,15 @@ public class SensorMLX90614 extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sensor_mlx90614);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.mlx90614);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         howToConnectDialog(getString(R.string.ir_thermometer), getString(R.string.ir_thermometer_intro), R.drawable.mlx90614_schematic, getString(R.string.ir_thermometer_desc));
 
         sensorDock = (RelativeLayout) findViewById(R.id.sensor_control_dock_layout);
@@ -229,13 +238,13 @@ public class SensorMLX90614 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (play && scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.play);
+                    playPauseButton.setImageResource(R.drawable.circle_play_button);
                     play = false;
                 } else if (!scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.play);
+                    playPauseButton.setImageResource(R.drawable.circle_play_button);
                     play = false;
                 } else {
-                    playPauseButton.setImageResource(R.drawable.pause);
+                    playPauseButton.setImageResource(R.drawable.circle_pause_button);
                     play = true;
                     if (!indefiniteSamplesCheckBox.isChecked()) {
                         counter = Integer.parseInt(samplesEditBox.getText().toString());
@@ -370,11 +379,19 @@ public class SensorMLX90614 extends AppCompatActivity {
             samplesEditBox.setText(String.valueOf(counter));
             if (counter == 0 && !runIndefinitely) {
                 play = false;
-                playPauseButton.setImageResource(R.drawable.play);
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
             }
             synchronized (lock) {
                 lock.notify();
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return true;
     }
 }
