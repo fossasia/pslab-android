@@ -341,7 +341,7 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
                 /*
                  * update the moving average window
                  */
-                if( !(movingAvgWindow.size() < movingAvgWindowSize) ) {
+                if ((movingAvgWindow.size() >= movingAvgWindowSize)) {
                     rmsSum -= movingAvgWindow.removeFirst();
                 }
                 movingAvgWindow.addLast(rmsamp);
