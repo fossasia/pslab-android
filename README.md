@@ -6,7 +6,7 @@ Repository for the PSLab Android App for performing experiments with the [Pocket
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3383ddffb53b4c82a822f3a5991fe0a1)](https://www.codacy.com/gh/fossasia/pslab-android/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/pslab-android&amp;utm_campaign=Badge_Grade)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/pslab-fossasia)
 ![Minimum API Level](https://img.shields.io/badge/Min%20API%20Level-23-green)
-![Maximum API Level](https://img.shields.io/badge/Max%20API%20Level-28-orange)
+![Maximum API Level](https://img.shields.io/badge/Max%20API%20Level-31-orange)
 ![GitHub repo size](https://img.shields.io/github/repo-size/fossasia/pslab-android)
 [![Gitter](https://badges.gitter.im/fossasia/pslab.svg)](https://gitter.im/fossasia/pslab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Twitter Follow](https://img.shields.io/twitter/follow/pslabio.svg?style=social&label=Follow&maxAge=2592000?style=flat-square)](https://twitter.com/pslabio)
@@ -151,19 +151,19 @@ If you built your own hardware, change VendorID and/or ProductID in [Communicati
 
 ### By direct cloning
 
- 1. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select "check out project from version control".
- 2. Select git from the drop down menu that appeared.
- 3. Go to the repository and click clone or download button.
- 4. From the dropdown that appeared, copy the link.
- 5. Paste the URL that you copied and press clone.
- 6. Android studio should now begin building the project with gradle.
- 7. Once this process is complete and Android Studio opens, check the Console for any build errors.
+  1. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select "check out project from version control".
+  2. Select git from the drop down menu that appeared.
+  3. Go to the repository and click clone or download button.
+  4. From the dropdown that appeared, copy the link.
+  5. Paste the URL that you copied and press clone.
+  6. Android studio should now begin building the project with gradle.
+  7. Once this process is complete and Android Studio opens, check the Console for any build errors.
 
  - _Note:_ If you receive a Gradle sync error titled, "failed to find ...", you should click on the link below the error message (if available) that says _Install missing platform(s) and sync project_ and allow Android studio to fetch you what is missing.
 
- 8. Once all build errors have been resolved, you should be all set to build the app and test it.
- 9. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
-10. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
+  8. Once all build errors have been resolved, you should be all set to build the app and test it.
+  9. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
+ 10. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
 
 If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
 
@@ -205,27 +205,27 @@ As a tip for new developers those who struggle with squashing commits into one, 
 
 Despite any reason, follow the steps given below to squash all commits into one adhering to our best practices.
 
- * Setup remote to upstream branch if not set before
+  * Setup remote to upstream branch if not set before
 
 `$ git remote add upstream https://github.com/fossasia/pslab-android.git`
 
- * Check into the branch related to the pull request
+  * Check into the branch related to the pull request
 
 `$ git checkout <branch-name>`
 
- * Perform a soft reset to retain the changes while removing all the commit details
+  * Perform a soft reset to retain the changes while removing all the commit details
 
 `$ git reset --soft upstream/development`
 
- * Add files to the staging area
+  * Add files to the staging area
 
 `$ git add <file paths or "." to add everything>`
 
- * Create a new commit with a proper message following commit message guidelines
+  * Create a new commit with a proper message following commit message guidelines
 
 `$ git commit -m "tag: commit message"`
 
- * If you have already made a pull request
+  * If you have already made a pull request
 
 `$ git push -f origin <branch-name>`
 
