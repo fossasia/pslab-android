@@ -98,10 +98,10 @@ This repository holds the Android App for performing experiments with [PSLab](ht
   </table>
 
 ## Video Demo
-- [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k).
-- [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ).
-- [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo).
-- [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y).
+  * [PSLab Android App Overview](https://www.youtube.com/watch?v=JJfsF0b8M8k).
+  * [Observing Sound Waveforms Using PSLab Device](https://www.youtube.com/watch?v=5bxDd1PiOMQ).
+  * [Real-time Sensor Data Logging Using Pocket Science Lab](https://www.youtube.com/watch?v=_A8h6o-UcNo).
+  * [Generating and Observing Waveforms Using Pocket Science Lab](https://www.youtube.com/watch?v=Ua9_OCR4p8Y).
 
 ## Features
 |   **Feature**          | **Description**                                                   | **Status**         |
@@ -151,28 +151,19 @@ If you built your own hardware, change VendorID and/or ProductID in [Communicati
 
 ### By direct cloning
 
-
-1. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select "check out project from version control".
-
-2. Select git from the drop down menu that appeared.
-
-3. Go to the repository and click clone or download button.
-
-4. From the dropdown that appeared, copy the link.
-
-5. Paste the URL that you copied and press clone.
-
-6. Android studio should now begin building the project with gradle.
-
-7. Once this process is complete and Android Studio opens, check the Console for any build errors.
+ 1. Open Android Studio, you will see a **Welcome to Android** window. Under Quick Start, select "check out project from version control".
+ 2. Select git from the drop down menu that appeared.
+ 3. Go to the repository and click clone or download button.
+ 4. From the dropdown that appeared, copy the link.
+ 5. Paste the URL that you copied and press clone.
+ 6. Android studio should now begin building the project with gradle.
+ 7. Once this process is complete and Android Studio opens, check the Console for any build errors.
 
  - _Note:_ If you receive a Gradle sync error titled, "failed to find ...", you should click on the link below the error message (if available) that says _Install missing platform(s) and sync project_ and allow Android studio to fetch you what is missing.
 
-8. Once all build errors have been resolved, you should be all set to build the app and test it.
-
-9. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
-
-10.  If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
+ 8. Once all build errors have been resolved, you should be all set to build the app and test it.
+ 9. To Build the app, go to _Build>Make Project_ (or alternatively press the Make Project icon in the toolbar).
+10. If the app was built successfully, you can test it by running it on either a real device or an emulated one by going to _Run>Run 'app'_ or pressing the Run icon in the toolbar.
 
 If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
 
@@ -199,11 +190,11 @@ To use PSLab device with Android, you simply need an OTG cable, an Android Devic
 
 Please help us follow the best practice to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
 
- * Single commit per pull request.
- * Reference the issue numbers in the commit message. Follow the pattern ``` Fixes #<issue number> <commit message>```
- * Follow uniform design practices. The design language must be consistent throughout the app.
- * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
- * If the PR is related to any front end change, please attach relevant screenshots in the pull request description.
+  * Single commit per pull request.
+  * Reference the issue numbers in the commit message. Follow the pattern ``` Fixes #<issue number> <commit message>```
+  * Follow uniform design practices. The design language must be consistent throughout the app.
+  * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
+  * If the PR is related to any front end change, please attach relevant screenshots in the pull request description.
 
 #### How to `git squash`?
 
@@ -263,9 +254,9 @@ The project is maintained by
 - Lorenz Gerber ([@lorenzgerber](https://github.com/lorenzgerber))
 - Wei Tat ([@cweitat](https://github.com/cweitat))
 - Wai Gie ([@woshikie](https://github.com/woshikie))
-- Neel Trivedi ([@neel1998](https://github.com/neel1998))
 
 ### Alumni
+- Neel Trivedi ([@neel1998](https://github.com/neel1998))
 - Akarshan Gandotra ([@akarshan96](https://github.com/akarshan96))
 - Asitava Sarkar ([@asitava1998](https://github.com/asitava1998))
 - Vivek Singh Bhadauria ([@viveksb007](https://github.com/viveksb007))
