@@ -8,7 +8,9 @@ categories:
   - title: ':bug: Bug Fixes'
     label: 'Fix'
   - title: ':wrench: Maintenance'
-    label: 'Chore'
+    labels: 
+      - 'Chore'
+      - 'Dependencies'
   - title: ':page_facing_up: Documentation'
     label: 'Documentation'
 change-template: '- $TITLE (#$NUMBER) - @$AUTHOR'
