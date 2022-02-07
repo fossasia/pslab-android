@@ -14,6 +14,8 @@ categories:
   - title: ':page_facing_up: Documentation'
     label: 'Documentation'
 change-template: '- $TITLE (#$NUMBER) - @$AUTHOR'
+exclude-contributors:
+  - 'Dependabot'
 template: |-
     ## Changes
     $CHANGES
