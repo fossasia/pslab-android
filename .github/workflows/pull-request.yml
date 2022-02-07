@@ -23,3 +23,10 @@ jobs:
     - name: Build with Gradle
       run: |
         bash ./gradlew build --stacktrace
+
+    - name: Store APK file
+      uses: actions/upload-artifact@v2
+      with:
+        name: apk-files
+        path: |
+          app/build/outputs/apk/debug/app-debug.apk

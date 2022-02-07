@@ -1,0 +1,23 @@
+name: Comment
+
+on:
+  pull_request:
+    types: [ opened, edited, reopened ]
+    branches:
+      - development
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download repository
+      uses: actions/checkout@v2
+
+    - name: Post Comment
+      uses: actions/github-script@v5
+      with:
+        script: |
+          const script = require('./scripts/pr_comment.js')
+          await script({github, context, core})
+          
