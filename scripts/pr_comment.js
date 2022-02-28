@@ -14,6 +14,11 @@ module.exports = async ({github, context, core}) => {
   const pr_author = pullrequest.data.user.login;
   const pr_reviewers = ['CloudyPadmal'];
   const pr_comment = "Hello @" + pr_author + ", ";
+  const pr_exclude = ['dependabot[bot]'];
+  
+  if (!pr_author.includes(pr_exclude)) {
+    return;
+  }
   
   await github.rest.issues.addAssignees({
     issue_number: context.issue.number,
