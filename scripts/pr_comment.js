@@ -16,7 +16,7 @@ module.exports = async ({github, context, core}) => {
   const pr_comment = "Hello @" + pr_author + ", ";
   const pr_exclude = ['dependabot[bot]'];
   
-  if (!pr_author.includes(pr_exclude)) {
+  if (pr_author.includes(pr_exclude)) {
     return;
   }
   
