@@ -49,6 +49,7 @@ public class ESPFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 espIPAddress = espIPEditText.getText().toString();
+                espConnectBtn.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 if (espIPAddress.length() == 0) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
                             getString(R.string.incorrect_IP_address_message),null,null, Snackbar.LENGTH_SHORT);
