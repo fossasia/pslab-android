@@ -343,5 +343,12 @@
 
     </RelativeLayout>
 
+    <View
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="@color/black" />
+
     <include layout="@layout/bottom_sheet_oscilloscope" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

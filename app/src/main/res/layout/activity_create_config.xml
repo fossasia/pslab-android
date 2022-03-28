@@ -28,29 +28,29 @@
 
                 <LinearLayout
                     android:id="@+id/select_instrument"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/create_config_margin1"
+                    android:orientation="horizontal"
                     android:paddingTop="@dimen/create_config_padding"
-                    android:paddingBottom="@dimen/create_config_padding"
-                    android:layout_marginStart="@dimen/create_config_margin1">
+                    android:paddingBottom="@dimen/create_config_padding">
 
                     <TextView
                         android:id="@+id/select_instrument_title"
                         style="@style/Base.TextAppearance.AppCompat.Title"
                         android:layout_width="@dimen/width_zero"
-                        android:layout_weight="@dimen/weight_one"
-                        android:textSize="@dimen/text_size_of_label"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="@string/select_instrument_title" />
+                        android:layout_weight="@dimen/weight_one"
+                        android:text="@string/select_instrument_title"
+                        android:textSize="@dimen/text_size_of_label" />
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/select_instrument_spinner"
                         android:layout_width="@dimen/width_zero"
-                        android:layout_weight="@dimen/weight_two"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_weight="@dimen/weight_two"
                         android:textAlignment="center" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -66,35 +66,35 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginStart="@dimen/create_config_margin1">
+                    android:layout_marginStart="@dimen/create_config_margin1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/time_interval_title"
                         style="@style/Base.TextAppearance.AppCompat.Title"
                         android:layout_width="wrap_content"
-                        android:textSize="@dimen/text_size_of_label"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="@string/time_interval_title" />
+                        android:text="@string/time_interval_title"
+                        android:textSize="@dimen/text_size_of_label" />
 
                     <EditText
                         android:id="@+id/interval_edit_text"
                         android:layout_width="@dimen/width_zero"
-                        android:layout_weight="@dimen/weight_three"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="@dimen/weight_three"
                         android:hint="@string/time_interval_hint"
                         android:imeOptions="actionDone"
                         android:inputType="number"
-                        android:textAlignment="center"
-                        android:layout_gravity="center" />
+                        android:textAlignment="center" />
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/interval_unit_spinner"
                         android:layout_width="@dimen/width_zero"
-                        android:layout_weight="@dimen/weight_one"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"
+                        android:layout_weight="@dimen/weight_one" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -104,10 +104,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textAlignment="center"
-                android:textSize="@dimen/text_size_of_heading"
                 android:layout_marginTop="@dimen/create_config_margin2"
-                android:text="@string/select_params_title" />
+                android:text="@string/select_params_title"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_of_heading" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/params_list_container"

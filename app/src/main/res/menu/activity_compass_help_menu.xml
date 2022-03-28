@@ -6,7 +6,7 @@
         android:id="@+id/compass_record_data"
         android:icon="@drawable/ic_record_white"
         android:title="Record current data"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/compass_help_icon"

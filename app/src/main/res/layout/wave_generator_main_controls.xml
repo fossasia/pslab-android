@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
+
     <Button
         android:id="@+id/btn_produce_sound"
         android:layout_width="match_parent"
@@ -35,6 +34,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/wave_gen_control_text_size" />
+
     <Button
         android:id="@+id/digital_mode_btn"
         android:layout_width="match_parent"

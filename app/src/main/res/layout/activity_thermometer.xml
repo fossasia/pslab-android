@@ -76,7 +76,7 @@
                     app:sv_speedometerMode="NORMAL"
                     app:sv_textSize="@dimen/thermo_guage_font_size"
                     app:sv_unit="@string/thermo_unit_celcius"
-                    app:sv_unitTextColor="@color/black"/>
+                    app:sv_unitTextColor="@color/black" />
 
             </LinearLayout>
 
