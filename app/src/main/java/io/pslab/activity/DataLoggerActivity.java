@@ -1,7 +1,6 @@
 package io.pslab.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -149,7 +148,7 @@ public class DataLoggerActivity extends AppCompatActivity {
         categoryData.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SensorDataBlock>>() {
             @Override
             public void onChange(RealmResults<SensorDataBlock> sensorDataBlocks, OrderedCollectionChangeSet changeSet) {
-                if(categoryData.size()==0) {
+                if (categoryData.size() == 0) {
                     DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
                 }
             }

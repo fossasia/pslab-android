@@ -9,15 +9,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.widget.TextViewCompat;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,11 +17,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.widget.TextViewCompat;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
@@ -43,6 +37,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
+import io.pslab.activity.guide.GuideActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.items.SquareImageButton;
 import io.pslab.models.PowerSourceData;
@@ -52,14 +47,12 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
-import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
-public class PowerSourceActivity extends AppCompatActivity {
+public class PowerSourceActivity extends GuideActivity {
 
     public static final String POWER_PREFERENCES = "Power_Preferences";
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
@@ -117,24 +110,6 @@ public class PowerSourceActivity extends AppCompatActivity {
     SquareImageButton upPCS;
     @BindView(R.id.power_card_pcs_down)
     SquareImageButton downPCS;
-    @BindView(R.id.bottom_sheet)
-    LinearLayout bottomSheet;
-    @BindView(R.id.shadow)
-    View tvShadow;
-    @BindView(R.id.img_arrow)
-    ImageView arrowUpDown;
-    @BindView(R.id.sheet_slide_text)
-    TextView bottomSheetSlideText;
-    @BindView(R.id.guide_title)
-    TextView bottomSheetGuideTitle;
-    @BindView(R.id.custom_dialog_text)
-    TextView bottomSheetText;
-    @BindView(R.id.custom_dialog_schematic)
-    ImageView bottomSheetSchematic;
-    @BindView(R.id.custom_dialog_desc)
-    TextView bottomSheetDesc;
-    BottomSheetBehavior bottomSheetBehavior;
-    GestureDetector gestureDetector;
     private CSVLogger powerSourceLogger = null;
     private GPSLogger gpsLogger = null;
     private Realm realm;
@@ -142,16 +117,16 @@ public class PowerSourceActivity extends AppCompatActivity {
     private Timer playbackTimer = null;
     private int currentPosition = 0;
     private boolean playClicked = false;
-    private long recordPeriod = 1000;
+    private final long recordPeriod = 1000;
     private boolean isRecording = false;
     private Boolean writeHeaderToFile = true;
     private SharedPreferences powerPreferences;
     private boolean isRunning = false;
     private boolean incrementPower = false, decrementPower = false;
-    private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
+    private final ScienceLab scienceLab = ScienceLabCommon.scienceLab;
     private RealmResults<PowerSourceData> recordedPowerData;
     private Timer powerCounter;
-    private Handler powerHandler = new Handler();
+    private final Handler powerHandler = new Handler();
     private long block;
     private boolean isPlayingBack = false;
     private MenuItem stopMenu;
@@ -159,27 +134,22 @@ public class PowerSourceActivity extends AppCompatActivity {
 
     private float voltagePV1 = 0.00f, voltagePV2 = 0.00f, voltagePV3 = 0.00f, currentPCS = 0.00f;
 
+    public PowerSourceActivity() {
+        super(R.layout.activity_power_source);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_power_source);
 
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         powerPreferences = getSharedPreferences(POWER_PREFERENCES, MODE_PRIVATE);
-
-        setUpBottomSheet();
-        tvShadow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                tvShadow.setVisibility(View.GONE);
-            }
-        });
 
         gpsLogger = new GPSLogger(this,
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE));
@@ -348,78 +318,6 @@ public class PowerSourceActivity extends AppCompatActivity {
                 TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
     }
 
-    /**
-     * Initiates bottom sheet to display guides on using Power Source Instruement
-     */
-    private void setUpBottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        boolean isFirstTime = powerPreferences.getBoolean("PowerSourceFirstTime", true);
-
-        if (isFirstTime) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            tvShadow.setVisibility(View.VISIBLE);
-            tvShadow.setAlpha(0.8f);
-            arrowUpDown.setRotation(180);
-            bottomSheetSlideText.setText(R.string.hide_guide_text);
-            SharedPreferences.Editor editor = powerPreferences.edit();
-            editor.putBoolean("PowerSourceFirstTime", false);
-            editor.apply();
-        } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private Handler handler = new Handler();
-            private Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                    } catch (IllegalArgumentException e) {
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    }
-                }
-            };
-
-            @Override
-            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.hide_guide_text);
-                        break;
-
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        handler.postDelayed(runnable, 2000);
-                        break;
-
-                    default:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.show_guide_text);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0,
-                        0.0, 0.8);
-                tvShadow.setVisibility(View.VISIBLE);
-                tvShadow.setAlpha(value);
-                arrowUpDown.setRotation(slideOffset * 180);
-            }
-        });
-        gestureDetector = new GestureDetector(this,
-                new SwipeGestureDetector(bottomSheetBehavior));
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -447,8 +345,7 @@ public class PowerSourceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_guide:
-                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
-                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                toggleGuide();
                 break;
             case R.id.power_source_record_data:
                 if (!isRecording) {
@@ -927,7 +824,7 @@ public class PowerSourceActivity extends AppCompatActivity {
      */
     private float limitDigits(float number) {
         try {
-            return Float.valueOf(String.format(Locale.ROOT, "%.2f", number));
+            return Float.parseFloat(String.format(Locale.ROOT, "%.2f", number));
         } catch (NumberFormatException e) {
             return 0.00f;
         }

@@ -5,12 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,13 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
-
-import io.pslab.R;
-import io.pslab.adapters.MPUDataAdapter;
-import io.pslab.models.DataMPU6050;
-import io.pslab.models.SensorLogged;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,6 +34,10 @@ import javax.annotation.Nullable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.R;
+import io.pslab.adapters.MPUDataAdapter;
+import io.pslab.models.DataMPU6050;
+import io.pslab.models.SensorLogged;
 import io.pslab.others.CustomSnackBar;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -165,7 +164,7 @@ public class ShowLoggedData extends AppCompatActivity {
                         try {
                             stream = new FileOutputStream(file);
                             for (DataMPU6050 temp : results) {
-                                stream.write((String.valueOf(temp.getAx()) + " " + temp.getAy() + " " + temp.getAz() + " " +
+                                stream.write((temp.getAx() + " " + temp.getAy() + " " + temp.getAz() + " " +
                                         temp.getGx() + " " + temp.getGy() + " " + temp.getGz() + " " + temp.getTemperature() + "\n").getBytes());
                             }
                         } catch (IOException e) {
@@ -180,7 +179,7 @@ public class ShowLoggedData extends AppCompatActivity {
                             }
                         }
                         CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                                "MPU6050 data exported successfully",null,null, Snackbar.LENGTH_SHORT);
+                                "MPU6050 data exported successfully", null, null, Snackbar.LENGTH_SHORT);
                         break;
                 }
             } else {
@@ -195,19 +194,19 @@ public class ShowLoggedData extends AppCompatActivity {
                             StringBuilder stringBuilder = new StringBuilder();
                             stringBuilder.append("Ax,Ay,Ax,Gx,Gy,Gz,Temperature\n");
                             for (DataMPU6050 temp : results) {
-                                stringBuilder.append(String.valueOf(temp.getAx()));
+                                stringBuilder.append(temp.getAx());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getAy()));
+                                stringBuilder.append(temp.getAy());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getAz()));
+                                stringBuilder.append(temp.getAz());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getGx()));
+                                stringBuilder.append(temp.getGx());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getGy()));
+                                stringBuilder.append(temp.getGy());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getGz()));
+                                stringBuilder.append(temp.getGz());
                                 stringBuilder.append(',');
-                                stringBuilder.append(String.valueOf(temp.getTemperature()));
+                                stringBuilder.append(temp.getTemperature());
                                 stringBuilder.append('\n');
                             }
                             writer.write(stringBuilder.toString());
@@ -216,13 +215,13 @@ public class ShowLoggedData extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                                "MPU6050 data exported successfully",null,null,Snackbar.LENGTH_SHORT);
+                                "MPU6050 data exported successfully", null, null, Snackbar.LENGTH_SHORT);
                         break;
                 }
             }
         } else {
             CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                    "Can't write to storage",null,null,Snackbar.LENGTH_SHORT);
+                    "Can't write to storage", null, null, Snackbar.LENGTH_SHORT);
         }
     }
 

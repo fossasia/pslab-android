@@ -1,39 +1,32 @@
 package io.pslab.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import androidx.annotation.NonNull;
-
-import androidx.annotation.Nullable;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
-import android.view.GestureDetector;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.pslab.R;
+import io.pslab.activity.guide.GuideActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.others.CustomSnackBar;
-import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
 import io.pslab.sensors.SensorADS1115;
 import io.pslab.sensors.SensorBMP180;
 import io.pslab.sensors.SensorHMC5883L;
@@ -43,73 +36,37 @@ import io.pslab.sensors.SensorMPU925X;
 import io.pslab.sensors.SensorSHT21;
 import io.pslab.sensors.SensorTSL2561;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
 /**
  * Created by asitava on 18/6/17.
  */
 
-public class SensorActivity extends AppCompatActivity {
+public class SensorActivity extends GuideActivity {
 
-    public static final String PREFS_NAME = "customDialogPreference";
     private I2C i2c;
     private ScienceLab scienceLab;
-    private LinkedHashMap<Integer, String> sensorAddr = new LinkedHashMap<>();
-    private ArrayList<String> dataAddress = new ArrayList<>();
-    private ArrayList<String> dataName = new ArrayList<>();
+    private final Map<Integer, String> sensorAddr = new LinkedHashMap<>();
+    private final List<String> dataAddress = new ArrayList<>();
+    private final List<String> dataName = new ArrayList<>();
     private ArrayAdapter<String> adapter;
-    private String tvData = "";
     private ListView lvSensor;
     private TextView tvSensorScan;
     private Button buttonSensorAutoScan;
 
-    //Bottom Sheet
-    private LinearLayout bottomSheet;
-    private View tvShadow;
-    private ImageView arrowUpDown;
-    private TextView bottomSheetSlideText;
-    private TextView bottomSheetGuideTitle;
-    private TextView bottomSheetText;
-    private ImageView bottomSheetSchematic;
-    private TextView bottomSheetDesc;
-    private BottomSheetBehavior bottomSheetBehavior;
-    private GestureDetector gestureDetector;
+    public SensorActivity() {
+        super(R.layout.sensor_main);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sensor_main);
         scienceLab = ScienceLabCommon.scienceLab;
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.sensors);
         if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.sensors);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
-        // Bottom Sheet guide
-        bottomSheet = findViewById(R.id.bottom_sheet);
-        tvShadow = findViewById(R.id.shadow);
-        arrowUpDown = findViewById(R.id.img_arrow);
-        bottomSheetSlideText = findViewById(R.id.sheet_slide_text);
-        bottomSheetGuideTitle = findViewById(R.id.guide_title);
-        bottomSheetText = findViewById(R.id.custom_dialog_text);
-        bottomSheetSchematic = findViewById(R.id.custom_dialog_schematic);
-        bottomSheetDesc = findViewById(R.id.custom_dialog_desc);
-
-        setUpBottomSheet();
-        tvShadow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                tvShadow.setVisibility(View.GONE);
-            }
-        });
 
         i2c = scienceLab.i2c;
         sensorAddr.put(0x48, "ADS1115");
@@ -123,137 +80,62 @@ public class SensorActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter<>(getApplication(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataName);
 
-        final CoordinatorLayout coordinatorLayout = findViewById(R.id.layout_container);
         buttonSensorAutoScan = findViewById(R.id.button_sensor_autoscan);
         tvSensorScan = findViewById(R.id.tv_sensor_scan);
         tvSensorScan.setText(getResources().getString(R.string.use_autoscan));
         lvSensor = findViewById(R.id.lv_sensor);
         lvSensor.setAdapter(adapter);
 
-        buttonSensorAutoScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonSensorAutoScan.setClickable(false);
-                tvSensorScan.setText(getResources().getString(R.string.scanning));
-                new PopulateSensors().execute();
-            }
+        buttonSensorAutoScan.setOnClickListener(v -> {
+            buttonSensorAutoScan.setClickable(false);
+            tvSensorScan.setText(getResources().getString(R.string.scanning));
+            new PopulateSensors().execute();
         });
-        lvSensor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String itemValue = (String) lvSensor.getItemAtPosition(position);
-                Intent intent;
-                switch (itemValue) {
-                    case "ADS1115":
-                        intent = new Intent(getApplication(), SensorADS1115.class);
-                        startActivity(intent);
-                        break;
-                    case "BMP180":
-                        intent = new Intent(getApplication(), SensorBMP180.class);
-                        startActivity(intent);
-                        break;
-                    case "MLX90614":
-                        intent = new Intent(getApplication(), SensorMLX90614.class);
-                        startActivity(intent);
-                        break;
-                    case "HMC5883L":
-                        intent = new Intent(getApplication(), SensorHMC5883L.class);
-                        startActivity(intent);
-                        break;
-                    case "MPU6050":
-                        intent = new Intent(getApplication(), SensorMPU6050.class);
-                        startActivity(intent);
-                        break;
-                    case "SHT21":
-                        intent = new Intent(getApplication(), SensorSHT21.class);
-                        startActivity(intent);
-                        break;
-                    case "TSL2561":
-                        intent = new Intent(getApplication(), SensorTSL2561.class);
-                        startActivity(intent);
-                        break;
-                    case "MPU925x":
-                        intent = new Intent(getApplication(), SensorMPU925X.class);
-                        startActivity(intent);
-                        break;
-                    default:
-                        CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                                "Sensor Not Supported",null,null, Snackbar.LENGTH_SHORT);
-                }
+        lvSensor.setOnItemClickListener((parent, view, position, id) -> {
+            String itemValue = (String) lvSensor.getItemAtPosition(position);
+            Intent intent;
+            switch (itemValue) {
+                case "ADS1115":
+                    intent = new Intent(getApplication(), SensorADS1115.class);
+                    startActivity(intent);
+                    break;
+                case "BMP180":
+                    intent = new Intent(getApplication(), SensorBMP180.class);
+                    startActivity(intent);
+                    break;
+                case "MLX90614":
+                    intent = new Intent(getApplication(), SensorMLX90614.class);
+                    startActivity(intent);
+                    break;
+                case "HMC5883L":
+                    intent = new Intent(getApplication(), SensorHMC5883L.class);
+                    startActivity(intent);
+                    break;
+                case "MPU6050":
+                    intent = new Intent(getApplication(), SensorMPU6050.class);
+                    startActivity(intent);
+                    break;
+                case "SHT21":
+                    intent = new Intent(getApplication(), SensorSHT21.class);
+                    startActivity(intent);
+                    break;
+                case "TSL2561":
+                    intent = new Intent(getApplication(), SensorTSL2561.class);
+                    startActivity(intent);
+                    break;
+                case "MPU925x":
+                    intent = new Intent(getApplication(), SensorMPU925X.class);
+                    startActivity(intent);
+                    break;
+                default:
+                    CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                            "Sensor Not Supported", null, null, Snackbar.LENGTH_SHORT);
             }
         });
     }
-
-    private void setUpBottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        final SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        Boolean isFirstTime = settings.getBoolean("SensorsFirstTime", true);
-
-        bottomSheetGuideTitle.setText(R.string.sensors);
-        bottomSheetDesc.setText(R.string.sensors_description);
-
-        if (isFirstTime) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            tvShadow.setVisibility(View.VISIBLE);
-            tvShadow.setAlpha(0.8f);
-            arrowUpDown.setRotation(180);
-            bottomSheetSlideText.setText(R.string.hide_guide_text);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("SensorsFirstTime", false);
-            editor.apply();
-        } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private Handler handler = new Handler();
-            private Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-            };
-
-            @Override
-            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.hide_guide_text);
-                        break;
-
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        handler.postDelayed(runnable, 2000);
-                        break;
-
-                    default:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.show_guide_text);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
-                tvShadow.setVisibility(View.VISIBLE);
-                tvShadow.setAlpha(value);
-                arrowUpDown.setRotation(slideOffset * 180);
-            }
-        });
-        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
-        return super.onTouchEvent(event);
-    }
-
 
     private class PopulateSensors extends AsyncTask<Void, Void, Void> {
-        private ArrayList<Integer> data;
+        private List<Integer> data;
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -274,20 +156,20 @@ public class SensorActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
+            StringBuilder tvData = new StringBuilder();
             if (data != null) {
                 for (Integer myInt : data) {
                     if (myInt != null && sensorAddr.get(myInt) != null) {
                         dataAddress.add(String.valueOf(myInt));
                     }
                 }
-                tvData = "";
 
-                for (String s : dataAddress) {
-                    tvData += s + ":" + sensorAddr.get(Integer.parseInt(s)) + "\n";
+                for (final String s : dataAddress) {
+                    tvData.append(s).append(":").append(sensorAddr.get(Integer.parseInt(s))).append("\n");
                 }
 
             } else {
-                tvData = getResources().getString(R.string.sensor_not_connected);
+                tvData.append(getResources().getString(R.string.sensor_not_connected));
             }
 
             for (int key : sensorAddr.keySet()) {
@@ -305,9 +187,22 @@ public class SensorActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.sensor_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.show_guide:
+                toggleGuide();
+                break;
+            default:
+                break;
         }
         return true;
     }

@@ -1,5 +1,7 @@
 package io.pslab.activity;
 
+import static io.pslab.others.ScienceLabCommon.scienceLab;
+
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -10,6 +12,13 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,14 +29,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,8 +52,6 @@ import io.pslab.others.CustomTabService;
 import io.pslab.others.InitializationVariable;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.receivers.USBDetachReceiver;
-
-import static io.pslab.others.ScienceLabCommon.scienceLab;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     private static String CURRENT_TAG = TAG_INSTRUMENTS;
     private String[] activityTitles;
 
-    private boolean shouldLoadHomeFragOnBackPress = true;
+    private final boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
     private ScienceLabCommon mScienceLabCommon;
 

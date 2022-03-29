@@ -28,8 +28,7 @@
                     android:id="@+id/button_control_read1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/resistance"
-                    />
+                    android:text="@string/resistance" />
 
                 <TextView
                     android:id="@+id/tv_control_read1"
@@ -104,7 +103,7 @@
                     android:id="@+id/button_control_read3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/read"/>
+                    android:text="@string/read" />
 
                 <TextView
                     android:id="@+id/tv_control_read3"
@@ -134,7 +133,7 @@
                     android:layout_weight="4"
                     android:text="@string/count_pulses"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <Spinner
                     android:id="@+id/spinner_control_read2"
@@ -148,7 +147,7 @@
                     android:id="@+id/button_control_read4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/read"/>
+                    android:text="@string/read" />
 
                 <TextView
                     android:id="@+id/tv_control_read4"
@@ -198,7 +197,7 @@
                     android:layout_weight="4"
                     android:text="@string/voltage"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <Button
                     android:theme="@style/AppTheme.Button"
@@ -206,7 +205,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@string/read"/>
+                    android:text="@string/read" />
 
 
             </TableRow>
@@ -344,7 +343,7 @@
                     android:textStyle="bold"
                     android:textSize="@dimen/control_textsize_small"
                     android:gravity="center"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center" />
 
                 <TextView
                     android:layout_width="0dp"

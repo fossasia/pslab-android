@@ -2,8 +2,8 @@ package io.pslab.activity;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.Fragment;
 
+import androidx.fragment.app.Fragment;
 
 import io.pslab.R;
 import io.pslab.fragment.DustSensorDataFragment;

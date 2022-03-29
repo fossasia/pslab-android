@@ -9,14 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,11 +19,26 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
@@ -40,13 +47,6 @@ import io.pslab.models.DataMPU6050;
 import io.pslab.models.SensorLogged;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import io.pslab.DataFormatter;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -56,11 +56,11 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST = 1;
     private static boolean hasPermission = false;
     private static boolean isLogging = false;
-    private LinkedHashMap<Integer, String> sensorAddress = new LinkedHashMap<>();
-    private ScienceLab scienceLab = ScienceLabCommon.scienceLab;
-    private I2C i2c = scienceLab.i2c;
-    private ArrayList<String> sensorList = new ArrayList<>();
-    private ArrayList<DataMPU6050> mpu6050DataList = new ArrayList<>();
+    private final LinkedHashMap<Integer, String> sensorAddress = new LinkedHashMap<>();
+    private final ScienceLab scienceLab = ScienceLabCommon.scienceLab;
+    private final I2C i2c = scienceLab.i2c;
+    private final ArrayList<String> sensorList = new ArrayList<>();
+    private final ArrayList<DataMPU6050> mpu6050DataList = new ArrayList<>();
     private Context context;
     private Thread loggingThread;
     private volatile boolean loggingThreadRunning = false;
@@ -75,7 +75,6 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.layout_container)
     FrameLayout container;
-
 
 
     @Override
@@ -156,7 +155,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     private void handleClick(int position) {
         String sensor = sensorList.get(position);
         CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                sensor,null,null,Snackbar.LENGTH_SHORT);
+                sensor, null, null, Snackbar.LENGTH_SHORT);
         switch (sensor) {
             case "MPU6050":
                 MaterialDialog dialog = new MaterialDialog.Builder(context)
@@ -235,7 +234,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                                 }
                                 realm.commitTransaction();
                                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                                        "Data Logged Successfully",null,null,Snackbar.LENGTH_SHORT);
+                                        "Data Logged Successfully", null, null, Snackbar.LENGTH_SHORT);
                                 dialog.dismiss();
                             }
                         })
@@ -249,7 +248,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
 
     private class TaskMPU6050 extends AsyncTask<Void, Void, Void> {
 
-        private MPU6050 sensorMPU6050;
+        private final MPU6050 sensorMPU6050;
         private ArrayList<Double> dataMPU6050 = new ArrayList<>();
 
         TaskMPU6050(MPU6050 mpu6050) {
@@ -328,6 +327,6 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-       finish();
+        finish();
     }
 }

@@ -1,8 +1,8 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
-import androidx.fragment.app.Fragment;
 
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import io.pslab.R;

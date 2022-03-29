@@ -26,7 +26,7 @@
             android:layout_marginEnd="@dimen/card_title_margin"
             android:layout_marginTop="@dimen/card_title_margin"
             android:textColor="@color/black"
-            tools:text="PV1"/>
+            tools:text="PV1" />
 
 
         <LinearLayout
@@ -40,7 +40,6 @@
             android:layout_marginTop="@dimen/control_margin">
 
 
-
             <Button
                 android:id="@+id/button_control_main1"
                 style="@style/Widget.AppCompat.Button.Borderless"
@@ -49,7 +48,7 @@
                 android:layout_height="match_parent"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/control_textsize_large"
-                android:text="@string/hyphen"/>
+                android:text="@string/hyphen" />
 
             <EditText
                 android:id="@+id/edittext_control_main"
@@ -64,7 +63,7 @@
                 android:layout_marginBottom="@dimen/control_edittext_padding"
                 android:inputType="numberDecimal|numberSigned"
                 android:background="@drawable/control_edittext"
-                tools:text="Value"/>
+                tools:text="Value" />
 
 
             <Button
@@ -75,7 +74,7 @@
                 android:layout_height="match_parent"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/control_textsize_large"
-                android:text="@string/plus"/>
+                android:text="@string/plus" />
 
             <Button
                 android:id="@+id/button_control_main3"
@@ -105,7 +104,7 @@
             android:layout_below="@id/linearlayout_control_main1"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

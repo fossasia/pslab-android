@@ -12,5 +12,5 @@
         android:id="@+id/export_logged_data"
         android:title="@string/export_logged_data"
         app:showAsAction="always"
-        android:icon="@drawable/ic_export_file"/>
+        android:icon="@drawable/ic_export_file" />
 </menu>

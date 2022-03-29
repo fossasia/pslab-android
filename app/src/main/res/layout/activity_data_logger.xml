@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.DataLoggerActivity">
+
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/delete_all_progbar"
-        />
+        android:id="@+id/delete_all_progbar" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/top_app_bar_layout"
         android:layout_width="match_parent"

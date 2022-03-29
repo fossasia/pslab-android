@@ -1,10 +1,11 @@
 package io.pslab.activity;
 
 
+import static io.pslab.others.MathUtils.map;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
@@ -14,16 +15,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,7 +29,6 @@ import android.widget.TextView;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -43,7 +40,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +56,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
+import io.pslab.activity.guide.GuideActivity;
 import io.pslab.communication.AnalyticsClass;
 import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.ChannelParametersFragment;
@@ -75,19 +72,14 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
-import io.pslab.others.MathUtils;
 import io.pslab.others.Plot2D;
 import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
-import static io.pslab.others.MathUtils.map;
+public class OscilloscopeActivity extends GuideActivity implements View.OnClickListener {
 
-public class OscilloscopeActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private static final String PREF_NAME = "OscilloscopeActivity";
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
             .add("Timestamp")
             .add("DateTime")
@@ -160,21 +152,13 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     TextView dataAnalysisTextView;
     @BindView(R.id.tv_xy_plot_os)
     TextView xyPlotTextView;
-    @BindView(R.id.img_arrow_oscilloscope)
-    ImageView arrowUpDown;
-    @BindView(R.id.sheet_slide_text_oscilloscope)
-    TextView bottomSheetSlideText;
     @BindView(R.id.parent_layout)
     View parentLayout;
-    @BindView(R.id.bottom_sheet_oscilloscope)
-    LinearLayout bottomSheet;
     private Fragment channelParametersFragment;
     private Fragment timebaseTriggerFragment;
     private Fragment dataAnalysisFragment;
     private Fragment xyPlotFragment;
     private Fragment playbackFragment;
-    @BindView(R.id.show_guide_oscilloscope)
-    TextView showText;
     private ScienceLab scienceLab;
     private int height;
     private int width;
@@ -187,8 +171,6 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private CaptureTask captureTask;
     private Thread monitorThread;
     private volatile boolean monitor = true;
-    private BottomSheetBehavior bottomSheetBehavior;
-    private GestureDetector gestureDetector;
     private double maxAmp, maxFreq;
     private boolean isRecording = false;
     private Realm realm;
@@ -197,7 +179,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private GPSLogger gpsLogger;
     private long block;
     private Timer recordTimer;
-    private long recordPeriod = 100;
+    private final long recordPeriod = 100;
     private String loggingXdata = "";
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
@@ -208,8 +190,8 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
     private double lon;
     public boolean isPlaybackFourierChecked = false;
     private HashMap<String, Integer> channelIndexMap;
-    private Integer[] channelColors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.MAGENTA};
-    private String[] loggingYdata = new String[4];
+    private final Integer[] channelColors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.MAGENTA};
+    private final String[] loggingYdata = new String[4];
     public String xyPlotAxis1 = "CH1";
     public String xyPlotAxis2 = "CH2";
     private boolean isPlayingback = false;
@@ -218,31 +200,25 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
+    public OscilloscopeActivity() {
+        super(R.layout.activity_oscilloscope);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_oscilloscope);
         ButterKnife.bind(this);
 
         removeStatusBar();
-        setUpBottomSheet();
-        parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                parentLayout.setVisibility(View.GONE);
-            }
-        });
         mainLayout = findViewById(R.id.oscilloscope_mail_layout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.oscilloscope);
         if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.oscilloscope);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -556,8 +532,7 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
                 }
                 break;
             case R.id.show_guide:
-                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
-                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                toggleGuide();
                 break;
             case R.id.show_logged_data:
                 Intent intent = new Intent(OscilloscopeActivity.this, DataLoggerActivity.class);
@@ -913,73 +888,9 @@ public class OscilloscopeActivity extends AppCompatActivity implements View.OnCl
         xAxisLabel.setText(xAxisInput);
     }
 
-    private void setUpBottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        final SharedPreferences settings = this.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        Boolean isFirstTime = settings.getBoolean("OscilloscopeFirstTime", true);
-
-        if (isFirstTime) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            parentLayout.setVisibility(View.VISIBLE);
-            parentLayout.setAlpha(0.8f);
-            arrowUpDown.setRotation(180);
-            bottomSheetSlideText.setText(R.string.hide_guide_text);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("OscilloscopeFirstTime", false);
-            editor.apply();
-        } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private Handler handler = new Handler();
-            private Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-            };
-
-            @Override
-            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.hide_guide_text);
-                        break;
-
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        handler.postDelayed(runnable, 2000);
-                        break;
-
-                    default:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.show_guide_text);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
-                parentLayout.setVisibility(View.VISIBLE);
-                parentLayout.setAlpha(value);
-                arrowUpDown.setRotation(slideOffset * 180);
-            }
-        });
-        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
-        return super.onTouchEvent(event);
-    }
-
     public class CaptureTask extends AsyncTask<String, Void, Void> {
-        private ArrayList<ArrayList<Entry>> entries = new ArrayList<>();
-        private ArrayList<ArrayList<Entry>> curveFitEntries = new ArrayList<>();
+        private final ArrayList<ArrayList<Entry>> entries = new ArrayList<>();
+        private final ArrayList<ArrayList<Entry>> curveFitEntries = new ArrayList<>();
         private Integer noOfChannels;
         private String[] paramsChannels;
         private String channel;

@@ -12,7 +12,7 @@
         android:layout_height="@dimen/splash_screen_logo_height"
         android:contentDescription="@string/pocket_science_logo"
         android:src="@drawable/logo"
-        android:alpha="0"/>
+        android:alpha="0" />
 
     <ImageView
         android:id="@+id/PSLabText"
@@ -20,6 +20,6 @@
         android:layout_height="@dimen/splash_screen_name_height"
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/text"
-        android:alpha="0"/>
+        android:alpha="0" />
 
 </LinearLayout>

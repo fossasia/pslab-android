@@ -1,10 +1,10 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
-import android.hardware.SensorManager;
 import android.hardware.Sensor;
-import androidx.fragment.app.Fragment;
+import android.hardware.SensorManager;
 
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import io.pslab.R;
