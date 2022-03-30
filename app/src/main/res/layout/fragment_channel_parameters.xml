@@ -86,7 +86,7 @@
         android:layout_height="@dimen/osc_spinner_height"
         app:layout_constraintLeft_toRightOf="@+id/tv_range1_cp"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="@dimen/osc_cb_margin"/>
+        android:layout_marginStart="@dimen/osc_cb_margin" />
 
     <TextView
         android:id="@+id/tv_ch2_cp"

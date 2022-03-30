@@ -7,13 +7,10 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,13 +18,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -43,21 +38,20 @@ import io.pslab.R;
 import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.MapsActivity;
 import io.pslab.activity.SettingsActivity;
+import io.pslab.activity.guide.GuideActivity;
+import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.SoundMeterDataFragment;
 import io.pslab.interfaces.OperationCallback;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
-import io.pslab.others.MathUtils;
 import io.pslab.others.PSLabPermission;
 import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
-import io.pslab.communication.ScienceLab;
 import io.realm.Realm;
 import io.realm.RealmObject;
 
-public abstract class PSLabSensor extends AppCompatActivity {
+public abstract class PSLabSensor extends GuideActivity {
 
     public boolean isRecording = false;
     public boolean locationEnabled = true;
@@ -69,8 +63,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     public boolean startedPlay = false;
 
     public CoordinatorLayout sensorParentView;
-    public BottomSheetBehavior<View> bottomSheetBehavior;
-    public GestureDetector gestureDetector;
     public ScienceLab scienceLab;
 
     public JSONArray markers;
@@ -119,14 +111,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
     @BindView(R.id.sensor_cl)
     CoordinatorLayout coordinatorLayout;
 
-    @BindView(R.id.bottom_sheet)
-    LinearLayout bottomSheet;
-    @BindView(R.id.shadow)
-    View tvShadow;
-    @BindView(R.id.img_arrow)
-    ImageView arrowUpDown;
-    @BindView(R.id.sheet_slide_text)
-    TextView bottomSheetSlideText;
     @BindView(R.id.guide_title)
     TextView bottomSheetGuideTitle;
     @BindView(R.id.custom_dialog_text)
@@ -137,6 +121,10 @@ public abstract class PSLabSensor extends AppCompatActivity {
     TextView bottomSheetDesc;
     @BindView(R.id.custom_dialog_additional_content)
     LinearLayout bottomSheetAdditionalContent;
+
+    public PSLabSensor() {
+        super(R.layout.activity_generic_sensor);
+    }
 
     /**
      * Getting menu layout distinct to each sensor
@@ -238,11 +226,12 @@ public abstract class PSLabSensor extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generic_sensor);
         ButterKnife.bind(this);
         setSupportActionBar(sensorToolBar);
-        getSupportActionBar().setTitle(getSensorName());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getSensorName());
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         markers = new JSONArray();
         psLabPermission = PSLabPermission.getInstance();
         gpsLogger = new GPSLogger(this,
@@ -252,7 +241,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
         realm = LocalDataLog.with().getRealm();
         titleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
         sensorParentView = coordinatorLayout;
-        setUpBottomSheet();
+        setupGuideLayout();
         fillUpFragment();
         invalidateOptionsMenu();
         scienceLab = ScienceLabCommon.scienceLab;
@@ -387,7 +376,7 @@ public abstract class PSLabSensor extends AppCompatActivity {
                 }
                 break;
             case R.id.show_guide:
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                toggleGuide();
                 break;
             case R.id.save_graph:
                 displayLogLocationOnSnackBar();
@@ -485,11 +474,10 @@ public abstract class PSLabSensor extends AppCompatActivity {
             case PSLabPermission.GPS_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     gpsRecordingCycle();
-                    invalidateOptionsMenu();
                 } else {
                     nogpsRecordingCycle();
-                    invalidateOptionsMenu();
                 }
+                invalidateOptionsMenu();
                 break;
             case PSLabPermission.CSV_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -503,89 +491,10 @@ public abstract class PSLabSensor extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
-
-    /**
-     * Configure the sensor guide with content and settings
-     */
-    private void setUpBottomSheet() {
-        setupGuideLayout();
-        handleFirstTimeUsage();
-        handleBottomSheetBehavior();
-        handleShadowClicks();
-        gestureDetector = new GestureDetector(this,
-                new SwipeGestureDetector(bottomSheetBehavior));
-    }
-
-    /**
-     * Closes the guide when user clicks on dark background area
-     */
-    private void handleShadowClicks() {
-        tvShadow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                tvShadow.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    /**
-     * Handle sliding up and down behaviors and proper handling in closure.
-     */
-    private void handleBottomSheetBehavior() {
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private Handler handler = new Handler();
-            private Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                    tvShadow.setVisibility(View.GONE);
-                }
-            };
-
-            @Override
-            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.hide_guide_text);
-                        break;
-
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        handler.postDelayed(runnable, 2000);
-                        break;
-
-                    default:
-                        tvShadow.setVisibility(View.GONE);
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.show_guide_text);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Float value = (float) MathUtils.map((double) slideOffset,
-                        0.0, 1.0, 0.0, 0.8);
-                tvShadow.setVisibility(View.VISIBLE);
-                tvShadow.setAlpha(value);
-                arrowUpDown.setRotation(slideOffset * 180);
-            }
-        });
-    }
-
     /**
      * Inflate each individual view with content to fill up the sensor guide
      */
     private void setupGuideLayout() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
         bottomSheetGuideTitle.setText(getGuideTitle());
         bottomSheetText.setText(getGuideAbstract());
         bottomSheetSchematic.setImageResource(getGuideSchematics());
@@ -603,25 +512,6 @@ public abstract class PSLabSensor extends AppCompatActivity {
             assert I != null;
             View childLayout = I.inflate(getGuideExtraContent(), null);
             bottomSheetAdditionalContent.addView(childLayout);
-        }
-    }
-
-    /**
-     * Handle first time usage of sensor to show the guide at startup
-     */
-    private void handleFirstTimeUsage() {
-        if (getStateSettings().getBoolean(getFirstTimeSettingID(), true)) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            tvShadow.setVisibility(View.VISIBLE);
-            tvShadow.setAlpha(0.8f);
-            arrowUpDown.setRotation(180);
-            bottomSheetSlideText.setText(R.string.hide_guide_text);
-            SharedPreferences.Editor editor = getStateSettings().edit();
-            editor.putBoolean(getFirstTimeSettingID(), false);
-            editor.apply();
-        } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            tvShadow.setVisibility(View.GONE);
         }
     }
 

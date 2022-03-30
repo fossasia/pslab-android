@@ -12,10 +12,14 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -23,18 +27,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
@@ -47,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.DataFormatter;
 import io.pslab.R;
+import io.pslab.activity.guide.GuideActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.MultimeterSettingsFragment;
 import io.pslab.models.MultimeterData;
@@ -56,9 +49,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
-import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -68,9 +59,8 @@ import it.beppi.knoblibrary.Knob;
  * Created by Abhinav Raj on 26/5/18.
  */
 
-public class MultimeterActivity extends AppCompatActivity {
+public class MultimeterActivity extends GuideActivity {
 
-    public static final String PREFS_NAME = "customDialogPreference";
     public static final String NAME = "savingData";
     private static final int MY_PERMISSIONS_REQUEST_STORAGE_FOR_DATA = 101;
     private static final CSVDataLine CSV_HEADER =
@@ -97,25 +87,7 @@ public class MultimeterActivity extends AppCompatActivity {
     SwitchCompat aSwitch;
     @BindView(R.id.multimeter_coordinator_layout)
     CoordinatorLayout coordinatorLayout;
-    //bottomSheet
-    @BindView(R.id.bottom_sheet)
-    LinearLayout bottomSheet;
-    @BindView(R.id.shadow)
-    View tvShadow;
-    @BindView(R.id.img_arrow)
-    ImageView arrowUpDown;
-    @BindView(R.id.sheet_slide_text)
-    TextView bottomSheetSlideText;
-    @BindView(R.id.guide_title)
-    TextView bottomSheetGuideTitle;
-    @BindView(R.id.custom_dialog_text)
-    TextView bottomSheetText;
-    @BindView(R.id.custom_dialog_schematic)
-    ImageView bottomSheetSchematic;
-    @BindView(R.id.custom_dialog_desc)
-    TextView bottomSheetDesc;
-    BottomSheetBehavior<View> bottomSheetBehavior;
-    GestureDetector gestureDetector;
+
     SharedPreferences multimeter_data;
     private ScienceLab scienceLab;
     private int knobState;
@@ -141,29 +113,24 @@ public class MultimeterActivity extends AppCompatActivity {
     private Timer playBackTimer;
     private int currentPosition = 0;
 
+    public MultimeterActivity() {
+        super(R.layout.activity_multimeter_main);
+    }
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_multimeter_main);
         defaultValue = getString(R.string.multimeter_default_value);
         ButterKnife.bind(this);
         scienceLab = ScienceLabCommon.scienceLab;
         knobMarker = getResources().getStringArray(io.pslab.R.array.multimeter_knob_states);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         gpsLogger = new GPSLogger(this, (LocationManager) getSystemService(Context.LOCATION_SERVICE));
-        setUpBottomSheet();
-        tvShadow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                tvShadow.setVisibility(View.GONE);
-            }
-        });
 
         multimeter_data = this.getSharedPreferences(NAME, MODE_PRIVATE);
         dataRecorded = CSV_HEADER;
@@ -368,75 +335,6 @@ public class MultimeterActivity extends AppCompatActivity {
         locationEnabled = multimeterConfigs.getBoolean(MultimeterSettingsFragment.KEY_INCLUDE_LOCATION, true);
     }
 
-    private void setUpBottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        final SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        Boolean isFirstTime = settings.getBoolean("MultimeterFirstTime", true);
-
-        bottomSheetGuideTitle.setText(R.string.multimeter_dialog_heading);
-        bottomSheetText.setText(R.string.multimeter_dialog_text);
-        bottomSheetSchematic.setImageResource(R.drawable.multimeter_circuit);
-        bottomSheetDesc.setText(R.string.multimeter_dialog_description);
-
-        if (isFirstTime) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            tvShadow.setVisibility(View.VISIBLE);
-            tvShadow.setAlpha(0.8f);
-            arrowUpDown.setRotation(180);
-            bottomSheetSlideText.setText(R.string.hide_guide_text);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("MultimeterFirstTime", false);
-            editor.apply();
-        } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private Handler handler = new Handler();
-            private Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-            };
-
-            @Override
-            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.hide_guide_text);
-                        break;
-
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        handler.postDelayed(runnable, 2000);
-                        break;
-
-                    default:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.show_guide_text);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
-                tvShadow.setVisibility(View.VISIBLE);
-                tvShadow.setAlpha(value);
-                arrowUpDown.setRotation(slideOffset * 180);
-            }
-        });
-        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
-        return super.onTouchEvent(event);
-    }
-
     private void saveAndSetData(String Quantity, String Unit) {
         SharedPreferences.Editor editor = multimeter_data.edit();
         editor.putString("TextBox", Quantity);
@@ -561,7 +459,7 @@ public class MultimeterActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.show_guide:
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                toggleGuide();
                 break;
             case R.id.play_data:
                 if (playClicked) {

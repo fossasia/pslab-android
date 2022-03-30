@@ -2,50 +2,43 @@ package io.pslab.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.DragEvent;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 import com.triggertrap.seekarc.SeekArc;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.InputMinMaxFilter;
 import io.pslab.R;
+import io.pslab.activity.guide.GuideActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.ServoData;
@@ -54,16 +47,13 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
-import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
-public class RoboticArmActivity extends AppCompatActivity {
+public class RoboticArmActivity extends GuideActivity {
 
-    private static final String PREF_NAME = "RoboticArmActivity";
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
             .add("Timestamp")
             .add("DateTime")
@@ -89,42 +79,26 @@ public class RoboticArmActivity extends AppCompatActivity {
     private final String DATA_BLOCK = "data_block";
     private int timelinePosition = 0;
     private ScienceLab scienceLab;
-    private BottomSheetBehavior bottomSheetBehavior;
-    private GestureDetector gestureDetector;
     private LinearLayout timeIndicatorLayout;
     private LinearLayout.LayoutParams timeIndicatorParams;
     private MenuItem playMenu;
-    @BindView(R.id.sheet_slide_text_robotic_arm)
-    TextView bottomSheetSlideText;
-    @BindView(R.id.parent_layout_robotic)
-    View parentLayout;
-    @BindView(R.id.bottom_sheet_robotic_arm)
-    LinearLayout bottomSheet;
-    @BindView(R.id.img_arrow_robotic_arm)
-    ImageView arrowUpDown;
+
+    public RoboticArmActivity() {
+        super(R.layout.activity_robotic_arm);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_robotic_arm);
         ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.robotic_arm);
         if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.robotic_arm);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        setUpBottomSheet();
-        parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                parentLayout.setVisibility(View.GONE);
-            }
-        });
 
         scienceLab = ScienceLabCommon.scienceLab;
         if (!scienceLab.isConnected()) {
@@ -169,10 +143,10 @@ public class RoboticArmActivity extends AppCompatActivity {
         degreeText3.setText(getResources().getString(R.string.zero));
         degreeText4.setText(getResources().getString(R.string.zero));
 
-        degreeText1.setFilters(new InputFilter[]{new InputMinMaxFilter(0,360)});
-        degreeText2.setFilters(new InputFilter[]{new InputMinMaxFilter(0,360)});
-        degreeText3.setFilters(new InputFilter[]{new InputMinMaxFilter(0,360)});
-        degreeText4.setFilters(new InputFilter[]{new InputMinMaxFilter(0,360)});
+        degreeText1.setFilters(new InputFilter[]{new InputMinMaxFilter(0, 360)});
+        degreeText2.setFilters(new InputFilter[]{new InputMinMaxFilter(0, 360)});
+        degreeText3.setFilters(new InputFilter[]{new InputMinMaxFilter(0, 360)});
+        degreeText4.setFilters(new InputFilter[]{new InputMinMaxFilter(0, 360)});
 
         LinearLayout.LayoutParams servoControllerParams = new LinearLayout.LayoutParams(screen_width / 4 - 4, screen_height / 2 - 4);
         servoControllerParams.setMargins(2, 5, 2, 0);
@@ -431,7 +405,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 removeStatusBar();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    degree = Integer.valueOf(degreeText3.getText().toString());
+                    degree = Integer.parseInt(degreeText3.getText().toString());
                     if (degree > 360 || degree < 0) {
                         degreeText3.setText(getResources().getString(R.string.zero));
                         seekArc3.setProgress(0);
@@ -519,79 +493,15 @@ public class RoboticArmActivity extends AppCompatActivity {
 
     }
 
-    private void setUpBottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        final SharedPreferences settings = this.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        Boolean isFirstTime = settings.getBoolean("RoboticArmFirstTime", true);
-
-        if (isFirstTime) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            parentLayout.setVisibility(View.VISIBLE);
-            parentLayout.setAlpha(0.8f);
-            arrowUpDown.setRotation(180);
-            bottomSheetSlideText.setText(R.string.hide_guide_text);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("RoboticArmFirstTime", false);
-            editor.apply();
-        } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private Handler handler = new Handler();
-            private Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-            };
-
-            @Override
-            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.hide_guide_text);
-                        break;
-
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        handler.postDelayed(runnable, 2000);
-                        break;
-
-                    default:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.show_guide_text);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
-                parentLayout.setVisibility(View.VISIBLE);
-                parentLayout.setAlpha(value);
-                arrowUpDown.setRotation(slideOffset * 180);
-            }
-        });
-        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
-        return super.onTouchEvent(event);
-    }
-
     private void toastInvalidValueMessage() {
         CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
                 getString(R.string.invalid_servo_value), null, null, Snackbar.LENGTH_SHORT);
     }
 
     private void setReceivedData() {
-        ArrayList servoDataList = new ArrayList(recordedServoData);
+        final List<ServoData> servoDataList = new ArrayList<>(recordedServoData);
         for (int i = 0; i < servoDataList.size(); i++) {
-            ServoData servoData = (ServoData) servoDataList.get(i);
+            ServoData servoData = servoDataList.get(i);
             ((TextView) servo1TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree1() + getResources().getString(R.string.robotic_arm_degree_symbol));
             ((TextView) servo2TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree2() + getResources().getString(R.string.robotic_arm_degree_symbol));
             ((TextView) servo3TimeLine.getChildAt(i).findViewById(R.id.timeline_box_degree_text)).setText(servoData.getDegree3() + getResources().getString(R.string.robotic_arm_degree_symbol));
@@ -655,7 +565,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 }, Snackbar.LENGTH_SHORT);
     }
 
-    private View.OnDragListener servo1DragListener = new View.OnDragListener() {
+    private final View.OnDragListener servo1DragListener = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
@@ -668,7 +578,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             return true;
         }
     };
-    private View.OnDragListener servo2DragListener = new View.OnDragListener() {
+    private final View.OnDragListener servo2DragListener = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
@@ -681,7 +591,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             return true;
         }
     };
-    private View.OnDragListener servo3DragListener = new View.OnDragListener() {
+    private final View.OnDragListener servo3DragListener = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
@@ -694,7 +604,7 @@ public class RoboticArmActivity extends AppCompatActivity {
             return true;
         }
     };
-    private View.OnDragListener servo4DragListener = new View.OnDragListener() {
+    private final View.OnDragListener servo4DragListener = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
@@ -747,8 +657,7 @@ public class RoboticArmActivity extends AppCompatActivity {
                 timelinePosition = 0;
                 break;
             case R.id.show_guide:
-                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
-                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                toggleGuide();
                 break;
             case R.id.show_logged_data:
                 Intent intent = new Intent(RoboticArmActivity.this, DataLoggerActivity.class);

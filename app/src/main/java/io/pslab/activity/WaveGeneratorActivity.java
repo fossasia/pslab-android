@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -16,19 +15,8 @@ import android.media.AudioTrack;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,9 +26,15 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -48,7 +42,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
@@ -63,6 +56,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
+import io.pslab.activity.guide.GuideActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.models.WaveGeneratorData;
@@ -71,21 +65,18 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
-import io.pslab.others.MathUtils;
 import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.SwipeGestureDetector;
 import io.pslab.others.WaveGeneratorCommon;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
-public class WaveGeneratorActivity extends AppCompatActivity {
+public class WaveGeneratorActivity extends GuideActivity {
 
     //const values
     public static final int SIN = 1;
     public static final int TRIANGULAR = 2;
     public static final int PWM = 3;
-    public static final String PREFS_NAME = "customDialogPreference";
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
             .add("Timestamp")
             .add("DateTime")
@@ -170,26 +161,15 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     ImageButton imgBtnDown;
     @BindView(R.id.seek_bar_wave_gen)
     IndicatorSeekBar seekBar;
-    //bottomSheet
-    @BindView(R.id.bottom_sheet)
-    LinearLayout bottomSheet;
-    @BindView(R.id.shadow)
-    View tvShadow;
-    @BindView(R.id.img_arrow)
-    ImageView arrowUpDown;
-    @BindView(R.id.sheet_slide_text)
-    TextView bottomSheetSlideText;
     @BindView(R.id.wave_phase)
     TextView wavePhaseTitle;
     @BindView(R.id.btn_produce_sound)
     Button btnProduceSound;
     ScienceLab scienceLab;
-    BottomSheetBehavior bottomSheetBehavior;
-    GestureDetector gestureDetector;
     private int leastCount, seekMax, seekMin;
     private String unit;
     private Timer waveGenCounter;
-    private Handler wavegenHandler = new Handler();
+    private final Handler wavegenHandler = new Handler();
     private AlertDialog waveDialog;
     private CSVLogger csvLogger;
     private WaveConst waveBtnActive, pwmBtnActive, prop_active, digital_mode;
@@ -208,11 +188,14 @@ public class WaveGeneratorActivity extends AppCompatActivity {
 
     private AudioTrack track;
 
+    public WaveGeneratorActivity() {
+        super(R.layout.activity_wave_generator_main);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wave_generator_main);
         ButterKnife.bind(this);
 
         realm = LocalDataLog.with().getRealm();
@@ -240,16 +223,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         if (!WaveGeneratorCommon.isInitialized) {
             new WaveGeneratorCommon(true);
         }
-
-        setUpBottomSheet();
-        tvShadow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                tvShadow.setVisibility(View.GONE);
-            }
-        });
 
         enableInitialState();
         waveDialog = createIntentDialog();
@@ -674,7 +647,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(produceSoundTask != null)
+                if (produceSoundTask != null)
                     produceSoundTask.cancel(true);
                 produceSoundTask = null;
                 isPlayingSound = false;
@@ -693,8 +666,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.show_guide:
-                bottomSheetBehavior.setState(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN ?
-                        BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_HIDDEN);
+                toggleGuide();
                 break;
             case R.id.show_logged_data:
                 Intent intent = new Intent(WaveGeneratorActivity.this, DataLoggerActivity.class);
@@ -1095,70 +1067,6 @@ public class WaveGeneratorActivity extends AppCompatActivity {
         toggleDigitalMode(WaveConst.PWM);
     }
 
-    private void setUpBottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        final SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        Boolean isFirstTime = settings.getBoolean("WaveGenFirstTime", true);
-
-        if (isFirstTime) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            tvShadow.setVisibility(View.VISIBLE);
-            tvShadow.setAlpha(0.8f);
-            arrowUpDown.setRotation(180);
-            bottomSheetSlideText.setText(R.string.hide_guide_text);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("WaveGenFirstTime", false);
-            editor.apply();
-        } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private Handler handler = new Handler();
-            private Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-            };
-
-            @Override
-            public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.hide_guide_text);
-                        break;
-
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        handler.postDelayed(runnable, 2000);
-                        break;
-
-                    default:
-                        handler.removeCallbacks(runnable);
-                        bottomSheetSlideText.setText(R.string.show_guide_text);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Float value = (float) MathUtils.map((double) slideOffset, 0.0, 1.0, 0.0, 0.8);
-                tvShadow.setVisibility(View.VISIBLE);
-                tvShadow.setAlpha(value);
-                arrowUpDown.setRotation(slideOffset * 180);
-            }
-        });
-        gestureDetector = new GestureDetector(this, new SwipeGestureDetector(bottomSheetBehavior));
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);                 //Gesture detector need this to transfer touch event to the gesture detector.
-        return super.onTouchEvent(event);
-    }
-
     /**
      * Click listeners to increment and decrement buttons
      *
@@ -1329,7 +1237,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
             short[] buffer = new short[1024];
             track = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, buffer.length, AudioTrack.MODE_STREAM);
             float angle = 0;
-            float samples[] = new float[1024];
+            float[] samples = new float[1024];
 
             track.play();
             double frequency;
@@ -1371,7 +1279,7 @@ public class WaveGeneratorActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(produceSoundTask != null)
+        if (produceSoundTask != null)
             produceSoundTask.cancel(true);
         produceSoundTask = null;
         isPlayingSound = false;

@@ -3,11 +3,11 @@ package io.pslab.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.widget.ImageView;
 
 import butterknife.ButterKnife;
 import io.pslab.R;
