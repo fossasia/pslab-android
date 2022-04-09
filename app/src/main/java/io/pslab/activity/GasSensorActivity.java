@@ -2,6 +2,7 @@ package io.pslab.activity;
 
 import android.content.SharedPreferences;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 
 import io.pslab.R;
@@ -94,8 +95,14 @@ public class GasSensorActivity extends PSLabSensor {
             viewingData = true;
             recordedGasSensorData = LocalDataLog.with()
                     .getBlockOfGasSensorRecords(getIntent().getExtras().getLong(DATA_BLOCK));
-            String title = titleFormat.format(recordedGasSensorData.get(0).getTime());
-            getSupportActionBar().setTitle(title);
+            final GasSensorData data = recordedGasSensorData.get(0);
+            if (data != null) {
+                final String title = titleFormat.format(data.getTime());
+                final ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.setTitle(title);
+                }
+            }
         }
     }
 

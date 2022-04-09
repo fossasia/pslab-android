@@ -60,7 +60,7 @@ public class CustomTabService {
             mCustomTabsIntent.launchUrl(activity, Uri.parse(Url));
         }catch (Exception e){
             CustomSnackBar.showSnackBar(activity.findViewById(android.R.id.content),
-                    "Error: "+e.toString(),null,null, Snackbar.LENGTH_SHORT);
+                    "Error: "+ e,null,null, Snackbar.LENGTH_SHORT);
         }
     }
 }

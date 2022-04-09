@@ -6,10 +6,10 @@ package io.pslab.items;
 
 public class PinDetails {
 
-    private String name;
-    private String description;
-    private int categoryColor;
-    private int colorID;
+    private final String name;
+    private final String description;
+    private final int categoryColor;
+    private final int colorID;
 
     public PinDetails(String name, String description, int categoryColor, int colorID) {
         this.name = name;

@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -66,7 +67,7 @@ import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
 import io.pslab.others.ScienceLabCommon;
-import io.pslab.others.WaveGeneratorCommon;
+import io.pslab.others.WaveGeneratorConstants;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -204,10 +205,11 @@ public class WaveGeneratorActivity extends GuideActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.wave_generator));
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.wave_generator));
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
         coordinatorLayout = findViewById(R.id.wave_generator_coordinator_layout);
         squareModeLayout = findViewById(R.id.square_mode_layout);
@@ -220,9 +222,6 @@ public class WaveGeneratorActivity extends GuideActivity {
         pwmModeControls = findViewById(R.id.pwm_mode_controls);
         csvLogger = new CSVLogger(getString(R.string.wave_generator));
         scienceLab = ScienceLabCommon.scienceLab;
-        if (!WaveGeneratorCommon.isInitialized) {
-            new WaveGeneratorCommon(true);
-        }
 
         enableInitialState();
         waveDialog = createIntentDialog();
@@ -251,7 +250,7 @@ public class WaveGeneratorActivity extends GuideActivity {
             public void onClick(View view) {
                 imgBtnSin.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 imgBtnTri.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, SIN);
+                WaveGeneratorConstants.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, SIN);
                 selectWaveform(SIN);
             }
         });
@@ -261,7 +260,7 @@ public class WaveGeneratorActivity extends GuideActivity {
             public void onClick(View view) {
                 imgBtnSin.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 imgBtnTri.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
-                WaveGeneratorCommon.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, TRIANGULAR);
+                WaveGeneratorConstants.wave.get(waveBtnActive).put(WaveConst.WAVETYPE, TRIANGULAR);
                 selectWaveform(TRIANGULAR);
             }
         });
@@ -481,12 +480,12 @@ public class WaveGeneratorActivity extends GuideActivity {
         double lat, lon;
         csvLogger.writeCSVFile(CSV_HEADER);
         recordSensorDataBlockID(new SensorDataBlock(block, getResources().getString(R.string.wave_generator)));
-        double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
-        double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
-        double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
+        double freq1 = (double) (WaveGeneratorConstants.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
+        double freq2 = (double) WaveGeneratorConstants.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
+        double phase = (double) WaveGeneratorConstants.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
 
-        String waveType1 = WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
-        String waveType2 = WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+        String waveType1 = WaveGeneratorConstants.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+        String waveType2 = WaveGeneratorConstants.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
 
         if (gpsLogger.isGPSEnabled()) {
             Location location = gpsLogger.getDeviceLocation();
@@ -513,14 +512,14 @@ public class WaveGeneratorActivity extends GuideActivity {
                 csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("Square").add("Wave2").add(waveType2).add(freq2).add(phase).add(0).add(lat).add(lon)); //wave2
                 recordSensorData(new WaveGeneratorData(timestamp + 1, block, "Square", "Wave2", waveType2, String.valueOf(freq2), String.valueOf(phase), "0", lat, lon));
             } else {
-                double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
-                double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
-                double dutySqr2 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.DUTY)) / 100;
-                double phaseSqr2 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.PHASE) / 360;
-                double dutySqr3 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.DUTY)) / 100;
-                double phaseSqr3 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.PHASE) / 360;
-                double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
-                double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
+                double freqSqr1 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+                double dutySqr1 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
+                double dutySqr2 = ((double) WaveGeneratorConstants.wave.get(WaveConst.SQR2).get(WaveConst.DUTY)) / 100;
+                double phaseSqr2 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR2).get(WaveConst.PHASE) / 360;
+                double dutySqr3 = ((double) WaveGeneratorConstants.wave.get(WaveConst.SQR3).get(WaveConst.DUTY)) / 100;
+                double phaseSqr3 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR3).get(WaveConst.PHASE) / 360;
+                double dutySqr4 = ((double) WaveGeneratorConstants.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
+                double phaseSqr4 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
 
                 csvLogger.writeCSVFile(new CSVDataLine().add(timestamp).add(dateTime).add("PWM").add("Sq1").add("PWM").add(freqSqr1).add(0).add(dutySqr1).add(lat).add(lon));
                 recordSensorData(new WaveGeneratorData(timestamp, block, "PWM", "Sq1", "PWM", String.valueOf(freqSqr1), "0", String.valueOf(dutySqr1), lat, lon));
@@ -551,45 +550,45 @@ public class WaveGeneratorActivity extends GuideActivity {
         for (WaveGeneratorData data : recordedWaveData) {
             Log.d("data", data.toString());
             if (data.getMode().equals(MODE_SQUARE)) {
-                WaveGeneratorCommon.mode_selected = WaveConst.SQUARE;
+                WaveGeneratorConstants.mode_selected = WaveConst.SQUARE;
                 switch (data.getWave()) {
                     case "Wave1":
                         if (data.getShape().equals("sine")) {
-                            WaveGeneratorCommon.wave.get(WaveConst.WAVE1).put(WaveConst.WAVETYPE, SIN);
+                            WaveGeneratorConstants.wave.get(WaveConst.WAVE1).put(WaveConst.WAVETYPE, SIN);
                         } else {
-                            WaveGeneratorCommon.wave.get(WaveConst.WAVE1).put(WaveConst.WAVETYPE, TRIANGULAR);
+                            WaveGeneratorConstants.wave.get(WaveConst.WAVE1).put(WaveConst.WAVETYPE, TRIANGULAR);
                         }
-                        WaveGeneratorCommon.wave.get(WaveConst.WAVE1).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.WAVE1).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
                         break;
                     case "Wave2":
                         if (data.getShape().equals("sine")) {
-                            WaveGeneratorCommon.wave.get(WaveConst.WAVE2).put(WaveConst.WAVETYPE, SIN);
+                            WaveGeneratorConstants.wave.get(WaveConst.WAVE2).put(WaveConst.WAVETYPE, SIN);
                         } else {
-                            WaveGeneratorCommon.wave.get(WaveConst.WAVE2).put(WaveConst.WAVETYPE, TRIANGULAR);
+                            WaveGeneratorConstants.wave.get(WaveConst.WAVE2).put(WaveConst.WAVETYPE, TRIANGULAR);
                         }
-                        WaveGeneratorCommon.wave.get(WaveConst.WAVE2).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
-                        WaveGeneratorCommon.wave.get(WaveConst.WAVE2).put(WaveConst.PHASE, Double.valueOf(data.getPhase()).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.WAVE2).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.WAVE2).put(WaveConst.PHASE, Double.valueOf(data.getPhase()).intValue());
                         break;
                 }
                 enableInitialState();
             } else if (data.getMode().equals(MODE_PWM)) {
-                WaveGeneratorCommon.mode_selected = WaveConst.PWM;
+                WaveGeneratorConstants.mode_selected = WaveConst.PWM;
                 switch (data.getWave()) {
                     case "Sq1":
-                        WaveGeneratorCommon.wave.get(WaveConst.SQR1).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
-                        WaveGeneratorCommon.wave.get(WaveConst.SQR1).put(WaveConst.DUTY, ((Double) (Double.valueOf(data.getDuty()) * 100)).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.SQR1).put(WaveConst.FREQUENCY, Double.valueOf(data.getFreq()).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.SQR1).put(WaveConst.DUTY, ((Double) (Double.valueOf(data.getDuty()) * 100)).intValue());
                         break;
                     case "Sq2":
-                        WaveGeneratorCommon.wave.get(WaveConst.SQR2).put(WaveConst.DUTY, ((Double) (Double.valueOf(data.getDuty()) * 100)).intValue());
-                        WaveGeneratorCommon.wave.get(WaveConst.SQR2).put(WaveConst.PHASE, ((Double) (Double.valueOf(data.getPhase()) * 360)).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.SQR2).put(WaveConst.DUTY, ((Double) (Double.valueOf(data.getDuty()) * 100)).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.SQR2).put(WaveConst.PHASE, ((Double) (Double.valueOf(data.getPhase()) * 360)).intValue());
                         break;
                     case "Sq3":
-                        WaveGeneratorCommon.wave.get(WaveConst.SQR3).put(WaveConst.DUTY, ((Double) (Double.valueOf(data.getDuty()) * 100)).intValue());
-                        WaveGeneratorCommon.wave.get(WaveConst.SQR3).put(WaveConst.PHASE, ((Double) (Double.valueOf(data.getPhase()) * 360)).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.SQR3).put(WaveConst.DUTY, ((Double) (Double.valueOf(data.getDuty()) * 100)).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.SQR3).put(WaveConst.PHASE, ((Double) (Double.valueOf(data.getPhase()) * 360)).intValue());
                         break;
                     case "Sq4":
-                        WaveGeneratorCommon.wave.get(WaveConst.SQR4).put(WaveConst.DUTY, ((Double) (Double.valueOf(data.getDuty()) * 100)).intValue());
-                        WaveGeneratorCommon.wave.get(WaveConst.SQR4).put(WaveConst.PHASE, ((Double) (Double.valueOf(data.getPhase()) * 360)).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.SQR4).put(WaveConst.DUTY, ((Double) (Double.valueOf(data.getDuty()) * 100)).intValue());
+                        WaveGeneratorConstants.wave.get(WaveConst.SQR4).put(WaveConst.PHASE, ((Double) (Double.valueOf(data.getPhase()) * 360)).intValue());
                         break;
                 }
                 enableInitialStatePWM();
@@ -598,12 +597,12 @@ public class WaveGeneratorActivity extends GuideActivity {
     }
 
     private void setWave() {
-        double freq1 = (double) (WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
-        double freq2 = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
-        double phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
+        double freq1 = (double) (WaveGeneratorConstants.wave.get(WaveConst.WAVE1).get(WaveConst.FREQUENCY));
+        double freq2 = (double) WaveGeneratorConstants.wave.get(WaveConst.WAVE2).get(WaveConst.FREQUENCY);
+        double phase = (double) WaveGeneratorConstants.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
 
-        String waveType1 = WaveGeneratorCommon.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
-        String waveType2 = WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+        String waveType1 = WaveGeneratorConstants.wave.get(WaveConst.WAVE1).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
+        String waveType2 = WaveGeneratorConstants.wave.get(WaveConst.WAVE2).get(WaveConst.WAVETYPE) == SIN ? "sine" : "tria";
 
         if (scienceLab.isConnected()) {
             if (digital_mode == WaveConst.SQUARE) {
@@ -614,14 +613,14 @@ public class WaveGeneratorActivity extends GuideActivity {
                     scienceLab.setWaves(freq1, phase, freq2);
                 }
             } else {
-                double freqSqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
-                double dutySqr1 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
-                double dutySqr2 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.DUTY)) / 100;
-                double phaseSqr2 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR2).get(WaveConst.PHASE) / 360;
-                double dutySqr3 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.DUTY)) / 100;
-                double phaseSqr3 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR3).get(WaveConst.PHASE) / 360;
-                double dutySqr4 = ((double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
-                double phaseSqr4 = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
+                double freqSqr1 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+                double dutySqr1 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(WaveConst.DUTY) / 100;
+                double dutySqr2 = ((double) WaveGeneratorConstants.wave.get(WaveConst.SQR2).get(WaveConst.DUTY)) / 100;
+                double phaseSqr2 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR2).get(WaveConst.PHASE) / 360;
+                double dutySqr3 = ((double) WaveGeneratorConstants.wave.get(WaveConst.SQR3).get(WaveConst.DUTY)) / 100;
+                double phaseSqr3 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR3).get(WaveConst.PHASE) / 360;
+                double dutySqr4 = ((double) WaveGeneratorConstants.wave.get(WaveConst.SQR4).get(WaveConst.DUTY)) / 100;
+                double phaseSqr4 = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR4).get(WaveConst.PHASE) / 360;
 
                 scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2, phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, false);
             }
@@ -698,7 +697,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
 
-                selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
+                selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
 
                 fetchPropertyValue(waveBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), waveFreqValue);
                 wavePhaseTitle.setText(getResources().getString(R.string.text_phase_colon));
@@ -713,7 +712,7 @@ public class WaveGeneratorActivity extends GuideActivity {
 
                 btnCtrlPhase.setEnabled(true); // enable phase for wave2
 
-                selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
+                selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
 
                 fetchPropertyValue(waveBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), waveFreqValue);
                 fetchPropertyValue(waveBtnActive, WaveConst.PHASE, getString(R.string.deg_text), wavePhaseValue);
@@ -774,7 +773,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnCtrlWave2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
-                selectWaveform(WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
+                selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
                 fetchPropertyValue(waveBtnActive, WaveConst.FREQUENCY, getString(R.string.deg_text), waveFreqValue);
                 break;
 
@@ -831,12 +830,12 @@ public class WaveGeneratorActivity extends GuideActivity {
             btnPwmSq3.setEnabled(true);
             btnPwmSq4.setEnabled(true);
         }
-        WaveGeneratorCommon.mode_selected = mode;
+        WaveGeneratorConstants.mode_selected = mode;
         previewWave();
     }
 
     private void fetchPropertyValue(WaveConst btnActive, WaveConst property, String unit, TextView propTextView) {
-        Double value = (double) WaveGeneratorCommon.wave.get(btnActive).get(property);
+        Double value = (double) WaveGeneratorConstants.wave.get(btnActive).get(property);
         String valueText;
         switch (unit) {
             case "\u00b0":
@@ -891,14 +890,14 @@ public class WaveGeneratorActivity extends GuideActivity {
             waveMonPropValueSelect.setText("");
 
             if (prop_active.equals(WaveConst.FREQUENCY)) {
-                seekBar.setProgress(WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(prop_active));
+                seekBar.setProgress(WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(prop_active));
             } else {
-                seekBar.setProgress(WaveGeneratorCommon.wave.get(pwmBtnActive).get(prop_active));
+                seekBar.setProgress(WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active));
             }
         } else {
             pwmMonPropSelect.setText("");
             pwmMonPropSelectValue.setText("");
-            seekBar.setProgress(WaveGeneratorCommon.wave.get(waveBtnActive).get(prop_active));
+            seekBar.setProgress(WaveGeneratorConstants.wave.get(waveBtnActive).get(prop_active));
         }
         toggleSeekBtns(true);
     }
@@ -926,18 +925,18 @@ public class WaveGeneratorActivity extends GuideActivity {
 
         if (!waveMonSelected) {
             if (prop_active == WaveConst.FREQUENCY) {
-                WaveGeneratorCommon.wave.get(WaveConst.SQR1).put(prop_active, value);
+                WaveGeneratorConstants.wave.get(WaveConst.SQR1).put(prop_active, value);
             } else {
                 if (prop_active == WaveConst.DUTY) {
                     if (value != WaveData.DUTY_MIN.getValue()) {
-                        WaveGeneratorCommon.state.put(pwmBtnActive.toString(), 1);
+                        WaveGeneratorConstants.state.put(pwmBtnActive.toString(), 1);
                     } else
-                        WaveGeneratorCommon.state.put(pwmBtnActive.toString(), 0);
+                        WaveGeneratorConstants.state.put(pwmBtnActive.toString(), 0);
                 }
-                WaveGeneratorCommon.wave.get(pwmBtnActive).put(prop_active, value);
+                WaveGeneratorConstants.wave.get(pwmBtnActive).put(prop_active, value);
             }
         } else {
-            WaveGeneratorCommon.wave.get(waveBtnActive).put(prop_active, value);
+            WaveGeneratorConstants.wave.get(waveBtnActive).put(prop_active, value);
         }
         setWave();
         previewWave();
@@ -959,7 +958,7 @@ public class WaveGeneratorActivity extends GuideActivity {
         ArrayList<Entry> refEntries = getSamplePoints(true);
         LineDataSet dataSet;
         LineDataSet refDataSet;
-        if (WaveGeneratorCommon.mode_selected == WaveConst.PWM) {
+        if (WaveGeneratorConstants.mode_selected == WaveConst.PWM) {
             dataSet = new LineDataSet(entries, pwmBtnActive.toString());
             refDataSet = new LineDataSet(refEntries, getResources().getString(R.string.reference_wave_title));
         } else {
@@ -981,12 +980,12 @@ public class WaveGeneratorActivity extends GuideActivity {
 
     private ArrayList<Entry> getSamplePoints(boolean isReference) {
         ArrayList<Entry> entries = new ArrayList<>();
-        if (WaveGeneratorCommon.mode_selected == WaveConst.PWM) {
-            double freq = (double) WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
-            double duty = ((double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.DUTY)) / 100;
+        if (WaveGeneratorConstants.mode_selected == WaveConst.PWM) {
+            double freq = (double) WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+            double duty = ((double) WaveGeneratorConstants.wave.get(pwmBtnActive).get(WaveConst.DUTY)) / 100;
             double phase = 0;
             if (pwmBtnActive != WaveConst.SQR1 && !isReference) {
-                phase = (double) WaveGeneratorCommon.wave.get(pwmBtnActive).get(WaveConst.PHASE);
+                phase = (double) WaveGeneratorConstants.wave.get(pwmBtnActive).get(WaveConst.PHASE);
             }
             for (int i = 0; i < 5000; i++) {
                 double t = 2 * Math.PI * freq * (i) / 1e6 + phase * Math.PI / 180;
@@ -1000,11 +999,11 @@ public class WaveGeneratorActivity extends GuideActivity {
             }
         } else {
             double phase = 0;
-            int shape = WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE);
-            double freq = (double) WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
+            int shape = WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE);
+            double freq = (double) WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
 
             if (waveBtnActive != WaveConst.WAVE1 && !isReference) {
-                phase = (double) WaveGeneratorCommon.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
+                phase = (double) WaveGeneratorConstants.wave.get(WaveConst.WAVE2).get(WaveConst.PHASE);
             }
             if (shape == 1) {
                 for (int i = 0; i < 5000; i++) {
@@ -1242,18 +1241,18 @@ public class WaveGeneratorActivity extends GuideActivity {
             track.play();
             double frequency;
             while (isPlayingSound) {
-                if (WaveGeneratorCommon.mode_selected == WaveConst.SQUARE) {
-                    frequency = WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
+                if (WaveGeneratorConstants.mode_selected == WaveConst.SQUARE) {
+                    frequency = WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.FREQUENCY);
                 } else {
-                    frequency = WaveGeneratorCommon.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
+                    frequency = WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(WaveConst.FREQUENCY);
                 }
                 float increment = (float) ((2 * Math.PI) * frequency / 44100);
                 for (int i = 0; i < samples.length; i++) {
                     samples[i] = (float) Math.sin(angle);
-                    if (WaveGeneratorCommon.mode_selected == WaveConst.PWM) {
+                    if (WaveGeneratorConstants.mode_selected == WaveConst.PWM) {
                         samples[i] = (samples[i] >= 0.0) ? 1 : -1;
                     } else {
-                        if (WaveGeneratorCommon.wave.get(waveBtnActive).get(WaveConst.WAVETYPE) == 2) {
+                        if (WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE) == 2) {
                             samples[i] = (float) ((2 / Math.PI) * Math.asin(samples[i]));
                         }
                     }

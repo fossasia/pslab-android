@@ -56,11 +56,8 @@ public class DigitalChannel {
             this.initialState = (initialStateOverride - 1) == 1;
             this.initialStateOverride = 0;
         } else {
-            if (initialStates.get(channelName) == 1) {
-                this.initialState = true;
-            } else {
-                this.initialState = false;
-            }
+            final Integer s = initialStates.get(channelName);
+            this.initialState = s != null && s == 1;
         }
         System.arraycopy(timestamps, 0, this.timestamps, 0, timestamps.length);
         this.dlength = timestamps.length; //

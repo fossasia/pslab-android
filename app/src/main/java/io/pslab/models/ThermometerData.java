@@ -62,6 +62,6 @@ public class ThermometerData extends RealmObject {
 
     @Override
     public String toString() {
-        return "Block - " + block + ", Time - " + time + ",Temprature - " + temp + ", Lat - " + lat + ", Lon - " + lon;
+        return "Block - " + block + ", Time - " + time + ",Temperature - " + temp + ", Lat - " + lat + ", Lon - " + lon;
     }
 }

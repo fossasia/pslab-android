@@ -145,7 +145,7 @@ public class PowerSourceActivity extends GuideActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -408,8 +408,11 @@ public class PowerSourceActivity extends GuideActivity {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (currentPosition < recordedPowerData.size()) {
-                                        setSavedValue(recordedPowerData.get(currentPosition));
+                                    if (recordedPowerData != null && currentPosition < recordedPowerData.size()) {
+                                        final PowerSourceData data = recordedPowerData.get(currentPosition);
+                                        if (data != null) {
+                                            setSavedValue(data);
+                                        }
                                     } else {
                                         playbackTimer.cancel();
                                         currentPosition = 0;

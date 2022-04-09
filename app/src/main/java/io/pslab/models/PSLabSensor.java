@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -228,9 +229,10 @@ public abstract class PSLabSensor extends GuideActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         setSupportActionBar(sensorToolBar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(getSensorName());
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getSensorName());
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
         markers = new JSONArray();
         psLabPermission = PSLabPermission.getInstance();

@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
@@ -102,8 +103,14 @@ public class BarometerActivity extends PSLabSensor {
             viewingData = true;
             recordedBaroData = LocalDataLog.with()
                     .getBlockOfBaroRecords(getIntent().getExtras().getLong(DATA_BLOCK));
-            String title = titleFormat.format(recordedBaroData.get(0).getTime());
-            getSupportActionBar().setTitle(title);
+            final BaroData data = recordedBaroData.get(0);
+            if (data != null) {
+                final String title = titleFormat.format(data.getTime());
+                final ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.setTitle(title);
+                }
+            }
         }
     }
 

@@ -71,7 +71,7 @@ public class EditTextWidget extends LinearLayout{
             @Override
             public void onClick(View v) {
                 try {
-                    Double data = Double.parseDouble(editText.getText().toString());
+                    double data = Double.parseDouble(editText.getText().toString());
                     data = data - leastCount;
                     data = Math.round(data*100.0)/100.0;
                     data = data > maxima ? maxima : data;
@@ -90,7 +90,7 @@ public class EditTextWidget extends LinearLayout{
             @Override
             public void onClick(View v) {
                 try {
-                    Double data = Double.valueOf(editText.getText().toString());
+                    double data = Double.valueOf(editText.getText().toString());
                     data = data + leastCount;
                     data = Math.round(data*100.0)/100.0;
                     data = data > maxima ? maxima : data;

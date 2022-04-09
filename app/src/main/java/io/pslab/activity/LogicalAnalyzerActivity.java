@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
 import io.pslab.R;
@@ -51,10 +52,11 @@ public class LogicalAnalyzerActivity extends GuideActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.la_frame_layout, laLogicLinesFragment).commit();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.logical_analyzer);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.logical_analyzer);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
 
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {

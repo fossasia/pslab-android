@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
@@ -98,8 +99,14 @@ public class CompassActivity extends PSLabSensor {
             viewingData = true;
             recordedCompassData = LocalDataLog.with()
                     .getBlockOfCompassRecords(getIntent().getExtras().getLong(DATA_BLOCK));
-            String title = titleFormat.format(recordedCompassData.get(0).getTime());
-            getSupportActionBar().setTitle(title);
+            final CompassData data = recordedCompassData.get(0);
+            if (data != null) {
+                final String title = titleFormat.format(data.getTime());
+                final ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.setTitle(title);
+                }
+            }
         }
     }
 

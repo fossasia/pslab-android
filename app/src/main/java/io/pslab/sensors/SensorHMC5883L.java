@@ -3,8 +3,6 @@ package io.pslab.sensors;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -15,6 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -24,16 +26,16 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.HMC5883L;
 import io.pslab.others.ScienceLabCommon;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Harsh on 6/6/18.
@@ -71,18 +73,19 @@ public class SensorHMC5883L extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.hmc5883l);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.hmc5883l);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        sensorDock = (RelativeLayout) findViewById(R.id.sensor_control_dock_layout);
-        indefiniteSamplesCheckBox = (CheckBox) findViewById(R.id.checkBox_samples_sensor);
-        samplesEditBox = (EditText) findViewById(R.id.editBox_samples_sensors);
-        timeGapSeekbar = (SeekBar) findViewById(R.id.seekBar_timegap_sensor);
-        timeGapLabel = (TextView) findViewById(R.id.tv_timegap_label);
-        playPauseButton = (ImageButton) findViewById(R.id.imageButton_play_pause_sensor);
+        sensorDock = findViewById(R.id.sensor_control_dock_layout);
+        indefiniteSamplesCheckBox = findViewById(R.id.checkBox_samples_sensor);
+        samplesEditBox = findViewById(R.id.editBox_samples_sensors);
+        timeGapSeekbar = findViewById(R.id.seekBar_timegap_sensor);
+        timeGapLabel = findViewById(R.id.tv_timegap_label);
+        playPauseButton = findViewById(R.id.imageButton_play_pause_sensor);
         setSensorDock();
         sensorDock.setVisibility(View.VISIBLE);
 
