@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -56,10 +57,11 @@ public class CreateConfigActivity extends AppCompatActivity {
         intervalEditText = findViewById(R.id.interval_edit_text);
         Button createConfigFileBtn = findViewById(R.id.create_config_btn);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.nav_config);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.nav_config);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
         instrumentsList = new ArrayList<>();
         instrumentParamsList = new ArrayList<>();

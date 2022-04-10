@@ -12,10 +12,10 @@ public class ApplicationItem {
 
     public ApplicationItem() {}
 
-    public ApplicationItem(String applicationName, int applicaitonIcon, String applicationDescription) {
+    public ApplicationItem(String applicationName, int applicationIcon, String applicationDescription) {
         this.applicationName = applicationName;
         this.applicationDescription = applicationDescription;
-        this.applicationIcon = applicaitonIcon;
+        this.applicationIcon = applicationIcon;
     }
 
     public String getApplicationName() {

@@ -7,9 +7,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.models.DataMPU6050;
-import io.pslab.DataFormatter;
 import io.realm.RealmResults;
 
 /**
@@ -33,15 +33,16 @@ public class MPUDataAdapter extends RecyclerView.Adapter<MPUDataAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         DataMPU6050 temp = results.get(position);
-        holder.tvAx.setText(DataFormatter.formatDouble(temp.getAx(), DataFormatter.LOW_PRECISION_FORMAT));
-        holder.tvAy.setText(DataFormatter.formatDouble(temp.getAy(), DataFormatter.LOW_PRECISION_FORMAT));
-        holder.tvAz.setText(DataFormatter.formatDouble(temp.getAz(), DataFormatter.LOW_PRECISION_FORMAT));
-        holder.tvGx.setText(DataFormatter.formatDouble(temp.getGx(), DataFormatter.LOW_PRECISION_FORMAT));
-        holder.tvGy.setText(DataFormatter.formatDouble(temp.getGy(), DataFormatter.LOW_PRECISION_FORMAT));
-        holder.tvGz.setText(DataFormatter.formatDouble(temp.getGz(), DataFormatter.LOW_PRECISION_FORMAT));
-        holder.tvTemperature.setText(DataFormatter.formatDouble(temp.getTemperature(), DataFormatter.LOW_PRECISION_FORMAT));
-        holder.tvTitle.setText("Raw Data #" + (position + 1));
-
+        if (temp != null) {
+            holder.tvAx.setText(DataFormatter.formatDouble(temp.getAx(), DataFormatter.LOW_PRECISION_FORMAT));
+            holder.tvAy.setText(DataFormatter.formatDouble(temp.getAy(), DataFormatter.LOW_PRECISION_FORMAT));
+            holder.tvAz.setText(DataFormatter.formatDouble(temp.getAz(), DataFormatter.LOW_PRECISION_FORMAT));
+            holder.tvGx.setText(DataFormatter.formatDouble(temp.getGx(), DataFormatter.LOW_PRECISION_FORMAT));
+            holder.tvGy.setText(DataFormatter.formatDouble(temp.getGy(), DataFormatter.LOW_PRECISION_FORMAT));
+            holder.tvGz.setText(DataFormatter.formatDouble(temp.getGz(), DataFormatter.LOW_PRECISION_FORMAT));
+            holder.tvTemperature.setText(DataFormatter.formatDouble(temp.getTemperature(), DataFormatter.LOW_PRECISION_FORMAT));
+            holder.tvTitle.setText("Raw Data #" + (position + 1));
+        }
     }
 
     @Override

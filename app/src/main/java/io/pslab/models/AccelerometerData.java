@@ -12,19 +12,19 @@ public class AccelerometerData extends RealmObject {
     @PrimaryKey
     private long time;
     private long block;
-    private float accelerometer_X;
-    private float accelerometer_Y;
-    private float accelerometer_Z;
+    private float accelerometerX;
+    private float accelerometerY;
+    private float accelerometerZ;
     private double lat, lon;
 
     public AccelerometerData() {/**/}
 
-    public AccelerometerData(long time, long block, float accelerometer_X, float accelerometer_Y, float accelerometer_Z, double lat, double lon) {
+    public AccelerometerData(long time, long block, float accelerometerX, float accelerometerY, float accelerometerZ, double lat, double lon) {
         this.time = time;
         this.block = block;
-        this.accelerometer_X = accelerometer_X;
-        this.accelerometer_Y = accelerometer_Y;
-        this.accelerometer_Z = accelerometer_Z;
+        this.accelerometerX = accelerometerX;
+        this.accelerometerY = accelerometerY;
+        this.accelerometerZ = accelerometerZ;
         this.lat = lat;
         this.lon = lon;
     }
@@ -46,31 +46,31 @@ public class AccelerometerData extends RealmObject {
     }
 
     public float getAccelerometerX() {
-        return accelerometer_X;
+        return accelerometerX;
     }
 
-    public void setAccelerometerX(float accelerometer) {
-        this.accelerometer_X = accelerometer_X;
+    public void setAccelerometerX(float accelerometerX) {
+        this.accelerometerX = accelerometerX;
     }
 
     public float getAccelerometerY() {
-        return accelerometer_Y;
+        return accelerometerY;
     }
 
-    public void setAccelerometerY(float accelerometer) {
-        this.accelerometer_Y = accelerometer_Y;
+    public void setAccelerometerY(float accelerometerY) {
+        this.accelerometerY = accelerometerY;
     }
 
     public float getAccelerometerZ() {
-        return accelerometer_Z;
+        return accelerometerZ;
     }
 
-    public void setAccelerometerZ(float accelerometer) {
-        this.accelerometer_Z = accelerometer_Z;
+    public void setAccelerometerZ(float accelerometerZ) {
+        this.accelerometerZ = accelerometerZ;
     }
 
-    public float[] getAccelerometer(){
-        return new float[]{this.accelerometer_X, this.accelerometer_Y, this.accelerometer_Z};
+    public float[] getAccelerometer() {
+        return new float[]{this.accelerometerX, this.accelerometerY, this.accelerometerZ};
     }
 
     public double getLat() {
@@ -91,6 +91,6 @@ public class AccelerometerData extends RealmObject {
 
     @Override
     public String toString() {
-        return "Block - " + block + ", Time - " + time + ", Accelerometer_X - " + accelerometer_X +", Accelerometer_Y - " + accelerometer_Y + ", Accelerometer_Z - " + accelerometer_Z + ", Lat - " + lat + ", Lon - " + lon;
+        return "Block - " + block + ", Time - " + time + ", Accelerometer_X - " + accelerometerX + ", Accelerometer_Y - " + accelerometerY + ", Accelerometer_Z - " + accelerometerZ + ", Lat - " + lat + ", Lon - " + lon;
     }
 }

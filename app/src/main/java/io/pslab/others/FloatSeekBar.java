@@ -33,7 +33,7 @@ public class FloatSeekBar extends AppCompatSeekBar {
     }
 
     public double getValue() {
-        Double value = (max - min) * ((float) getProgress() / (float) getMax()) + min;
+        double value = (max - min) * ((float) getProgress() / (float) getMax()) + min;
         value = (double) Math.round(value * 100) / 100;
         return value;
     }

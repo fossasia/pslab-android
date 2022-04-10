@@ -29,7 +29,7 @@ public class CustomScrollView extends ScrollView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        View view = (View) getChildAt(getChildCount() - 1);
+        View view = getChildAt(getChildCount() - 1);
         int diff = (view.getBottom() - (getHeight() + getScrollY()));
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {

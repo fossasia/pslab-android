@@ -14,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -25,14 +26,14 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.ADS1115;
 import io.pslab.others.ScienceLabCommon;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class SensorADS1115 extends AppCompatActivity {
     private static int counter;
@@ -63,18 +64,19 @@ public class SensorADS1115 extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.ads1115);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.ads1115);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        sensorDock = (RelativeLayout) findViewById(R.id.sensor_control_dock_layout);
-        indefiniteSamplesCheckBox = (CheckBox) findViewById(R.id.checkBox_samples_sensor);
-        samplesEditBox = (EditText) findViewById(R.id.editBox_samples_sensors);
-        timeGapSeekbar = (SeekBar) findViewById(R.id.seekBar_timegap_sensor);
-        timeGapLabel = (TextView) findViewById(R.id.tv_timegap_label);
-        playPauseButton = (ImageButton) findViewById(R.id.imageButton_play_pause_sensor);
+        sensorDock = findViewById(R.id.sensor_control_dock_layout);
+        indefiniteSamplesCheckBox = findViewById(R.id.checkBox_samples_sensor);
+        samplesEditBox = findViewById(R.id.editBox_samples_sensors);
+        timeGapSeekbar = findViewById(R.id.seekBar_timegap_sensor);
+        timeGapLabel = findViewById(R.id.tv_timegap_label);
+        playPauseButton = findViewById(R.id.imageButton_play_pause_sensor);
         setSensorDock();
         sensorDock.setVisibility(View.VISIBLE);
 

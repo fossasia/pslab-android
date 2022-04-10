@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.others.MathUtils;
 import io.pslab.others.SwipeGestureDetector;
-import io.pslab.others.WaveGeneratorCommon;
 
 /**
  * Base class for activities which have a guide.
@@ -52,10 +51,6 @@ public class GuideActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-
-        if (!WaveGeneratorCommon.isInitialized) {
-            new WaveGeneratorCommon(true);
-        }
 
         setUpBottomSheet();
         shadowLayer.setOnClickListener(v -> {

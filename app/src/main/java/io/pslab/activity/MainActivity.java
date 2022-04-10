@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadHomeFragment() {
         selectNavMenu();
-        setToolbarTitle();
+        setToolbarTitle(activityTitles[navItemIndex]);
         if (drawer != null && getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
             return;
@@ -197,8 +198,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setToolbarTitle() {
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+    private void setToolbarTitle(final CharSequence title) {
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title);
+        }
     }
 
     private void unCheckAllMenuItems(Menu menu) {
@@ -421,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
     private void displayPSLabPinLayout() {
         CURRENT_TAG = TAG_PINLAYOUT;
         navigationView.getMenu().getItem(navItemIndex).setChecked(false);
-        getSupportActionBar().setTitle(getResources().getString(R.string.pslab_pinlayout));
+        setToolbarTitle(getResources().getString(R.string.pslab_pinlayout));
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {

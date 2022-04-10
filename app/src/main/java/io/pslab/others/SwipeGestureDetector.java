@@ -8,7 +8,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
 
-    private BottomSheetBehavior bottomSheet;
+    private final BottomSheetBehavior<View> bottomSheet;
 
     public SwipeGestureDetector(BottomSheetBehavior<View> bt) {
         bottomSheet = bt;
@@ -43,7 +43,7 @@ public class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListene
     }
 
     private Direction getDirection(float x1, float y1, float x2, float y2) {
-        Double angle = Math.toDegrees(Math.atan2(y1 - y2, x2 - x1));
+        double angle = Math.toDegrees(Math.atan2(y1 - y2, x2 - x1));
         if (angle > 45 && angle <= 135)
             return Direction.TOP;
         if (angle >= 135 && angle < 180 || angle < -135 && angle > -180)
