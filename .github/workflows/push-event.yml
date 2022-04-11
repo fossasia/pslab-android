@@ -31,7 +31,7 @@ jobs:
         bash ./gradlew bundle --stacktrace
     
     - name: Store APK files
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: apk-files
         path: |
