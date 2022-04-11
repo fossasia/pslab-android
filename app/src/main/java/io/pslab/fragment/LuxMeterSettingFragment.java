@@ -80,7 +80,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 break;
             case KEY_UPDATE_PERIOD:
                 try {
-                    Integer updatePeriod = Integer.parseInt(updatePeriodPref.getText());
+                    int updatePeriod = Integer.parseInt(updatePeriodPref.getText());
                     if (updatePeriod > 1000 || updatePeriod < 100) {
                         throw new NumberFormatException();
                     } else {
@@ -88,7 +88,7 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                     }
                 } catch (NumberFormatException e) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.update_period_msg),null,null, Snackbar.LENGTH_SHORT);
+                            getString(R.string.update_period_msg), null, null, Snackbar.LENGTH_SHORT);
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -110,15 +110,15 @@ public class LuxMeterSettingFragment extends PreferenceFragmentCompat implements
                 break;
             case KEY_HIGH_LIMIT:
                 try {
-                    Integer highLimit = Integer.parseInt(higLimitPref.getText());
+                    int highLimit = Integer.parseInt(higLimitPref.getText());
                     if (highLimit > 10000 || highLimit < 10) {
                         throw new NumberFormatException();
                     } else {
-                        higLimitPref.setSummary(String.valueOf(highLimit) + " Lx");
+                        higLimitPref.setSummary(highLimit + " Lx");
                     }
                 } catch (NumberFormatException e) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.high_limit_msg),null,null, Snackbar.LENGTH_SHORT);
+                            getString(R.string.high_limit_msg), null, null, Snackbar.LENGTH_SHORT);
                     higLimitPref.setSummary("2000 Lx");
                     higLimitPref.setText("2000");
                     SharedPreferences.Editor editor = sharedPref.edit();

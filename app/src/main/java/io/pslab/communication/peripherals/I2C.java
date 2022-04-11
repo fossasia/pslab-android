@@ -3,14 +3,15 @@ package io.pslab.communication.peripherals;
 import android.os.SystemClock;
 import android.util.Log;
 
-import io.pslab.communication.CommandsProto;
-import io.pslab.communication.PacketHandler;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import io.pslab.communication.CommandsProto;
+import io.pslab.communication.PacketHandler;
 
 /**
  * Created by viveksb007 on 28/3/17.
@@ -19,10 +20,10 @@ import java.util.Map;
 public class I2C {
 
     private static final String TAG = "I2C";
-    private double[] buffer;
-    private int frequency = 100000;
-    private CommandsProto commandsProto;
-    private PacketHandler packetHandler;
+    private final double[] buffer;
+    private final int frequency = 100000;
+    private final CommandsProto commandsProto;
+    private final PacketHandler packetHandler;
     private int totalBytes, channels, samples, timeGap;
 
     public I2C(PacketHandler packetHandler) {
@@ -57,7 +58,7 @@ public class I2C {
         int BRGVAL = (int) ((1 / frequency - 1 / 1e7) * 64e6 - 1);
         if (BRGVAL > 511) {
             BRGVAL = 511;
-            Log.v(TAG, "Frequency too low. Setting to : " + String.valueOf(1 / ((BRGVAL + 1.0) / 64e6 + 1.0 / 1e7)));
+            Log.v(TAG, "Frequency too low. Setting to : " + 1 / ((BRGVAL + 1.0) / 64e6 + 1.0 / 1e7));
         }
         packetHandler.sendInt(BRGVAL);
         packetHandler.getAcknowledgement();
@@ -96,13 +97,13 @@ public class I2C {
         return (packetHandler.getAcknowledgement() >> 4);
     }
 
-    public ArrayList<Byte> simpleRead(int address, int numBytes) throws IOException {
+    public List<Byte> simpleRead(int address, int numBytes) throws IOException {
         this.start(address, 1);
         return this.read(numBytes);
     }
 
-    public ArrayList<Byte> read(int length) throws IOException {
-        ArrayList<Byte> data = new ArrayList<>();
+    public List<Byte> read(int length) throws IOException {
+        List<Byte> data = new ArrayList<>();
         for (int i = 0; i < length - 1; i++) {
             packetHandler.sendByte(commandsProto.I2C_HEADER);
             packetHandler.sendByte(commandsProto.I2C_READ_MORE);
@@ -140,7 +141,7 @@ public class I2C {
         return val;
     }
 
-    public ArrayList<Character> readBulk(int deviceAddress, int registerAddress, int bytesToRead) throws IOException {
+    public List<Character> readBulk(int deviceAddress, int registerAddress, int bytesToRead) throws IOException {
         packetHandler.sendByte(commandsProto.I2C_HEADER);
         packetHandler.sendByte(commandsProto.I2C_READ_BULK);
         packetHandler.sendByte(deviceAddress);
@@ -149,7 +150,7 @@ public class I2C {
         byte[] data = new byte[bytesToRead];
         packetHandler.read(data, bytesToRead);
         packetHandler.getAcknowledgement();
-        ArrayList<Character> charData = new ArrayList<>();
+        List<Character> charData = new ArrayList<>();
         for (int i = 0; i < bytesToRead; i++) {
             charData.add((char) data[i]);
         }
@@ -167,10 +168,10 @@ public class I2C {
         packetHandler.getAcknowledgement();
     }
 
-    public ArrayList<Integer> scan(Integer frequency) throws IOException {
+    public List<Integer> scan(Integer frequency) throws IOException {
         if (frequency == null) frequency = 100000;
         config(frequency);
-        ArrayList<Integer> addresses = new ArrayList<>();
+        List<Integer> addresses = new ArrayList<>();
         for (int i = 0; i < 128; i++) {
             int x = start(i, 0);
             if ((x & 1) == 0) {
@@ -219,10 +220,10 @@ public class I2C {
         return -1;
     }
 
-    public ArrayList<Byte> retreiveBuffer() throws IOException {
+    public List<Byte> retreiveBuffer() throws IOException {
         int totalIntSamples = totalBytes / 2;
         Log.v(TAG, "Fetching samples : " + totalIntSamples + ", split : " + commandsProto.DATA_SPLITTING);
-        ArrayList<Byte> listData = new ArrayList<>();
+        List<Byte> listData = new ArrayList<>();
         for (int i = 0; i < (totalIntSamples / commandsProto.DATA_SPLITTING); i++) {
             packetHandler.sendByte(commandsProto.ADC);
             packetHandler.sendByte(commandsProto.GET_CAPTURE_CHANNEL);
@@ -254,7 +255,7 @@ public class I2C {
         return listData;
     }
 
-    public Map<String, ArrayList> dataProcessor(ArrayList<Byte> data, Boolean inInt) {
+    public Map<String, List<Double>> dataProcessor(List<Byte> data, Boolean inInt) {
         if (inInt) {
             for (int i = 0; i < (this.channels * this.samples) / 2; i++)
                 this.buffer[i] = (data.get(i * 2) << 8) | (data.get(i * 2 + 1));
@@ -262,22 +263,22 @@ public class I2C {
             for (int i = 0; i < (this.channels * this.samples); i++)
                 this.buffer[i] = data.get(i);
         }
-        Map<String, ArrayList> retData = new LinkedHashMap<>();
-        ArrayList<Double> timeBase = new ArrayList<>();
+        Map<String, List<Double>> retData = new LinkedHashMap<>();
+        List<Double> timeBase = new ArrayList<>();
         double factor = timeGap * (this.samples - 1) / this.samples;
         for (double i = 0; i < timeGap * (this.samples - 1); i += factor) timeBase.add(i);
         retData.put("time", timeBase);
         for (int i = 0; i < this.channels / 2; i++) {
-            ArrayList<Double> yValues = new ArrayList<>();
+            List<Double> yValues = new ArrayList<>();
             for (int j = i; j < this.samples * this.channels / 2; j += this.channels / 2) {
                 yValues.add(buffer[j]);
             }
-            retData.put("CH" + String.valueOf(i + 1), yValues);
+            retData.put("CH" + (i + 1), yValues);
         }
         return retData;
     }
 
-    public Map<String, ArrayList> capture(int address, int location, int sampleLength, int totalSamples, int timeGap, Boolean inInt) {
+    public Map<String, List<Double>> capture(int address, int location, int sampleLength, int totalSamples, int timeGap, Boolean inInt) {
         /*
         Blocking call that fetches data from I2C sensors like an oscilloscope fetches voltage readings
 
@@ -322,7 +323,7 @@ public class I2C {
             SystemClock.sleep((long) (1e-6 * totalSamples * timeGap + 0.5) * 1000);
             int totalIntSamples = totalBytes / 2;
             Log.v(TAG, "Fetching samples : " + totalIntSamples + ", split : " + commandsProto.DATA_SPLITTING);
-            ArrayList<Byte> listData = new ArrayList<>();
+            List<Byte> listData = new ArrayList<>();
             for (int i = 0; i < (totalIntSamples / commandsProto.DATA_SPLITTING); i++) {
                 packetHandler.sendByte(commandsProto.ADC);
                 packetHandler.sendByte(commandsProto.GET_CAPTURE_CHANNEL);
@@ -357,17 +358,17 @@ public class I2C {
                 for (int i = 0; i < (totalChannels * channelLength); i++)
                     this.buffer[i] = listData.get(i);
             }
-            Map<String, ArrayList> retData = new LinkedHashMap<>();
-            ArrayList<Double> timeBase = new ArrayList<>();
+            Map<String, List<Double>> retData = new LinkedHashMap<>();
+            List<Double> timeBase = new ArrayList<>();
             double factor = timeGap * (channelLength - 1) / channelLength;
             for (double i = 0; i < timeGap * (channelLength - 1); i += factor) timeBase.add(i);
             retData.put("time", timeBase);
             for (int i = 0; i < totalChannels; i++) {
-                ArrayList<Double> yValues = new ArrayList<>();
+                List<Double> yValues = new ArrayList<>();
                 for (int j = i; j < channelLength * totalChannels; j += totalChannels) {
                     yValues.add(buffer[j]);
                 }
-                retData.put("CH" + String.valueOf(i + 1), yValues);
+                retData.put("CH" + (i + 1), yValues);
             }
             return retData;
         } catch (IOException e) {

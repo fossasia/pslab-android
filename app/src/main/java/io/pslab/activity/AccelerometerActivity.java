@@ -132,8 +132,8 @@ public class AccelerometerActivity extends PSLabSensor {
         accelerometerConfigurations = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         locationEnabled = accelerometerConfigurations.getBoolean(AccelerometerSettingsFragment.KEY_INCLUDE_LOCATION, true);
         AccelerometerDataFragment.setParameters(
-                Float.valueOf(accelerometerConfigurations.getString(AccelerometerSettingsFragment.KEY_HIGH_LIMIT, "20")),
-                Integer.valueOf(accelerometerConfigurations.getString(AccelerometerSettingsFragment.KEY_UPDATE_PERIOD, "1000")),
+                Float.parseFloat(accelerometerConfigurations.getString(AccelerometerSettingsFragment.KEY_HIGH_LIMIT, "20")),
+                Integer.parseInt(accelerometerConfigurations.getString(AccelerometerSettingsFragment.KEY_UPDATE_PERIOD, "1000")),
                 accelerometerConfigurations.getString(AccelerometerSettingsFragment.KEY_ACCELEROMETER_SENSOR_GAIN, "1"));
     }
 }

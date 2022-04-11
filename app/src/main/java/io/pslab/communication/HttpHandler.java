@@ -18,11 +18,11 @@ import okhttp3.Response;
 public class HttpHandler {
 
     private final String TAG = this.getClass().getSimpleName();
-    private String baseIP;
-    private String sendDataEndPoint = "send";
-    private String getDataEndPoint = "get";
-    private String dataKeyString = "data";
-    private OkHttpClient client;
+    private final String baseIP;
+    private final String sendDataEndPoint = "send";
+    private final String getDataEndPoint = "get";
+    private final String dataKeyString = "data";
+    private final OkHttpClient client;
     private JSONObject receivedData;
 
     public HttpHandler(String baseIP) {
@@ -63,6 +63,7 @@ public class HttpHandler {
 
     /**
      * Method to get data from ESP
+     *
      * @return 1 if data was received 0 otherwise
      */
     public int read() throws IOException, JSONException {
@@ -78,7 +79,7 @@ public class HttpHandler {
         } else {
             receivedData = new JSONObject(response.body().string());
         }
-        return  result;
+        return result;
     }
 
     public JSONObject getReceivedData() {

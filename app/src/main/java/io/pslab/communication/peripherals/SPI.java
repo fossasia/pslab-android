@@ -2,12 +2,13 @@ package io.pslab.communication.peripherals;
 
 import android.util.Log;
 
-import io.pslab.communication.CommandsProto;
-import io.pslab.communication.PacketHandler;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import io.pslab.communication.CommandsProto;
+import io.pslab.communication.PacketHandler;
 
 /**
  * Created by viveksb007 on 28/3/17.
@@ -16,8 +17,8 @@ import java.util.Arrays;
 public class SPI {
 
     private static final String TAG = "SPI";
-    private PacketHandler packetHandler;
-    private CommandsProto commandsProto;
+    private final PacketHandler packetHandler;
+    private final CommandsProto commandsProto;
     private int CKE = 1, CKP = 0, SMP = 1;
 
     public SPI(PacketHandler packetHandler) {
@@ -94,9 +95,9 @@ public class SPI {
         packetHandler.sendInt(value);
     }
 
-    public ArrayList<Byte> xfer(int channel, ArrayList<Byte> data) throws IOException {
+    public List<Byte> xfer(int channel, List<Byte> data) throws IOException {
         start(channel);
-        ArrayList<Byte> reply = new ArrayList<>();
+        List<Byte> reply = new ArrayList<>();
         for (Byte a : data) {
             reply.add(send8(a));
         }

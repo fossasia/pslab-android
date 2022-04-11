@@ -3,6 +3,7 @@ package io.pslab.others;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -15,21 +16,21 @@ import java.util.List;
 
 public class PSLabPermission {
 
-    private String[] allPermissions = new String[] {
+    private final String[] allPermissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
-    private String[] csvPermissions = new String[] {
+    private final String[] csvPermissions = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
-    private String[] logPermissions = new String[] {
+    private final String[] logPermissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    private String[] mapPermissions = new String[] {
+    private final String[] mapPermissions = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 

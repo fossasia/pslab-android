@@ -2,12 +2,14 @@ package io.pslab.communication.sensors;
 
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.util.FastMath;
-import io.pslab.communication.ScienceLab;
-import io.pslab.communication.peripherals.I2C;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import io.pslab.communication.ScienceLab;
+import io.pslab.communication.peripherals.I2C;
 
 /**
  * Created by akarshan on 4/21/17.
@@ -17,21 +19,21 @@ import java.util.Arrays;
  */
 
 public class MPU6050 {
-    private int GYRO_CONFIG = 0x1B;
-    private int ACCEL_CONFIG = 0x1C;
-    private double[] GYRO_SCALING = {131, 65.5, 32.8, 16.4};
-    private double[] ACCEL_SCALING = {16384, 8192, 4096, 2048};
+    private final int GYRO_CONFIG = 0x1B;
+    private final int ACCEL_CONFIG = 0x1C;
+    private final double[] GYRO_SCALING = {131, 65.5, 32.8, 16.4};
+    private final double[] ACCEL_SCALING = {16384, 8192, 4096, 2048};
     private int AR = 3;
     private int GR = 3;
-    private int NUMPLOTS = 7;
+    private final int NUMPLOTS = 7;
     public String[] PLOTNAMES = {"Ax", "Ay", "Az,'Temp", "Gx", "Gy", "Gz"};
-    private int ADDRESS = 0x68;
-    private String name = "Accel/gyro";
-    private ArrayList<KalmanFilter> K = new ArrayList<>();          //K is the list of KalmanFilter object
-    private I2C i2c;
-    private ArrayList<Integer> setGyroRange = new ArrayList<>(Arrays.asList(250, 500, 1000, 2000));
-    private ArrayList<Integer> setAccelRange = new ArrayList<>(Arrays.asList(2, 4, 8, 16));
-    private ArrayList<Double> kalmanFilter = new ArrayList<>(Arrays.asList(0.01, 0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0, 0.0));
+    private final int ADDRESS = 0x68;
+    private final String name = "Accel/gyro";
+    private List<KalmanFilter> K = new ArrayList<>();          //K is the list of KalmanFilter object
+    private final I2C i2c;
+    private final List<Integer> setGyroRange = Arrays.asList(250, 500, 1000, 2000);
+    private final List<Integer> setAccelRange = Arrays.asList(2, 4, 8, 16);
+    private final List<Double> kalmanFilter = Arrays.asList(0.01, 0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0, 0.0);
 
     public MPU6050(I2C i2c, ScienceLab scienceLab) throws IOException {
         this.i2c = i2c;
@@ -43,9 +45,9 @@ public class MPU6050 {
     }
 
     public void kalmanFilter(Double opt) throws IOException, NullPointerException {
-        ArrayList<double[]> noise = new ArrayList<>();
+        List<double[]> noise = new ArrayList<>();
         double[] innerNoiseArray = new double[NUMPLOTS];
-        ArrayList<Double> vals;
+        List<Double> vals;
         double standardDeviation;
         if (opt == null) {        //Replaced "OFF" with null.
             K = null;
@@ -65,7 +67,7 @@ public class MPU6050 {
 
     }
 
-    private ArrayList<Character> getVals(int addr, int bytesToRead) throws IOException {
+    private List<Character> getVals(int addr, int bytesToRead) throws IOException {
         return i2c.readBulk(ADDRESS, addr, bytesToRead);
     }
 
@@ -83,9 +85,9 @@ public class MPU6050 {
         i2c.writeBulk(ADDRESS, new int[]{ACCEL_CONFIG, AR << 3});
     }
 
-    public ArrayList<Double> getRaw() throws IOException, NullPointerException {
-        ArrayList<Character> vals = getVals(0x3B, 14);
-        ArrayList<Double> raw = new ArrayList<>();
+    public List<Double> getRaw() throws IOException, NullPointerException {
+        List<Character> vals = getVals(0x3B, 14);
+        List<Double> raw = new ArrayList<>();
         if (vals.size() == 14) {
             int a;
             for (a = 0; a < 3; a++)
@@ -107,7 +109,7 @@ public class MPU6050 {
     }
 
     public double[] getAcceleration() throws IOException {
-        ArrayList<Character> vals = getVals(0x3B, 6);
+        List<Character> vals = getVals(0x3B, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);
@@ -116,13 +118,13 @@ public class MPU6050 {
     }
 
     public double getTemperature() throws IOException {
-        ArrayList<Character> vals = getVals(0x41, 6);
+        List<Character> vals = getVals(0x41, 6);
         int t = vals.get(0) << 8 | vals.get(1);
         return t / 65535.;
     }
 
     public double[] getGyroscope() throws IOException {
-        ArrayList<Character> vals = getVals(0x43, 6);
+        List<Character> vals = getVals(0x43, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);

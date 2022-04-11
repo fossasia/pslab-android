@@ -2,6 +2,7 @@ package io.pslab.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -23,7 +24,7 @@ public class SoundmeterSettingsFragment extends PreferenceFragmentCompat impleme
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.sound_meter_settings,rootKey);
+        setPreferencesFromResource(R.xml.sound_meter_settings, rootKey);
         locationPreference = (CheckBoxPreference) getPreferenceScreen().findPreference(KEY_INCLUDE_LOCATION);
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -34,6 +35,7 @@ public class SoundmeterSettingsFragment extends PreferenceFragmentCompat impleme
             editor.apply();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();

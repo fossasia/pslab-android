@@ -2,6 +2,7 @@ package io.pslab.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 

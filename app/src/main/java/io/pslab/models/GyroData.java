@@ -65,9 +65,10 @@ public class GyroData extends RealmObject {
         this.gyro_z = gyro_z;
     }
 
-    public float[] getGyro(){
+    public float[] getGyro() {
         return new float[]{this.gyro_x, this.gyro_y, this.gyro_z};
     }
+
     public double getLat() {
         return lat;
     }

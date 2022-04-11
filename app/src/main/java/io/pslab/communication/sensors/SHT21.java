@@ -2,32 +2,33 @@ package io.pslab.communication.sensors;
 
 import android.util.Log;
 
-import io.pslab.communication.ScienceLab;
-import io.pslab.communication.peripherals.I2C;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import io.pslab.communication.ScienceLab;
+import io.pslab.communication.peripherals.I2C;
 
 /**
  * Created by akarshan on 4/16/17.
  */
 
 public class SHT21 {
-    private String TAG = "SHT21";
-    private int RESET = 0XFE;
-    private int TEMP_ADDRESS = 0xF3;
-    private int HUMIDITY_ADDRESS = 0xF5;
+    private final String TAG = "SHT21";
+    private final int RESET = 0XFE;
+    private final int TEMP_ADDRESS = 0xF3;
+    private final int HUMIDITY_ADDRESS = 0xF5;
     private int selected = 0xF3;
-    private int ADDRESS = 0x40;
+    private final int ADDRESS = 0x40;
 
     public int NUMPLOTS = 1;
     public String[] PLOTNAMES = {"Data"};
     public String name = "Humidity/Temperature";
 
-    public ArrayList<String> selectParameter = new ArrayList<>(Arrays.asList("temperature", "humidity"));
-    private I2C i2c;
+    public List<String> selectParameter = Arrays.asList("temperature", "humidity");
+    private final I2C i2c;
 
     public SHT21(I2C i2c, ScienceLab scienceLab) throws IOException, InterruptedException {
         this.i2c = i2c;
@@ -41,9 +42,9 @@ public class SHT21 {
         TimeUnit.MILLISECONDS.sleep(100);
     }
 
-    private ArrayList<Double> rawToTemp(ArrayList<Byte> vals) {
+    private List<Double> rawToTemp(List<Byte> vals) {
         double v;
-        ArrayList<Double> v1 = new ArrayList<>();
+        List<Double> v1 = new ArrayList<>();
         if (vals.size() != 0) {
             v = (vals.get(0) << 8) | (vals.get(1) & 0xFC);
             v *= 175.72;
@@ -54,9 +55,9 @@ public class SHT21 {
         } else return null;
     }
 
-    private ArrayList<Double> rawToRH(ArrayList<Byte> vals) {
+    private List<Double> rawToRH(List<Byte> vals) {
         double v;
-        ArrayList<Double> v1 = new ArrayList<>();
+        List<Double> v1 = new ArrayList<>();
         if (vals.size() != 0) {
             v = (vals.get(0) << 8) | (vals.get(1) & 0xFC);
             v *= 125.;
@@ -67,7 +68,7 @@ public class SHT21 {
         } else return null;
     }
 
-    private static int calculateChecksum(ArrayList<Byte> data, int numberOfBytes) {
+    private static int calculateChecksum(List<Byte> data, int numberOfBytes) {
 
         //CRC
         int POLYNOMIAL = 0x131, byteCtr, crc = 0;
@@ -91,8 +92,8 @@ public class SHT21 {
             selected = HUMIDITY_ADDRESS;
     }
 
-    public ArrayList<Double> getRaw() throws IOException, InterruptedException {
-        ArrayList<Byte> vals;
+    public List<Double> getRaw() throws IOException, InterruptedException {
+        List<Byte> vals;
         i2c.writeBulk(ADDRESS, new int[]{selected});
         if (selected == TEMP_ADDRESS)
             TimeUnit.MILLISECONDS.sleep(100);

@@ -3,11 +3,13 @@ package io.pslab.fragment;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
+
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import io.pslab.R;
 import io.pslab.others.CustomSnackBar;
@@ -73,7 +75,7 @@ public class GyroscopeSettingsFragment extends PreferenceFragmentCompat implemen
                 break;
             case KEY_UPDATE_PERIOD:
                 try {
-                    Integer updatePeriod = Integer.parseInt(updatePeriodPref.getText());
+                    int updatePeriod = Integer.parseInt(updatePeriodPref.getText());
                     if (updatePeriod > 2000 || updatePeriod < 100) {
                         throw new NumberFormatException();
                     } else {
@@ -81,7 +83,7 @@ public class GyroscopeSettingsFragment extends PreferenceFragmentCompat implemen
                     }
                 } catch (NumberFormatException e) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.update_period_msg),null,null, Snackbar.LENGTH_SHORT);
+                            getString(R.string.update_period_msg), null, null, Snackbar.LENGTH_SHORT);
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -103,15 +105,15 @@ public class GyroscopeSettingsFragment extends PreferenceFragmentCompat implemen
                 break;
             case KEY_HIGH_LIMIT:
                 try {
-                    Integer highLimit = Integer.parseInt(higLimitPref.getText());
+                    int highLimit = Integer.parseInt(higLimitPref.getText());
                     if (highLimit > 1000 || highLimit < 0) {
                         throw new NumberFormatException();
                     } else {
-                        higLimitPref.setSummary(String.valueOf(highLimit) + " rad/s");
+                        higLimitPref.setSummary(highLimit + " rad/s");
                     }
                 } catch (NumberFormatException e) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.high_limit_msg),null,null, Snackbar.LENGTH_SHORT);
+                            getString(R.string.high_limit_msg), null, null, Snackbar.LENGTH_SHORT);
                     higLimitPref.setSummary("20 " + "rad/s");
                     higLimitPref.setText("20");
                     SharedPreferences.Editor editor = sharedPref.edit();

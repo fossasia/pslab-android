@@ -1,22 +1,21 @@
 package io.pslab.adapters;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Environment;
-import androidx.annotation.NonNull;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,7 +70,7 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
 
     private final String KEY_LOG = "has_log";
     private final String DATA_BLOCK = "data_block";
-    private Activity context;
+    private final Activity context;
 
     public SensorLoggerListAdapter(RealmResults<SensorDataBlock> results, Activity context) {
         super(results, true, true);
@@ -150,25 +149,10 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
             default:
                 break;
         }
-        holder.dateTime.setText(String.valueOf(CSVLogger.FILE_NAME_FORMAT.format(new Date(block.getBlock()))));
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleCardViewClick(block);
-            }
-        });
-        holder.deleteIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleDeleteItem(block);
-            }
-        });
-        holder.mapIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                populateMapData(block);
-            }
-        });
+        holder.dateTime.setText(CSVLogger.FILE_NAME_FORMAT.format(new Date(block.getBlock())));
+        holder.cardView.setOnClickListener(view -> handleCardViewClick(block));
+        holder.deleteIcon.setOnClickListener(view -> handleDeleteItem(block));
+        holder.mapIcon.setOnClickListener(view -> populateMapData(block));
     }
 
     private void handleCardViewClick(SensorDataBlock block) {
@@ -250,55 +234,49 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
                 .setTitle(context.getString(R.string.delete))
                 .setMessage(context.getString(R.string.delete_confirmation) + " " +
                         CSVLogger.FILE_NAME_FORMAT.format(block.getBlock()) + "?")
-                .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        File logDirectory = new File(
-                                Environment.getExternalStorageDirectory().getAbsolutePath() +
-                                        File.separator + CSVLogger.CSV_DIRECTORY +
-                                        File.separator + block.getSensorType() +
-                                        File.separator + CSVLogger.FILE_NAME_FORMAT.format(block.getBlock()) + ".csv");
-                        CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content), context.getString(R.string.log_deleted), null, null, Snackbar.LENGTH_LONG);
-                        if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LUXMETER)) {
-                            LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.BAROMETER)) {
-                            LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GYROSCOPE)) {
-                            LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.COMPASS)) {
-                            LocalDataLog.with().clearBlockOfCompassRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER_CONFIGURATIONS)) {
-                            LocalDataLog.with().clearBlockOfAccelerometerRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ROBOTIC_ARM)) {
-                            LocalDataLog.with().clearBlockOfServoRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.WAVE_GENERATOR)) {
-                            LocalDataLog.with().clearBlockOfWaveRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.OSCILLOSCOPE)) {
-                            LocalDataLog.with().clearBlockOfOscilloscopeRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.POWER_SOURCE)) {
-                            LocalDataLog.with().clearBlockOfPowerRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.MULTIMETER)) {
-                            LocalDataLog.with().clearBlockOfMultimeterRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LOGIC_ANALYZER)) {
-                            LocalDataLog.with().clearBlockOfLARecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GAS_SENSOR)) {
-                            LocalDataLog.with().clearBlockOfGasSensorRecords(block.getBlock());
-                        } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.SOUND_METER)) {
-                            LocalDataLog.with().clearBlockOfSoundRecords(block.getBlock());
-                        }
-                        LocalDataLog.with().clearSensorBlock(block.getBlock());
-                        dialog.dismiss();
-                        if (LocalDataLog.with().getAllSensorBlocks().size() <= 0) {
-                            context.findViewById(R.id.data_logger_blank_view).setVisibility(View.VISIBLE);
-                        } else {
-                            context.findViewById(R.id.data_logger_blank_view).setVisibility(View.GONE);
-                        }
+                .setPositiveButton(context.getString(R.string.delete), (dialog, whichButton) -> {
+                    File logDirectory = new File(
+                            Environment.getExternalStorageDirectory().getAbsolutePath() +
+                                    File.separator + CSVLogger.CSV_DIRECTORY +
+                                    File.separator + block.getSensorType() +
+                                    File.separator + CSVLogger.FILE_NAME_FORMAT.format(block.getBlock()) + ".csv");
+                    CustomSnackBar.showSnackBar(context.findViewById(android.R.id.content), context.getString(R.string.log_deleted), null, null, Snackbar.LENGTH_LONG);
+                    if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LUXMETER)) {
+                        LocalDataLog.with().clearBlockOfLuxRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.BAROMETER)) {
+                        LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GYROSCOPE)) {
+                        LocalDataLog.with().clearBlockOfBaroRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.COMPASS)) {
+                        LocalDataLog.with().clearBlockOfCompassRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ACCELEROMETER_CONFIGURATIONS)) {
+                        LocalDataLog.with().clearBlockOfAccelerometerRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.ROBOTIC_ARM)) {
+                        LocalDataLog.with().clearBlockOfServoRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.WAVE_GENERATOR)) {
+                        LocalDataLog.with().clearBlockOfWaveRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.OSCILLOSCOPE)) {
+                        LocalDataLog.with().clearBlockOfOscilloscopeRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.POWER_SOURCE)) {
+                        LocalDataLog.with().clearBlockOfPowerRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.MULTIMETER)) {
+                        LocalDataLog.with().clearBlockOfMultimeterRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.LOGIC_ANALYZER)) {
+                        LocalDataLog.with().clearBlockOfLARecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.GAS_SENSOR)) {
+                        LocalDataLog.with().clearBlockOfGasSensorRecords(block.getBlock());
+                    } else if (block.getSensorType().equalsIgnoreCase(PSLabSensor.SOUND_METER)) {
+                        LocalDataLog.with().clearBlockOfSoundRecords(block.getBlock());
+                    }
+                    LocalDataLog.with().clearSensorBlock(block.getBlock());
+                    dialog.dismiss();
+                    if (LocalDataLog.with().getAllSensorBlocks().size() <= 0) {
+                        context.findViewById(R.id.data_logger_blank_view).setVisibility(View.VISIBLE);
+                    } else {
+                        context.findViewById(R.id.data_logger_blank_view).setVisibility(View.GONE);
                     }
                 })
-                .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setNegativeButton(context.getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
                 .create().show();
     }
 
@@ -570,10 +548,13 @@ public class SensorLoggerListAdapter extends RealmRecyclerViewAdapter<SensorData
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView sensor, dateTime;
-        private ImageView deleteIcon, mapIcon, tileIcon;
-        private CardView cardView;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView sensor;
+        private final TextView dateTime;
+        private final ImageView deleteIcon;
+        private final ImageView mapIcon;
+        private final ImageView tileIcon;
+        private final CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);

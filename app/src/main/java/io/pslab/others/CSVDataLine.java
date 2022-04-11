@@ -1,7 +1,6 @@
 package io.pslab.others;
 
 import androidx.annotation.NonNull;
-
 import androidx.annotation.Nullable;
 
 import java.text.NumberFormat;

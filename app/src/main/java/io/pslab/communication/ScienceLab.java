@@ -1,11 +1,29 @@
 package io.pslab.communication;
 
+import static org.apache.commons.lang3.math.NumberUtils.max;
+import static java.lang.Math.abs;
+import static io.pslab.others.MathUtils.linSpace;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import io.pslab.activity.MainActivity;
 import io.pslab.communication.analogChannel.AnalogAquisitionChannel;
 import io.pslab.communication.analogChannel.AnalogConstants;
@@ -19,23 +37,6 @@ import io.pslab.communication.peripherals.SPI;
 import io.pslab.fragment.HomeFragment;
 import io.pslab.others.InitializationVariable;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import static java.lang.Math.abs;
-import static org.apache.commons.lang3.math.NumberUtils.max;
-import static io.pslab.others.MathUtils.linSpace;
-
 /**
  * Created by viveksb007 on 28/3/17.
  */
@@ -45,17 +46,17 @@ public class ScienceLab {
     private static final String TAG = "ScienceLab";
     public static Thread initialisationThread;
 
-    private int CAP_AND_PCS = 0;
-    private int ADC_SHIFTS_LOCATION1 = 1;
-    private int ADC_SHIFTS_LOCATION2 = 2;
-    private int ADC_POLYNOMIALS_LOCATION = 3;
+    private final int CAP_AND_PCS = 0;
+    private final int ADC_SHIFTS_LOCATION1 = 1;
+    private final int ADC_SHIFTS_LOCATION2 = 2;
+    private final int ADC_POLYNOMIALS_LOCATION = 3;
 
-    private int DAC_SHIFTS_PV1A = 4;
-    private int DAC_SHIFTS_PV1B = 5;
-    private int DAC_SHIFTS_PV2A = 6;
-    private int DAC_SHIFTS_PV2B = 7;
-    private int DAC_SHIFTS_PV3A = 8;
-    private int DAC_SHIFTS_PV3B = 9;
+    private final int DAC_SHIFTS_PV1A = 4;
+    private final int DAC_SHIFTS_PV1B = 5;
+    private final int DAC_SHIFTS_PV2A = 6;
+    private final int DAC_SHIFTS_PV2B = 7;
+    private final int DAC_SHIFTS_PV3A = 8;
+    private final int DAC_SHIFTS_PV3B = 9;
 
     public int BAUD = 1000000;
     public int DDS_CLOCK, MAX_SAMPLES, samples, triggerLevel, triggerChannel, errorCount,
@@ -70,19 +71,21 @@ public class ScienceLab {
     HashMap<String, Double> squareWaveFrequency = new HashMap<>();
     HashMap<String, Integer> gains = new HashMap<>();
     HashMap<String, String> waveType = new HashMap<>();
-    ArrayList<AnalogAquisitionChannel> aChannels = new ArrayList<>();
-    ArrayList<DigitalChannel> dChannels = new ArrayList<>();
+    List<AnalogAquisitionChannel> aChannels = new ArrayList<>();
+    List<DigitalChannel> dChannels = new ArrayList<>();
 
-    private CommunicationHandler mCommunicationHandler;
+    private final CommunicationHandler mCommunicationHandler;
     private PacketHandler mPacketHandler;
-    private CommandsProto mCommandsProto;
-    private AnalogConstants mAnalogConstants;
+    private final CommandsProto mCommandsProto;
+    private final AnalogConstants mAnalogConstants;
     public I2C i2c;
     public SPI spi;
     private NRF24L01 nrf;
     private MCP4728 dac;
 
-    /** Constructor
+    /**
+     * Constructor
+     *
      * @param communicationHandler
      */
     public ScienceLab(CommunicationHandler communicationHandler) {
@@ -100,33 +103,23 @@ public class ScienceLab {
         }
         if (isConnected()) {
             initializeVariables();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    initialisationThread = new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            try {
-                                runInitSequence(true);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            calibrated = true;
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (HomeFragment.booleanVariable == null) {
-                                        HomeFragment.booleanVariable = new InitializationVariable();
-                                    }
-                                    HomeFragment.booleanVariable.setVariable(true);
-                                }
-                            });
+            new Handler().postDelayed(() -> {
+                initialisationThread = new Thread(() -> {
+                    try {
+                        runInitSequence(true);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    calibrated = true;
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (HomeFragment.booleanVariable == null) {
+                            HomeFragment.booleanVariable = new InitializationVariable();
                         }
+                        HomeFragment.booleanVariable.setVariable(true);
                     });
-                    initialisationThread.start();
+                });
+                initialisationThread.start();
 
-                }
             }, 1000);
         }
     }
@@ -157,7 +150,7 @@ public class ScienceLab {
     }
 
     private void runInitSequence(Boolean loadCalibrationData) throws IOException {
-        ArrayList<String> aboutArray = new ArrayList<>();
+        List<String> aboutArray = new ArrayList<>();
         if (!isConnected()) {
             Log.e(TAG, "Check hardware connections. Not connected");
         }
@@ -201,7 +194,7 @@ public class ScienceLab {
             /* CAPS AND PCS CALIBRATION */
             byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5); // 5 for READY and 32 (8 float numbers) for data
 
-            ArrayList<Byte> capsAndPCSByteData = new ArrayList<>();
+            List<Byte> capsAndPCSByteData = new ArrayList<>();
 
             for (byte temp : capAndPCS) {
                 capsAndPCSByteData.add(temp);
@@ -216,16 +209,12 @@ public class ScienceLab {
             }
             */
 
-            String isReady = "";
+            StringBuilder isReady = new StringBuilder();
             for (int i = 0; i < 5; i++) {
-                try {
-                    isReady += new String(new byte[]{capsAndPCSByteData.get(i)}, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                isReady.append(new String(new byte[]{capsAndPCSByteData.get(i)}, StandardCharsets.UTF_8));
             }
-            if ("READY".equals(isReady)) {
-                ArrayList<Float> scalars = new ArrayList<>();
+            if ("READY".equals(isReady.toString())) {
+                List<Float> scalars = new ArrayList<>();
                 for (int i = 0; i < 8; i++) {
                     // unpacking byte data to float, total 32 bytes -> 8 floats of 4 bytes each
                     scalars.add(Float.intBitsToFloat(
@@ -254,7 +243,7 @@ public class ScienceLab {
             /* POLYNOMIAL DATA FOR CALIBRATION */
             //byte[] polynomials = readBulkFlash(this.ADC_POLYNOMIALS_LOCATION, 2048);
 
-            ArrayList<Byte> polynomialsByteData = new ArrayList<>();
+            List<Byte> polynomialsByteData = new ArrayList<>();
             for (int i = 0; i < 2048 / 16; i++) {
                 byte[] temp = readFlash(ADC_POLYNOMIALS_LOCATION, i);
                 for (byte a : temp) {
@@ -264,20 +253,16 @@ public class ScienceLab {
 
             //Log.v("PolynomialByteDataSize:", "" + polynomialsByteData.size());
 
-            String polynomialByteString = "";
+            StringBuilder polynomialByteString = new StringBuilder();
             for (int i = 0; i < 2048; i++) {
-                try {
-                    polynomialByteString += new String(new byte[]{polynomialsByteData.get(i)}, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                polynomialByteString.append(new String(new byte[]{polynomialsByteData.get(i)}, StandardCharsets.UTF_8));
             }
 
             // todo : change to "PSLab" after PSLab firmware is ready
             if ("SEELablet".equals(polynomialByteString.substring(0, 9))) {
                 Log.v(TAG, "ADC calibration found...");
                 this.calibrated = true;
-                ArrayList<Byte> adcShifts = new ArrayList<>();
+                List<Byte> adcShifts = new ArrayList<>();
                 for (int i = 0; i < 2048 / 16; i++) {
                     byte[] temp = readFlash(ADC_SHIFTS_LOCATION1, i);
                     for (byte a : temp) {
@@ -290,7 +275,7 @@ public class ScienceLab {
                         adcShifts.add(a);
                     }
                 }
-                String[] polySections = polynomialByteString.split("STOP");
+                String[] polySections = polynomialByteString.toString().split("STOP");
                 String adcSlopeOffsets = polySections[0];
                 String dacSlopeIntercept = polySections[1];
                 String inlSlopeIntercept = polySections[2];
@@ -299,7 +284,7 @@ public class ScienceLab {
                 Log.v("dacSlopeIntercept", dacSlopeIntercept);
                 Log.v("inlSlopeIntercept", inlSlopeIntercept);
 
-                Map<String, ArrayList<Double[]>> polyDict = new LinkedHashMap<>();
+                Map<String, List<Double[]>> polyDict = new LinkedHashMap<>();
                 String[] adcSlopeOffsetsSplit = adcSlopeOffsets.split(Pattern.quote(">|"));
                 /*
                 for (String temp : adcSlopeOffsetsSplit) {
@@ -310,11 +295,11 @@ public class ScienceLab {
                     if (i == 0) continue;
                     //Log.v("" + i, adcSlopeOffsetsSplit[i]);
                     String cals = adcSlopeOffsetsSplit[i].substring(5);
-                    polyDict.put(adcSlopeOffsetsSplit[i].substring(0, 3), new ArrayList<Double[]>());
+                    polyDict.put(adcSlopeOffsetsSplit[i].substring(0, 3), new ArrayList<>());
                     for (int j = 0; j < cals.length() / 16; j++) {
                         Double[] poly = new Double[4];
                         for (int k = 0; k < 4; k++) {
-                            Float f = ByteBuffer.wrap(cals.substring((16 * j) + (k * 4), (16 * j) + (k * 4) + 4).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+                            float f = ByteBuffer.wrap(cals.substring((16 * j) + (k * 4), (16 * j) + (k * 4) + 4).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat();
                             poly[k] = (double) f;
                         }
                         polyDict.get(adcSlopeOffsetsSplit[i].substring(0, 3)).add(poly);
@@ -368,7 +353,7 @@ public class ScienceLab {
                         Log.v("Last", "" + DACX[4095]);
                         */
 
-                        ArrayList<Byte> OFF = new ArrayList<>();
+                        List<Byte> OFF = new ArrayList<>();
                         if ("PV1".equals(name)) {
                             for (int j = 0; j < 2048 / 16; j++) {
                                 byte[] temp = readFlash(DAC_SHIFTS_PV1A, j);
@@ -420,7 +405,7 @@ public class ScienceLab {
                         }
                         int LOOKBEHIND = 100;
                         int LOOKAHEAD = 100;
-                        ArrayList<Double> offset = new ArrayList<>();
+                        List<Double> offset = new ArrayList<>();
                         for (int j = 0; j < 4096; j++) {
                             double[] temp = new double[Math.min(4095, j + LOOKAHEAD) - Math.max(j - LOOKBEHIND, 0)];
                             for (int k = Math.max(j - LOOKBEHIND, 0), p = 0; k < Math.min(4095, j + LOOKAHEAD); k++, p++) {
@@ -511,7 +496,7 @@ public class ScienceLab {
         }
     }
 
-    public Map<Integer, ArrayList<Integer>> getRadioLinks() {
+    public Map<Integer, List<Integer>> getRadioLinks() {
         try {
             return this.nrf.getNodeList();
         } catch (IOException e) {
@@ -534,21 +519,23 @@ public class ScienceLab {
 
     /**
      * Blocking call that fetches an oscilloscope trace from the specified input channel
+     *
      * @param channel Channel to select as input. ['CH1','CH2','CH3','MIC',RES']
      * @param samples Number of samples to fetch. Maximum 10000
      * @param timeGap Timegap between samples in microseconds
      * @return Arrays X(timestamps),Y(Corresponding Voltage values)
      */
     public HashMap<String, double[]> captureOne(String channel, int samples, double timeGap) {
-        return this.captureFullSpeed(channel, samples, timeGap, new ArrayList<String>(), null);
+        return this.captureFullSpeed(channel, samples, timeGap, new ArrayList<>(), null);
     }
 
     /**
      * Blocking call that fetches oscilloscope traces from CH1,CH2
-     * @param samples Number of samples to fetch. Maximum 5000
-     * @param timeGap Timegap between samples in microseconds
+     *
+     * @param samples       Number of samples to fetch. Maximum 5000
+     * @param timeGap       Timegap between samples in microseconds
      * @param traceOneRemap Choose the analog input for channel 1. It is connected to CH1 by default. Channel 2 always reads CH2.
-     * @param trigger boolean whether trigger is selected or not
+     * @param trigger       boolean whether trigger is selected or not
      * @return Arrays X(timestamps),Y1(Voltage at CH1),Y2(Voltage at CH2)
      */
     public HashMap<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap, boolean trigger) {
@@ -571,10 +558,11 @@ public class ScienceLab {
 
     /**
      * Blocking call that fetches oscilloscope traces from CH1,CH2,CH3,MIC
-     * @param samples Number of samples to fetch. Maximum 2500
-     * @param timeGap Timegap between samples in microseconds. Minimum 1.75uS
+     *
+     * @param samples       Number of samples to fetch. Maximum 2500
+     * @param timeGap       Timegap between samples in microseconds. Minimum 1.75uS
      * @param traceOneRemap Choose the analog input for channel 1. It is connected to CH1 by default. Channel 2 always reads CH2.
-     * @param trigger boolean whether trigger is selected or not
+     * @param trigger       boolean whether trigger is selected or not
      * @return Arrays X(timestamps),Y1(Voltage at CH1),Y2(Voltage at CH2),Y3(Voltage at CH3),Y4(Voltage at CH4)
      */
     public HashMap<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap, boolean trigger) {
@@ -598,12 +586,13 @@ public class ScienceLab {
 
     /**
      * Blocking call that fetches oscilloscope traces from a set of specified channels
+     *
      * @param samples Number of samples to fetch. Maximum 10000/(total specified channels)
      * @param timeGap Timegap between samples in microseconds.
-     * @param args Channel names
+     * @param args    Channel names
      * @return Arrays X(timestamps),Y1,Y2 ..
      */
-    public Map<String, ArrayList<Double>> captureMultiple(int samples, double timeGap, List<String> args) {
+    public Map<String, List<Double>> captureMultiple(int samples, double timeGap, List<String> args) {
         if (args.size() == 0) {
             Log.v(TAG, "Please specify channels to record");
             return null;
@@ -632,7 +621,7 @@ public class ScienceLab {
             Log.v(TAG, "Wait");
             Thread.sleep((long) (1e-6 * totalSamples * timeGap + .01) * 1000);
             Log.v(TAG, "Done");
-            ArrayList<Integer> listData = new ArrayList<>();
+            List<Integer> listData = new ArrayList<>();
             for (int i = 0; i < totalSamples / this.dataSplitting; i++) {
                 mPacketHandler.sendByte(mCommandsProto.ADC);
                 mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
@@ -661,17 +650,17 @@ public class ScienceLab {
             for (int i = 0; i < totalSamples; i++) {
                 this.buffer[i] = (listData.get(i * 2) | (listData.get(i * 2 + 1) << 8));
             }
-            Map<String, ArrayList<Double>> retData = new LinkedHashMap<>();
-            ArrayList<Double> timeBase = new ArrayList<>();
+            Map<String, List<Double>> retData = new LinkedHashMap<>();
+            List<Double> timeBase = new ArrayList<>();
             double factor = timeGap * (samples - 1) / samples;
             for (double i = 0; i < timeGap * (samples - 1); i += factor) timeBase.add(i);
             retData.put("time", timeBase);
             for (int i = 0; i < totalChannels; i++) {
-                ArrayList<Double> yValues = new ArrayList<>();
+                List<Double> yValues = new ArrayList<>();
                 for (int j = i; j < totalSamples; j += totalChannels) {
                     yValues.add(buffer[j]);
                 }
-                retData.put("CH" + String.valueOf(i + 1), yValues);
+                retData.put("CH" + (i + 1), yValues);
             }
             return retData;
         } catch (IOException | InterruptedException e) {
@@ -720,13 +709,14 @@ public class ScienceLab {
 
     /**
      * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
-     * @param channel Channel name 'CH1','CH2','CH3','MIC','RES'
-     * @param samples Number of samples to fetch. Maximum 10000/(total specified channels)
-     * @param timeGap Timegap between samples in microseconds.
-     * @param args  Specify if SQR1 must be toggled right before capturing.
-     *              'SET_LOW': Set SQR1 to 0V
-     *              'SET_HIGH': Set SQR1 to 1V
-     *              'FIRE_PULSES': output a preset frequency on SQR1 for a given interval (keyword arg 'interval' must be specified or it will default to 1000uS) before acquiring data. This is used for measuring speed of sound using piezos if no arguments are specified, a regular capture will be executed.
+     *
+     * @param channel  Channel name 'CH1','CH2','CH3','MIC','RES'
+     * @param samples  Number of samples to fetch. Maximum 10000/(total specified channels)
+     * @param timeGap  Timegap between samples in microseconds.
+     * @param args     Specify if SQR1 must be toggled right before capturing.
+     *                 'SET_LOW': Set SQR1 to 0V
+     *                 'SET_HIGH': Set SQR1 to 1V
+     *                 'FIRE_PULSES': output a preset frequency on SQR1 for a given interval (keyword arg 'interval' must be specified or it will default to 1000uS) before acquiring data. This is used for measuring speed of sound using piezos if no arguments are specified, a regular capture will be executed.
      * @param interval Units: uS. Necessary if 'FIRE_PULSES' argument was supplied. Default 1000uS
      * @return Timestamp array ,voltage_value array
      */
@@ -781,11 +771,10 @@ public class ScienceLab {
     }
 
     /**
-     *
      * @param channel Channel name 'CH1' / 'CH2' ... 'RES'
      * @param samples Number of samples to fetch. Maximum 10000/(total specified channels)
      * @param timeGap Timegap between samples in microseconds.
-     * @param args timestamp array ,voltage_value array
+     * @param args    timestamp array ,voltage_value array
      * @return Timestamp array ,voltage_value array
      */
     public Map<String, double[]> captureFullSpeedHr(String channel, int samples, double timeGap, List<String> args) {
@@ -807,7 +796,7 @@ public class ScienceLab {
     }
 
     private Map<String, double[]> retrieveBufferData(String channel, int samples, double timeGap) {
-        ArrayList<Integer> listData = new ArrayList<>();
+        List<Integer> listData = new ArrayList<>();
         try {
             for (int i = 0; i < samples / this.dataSplitting; i++) {
                 mPacketHandler.sendByte(mCommandsProto.ADC);
@@ -852,11 +841,12 @@ public class ScienceLab {
 
     /**
      * Instruct the ADC to start sampling. use fetchTrace to retrieve the data
-     * @param number Channels to acquire. 1/2/4
-     * @param samples Total points to store per channel. Maximum 3200 total
-     * @param timeGap  Timegap between two successive samples (in uSec)
+     *
+     * @param number          Channels to acquire. 1/2/4
+     * @param samples         Total points to store per channel. Maximum 3200 total
+     * @param timeGap         Timegap between two successive samples (in uSec)
      * @param channelOneInput Map channel 1 to 'CH1'
-     * @param trigger Whether or not to trigger the oscilloscope based on the voltage level set
+     * @param trigger         Whether or not to trigger the oscilloscope based on the voltage level set
      * @param CH123SA
      */
     public void captureTraces(int number, int samples, double timeGap, String channelOneInput, Boolean trigger, Integer CH123SA) {
@@ -914,6 +904,7 @@ public class ScienceLab {
 
     /**
      * Instruct the ADC to start sampling. Use fetchTrace to retrieve the data
+     *
      * @param channel Channel to acquire data from 'CH1', 'CH2', 'CH3', 'MIC'
      * @param samples Total points to store per channel. Maximum 3200 total.
      * @param timeGap Timegap between two successive samples (in uSec)
@@ -943,6 +934,7 @@ public class ScienceLab {
 
     /**
      * Fetches a channel(1-4) captured by :func:captureTraces called prior to this, and returns xAxis,yAxis
+     *
      * @param channelNumber Any of the maximum of four channels that the oscilloscope captured. 1/2/3/4
      * @return time array,voltage array
      */
@@ -956,6 +948,7 @@ public class ScienceLab {
 
     /**
      * Returns the number of samples acquired by the capture routines, and the conversion_done status
+     *
      * @return conversion done(bool) ,samples acquired (number)
      */
     public int[] oscilloscopeProgress() {
@@ -988,7 +981,7 @@ public class ScienceLab {
         }
         Log.v("Samples", "" + samples);
         Log.v("Data Splitting", "" + this.dataSplitting);
-        ArrayList<Integer> listData = new ArrayList<>();
+        List<Integer> listData = new ArrayList<>();
         try {
             for (int i = 0; i < samples / this.dataSplitting; i++) {
                 mPacketHandler.sendByte(mCommandsProto.ADC);
@@ -1070,9 +1063,10 @@ public class ScienceLab {
      * The capture routines will wait till a rising edge of the input signal crosses the specified level.
      * The trigger will timeout within 8mS, and capture routines will start regardless.
      * These settings will not be used if the trigger option in the capture routines are set to False
-     * @param channel Channel 0,1,2,3. Corresponding to the channels being recorded by the capture routine(not the analog inputs)
+     *
+     * @param channel     Channel 0,1,2,3. Corresponding to the channels being recorded by the capture routine(not the analog inputs)
      * @param channelName Name of the channel. 'CH1','CH2','CH3','MIC','V+'
-     * @param voltage The voltage level that should trigger the capture sequence(in Volts)
+     * @param voltage     The voltage level that should trigger the capture sequence(in Volts)
      * @param resolution
      * @param prescalar
      */
@@ -1106,9 +1100,10 @@ public class ScienceLab {
 
     /**
      * Set the gain of the selected PGA
+     *
      * @param channel 'CH1','CH2'
-     * @param gain (0-8) -> (1x,2x,4x,5x,8x,10x,16x,32x,1/11x)
-     * @param force If True, the amplifier gain will be set even if it was previously set to the same value.
+     * @param gain    (0-8) -> (1x,2x,4x,5x,8x,10x,16x,32x,1/11x)
+     * @param force   If True, the amplifier gain will be set even if it was previously set to the same value.
      * @return
      */
     public double setGain(String channel, int gain, Boolean force) {
@@ -1145,7 +1140,8 @@ public class ScienceLab {
 
     /**
      * set the gain of the selected PGA
-     * @param channel 'CH1','CH2'
+     *
+     * @param channel      'CH1','CH2'
      * @param voltageRange Choose from [16,8,4,3,2,1.5,1,.5,160]
      * @return
      */
@@ -1231,8 +1227,9 @@ public class ScienceLab {
 
     /**
      * Return the voltage on the selected channel
+     *
      * @param channelName : 'CH1','CH2','CH3','MIC','IN1','RES','V+'
-     * @param sample Samples to average
+     * @param sample      Samples to average
      * @return Voltage on the selected channel
      */
     private double getAverageVoltage(String channelName, Integer sample) {
@@ -1240,7 +1237,7 @@ public class ScienceLab {
         PolynomialFunction poly;
         double sum = 0;
         poly = analogInputSources.get(channelName).calPoly12;
-        ArrayList<Double> vals = new ArrayList<>();
+        List<Double> vals = new ArrayList<>();
         for (int i = 0; i < sample; i++) {
             vals.add(getRawAverageVoltage(channelName));
         }
@@ -1268,8 +1265,9 @@ public class ScienceLab {
 
     /**
      * Fetches a section of the ADC hardware buffer
+     *
      * @param startingPosition Starting index
-     * @param totalPoints Total points to fetch
+     * @param totalPoints      Total points to fetch
      */
     private void fetchBuffer(int startingPosition, int totalPoints) {
         startingPosition = 0;
@@ -1291,8 +1289,9 @@ public class ScienceLab {
 
     /**
      * Clears a section of the ADC hardware buffer
+     *
      * @param startingPosition Starting index
-     * @param totalPoints Total points to fetch
+     * @param totalPoints      Total points to fetch
      */
     private void clearBuffer(int startingPosition, int totalPoints) {
         try {
@@ -1309,8 +1308,9 @@ public class ScienceLab {
 
     /**
      * Fill a section of the ADC hardware buffer with data
+     *
      * @param startingPosition Starting index
-     * @param pointArray Total points to fetch
+     * @param pointArray       Total points to fetch
      */
     private void fillBuffer(int startingPosition, int[] pointArray) {
         try {
@@ -1331,8 +1331,9 @@ public class ScienceLab {
 
     /**
      * Instruct the ADC to start streaming 8-bit data. use stop_streaming to stop
-     * @param tg Timegap. 250KHz clock
-     * @param channel  Channel 'CH1'... 'CH9','IN1','RES'
+     *
+     * @param tg      Timegap. 250KHz clock
+     * @param channel Channel 'CH1'... 'CH9','IN1','RES'
      * @throws IOException
      */
     private void startStreaming(int tg, String channel) throws IOException {
@@ -1352,6 +1353,7 @@ public class ScienceLab {
 
     /**
      * Instruct the ADC to stop streaming data
+     *
      * @throws IOException
      */
     private void stopStreaming() throws IOException {
@@ -1371,6 +1373,7 @@ public class ScienceLab {
 
     /**
      * Checks if PSLab device is found
+     *
      * @return true is device found; false otherwise
      */
     public boolean isDeviceFound() {
@@ -1379,6 +1382,7 @@ public class ScienceLab {
 
     /**
      * Checks if PSLab device is connected
+     *
      * @return true is device is connected; false otherwise
      */
     public boolean isConnected() {
@@ -1420,6 +1424,7 @@ public class ScienceLab {
      * Also good for lower frequencies, but avoid using it since the oscilloscope cannot be used simultaneously due to hardware limitations.
      * The input frequency is fed to a 32 bit counter for a period of 100mS.
      * The value of the counter at the end of 100mS is used to calculate the frequency.
+     *
      * @param pin The input pin to measure frequency from : ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @return frequency
      */
@@ -1449,6 +1454,7 @@ public class ScienceLab {
      * Frequency measurement on IDx.
      * Measures time taken for 16 rising edges of input signal.
      * Returns the frequency in Hertz
+     *
      * @param channel The input to measure frequency from. ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param timeout This is a blocking call which will wait for one full wavelength before returning the calculated frequency. Use the timeout option if you're unsure of the input signal. Returns 0 if timed out
      * @return frequency
@@ -1484,14 +1490,15 @@ public class ScienceLab {
 
     /**
      * Stores a list of rising edges that occurred within the timeout period.
-     * @param channel The input to measure time between two rising edges.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
+     *
+     * @param channel   The input to measure time between two rising edges.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param skipCycle Number of points to skip. eg. Pendulums pass through light barriers twice every cycle. SO 1 must be skipped
-     * @param timeout Number of seconds to wait for datapoints. (Maximum 60 seconds)
+     * @param timeout   Number of seconds to wait for datapoints. (Maximum 60 seconds)
      * @return
      */
     public Double r2rTime(String channel, Integer skipCycle, Integer timeout) {
         /*
-        Return a list of rising edges that occured within the timeout period.
+        Return a list of rising edges that occurred within the timeout period.
         */
         if (skipCycle == null) skipCycle = 0;
         if (timeout == null) timeout = 5;
@@ -1527,10 +1534,11 @@ public class ScienceLab {
     }
 
     /**
-     * Stores a list of falling edges that occured within the timeout period.
-     * @param channel The input to measure time between two falling edges.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
+     * Stores a list of falling edges that occurred within the timeout period.
+     *
+     * @param channel   The input to measure time between two falling edges.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param skipCycle Number of points to skip. eg. Pendulums pass through light barriers twice every cycle. SO 1 must be skipped
-     * @param timeout Number of seconds to wait for datapoints. (Maximum 60 seconds)
+     * @param timeout   Number of seconds to wait for datapoints. (Maximum 60 seconds)
      * @return
      */
     public Double f2fTime(String channel, Integer skipCycle, Integer timeout) {
@@ -1574,17 +1582,18 @@ public class ScienceLab {
      * Measures time intervals between two logic level changes on any two digital inputs(both can be the same) and returns the calculated time.
      * For example, one can measure the time interval between the occurrence of a rising edge on LA1, and a falling edge on LA3.
      * If the returned time is negative, it simply means that the event corresponding to channel2 occurred first.
+     *
      * @param channel1 The input pin to measure first logic level change
      * @param channel2 The input pin to measure second logic level change -['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
-     * @param edge1 The type of level change to detect in order to start the timer - ['rising', 'falling', 'four rising edges']
-     * @param edge2 The type of level change to detect in order to stop the timer - ['rising', 'falling', 'four rising edges']
-     * @param timeout Use the timeout option if you're unsure of the input signal time period. Returns -1 if timed out
+     * @param edge1    The type of level change to detect in order to start the timer - ['rising', 'falling', 'four rising edges']
+     * @param edge2    The type of level change to detect in order to stop the timer - ['rising', 'falling', 'four rising edges']
+     * @param timeout  Use the timeout option if you're unsure of the input signal time period. Returns -1 if timed out
      * @return time
      */
     public Double measureInterval(String channel1, String channel2, String edge1, String edge2, Float timeout) {
         /*
         Measures time intervals between two logic level changes on any two digital inputs(both can be the same)
-		For example, one can measure the time interval between the occurence of a rising edge on LA1, and a falling edge on LA3.
+		For example, one can measure the time interval between the occurrence of a rising edge on LA1, and a falling edge on LA3.
 		If the returned time is negative, it simply means that the event corresponding to channel2 occurred first.
 		Returns the calculated time
         */
@@ -1628,6 +1637,7 @@ public class ScienceLab {
     /**
      * Duty cycle measurement on channel. Returns wavelength(seconds), and length of first half of pulse(high time)
      * Low time = (wavelength - high time)
+     *
      * @param channel The input pin to measure wavelength and high time.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param timeout Use the timeout option if you're unsure of the input signal time period. Returns 0 if timed out
      * @return Wavelength, Duty cycle
@@ -1675,9 +1685,10 @@ public class ScienceLab {
     /**
      * Duty cycle measurement on channel. Returns wavelength(seconds), and length of first half of pulse(high time)
      * Low time = (wavelength - high time)
-     * @param channel The input pin to measure wavelength and high time.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
+     *
+     * @param channel   The input pin to measure wavelength and high time.['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param pulseType Type of pulse to detect. May be 'HIGH' or 'LOW'
-     * @param timeout Use the timeout option if you're unsure of the input signal time period. Returns 0 if timed out
+     * @param timeout   Use the timeout option if you're unsure of the input signal time period. Returns 0 if timed out
      * @return Pulse width
      */
     public Double pulseTime(String channel, String pulseType, Double timeout) {
@@ -1710,15 +1721,16 @@ public class ScienceLab {
 
     /**
      * Measures a set of timestamped logic level changes(Type can be selected) from two different digital inputs.
-     * @param channel1 The input pin to measure first logic level change
-     * @param channel2 The input pin to measure second logic level change -['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
+     *
+     * @param channel1  The input pin to measure first logic level change
+     * @param channel2  The input pin to measure second logic level change -['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param edgeType1 The type of level change that should be recorded - ['rising', 'falling', 'four rising edges(default)']
      * @param edgeType2 The type of level change that should be recorded - ['rising', 'falling', 'four rising edges(default)']
-     * @param points1 Number of data points to obtain for input 1 (Max 4)
-     * @param points2 Number of data points to obtain for input 2 (Max 4)
-     * @param timeout Use the timeout option if you're unsure of the input signal time period. returns -1 if timed out
-     * @param SQR1 Set the state of SQR1 output(LOW or HIGH) and then start the timer. eg. SQR1 = 'LOW'
-     * @param zero subtract the timestamp of the first point from all the others before returning. Default: True
+     * @param points1   Number of data points to obtain for input 1 (Max 4)
+     * @param points2   Number of data points to obtain for input 2 (Max 4)
+     * @param timeout   Use the timeout option if you're unsure of the input signal time period. returns -1 if timed out
+     * @param SQR1      Set the state of SQR1 output(LOW or HIGH) and then start the timer. eg. SQR1 = 'LOW'
+     * @param zero      subtract the timestamp of the first point from all the others before returning. Default: True
      * @return time
      */
     private Map<String, double[]> measureMultipleDigitalEdges(String channel1, String channel2, String edgeType1, String edgeType2, int points1, int points2, Double timeout, String SQR1, Boolean zero) {
@@ -1800,17 +1812,18 @@ public class ScienceLab {
 
     /**
      * Log timestamps of rising/falling edges on one digital input
-     * @param waitingTime Total time to allow the logic analyzer to collect data. This is implemented using a simple sleep routine, so if large delays will be involved, refer to startOneChannelLA() to start the acquisition, and fetchLAChannels() to retrieve data from the hardware after adequate time. The retrieved data is stored in the array self.dchans[0].timestamps.
-     * @param aquireChannel LA1',...,'LA4'
+     *
+     * @param waitingTime    Total time to allow the logic analyzer to collect data. This is implemented using a simple sleep routine, so if large delays will be involved, refer to startOneChannelLA() to start the acquisition, and fetchLAChannels() to retrieve data from the hardware after adequate time. The retrieved data is stored in the array self.dchans[0].timestamps.
+     * @param aquireChannel  LA1',...,'LA4'
      * @param triggerChannel LA1',...,'LA4'
-     * @param aquireMode EVERY_SIXTEENTH_RISING_EDGE = 5
-     *                   EVERY_FOURTH_RISING_EDGE = 4
-     *                   EVERY_RISING_EDGE = 3
-     *                   EVERY_FALLING_EDGE = 2
-     *                   EVERY_EDGE = 1
-     *                   DISABLED = 0
-     *                   default = 3
-     * @param triggerMode same as aquireMode. default_value : 3
+     * @param aquireMode     EVERY_SIXTEENTH_RISING_EDGE = 5
+     *                       EVERY_FOURTH_RISING_EDGE = 4
+     *                       EVERY_RISING_EDGE = 3
+     *                       EVERY_FALLING_EDGE = 2
+     *                       EVERY_EDGE = 1
+     *                       DISABLED = 0
+     *                       default = 3
+     * @param triggerMode    same as aquireMode. default_value : 3
      * @return
      */
     public double[] captureEdgesOne(Integer waitingTime, String aquireChannel, String triggerChannel, Integer aquireMode, Integer triggerMode) {
@@ -1839,13 +1852,14 @@ public class ScienceLab {
 
     /**
      * Start logging timestamps of rising/falling edges on LA1
-     * @param trigger Bool . Enable edge trigger on LA1. use keyword argument edge = 'rising' or 'falling'
-     * @param channel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
-     * @param maximumTime Total time to sample. If total time exceeds 67 seconds, a prescaler will be used in the reference clock.
+     *
+     * @param trigger         Bool . Enable edge trigger on LA1. use keyword argument edge = 'rising' or 'falling'
+     * @param channel         ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
+     * @param maximumTime     Total time to sample. If total time exceeds 67 seconds, a prescaler will be used in the reference clock.
      * @param triggerChannels array of digital input names that can trigger the acquisition. Eg, trigger = ['LA1','LA2','LA3'] will triggger when a logic change specified by the keyword argument 'edge' occurs on either or the three specified trigger inputs.
-     * @param edge 'rising' or 'falling' . trigger edge type for trigger_channels.
+     * @param edge            'rising' or 'falling' . trigger edge type for trigger_channels.
      */
-    public void startOneChannelLABackup(Integer trigger, String channel, Integer maximumTime, ArrayList<String> triggerChannels, String edge) {
+    public void startOneChannelLABackup(Integer trigger, String channel, Integer maximumTime, List<String> triggerChannels, String edge) {
         /*
         start logging timestamps of rising/falling edges on LA1
         */
@@ -1881,14 +1895,15 @@ public class ScienceLab {
 
     /**
      * Start logging timestamps of rising/falling edges on LA1.
-     * @param channel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
-     * @param channelMode acquisition mode default value: 1(EVERY_EDGE)
-                        - EVERY_SIXTEENTH_RISING_EDGE = 5
-                        - EVERY_FOURTH_RISING_EDGE    = 4
-                        - EVERY_RISING_EDGE           = 3
-                        - EVERY_FALLING_EDGE          = 2
-                        - EVERY_EDGE                  = 1
-                        - DISABLED                    = 0
+     *
+     * @param channel        ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
+     * @param channelMode    acquisition mode default value: 1(EVERY_EDGE)
+     *                       - EVERY_SIXTEENTH_RISING_EDGE = 5
+     *                       - EVERY_FOURTH_RISING_EDGE    = 4
+     *                       - EVERY_RISING_EDGE           = 3
+     *                       - EVERY_FALLING_EDGE          = 2
+     *                       - EVERY_EDGE                  = 1
+     *                       - DISABLED                    = 0
      * @param triggerChannel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      * @param triggerMode    1=Falling edge, 0=Rising Edge, -1=Disable Trigger
      */
@@ -1928,20 +1943,21 @@ public class ScienceLab {
 
     /**
      * Start logging timestamps of rising/falling edges on LA1,LA2
-     * @param channels Channels to acquire data from . default ['LA1','LA2']
-     * @param modes modes for each channel. Array . default value: [1,1]
-                    - EVERY_SIXTEENTH_RISING_EDGE = 5
-                    - EVERY_FOURTH_RISING_EDGE    = 4
-                    - EVERY_RISING_EDGE           = 3
-                    - EVERY_FALLING_EDGE          = 2
-                    - EVERY_EDGE                  = 1
-                    - DISABLED                    = 0
-     * @param maximumTime Total time to sample. If total time exceeds 67 seconds, a prescaler will be used in the reference clock
-     * @param trigger Bool . Enable rising edge trigger on LA1
-     * @param edge 'rising' or 'falling' . trigger edge type for trigger_channels.
+     *
+     * @param channels       Channels to acquire data from . default ['LA1','LA2']
+     * @param modes          modes for each channel. Array . default value: [1,1]
+     *                       - EVERY_SIXTEENTH_RISING_EDGE = 5
+     *                       - EVERY_FOURTH_RISING_EDGE    = 4
+     *                       - EVERY_RISING_EDGE           = 3
+     *                       - EVERY_FALLING_EDGE          = 2
+     *                       - EVERY_EDGE                  = 1
+     *                       - DISABLED                    = 0
+     * @param maximumTime    Total time to sample. If total time exceeds 67 seconds, a prescaler will be used in the reference clock
+     * @param trigger        Bool . Enable rising edge trigger on LA1
+     * @param edge           'rising' or 'falling' . trigger edge type for trigger_channels.
      * @param triggerChannel channel to trigger on . Any digital input. default CH1
      */
-    public void startTwoChannelLA(ArrayList<String> channels, ArrayList<Integer> modes, Integer maximumTime, Integer trigger, String edge, String triggerChannel) {
+    public void startTwoChannelLA(List<String> channels, List<Integer> modes, Integer maximumTime, Integer trigger, String edge, String triggerChannel) {
         if (maximumTime == null) maximumTime = 67;
         if (trigger == null) trigger = 0;
         if (edge == null) edge = "rising";
@@ -1989,18 +2005,19 @@ public class ScienceLab {
 
     /**
      * Start logging timestamps of rising/falling edges on LA1,LA2,LA3
-     * @param modes  modes for each channel. Array. default value: [1,1,1]
-                    - EVERY_SIXTEENTH_RISING_EDGE = 5
-                    - EVERY_FOURTH_RISING_EDGE    = 4
-                    - EVERY_RISING_EDGE           = 3
-                    - EVERY_FALLING_EDGE          = 2
-                    - EVERY_EDGE                  = 1
-                    - DISABLED                    = 0
+     *
+     * @param modes          modes for each channel. Array. default value: [1,1,1]
+     *                       - EVERY_SIXTEENTH_RISING_EDGE = 5
+     *                       - EVERY_FOURTH_RISING_EDGE    = 4
+     *                       - EVERY_RISING_EDGE           = 3
+     *                       - EVERY_FALLING_EDGE          = 2
+     *                       - EVERY_EDGE                  = 1
+     *                       - DISABLED                    = 0
      * @param triggerChannel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
-     * @param triggerMode same as modes(previously documented keyword argument)
-    default_value : 3
+     * @param triggerMode    same as modes(previously documented keyword argument)
+     *                       default_value : 3
      */
-    public void startThreeChannelLA(ArrayList<Integer> modes, String triggerChannel, Integer triggerMode) {
+    public void startThreeChannelLA(List<Integer> modes, String triggerChannel, Integer triggerMode) {
         if (modes == null) {
             modes = new ArrayList<>();
             modes.add(1);
@@ -2048,29 +2065,30 @@ public class ScienceLab {
 
     /**
      * Four channel Logic Analyzer.
-        Start logging timestamps from a 64MHz counter to record level changes on LA1,LA2,LA3,LA4.
-            triggerChannel[0] -> LA1
-            triggerChannel[1] -> LA2
-            triggerChannel[2] -> LA3
-     * @param trigger Bool. Enable rising edge trigger on LA1.
-     * @param maximumTime Maximum delay expected between two logic level changes.
-                         If total time exceeds 1 mS, a prescaler will be used in the reference clock.
-                         However, this only refers to the maximum time between two successive level changes. If a delay larger
-                         than .26 S occurs, it will be truncated by modulo .26 S.
-                         If you need to record large intervals, try single channel/two channel modes which use 32 bit counters
-                         capable of time interval up to 67 seconds.
-     * @param modes modes for each channel. List with four elements\n
-                    default values: [1,1,1,1]
-                    - EVERY_SIXTEENTH_RISING_EDGE = 5
-                    - EVERY_FOURTH_RISING_EDGE    = 4
-                    - EVERY_RISING_EDGE           = 3
-                    - EVERY_FALLING_EDGE          = 2
-                    - EVERY_EDGE                  = 1
-                    - DISABLED                    = 0
-     * @param edge 'rising' or 'falling'. Trigger edge type for trigger_channels.
+     * Start logging timestamps from a 64MHz counter to record level changes on LA1,LA2,LA3,LA4.
+     * triggerChannel[0] -> LA1
+     * triggerChannel[1] -> LA2
+     * triggerChannel[2] -> LA3
+     *
+     * @param trigger        Bool. Enable rising edge trigger on LA1.
+     * @param maximumTime    Maximum delay expected between two logic level changes.
+     *                       If total time exceeds 1 mS, a prescaler will be used in the reference clock.
+     *                       However, this only refers to the maximum time between two successive level changes. If a delay larger
+     *                       than .26 S occurs, it will be truncated by modulo .26 S.
+     *                       If you need to record large intervals, try single channel/two channel modes which use 32 bit counters
+     *                       capable of time interval up to 67 seconds.
+     * @param modes          modes for each channel. List with four elements\n
+     *                       default values: [1,1,1,1]
+     *                       - EVERY_SIXTEENTH_RISING_EDGE = 5
+     *                       - EVERY_FOURTH_RISING_EDGE    = 4
+     *                       - EVERY_RISING_EDGE           = 3
+     *                       - EVERY_FALLING_EDGE          = 2
+     *                       - EVERY_EDGE                  = 1
+     *                       - DISABLED                    = 0
+     * @param edge           'rising' or 'falling'. Trigger edge type for trigger_channels.
      * @param triggerChannel ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      */
-    public void startFourChannelLA(Integer trigger, Double maximumTime, ArrayList<Integer> modes, String edge, ArrayList<Boolean> triggerChannel) {
+    public void startFourChannelLA(Integer trigger, Double maximumTime, List<Integer> modes, String edge, List<Boolean> triggerChannel) {
         if (trigger == null) trigger = 1;
         if (maximumTime == null) maximumTime = 0.001;
         if (modes == null) {
@@ -2116,7 +2134,8 @@ public class ScienceLab {
 
     /**
      * Fetches the initial states of digital inputs that were recorded right before the Logic analyzer was started,
-        and the total points each channel recorded.
+     * and the total points each channel recorded.
+     *
      * @return CH1 progress,CH2 progress,CH3 progress,CH4 progress,[LA1,LA2,LA3,LA4]. eg. [1,0,1,1]
      */
     public LinkedHashMap<String, Integer> getLAInitialStates() {
@@ -2196,7 +2215,8 @@ public class ScienceLab {
 
     /**
      * Fetches the data stored by DMA. integer address increments
-     * @param bytes number of readings(integer) to fetch
+     *
+     * @param bytes   number of readings(integer) to fetch
      * @param channel channel number (1-4)
      * @return array of integer data fetched from Logic Analyser.
      */
@@ -2213,9 +2233,9 @@ public class ScienceLab {
 
             if (readData.length > 0) {
 
-                ArrayList<Integer> l = new ArrayList<>();
-                for (int i = 0; i < readData.length; i += 1) {
-                    l.add((int) readData[i] & 0xff);
+                List<Integer> l = new ArrayList<>();
+                for (byte readDatum : readData) {
+                    l.add((int) readDatum & 0xff);
                 }
 
                 StringBuilder stringBuilder = new StringBuilder();
@@ -2223,7 +2243,7 @@ public class ScienceLab {
                 for (int i = 0; i < (int) (readData.length / 2); i++) {
                     double t = (l.get(i * 2) | (l.get(i * 2 + 1) << 8));
                     timeStamps[i + 1] = (int) t;
-                    stringBuilder.append(String.valueOf(t));
+                    stringBuilder.append(t);
                     stringBuilder.append(" ");
                 }
                 Log.v("Fetched points : ", stringBuilder.toString());
@@ -2245,7 +2265,8 @@ public class ScienceLab {
 
     /**
      * Fetches the data stored by DMA. long address increments.
-     * @param bytes number of readings(long integers) to fetch
+     *
+     * @param bytes   number of readings(long integers) to fetch
      * @param channel channel number (1-2)
      * @return array of long integers data fetched from Logic Analyser.
      */
@@ -2287,6 +2308,7 @@ public class ScienceLab {
 
     /**
      * Reads and stores the channels in this.dChannels.
+     *
      * @return true if LA channels fetched successfully.
      */
     public boolean fetchLAChannels() {
@@ -2346,6 +2368,7 @@ public class ScienceLab {
 
     /**
      * Gets the state of the digital inputs.
+     *
      * @return dictionary with keys 'LA1','LA2','LA3','LA4'.
      */
     public Map<String, Boolean> getStates() {
@@ -2368,9 +2391,10 @@ public class ScienceLab {
 
     /**
      * Fetch the state of given input ID.
+     *
      * @param inputID the input channel
-                        'LA1' -> state of LA1
-                        'LA4' -> state of LA4
+     *                'LA1' -> state of LA1
+     *                'LA4' -> state of LA4
      * @return the logic level on the specified input (LA1,LA2,LA3, or LA4)
      */
     public Boolean getState(String inputID) {
@@ -2379,8 +2403,9 @@ public class ScienceLab {
 
     /**
      * set the logic level on digital outputs SQR1,SQR2,SQR3,SQR4.
+     *
      * @param args SQR1,SQR2,SQR3,SQR4
-            states(0 or 1)
+     *             states(0 or 1)
      */
     public void setState(Map<String, Integer> args) {
         int data = 0;
@@ -2409,6 +2434,7 @@ public class ScienceLab {
 
     /**
      * Count pulses on a digital input. Retrieve total pulses using readPulseCount.
+     *
      * @param channel The input pin to measure rising edges on : ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
      */
     public void countPulses(String channel) {
@@ -2425,6 +2451,7 @@ public class ScienceLab {
 
     /**
      * Read pulses counted using a digital input. Call countPulses before using this.
+     *
      * @return number of pulse.
      */
     public int readPulseCount() {
@@ -2455,13 +2482,13 @@ public class ScienceLab {
     public double[] captureCapacitance(int samples, int timeGap) {
         AnalyticsClass analyticsClass = new AnalyticsClass();
         this.chargeCap(1, 50000);
-        Map<String, double[]> data = this.captureFullSpeedHr("CAP", samples, timeGap, Arrays.asList("READ_CAP"));
+        Map<String, double[]> data = this.captureFullSpeedHr("CAP", samples, timeGap, Collections.singletonList("READ_CAP"));
         double[] x = data.get("x");
         double[] y = data.get("y");
         for (int i = 0; i < x.length; i++) {
             x[i] = x[i] * 1e-6;
         }
-        ArrayList<double[]> fitres = analyticsClass.fitExponential(x, y);
+        List<double[]> fitres = analyticsClass.fitExponential(x, y);
         if (fitres != null) {
             // Not return extra data as in python-communication library. Not required at this point.
             return fitres.get(0);
@@ -2485,6 +2512,7 @@ public class ScienceLab {
 
     /**
      * Charges a capacitor connected to IN1 via a 20K resistor from a 3.3V source for a fixed interval.
+     *
      * @param cTime range of time
      * @return the capacitance calculated using the formula Vc = Vs(1-exp(-t/RC))
      */
@@ -2508,6 +2536,7 @@ public class ScienceLab {
 
     /**
      * Charges a capacitor connected to IN1 via a 20K resistor from a 3.3V source for a fixed interval
+     *
      * @return the capacitance calculated using the formula Vc = Vs(1-exp(-t/RC))
      */
     public double[] getCapacitorRange() {
@@ -2526,6 +2555,7 @@ public class ScienceLab {
 
     /**
      * Measures capacitance of component connected between CAP and ground
+     *
      * @return Capacitance (F)
      */
     public Double getCapacitance() {
@@ -2596,6 +2626,7 @@ public class ScienceLab {
 
     /**
      * Fetch the processor's temperature.
+     *
      * @return the processor's temperature.
      */
     public Double getTemperature() {
@@ -2611,12 +2642,13 @@ public class ScienceLab {
 
     /**
      * get_ctmu_voltage(5,2)  will activate a constant current source of 5.5uA on IN1 and then measure the voltage at the output.
-     If a diode is used to connect IN1 to ground, the forward voltage drop of the diode will be returned.
+     * If a diode is used to connect IN1 to ground, the forward voltage drop of the diode will be returned.
+     *
      * @param channel
-     * @param cRange    CRange=0   implies 550uA,
-     *                  CRange=1   implies 0.55uA,
-                        CRange=2   implies 5.5uA,
-                        CRange=3   implies 55uA
+     * @param cRange  CRange=0   implies 550uA,
+     *                CRange=1   implies 0.55uA,
+     *                CRange=2   implies 5.5uA,
+     *                CRange=3   implies 55uA
      * @param tgen
      * @return Voltage
      */
@@ -2722,7 +2754,9 @@ public class ScienceLab {
 		TO GO THROUGH THE TROUBLE OF GETTING IT FROM THE MANUFACTURER AND
 		RE-FLASHING IT.
         */
-        while (data.length() < 16) data += '.';
+        StringBuilder dataBuilder = new StringBuilder(data);
+        while (dataBuilder.length() < 16) dataBuilder.append('.');
+        data = dataBuilder.toString();
         try {
             mPacketHandler.sendByte(mCommandsProto.FLASH);
             mPacketHandler.sendByte(mCommandsProto.WRITE_FLASH);
@@ -2736,7 +2770,7 @@ public class ScienceLab {
         }
     }
 
-    public void writeBulkFlash(int location, ArrayList<Integer> data) {
+    public void writeBulkFlash(int location, List<Integer> data) {
         /*
         write a byte array to the entire flash page. Erases any other data
 
@@ -2979,8 +3013,8 @@ public class ScienceLab {
             waveType.put(channel, "arbit");
         }
         double factor = (span[1] - span[0]) / 512;
-        ArrayList<Double> x = new ArrayList<>();
-        ArrayList<Double> y = new ArrayList<>();
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
         // for now using switch, proper way is to create an interface and pass it to loadEquation and call interface methods for calculation
         for (int i = 0; i < 512; i++) {
             x.add(span[0] + i * factor);
@@ -2996,10 +3030,10 @@ public class ScienceLab {
         loadTable(channel, y, waveType.get(channel), -1);
     }
 
-    private void loadTable(String channel, ArrayList<Double> y, String mode, double amp) {
+    private void loadTable(String channel, List<Double> y, String mode, double amp) {
         waveType.put(channel, mode);
-        ArrayList<String> channels = new ArrayList<>();
-        ArrayList<Double> points = y;
+        List<String> channels = new ArrayList<>();
+        List<Double> points = y;
         channels.add("SI1");
         channels.add("SI2");
         int num;
@@ -3017,12 +3051,12 @@ public class ScienceLab {
             y.set(i, y.get(i) - min);
         }
         double max = Collections.max(y);
-        ArrayList<Integer> yMod1 = new ArrayList<>();
+        List<Integer> yMod1 = new ArrayList<>();
         for (int i = 0; i < y.size(); i++) {
             double temp = 1 - (y.get(i) / max);
             yMod1.add((int) Math.round(LARGE_MAX - LARGE_MAX * temp));
         }
-        y = new ArrayList<Double>();
+        y = new ArrayList<>();
 
 
         for (int i = 0; i < points.size(); i += 16) {
@@ -3033,7 +3067,7 @@ public class ScienceLab {
             y.set(i, y.get(i) - min);
         }
         max = Collections.max(y);
-        ArrayList<Integer> yMod2 = new ArrayList<>();
+        List<Integer> yMod2 = new ArrayList<>();
         for (int i = 0; i < y.size(); i++) {
             double temp = 1 - (y.get(i) / max);
             yMod2.add((int) Math.round(SMALL_MAX - SMALL_MAX * temp));
@@ -3202,7 +3236,7 @@ public class ScienceLab {
         return (int) (64e6 / wavelength / p[prescalar & 0x3]);
     }
 
-    public void mapReferenceClock(ArrayList<String> args, int scalar) {
+    public void mapReferenceClock(List<String> args, int scalar) {
         try {
             mPacketHandler.sendByte(mCommandsProto.WAVEGEN);
             mPacketHandler.sendByte(mCommandsProto.MAP_REFERENCE);

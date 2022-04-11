@@ -1,6 +1,5 @@
 package io.pslab.fragment;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -18,6 +16,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
@@ -25,14 +26,11 @@ import io.pslab.others.CustomSnackBar;
 import io.pslab.others.EditTextWidget;
 import io.pslab.others.ScienceLabCommon;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class ControlFragmentAdvanced extends Fragment {
 
     private ScienceLab scienceLab;
-    private Map<String, Integer> state = new HashMap<>();
+    private final Map<String, Integer> state = new HashMap<>();
 
     public static ControlFragmentAdvanced newInstance() {
         return new ControlFragmentAdvanced();
@@ -97,305 +95,173 @@ public class ControlFragmentAdvanced extends Fragment {
         etWidgetControlAdvanced9.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
         etWidgetControlAdvanced10.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
         etWidgetControlAdvanced11.setText(DataFormatter.formatDouble(0, DataFormatter.MINIMAL_PRECISION_FORMAT));
-        etWidgetControlAdvanced1.setOnClickListener(new View.OnClickListener() {
+        etWidgetControlAdvanced1.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced1, 1.0, 10.0, 5000.0));
 
-            @Override
-            public void onClick(View arg0) {
+        etWidgetControlAdvanced1.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced1, 1.0, 10.0, 5000.0);
             }
         });
 
-        etWidgetControlAdvanced1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced1, 1.0, 10.0, 5000.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced2.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced2, 1.0, 10.0, 5000.0));
 
-        etWidgetControlAdvanced2.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
+        etWidgetControlAdvanced2.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced2, 1.0, 10.0, 5000.0);
-
             }
         });
 
-        etWidgetControlAdvanced2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced2, 1.0, 10.0, 5000.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced3.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced3, 1.0, 0.0, 360.0));
 
-        etWidgetControlAdvanced3.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
+        etWidgetControlAdvanced3.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced3, 1.0, 0.0, 360.0);
-
             }
         });
 
-        etWidgetControlAdvanced3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced3, 1.0, 0.0, 360.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced4.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced4, 0.1, 0.0, 1.0));
 
-        etWidgetControlAdvanced4.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
+        etWidgetControlAdvanced4.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced4, 0.1, 0.0, 1.0);
             }
         });
 
-        etWidgetControlAdvanced4.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced4, 0.1, 0.0, 1.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced5.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced5, 1.0, 0.0, 360.0));
 
-        etWidgetControlAdvanced5.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
+        etWidgetControlAdvanced5.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced5, 1.0, 0.0, 360.0);
             }
         });
 
-        etWidgetControlAdvanced5.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced5, 1.0, 0.0, 360.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced6.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced6, 0.1, 0.0, 1.0));
 
-        etWidgetControlAdvanced6.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
+        etWidgetControlAdvanced6.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced6, 0.1, 0.0, 1.0);
-
             }
         });
 
-        etWidgetControlAdvanced6.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced6, 0.1, 0.0, 1.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced7.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced7, 1.0, 0.0, 360.0));
 
-        etWidgetControlAdvanced7.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
+        etWidgetControlAdvanced7.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced7, 1.0, 0.0, 360.0);
-
             }
         });
 
-        etWidgetControlAdvanced7.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced7, 1.0, 0.0, 360.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced8.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced8, 0.1, 0.0, 1.0));
 
-        etWidgetControlAdvanced8.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
+        etWidgetControlAdvanced8.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced8, 0.1, 0.0, 1.0);
-
             }
         });
 
-        etWidgetControlAdvanced8.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced8, 0.1, 0.0, 1.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced9.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced9, 1.0, 0.0, 360.0));
 
-        etWidgetControlAdvanced9.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
+        etWidgetControlAdvanced9.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced9, 1.0, 0.0, 360.0);
-
             }
         });
 
-        etWidgetControlAdvanced9.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced9, 1.0, 0.0, 360.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced10.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced10, 0.1, 0.0, 1.0));
 
-        etWidgetControlAdvanced10.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
+        etWidgetControlAdvanced10.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced10, 0.1, 0.0, 1.0);
-
             }
         });
 
-        etWidgetControlAdvanced10.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced10, 0.1, 0.0, 1.0);
-                }
-            }
-        });
+        etWidgetControlAdvanced11.setOnClickListener(arg0 -> showInputDialog(etWidgetControlAdvanced11, 1.0, 10.0, 5000.0));
 
-        etWidgetControlAdvanced11.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
+        etWidgetControlAdvanced11.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 showInputDialog(etWidgetControlAdvanced11, 1.0, 10.0, 5000.0);
-
             }
         });
 
-        etWidgetControlAdvanced11.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputDialog(etWidgetControlAdvanced11, 1.0, 10.0, 5000.0);
-                }
+        buttonControlAdvanced1.setOnClickListener(v -> {
+            try {
+                double frequencySI1 = Double.parseDouble(etWidgetControlAdvanced1.getText().toString());
+                double frequencySI2 = Double.parseDouble(etWidgetControlAdvanced2.getText().toString());
+                float phase = Float.parseFloat(etWidgetControlAdvanced3.getText().toString());
+
+                String wavetypeSI1 = spinnerControlAdvanced1.getSelectedItem().toString();
+                String wavetypeSI2 = spinnerControlAdvanced2.getSelectedItem().toString();
+
+                if ("SINE".equals(wavetypeSI1) && scienceLab.isConnected())
+                    scienceLab.setSine1(frequencySI1);
+                else if ("SQUARE".equals(wavetypeSI1) && scienceLab.isConnected())
+                    scienceLab.setSqr1(frequencySI1, -1, false);
+
+                if ("SINE".equals(wavetypeSI2) && scienceLab.isConnected())
+                    scienceLab.setSine2(frequencySI2);
+                else if ("SQUARE".equals(wavetypeSI2) && scienceLab.isConnected())
+                    scienceLab.setSqr2(frequencySI2, -1);
+            } catch (NumberFormatException e) {
+                etWidgetControlAdvanced1.setText("0");
+                etWidgetControlAdvanced2.setText("0");
+                etWidgetControlAdvanced3.setText("0");
             }
         });
 
-        buttonControlAdvanced1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Double frequencySI1 = Double.parseDouble(etWidgetControlAdvanced1.getText().toString());
-                    Double frequencySI2 = Double.parseDouble(etWidgetControlAdvanced2.getText().toString());
-                    float phase = Float.parseFloat(etWidgetControlAdvanced3.getText().toString());
+        buttonControlAdvanced2.setOnClickListener(v -> {
+            try {
+                double phase2 = Double.parseDouble(etWidgetControlAdvanced5.getText().toString());
+                double phase3 = Double.parseDouble(etWidgetControlAdvanced7.getText().toString());
+                double phase4 = Double.parseDouble(etWidgetControlAdvanced9.getText().toString());
 
-                    String wavetypeSI1 = spinnerControlAdvanced1.getSelectedItem().toString();
-                    String wavetypeSI2 = spinnerControlAdvanced2.getSelectedItem().toString();
+                double dutyCycle1 = Double.parseDouble(etWidgetControlAdvanced4.getText().toString());
+                double dutyCycle2 = Double.parseDouble(etWidgetControlAdvanced6.getText().toString());
+                double dutyCycle3 = Double.parseDouble(etWidgetControlAdvanced8.getText().toString());
+                double dutyCycle4 = Double.parseDouble(etWidgetControlAdvanced10.getText().toString());
 
-                    if ("SINE".equals(wavetypeSI1) && scienceLab.isConnected())
-                        scienceLab.setSine1(frequencySI1);
-                    else if ("SQUARE".equals(wavetypeSI1) && scienceLab.isConnected())
-                        scienceLab.setSqr1(frequencySI1, -1, false);
+                double frequency = Double.parseDouble(etWidgetControlAdvanced11.getText().toString());
 
-                    if ("SINE".equals(wavetypeSI2) && scienceLab.isConnected())
-                        scienceLab.setSine2(frequencySI2);
-                    else if ("SQUARE".equals(wavetypeSI2) && scienceLab.isConnected())
-                        scienceLab.setSqr2(frequencySI2, -1);
-                } catch (NumberFormatException e) {
-                    etWidgetControlAdvanced1.setText("0");
-                    etWidgetControlAdvanced2.setText("0");
-                    etWidgetControlAdvanced3.setText("0");
-                }
-            }
-        });
-
-        buttonControlAdvanced2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    double phase2 = Double.parseDouble(etWidgetControlAdvanced5.getText().toString());
-                    double phase3 = Double.parseDouble(etWidgetControlAdvanced7.getText().toString());
-                    double phase4 = Double.parseDouble(etWidgetControlAdvanced9.getText().toString());
-
-                    double dutyCycle1 = Double.parseDouble(etWidgetControlAdvanced4.getText().toString());
-                    double dutyCycle2 = Double.parseDouble(etWidgetControlAdvanced6.getText().toString());
-                    double dutyCycle3 = Double.parseDouble(etWidgetControlAdvanced8.getText().toString());
-                    double dutyCycle4 = Double.parseDouble(etWidgetControlAdvanced10.getText().toString());
-
-                    double frequency = Double.parseDouble(etWidgetControlAdvanced11.getText().toString());
-
-                    if (scienceLab.isConnected())
-                        scienceLab.sqrPWM(frequency, dutyCycle1, phase2, dutyCycle2, phase3, dutyCycle3,
-                                phase4, dutyCycle4, true);
-                } catch (NumberFormatException e) {
-                    etWidgetControlAdvanced4.setText("0");
-                    etWidgetControlAdvanced5.setText("0");
-                    etWidgetControlAdvanced6.setText("0");
-                    etWidgetControlAdvanced7.setText("0");
-                    etWidgetControlAdvanced8.setText("0");
-                    etWidgetControlAdvanced9.setText("0");
-                    etWidgetControlAdvanced10.setText("0");
-                    etWidgetControlAdvanced11.setText("0");
-                }
-            }
-        });
-
-        checkBoxControlAdvanced1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) state.put("SQR1", 1);
-                else state.put("SQR1", 0);
                 if (scienceLab.isConnected())
-                    scienceLab.setState(state);
+                    scienceLab.sqrPWM(frequency, dutyCycle1, phase2, dutyCycle2, phase3, dutyCycle3,
+                            phase4, dutyCycle4, true);
+            } catch (NumberFormatException e) {
+                etWidgetControlAdvanced4.setText("0");
+                etWidgetControlAdvanced5.setText("0");
+                etWidgetControlAdvanced6.setText("0");
+                etWidgetControlAdvanced7.setText("0");
+                etWidgetControlAdvanced8.setText("0");
+                etWidgetControlAdvanced9.setText("0");
+                etWidgetControlAdvanced10.setText("0");
+                etWidgetControlAdvanced11.setText("0");
             }
         });
 
-        checkBoxControlAdvanced2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) state.put("SQR2", 1);
-                else state.put("SQR2", 0);
-                if (scienceLab.isConnected())
-                    scienceLab.setState(state);
-            }
+        checkBoxControlAdvanced1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) state.put("SQR1", 1);
+            else state.put("SQR1", 0);
+            if (scienceLab.isConnected())
+                scienceLab.setState(state);
         });
 
-        checkBoxControlAdvanced3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) state.put("SQR3", 1);
-                else state.put("SQR3", 0);
-                if (scienceLab.isConnected())
-                    scienceLab.setState(state);
-            }
+        checkBoxControlAdvanced2.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) state.put("SQR2", 1);
+            else state.put("SQR2", 0);
+            if (scienceLab.isConnected())
+                scienceLab.setState(state);
         });
 
-        checkBoxControlAdvanced4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) state.put("SQR4", 1);
-                else state.put("SQR4", 0);
-                if (scienceLab.isConnected())
-                    scienceLab.setState(state);
-            }
+        checkBoxControlAdvanced3.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) state.put("SQR3", 1);
+            else state.put("SQR3", 0);
+            if (scienceLab.isConnected())
+                scienceLab.setState(state);
+        });
+
+        checkBoxControlAdvanced4.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) state.put("SQR4", 1);
+            else state.put("SQR4", 0);
+            if (scienceLab.isConnected())
+                scienceLab.setState(state);
         });
 
         return view;
@@ -416,31 +282,25 @@ public class ControlFragmentAdvanced extends Fragment {
 
         alertDialogBuilder
                 .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // get user input and set it to result
-                                // edit text
-                                String input = userInput.getText();
+                        (dialog, id) -> {
+                            // get user input and set it to result
+                            // edit text
+                            String input = userInput.getText();
 
-                                if (Double.parseDouble(input) > maxima) {
-                                    input = DataFormatter.formatDouble(maxima, DataFormatter.LOW_PRECISION_FORMAT);
-                                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                                            "The Maximum value for this field is " + maxima,null,null, Snackbar.LENGTH_SHORT);
-                                }
-                                if (Double.parseDouble(input) < minima) {
-                                    input = DataFormatter.formatDouble(minima, DataFormatter.MEDIUM_PRECISION_FORMAT);
-                                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                                            "The Minimum value for this field is " + minima,null,null, Snackbar.LENGTH_SHORT);
-                                }
-                                et.setText(input);
+                            if (Double.parseDouble(input) > maxima) {
+                                input = DataFormatter.formatDouble(maxima, DataFormatter.LOW_PRECISION_FORMAT);
+                                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                        "The Maximum value for this field is " + maxima, null, null, Snackbar.LENGTH_SHORT);
                             }
+                            if (Double.parseDouble(input) < minima) {
+                                input = DataFormatter.formatDouble(minima, DataFormatter.MEDIUM_PRECISION_FORMAT);
+                                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                                        "The Minimum value for this field is " + minima, null, null, Snackbar.LENGTH_SHORT);
+                            }
+                            et.setText(input);
                         })
                 .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                        (dialog, id) -> dialog.cancel());
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }

@@ -1,11 +1,12 @@
 package io.pslab.communication.sensors;
 
-import io.pslab.communication.ScienceLab;
-import io.pslab.communication.peripherals.I2C;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import io.pslab.communication.ScienceLab;
+import io.pslab.communication.peripherals.I2C;
 
 /**
  * Created by akarshan on 4/23/17.
@@ -15,32 +16,32 @@ import java.util.Arrays;
  */
 
 public class HMC5883L {
-    private int CONFA = 0x00;
-    private int CONFB = 0x01;
-    private int MODE = 0x02;
-    private int STATUS = 0x09;
+    private final int CONFA = 0x00;
+    private final int CONFB = 0x01;
+    private final int MODE = 0x02;
+    private final int STATUS = 0x09;
 
     //--------CONFA register bits. 0x00-----------//
 
     private int samplesToAverage = 0;
-    private ArrayList<Integer> samplesToAverageChoices = new ArrayList<>(Arrays.asList(1, 2, 4, 8));
+    private final List<Integer> samplesToAverageChoices = Arrays.asList(1, 2, 4, 8);
 
     private int dataOutputRate = 6;
-    private ArrayList<Double> dataOutputRateChoices = new ArrayList<Double>(Arrays.asList(0.75, 1.5, 3., 7.5, 15., 30., 75.));
+    private final List<Double> dataOutputRateChoices = Arrays.asList(0.75, 1.5, 3., 7.5, 15., 30., 75.);
 
-    private int measurementConf = 0;
+    private final int measurementConf = 0;
 
     //--------CONFB register bits. 0x01-----------//
 
     private int gainValue = 7;      //least sensitive
-    private ArrayList<Integer> gainChoices = new ArrayList<>(Arrays.asList(8, 7, 6, 5, 4, 3, 2, 1));
-    private ArrayList<Double> scaling = new ArrayList<>(Arrays.asList(1370., 1090., 820., 660., 440., 390., 330., 230.));
-    private int ADDRESS = 0x1E;
+    private final List<Integer> gainChoices = Arrays.asList(8, 7, 6, 5, 4, 3, 2, 1);
+    private final List<Double> scaling = Arrays.asList(1370., 1090., 820., 660., 440., 390., 330., 230.);
+    private final int ADDRESS = 0x1E;
     public String name = "Magnetometer";
     public int NUMPLOTS = 3;
     public String[] PLOTNAMES = {"Bx", "By", "Bz"};
 
-    private I2C i2c;
+    private final I2C i2c;
 
     public HMC5883L(I2C i2c, ScienceLab scienceLab) throws IOException {
         this.i2c = i2c;
@@ -80,13 +81,13 @@ public class HMC5883L {
         writeCONFB();
     }
 
-    public ArrayList<Character> getVals(int addr, int bytes) throws IOException {
+    public List<Character> getVals(int addr, int bytes) throws IOException {
         return i2c.readBulk(ADDRESS, addr, bytes);
     }
 
-    public ArrayList<Double> getRaw() throws IOException {
-        ArrayList<Double> returnList = new ArrayList<>();
-        ArrayList<Character> vals = getVals(0x03, 6);
+    public List<Double> getRaw() throws IOException {
+        List<Double> returnList = new ArrayList<>();
+        List<Character> vals = getVals(0x03, 6);
         if (vals.size() == 6) {
             for (int a = 0; a < 3; a++) {
                 returnList.add((vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / scaling.get(gainValue));

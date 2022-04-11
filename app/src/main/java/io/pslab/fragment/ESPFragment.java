@@ -3,15 +3,14 @@ package io.pslab.fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,40 +44,34 @@ public class ESPFragment extends DialogFragment {
         EditText espIPEditText = rootView.findViewById(R.id.esp_ip_edit_text);
         espConnectBtn = rootView.findViewById(R.id.esp_connect_btn);
         espConnectProgressBar = rootView.findViewById(R.id.esp_connect_progressbar);
-        espConnectBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                espIPAddress = espIPEditText.getText().toString();
-                espConnectBtn.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                if (espIPAddress.length() == 0) {
-                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.incorrect_IP_address_message),null,null, Snackbar.LENGTH_SHORT);
+        espConnectBtn.setOnClickListener(v -> {
+            espIPAddress = espIPEditText.getText().toString();
+            espConnectBtn.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            if (espIPAddress.length() == 0) {
+                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
+                        getString(R.string.incorrect_IP_address_message), null, null, Snackbar.LENGTH_SHORT);
 
-                } else {
-                    new ESPTask().execute();
-                }
+            } else {
+                new ESPTask().execute();
             }
-
         });
-        espIPEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        espConnectBtn.performClick();
-                        return true;
-                    }
-                    return false;
-                }
+        espIPEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                espConnectBtn.performClick();
+                return true;
+            }
+            return false;
         });
         return rootView;
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        getDialog().getWindow().setAttributes(params);
     }
 
     private class ESPTask extends AsyncTask<Void, Void, String> {
@@ -115,7 +108,7 @@ public class ESPFragment extends DialogFragment {
             espConnectBtn.setVisibility(View.VISIBLE);
             if (result.length() == 0) {
                 CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        getString(R.string.incorrect_IP_address_message),null,null,Snackbar.LENGTH_SHORT);
+                        getString(R.string.incorrect_IP_address_message), null, null, Snackbar.LENGTH_SHORT);
             } else {
                 Log.v("Response", result);
             }

@@ -1,6 +1,5 @@
 package io.pslab.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,12 +8,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -160,116 +157,84 @@ public class PowerSourceActivity extends GuideActivity {
         autoSize(displayPV3);
         autoSize(displayPCS);
 
-        displayPV1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayPV1.setCursorVisible(true);
-            }
-        });
-        displayPV2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayPV2.setCursorVisible(true);
-            }
-        });
-        displayPV3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayPV3.setCursorVisible(true);
-            }
-        });
-        displayPCS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayPCS.setCursorVisible(true);
-            }
-        });
-        displayPV1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String voltageValue = displayPV1.getText().toString();
-                    voltageValue = voltageValue.replace("V", "");
-                    float voltage = Float.parseFloat(voltageValue);
-                    if (voltage < -5.00f) {
-                        voltage = -5.00f;
-                        displayPV1.setText(voltage + " V");
-                    }
-                    if (voltage > 5.00f) {
-                        voltage = 5.00f;
-                        displayPV1.setText(voltage + " V");
-                    }
-                    controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
-                            5.00f, -5.00f));
+        displayPV1.setOnClickListener(v -> displayPV1.setCursorVisible(true));
+        displayPV2.setOnClickListener(v -> displayPV2.setCursorVisible(true));
+        displayPV3.setOnClickListener(v -> displayPV3.setCursorVisible(true));
+        displayPCS.setOnClickListener(v -> displayPCS.setCursorVisible(true));
+        displayPV1.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String voltageValue = displayPV1.getText().toString();
+                voltageValue = voltageValue.replace("V", "");
+                float voltage = Float.parseFloat(voltageValue);
+                if (voltage < -5.00f) {
+                    voltage = -5.00f;
+                    displayPV1.setText(voltage + " V");
                 }
-                return false;
+                if (voltage > 5.00f) {
+                    voltage = 5.00f;
+                    displayPV1.setText(voltage + " V");
+                }
+                controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
+                        5.00f, -5.00f));
             }
+            return false;
         });
 
-        displayPV2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String voltageValue = displayPV2.getText().toString();
-                    voltageValue = voltageValue.replace("V", "");
-                    float voltage = Float.parseFloat(voltageValue);
-                    if (voltage < -3.30f) {
-                        voltage = -3.30f;
-                        displayPV2.setText(voltage + " V");
-                    }
-                    if (voltage > 3.30f) {
-                        voltage = 3.30f;
-                        displayPV2.setText(voltage + " V");
-                    }
-                    controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
-                            3.30f, -3.30f));
+        displayPV2.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String voltageValue = displayPV2.getText().toString();
+                voltageValue = voltageValue.replace("V", "");
+                float voltage = Float.parseFloat(voltageValue);
+                if (voltage < -3.30f) {
+                    voltage = -3.30f;
+                    displayPV2.setText(voltage + " V");
                 }
-                return false;
+                if (voltage > 3.30f) {
+                    voltage = 3.30f;
+                    displayPV2.setText(voltage + " V");
+                }
+                controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
+                        3.30f, -3.30f));
             }
+            return false;
         });
 
-        displayPV3.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String voltageValue = displayPV3.getText().toString();
-                    voltageValue = voltageValue.replace("V", "");
-                    float voltage = Float.parseFloat(voltageValue);
-                    if (voltage < 0.00f) {
-                        voltage = 0.00f;
-                        displayPV3.setText(voltage + " V");
-                    }
-                    if (voltage > 3.30f) {
-                        voltage = 3.30f;
-                        displayPV3.setText(voltage + " V");
-                    }
-                    controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
-                            3.30f, 0.00f));
+        displayPV3.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String voltageValue = displayPV3.getText().toString();
+                voltageValue = voltageValue.replace("V", "");
+                float voltage = Float.parseFloat(voltageValue);
+                if (voltage < 0.00f) {
+                    voltage = 0.00f;
+                    displayPV3.setText(voltage + " V");
                 }
-                return false;
+                if (voltage > 3.30f) {
+                    voltage = 3.30f;
+                    displayPV3.setText(voltage + " V");
+                }
+                controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
+                        3.30f, 0.00f));
             }
+            return false;
         });
 
-        displayPCS.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String currentValue = displayPCS.getText().toString();
-                    currentValue = currentValue.replace("mA", "");
-                    float current = Float.parseFloat(currentValue);
-                    if (current < 0.00f) {
-                        current = 0.00f;
-                        displayPCS.setText(current + " mA");
-                    }
-                    if (current > 3.30f) {
-                        current = 3.30f;
-                        displayPCS.setText(current + " mA");
-                    }
-                    controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
-                            3.30f, 0.00f));
+        displayPCS.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String currentValue = displayPCS.getText().toString();
+                currentValue = currentValue.replace("mA", "");
+                float current = Float.parseFloat(currentValue);
+                if (current < 0.00f) {
+                    current = 0.00f;
+                    displayPCS.setText(current + " mA");
                 }
-                return false;
+                if (current > 3.30f) {
+                    current = 3.30f;
+                    displayPCS.setText(current + " mA");
+                }
+                controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
+                        3.30f, 0.00f));
             }
+            return false;
         });
 
         monitorControllers(controllerPV1, Pin.PV1, PV1_CONTROLLER_MAX);
@@ -363,12 +328,7 @@ public class PowerSourceActivity extends GuideActivity {
                     recordTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    recordData();
-                                }
-                            });
+                            handler.post(PowerSourceActivity.this::recordData);
                         }
                     }, 0, recordPeriod);
                 } else {
@@ -379,13 +339,10 @@ public class PowerSourceActivity extends GuideActivity {
                     writeHeaderToFile = true;
                     CustomSnackBar.showSnackBar(coordinatorLayout,
                             getString(R.string.csv_store_text) + " " + powerSourceLogger.getCurrentFilePath()
-                            , getString(R.string.open), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent = new Intent(PowerSourceActivity.this, DataLoggerActivity.class);
-                                    intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.power_source));
-                                    startActivity(intent);
-                                }
+                            , getString(R.string.open), view -> {
+                                Intent intent = new Intent(PowerSourceActivity.this, DataLoggerActivity.class);
+                                intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.power_source));
+                                startActivity(intent);
                             }, Snackbar.LENGTH_LONG);
 
                 }
@@ -405,21 +362,18 @@ public class PowerSourceActivity extends GuideActivity {
                     playbackTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (recordedPowerData != null && currentPosition < recordedPowerData.size()) {
-                                        final PowerSourceData data = recordedPowerData.get(currentPosition);
-                                        if (data != null) {
-                                            setSavedValue(data);
-                                        }
-                                    } else {
-                                        playbackTimer.cancel();
-                                        currentPosition = 0;
-                                        playClicked = false;
-                                        stopMenu.setVisible(false);
-                                        item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
+                            handler.post(() -> {
+                                if (recordedPowerData != null && currentPosition < recordedPowerData.size()) {
+                                    final PowerSourceData data = recordedPowerData.get(currentPosition);
+                                    if (data != null) {
+                                        setSavedValue(data);
                                     }
+                                } else {
+                                    playbackTimer.cancel();
+                                    currentPosition = 0;
+                                    playClicked = false;
+                                    stopMenu.setVisible(false);
+                                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                                 }
                             });
                         }
@@ -497,39 +451,23 @@ public class PowerSourceActivity extends GuideActivity {
      * @param pin  assigned power pin
      */
     private void monitorVariations(SquareImageButton up, SquareImageButton down, final Pin pin) {
-        up.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                incrementValue(pin);
+        up.setOnClickListener(view -> incrementValue(pin));
+        up.setOnLongClickListener(view -> {
+            if (!isRunning) {
+                isRunning = true;
+                incrementPower = true;
+                fastCounter(pin);
             }
+            return true;
         });
-        up.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(final View view) {
-                if (!isRunning) {
-                    isRunning = true;
-                    incrementPower = true;
-                    fastCounter(pin);
-                }
-                return true;
+        down.setOnClickListener(view -> decrementValue(pin));
+        down.setOnLongClickListener(view -> {
+            if (!isRunning) {
+                isRunning = true;
+                decrementPower = true;
+                fastCounter(pin);
             }
-        });
-        down.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                decrementValue(pin);
-            }
-        });
-        down.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(final View view) {
-                if (!isRunning) {
-                    isRunning = true;
-                    decrementPower = true;
-                    fastCounter(pin);
-                }
-                return true;
-            }
+            return true;
         });
     }
 
@@ -540,35 +478,27 @@ public class PowerSourceActivity extends GuideActivity {
      * @param down decrement button
      */
     private void monitorLongClicks(SquareImageButton up, SquareImageButton down) {
-        up.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                view.onTouchEvent(motionEvent);
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP && incrementPower) {
-                    if (isRunning) {
-                        isRunning = false;
-                        stopCounter();
-                        incrementPower = false;
-                    }
+        up.setOnTouchListener((view, motionEvent) -> {
+            view.onTouchEvent(motionEvent);
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP && incrementPower) {
+                if (isRunning) {
+                    isRunning = false;
+                    stopCounter();
+                    incrementPower = false;
                 }
-                return true;
             }
+            return true;
         });
-        down.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                view.onTouchEvent(motionEvent);
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP && decrementPower) {
-                    if (isRunning) {
-                        isRunning = false;
-                        stopCounter();
-                        decrementPower = false;
-                    }
+        down.setOnTouchListener((view, motionEvent) -> {
+            view.onTouchEvent(motionEvent);
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP && decrementPower) {
+                if (isRunning) {
+                    isRunning = false;
+                    stopCounter();
+                    decrementPower = false;
                 }
-                return true;
             }
+            return true;
         });
     }
 
@@ -853,13 +783,11 @@ public class PowerSourceActivity extends GuideActivity {
         powerCounter = new Timer();
         TimerTask task = new TimerTask() {
             public void run() {
-                powerHandler.post(new Runnable() {
-                    public void run() {
-                        if (incrementPower) {
-                            incrementValue(pin);
-                        } else if (decrementPower) {
-                            decrementValue(pin);
-                        }
+                powerHandler.post(() -> {
+                    if (incrementPower) {
+                        incrementValue(pin);
+                    } else if (decrementPower) {
+                        decrementValue(pin);
                     }
                 });
             }

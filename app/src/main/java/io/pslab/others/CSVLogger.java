@@ -18,7 +18,7 @@ import java.util.Locale;
 public class CSVLogger {
 
     private File csvFile;
-    private String category;
+    private final String category;
 
     public static final String CSV_DIRECTORY = "PSLab";
     public static final SimpleDateFormat FILE_NAME_FORMAT = new SimpleDateFormat(

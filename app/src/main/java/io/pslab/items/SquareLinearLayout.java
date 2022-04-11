@@ -1,9 +1,10 @@
 package io.pslab.items;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by Your name on 25-07-2018.

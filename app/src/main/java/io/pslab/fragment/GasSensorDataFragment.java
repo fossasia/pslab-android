@@ -1,21 +1,21 @@
 package io.pslab.fragment;
 
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
+
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -25,12 +25,14 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,8 +51,6 @@ import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
-
-import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class GasSensorDataFragment extends Fragment implements OperationCallback {
 
@@ -74,8 +74,8 @@ public class GasSensorDataFragment extends Fragment implements OperationCallback
     private ScienceLab scienceLab;
     private YAxis y;
     private Timer graphTimer;
-    private ArrayList<Entry> entries;
-    private long updatePeriod = 1000;
+    private List<Entry> entries;
+    private final long updatePeriod = 1000;
     private long startTime;
     private long timeElapsed;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
@@ -83,7 +83,7 @@ public class GasSensorDataFragment extends Fragment implements OperationCallback
     private GasSensorData sensorData;
     private boolean returningFromPause = false;
     private int turns = 0;
-    private ArrayList<GasSensorData> recordedGasSensorArray;
+    private List<GasSensorData> recordedGasSensorArray;
 
 
     public static GasSensorDataFragment newInstance() {
@@ -198,42 +198,39 @@ public class GasSensorDataFragment extends Fragment implements OperationCallback
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (gasSensorActivity.playingData) {
-                            try {
-                                GasSensorData d = recordedGasSensorArray.get(turns);
-                                turns++;
-                                gasValue.setText(String.format(Locale.getDefault(), "%.2f", d.getPpmValue()));
-                                y.setAxisMaximum(1024);
-                                y.setAxisMinimum(0);
-                                y.setLabelCount(10);
-                                gasSensorMeter.setWithTremble(false);
-                                gasSensorMeter.setSpeedAt(d.getPpmValue());
+                handler.post(() -> {
+                    if (gasSensorActivity.playingData) {
+                        try {
+                            GasSensorData d = recordedGasSensorArray.get(turns);
+                            turns++;
+                            gasValue.setText(String.format(Locale.getDefault(), "%.2f", d.getPpmValue()));
+                            y.setAxisMaximum(1024);
+                            y.setAxisMinimum(0);
+                            y.setLabelCount(10);
+                            gasSensorMeter.setWithTremble(false);
+                            gasSensorMeter.setSpeedAt(d.getPpmValue());
 
-                                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getPpmValue());
-                                entries.add(entry);
+                            Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getPpmValue());
+                            entries.add(entry);
 
-                                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
-                                dataSet.setDrawCircles(false);
-                                dataSet.setDrawValues(false);
-                                dataSet.setLineWidth(2);
-                                LineData data = new LineData(dataSet);
+                            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
+                            dataSet.setDrawCircles(false);
+                            dataSet.setDrawValues(false);
+                            dataSet.setLineWidth(2);
+                            LineData data = new LineData(dataSet);
 
-                                mChart.setData(data);
-                                mChart.notifyDataSetChanged();
-                                mChart.setVisibleXRangeMaximum(80);
-                                mChart.moveViewToX(data.getEntryCount());
-                                mChart.invalidate();
-                            } catch (IndexOutOfBoundsException e) {
-                                graphTimer.cancel();
-                                graphTimer = null;
-                                turns = 0;
-                                gasSensorActivity.playingData = false;
-                                gasSensorActivity.startedPlay = false;
-                                gasSensorActivity.invalidateOptionsMenu();
-                            }
+                            mChart.setData(data);
+                            mChart.notifyDataSetChanged();
+                            mChart.setVisibleXRangeMaximum(80);
+                            mChart.moveViewToX(data.getEntryCount());
+                            mChart.invalidate();
+                        } catch (IndexOutOfBoundsException e) {
+                            graphTimer.cancel();
+                            graphTimer = null;
+                            turns = 0;
+                            gasSensorActivity.playingData = false;
+                            gasSensorActivity.startedPlay = false;
+                            gasSensorActivity.invalidateOptionsMenu();
                         }
                     }
                 });
@@ -323,13 +320,10 @@ public class GasSensorDataFragment extends Fragment implements OperationCallback
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            visualizeData();
-                        } catch (NullPointerException e) {
-                        }
+                handler.post(() -> {
+                    try {
+                        visualizeData();
+                    } catch (NullPointerException e) {
                     }
                 });
             }

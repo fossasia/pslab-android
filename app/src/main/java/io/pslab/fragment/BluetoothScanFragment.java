@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -142,10 +143,10 @@ public class BluetoothScanFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        getDialog().getWindow().setAttributes(params);
     }
 
     private void connectBluetooth() {

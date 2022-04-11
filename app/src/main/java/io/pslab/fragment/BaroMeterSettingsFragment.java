@@ -3,12 +3,14 @@ package io.pslab.fragment;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
+
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import io.pslab.DataFormatter;
 import io.pslab.R;
@@ -75,15 +77,15 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                 break;
             case KEY_UPDATE_PERIOD:
                 try {
-                    Integer updatePeriod = Integer.parseInt(updatePeriodPref.getText());
+                    int updatePeriod = Integer.parseInt(updatePeriodPref.getText());
                     if (updatePeriod > 2000 || updatePeriod < 100) {
                         throw new NumberFormatException();
                     } else {
-                        updatePeriodPref.setSummary(String.valueOf(updatePeriod) + " ms");
+                        updatePeriodPref.setSummary(updatePeriod + " ms");
                     }
                 } catch (NumberFormatException e) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.update_period_msg),null,null, Snackbar.LENGTH_SHORT);
+                            getString(R.string.update_period_msg), null, null, Snackbar.LENGTH_SHORT);
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -101,7 +103,7 @@ public class BaroMeterSettingsFragment extends PreferenceFragmentCompat implemen
                     }
                 } catch (NumberFormatException e) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.high_limit_msg),null,null,Snackbar.LENGTH_SHORT);
+                            getString(R.string.high_limit_msg), null, null, Snackbar.LENGTH_SHORT);
                     highLimitPref.setSummary("1.10 atm");
                     highLimitPref.setText("1.10");
                     SharedPreferences.Editor editor = sharedPref.edit();

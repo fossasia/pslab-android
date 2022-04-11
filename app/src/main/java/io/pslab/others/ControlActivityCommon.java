@@ -7,10 +7,10 @@ import java.util.HashMap;
  */
 
 public class ControlActivityCommon {
-    public static HashMap<String , Float> editTextValues ;
+    public static HashMap<String, Float> editTextValues;
 
-    public ControlActivityCommon(){
-        editTextValues= new HashMap<>();
+    public ControlActivityCommon() {
+        editTextValues = new HashMap<>();
     }
 
 }

@@ -4,13 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+
 import com.google.android.material.snackbar.Snackbar;
 
 import io.pslab.R;
@@ -25,12 +25,12 @@ public class GPSLogger {
     public static final int PSLAB_PERMISSION_FOR_MAPS = 102;
     private static final int UPDATE_INTERVAL_IN_MILLISECONDS = 400;
     private static final int MIN_DISTANCE_CHANGE_FOR_UPDATES = 1;
-    private LocationManager locationManager;
-    private Context context;
+    private final LocationManager locationManager;
+    private final Context context;
     private Location bestLocation;
     private PSLabSensor sensorActivity;
-    private PSLabPermission psLabPermission;
-    private String provider = LocationManager.GPS_PROVIDER;
+    private final PSLabPermission psLabPermission;
+    private final String provider = LocationManager.GPS_PROVIDER;
     public AlertDialog gpsAlert;
 
     public GPSLogger(Context context, LocationManager locationManager) {
@@ -47,34 +47,28 @@ public class GPSLogger {
         gpsAlert = new AlertDialog.Builder(sensorActivity, R.style.AlertDialogStyle)
                 .setTitle(R.string.allow_gps)
                 .setMessage(R.string.allow_gps_info)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        context.startActivity(intent);
-                        sensorActivity.checkGPSOnResume = true;
-                    }
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    context.startActivity(intent);
+                    sensorActivity.checkGPSOnResume = true;
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (sensorActivity.isRecording) {
-                            CustomSnackBar.showSnackBar(sensorActivity.sensorParentView,
-                                    context.getResources().getString(R.string.data_recording_with_gps_off),
-                                    null, null, Snackbar.LENGTH_LONG);
-                        } else {
-                            sensorActivity.isRecording = true;
-                            sensorActivity.invalidateOptionsMenu();
-                            CustomSnackBar.showSnackBar(sensorActivity.sensorParentView,
-                                    context.getResources().getString(R.string.data_recording_with_nogps),
-                                    null, null, Snackbar.LENGTH_LONG);
-                        }
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    if (sensorActivity.isRecording) {
+                        CustomSnackBar.showSnackBar(sensorActivity.sensorParentView,
+                                context.getResources().getString(R.string.data_recording_with_gps_off),
+                                null, null, Snackbar.LENGTH_LONG);
+                    } else {
+                        sensorActivity.isRecording = true;
+                        sensorActivity.invalidateOptionsMenu();
+                        CustomSnackBar.showSnackBar(sensorActivity.sensorParentView,
+                                context.getResources().getString(R.string.data_recording_with_nogps),
+                                null, null, Snackbar.LENGTH_LONG);
                     }
                 })
                 .create();
     }
 
-    private LocationListener locationListener = new LocationListener() {
+    private final LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             bestLocation = location;
@@ -141,7 +135,7 @@ public class GPSLogger {
                     locationListener);
         } else {
             CustomSnackBar.showSnackBar(((Activity) context).findViewById(android.R.id.content),
-                    context.getString(R.string.no_permission_for_maps),null,null,Snackbar.LENGTH_LONG);
+                    context.getString(R.string.no_permission_for_maps), null, null, Snackbar.LENGTH_LONG);
         }
     }
 }

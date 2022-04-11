@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -59,12 +58,12 @@ public class SensorMPU925X extends AppCompatActivity {
     private LineChart mChartGyroscope;
     private long startTime;
     private int flag;
-    private ArrayList<Entry> entriesax;
-    private ArrayList<Entry> entriesay;
-    private ArrayList<Entry> entriesaz;
-    private ArrayList<Entry> entriesgx;
-    private ArrayList<Entry> entriesgy;
-    private ArrayList<Entry> entriesgz;
+    private List<Entry> entriesax;
+    private List<Entry> entriesay;
+    private List<Entry> entriesaz;
+    private List<Entry> entriesgx;
+    private List<Entry> entriesgy;
+    private List<Entry> entriesgz;
     private RelativeLayout sensorDock;
     private CheckBox indefiniteSamplesCheckBox;
     private EditText samplesEditBox;
@@ -114,32 +113,29 @@ public class SensorMPU925X extends AppCompatActivity {
         entriesgy = new ArrayList<>();
         entriesgz = new ArrayList<>();
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (scienceLab.isConnected() && shouldPlay()) {
-                        sensorDataFetch = new SensorMPU925X.SensorDataFetch();
-                        sensorDataFetch.execute();
+        Runnable runnable = () -> {
+            while (true) {
+                if (scienceLab.isConnected() && shouldPlay()) {
+                    sensorDataFetch = new SensorDataFetch();
+                    sensorDataFetch.execute();
 
-                        if (flag == 0) {
-                            startTime = System.currentTimeMillis();
-                            flag = 1;
-                        }
+                    if (flag == 0) {
+                        startTime = System.currentTimeMillis();
+                        flag = 1;
+                    }
 
-                        synchronized (lock) {
-                            try {
-                                lock.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
+                    synchronized (lock) {
                         try {
-                            Thread.sleep(timeGap);
+                            lock.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                    }
+
+                    try {
+                        Thread.sleep(timeGap);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -272,21 +268,18 @@ public class SensorMPU925X extends AppCompatActivity {
         final int max = 1000;
         final int min = 100;
 
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (play && scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.circle_play_button);
-                    play = false;
-                } else if (!scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.circle_play_button);
-                    play = false;
-                } else {
-                    playPauseButton.setImageResource(R.drawable.circle_pause_button);
-                    play = true;
-                    if (!indefiniteSamplesCheckBox.isChecked()) {
-                        counter = Integer.parseInt(samplesEditBox.getText().toString());
-                    }
+        playPauseButton.setOnClickListener(v -> {
+            if (play && scienceLab.isConnected()) {
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
+                play = false;
+            } else if (!scienceLab.isConnected()) {
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
+                play = false;
+            } else {
+                playPauseButton.setImageResource(R.drawable.circle_pause_button);
+                play = true;
+                if (!indefiniteSamplesCheckBox.isChecked()) {
+                    counter = Integer.parseInt(samplesEditBox.getText().toString());
                 }
             }
         });
@@ -294,16 +287,13 @@ public class SensorMPU925X extends AppCompatActivity {
 
         indefiniteSamplesCheckBox.setChecked(true);
         samplesEditBox.setEnabled(false);
-        indefiniteSamplesCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    runIndefinitely = true;
-                    samplesEditBox.setEnabled(false);
-                } else {
-                    runIndefinitely = false;
-                    samplesEditBox.setEnabled(true);
-                }
+        indefiniteSamplesCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                runIndefinitely = true;
+                samplesEditBox.setEnabled(false);
+            } else {
+                runIndefinitely = false;
+                samplesEditBox.setEnabled(true);
             }
         });
 

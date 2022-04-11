@@ -27,14 +27,14 @@ public class AudioJack {
     private AudioTrack audioTrack = null;
     private int minRecorderBufferSize;
     private int minTrackBufferSize;
-    private String io;
-    private Random random;
+    private final String io;
+    private final Random random;
 
     public boolean configurationStatus;
 
     /*
-    * Context to obtain AudioManager Instance and string io to classify if requested input or output.
-    * */
+     * Context to obtain AudioManager Instance and string io to classify if requested input or output.
+     * */
     public AudioJack(String io) {
         this.io = io;
         random = new Random();
@@ -95,8 +95,8 @@ public class AudioJack {
     }
 
     /*
-    * Would generate a buffer based on frequency value which would be played by AudioTrack to generate wave
-    * */
+     * Would generate a buffer based on frequency value which would be played by AudioTrack to generate wave
+     * */
     public short[] createBuffer(int frequency) {
         // generating a random buffer for now
         short[] buffer = new short[minTrackBufferSize];

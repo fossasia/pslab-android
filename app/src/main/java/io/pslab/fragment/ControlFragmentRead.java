@@ -11,12 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.text.DecimalFormat;
+
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.others.ScienceLabCommon;
-
-import java.text.DecimalFormat;
 
 public class ControlFragmentRead extends Fragment {
 
@@ -68,82 +68,64 @@ public class ControlFragmentRead extends Fragment {
         spinnerControlRead1 = view.findViewById(R.id.spinner_control_read1);
         spinnerControlRead2 = view.findViewById(R.id.spinner_control_read2);
 
-        buttonControlRead1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (scienceLab.isConnected()) {
-                    DecimalFormat resistanceFormat = new DecimalFormat("#.##");
-                    Double resistance = scienceLab.getResistance();
-                    String Resistance = "";
-                    if (resistance == null) {
-                        Resistance = "Infinity";
+        buttonControlRead1.setOnClickListener(view16 -> {
+            if (scienceLab.isConnected()) {
+                DecimalFormat resistanceFormat = new DecimalFormat("#.##");
+                Double resistance = scienceLab.getResistance();
+                String Resistance = "";
+                if (resistance == null) {
+                    Resistance = "Infinity";
+                } else {
+                    if (resistance > 10e5) {
+                        Resistance = resistanceFormat.format((resistance / 10e5)) + " MOhms";
+                    } else if (resistance > 10e2) {
+                        Resistance = resistanceFormat.format((resistance / 10e2)) + " kOhms";
+                    } else if (resistance > 1) {
+                        Resistance = resistanceFormat.format(resistance) + " Ohms";
                     } else {
-                        if (resistance > 10e5) {
-                            Resistance = resistanceFormat.format((resistance / 10e5)) + " MOhms";
-                        } else if (resistance > 10e2) {
-                            Resistance = resistanceFormat.format((resistance / 10e2)) + " kOhms";
-                        } else if (resistance > 1) {
-                            Resistance = resistanceFormat.format(resistance) + " Ohms";
-                        } else {
-                            Resistance = "Cannot measure!";
-                        }
+                        Resistance = "Cannot measure!";
                     }
-                    tvControlRead1.setText(Resistance);
                 }
+                tvControlRead1.setText(Resistance);
             }
         });
-        buttonControlRead2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (scienceLab.isConnected()) {
-                    Double capacitance = scienceLab.getCapacitance();
-                    tvControlRead2.setText(String.valueOf(capacitance));
-                }
+        buttonControlRead2.setOnClickListener(view15 -> {
+            if (scienceLab.isConnected()) {
+                Double capacitance = scienceLab.getCapacitance();
+                tvControlRead2.setText(String.valueOf(capacitance));
             }
         });
-        buttonControlRead3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String channel = spinnerControlRead1.getSelectedItem().toString();
-                if (scienceLab.isConnected()) {
-                    Double frequency = scienceLab.getFrequency(channel, null);
-                    tvControlRead3.setText(DataFormatter.formatDouble(frequency, DataFormatter.MEDIUM_PRECISION_FORMAT));
-                }
+        buttonControlRead3.setOnClickListener(view14 -> {
+            String channel = spinnerControlRead1.getSelectedItem().toString();
+            if (scienceLab.isConnected()) {
+                Double frequency = scienceLab.getFrequency(channel, null);
+                tvControlRead3.setText(DataFormatter.formatDouble(frequency, DataFormatter.MEDIUM_PRECISION_FORMAT));
             }
         });
-        buttonControlRead4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String channel = spinnerControlRead2.getSelectedItem().toString();
-                if (scienceLab.isConnected()) {
-                    scienceLab.countPulses(channel);
-                    double pulseCount = scienceLab.readPulseCount();
-                    tvControlRead4.setText(DataFormatter.formatDouble(pulseCount, DataFormatter.MEDIUM_PRECISION_FORMAT));
-                }
+        buttonControlRead4.setOnClickListener(view13 -> {
+            String channel = spinnerControlRead2.getSelectedItem().toString();
+            if (scienceLab.isConnected()) {
+                scienceLab.countPulses(channel);
+                double pulseCount = scienceLab.readPulseCount();
+                tvControlRead4.setText(DataFormatter.formatDouble(pulseCount, DataFormatter.MEDIUM_PRECISION_FORMAT));
             }
         });
-        buttonControlRead5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tvControlRead1.setText("");
-                tvControlRead2.setText("");
-                tvControlRead3.setText("");
-                tvControlRead4.setText("");
-            }
+        buttonControlRead5.setOnClickListener(view12 -> {
+            tvControlRead1.setText("");
+            tvControlRead2.setText("");
+            tvControlRead3.setText("");
+            tvControlRead4.setText("");
         });
-        buttonControlRead6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (scienceLab.isConnected()) {
-                    tvControlRead5.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH1", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                    tvControlRead6.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CAP", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                    tvControlRead7.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH2", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                    tvControlRead8.setText(DataFormatter.formatDouble(scienceLab.getVoltage("RES", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                    tvControlRead9.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH3", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                    tvControlRead10.setText(DataFormatter.formatDouble(scienceLab.getVoltage("VOL", 1), DataFormatter.LOW_PRECISION_FORMAT));
-                }
+        buttonControlRead6.setOnClickListener(view1 -> {
+            if (scienceLab.isConnected()) {
+                tvControlRead5.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH1", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                tvControlRead6.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CAP", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                tvControlRead7.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH2", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                tvControlRead8.setText(DataFormatter.formatDouble(scienceLab.getVoltage("RES", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                tvControlRead9.setText(DataFormatter.formatDouble(scienceLab.getVoltage("CH3", 1), DataFormatter.LOW_PRECISION_FORMAT));
+                tvControlRead10.setText(DataFormatter.formatDouble(scienceLab.getVoltage("VOL", 1), DataFormatter.LOW_PRECISION_FORMAT));
+            }
 
-            }
         });
         return view;
     }

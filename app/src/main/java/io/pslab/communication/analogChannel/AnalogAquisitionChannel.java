@@ -12,10 +12,10 @@ public class AnalogAquisitionChannel {
     private AnalogInputSource analogInputSource;
     private double gain;
     private String channel;
-    private double calibration_ref196;
+    private final double calibration_ref196;
     public int length;
     private double timebase;
-    private double[] xAxis = new double[10000];
+    private final double[] xAxis = new double[10000];
     public double[] yAxis = new double[10000];
 
     public AnalogAquisitionChannel(String channel) {

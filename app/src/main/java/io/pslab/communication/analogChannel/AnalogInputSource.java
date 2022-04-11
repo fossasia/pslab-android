@@ -10,22 +10,23 @@ import java.util.List;
 
 public class AnalogInputSource {
 
-    private static String TAG = "AnalogInputSource";
+    private static final String TAG = "AnalogInputSource";
 
-    private double gainValues[], range[];
+    private final double[] gainValues;
+    private final double[] range;
     public boolean gainEnabled = false, inverted = false, calibrationReady = false;
     private double gain = 0;
     public int gainPGA, CHOSA;
     private int inversion = 1;
-    private int defaultOffsetCode = 0;
-    private int scaling = 1;
-    private String channelName;
+    private final int defaultOffsetCode = 0;
+    private final int scaling = 1;
+    private final String channelName;
     public PolynomialFunction calPoly10;
     public PolynomialFunction calPoly12;
     public PolynomialFunction voltToCode10;
     public PolynomialFunction voltToCode12;
-    private List<Double> adc_shifts = new ArrayList<>();
-    private List<PolynomialFunction> polynomials = new ArrayList<>(); //list of maps
+    private final List<Double> adc_shifts = new ArrayList<>();
+    private final List<PolynomialFunction> polynomials = new ArrayList<>(); //list of maps
 
     public AnalogInputSource(String channelName) {
         AnalogConstants analogConstants = new AnalogConstants();
@@ -85,7 +86,7 @@ public class AnalogInputSource {
         calibrationReady = false;
     }
 
-    public void loadPolynomials(ArrayList<Double[]> polys) {
+    public void loadPolynomials(List<Double[]> polys) {
         for (int i = 0; i < polys.size(); i++) {
             double[] temp = ArrayUtils.toPrimitive(polys.get(i));
             ArrayUtils.reverse(temp);
@@ -97,7 +98,7 @@ public class AnalogInputSource {
         double A, B, intercept, slope;
         B = range[1];
         A = range[0];
-        if (gain >= 0 && gain<=8) {
+        if (gain >= 0 && gain <= 8) {
             gain = gainValues[(int) gain];
             B /= gain;
             A /= gain;

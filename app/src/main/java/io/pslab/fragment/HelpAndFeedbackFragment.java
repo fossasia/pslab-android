@@ -13,10 +13,9 @@ import com.google.android.material.appbar.AppBarLayout;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.pslab.R;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.R;
 
 
 public class HelpAndFeedbackFragment extends Fragment {

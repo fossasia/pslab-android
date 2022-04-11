@@ -5,8 +5,8 @@ package io.pslab.communication.sensors;
  */
 
 public class KalmanFilter {
-    private double processVariance;
-    private double estimatedMeasurementVariance;
+    private final double processVariance;
+    private final double estimatedMeasurementVariance;
     private double posteriEstimate;
     private double posteriErrorEstimate;
     private double prioriEstimate;

@@ -34,9 +34,9 @@ import io.pslab.others.CustomSnackBar;
 
 public class CreateConfigActivity extends AppCompatActivity {
 
-    private ArrayList<String> instrumentsList;
-    private ArrayList<String[]> instrumentParamsList;
-    private ArrayList<String[]> instrumentParamsListTitles;
+    private List<String> instrumentsList;
+    private List<String[]> instrumentParamsList;
+    private List<String[]> instrumentParamsListTitles;
     private int selectedItem = 0;
     private String intervalUnit = "sec";
     private EditText intervalEditText;
@@ -68,8 +68,8 @@ public class CreateConfigActivity extends AppCompatActivity {
         instrumentParamsListTitles = new ArrayList<>();
         paramsListContainer.setLayoutManager(new LinearLayoutManager(this));
         list = new ArrayList<>();
-        createArrayLists();
-        selectInstrumentSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, instrumentsList));
+        createLists();
+        selectInstrumentSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, instrumentsList));
         selectInstrumentSpinner.setSelection(0, true);
         createCheckboxList();
         selectInstrumentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -85,7 +85,7 @@ public class CreateConfigActivity extends AppCompatActivity {
             }
         });
 
-        intervalUnitSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.interval_units)));
+        intervalUnitSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.interval_units)));
         intervalUnitSpinner.setSelection(0, true);
         intervalUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -99,28 +99,25 @@ public class CreateConfigActivity extends AppCompatActivity {
             }
         });
 
-        createConfigFileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                interval = intervalEditText.getText().toString();
-                if (interval.length() == 0) {
-                    CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
-                            getString(R.string.no_interval_message), null, null, Snackbar.LENGTH_SHORT);
-                } else {
-                    ArrayList<String> selectedParamsList = new ArrayList<>();
-                    for (int i = 0; i < paramsListContainer.getChildCount(); i++) {
-                        boolean checkBox = list.get(i).isSelected();
-                        if (checkBox) {
-                            selectedParamsList.add(instrumentParamsList.get(selectedItem)[i]);
-                        }
+        createConfigFileBtn.setOnClickListener(v -> {
+            interval = intervalEditText.getText().toString();
+            if (interval.length() == 0) {
+                CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
+                        getString(R.string.no_interval_message), null, null, Snackbar.LENGTH_SHORT);
+            } else {
+                List<String> selectedParamsList = new ArrayList<>();
+                for (int i = 0; i < paramsListContainer.getChildCount(); i++) {
+                    boolean checkBox = list.get(i).isSelected();
+                    if (checkBox) {
+                        selectedParamsList.add(instrumentParamsList.get(selectedItem)[i]);
                     }
-                    createConfigFile(selectedParamsList);
                 }
+                createConfigFile(selectedParamsList);
             }
         });
     }
 
-    private void createArrayLists() {
+    private void createLists() {
 
         instrumentParamsList.add(getResources().getStringArray(R.array.oscilloscope_params));
         instrumentParamsList.add(getResources().getStringArray(R.array.multimeter_params));
@@ -147,8 +144,8 @@ public class CreateConfigActivity extends AppCompatActivity {
     private void createCheckboxList() {
         list.clear();
         String[] params = instrumentParamsListTitles.get(selectedItem);
-        for (int i = 0; i < params.length; i++) {
-            CheckBoxGetter check = new CheckBoxGetter(params[i], false);
+        for (String param : params) {
+            CheckBoxGetter check = new CheckBoxGetter(param, false);
             list.add(check);
         }
         CheckBoxAdapter box;
@@ -164,7 +161,7 @@ public class CreateConfigActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void createConfigFile(ArrayList<String> params) {
+    private void createConfigFile(List<String> params) {
         String instrumentName = instrumentsList.get(selectedItem);
         String fileName = "pslab_config.txt";
         String basepath = Environment.getExternalStorageDirectory().getAbsolutePath();

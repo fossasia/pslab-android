@@ -33,6 +33,7 @@ public class SoundData extends RealmObject {
         this.lat = lat;
         this.lon = lon;
     }
+
     public long getTime() {
         return time;
     }

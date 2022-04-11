@@ -11,8 +11,8 @@ import io.pslab.interfaces.HttpCallback;
 
 public class HttpAsyncTask extends AsyncTask<byte[], Void, Void> {
 
-    private HttpHandler mHttpHandler;
-    private HttpCallback<JSONObject> mHttpCallback;
+    private final HttpHandler mHttpHandler;
+    private final HttpCallback<JSONObject> mHttpCallback;
 
     public HttpAsyncTask(String baseIP, HttpCallback<JSONObject> httpCallback) {
         mHttpHandler = new HttpHandler(baseIP);

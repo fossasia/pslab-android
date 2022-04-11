@@ -1,11 +1,11 @@
 package io.pslab.others;
 
 import android.graphics.Color;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 

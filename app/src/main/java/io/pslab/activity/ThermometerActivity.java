@@ -138,7 +138,6 @@ public class ThermometerActivity extends PSLabSensor {
         if (strValue.isEmpty()) return lowerBound;
         int value = Integer.parseInt(strValue);
         if (value > upperBound) return upperBound;
-        else if (value < lowerBound) return lowerBound;
-        else return value;
+        else return Math.max(value, lowerBound);
     }
 }

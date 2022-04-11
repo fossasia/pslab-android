@@ -1,13 +1,12 @@
 package io.pslab.communication.peripherals;
 
-import io.pslab.communication.PacketHandler;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.pslab.communication.PacketHandler;
 
 /**
  * Created by viveksb007 on 28/3/17.
@@ -26,23 +25,23 @@ public class MCP4728 {
     int GAINWRITE = 192;
     int POWERDOWNWRITE = 160;
     int GENERALCALL = 0;
-    private PacketHandler packetHandler;
-    private double vref;
-    private int devid;
-    private I2C i2c;
-    private List<Integer> switchedOff;
-    private List<Integer> vRefs;
+    private final PacketHandler packetHandler;
+    private final double vref;
+    private final int devid;
+    private final I2C i2c;
+    private final List<Integer> switchedOff;
+    private final List<Integer> vRefs;
     public Map<String, DACChannel> chans = new LinkedHashMap<>();
-    private Map<Integer, String> channelMap = new LinkedHashMap<>();
-    private Map<String, Double> values = new LinkedHashMap<>();
-    private int addr;
+    private final Map<Integer, String> channelMap = new LinkedHashMap<>();
+    private final Map<String, Double> values = new LinkedHashMap<>();
+    private final int addr;
 
     public MCP4728(PacketHandler packetHandler, I2C i2c) {
         this.packetHandler = packetHandler;
         this.vref = 3.3;
         this.devid = 0;
-        switchedOff = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
-        vRefs = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+        switchedOff = Arrays.asList(0, 0, 0, 0);
+        vRefs = Arrays.asList(0, 0, 0, 0);
         this.i2c = i2c;
         addr = 0x60 | devid;
         chans.put("PCS", new DACChannel("PCS", new double[]{0, 3.3e-3}, 0));

@@ -5,7 +5,6 @@ import io.realm.RealmResults;
 
 /**
  * @author reckoner1429
- *
  */
 public interface SoundMeterRecordables {
 

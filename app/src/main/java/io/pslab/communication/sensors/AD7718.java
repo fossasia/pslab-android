@@ -4,7 +4,6 @@ import android.util.Log;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import io.pslab.communication.peripherals.SPI;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,71 +11,73 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import io.pslab.communication.peripherals.SPI;
+
 /**
  * Created by Padmal on 5/3/17.
  */
 
 public class AD7718 {
 
-    private double VREF = 3.3;
+    private final double VREF = 3.3;
 
-    private int STATUS = 0;
-    private int MODE = 1;
-    private int ADCCON = 2;
-    private int FILTER = 3;
-    private int ADCDATA = 4;
-    private int ADCOFFSET = 5;
-    private int ADCGAIN = 6;
-    private int IOCON = 7;
-    private int TEST1 = 12;
-    private int TEST2 = 13;
-    private int ID = 15;
+    private final int STATUS = 0;
+    private final int MODE = 1;
+    private final int ADCCON = 2;
+    private final int FILTER = 3;
+    private final int ADCDATA = 4;
+    private final int ADCOFFSET = 5;
+    private final int ADCGAIN = 6;
+    private final int IOCON = 7;
+    private final int TEST1 = 12;
+    private final int TEST2 = 13;
+    private final int ID = 15;
 
     // Bit definitions
-    private int MODE_PD = 0;
-    private int MODE_IDLE = 1;
-    private int MODE_SINGLE = 2;
-    private int MODE_CONT = 3;
-    private int MODE_INT_ZEROCAL = 4;
-    private int MODE_INT_FULLCAL = 5;
-    private int MODE_SYST_ZEROCAL = 6;
-    private int MODE_SYST_FULLCAL = 7;
+    private final int MODE_PD = 0;
+    private final int MODE_IDLE = 1;
+    private final int MODE_SINGLE = 2;
+    private final int MODE_CONT = 3;
+    private final int MODE_INT_ZEROCAL = 4;
+    private final int MODE_INT_FULLCAL = 5;
+    private final int MODE_SYST_ZEROCAL = 6;
+    private final int MODE_SYST_FULLCAL = 7;
 
-    private int MODE_OSCPD = bitShift(1, 3);
-    private int MODE_CHCON = bitShift(1, 4);
-    private int MODE_REFSEL = bitShift(1, 5);
-    private int MODE_NEGBUF = bitShift(1, 6);
-    private int MODE_NOCHOP = bitShift(1, 7);
+    private final int MODE_OSCPD = bitShift(1, 3);
+    private final int MODE_CHCON = bitShift(1, 4);
+    private final int MODE_REFSEL = bitShift(1, 5);
+    private final int MODE_NEGBUF = bitShift(1, 6);
+    private final int MODE_NOCHOP = bitShift(1, 7);
 
-    private int CON_AIN1AINCOM = bitShift(0, 4);
-    private int CON_AIN2AINCOM = bitShift(1, 4);
-    private int CON_AIN3AINCOM = bitShift(2, 4);
-    private int CON_AIN4AINCOM = bitShift(3, 4);
-    private int CON_AIN5AINCOM = bitShift(4, 4);
-    private int CON_AIN6AINCOM = bitShift(5, 4);
-    private int CON_AIN7AINCOM = bitShift(6, 4);
-    private int CON_AIN8AINCOM = bitShift(7, 4);
-    private int CON_AIN1AIN2 = bitShift(8, 4);
-    private int CON_AIN3AIN4 = bitShift(9, 4);
-    private int CON_AIN5AIN6 = bitShift(10, 4);
-    private int CON_AIN7AIN8 = bitShift(11, 4);
-    private int CON_AIN2AIN2 = bitShift(12, 4);
-    private int CON_AINCOMAINCOM = bitShift(13, 4);
-    private int CON_REFINREFIN = bitShift(14, 4);
-    private int CON_OPEN = bitShift(15, 4);
-    private int CON_UNIPOLAR = bitShift(1, 3);
+    private final int CON_AIN1AINCOM = bitShift(0, 4);
+    private final int CON_AIN2AINCOM = bitShift(1, 4);
+    private final int CON_AIN3AINCOM = bitShift(2, 4);
+    private final int CON_AIN4AINCOM = bitShift(3, 4);
+    private final int CON_AIN5AINCOM = bitShift(4, 4);
+    private final int CON_AIN6AINCOM = bitShift(5, 4);
+    private final int CON_AIN7AINCOM = bitShift(6, 4);
+    private final int CON_AIN8AINCOM = bitShift(7, 4);
+    private final int CON_AIN1AIN2 = bitShift(8, 4);
+    private final int CON_AIN3AIN4 = bitShift(9, 4);
+    private final int CON_AIN5AIN6 = bitShift(10, 4);
+    private final int CON_AIN7AIN8 = bitShift(11, 4);
+    private final int CON_AIN2AIN2 = bitShift(12, 4);
+    private final int CON_AINCOMAINCOM = bitShift(13, 4);
+    private final int CON_REFINREFIN = bitShift(14, 4);
+    private final int CON_OPEN = bitShift(15, 4);
+    private final int CON_UNIPOLAR = bitShift(1, 3);
 
-    private int CON_RANGE0 = 0;  // +-20mV
-    private int CON_RANGE1 = 1;  // +-40mV
-    private int CON_RANGE2 = 2;  // +-80mV
-    private int CON_RANGE3 = 3;  // +-160mV
-    private int CON_RANGE4 = 4;  // +-320mV
-    private int CON_RANGE5 = 5;  // +-640mV
-    private int CON_RANGE6 = 6;  // +-1280mV
-    private int CON_RANGE7 = 7;  // +-2560mV
+    private final int CON_RANGE0 = 0;  // +-20mV
+    private final int CON_RANGE1 = 1;  // +-40mV
+    private final int CON_RANGE2 = 2;  // +-80mV
+    private final int CON_RANGE3 = 3;  // +-160mV
+    private final int CON_RANGE4 = 4;  // +-320mV
+    private final int CON_RANGE5 = 5;  // +-640mV
+    private final int CON_RANGE6 = 6;  // +-1280mV
+    private final int CON_RANGE7 = 7;  // +-2560mV
     private int gain = 1;
 
-    private String[] CHAN_NAMES = {
+    private final String[] CHAN_NAMES = {
             "AIN1AINCOM",
             "AIN2AINCOM",
             "AIN3AINCOM",
@@ -87,14 +88,14 @@ public class AD7718 {
             "AIN8AINCOM"
     };
 
-    private SPI spi;
+    private final SPI spi;
     private boolean caldone;
-    private String cs;
+    private final String cs;
 
     private final String TAG = "AD7718";
 
     private HashMap<String, double[]> calibs = new HashMap<>();
-    private HashMap<String, double[]> caldata = new HashMap<>();
+    private final HashMap<String, double[]> caldata = new HashMap<>();
 
 
     public AD7718(SPI spi) throws IOException {
@@ -210,7 +211,7 @@ public class AD7718 {
         stop();
     }
 
-    public List readCalibration() throws IOException {
+    public List<int[]> readCalibration() throws IOException {
         start();
         int off = send16(0x4000 | (ADCOFFSET << 8));
         off &= 0xFF;
@@ -222,7 +223,7 @@ public class AD7718 {
         gn <<= 16;
         gn |= send16(0x0000);
         stop();
-        return Arrays.asList(new int[]{off, gn});
+        return Collections.singletonList(new int[]{off, gn});
     }
 
 
@@ -243,7 +244,7 @@ public class AD7718 {
                 sb.append(N[a]);
             }
         }
-        Log.d(TAG, stat + ", " + sb.toString());
+        Log.d(TAG, stat + ", " + sb);
     }
 
     private float convertUniPolar(float x) {
@@ -255,7 +256,7 @@ public class AD7718 {
     }
 
     private boolean startRead(String chan) throws IOException {
-        List channels = Arrays.asList(CHAN_NAMES);
+        List<String> channels = Arrays.asList(CHAN_NAMES);
         if (channels.contains(chan)) {
             int channelID = channels.indexOf(chan);
             configADC(CON_RANGE7 | CON_UNIPOLAR | channelID << 4);

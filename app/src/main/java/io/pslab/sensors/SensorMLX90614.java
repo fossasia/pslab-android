@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -33,6 +32,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.pslab.DataFormatter;
 import io.pslab.R;
@@ -58,8 +58,8 @@ public class SensorMLX90614 extends AppCompatActivity {
     private LineChart mChartAmbientTemperature;
     private long startTime;
     private int flag;
-    private ArrayList<Entry> entriesObjectTemperature;
-    private ArrayList<Entry> entriesAmbientTemperature;
+    private List<Entry> entriesObjectTemperature;
+    private List<Entry> entriesAmbientTemperature;
     private RelativeLayout sensorDock;
     private CheckBox indefiniteSamplesCheckBox;
     private EditText samplesEditBox;
@@ -106,31 +106,28 @@ public class SensorMLX90614 extends AppCompatActivity {
         entriesObjectTemperature = new ArrayList<>();
         entriesAmbientTemperature = new ArrayList<>();
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (scienceLab.isConnected() && shouldPlay()) {
-                        sensorDataFetch = new SensorMLX90614.SensorDataFetch();
-                        sensorDataFetch.execute();
-                        if (flag == 0) {
-                            startTime = System.currentTimeMillis();
-                            flag = 1;
-                        }
+        Runnable runnable = () -> {
+            while (true) {
+                if (scienceLab.isConnected() && shouldPlay()) {
+                    sensorDataFetch = new SensorDataFetch();
+                    sensorDataFetch.execute();
+                    if (flag == 0) {
+                        startTime = System.currentTimeMillis();
+                        flag = 1;
+                    }
 
-                        synchronized (lock) {
-                            try {
-                                lock.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
+                    synchronized (lock) {
                         try {
-                            Thread.sleep(timeGap);
+                            lock.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                    }
+
+                    try {
+                        Thread.sleep(timeGap);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -236,21 +233,18 @@ public class SensorMLX90614 extends AppCompatActivity {
         final int max = 1000;
         final int min = 100;
 
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (play && scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.circle_play_button);
-                    play = false;
-                } else if (!scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.circle_play_button);
-                    play = false;
-                } else {
-                    playPauseButton.setImageResource(R.drawable.circle_pause_button);
-                    play = true;
-                    if (!indefiniteSamplesCheckBox.isChecked()) {
-                        counter = Integer.parseInt(samplesEditBox.getText().toString());
-                    }
+        playPauseButton.setOnClickListener(v -> {
+            if (play && scienceLab.isConnected()) {
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
+                play = false;
+            } else if (!scienceLab.isConnected()) {
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
+                play = false;
+            } else {
+                playPauseButton.setImageResource(R.drawable.circle_pause_button);
+                play = true;
+                if (!indefiniteSamplesCheckBox.isChecked()) {
+                    counter = Integer.parseInt(samplesEditBox.getText().toString());
                 }
             }
         });
@@ -258,16 +252,13 @@ public class SensorMLX90614 extends AppCompatActivity {
 
         indefiniteSamplesCheckBox.setChecked(true);
         samplesEditBox.setEnabled(false);
-        indefiniteSamplesCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    runIndefinitely = true;
-                    samplesEditBox.setEnabled(false);
-                } else {
-                    runIndefinitely = false;
-                    samplesEditBox.setEnabled(true);
-                }
+        indefiniteSamplesCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                runIndefinitely = true;
+                samplesEditBox.setEnabled(false);
+            } else {
+                runIndefinitely = false;
+                samplesEditBox.setEnabled(true);
             }
         });
 
@@ -311,17 +302,14 @@ public class SensorMLX90614 extends AppCompatActivity {
 
             final SharedPreferences sharedPreferences = this.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
             final AlertDialog dialog = builder.create();
-            Boolean skipDialog = sharedPreferences.getBoolean(KEY, false);
-            okButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (doNotShowDialog.isChecked()) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(KEY, true);
-                        editor.apply();
-                    }
-                    dialog.dismiss();
+            boolean skipDialog = sharedPreferences.getBoolean(KEY, false);
+            okButton.setOnClickListener(v -> {
+                if (doNotShowDialog.isChecked()) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(KEY, true);
+                    editor.apply();
                 }
+                dialog.dismiss();
             });
             if (!skipDialog) {
                 dialog.show();

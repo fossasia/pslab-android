@@ -22,9 +22,9 @@ public class NothingSelectedSpinnerAdapter implements SpinnerAdapter, ListAdapte
     private static final int EXTRA = 1;
     protected SpinnerAdapter adapter;
     protected Context context;
-    private int nothingSelectedLayout;
-    private int nothingSelectedDropdownLayout;
-    private LayoutInflater layoutInflater;
+    private final int nothingSelectedLayout;
+    private final int nothingSelectedDropdownLayout;
+    private final LayoutInflater layoutInflater;
 
     /**
      * Use this constructor to have NO 'Select One...' item, instead use

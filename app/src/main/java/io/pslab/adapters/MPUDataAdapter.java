@@ -18,7 +18,7 @@ import io.realm.RealmResults;
 
 public class MPUDataAdapter extends RecyclerView.Adapter<MPUDataAdapter.ViewHolder> {
 
-    private RealmResults<DataMPU6050> results;
+    private final RealmResults<DataMPU6050> results;
 
     public MPUDataAdapter(RealmResults<DataMPU6050> results) {
         this.results = results;
@@ -50,9 +50,16 @@ public class MPUDataAdapter extends RecyclerView.Adapter<MPUDataAdapter.ViewHold
         return results.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvAx, tvAy, tvAz, tvGx, tvGy, tvGz, tvTemperature, tvTitle;
+        private final TextView tvAx;
+        private final TextView tvAy;
+        private final TextView tvAz;
+        private final TextView tvGx;
+        private final TextView tvGy;
+        private final TextView tvGz;
+        private final TextView tvTemperature;
+        private final TextView tvTitle;
 
         ViewHolder(View itemView) {
             super(itemView);

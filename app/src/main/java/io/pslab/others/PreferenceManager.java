@@ -9,9 +9,9 @@ import android.content.SharedPreferences;
 
 public class PreferenceManager {
 
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private Context context;
+    private final Context context;
 
     private static final String preferenceName = "PSLAB";
     private static final String version = "version";

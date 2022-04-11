@@ -12,7 +12,6 @@ import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.DragEvent;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -314,145 +313,101 @@ public class RoboticArmActivity extends GuideActivity {
             }
         });
 
-        servo1Layout.findViewById(R.id.drag_handle).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo1Layout);
-                v.startDrag(null, myShadow, servo1Layout, 0);
-                return true;
-            }
+        servo1Layout.findViewById(R.id.drag_handle).setOnLongClickListener(v -> {
+            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo1Layout);
+            v.startDrag(null, myShadow, servo1Layout, 0);
+            return true;
         });
 
-        servo2Layout.findViewById(R.id.drag_handle).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo2Layout);
-                v.startDrag(null, myShadow, servo2Layout, 0);
-                return true;
-            }
+        servo2Layout.findViewById(R.id.drag_handle).setOnLongClickListener(v -> {
+            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo2Layout);
+            v.startDrag(null, myShadow, servo2Layout, 0);
+            return true;
         });
 
-        servo3Layout.findViewById(R.id.drag_handle).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo3Layout);
-                v.startDrag(null, myShadow, servo3Layout, 0);
-                return true;
-            }
+        servo3Layout.findViewById(R.id.drag_handle).setOnLongClickListener(v -> {
+            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo3Layout);
+            v.startDrag(null, myShadow, servo3Layout, 0);
+            return true;
         });
 
-        servo4Layout.findViewById(R.id.drag_handle).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo4Layout);
-                v.startDrag(null, myShadow, servo4Layout, 0);
-                return true;
-            }
+        servo4Layout.findViewById(R.id.drag_handle).setOnLongClickListener(v -> {
+            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(servo4Layout);
+            v.startDrag(null, myShadow, servo4Layout, 0);
+            return true;
         });
 
-        degreeText1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                removeStatusBar();
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    degree = Integer.valueOf(degreeText1.getText().toString());
-                    if (degree > 360 || degree < 0) {
-                        degreeText1.setText(getResources().getString(R.string.zero));
-                        seekArc1.setProgress(0);
-                        toastInvalidValueMessage();
-                    } else {
-                        seekArc1.setProgress((int) (degree / 3.6));
-                        editEnter = true;
-                    }
+        degreeText1.setOnEditorActionListener((v, actionId, event) -> {
+            removeStatusBar();
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                degree = Integer.parseInt(degreeText1.getText().toString());
+                if (degree > 360 || degree < 0) {
+                    degreeText1.setText(getResources().getString(R.string.zero));
+                    seekArc1.setProgress(0);
+                    toastInvalidValueMessage();
+                } else {
+                    seekArc1.setProgress((int) (degree / 3.6));
+                    editEnter = true;
                 }
-                return false;
             }
+            return false;
         });
 
-        degreeText1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                degreeText1.setCursorVisible(true);
-            }
-        });
+        degreeText1.setOnClickListener(v -> degreeText1.setCursorVisible(true));
 
-        degreeText2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                removeStatusBar();
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    degree = Integer.valueOf(degreeText2.getText().toString());
-                    if (degree > 360 || degree < 0) {
-                        degreeText2.setText(getResources().getString(R.string.zero));
-                        seekArc2.setProgress(0);
-                        toastInvalidValueMessage();
-                    } else {
-                        seekArc2.setProgress((int) (degree / 3.6));
-                        editEnter = true;
-                    }
+        degreeText2.setOnEditorActionListener((v, actionId, event) -> {
+            removeStatusBar();
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                degree = Integer.parseInt(degreeText2.getText().toString());
+                if (degree > 360 || degree < 0) {
+                    degreeText2.setText(getResources().getString(R.string.zero));
+                    seekArc2.setProgress(0);
+                    toastInvalidValueMessage();
+                } else {
+                    seekArc2.setProgress((int) (degree / 3.6));
+                    editEnter = true;
                 }
-                return false;
             }
+            return false;
         });
 
-        degreeText2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                degreeText2.setCursorVisible(true);
-            }
-        });
+        degreeText2.setOnClickListener(v -> degreeText2.setCursorVisible(true));
 
-        degreeText3.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                removeStatusBar();
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    degree = Integer.parseInt(degreeText3.getText().toString());
-                    if (degree > 360 || degree < 0) {
-                        degreeText3.setText(getResources().getString(R.string.zero));
-                        seekArc3.setProgress(0);
-                        toastInvalidValueMessage();
-                    } else {
-                        seekArc3.setProgress((int) (degree / 3.6));
-                        editEnter = true;
-                    }
+        degreeText3.setOnEditorActionListener((v, actionId, event) -> {
+            removeStatusBar();
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                degree = Integer.parseInt(degreeText3.getText().toString());
+                if (degree > 360 || degree < 0) {
+                    degreeText3.setText(getResources().getString(R.string.zero));
+                    seekArc3.setProgress(0);
+                    toastInvalidValueMessage();
+                } else {
+                    seekArc3.setProgress((int) (degree / 3.6));
+                    editEnter = true;
                 }
-                return false;
             }
+            return false;
         });
 
-        degreeText3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                degreeText3.setCursorVisible(true);
-            }
-        });
+        degreeText3.setOnClickListener(v -> degreeText3.setCursorVisible(true));
 
-        degreeText4.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                removeStatusBar();
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    degree = Integer.valueOf(degreeText4.getText().toString());
-                    if (degree > 360 || degree < 0) {
-                        degreeText4.setText(getResources().getString(R.string.zero));
-                        seekArc4.setProgress(0);
-                        toastInvalidValueMessage();
-                    } else {
-                        seekArc4.setProgress((int) (degree / 3.6));
-                        editEnter = true;
-                    }
+        degreeText4.setOnEditorActionListener((v, actionId, event) -> {
+            removeStatusBar();
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                degree = Integer.parseInt(degreeText4.getText().toString());
+                if (degree > 360 || degree < 0) {
+                    degreeText4.setText(getResources().getString(R.string.zero));
+                    seekArc4.setProgress(0);
+                    toastInvalidValueMessage();
+                } else {
+                    seekArc4.setProgress((int) (degree / 3.6));
+                    editEnter = true;
                 }
-                return false;
             }
+            return false;
         });
 
-        degreeText4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                degreeText4.setCursorVisible(true);
-            }
-        });
+        degreeText4.setOnClickListener(v -> degreeText4.setCursorVisible(true));
 
         timeIndicatorLayout = findViewById(R.id.time_indicator);
         timeIndicatorParams = new LinearLayout.LayoutParams(screen_width / 6 - 2, 12);
@@ -475,7 +430,7 @@ public class RoboticArmActivity extends GuideActivity {
                 String deg4 = ((TextView) servo4TimeLine.getChildAt(timelinePosition).findViewById(R.id.timeline_box_degree_text)).getText().toString();
                 deg4 = (deg4.length() > 0) ? deg4.substring(0, deg4.length() - 1) : getResources().getString(R.string.zero);
                 if (scienceLab.isConnected()) {
-                    scienceLab.servo4(Double.valueOf(deg1), Double.valueOf(deg2), Double.valueOf(deg3), Double.valueOf(deg4));
+                    scienceLab.servo4(Double.parseDouble(deg1), Double.parseDouble(deg2), Double.parseDouble(deg3), Double.parseDouble(deg4));
                 }
                 timelinePosition++;
             }
@@ -557,67 +512,52 @@ public class RoboticArmActivity extends GuideActivity {
         }
         CustomSnackBar.showSnackBar(findViewById(R.id.robotic_arm_coordinator),
                 getString(R.string.csv_store_text) + " " + servoCSVLogger.getCurrentFilePath()
-                , getString(R.string.open), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(RoboticArmActivity.this, DataLoggerActivity.class);
-                        intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.robotic_arm));
-                        startActivity(intent);
-                    }
+                , getString(R.string.open), view -> {
+                    Intent intent = new Intent(RoboticArmActivity.this, DataLoggerActivity.class);
+                    intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getResources().getString(R.string.robotic_arm));
+                    startActivity(intent);
                 }, Snackbar.LENGTH_SHORT);
     }
 
-    private final View.OnDragListener servo1DragListener = new View.OnDragListener() {
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                View view = (View) event.getLocalState();
-                TextView text = view.findViewById(R.id.degreeText);
-                if (view.getId() == R.id.servo_1) {
-                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
-                }
+    private final View.OnDragListener servo1DragListener = (v, event) -> {
+        if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+            View view = (View) event.getLocalState();
+            TextView text = view.findViewById(R.id.degreeText);
+            if (view.getId() == R.id.servo_1) {
+                ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
             }
-            return true;
         }
+        return true;
     };
-    private final View.OnDragListener servo2DragListener = new View.OnDragListener() {
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                View view = (View) event.getLocalState();
-                TextView text = view.findViewById(R.id.degreeText);
-                if (view.getId() == R.id.servo_2) {
-                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
-                }
+    private final View.OnDragListener servo2DragListener = (v, event) -> {
+        if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+            View view = (View) event.getLocalState();
+            TextView text = view.findViewById(R.id.degreeText);
+            if (view.getId() == R.id.servo_2) {
+                ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
             }
-            return true;
         }
+        return true;
     };
-    private final View.OnDragListener servo3DragListener = new View.OnDragListener() {
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                View view = (View) event.getLocalState();
-                TextView text = view.findViewById(R.id.degreeText);
-                if (view.getId() == R.id.servo_3) {
-                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
-                }
+    private final View.OnDragListener servo3DragListener = (v, event) -> {
+        if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+            View view = (View) event.getLocalState();
+            TextView text = view.findViewById(R.id.degreeText);
+            if (view.getId() == R.id.servo_3) {
+                ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
             }
-            return true;
         }
+        return true;
     };
-    private final View.OnDragListener servo4DragListener = new View.OnDragListener() {
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                View view = (View) event.getLocalState();
-                TextView text = view.findViewById(R.id.degreeText);
-                if (view.getId() == R.id.servo_4) {
-                    ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
-                }
+    private final View.OnDragListener servo4DragListener = (v, event) -> {
+        if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+            View view = (View) event.getLocalState();
+            TextView text = view.findViewById(R.id.degreeText);
+            if (view.getId() == R.id.servo_4) {
+                ((TextView) v.findViewById(R.id.timeline_box_degree_text)).setText(text.getText().toString());
             }
-            return true;
         }
+        return true;
     };
 
     @Override

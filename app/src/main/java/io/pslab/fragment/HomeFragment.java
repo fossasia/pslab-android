@@ -75,10 +75,7 @@ public class HomeFragment extends Fragment {
         if (booleanVariable == null) {
             booleanVariable = new InitializationVariable();
         }
-        if (scienceLab.calibrated)
-            booleanVariable.setVariable(true);
-        else
-            booleanVariable.setVariable(false);
+        booleanVariable.setVariable(scienceLab.calibrated);
     }
 
     @Nullable
@@ -113,57 +110,51 @@ public class HomeFragment extends Fragment {
          *
          * See: https://github.com/fossasia/pslab-android/issues/2211
          */
-        deviceDescription.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (webView == null) {
-                    return;
+        deviceDescription.setOnClickListener(view1 -> {
+            if (webView == null) {
+                return;
+            }
+
+            webView.loadUrl("https://pslab.io");
+            webView.getSettings().setDomStorageEnabled(true);
+            webView.getSettings().setJavaScriptEnabled(true);
+            svHomeContent.setVisibility(View.GONE);
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageStarted(WebView view1, String url, Bitmap favicon) {
+                    if (wvProgressBar != null) {
+                        wvProgressBar.setIndeterminate(true);
+                        wvProgressBar.setVisibility(View.VISIBLE);
+                    }
                 }
 
-                webView.loadUrl("https://pslab.io");
-                webView.getSettings().setDomStorageEnabled(true);
-                webView.getSettings().setJavaScriptEnabled(true);
-                svHomeContent.setVisibility(View.GONE);
-                webView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                        if (wvProgressBar != null) {
-                            wvProgressBar.setIndeterminate(true);
-                            wvProgressBar.setVisibility(View.VISIBLE);
-                        }
+                public void onPageFinished(WebView view1, String url) {
+                    if (wvProgressBar != null) {
+                        wvProgressBar.setVisibility(View.GONE);
                     }
-
-                    public void onPageFinished(WebView view, String url) {
-                        if (wvProgressBar != null) {
-                            wvProgressBar.setVisibility(View.GONE);
-                        }
-                        if (webView != null) {
-                            webView.setVisibility(View.VISIBLE);
-                        }
+                    if (webView != null) {
+                        webView.setVisibility(View.VISIBLE);
                     }
-                });
-                isWebViewShowing = true;
-            }
+                }
+            });
+            isWebViewShowing = true;
         });
 
-        webView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    WebView webView = (WebView) v;
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_BACK:
-                            if (webView.canGoBack()) {
-                                webView.goBack();
-                                return true;
-                            }
-                            break;
-                        default:
-                            return false;
-                    }
+        webView.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                WebView webView = (WebView) v;
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_BACK:
+                        if (webView.canGoBack()) {
+                            webView.goBack();
+                            return true;
+                        }
+                        break;
+                    default:
+                        return false;
                 }
-                return false;
             }
+            return false;
         });
         if (ScienceLabCommon.scienceLab.isConnected()) {
             bluetoothButton.setVisibility(View.GONE);
@@ -174,22 +165,16 @@ public class HomeFragment extends Fragment {
             wifiButton.setVisibility(View.VISIBLE);
             bluetoothWifiOption.setVisibility(View.VISIBLE);
         }
-        bluetoothButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BluetoothScanFragment bluetoothScanFragment = new BluetoothScanFragment();
-                bluetoothScanFragment.show(getActivity().getSupportFragmentManager(), "bluetooth");
-                bluetoothScanFragment.setCancelable(true);
-            }
+        bluetoothButton.setOnClickListener(v -> {
+            BluetoothScanFragment bluetoothScanFragment = new BluetoothScanFragment();
+            bluetoothScanFragment.show(getActivity().getSupportFragmentManager(), "bluetooth");
+            bluetoothScanFragment.setCancelable(true);
         });
 
-        wifiButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ESPFragment espFragment = new ESPFragment();
-                espFragment.show(getActivity().getSupportFragmentManager(), "wifi");
-                espFragment.setCancelable(true);
-            }
+        wifiButton.setOnClickListener(v -> {
+            ESPFragment espFragment = new ESPFragment();
+            espFragment.show(getActivity().getSupportFragmentManager(), "wifi");
+            espFragment.setCancelable(true);
         });
         return view;
     }

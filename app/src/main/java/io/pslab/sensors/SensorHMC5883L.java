@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -53,9 +52,9 @@ public class SensorHMC5883L extends AppCompatActivity {
     private LineChart mChart;
     private long startTime;
     private int flag;
-    private ArrayList<Entry> entriesBx;
-    private ArrayList<Entry> entriesBy;
-    private ArrayList<Entry> entriesBz;
+    private List<Entry> entriesBx;
+    private List<Entry> entriesBy;
+    private List<Entry> entriesBz;
     private RelativeLayout sensorDock;
     private CheckBox indefiniteSamplesCheckBox;
     private EditText samplesEditBox;
@@ -102,29 +101,26 @@ public class SensorHMC5883L extends AppCompatActivity {
         entriesBz = new ArrayList<>();
         sensorDock.setVisibility(View.VISIBLE);
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (scienceLab.isConnected() && shouldPlay()) {
-                        sensorDataFetch = new SensorHMC5883L.SensorDataFetch();
-                        sensorDataFetch.execute();
-                        if (flag == 0) {
-                            startTime = System.currentTimeMillis();
-                            flag = 1;
-                        }
-                        synchronized (lock) {
-                            try {
-                                lock.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
+        Runnable runnable = () -> {
+            while (true) {
+                if (scienceLab.isConnected() && shouldPlay()) {
+                    sensorDataFetch = new SensorDataFetch();
+                    sensorDataFetch.execute();
+                    if (flag == 0) {
+                        startTime = System.currentTimeMillis();
+                        flag = 1;
+                    }
+                    synchronized (lock) {
                         try {
-                            Thread.sleep(timeGap);
+                            lock.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                    }
+                    try {
+                        Thread.sleep(timeGap);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -194,21 +190,18 @@ public class SensorHMC5883L extends AppCompatActivity {
         final int max = 1000;
         final int min = 100;
 
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (play && scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.circle_play_button);
-                    play = false;
-                } else if (!scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.circle_play_button);
-                    play = false;
-                } else {
-                    playPauseButton.setImageResource(R.drawable.circle_pause_button);
-                    play = true;
-                    if (!indefiniteSamplesCheckBox.isChecked()) {
-                        counter = Integer.parseInt(samplesEditBox.getText().toString());
-                    }
+        playPauseButton.setOnClickListener(v -> {
+            if (play && scienceLab.isConnected()) {
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
+                play = false;
+            } else if (!scienceLab.isConnected()) {
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
+                play = false;
+            } else {
+                playPauseButton.setImageResource(R.drawable.circle_pause_button);
+                play = true;
+                if (!indefiniteSamplesCheckBox.isChecked()) {
+                    counter = Integer.parseInt(samplesEditBox.getText().toString());
                 }
             }
         });
@@ -216,16 +209,13 @@ public class SensorHMC5883L extends AppCompatActivity {
 
         indefiniteSamplesCheckBox.setChecked(true);
         samplesEditBox.setEnabled(false);
-        indefiniteSamplesCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    runIndefinitely = true;
-                    samplesEditBox.setEnabled(false);
-                } else {
-                    runIndefinitely = false;
-                    samplesEditBox.setEnabled(true);
-                }
+        indefiniteSamplesCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                runIndefinitely = true;
+                samplesEditBox.setEnabled(false);
+            } else {
+                runIndefinitely = false;
+                samplesEditBox.setEnabled(true);
             }
         });
 
@@ -251,7 +241,7 @@ public class SensorHMC5883L extends AppCompatActivity {
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
 
-        private ArrayList<Double> dataHMC5883L = new ArrayList<>();
+        private List<Double> dataHMC5883L = new ArrayList<>();
         private long timeElapsed;
 
         @Override

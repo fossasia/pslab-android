@@ -436,13 +436,10 @@ public abstract class PSLabSensor extends GuideActivity {
             logLocation = getString(R.string.log_saved_failed);
         }
         CustomSnackBar.showSnackBar(sensorParentView, logLocation, getString(R.string.open),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(PSLabSensor.this, DataLoggerActivity.class);
-                        intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getSensorName());
-                        startActivity(intent);
-                    }
+                view -> {
+                    Intent intent = new Intent(PSLabSensor.this, DataLoggerActivity.class);
+                    intent.putExtra(DataLoggerActivity.CALLER_ACTIVITY, getSensorName());
+                    startActivity(intent);
                 }, Snackbar.LENGTH_INDEFINITE);
     }
 

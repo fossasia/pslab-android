@@ -1,5 +1,12 @@
 package io.pslab.communication;
 
+import static org.apache.commons.lang3.math.NumberUtils.max;
+import static org.apache.commons.lang3.math.NumberUtils.min;
+import static org.apache.commons.math3.util.FastMath.abs;
+import static org.apache.commons.math3.util.FastMath.exp;
+import static org.apache.commons.math3.util.FastMath.sin;
+import static java.lang.Math.cos;
+
 import android.util.Log;
 
 import org.apache.commons.math3.analysis.ParametricUnivariateFunction;
@@ -10,18 +17,12 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
+
+import java.util.Arrays;
+import java.util.List;
+
 import io.pslab.filters.BandstopFilter;
 import io.pslab.filters.Lfilter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static java.lang.Math.cos;
-import static org.apache.commons.lang3.math.NumberUtils.min;
-import static org.apache.commons.lang3.math.NumberUtils.max;
-import static org.apache.commons.math3.util.FastMath.abs;
-import static org.apache.commons.math3.util.FastMath.exp;
-import static org.apache.commons.math3.util.FastMath.sin;
 
 /**
  * Created by akarshan on 5/13/17.
@@ -66,7 +67,7 @@ public class AnalyticsClass {
         }
     };
 
-    public ArrayList<double[]> fitExponential(double time[], double voltage[]) {
+    public List<double[]> fitExponential(double time[], double voltage[]) {
         //length of time and voltage arrays should be in the power of 2
         double size = time.length;
         double v80 = voltage[0] * 0.8;
@@ -87,7 +88,7 @@ public class AnalyticsClass {
         double[] result = fitter.fit(exponentialParametricUnivariateFunction, initialGuess);    //result -> the fitted parameters.
         for (int i = 0; i < time.length; i++)
             vf[i] = result[0] * exp(-time[i] / result[1]) + result[2];
-        return new ArrayList<double[]>(Arrays.asList(result, vf));
+        return Arrays.asList(result, vf);
     }
 
     //-------------------------- Sine Fit ----------------------------------------//
@@ -333,7 +334,7 @@ public class AnalyticsClass {
         return frequency[index];
     }
 
-    public ArrayList<double[]> amplitudeSpectrum(double[] voltage, int samplingInterval, int nHarmonics) {
+    public List<double[]> amplitudeSpectrum(double[] voltage, int samplingInterval, int nHarmonics) {
         int voltageLength = voltage.length;
         Complex[] complex;
         double[] amplitude;
@@ -361,10 +362,10 @@ public class AnalyticsClass {
                 }
             }
         }
-        return new ArrayList<double[]>(Arrays.asList(                                                                   // restrict to 'nHarmonics' harmonics
+        return Arrays.asList(                                                                   // restrict to 'nHarmonics' harmonics
                 Arrays.copyOfRange(frequency, index * nHarmonics, frequency.length),
                 Arrays.copyOfRange(amplitude, index * nHarmonics, amplitude.length)
-        ));
+        );
     }
 
     //-------------------------- Damped Sine Fit ----------------------------------------//
@@ -450,7 +451,7 @@ public class AnalyticsClass {
         return result;
     }
 
-    ArrayList<double[]> butterNotch(double lowCut, double highCut, double fs, int order) {
+    List<double[]> butterNotch(double lowCut, double highCut, double fs, int order) {
         double nyq = 0.5 * fs;
         double low = lowCut / nyq;
         double high = highCut / nyq;
@@ -459,14 +460,14 @@ public class AnalyticsClass {
     }
 
     double[] butterNotchFilter(double[] data, double lowCut, double highCut, double fs, int order) {
-        ArrayList<double[]> arrayList = butterNotch(lowCut, highCut, fs, order);
-        double[] b = arrayList.get(0);
-        double[] a = arrayList.get(1);
+        List<double[]> list = butterNotch(lowCut, highCut, fs, order);
+        double[] b = list.get(0);
+        double[] a = list.get(1);
         Lfilter lfilter = new Lfilter();
         return lfilter.filter(b, a, data);
     }
 
-    public ArrayList<double[]> fft(double[] signal, double samplingInterval) {
+    public List<double[]> fft(double[] signal, double samplingInterval) {
         /*
          Returns positive half of the Fourier transform of the signal.
          Sampling interval 'samplingInterval', in milliseconds
@@ -489,7 +490,7 @@ public class AnalyticsClass {
         frequencyArray = fftFrequency(ns, samplingInterval);
         x = Arrays.copyOfRange(frequencyArray, 0, ns / 2);
         y = Arrays.copyOfRange(terms, 0, ns / 2);
-        return new ArrayList<double[]>(Arrays.asList(x, y));
+        return Arrays.asList(x, y);
     }
 
     public double[] rfftFrequency(int n, double space) {

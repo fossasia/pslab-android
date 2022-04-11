@@ -3,12 +3,14 @@ package io.pslab.fragment;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
+
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import io.pslab.R;
 import io.pslab.others.CustomSnackBar;
@@ -82,7 +84,7 @@ public class DustSensorSettingsFragment extends PreferenceFragmentCompat impleme
                     }
                 } catch (NumberFormatException e) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.update_period_msg),null,null, Snackbar.LENGTH_SHORT);
+                            getString(R.string.update_period_msg), null, null, Snackbar.LENGTH_SHORT);
                     updatePeriodPref.setSummary("1000 ms");
                     updatePeriodPref.setText("1000");
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -96,11 +98,11 @@ public class DustSensorSettingsFragment extends PreferenceFragmentCompat impleme
                     if (highLimit > 5.0 || highLimit < 0.0) {
                         throw new NumberFormatException();
                     } else {
-                        highLimitPref.setSummary(String.valueOf(highLimit) + " PPM");
+                        highLimitPref.setSummary(highLimit + " PPM");
                     }
                 } catch (NumberFormatException e) {
                     CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.high_limit_msg),null,null,Snackbar.LENGTH_SHORT);
+                            getString(R.string.high_limit_msg), null, null, Snackbar.LENGTH_SHORT);
                     highLimitPref.setSummary("4.0 V");
                     highLimitPref.setText("4.0");
                     SharedPreferences.Editor editor = sharedPref.edit();

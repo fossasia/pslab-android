@@ -58,8 +58,8 @@ public class FloatSeekBar extends AppCompatSeekBar {
         }
         a.recycle();
     }
-    public void setters(double a, double b)
-    {
+
+    public void setters(double a, double b) {
         min = a;
         max = b;
     }

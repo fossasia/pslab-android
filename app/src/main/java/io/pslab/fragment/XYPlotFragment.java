@@ -1,21 +1,19 @@
 package io.pslab.fragment;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.Spinner;
+
+import androidx.fragment.app.Fragment;
 
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
 import io.pslab.others.ViewGroupUtils;
-
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.Spinner;
 
 public class XYPlotFragment extends Fragment {
 
@@ -83,31 +81,28 @@ public class XYPlotFragment extends Fragment {
         spinnerChannelSelect1.setSelection(channelsAdapter.getPosition("CH1"), true);
         spinnerChannelSelect2.setSelection(channelsAdapter.getPosition("CH2"), true);
 
-        checkBoxXYPlot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ((OscilloscopeActivity) getActivity()).isXYPlotSelected = isChecked;
-                if (isChecked) {
-                    ViewGroupUtils.replaceView(((OscilloscopeActivity) getActivity()).mChart,
-                            ((OscilloscopeActivity) getActivity()).graph);
-                    ((OscilloscopeActivity) getActivity()).setXAxisLabel(spinnerChannelSelect1.getSelectedItem().toString());
-                    ((OscilloscopeActivity) getActivity()).setLeftYAxisLabel(spinnerChannelSelect2.getSelectedItem().toString());
-                    ((OscilloscopeActivity) getActivity()).xAxisLabelUnit.setText("(V)");
-                    ((OscilloscopeActivity) getActivity()).rightYAxisLabel.setVisibility(View.INVISIBLE);
-                    ((OscilloscopeActivity) getActivity()).rightYAxisLabelUnit.setVisibility(View.INVISIBLE);
+        checkBoxXYPlot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            ((OscilloscopeActivity) getActivity()).isXYPlotSelected = isChecked;
+            if (isChecked) {
+                ViewGroupUtils.replaceView(((OscilloscopeActivity) getActivity()).mChart,
+                        ((OscilloscopeActivity) getActivity()).graph);
+                ((OscilloscopeActivity) getActivity()).setXAxisLabel(spinnerChannelSelect1.getSelectedItem().toString());
+                ((OscilloscopeActivity) getActivity()).setLeftYAxisLabel(spinnerChannelSelect2.getSelectedItem().toString());
+                ((OscilloscopeActivity) getActivity()).xAxisLabelUnit.setText("(V)");
+                ((OscilloscopeActivity) getActivity()).rightYAxisLabel.setVisibility(View.INVISIBLE);
+                ((OscilloscopeActivity) getActivity()).rightYAxisLabelUnit.setVisibility(View.INVISIBLE);
 
 
-                } else {
-                    ViewGroupUtils.replaceView(((OscilloscopeActivity) getActivity()).graph,
-                            ((OscilloscopeActivity) getActivity()).mChart);
-                    ((OscilloscopeActivity) getActivity()).rightYAxisLabel.setVisibility(View.VISIBLE);
-                    ((OscilloscopeActivity) getActivity()).rightYAxisLabelUnit.setVisibility(View.VISIBLE);
-                    ((OscilloscopeActivity) getActivity()).setXAxisLabel("time");
-                    ((OscilloscopeActivity) getActivity()).setXAxisScale(((OscilloscopeActivity) getActivity()).timebase);
-
-                }
+            } else {
+                ViewGroupUtils.replaceView(((OscilloscopeActivity) getActivity()).graph,
+                        ((OscilloscopeActivity) getActivity()).mChart);
+                ((OscilloscopeActivity) getActivity()).rightYAxisLabel.setVisibility(View.VISIBLE);
+                ((OscilloscopeActivity) getActivity()).rightYAxisLabelUnit.setVisibility(View.VISIBLE);
+                ((OscilloscopeActivity) getActivity()).setXAxisLabel("time");
+                ((OscilloscopeActivity) getActivity()).setXAxisScale(((OscilloscopeActivity) getActivity()).timebase);
 
             }
+
         });
 
         return v;

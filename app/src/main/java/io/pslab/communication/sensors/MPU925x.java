@@ -2,11 +2,13 @@ package io.pslab.communication.sensors;
 
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.util.FastMath;
-import io.pslab.communication.peripherals.I2C;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import io.pslab.communication.peripherals.I2C;
 
 /**
  * Created by akarshan on 5/7/17.
@@ -18,25 +20,25 @@ import java.util.Arrays;
 
 public class MPU925x {
     private static final String TAG = "MPU925x";
-    private int INT_PIN_CFG = 0x37;
-    private int GYRO_CONFIG = 0x1B;
-    private int ACCEL_CONFIG = 0x1C;
-    private double[] GYRO_SCALING = new double[]{131, 65.5, 32.8, 16.4};
-    private int[] ACCEL_SCALING = new int[]{16384, 8192, 4096, 2048};
+    private final int INT_PIN_CFG = 0x37;
+    private final int GYRO_CONFIG = 0x1B;
+    private final int ACCEL_CONFIG = 0x1C;
+    private final double[] GYRO_SCALING = new double[]{131, 65.5, 32.8, 16.4};
+    private final int[] ACCEL_SCALING = new int[]{16384, 8192, 4096, 2048};
     private int AR = 3;
     private int GR = 3;
-    private int NUMPLOTS = 7;
+    private final int NUMPLOTS = 7;
     public String[] PLOTNAMES = new String[]{"Ax", "Ay", "Az", "Temp", "Gx", "Gy", "Gz"};
-    private int ADDRESS = 0x68;
-    private int AK8963_ADDRESS = 0x0C;
-    private int AK8963_CNTL = 0x0A;
+    private final int ADDRESS = 0x68;
+    private final int AK8963_ADDRESS = 0x0C;
+    private final int AK8963_CNTL = 0x0A;
     public String name = "Accel/gyro";
 
-    private I2C i2c;
-    private ArrayList<KalmanFilter> kalman = new ArrayList<>();
-    private ArrayList<Integer> gyroRange = new ArrayList<>(Arrays.asList(250, 500, 1000, 2000));
-    private ArrayList<Integer> accelRange = new ArrayList<>(Arrays.asList(2, 4, 8, 16));
-    private double[] kalmanFilter = new double[]{.01, .1, 1, 10, 100, 1000, 10000, 0};       //Replaced "OFF" with 0.
+    private final I2C i2c;
+    private List<KalmanFilter> kalman;
+    private final List<Integer> gyroRange = Arrays.asList(250, 500, 1000, 2000);
+    private final List<Integer> accelRange = Arrays.asList(2, 4, 8, 16);
+    private final double[] kalmanFilter = new double[]{.01, .1, 1, 10, 100, 1000, 10000, 0};       //Replaced "OFF" with 0.
 
     public MPU925x(I2C i2c) throws IOException {
         this.i2c = i2c;
@@ -47,9 +49,9 @@ public class MPU925x {
     }
 
     public void KalmanFilter(Double opt) throws IOException, NullPointerException {
-        ArrayList<double[]> noise = new ArrayList<>();
+        List<double[]> noise = new ArrayList<>();
         double[] innerNoiseArray = new double[NUMPLOTS];
-        ArrayList<Double> vals;
+        List<Double> vals;
         double standardDeviation;
         if (opt == 0) {        //Replaced "OFF" with 0.
             kalman = null;
@@ -67,7 +69,7 @@ public class MPU925x {
         }
     }
 
-    private ArrayList<Character> getVals(int addr, int bytestoread) throws IOException {
+    private List<Character> getVals(int addr, int bytestoread) throws IOException {
         return i2c.readBulk(ADDRESS, addr, bytestoread);
     }
 
@@ -85,9 +87,9 @@ public class MPU925x {
         i2c.writeBulk(ADDRESS, new int[]{ACCEL_CONFIG, AR << 3});
     }
 
-    public ArrayList<Double> getRaw() throws IOException, NullPointerException {
-        ArrayList<Character> vals = getVals(0x3B, 14);
-        ArrayList<Double> raw = new ArrayList<>();
+    public List<Double> getRaw() throws IOException, NullPointerException {
+        List<Character> vals = getVals(0x3B, 14);
+        List<Double> raw = new ArrayList<>();
         if (vals.size() == 14) {
             for (int a = 0; a < 3; a++)
                 raw.set(a, 1. * (vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / ACCEL_SCALING[AR]);
@@ -109,7 +111,7 @@ public class MPU925x {
 
     public double[] getAcceleration() throws IOException {
         //Return a list of 3 values for acceleration vector
-        ArrayList<Character> vals = getVals(0x3B, 6);
+        List<Character> vals = getVals(0x3B, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);
@@ -118,14 +120,14 @@ public class MPU925x {
 
     public double getTemperature() throws IOException {
         //Return temperature
-        ArrayList<Character> vals = getVals(0x41, 6);
+        List<Character> vals = getVals(0x41, 6);
         int t = vals.get(0) << 8 | vals.get(1);
         return t / 65535.;
     }
 
     public double[] getGyroscope() throws IOException {
         //Return a list of 3 values for angular velocity vector
-        ArrayList<Character> vals = getVals(0x43, 6);
+        List<Character> vals = getVals(0x43, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);
@@ -135,7 +137,7 @@ public class MPU925x {
 
     public double[] getMagneticField() throws IOException {
         //Return a list of 3 values for magnetic field vector
-        ArrayList<Character> vals = i2c.readBulk(AK8963_ADDRESS, 0X03, 7);
+        List<Character> vals = i2c.readBulk(AK8963_ADDRESS, 0X03, 7);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);

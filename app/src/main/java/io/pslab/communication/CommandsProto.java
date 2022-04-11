@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class CommandsProto {
 
-    private static String TAG = "CommandsProto";
+    private static final String TAG = "CommandsProto";
 
     public int ACKNOWLEDGE = 254;
     public int MAX_SAMPLES = 10000;

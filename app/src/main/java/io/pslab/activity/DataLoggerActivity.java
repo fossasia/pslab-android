@@ -49,8 +49,6 @@ import io.pslab.models.WaveGeneratorData;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.LocalDataLog;
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -147,12 +145,9 @@ public class DataLoggerActivity extends AppCompatActivity {
                 categoryData = LocalDataLog.with().getAllSensorBlocks();
         }
         fillData();
-        categoryData.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SensorDataBlock>>() {
-            @Override
-            public void onChange(RealmResults<SensorDataBlock> sensorDataBlocks, OrderedCollectionChangeSet changeSet) {
-                if (categoryData.size() == 0) {
-                    DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
-                }
+        categoryData.addChangeListener((sensorDataBlocks, changeSet) -> {
+            if (categoryData.size() == 0) {
+                DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
             }
         });
     }
@@ -280,40 +275,40 @@ public class DataLoggerActivity extends AppCompatActivity {
         RealmObject returnObject = null;
         switch (objectType) {
             case "Lux Meter":
-                returnObject = new LuxData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
+                returnObject = new LuxData(time, block, Float.parseFloat(data[2]), Double.parseDouble(data[3]), Double.parseDouble(data[4]));
                 break;
             case "Barometer":
-                returnObject = new BaroData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Double.valueOf(data[4]), Double.valueOf(data[5]));
+                returnObject = new BaroData(time, block, Float.parseFloat(data[2]), Float.parseFloat(data[3]), Double.parseDouble(data[4]), Double.parseDouble(data[5]));
                 break;
             case "Accelerometer":
-                returnObject = new AccelerometerData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
+                returnObject = new AccelerometerData(time, block, Float.parseFloat(data[2]), Float.parseFloat(data[3]), Float.parseFloat(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]));
                 break;
             case "Gyroscope":
-                returnObject = new GyroData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Double.valueOf(data[5]), Double.valueOf(data[6]));
+                returnObject = new GyroData(time, block, Float.parseFloat(data[2]), Float.parseFloat(data[3]), Float.parseFloat(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]));
                 break;
             case "Compass":
-                returnObject = new CompassData(time, block, data[2].equals("null") ? 0f : Float.valueOf(data[2]), data[3].equals("null") ? 0f : Float.valueOf(data[3]), data[4].equals("null") ? 0f : Float.valueOf(data[4]), data[5], Double.valueOf(data[6]), Double.valueOf(data[7]));
+                returnObject = new CompassData(time, block, data[2].equals("null") ? 0f : Float.parseFloat(data[2]), data[3].equals("null") ? 0f : Float.parseFloat(data[3]), data[4].equals("null") ? 0f : Float.parseFloat(data[4]), data[5], Double.parseDouble(data[6]), Double.parseDouble(data[7]));
                 break;
             case "Thermometer":
-                returnObject = new ThermometerData(time, block, Float.valueOf(data[2]), Double.valueOf(data[5]), Double.valueOf(data[6]));
+                returnObject = new ThermometerData(time, block, Float.parseFloat(data[2]), Double.parseDouble(data[5]), Double.parseDouble(data[6]));
                 break;
             case "Robotic Arm":
-                returnObject = new ServoData(time, block, data[2], data[3], data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]));
+                returnObject = new ServoData(time, block, data[2], data[3], data[4], data[5], Float.parseFloat(data[6]), Float.parseFloat(data[7]));
                 break;
             case "Wave Generator":
-                returnObject = new WaveGeneratorData(time, block, data[2], data[3], data[4], data[5], data[6], data[7], Float.valueOf(data[8]), Float.valueOf(data[9]));
+                returnObject = new WaveGeneratorData(time, block, data[2], data[3], data[4], data[5], data[6], data[7], Float.parseFloat(data[8]), Float.parseFloat(data[9]));
                 break;
             case "Oscilloscope":
-                returnObject = new OscilloscopeData(time, block, Integer.valueOf(data[2]), data[3], data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]), Float.valueOf(data[8]));
+                returnObject = new OscilloscopeData(time, block, Integer.parseInt(data[2]), data[3], data[4], data[5], Float.parseFloat(data[6]), Float.parseFloat(data[7]), Float.parseFloat(data[8]));
                 break;
             case "Power Source":
-                returnObject = new PowerSourceData(time, block, Float.valueOf(data[2]), Float.valueOf(data[3]), Float.valueOf(data[4]), Float.valueOf(data[5]), Float.valueOf(data[6]), Float.valueOf(data[7]));
+                returnObject = new PowerSourceData(time, block, Float.parseFloat(data[2]), Float.parseFloat(data[3]), Float.parseFloat(data[4]), Float.parseFloat(data[5]), Float.parseFloat(data[6]), Float.parseFloat(data[7]));
                 break;
             case "Logic Analyzer":
-                returnObject = new LogicAnalyzerData(time, block, data[2], Integer.valueOf(data[3]), data[4], data[5], Float.valueOf(data[6]), Float.valueOf(data[7]));
+                returnObject = new LogicAnalyzerData(time, block, data[2], Integer.parseInt(data[3]), data[4], data[5], Float.parseFloat(data[6]), Float.parseFloat(data[7]));
                 break;
             case "Gas Sensor":
-                returnObject = new GasSensorData(time, block, Float.valueOf(data[2]), Double.valueOf(data[3]), Double.valueOf(data[4]));
+                returnObject = new GasSensorData(time, block, Float.parseFloat(data[2]), Double.parseDouble(data[3]), Double.parseDouble(data[4]));
                 break;
             default:
                 returnObject = null;

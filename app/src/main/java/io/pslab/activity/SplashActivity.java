@@ -55,13 +55,10 @@ public class SplashActivity extends AppCompatActivity {
     private void exitSplashScreen() {
         handler = new Handler();
         int SPLASH_TIME_OUT = 2000;
-        handler.postDelayed(runnable = new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        handler.postDelayed(runnable = () -> {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }, SPLASH_TIME_OUT);
     }
 }

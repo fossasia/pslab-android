@@ -25,8 +25,8 @@ public class CommunicationHandler {
     private UsbEndpoint mReadEndpoint;
     private UsbEndpoint mWriteEndpoint;
 
-    private boolean mRts = false;
-    private boolean mDtr = false;
+    private final boolean mRts = false;
+    private final boolean mDtr = false;
     private boolean connected = false, device_found = false;
 
     private static final int USB_RECIP_INTERFACE = 0x01;
@@ -45,12 +45,12 @@ public class CommunicationHandler {
     protected final Object mReadBufferLock = new Object();
     protected final Object mWriteBufferLock = new Object();
 
-    private byte[] mReadBuffer;
-    private byte[] mWriteBuffer;
+    private final byte[] mReadBuffer;
+    private final byte[] mWriteBuffer;
 
     private UsbDeviceConnection mConnection;
 
-    private UsbManager mUsbManager;
+    private final UsbManager mUsbManager;
 
     public CommunicationHandler(UsbManager usbManager) {
         this.mUsbManager = usbManager;

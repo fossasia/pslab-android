@@ -4,16 +4,18 @@ import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Created by viveksb007 on 28/3/17.
  */
 
 public class DACChannel {
-    private String name;
+    private final String name;
     int channum;
     private int offset;
     public double[] range;
-    private double slope, intercept;
+    private double slope;
+    private final double intercept;
     PolynomialFunction VToCode;
     PolynomialFunction CodeToV;
     String calibrationEnabled;

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -191,12 +190,7 @@ public class TimebaseTriggerFragment extends Fragment {
             }
         });
 
-        checkBoxTrigger.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ((OscilloscopeActivity) getActivity()).isTriggerSelected = isChecked;
-            }
-        });
+        checkBoxTrigger.setOnCheckedChangeListener((buttonView, isChecked) -> ((OscilloscopeActivity) getActivity()).isTriggerSelected = isChecked);
 
         return v;
     }

@@ -15,10 +15,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 
-import io.pslab.R;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.pslab.R;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 

@@ -1,16 +1,15 @@
 package io.pslab.fragment;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
+
+import androidx.fragment.app.Fragment;
 
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
@@ -101,12 +100,7 @@ public class DataAnalysisFragment extends Fragment {
             }
         });
 
-        checkBoxFouierTransform.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ((OscilloscopeActivity) getActivity()).isFourierTransformSelected = isChecked;
-            }
-        });
+        checkBoxFouierTransform.setOnCheckedChangeListener((buttonView, isChecked) -> ((OscilloscopeActivity) getActivity()).isFourierTransformSelected = isChecked);
 
         return v;
     }

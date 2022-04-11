@@ -18,7 +18,7 @@ import io.pslab.R;
  * Created by asitava on 22/6/17.
  */
 
-public class EditTextWidget extends LinearLayout{
+public class EditTextWidget extends LinearLayout {
 
     private EditText editText;
     private Button button1;
@@ -53,55 +53,51 @@ public class EditTextWidget extends LinearLayout{
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!s.toString().equals("")){
+                if (!s.toString().equals("")) {
                     button1.setEnabled(true);
                     button2.setEnabled(true);
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
-        button1.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    double data = Double.parseDouble(editText.getText().toString());
-                    data = data - leastCount;
-                    data = Math.round(data*100.0)/100.0;
-                    data = data > maxima ? maxima : data;
-                    data = data < minima ? minima : data;
-                    String editTextValue = DataFormatter.formatDouble(data, DataFormatter.MEDIUM_PRECISION_FORMAT);
-                    editText.setText(editTextValue);
-                    editText.setSelection(editTextValue.length());
-                } catch (Exception e) {
-                    editText.setText("0");
-                    editText.setSelection(1);
-                }
+            public void afterTextChanged(Editable s) {
             }
         });
 
-        button2.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    double data = Double.valueOf(editText.getText().toString());
-                    data = data + leastCount;
-                    data = Math.round(data*100.0)/100.0;
-                    data = data > maxima ? maxima : data;
-                    data = data < minima ? minima : data;
-                    String editTextValue = DataFormatter.formatDouble(data, DataFormatter.MEDIUM_PRECISION_FORMAT);
-                    editText.setText(editTextValue);
-                    editText.setSelection(editTextValue.length());
-                } catch (Exception e) {
-                    editText.setText("0");
-                    editText.setSelection(1);
-                }
+        button1.setOnClickListener(v -> {
+            try {
+                double data = Double.parseDouble(editText.getText().toString());
+                data = data - leastCount;
+                data = Math.round(data * 100.0) / 100.0;
+                data = Math.min(data, maxima);
+                data = Math.max(data, minima);
+                String editTextValue = DataFormatter.formatDouble(data, DataFormatter.MEDIUM_PRECISION_FORMAT);
+                editText.setText(editTextValue);
+                editText.setSelection(editTextValue.length());
+            } catch (Exception e) {
+                editText.setText("0");
+                editText.setSelection(1);
+            }
+        });
+
+        button2.setOnClickListener(v -> {
+            try {
+                double data = Double.parseDouble(editText.getText().toString());
+                data = data + leastCount;
+                data = Math.round(data * 100.0) / 100.0;
+                data = Math.min(data, maxima);
+                data = Math.max(data, minima);
+                String editTextValue = DataFormatter.formatDouble(data, DataFormatter.MEDIUM_PRECISION_FORMAT);
+                editText.setText(editTextValue);
+                editText.setSelection(editTextValue.length());
+            } catch (Exception e) {
+                editText.setText("0");
+                editText.setSelection(1);
             }
         });
     }
@@ -126,7 +122,7 @@ public class EditTextWidget extends LinearLayout{
     }
 
     public String getText() {
-        return  editText.getText().toString();
+        return editText.getText().toString();
     }
 
     public void setText(String text) {

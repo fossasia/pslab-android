@@ -2,16 +2,15 @@ package io.pslab.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -21,6 +20,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.pslab.R;
 
@@ -33,9 +33,9 @@ public class GyroscopeViewFragment extends Fragment {
     private float currentMax = Integer.MIN_VALUE;
     private float currentMin = Integer.MAX_VALUE;
     private float currentValue = 0;
-    private ArrayList<Entry> entries;
+    private List<Entry> entries;
     private long startTime;
-    private static int updatePeriod = 100;
+    private static final int updatePeriod = 100;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
 
     @Nullable
@@ -121,7 +121,7 @@ public class GyroscopeViewFragment extends Fragment {
         this.entries.add(entry);
     }
 
-    public ArrayList<Entry> getEntries() {
+    public List<Entry> getEntries() {
         return this.entries;
     }
 

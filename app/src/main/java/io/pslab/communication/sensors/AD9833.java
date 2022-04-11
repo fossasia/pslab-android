@@ -3,9 +3,9 @@ package io.pslab.communication.sensors;
 
 import android.util.Log;
 
-import io.pslab.communication.peripherals.SPI;
-
 import java.io.IOException;
+
+import io.pslab.communication.peripherals.SPI;
 
 
 /**
@@ -19,31 +19,31 @@ import java.io.IOException;
 public class AD9833 {
     //control bytes
     private static final String TAG = "AD9833";
-    private int DDS_MAX_FREQ = 0xFFFFFFF - 1;
-    private int DDS_B28 = 13;
-    private int DDS_HLB = 12;
-    private int DDS_FSELECT = 11;
-    private int DDS_PSELECT = 10;
-    private int DDS_RESET = 8;
-    private int DDS_SLEEP1 = 7;
-    private int DDS_SLEEP12 = 6;
-    private int DDS_OPBITEN = 5;
-    private int DDS_DIV2 = 3;
-    private int DDS_MODE = 1;
+    private final int DDS_MAX_FREQ = 0xFFFFFFF - 1;
+    private final int DDS_B28 = 13;
+    private final int DDS_HLB = 12;
+    private final int DDS_FSELECT = 11;
+    private final int DDS_PSELECT = 10;
+    private final int DDS_RESET = 8;
+    private final int DDS_SLEEP1 = 7;
+    private final int DDS_SLEEP12 = 6;
+    private final int DDS_OPBITEN = 5;
+    private final int DDS_DIV2 = 3;
+    private final int DDS_MODE = 1;
 
-    private int DDS_FSYNC = 9;
+    private final int DDS_FSYNC = 9;
 
-    private int[] DDS_SINE = {0};
-    private int DDS_TRIANGLE = (1 << DDS_MODE);
-    private int DDS_SQUARE = (1 << DDS_OPBITEN);
-    private int DDS_RESERVED = (1 << DDS_OPBITEN) | (1 << DDS_MODE);
-    private int DDS_CLOCK;
-    private int clockScaler = 4;       // 8MHz
+    private final int[] DDS_SINE = {0};
+    private final int DDS_TRIANGLE = (1 << DDS_MODE);
+    private final int DDS_SQUARE = (1 << DDS_OPBITEN);
+    private final int DDS_RESERVED = (1 << DDS_OPBITEN) | (1 << DDS_MODE);
+    private final int DDS_CLOCK;
+    private final int clockScaler = 4;       // 8MHz
     private int waveformMode;
     private int activeChannel;
     private int frequency;
-    private int cs;
-    private SPI spi;
+    private final int cs;
+    private final SPI spi;
 
     public AD9833(SPI spi, int DDS_CLOCK) throws IOException {
         cs = 9;

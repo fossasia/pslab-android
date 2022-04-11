@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -27,6 +26,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.pslab.DataFormatter;
 import io.pslab.R;
@@ -53,9 +53,9 @@ public class SensorBMP180 extends AppCompatActivity {
     private LineChart mChartPressure;
     private long startTime;
     private int flag;
-    private ArrayList<Entry> entriesTemperature;
-    private ArrayList<Entry> entriesAltitude;
-    private ArrayList<Entry> entriesPressure;
+    private List<Entry> entriesTemperature;
+    private List<Entry> entriesAltitude;
+    private List<Entry> entriesPressure;
     private RelativeLayout sensorDock;
     private CheckBox indefiniteSamplesCheckBox;
     private EditText samplesEditBox;
@@ -97,34 +97,31 @@ public class SensorBMP180 extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (scienceLab.isConnected() && shouldPlay()) {
-                        sensorDataFetch = new SensorBMP180.SensorDataFetch();
-                        sensorDataFetch.execute();
+        Runnable runnable = () -> {
+            while (true) {
+                if (scienceLab.isConnected() && shouldPlay()) {
+                    sensorDataFetch = new SensorDataFetch();
+                    sensorDataFetch.execute();
 
-                        if (flag == 0) {
-                            startTime = System.currentTimeMillis();
-                            flag = 1;
-                        }
+                    if (flag == 0) {
+                        startTime = System.currentTimeMillis();
+                        flag = 1;
+                    }
 
-                        synchronized (lock) {
-                            try {
-                                lock.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                    synchronized (lock) {
                         try {
-                            Thread.sleep(timeGap);
+                            lock.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-
+                    try {
+                        Thread.sleep(timeGap);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+
             }
         };
         new Thread(runnable).start();
@@ -268,21 +265,18 @@ public class SensorBMP180 extends AppCompatActivity {
         final int max = 1000;
         final int min = 100;
 
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (play && scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.circle_play_button);
-                    play = false;
-                } else if (!scienceLab.isConnected()) {
-                    playPauseButton.setImageResource(R.drawable.circle_play_button);
-                    play = false;
-                } else {
-                    playPauseButton.setImageResource(R.drawable.circle_pause_button);
-                    play = true;
-                    if (!indefiniteSamplesCheckBox.isChecked()) {
-                        counter = Integer.parseInt(samplesEditBox.getText().toString());
-                    }
+        playPauseButton.setOnClickListener(v -> {
+            if (play && scienceLab.isConnected()) {
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
+                play = false;
+            } else if (!scienceLab.isConnected()) {
+                playPauseButton.setImageResource(R.drawable.circle_play_button);
+                play = false;
+            } else {
+                playPauseButton.setImageResource(R.drawable.circle_pause_button);
+                play = true;
+                if (!indefiniteSamplesCheckBox.isChecked()) {
+                    counter = Integer.parseInt(samplesEditBox.getText().toString());
                 }
             }
         });
@@ -290,16 +284,13 @@ public class SensorBMP180 extends AppCompatActivity {
 
         indefiniteSamplesCheckBox.setChecked(true);
         samplesEditBox.setEnabled(false);
-        indefiniteSamplesCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    runIndefinitely = true;
-                    samplesEditBox.setEnabled(false);
-                } else {
-                    runIndefinitely = false;
-                    samplesEditBox.setEnabled(true);
-                }
+        indefiniteSamplesCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                runIndefinitely = true;
+                samplesEditBox.setEnabled(false);
+            } else {
+                runIndefinitely = false;
+                samplesEditBox.setEnabled(true);
             }
         });
 

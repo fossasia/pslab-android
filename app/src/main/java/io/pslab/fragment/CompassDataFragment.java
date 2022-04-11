@@ -1,5 +1,8 @@
 package io.pslab.fragment;
 
+import static android.content.Context.SENSOR_SERVICE;
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
+
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,12 +12,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +21,19 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -47,9 +51,6 @@ import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
-
-import static android.content.Context.SENSOR_SERVICE;
-import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class CompassDataFragment extends Fragment implements OperationCallback {
 
@@ -92,10 +93,10 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
     private Sensor sensor;
     private Timer graphTimer;
     private long startTime, block;
-    private ArrayList<CompassData> recordedCompassArray;
+    private List<CompassData> recordedCompassArray;
     private CompassData compassData = new CompassData();
     private CompassActivity compassActivity;
-    private static int updatePeriod = 1000;
+    private static final int updatePeriod = 1000;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private int turns = 0;
     private boolean returningFromPause = false;
@@ -106,7 +107,7 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
     }
 
     public static void setParameters(String type) {
-        CompassDataFragment.sensorType = Integer.valueOf(type);
+        CompassDataFragment.sensorType = Integer.parseInt(type);
     }
 
     @Override
@@ -124,43 +125,34 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
         xAxisRadioButton.setChecked(true);
         direction = 0;
 
-        xAxisRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                xAxisRadioButton.setChecked(true);
-                yAxisRadioButton.setChecked(false);
-                zAxisRadioButton.setChecked(false);
-                compassData.setAxis(getContext().getResources().getString(R.string.compass_X_axis));
-                direction = 0;
-            }
+        xAxisRadioButton.setOnClickListener(v -> {
+            xAxisRadioButton.setChecked(true);
+            yAxisRadioButton.setChecked(false);
+            zAxisRadioButton.setChecked(false);
+            compassData.setAxis(getContext().getResources().getString(R.string.compass_X_axis));
+            direction = 0;
         });
 
-        yAxisRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                xAxisRadioButton.setChecked(false);
-                yAxisRadioButton.setChecked(true);
-                zAxisRadioButton.setChecked(false);
-                compassData.setAxis(getContext().getResources().getString(R.string.compass_Y_axis));
-                direction = 1;
-            }
+        yAxisRadioButton.setOnClickListener(v -> {
+            xAxisRadioButton.setChecked(false);
+            yAxisRadioButton.setChecked(true);
+            zAxisRadioButton.setChecked(false);
+            compassData.setAxis(getContext().getResources().getString(R.string.compass_Y_axis));
+            direction = 1;
         });
 
-        zAxisRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                xAxisRadioButton.setChecked(false);
-                yAxisRadioButton.setChecked(false);
-                zAxisRadioButton.setChecked(true);
-                compassData.setAxis(getContext().getResources().getString(R.string.compass_Z_axis));
-                direction = 2;
-            }
+        zAxisRadioButton.setOnClickListener(v -> {
+            xAxisRadioButton.setChecked(false);
+            yAxisRadioButton.setChecked(false);
+            zAxisRadioButton.setChecked(true);
+            compassData.setAxis(getContext().getResources().getString(R.string.compass_Z_axis));
+            direction = 2;
         });
         compassActivity.addLocation = true;
         return rootView;
     }
 
-    private SensorEventListener compassEventListner = new SensorEventListener() {
+    private final SensorEventListener compassEventListner = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
             float degree;
@@ -289,96 +281,93 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (compassActivity.playingData) {
-                            try {
-                                CompassData d = recordedCompassArray.get(turns);
-                                if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_X_axis))) {
-                                    direction = 0;
-                                    xAxisRadioButton.setChecked(true);
-                                    yAxisRadioButton.setChecked(false);
-                                    zAxisRadioButton.setChecked(false);
-                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Y_axis))) {
-                                    direction = 1;
-                                    xAxisRadioButton.setChecked(false);
-                                    yAxisRadioButton.setChecked(true);
-                                    zAxisRadioButton.setChecked(false);
-                                } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Z_axis))) {
-                                    direction = 2;
-                                    xAxisRadioButton.setChecked(false);
-                                    yAxisRadioButton.setChecked(false);
-                                    zAxisRadioButton.setChecked(true);
-                                }
-                                turns++;
-                                float degree = 0;
-                                switch (direction) {
-                                    case 0:
-                                        if (d.getBx() != null) {
-                                            degree = Math.round(d.getBx());
-                                            if (degree < 0)
-                                                degree += 360;
-                                        }
-                                        break;
-                                    case 1:
-                                        if (d.getBy() != null) {
-                                            degree = Math.round(d.getBy());
-                                            if (degree < 0)
-                                                degree += 360;
-                                        }
-                                        break;
-                                    case 2:
-                                        if (d.getBz() != null) {
-                                            degree = Math.round(d.getBz());
-                                            if (degree < 0)
-                                                degree += 360;
-                                        }
-                                        break;
-                                    default:
-                                        if (d.getBx() != null) {
-                                            degree = Math.round(d.getBx());
-                                        }
-                                        break;
-                                }
-
-                                setCompassAnimation(degree);
-
-                                degreeIndicator.setText(String.valueOf(degree));
-                                currentDegree = -degree;
-
-                                if (d.getBx() != null) {
-                                    degree = Math.round(d.getBx());
-                                }
-                                if (degree < 0)
-                                    degree += 360;
-                                compassData.setBx(degree);
-                                xAxisMagneticField.setText(String.valueOf(degree));
-
-                                if (d.getBy() != null) {
-                                    degree = Math.round(d.getBy());
-                                }
-                                if (degree < 0)
-                                    degree += 360;
-                                compassData.setBy(degree);
-                                yAxisMagneticField.setText(String.valueOf(degree));
-
-                                if (d.getBz() != null) {
-                                    degree = Math.round(d.getBz());
-                                }
-                                if (degree < 0)
-                                    degree += 360;
-                                compassData.setBz(degree);
-                                zAxisMagneticField.setText(String.valueOf(degree));
-
-                            } catch (IndexOutOfBoundsException e) {
-                                graphTimer.cancel();
-                                graphTimer = null;
-                                turns = 0;
-                                compassActivity.playingData = false;
-                                compassActivity.startedPlay = false;
-                                compassActivity.invalidateOptionsMenu();
+                handler.post(() -> {
+                    if (compassActivity.playingData) {
+                        try {
+                            CompassData d = recordedCompassArray.get(turns);
+                            if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_X_axis))) {
+                                direction = 0;
+                                xAxisRadioButton.setChecked(true);
+                                yAxisRadioButton.setChecked(false);
+                                zAxisRadioButton.setChecked(false);
+                            } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Y_axis))) {
+                                direction = 1;
+                                xAxisRadioButton.setChecked(false);
+                                yAxisRadioButton.setChecked(true);
+                                zAxisRadioButton.setChecked(false);
+                            } else if (d.getAxis().equals(getContext().getResources().getString(R.string.compass_Z_axis))) {
+                                direction = 2;
+                                xAxisRadioButton.setChecked(false);
+                                yAxisRadioButton.setChecked(false);
+                                zAxisRadioButton.setChecked(true);
                             }
+                            turns++;
+                            float degree = 0;
+                            switch (direction) {
+                                case 0:
+                                    if (d.getBx() != null) {
+                                        degree = Math.round(d.getBx());
+                                        if (degree < 0)
+                                            degree += 360;
+                                    }
+                                    break;
+                                case 1:
+                                    if (d.getBy() != null) {
+                                        degree = Math.round(d.getBy());
+                                        if (degree < 0)
+                                            degree += 360;
+                                    }
+                                    break;
+                                case 2:
+                                    if (d.getBz() != null) {
+                                        degree = Math.round(d.getBz());
+                                        if (degree < 0)
+                                            degree += 360;
+                                    }
+                                    break;
+                                default:
+                                    if (d.getBx() != null) {
+                                        degree = Math.round(d.getBx());
+                                    }
+                                    break;
+                            }
+
+                            setCompassAnimation(degree);
+
+                            degreeIndicator.setText(String.valueOf(degree));
+                            currentDegree = -degree;
+
+                            if (d.getBx() != null) {
+                                degree = Math.round(d.getBx());
+                            }
+                            if (degree < 0)
+                                degree += 360;
+                            compassData.setBx(degree);
+                            xAxisMagneticField.setText(String.valueOf(degree));
+
+                            if (d.getBy() != null) {
+                                degree = Math.round(d.getBy());
+                            }
+                            if (degree < 0)
+                                degree += 360;
+                            compassData.setBy(degree);
+                            yAxisMagneticField.setText(String.valueOf(degree));
+
+                            if (d.getBz() != null) {
+                                degree = Math.round(d.getBz());
+                            }
+                            if (degree < 0)
+                                degree += 360;
+                            compassData.setBz(degree);
+                            zAxisMagneticField.setText(String.valueOf(degree));
+
+                        } catch (IndexOutOfBoundsException e) {
+                            graphTimer.cancel();
+                            graphTimer = null;
+                            turns = 0;
+                            compassActivity.playingData = false;
+                            compassActivity.startedPlay = false;
+                            compassActivity.invalidateOptionsMenu();
                         }
                     }
                 });
@@ -548,14 +537,11 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            visualizeData();
-                        } catch (NullPointerException e) {
-                            /* Pass for another refresh round */
-                        }
+                handler.post(() -> {
+                    try {
+                        visualizeData();
+                    } catch (NullPointerException e) {
+                        /* Pass for another refresh round */
                     }
                 });
             }
@@ -649,8 +635,7 @@ public class CompassDataFragment extends Fragment implements OperationCallback {
                 if (scienceLab.isConnected()) {
                     try {
                         I2C i2c = scienceLab.i2c;
-                        ArrayList<Integer> data;
-                        data = i2c.scan(null);
+                        List<Integer> data = i2c.scan(null);
                         if (data.contains(0x39)) {
                             sensorType = 1;
                         } else {

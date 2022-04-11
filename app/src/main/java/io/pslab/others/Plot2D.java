@@ -17,18 +17,18 @@ import android.view.View;
 
 public class Plot2D extends View {
 
-    private Paint paint;
+    private final Paint paint;
     private float[] xValues = {0.0f};
     private float[] yValues = {0.0f};
     private float maxX = 0.0f, maxY = 0.0f, minX = 0.0f, minY = 0.0f,
             locxAxis = 0.0f, locyAxis = 0.0f;
     private int vectorLength;
     private int axis = 1;
-    private static float MIN_ZOOM = 1f;
-    private static float MAX_ZOOM = 5f;
+    private static final float MIN_ZOOM = 1f;
+    private static final float MAX_ZOOM = 5f;
 
     private float scaleFactor = 1.f;
-    private ScaleGestureDetector detector;
+    private final ScaleGestureDetector detector;
 
     public Plot2D(Context context, AttributeSet attrs) {
         super(context, attrs);

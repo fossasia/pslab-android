@@ -112,16 +112,14 @@ public class DustSensorActivity extends PSLabSensor {
         if (strValue.isEmpty()) return lowerBound;
         int value = Integer.parseInt(strValue);
         if (value > upperBound) return upperBound;
-        else if (value < lowerBound) return lowerBound;
-        else return value;
+        else return Math.max(value, lowerBound);
     }
 
     private double getValueFromText(String strValue, double lowerBound, double upperBound) {
         if (strValue.isEmpty()) return lowerBound;
         double value = Double.parseDouble(strValue);
         if (value > upperBound) return upperBound;
-        else if (value < lowerBound) return lowerBound;
-        else return value;
+        else return Math.max(value, lowerBound);
     }
 
     @Override

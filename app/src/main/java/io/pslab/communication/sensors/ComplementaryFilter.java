@@ -1,14 +1,16 @@
 package io.pslab.communication.sensors;
 
-import static java.lang.Math.abs;
 import static org.apache.commons.math3.util.FastMath.atan2;
+import static java.lang.Math.abs;
 
 /**
  * Created by akarshan on 4/23/17.
  */
 
 public class ComplementaryFilter {
-    private double dt, pitch, roll;
+    private final double dt;
+    private double pitch;
+    private double roll;
 
     public ComplementaryFilter() {
         pitch = 0.;

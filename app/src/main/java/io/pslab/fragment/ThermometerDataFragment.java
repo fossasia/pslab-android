@@ -1,5 +1,8 @@
 package io.pslab.fragment;
 
+import static android.content.Context.SENSOR_SERVICE;
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
+
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -10,16 +13,14 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-
-import androidx.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -29,6 +30,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,6 +38,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,9 +61,6 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
 
-import static android.content.Context.SENSOR_SERVICE;
-import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
-
 public class ThermometerDataFragment extends Fragment implements OperationCallback {
 
     private static final String TEMPERATURE = "temperature";
@@ -71,7 +71,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
             .add("Latitude")
             .add("Longitude");
     private static int sensorType = 0;
-    private static int highLimit = 50;
+    private static final int highLimit = 50;
     private static int updatePeriod = 1000;
     private long timeElapsed;
     private int count = 0, turns = 0;
@@ -105,8 +105,8 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
     private SensorManager sensorManager;
     private Sensor sensor;
     private long startTime, block;
-    private ArrayList<Entry> entries;
-    private ArrayList<ThermometerData> recordedThermoArray;
+    private List<Entry> entries;
+    private List<ThermometerData> recordedThermoArray;
     private ThermometerData sensorData;
     private float currentMin = 125;
     private float currentMax = -40;
@@ -123,7 +123,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
 
     public static void setParameters(int updatePeriod, String type, String unit) {
         ThermometerDataFragment.updatePeriod = updatePeriod;
-        ThermometerDataFragment.sensorType = Integer.valueOf(type);
+        ThermometerDataFragment.sensorType = Integer.parseInt(type);
         ThermometerDataFragment.unit = unit;
 
     }
@@ -207,7 +207,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
             statMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, currentMin));
             statMean.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / recordedThermoArray.size())));
 
-            LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT, "°C"));
+            LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(ThermometerSettingsFragment.KEY_THERMO_UNIT, "°C"));
             dataSet.setDrawCircles(false);
             dataSet.setDrawValues(false);
             dataSet.setLineWidth(2);
@@ -247,52 +247,49 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (thermoSensor.playingData) {
-                            try {
-                                ThermometerData d = recordedThermoArray.get(turns);
-                                turns++;
-                                if (currentMax < d.getTemp()) {
-                                    currentMax = d.getTemp();
-                                    statMax.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, d.getTemp()));
-                                }
-                                if (currentMin > d.getTemp()) {
-                                    currentMin = d.getTemp();
-                                    statMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, d.getTemp()));
-                                }
-                                y.setAxisMaximum(currentMax);
-                                y.setAxisMinimum(currentMin);
-                                y.setLabelCount(10);
-                                thermometer.setWithTremble(false);
-                                thermometer.setSpeedAt(d.getTemp());
-
-                                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getTemp());
-                                entries.add(entry);
-                                count++;
-                                sum += entry.getY();
-                                statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.THERMOMETER_DATA_FORMAT));
-
-                                LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT.toString(), "°C"));
-                                dataSet.setDrawCircles(false);
-                                dataSet.setDrawValues(false);
-                                dataSet.setLineWidth(2);
-                                LineData data = new LineData(dataSet);
-
-                                mChart.setData(data);
-                                mChart.notifyDataSetChanged();
-                                mChart.setVisibleXRangeMaximum(800);
-                                mChart.moveViewToX(data.getEntryCount());
-                                mChart.invalidate();
-                            } catch (IndexOutOfBoundsException e) {
-                                graphTimer.cancel();
-                                graphTimer = null;
-                                turns = 0;
-                                thermoSensor.playingData = false;
-                                thermoSensor.startedPlay = false;
-                                thermoSensor.invalidateOptionsMenu();
+                handler.post(() -> {
+                    if (thermoSensor.playingData) {
+                        try {
+                            ThermometerData d = recordedThermoArray.get(turns);
+                            turns++;
+                            if (currentMax < d.getTemp()) {
+                                currentMax = d.getTemp();
+                                statMax.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, d.getTemp()));
                             }
+                            if (currentMin > d.getTemp()) {
+                                currentMin = d.getTemp();
+                                statMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, d.getTemp()));
+                            }
+                            y.setAxisMaximum(currentMax);
+                            y.setAxisMinimum(currentMin);
+                            y.setLabelCount(10);
+                            thermometer.setWithTremble(false);
+                            thermometer.setSpeedAt(d.getTemp());
+
+                            Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getTemp());
+                            entries.add(entry);
+                            count++;
+                            sum += entry.getY();
+                            statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.THERMOMETER_DATA_FORMAT));
+
+                            LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(ThermometerSettingsFragment.KEY_THERMO_UNIT, "°C"));
+                            dataSet.setDrawCircles(false);
+                            dataSet.setDrawValues(false);
+                            dataSet.setLineWidth(2);
+                            LineData data = new LineData(dataSet);
+
+                            mChart.setData(data);
+                            mChart.notifyDataSetChanged();
+                            mChart.setVisibleXRangeMaximum(800);
+                            mChart.moveViewToX(data.getEntryCount());
+                            mChart.invalidate();
+                        } catch (IndexOutOfBoundsException e) {
+                            graphTimer.cancel();
+                            graphTimer = null;
+                            turns = 0;
+                            thermoSensor.playingData = false;
+                            thermoSensor.startedPlay = false;
+                            thermoSensor.invalidateOptionsMenu();
                         }
                     }
                 });
@@ -420,14 +417,11 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            visualizeData();
-                        } catch (NullPointerException e) {
-                            /* Pass for another refresh round */
-                        }
+                handler.post(() -> {
+                    try {
+                        visualizeData();
+                    } catch (NullPointerException e) {
+                        /* Pass for another refresh round */
                     }
                 });
             }
@@ -498,7 +492,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
             if (timeElapsed != previousTimeElapsed) {
                 previousTimeElapsed = timeElapsed;
                 Entry entry = new Entry((float) timeElapsed, tempValue);
-                Long currentTime = System.currentTimeMillis();
+                long currentTime = System.currentTimeMillis();
                 writeLogToFile(currentTime, tempValue);
                 entries.add(entry);
 
@@ -506,7 +500,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                 sum += entry.getY();
                 statMean.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / count)));
 
-                LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT, "°C"));
+                LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(ThermometerSettingsFragment.KEY_THERMO_UNIT, "°C"));
                 dataSet.setDrawCircles(false);
                 dataSet.setDrawValues(false);
                 dataSet.setLineWidth(2);
@@ -521,7 +515,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
         }
     }
 
-    private SensorEventListener thermoSensorEventListener = new SensorEventListener() {
+    private final SensorEventListener thermoSensorEventListener = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {/**/}
@@ -578,8 +572,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                 if (scienceLab.isConnected()) {
                     try {
                         I2C i2c = scienceLab.i2c;
-                        ArrayList<Integer> data;
-                        data = i2c.scan(null);
+                        List<Integer> data = i2c.scan(null);
                         if (data.contains(0x39)) {
                             SHT21 sensorSHT21 = new SHT21(i2c, scienceLab);
                             sensorSHT21.selectParameter(TEMPERATURE);

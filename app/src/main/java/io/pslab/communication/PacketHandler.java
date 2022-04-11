@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import io.pslab.interfaces.HttpCallback;
@@ -24,11 +24,13 @@ public class PacketHandler {
     private final int BUFSIZE = 10000;
     private byte[] buffer = new byte[BUFSIZE];
     private boolean loadBurst, connected;
-    private int inputQueueSize = 0, BAUD = 1000000;
+    private int inputQueueSize = 0;
+    private final int BAUD = 1000000;
     private CommunicationHandler mCommunicationHandler = null;
     public static String version = "";
-    private CommandsProto mCommandsProto;
-    private int timeout = 500, VERSION_STRING_LENGTH = 15;
+    private final CommandsProto mCommandsProto;
+    private int timeout = 500;
+    private final int VERSION_STRING_LENGTH = 15;
     ByteBuffer burstBuffer = ByteBuffer.allocate(2000);
     private HttpAsyncTask httpAsyncTask;
 
@@ -52,7 +54,7 @@ public class PacketHandler {
             sendByte(mCommandsProto.GET_VERSION);
             // Read "<PSLAB Version String>\n"
             commonRead(VERSION_STRING_LENGTH + 1);
-            version = new String(Arrays.copyOfRange(buffer, 0, VERSION_STRING_LENGTH), Charset.forName("UTF-8"));
+            version = new String(Arrays.copyOfRange(buffer, 0, VERSION_STRING_LENGTH), StandardCharsets.UTF_8);
         } catch (IOException e) {
             Log.e("Error in Communication", e.toString());
         }
@@ -179,8 +181,8 @@ public class PacketHandler {
 
     public int read(byte[] dest, int bytesToRead) throws IOException {
         int numBytesRead = commonRead(bytesToRead);
-        for (int i = 0; i < bytesToRead; i++) {
-            dest[i] = buffer[i];
+        if (bytesToRead >= 0) {
+            System.arraycopy(buffer, 0, dest, 0, bytesToRead);
         }
         if (numBytesRead == bytesToRead) {
             return numBytesRead;
@@ -214,7 +216,7 @@ public class PacketHandler {
                 public void success(JSONObject jsonObject) {
                     try {
                         //Server will send byte array
-                        buffer = (byte[])jsonObject.get("data");
+                        buffer = (byte[]) jsonObject.get("data");
                         bytesRead[0] = buffer.length;
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -9,7 +9,7 @@ public class CompassData extends RealmObject {
     private String Axis = "X-axis";
     private long time;
     private long block;
-    private double lat,lon;
+    private double lat, lon;
 
     public CompassData() {/**/}
 

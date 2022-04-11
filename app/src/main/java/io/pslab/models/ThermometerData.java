@@ -10,7 +10,7 @@ public class ThermometerData extends RealmObject {
 
     public ThermometerData() {/**/}
 
-    public ThermometerData(long time, long block,float temp, double lat, double lon) {
+    public ThermometerData(long time, long block, float temp, double lat, double lon) {
 
         this.time = time;
         this.block = block;

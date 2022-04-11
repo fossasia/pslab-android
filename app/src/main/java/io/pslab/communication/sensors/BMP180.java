@@ -1,16 +1,16 @@
 package io.pslab.communication.sensors;
 
+import static java.lang.Math.pow;
+
 import android.util.Log;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
-import static java.lang.Math.pow;
 
 /**
  * Created by akarshan on 4/18/17.
@@ -18,25 +18,25 @@ import static java.lang.Math.pow;
 
 public class BMP180 {
 
-    private String TAG = "BMP180";
-    private int ADDRESS = 0x77;
-    private int REG_CONTROL = 0xF4;
-    private int REG_RESULT = 0xF6;
-    private int CMD_TEMP = 0x2E;
-    private int CMD_P0 = 0x34;
-    private int CMD_P1 = 0x74;
-    private int CMD_P2 = 0xB4;
-    private int CMD_P3 = 0xF4;
+    private final String TAG = "BMP180";
+    private final int ADDRESS = 0x77;
+    private final int REG_CONTROL = 0xF4;
+    private final int REG_RESULT = 0xF6;
+    private final int CMD_TEMP = 0x2E;
+    private final int CMD_P0 = 0x34;
+    private final int CMD_P1 = 0x74;
+    private final int CMD_P2 = 0xB4;
+    private final int CMD_P3 = 0xF4;
     private int oversampling = 0;
 
     public int NUMPLOTS = 3;
     public String[] PLOTNAMES = {"Temperature", "Pressure", "Altitude"};
     public String name = "Altimeter BMP180";
 
-    private I2C i2c;
+    private final I2C i2c;
     private int MB;
     private double c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, y2, p0, p1, p2, temperature, pressure, baseline;
-    private ArrayList<Integer> setOverSampling = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
+    private final List<Integer> setOverSampling = Arrays.asList(0, 1, 2, 3);
 
     public BMP180(I2C i2c, ScienceLab scienceLab) throws IOException, InterruptedException {
         this.i2c = i2c;
@@ -73,7 +73,7 @@ public class BMP180 {
     }
 
     private double readUInt(int address) throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, address, 2);
+        List<Character> vals = i2c.readBulk(ADDRESS, address, 2);
         return 1. * ((vals.get(0) << 8) | vals.get(1));
     }
 
@@ -83,7 +83,7 @@ public class BMP180 {
     }
 
     private Double readTemperature() throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, REG_RESULT, 2);
+        List<Character> vals = i2c.readBulk(ADDRESS, REG_RESULT, 2);
         if (vals.size() == 2) {
             double t = (vals.get(0) << 8) + vals.get(1);
             double a = c5 * (t - c6);
@@ -105,7 +105,7 @@ public class BMP180 {
     }
 
     private Double readPressure() throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, REG_RESULT, 3);
+        List<Character> vals = i2c.readBulk(ADDRESS, REG_RESULT, 3);
         if (vals.size() == 3) {
             double p = 1. * (vals.get(0) << 8) + vals.get(1) + (vals.get(2) / 256.0);
             double s = temperature - 25.0;

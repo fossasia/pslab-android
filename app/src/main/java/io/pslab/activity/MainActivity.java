@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -160,21 +159,18 @@ public class MainActivity extends AppCompatActivity {
             drawer.closeDrawers();
             return;
         }
-        Runnable mPendingRunnable = new Runnable() {
-            @Override
-            public void run() {
-                Fragment fragment = null;
-                try {
-                    fragment = getHomeFragment();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.fade_in,
-                        R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();
+        Runnable mPendingRunnable = () -> {
+            Fragment fragment = null;
+            try {
+                fragment = getHomeFragment();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.fade_in,
+                    R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+            fragmentTransaction.commitAllowingStateLoss();
         };
         if (mPendingRunnable != null) {
             mHandler.post(mPendingRunnable);
@@ -242,75 +238,72 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpNavigationView() {
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_instruments:
-                        navItemIndex = 0;
-                        CURRENT_TAG = TAG_INSTRUMENTS;
-                        break;
-                    case R.id.nav_device:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_DEVICE;
-                        break;
-                    case R.id.nav_settings:
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
-                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                        intent.putExtra("title", "Settings");
-                        startActivity(intent);
-                        return true;
-                    case R.id.nav_about_us:
-                        navItemIndex = 5;
-                        CURRENT_TAG = TAG_ABOUTUS;
-                        break;
-                    case R.id.nav_rate:
-                        customTabService.launchUrl("https://play.google.com/store/apps/details?id=io.pslab");
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
-                        break;
-                    case R.id.nav_help_feedback:
-                        navItemIndex = 8;
-                        CURRENT_TAG = TAG_FAQ;
-                        break;
-                    case R.id.nav_buy_pslab:
-                        customTabService.launchUrl("https://pslab.io/shop/");
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
-                        break;
-                    case R.id.sensor_data_logger:
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
-                        startActivity(new Intent(MainActivity.this, DataLoggerActivity.class));
-                        break;
-                    case R.id.nav_share_app:
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
-                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                        shareIntent.setType("text/plain");
-                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
-                        String shareMessage = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-                        startActivity(shareIntent);
-                        return true;
-                    case R.id.nav_generate_config:
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
-                        startActivity(new Intent(MainActivity.this, CreateConfigActivity.class));
-                        break;
-                    default:
-                        navItemIndex = 0;
-                }
-                loadHomeFragment();
-                return true;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_instruments:
+                    navItemIndex = 0;
+                    CURRENT_TAG = TAG_INSTRUMENTS;
+                    break;
+                case R.id.nav_device:
+                    navItemIndex = 2;
+                    CURRENT_TAG = TAG_DEVICE;
+                    break;
+                case R.id.nav_settings:
+                    if (drawer != null) {
+                        drawer.closeDrawers();
+                    }
+                    Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                    intent.putExtra("title", "Settings");
+                    startActivity(intent);
+                    return true;
+                case R.id.nav_about_us:
+                    navItemIndex = 5;
+                    CURRENT_TAG = TAG_ABOUTUS;
+                    break;
+                case R.id.nav_rate:
+                    customTabService.launchUrl("https://play.google.com/store/apps/details?id=io.pslab");
+                    if (drawer != null) {
+                        drawer.closeDrawers();
+                    }
+                    break;
+                case R.id.nav_help_feedback:
+                    navItemIndex = 8;
+                    CURRENT_TAG = TAG_FAQ;
+                    break;
+                case R.id.nav_buy_pslab:
+                    customTabService.launchUrl("https://pslab.io/shop/");
+                    if (drawer != null) {
+                        drawer.closeDrawers();
+                    }
+                    break;
+                case R.id.sensor_data_logger:
+                    if (drawer != null) {
+                        drawer.closeDrawers();
+                    }
+                    startActivity(new Intent(MainActivity.this, DataLoggerActivity.class));
+                    break;
+                case R.id.nav_share_app:
+                    if (drawer != null) {
+                        drawer.closeDrawers();
+                    }
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
+                    String shareMessage = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                    startActivity(shareIntent);
+                    return true;
+                case R.id.nav_generate_config:
+                    if (drawer != null) {
+                        drawer.closeDrawers();
+                    }
+                    startActivity(new Intent(MainActivity.this, CreateConfigActivity.class));
+                    break;
+                default:
+                    navItemIndex = 0;
             }
+            loadHomeFragment();
+            return true;
         });
 
         if (drawer != null) {
@@ -426,15 +419,12 @@ public class MainActivity extends AppCompatActivity {
         CURRENT_TAG = TAG_PINLAYOUT;
         navigationView.getMenu().getItem(navItemIndex).setChecked(false);
         setToolbarTitle(getResources().getString(R.string.pslab_pinlayout));
-        Runnable mPendingRunnable = new Runnable() {
-            @Override
-            public void run() {
-                Fragment fragment = PSLabPinLayoutFragment.newInstance();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                        .replace(R.id.frame, fragment, TAG_PINLAYOUT)
-                        .commitAllowingStateLoss();
-            }
+        Runnable mPendingRunnable = () -> {
+            Fragment fragment = PSLabPinLayoutFragment.newInstance();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                    .replace(R.id.frame, fragment, TAG_PINLAYOUT)
+                    .commitAllowingStateLoss();
         };
         mHandler.post(mPendingRunnable);
     }

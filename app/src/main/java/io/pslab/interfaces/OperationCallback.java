@@ -5,6 +5,8 @@ package io.pslab.interfaces;
  */
 public interface OperationCallback {
     void playData();
+
     void stopData();
+
     void saveGraph();
 }

@@ -1,5 +1,8 @@
 package io.pslab.fragment;
 
+import static android.content.Context.SENSOR_SERVICE;
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
+
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -10,11 +13,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-
 import android.text.Html;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -23,9 +21,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,6 +35,7 @@ import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,9 +47,6 @@ import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
-
-import static android.content.Context.SENSOR_SERVICE;
-import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class GyroscopeDataFragment extends Fragment implements OperationCallback {
 
@@ -68,11 +68,11 @@ public class GyroscopeDataFragment extends Fragment implements OperationCallback
     private Sensor sensor;
     private long startTime, block;
     private GyroData sensorData;
-    private ArrayList<GyroData> recordedGyroArray;
+    private List<GyroData> recordedGyroArray;
     private GyroscopeActivity gyroSensor;
-    private ArrayList<GyroscopeViewFragment> gyroscopeViewFragments = new ArrayList<>();
-    private int[] colors = {Color.YELLOW, Color.MAGENTA, Color.GREEN};
-    private DecimalFormat df = new DecimalFormat("+#0.0;-#0.0");
+    private final List<GyroscopeViewFragment> gyroscopeViewFragments = new ArrayList<>();
+    private final int[] colors = {Color.YELLOW, Color.MAGENTA, Color.GREEN};
+    private final DecimalFormat df = new DecimalFormat("+#0.0;-#0.0");
     private View rootView;
     private TextView noSensorText;
     private LinearLayout gyroLinearLayout;
@@ -84,7 +84,7 @@ public class GyroscopeDataFragment extends Fragment implements OperationCallback
     public static void setParameters(float highLimit, int updatePeriod, String gain) {
         GyroscopeDataFragment.highLimit = highLimit;
         GyroscopeDataFragment.updatePeriod = updatePeriod;
-        GyroscopeDataFragment.gain = Integer.valueOf(gain);
+        GyroscopeDataFragment.gain = Integer.parseInt(gain);
     }
 
     public static Pair<Integer, Pair<Float, Float>> getParameters() {
@@ -212,62 +212,59 @@ public class GyroscopeDataFragment extends Fragment implements OperationCallback
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (gyroSensor.playingData) {
-                            try {
-                                GyroData d = recordedGyroArray.get(turns);
-                                turns++;
-                                for (int i = 0; i < gyroscopeViewFragments.size(); i++) {
-                                    GyroscopeViewFragment fragment = gyroscopeViewFragments.get(i);
-                                    StringBuilder builder = new StringBuilder();
-                                    builder.append(df.format(d.getGyro()[i]));
-                                    builder.append(" ");
-                                    builder.append(getResources().getString(R.string.radian_per_sec_text));
-                                    fragment.setGyroValue(Html.fromHtml(builder.toString()));
+                handler.post(() -> {
+                    if (gyroSensor.playingData) {
+                        try {
+                            GyroData d = recordedGyroArray.get(turns);
+                            turns++;
+                            for (int i = 0; i < gyroscopeViewFragments.size(); i++) {
+                                GyroscopeViewFragment fragment = gyroscopeViewFragments.get(i);
+                                StringBuilder builder = new StringBuilder()
+                                        .append(df.format(d.getGyro()[i]))
+                                        .append(" ")
+                                        .append(getResources().getString(R.string.radian_per_sec_text));
+                                fragment.setGyroValue(Html.fromHtml(builder.toString()));
 
-                                    if (fragment.getCurrentMax() < d.getGyro()[i]) {
-                                        fragment.setCurrentMax(d.getGyro()[i]);
-                                        StringBuilder max_builder = new StringBuilder();
-                                        max_builder.append("Max: ");
-                                        max_builder.append(df.format(fragment.getCurrentMax()));
-                                        max_builder.append(" ");
-                                        max_builder.append(getResources().getString(R.string.radian_per_sec_text));
-                                        fragment.setGyroMax(Html.fromHtml(max_builder.toString()));
-                                    }
-                                    if (fragment.getCurrentMin() < d.getGyro()[i]) {
-                                        fragment.setCurrentMin(d.getGyro()[i]);
-                                        StringBuilder min_builder = new StringBuilder();
-                                        min_builder.append("Min: ");
-                                        min_builder.append(df.format(fragment.getCurrentMax()));
-                                        min_builder.append(" ");
-                                        min_builder.append(getResources().getString(R.string.radian_per_sec_text));
-                                        fragment.setGyroMin(Html.fromHtml(min_builder.toString()));
-                                    }
-
-                                    fragment.setYaxis(highLimit);
-                                    Entry entryX = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getGyro()[i]);
-                                    fragment.addEntry(entryX);
-
-                                    LineDataSet dataSet = new LineDataSet(fragment.getEntries(), getString(R.string.gyroscope));
-                                    dataSet.setDrawCircles(false);
-                                    dataSet.setDrawValues(false);
-                                    dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                                    dataSet.setLineWidth(1);
-                                    dataSet.setColor(colors[i]);
-                                    LineData data = new LineData(dataSet);
-
-                                    fragment.setChartData(data);
+                                if (fragment.getCurrentMax() < d.getGyro()[i]) {
+                                    fragment.setCurrentMax(d.getGyro()[i]);
+                                    StringBuilder max_builder = new StringBuilder()
+                                            .append("Max: ")
+                                            .append(df.format(fragment.getCurrentMax()))
+                                            .append(" ")
+                                            .append(getResources().getString(R.string.radian_per_sec_text));
+                                    fragment.setGyroMax(Html.fromHtml(max_builder.toString()));
                                 }
-                            } catch (IndexOutOfBoundsException e) {
-                                graphTimer.cancel();
-                                graphTimer = null;
-                                turns = 0;
-                                gyroSensor.playingData = false;
-                                gyroSensor.startedPlay = false;
-                                gyroSensor.invalidateOptionsMenu();
+                                if (fragment.getCurrentMin() < d.getGyro()[i]) {
+                                    fragment.setCurrentMin(d.getGyro()[i]);
+                                    StringBuilder min_builder = new StringBuilder();
+                                    min_builder.append("Min: ");
+                                    min_builder.append(df.format(fragment.getCurrentMax()));
+                                    min_builder.append(" ");
+                                    min_builder.append(getResources().getString(R.string.radian_per_sec_text));
+                                    fragment.setGyroMin(Html.fromHtml(min_builder.toString()));
+                                }
+
+                                fragment.setYaxis(highLimit);
+                                Entry entryX = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getGyro()[i]);
+                                fragment.addEntry(entryX);
+
+                                LineDataSet dataSet = new LineDataSet(fragment.getEntries(), getString(R.string.gyroscope));
+                                dataSet.setDrawCircles(false);
+                                dataSet.setDrawValues(false);
+                                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                                dataSet.setLineWidth(1);
+                                dataSet.setColor(colors[i]);
+                                LineData data = new LineData(dataSet);
+
+                                fragment.setChartData(data);
                             }
+                        } catch (IndexOutOfBoundsException e) {
+                            graphTimer.cancel();
+                            graphTimer = null;
+                            turns = 0;
+                            gyroSensor.playingData = false;
+                            gyroSensor.startedPlay = false;
+                            gyroSensor.invalidateOptionsMenu();
                         }
                     }
                 });
@@ -367,14 +364,11 @@ public class GyroscopeDataFragment extends Fragment implements OperationCallback
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            visualizeData();
-                        } catch (NullPointerException e) {
-                            /* Pass for another refresh round */
-                        }
+                handler.post(() -> {
+                    try {
+                        visualizeData();
+                    } catch (NullPointerException e) {
+                        /* Pass for another refresh round */
                     }
                 });
             }
@@ -444,11 +438,11 @@ public class GyroscopeDataFragment extends Fragment implements OperationCallback
                 fragment.setYaxis(highLimit);
             }
         }
-        Long currentTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
         writeLogToFile(currentTime, gyroscopeViewFragments.get(0).getCurrentValue(), gyroscopeViewFragments.get(1).getCurrentValue(), gyroscopeViewFragments.get(2).getCurrentValue());
     }
 
-    private SensorEventListener gyroScopeSensorEventListener = new SensorEventListener() {
+    private final SensorEventListener gyroScopeSensorEventListener = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {/**/}

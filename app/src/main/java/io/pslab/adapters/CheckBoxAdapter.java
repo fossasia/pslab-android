@@ -1,12 +1,13 @@
 package io.pslab.adapters;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import io.pslab.R;
 
 public class CheckBoxAdapter extends RecyclerView.Adapter<CheckBoxAdapter.CheckBoxHolder> {
 
-    private Context boxcontext;
+    private final Context boxcontext;
     private List<CheckBoxGetter> list = new ArrayList<>();
 
     public CheckBoxAdapter(Context boxcontext, List<CheckBoxGetter> list) {
@@ -42,13 +43,10 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<CheckBoxAdapter.CheckB
         holder.checkBox.setChecked(check.isSelected());
         holder.checkBox.setTag(list.get(position));
 
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CheckBoxGetter check1 = (CheckBoxGetter) holder.checkBox.getTag();
-                check1.setSelected(holder.checkBox.isChecked());
-                list.get(position).setSelected(holder.checkBox.isChecked());
-            }
+        holder.checkBox.setOnClickListener(view -> {
+            CheckBoxGetter check1 = (CheckBoxGetter) holder.checkBox.getTag();
+            check1.setSelected(holder.checkBox.isChecked());
+            list.get(position).setSelected(holder.checkBox.isChecked());
         });
     }
 
@@ -63,8 +61,8 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<CheckBoxAdapter.CheckB
 
     public static class CheckBoxHolder extends RecyclerView.ViewHolder {
 
-        private TextView tv_name;
-        private CheckBox checkBox;
+        private final TextView tv_name;
+        private final CheckBox checkBox;
 
         public CheckBoxHolder(View itemView) {
             super(itemView);

@@ -1,5 +1,7 @@
 package io.pslab.fragment;
 
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
+
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
@@ -54,8 +56,6 @@ import io.pslab.models.SoundData;
 import io.pslab.others.AudioJack;
 import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
-
-import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class SoundMeterDataFragment extends Fragment implements OperationCallback {
 
@@ -197,7 +197,7 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
     public void onResume() {
         super.onResume();
         startBackgroundThread();
-        if(soundMeter.viewingData) {
+        if (soundMeter.viewingData) {
             /*
              * reset counter to 0
              */
@@ -219,8 +219,8 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
     @Override
     public void onPause() {
         super.onPause();
-        if(soundMeter.playingData) {
-                pausePlaying();
+        if (soundMeter.playingData) {
+            pausePlaying();
         } else if (isProcessing) {
             stopProcessing();
         }
@@ -397,8 +397,8 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
 
     private void updateChart(double loudness, double avgLoudness, double maxLoudness, double minLoudness, long startTime, long offset) {
         float x = (offset + (System.currentTimeMillis() - startTime)) / 1000f;
-        chartQ.addLast(new Entry(x, (float)loudness));
-        if(chartQ.size() > ANIMATION_BUFFER_SIZE)
+        chartQ.addLast(new Entry(x, (float) loudness));
+        if (chartQ.size() > ANIMATION_BUFFER_SIZE)
             chartQ.removeFirst();
         List<Entry> entries = new ArrayList<>(chartQ);
         LineDataSet dataSet = new LineDataSet(entries, getString(R.string.sound_chart_label));
@@ -414,7 +414,7 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
         chartQ.clear();
         mChart.clear();
         decibelMeter.setSpeedAt(0.0f);
-        Log.i(TAG,"view reset complete");
+        Log.i(TAG, "view reset complete");
     }
 
     /* ********************************************************************************************
@@ -423,20 +423,20 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
      */
 
     private void playRecordedData(long startTime, long offset) {
-        long period = ( recordedSoundData.get(recordedSoundData.size()-1).getTime() -
-                recordedSoundData.get(0).getTime() ) / recordedSoundData.size();
-        dataPlayerHandle = scheduledExecutorService.scheduleWithFixedDelay(()-> {
+        long period = (recordedSoundData.get(recordedSoundData.size() - 1).getTime() -
+                recordedSoundData.get(0).getTime()) / recordedSoundData.size();
+        dataPlayerHandle = scheduledExecutorService.scheduleWithFixedDelay(() -> {
             SoundData soundData = recordedSoundData.get(counter);
             uiHandler.post(() -> {
-                if(soundMeter.playingData) {
+                if (soundMeter.playingData) {
                     updateChart(soundData.getdB(), soundData.getAvgLoudness(),
                             soundData.getMaxLoudness(), soundData.getMinLoudness(), startTime, offset);
                     updateMeter(soundData.getdB(), soundData.getAvgLoudness(),
                             soundData.getMaxLoudness(), soundData.getMinLoudness());
                 }
             });
-            counter ++;
-            if(counter == recordedSoundData.size()) {
+            counter++;
+            if (counter == recordedSoundData.size()) {
                 stopPlaying();
             }
         }, 0, period, TimeUnit.MILLISECONDS);
@@ -449,7 +449,7 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
     }
 
     private void stopPlaying() {
-        uiHandler.post(()-> {
+        uiHandler.post(() -> {
             dataPlayerHandle.cancel(false);
             soundMeter.playingData = false;
             soundMeter.startedPlay = false;
@@ -469,7 +469,7 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
     }
 
     private void pausePlaying() {
-        uiHandler.post(()-> {
+        uiHandler.post(() -> {
             dataPlayerHandle.cancel(false);
             pauseTime = System.currentTimeMillis();
             soundMeter.playingData = false;
@@ -530,10 +530,10 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
                                 .add(timestamp)
                                 .add(dateTime)
                                 .add(dB)
-                                .add((location != null)?location.getLatitude():0.0d)
-                                .add((location != null)?location.getLongitude():0.0d));
+                                .add((location != null) ? location.getLatitude() : 0.0d)
+                                .add((location != null) ? location.getLongitude() : 0.0d));
                 soundData = new SoundData(timestamp, block, dB, avgLoudness, maxLoudness, minLoudness,
-                        (location!=null)?location.getLatitude():0.0d, (location!=null)?location.getLongitude():0.0d);
+                        (location != null) ? location.getLatitude() : 0.0d, (location != null) ? location.getLongitude() : 0.0d);
             } else {
                 String dateTime = CSVLogger.FILE_NAME_FORMAT.format(new Date(timestamp));
                 soundMeter.csvLogger.writeCSVFile(
@@ -582,7 +582,7 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
      * The implementation of Handler class for the UI Thread
      */
     private static class UIHandler extends Handler {
-        private SoundMeterDataFragment soundMeterDataFragment;
+        private final SoundMeterDataFragment soundMeterDataFragment;
 
         UIHandler(SoundMeterDataFragment fragment) {
             this.soundMeterDataFragment = fragment;
@@ -598,7 +598,7 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
                 double avgLoudness = bundle.getDouble(KEY_AVG_LOUDNESS);
                 soundMeterDataFragment.updateMeter(loudness, avgLoudness, maxLoudness, minLoudness);
                 soundMeterDataFragment.updateChart(loudness, avgLoudness, maxLoudness, minLoudness, soundMeterDataFragment.recordStartTime, 0);
-                soundMeterDataFragment.writeLog(System.currentTimeMillis(), (float) loudness, (float)avgLoudness, (float)maxLoudness, (float)minLoudness);
+                soundMeterDataFragment.writeLog(System.currentTimeMillis(), (float) loudness, (float) avgLoudness, (float) maxLoudness, (float) minLoudness);
             }
         }
     }

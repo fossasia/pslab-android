@@ -3,13 +3,13 @@ package io.pslab.others;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class LogicAnalyzerAxisFormatter extends ValueFormatter {
 
-    private ArrayList<String> laChannelNames;
+    private final List<String> laChannelNames;
 
-    public LogicAnalyzerAxisFormatter(ArrayList<String> channelNames) {
+    public LogicAnalyzerAxisFormatter(List<String> channelNames) {
         this.laChannelNames = channelNames;
     }
 

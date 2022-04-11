@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -30,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -96,56 +96,47 @@ public class ShowLoggedData extends AppCompatActivity {
         linearLayout.addView(sensorListView);
         isSensorListViewOnStack = true;
         RealmResults<SensorLogged> results = realm.where(SensorLogged.class).findAll();
-        ArrayList<String> sensorList = new ArrayList<>();
+        final List<String> sensorList = new ArrayList<>();
         if (results != null) {
             for (SensorLogged temp : results) {
                 sensorList.add(temp.getSensor());
             }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 sensorList);
         sensorListView.setAdapter(adapter);
-        sensorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String sensor = ((TextView) view).getText().toString();
-                mSensor = sensor;
-                showSensorTrialData(sensor);
-            }
+        sensorListView.setOnItemClickListener((parent, view, position, id) -> {
+            String sensor = ((TextView) view).getText().toString();
+            mSensor = sensor;
+            showSensorTrialData(sensor);
         });
 
-        sensorListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final String sensor = ((TextView) view).getText().toString();
-                final MaterialDialog dialog = new MaterialDialog.Builder(context)
-                        .title(sensor)
-                        .customView(R.layout.sensor_list_long_click_dailog, false)
-                        .build();
-                dialog.show();
-                View customView = dialog.getCustomView();
-                assert customView != null;
-                ListView clickOptions = customView.findViewById(R.id.lv_sensor_list_click);
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sensor_click_list));
-                clickOptions.setAdapter(arrayAdapter);
+        sensorListView.setOnItemLongClickListener((parent, view, position, id) -> {
+            final String sensor = ((TextView) view).getText().toString();
+            final MaterialDialog dialog = new MaterialDialog.Builder(context)
+                    .title(sensor)
+                    .customView(R.layout.sensor_list_long_click_dailog, false)
+                    .build();
+            dialog.show();
+            View customView = dialog.getCustomView();
+            assert customView != null;
+            ListView clickOptions = customView.findViewById(R.id.lv_sensor_list_click);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sensor_click_list));
+            clickOptions.setAdapter(arrayAdapter);
 
-                clickOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        switch (position) {
-                            case 0:
-                                // todo : check for permission first
-                                exportCompleteSensorData(sensor);
-                                break;
-                            case 1:
-                                break;
-                        }
-                        dialog.dismiss();
-                    }
-                });
-                return true;
-            }
+            clickOptions.setOnItemClickListener((parent1, view1, position1, id1) -> {
+                switch (position1) {
+                    case 0:
+                        // todo : check for permission first
+                        exportCompleteSensorData(sensor);
+                        break;
+                    case 1:
+                        break;
+                }
+                dialog.dismiss();
+            });
+            return true;
         });
     }
 
@@ -229,7 +220,7 @@ public class ShowLoggedData extends AppCompatActivity {
 
     private void showSensorTrialData(final String sensor) {
         Number trial;
-        ArrayList<String> trialList = new ArrayList<>();
+        final List<String> trialList = new ArrayList<>();
 
         switch (sensor) {
             case "MPU6050":
@@ -251,12 +242,7 @@ public class ShowLoggedData extends AppCompatActivity {
         isTrialListViewOnStack = true;
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, trialList);
         trialListView.setAdapter(adapter);
-        trialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                populateSensorData(sensor, position);
-            }
-        });
+        trialListView.setOnItemClickListener((parent, view, position, id) -> populateSensorData(sensor, position));
     }
 
     private void populateSensorData(String sensor, long trial) {

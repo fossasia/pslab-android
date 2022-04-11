@@ -3,7 +3,7 @@ package io.pslab.others;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by viveksb007 on 14/6/17.
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class ChannelAxisFormatter implements IAxisValueFormatter {
 
-    private ArrayList<String> laChannelNames;
+    private final List<String> laChannelNames;
 
-    public ChannelAxisFormatter(ArrayList<String> channelNames) {
+    public ChannelAxisFormatter(List<String> channelNames) {
         this.laChannelNames = channelNames;
     }
 

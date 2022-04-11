@@ -10,7 +10,8 @@ public class ApplicationItem {
     private int applicationIcon;
     private String applicationDescription;
 
-    public ApplicationItem() {}
+    public ApplicationItem() {
+    }
 
     public ApplicationItem(String applicationName, int applicationIcon, String applicationDescription) {
         this.applicationName = applicationName;
@@ -22,7 +23,9 @@ public class ApplicationItem {
         return applicationName;
     }
 
-    public String getApplicationDescription(){ return applicationDescription; }
+    public String getApplicationDescription() {
+        return applicationDescription;
+    }
 
     public int getApplicationIcon() {
         return applicationIcon;
@@ -32,7 +35,7 @@ public class ApplicationItem {
         this.applicationName = applicationName;
     }
 
-    public void setApplicationDescription(String applicationDescription){
+    public void setApplicationDescription(String applicationDescription) {
         this.applicationDescription = applicationDescription;
     }
 

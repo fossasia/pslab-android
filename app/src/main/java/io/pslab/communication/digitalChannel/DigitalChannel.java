@@ -18,7 +18,7 @@ public class DigitalChannel {
     public static String[] digitalChannelNames = {"LA1", "LA2", "LA3", "LA4", "RES", "EXT", "FRQ"};
     public String channelName, dataType;
     public int initialStateOverride, channelNumber, length, prescalar, trigger, dlength, plotLength, maxTime, mode;
-    public double xAxis[], yAxis[], timestamps[];
+    public double[] xAxis, yAxis, timestamps;
     boolean initialState;
     double gain, maxT;
 

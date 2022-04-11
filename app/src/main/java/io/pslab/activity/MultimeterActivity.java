@@ -15,8 +15,6 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -154,21 +152,15 @@ public class MultimeterActivity extends GuideActivity {
             knob.setState(knobState);
             quantity.setText(text_quantity);
             unit.setText(text_unit);
-            knob.setOnStateChanged(new Knob.OnStateChanged() {
-                @Override
-                public void onState(int state) {
-                    knobState = state;
-                    saveKnobState(knobState);
-                }
+            knob.setOnStateChanged(state -> {
+                knobState = state;
+                saveKnobState(knobState);
             });
-            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    switchIsChecked = isChecked;
-                    SharedPreferences.Editor editor = multimeter_data.edit();
-                    editor.putBoolean("SwitchState", switchIsChecked);
-                    editor.apply();
-                }
+            aSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                switchIsChecked = isChecked;
+                SharedPreferences.Editor editor = multimeter_data.edit();
+                editor.putBoolean("SwitchState", switchIsChecked);
+                editor.apply();
             });
             isPlayingBack = false;
             checkConfig();
@@ -293,12 +285,7 @@ public class MultimeterActivity extends GuideActivity {
         recordTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        logData();
-                    }
-                });
+                runOnUiThread(MultimeterActivity.this::logData);
             }
         }, 0, recordPeriod);
     }
@@ -331,7 +318,7 @@ public class MultimeterActivity extends GuideActivity {
 
     private void checkConfig() {
         SharedPreferences multimeterConfigs = PreferenceManager.getDefaultSharedPreferences(this);
-        recordPeriod = Long.valueOf(multimeterConfigs.getString(MultimeterSettingsFragment.KEY_UPDATE_PERIOD, getResources().getString(R.string.multimeter_default_1000)));
+        recordPeriod = Long.parseLong(multimeterConfigs.getString(MultimeterSettingsFragment.KEY_UPDATE_PERIOD, getResources().getString(R.string.multimeter_default_1000)));
         locationEnabled = multimeterConfigs.getBoolean(MultimeterSettingsFragment.KEY_INCLUDE_LOCATION, true);
     }
 
@@ -415,12 +402,7 @@ public class MultimeterActivity extends GuideActivity {
                             // Export Data
                             CustomSnackBar.showSnackBar(coordinatorLayout,
                                     getString(R.string.csv_store_text) + " " + multimeterLogger.getCurrentFilePath()
-                                    , getString(R.string.open), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            startActivity(new Intent(MultimeterActivity.this, DataLoggerActivity.class));
-                                        }
-                                    }, Snackbar.LENGTH_SHORT);
+                                    , getString(R.string.open), view -> startActivity(new Intent(MultimeterActivity.this, DataLoggerActivity.class)), Snackbar.LENGTH_SHORT);
                             isRecordingStarted = false;
                             recordData = false;
                         } else {
@@ -481,17 +463,14 @@ public class MultimeterActivity extends GuideActivity {
                     playBackTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (currentPosition < recordedMultimeterData.size()) {
-                                        setLoggedData(recordedMultimeterData.get(currentPosition));
-                                    } else {
-                                        playBackTimer.cancel();
-                                        currentPosition = 0;
-                                        stopMenu.setVisible(false);
-                                        item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
-                                    }
+                            handler.post(() -> {
+                                if (currentPosition < recordedMultimeterData.size()) {
+                                    setLoggedData(recordedMultimeterData.get(currentPosition));
+                                } else {
+                                    playBackTimer.cancel();
+                                    currentPosition = 0;
+                                    stopMenu.setVisible(false);
+                                    item.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_24dp, null));
                                 }
                             });
                         }

@@ -2,10 +2,11 @@ package io.pslab.communication.sensors;
 
 import android.util.Log;
 
-import io.pslab.communication.peripherals.SPI;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import io.pslab.communication.peripherals.SPI;
 
 /**
  * Created by Padmal on 6/12/17.
@@ -15,52 +16,52 @@ public class Sx1276 {
 
     private String name = "SX1276";
     // Registers
-    private int REG_FIFO = 0x00;
-    private int REG_OP_MODE = 0x01;
-    private int REG_FRF_MSB = 0x06;
-    private int REG_FRF_MID = 0x07;
-    private int REG_FRF_LSB = 0x08;
-    private int REG_PA_CONFIG = 0x09;
-    private int REG_LNA = 0x0c;
-    private int REG_FIFO_ADDR_PTR = 0x0d;
-    private int REG_FIFO_TX_BASE_ADDR = 0x0e;
-    private int REG_FIFO_RX_BASE_ADDR = 0x0f;
-    private int REG_FIFO_RX_CURRENT_ADDR = 0x10;
-    private int REG_IRQ_FLAGS = 0x12;
-    private int REG_RX_NB_BYTES = 0x13;
-    private int REG_PKT_RSSI_VALUE = 0x1a;
-    private int REG_PKT_SNR_VALUE = 0x1b;
-    private int REG_MODEM_CONFIG_1 = 0x1d;
-    private int REG_MODEM_CONFIG_2 = 0x1e;
-    private int REG_PREAMBLE_MSB = 0x20;
-    private int REG_PREAMBLE_LSB = 0x21;
-    private int REG_PAYLOAD_LENGTH = 0x22;
-    private int REG_MODEM_CONFIG_3 = 0x26;
-    private int REG_RSSI_WIDEBAND = 0x2c;
-    private int REG_DETECTION_OPTIMIZE = 0x31;
-    private int REG_DETECTION_THRESHOLD = 0x37;
-    private int REG_SYNC_WORD = 0x39;
-    private int REG_DIO_MAPPING_1 = 0x40;
-    private int REG_VERSION = 0x42;
-    private int REG_PA_DAC = 0x4D;
+    private final int REG_FIFO = 0x00;
+    private final int REG_OP_MODE = 0x01;
+    private final int REG_FRF_MSB = 0x06;
+    private final int REG_FRF_MID = 0x07;
+    private final int REG_FRF_LSB = 0x08;
+    private final int REG_PA_CONFIG = 0x09;
+    private final int REG_LNA = 0x0c;
+    private final int REG_FIFO_ADDR_PTR = 0x0d;
+    private final int REG_FIFO_TX_BASE_ADDR = 0x0e;
+    private final int REG_FIFO_RX_BASE_ADDR = 0x0f;
+    private final int REG_FIFO_RX_CURRENT_ADDR = 0x10;
+    private final int REG_IRQ_FLAGS = 0x12;
+    private final int REG_RX_NB_BYTES = 0x13;
+    private final int REG_PKT_RSSI_VALUE = 0x1a;
+    private final int REG_PKT_SNR_VALUE = 0x1b;
+    private final int REG_MODEM_CONFIG_1 = 0x1d;
+    private final int REG_MODEM_CONFIG_2 = 0x1e;
+    private final int REG_PREAMBLE_MSB = 0x20;
+    private final int REG_PREAMBLE_LSB = 0x21;
+    private final int REG_PAYLOAD_LENGTH = 0x22;
+    private final int REG_MODEM_CONFIG_3 = 0x26;
+    private final int REG_RSSI_WIDEBAND = 0x2c;
+    private final int REG_DETECTION_OPTIMIZE = 0x31;
+    private final int REG_DETECTION_THRESHOLD = 0x37;
+    private final int REG_SYNC_WORD = 0x39;
+    private final int REG_DIO_MAPPING_1 = 0x40;
+    private final int REG_VERSION = 0x42;
+    private final int REG_PA_DAC = 0x4D;
     // Modes
-    private int MODE_LONG_RANGE_MODE = 0x80;
-    private int MODE_SLEEP = 0x00;
-    private int MODE_STDBY = 0x01;
-    private int MODE_TX = 0x03;
-    private int MODE_RX_CONTINUOUS = 0x05;
-    private int MODE_RX_SINGLE = 0x06;
+    private final int MODE_LONG_RANGE_MODE = 0x80;
+    private final int MODE_SLEEP = 0x00;
+    private final int MODE_STDBY = 0x01;
+    private final int MODE_TX = 0x03;
+    private final int MODE_RX_CONTINUOUS = 0x05;
+    private final int MODE_RX_SINGLE = 0x06;
     // PA config
-    private int PA_BOOST = 0x80;
+    private final int PA_BOOST = 0x80;
     // IRQ masks
-    private int IRQ_TX_DONE_MASK = 0x08;
-    private int IRQ_PAYLOAD_CRC_ERROR_MASK = 0x20;
-    private int IRQ_RX_DONE_MASK = 0x40;
+    private final int IRQ_TX_DONE_MASK = 0x08;
+    private final int IRQ_PAYLOAD_CRC_ERROR_MASK = 0x20;
+    private final int IRQ_RX_DONE_MASK = 0x40;
 
-    private int MAX_PKT_LENGTH = 255;
-    private int PA_OUTPUT_RFO_PIN = 0;
-    private int PA_OUTPUT_PA_BOOST_PIN = 1;
-    private int onReceive = 0;
+    private final int MAX_PKT_LENGTH = 255;
+    private final int PA_OUTPUT_RFO_PIN = 0;
+    private final int PA_OUTPUT_PA_BOOST_PIN = 1;
+    private final int onReceive = 0;
     private int frequency = 10;
     private int packetIndex = 0;
     private int packetLength = 0;
@@ -68,7 +69,7 @@ public class Sx1276 {
     private int implicitHeaderMode = 0;
 
     private SPI spi;
-    private ArrayList<Byte> bytes = new ArrayList<>();
+    private final List<Byte> bytes = new ArrayList<>();
 
     public Sx1276(SPI spi, int frequency, int power, boolean boost, double bw, int sf, int cf) throws IOException {
         initiateSX1276(spi, frequency);
@@ -124,9 +125,9 @@ public class Sx1276 {
         /**/
     }
 
-    private ArrayList<Byte> SPIRead(int adr, int total_bytes) throws IOException {
+    private List<Byte> SPIRead(int adr, int total_bytes) throws IOException {
         // CS1 => 9
-        ArrayList<Byte> data = new ArrayList<>();
+        List<Byte> data = new ArrayList<>();
         data.add((byte) adr);
         for (int i = 0; i < total_bytes; i++) {
             data.add((byte) 0);
@@ -205,13 +206,13 @@ public class Sx1276 {
         return SPIRead(REG_PKT_SNR_VALUE, 1).get(0) * 0.25;
     }
 
-    public int write(ArrayList<Byte> byteArray) throws IOException {
+    public int write(List<Byte> byteArray) throws IOException {
         int size = byteArray.size();
         int currentLength = SPIRead(REG_PAYLOAD_LENGTH, 1).get(0);
         if ((currentLength + size) > MAX_PKT_LENGTH) {
             size = MAX_PKT_LENGTH - currentLength;
         }
-        SPIWrite(REG_FIFO, (ArrayList<Byte>) byteArray.subList(0, size));
+        SPIWrite(REG_FIFO, byteArray.subList(0, size));
         setupBytesArray(currentLength + size);
         SPIWrite(REG_PAYLOAD_LENGTH, bytes);
         return size;
@@ -237,8 +238,8 @@ public class Sx1276 {
         } else return -1;
     }
 
-    public ArrayList<Byte> readAll() throws IOException {
-        ArrayList<Byte> p = new ArrayList<>();
+    public List<Byte> readAll() throws IOException {
+        List<Byte> p = new ArrayList<>();
         while (available()) {
             p.add(read());
         }
@@ -247,7 +248,7 @@ public class Sx1276 {
 
     public byte peek() throws IOException {
         if (available()) {
-            ArrayList<Byte> currentAddress = SPIRead(REG_FIFO_ADDR_PTR, 1);
+            List<Byte> currentAddress = SPIRead(REG_FIFO_ADDR_PTR, 1);
             byte val = SPIRead(REG_FIFO, 1).get(0);
             SPIWrite(REG_FIFO_ADDR_PTR, currentAddress);
             return val;
@@ -379,7 +380,7 @@ public class Sx1276 {
         SPIWrite(REG_PREAMBLE_LSB, bytes);
     }
 
-    public void setSyncWord(ArrayList<Byte> Word) throws IOException {
+    public void setSyncWord(List<Byte> Word) throws IOException {
         SPIWrite(REG_SYNC_WORD, Word);
     }
 
@@ -432,17 +433,17 @@ public class Sx1276 {
         SPIWrite(REG_FIFO_ADDR_PTR, bytes);
     }
 
-    private ArrayList<Byte> SPIWrite(int adr, ArrayList<Byte> byteArray) throws IOException {
+    private List<Byte> SPIWrite(int adr, List<Byte> byteArray) throws IOException {
         // CS1 => 9
-        ArrayList<Byte> data = new ArrayList<>();
+        List<Byte> data = new ArrayList<>();
         data.add((byte) (0x80 | adr));
         data.addAll(byteArray);
-        ArrayList<Byte> XFER = spi.xfer(9, data);
+        List<Byte> XFER = spi.xfer(9, data);
         XFER.remove(0);
         return XFER;
     }
 
-    public ArrayList<Byte> getRaw() throws IOException {
+    public List<Byte> getRaw() throws IOException {
         return SPIRead(0x02, 1);
     }
 

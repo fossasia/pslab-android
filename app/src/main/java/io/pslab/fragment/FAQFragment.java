@@ -56,8 +56,8 @@ public class FAQFragment extends Fragment {
     public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         private final LayoutInflater inf;
-        private String[] questions;
-        private String[][] answers;
+        private final String[] questions;
+        private final String[][] answers;
 
         public ExpandableListAdapter(String[] questions, String[][] answers) {
             this.questions = questions;

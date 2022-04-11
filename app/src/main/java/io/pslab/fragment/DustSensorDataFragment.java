@@ -1,21 +1,21 @@
 package io.pslab.fragment;
 
+import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
+
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.github.anastr.speedviewlib.PointerSpeedometer;
 import com.github.mikephil.charting.charts.LineChart;
@@ -25,12 +25,14 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,8 +52,6 @@ import io.pslab.others.CSVDataLine;
 import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.ScienceLabCommon;
-
-import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class DustSensorDataFragment extends Fragment implements OperationCallback {
 
@@ -85,7 +85,7 @@ public class DustSensorDataFragment extends Fragment implements OperationCallbac
     private ScienceLab scienceLab;
     private YAxis y;
     private Timer graphTimer;
-    private ArrayList<Entry> entries;
+    private List<Entry> entries;
     private long startTime;
     private long timeElapsed;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
@@ -93,7 +93,7 @@ public class DustSensorDataFragment extends Fragment implements OperationCallbac
     private GasSensorData sensorData;
     private boolean returningFromPause = false;
     private int turns = 0;
-    private ArrayList<DustSensorData> recordedDustSensorArray;
+    private List<DustSensorData> recordedDustSensorArray;
 
     public static DustSensorDataFragment newInstance() {
         return new DustSensorDataFragment();
@@ -109,7 +109,7 @@ public class DustSensorDataFragment extends Fragment implements OperationCallbac
     public static void setParameters(double highLimit, int updatePeriod, String type) {
         DustSensorDataFragment.highLimit = highLimit;
         DustSensorDataFragment.updatePeriod = updatePeriod;
-        DustSensorDataFragment.sensorType = Integer.valueOf(type);
+        DustSensorDataFragment.sensorType = Integer.parseInt(type);
     }
 
     @Nullable
@@ -215,47 +215,44 @@ public class DustSensorDataFragment extends Fragment implements OperationCallbac
         graphTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dustSensorActivity.playingData) {
-                            try {
-                                DustSensorData d = recordedDustSensorArray.get(turns);
-                                turns++;
-                                float ppm = d.getPpmValue();
-                                dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
-                                dustValue.setText(String.format(Locale.getDefault(), "%.2f", ppm));
-                                String status = ppm > highLimit ? "Good" : "Bad";
-                                dustStatus.setText(status);
+                handler.post(() -> {
+                    if (dustSensorActivity.playingData) {
+                        try {
+                            DustSensorData d = recordedDustSensorArray.get(turns);
+                            turns++;
+                            float ppm = d.getPpmValue();
+                            dustSensorMeter.setPointerColor(ppm > highLimit ? Color.WHITE : Color.RED);
+                            dustValue.setText(String.format(Locale.getDefault(), "%.2f", ppm));
+                            String status = ppm > highLimit ? "Good" : "Bad";
+                            dustStatus.setText(status);
 
-                                y.setAxisMaximum(5);
-                                y.setAxisMinimum(0);
-                                y.setLabelCount(10);
-                                dustSensorMeter.setWithTremble(false);
-                                dustSensorMeter.setSpeedAt(ppm);
+                            y.setAxisMaximum(5);
+                            y.setAxisMinimum(0);
+                            y.setLabelCount(10);
+                            dustSensorMeter.setWithTremble(false);
+                            dustSensorMeter.setSpeedAt(ppm);
 
-                                Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getPpmValue());
-                                entries.add(entry);
+                            Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getPpmValue());
+                            entries.add(entry);
 
-                                LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
-                                dataSet.setDrawCircles(false);
-                                dataSet.setDrawValues(false);
-                                dataSet.setLineWidth(2);
-                                LineData data = new LineData(dataSet);
+                            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.baro_unit));
+                            dataSet.setDrawCircles(false);
+                            dataSet.setDrawValues(false);
+                            dataSet.setLineWidth(2);
+                            LineData data = new LineData(dataSet);
 
-                                mChart.setData(data);
-                                mChart.notifyDataSetChanged();
-                                mChart.setVisibleXRangeMaximum(80);
-                                mChart.moveViewToX(data.getEntryCount());
-                                mChart.invalidate();
-                            } catch (IndexOutOfBoundsException e) {
-                                graphTimer.cancel();
-                                graphTimer = null;
-                                turns = 0;
-                                dustSensorActivity.playingData = false;
-                                dustSensorActivity.startedPlay = false;
-                                dustSensorActivity.invalidateOptionsMenu();
-                            }
+                            mChart.setData(data);
+                            mChart.notifyDataSetChanged();
+                            mChart.setVisibleXRangeMaximum(80);
+                            mChart.moveViewToX(data.getEntryCount());
+                            mChart.invalidate();
+                        } catch (IndexOutOfBoundsException e) {
+                            graphTimer.cancel();
+                            graphTimer = null;
+                            turns = 0;
+                            dustSensorActivity.playingData = false;
+                            dustSensorActivity.startedPlay = false;
+                            dustSensorActivity.invalidateOptionsMenu();
                         }
                     }
                 });

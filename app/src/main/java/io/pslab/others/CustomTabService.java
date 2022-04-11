@@ -3,12 +3,14 @@ package io.pslab.others;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.net.Uri;
+
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.browser.customtabs.CustomTabsSession;
-import com.google.android.material.snackbar.Snackbar;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import io.pslab.R;
 
@@ -22,14 +24,14 @@ public class CustomTabService {
     private CustomTabsServiceConnection mCustomTabsServiceConnection;
     private CustomTabsIntent mCustomTabsIntent;
 
-    private Activity activity;
+    private final Activity activity;
 
-    public CustomTabService (Activity currentActivity) {
+    public CustomTabService(Activity currentActivity) {
         this.activity = currentActivity;
         init();
     }
 
-    public CustomTabService (Activity currentActivity, CustomTabsServiceConnection serviceConnection) {
+    public CustomTabService(Activity currentActivity, CustomTabsServiceConnection serviceConnection) {
         this.activity = currentActivity;
         this.mCustomTabsServiceConnection = serviceConnection;
         init();
@@ -43,9 +45,10 @@ public class CustomTabService {
                 mCustomTabsClient.warmup(0L);
                 mCustomTabsSession = mCustomTabsClient.newSession(null);
             }
+
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                mCustomTabsClient= null;
+                mCustomTabsClient = null;
             }
         };
         CustomTabsClient.bindCustomTabsService(activity, activity.getPackageName(), mCustomTabsServiceConnection);
@@ -55,12 +58,12 @@ public class CustomTabService {
                 .build();
     }
 
-    public void launchUrl(String Url){
-        try{
+    public void launchUrl(String Url) {
+        try {
             mCustomTabsIntent.launchUrl(activity, Uri.parse(Url));
-        }catch (Exception e){
+        } catch (Exception e) {
             CustomSnackBar.showSnackBar(activity.findViewById(android.R.id.content),
-                    "Error: "+ e,null,null, Snackbar.LENGTH_SHORT);
+                    "Error: " + e, null, null, Snackbar.LENGTH_SHORT);
         }
     }
 }

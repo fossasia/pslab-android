@@ -6,10 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-import com.google.android.material.snackbar.Snackbar;
+import android.util.Log;
+
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
+import com.google.android.material.snackbar.Snackbar;
 
 import io.pslab.R;
 import io.pslab.activity.MainActivity;
@@ -28,7 +29,9 @@ public class USBDetachReceiver extends BroadcastReceiver {
     private final String TAG = this.getClass().getSimpleName();
     private Context activityContext;
 
-    public USBDetachReceiver(){}
+    public USBDetachReceiver() {
+    }
+
     public USBDetachReceiver(Context context) {
         this.activityContext = context;
     }
@@ -42,8 +45,8 @@ public class USBDetachReceiver extends BroadcastReceiver {
                     ScienceLabCommon.scienceLab.close();
                     // Clear saved values in Power Source Instrument
                     context.getSharedPreferences(PowerSourceActivity.POWER_PREFERENCES, Context.MODE_PRIVATE).edit().clear().apply();
-                    CustomSnackBar.showSnackBar(((Activity)context).findViewById(android.R.id.content),
-                            "USB Device Disconnected",null,null, Snackbar.LENGTH_SHORT);
+                    CustomSnackBar.showSnackBar(((Activity) context).findViewById(android.R.id.content),
+                            "USB Device Disconnected", null, null, Snackbar.LENGTH_SHORT);
 
                     PacketHandler.version = "";
 
@@ -60,7 +63,7 @@ public class USBDetachReceiver extends BroadcastReceiver {
                     Log.v(TAG, "USB Device is null");
                 }
             }
-        } catch (IllegalStateException ignored){
+        } catch (IllegalStateException ignored) {
 
         }
 

@@ -5,8 +5,12 @@ import io.realm.RealmResults;
 
 public interface GasSensorRecordables {
     GasSensorData getGasSensorData(long timeStamp);
+
     void clearAllGasSensorRecords();
+
     void clearBlockOfGasSensorRecords(long block);
+
     RealmResults<GasSensorData> getAllGasSensorRecords();
+
     RealmResults<GasSensorData> getBlockOfGasSensorRecords(long block);
 }

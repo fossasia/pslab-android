@@ -6,12 +6,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,17 +14,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import io.pslab.R;
 import io.pslab.items.PinDetails;
 
 public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchListener {
 
-    private ArrayList<PinDetails> pinDetails = new ArrayList<>();
+    private final List<PinDetails> pinDetails = new ArrayList<>();
 
-    private Matrix matrix = new Matrix();
-    private Matrix savedMatrix = new Matrix();
+    private final Matrix matrix = new Matrix();
+    private final Matrix savedMatrix = new Matrix();
 
     public static boolean frontSide = true;
 
@@ -39,8 +39,8 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
     private static final int ZOOM = 2;
     private int mode = NONE;
 
-    private PointF start = new PointF();
-    private PointF mid = new PointF();
+    private final PointF start = new PointF();
+    private final PointF mid = new PointF();
     private float oldDist = 1f;
 
     private ImageView colorMap;
@@ -193,12 +193,7 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
         builder.create();
         final AlertDialog dialog = builder.show();
 
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        dialogButton.setOnClickListener(v -> dialog.dismiss());
     }
 
     private float spacing(MotionEvent event) {

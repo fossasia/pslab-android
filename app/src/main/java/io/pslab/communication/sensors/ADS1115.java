@@ -1,81 +1,81 @@
 package io.pslab.communication.sensors;
 
-import io.pslab.communication.peripherals.I2C;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.pslab.communication.peripherals.I2C;
+
 public class ADS1115 {
-    private int ADDRESS = 0x48;
-    private I2C i2c;
+    private final int ADDRESS = 0x48;
+    private final I2C i2c;
 
-    private int REG_POINTER_MASK = 0x3;
-    private int REG_POINTER_CONVERT = 0;
-    private int REG_POINTER_CONFIG = 1;
-    private int REG_POINTER_LOWTHRESH = 2;
-    private int REG_POINTER_HITHRESH = 3;
+    private final int REG_POINTER_MASK = 0x3;
+    private final int REG_POINTER_CONVERT = 0;
+    private final int REG_POINTER_CONFIG = 1;
+    private final int REG_POINTER_LOWTHRESH = 2;
+    private final int REG_POINTER_HITHRESH = 3;
 
-    private int REG_CONFIG_OS_MASK = 0x8000;
-    private int REG_CONFIG_OS_SINGLE = 0x8000;
-    private int REG_CONFIG_OS_BUSY = 0x0000;
-    private int REG_CONFIG_OS_NOTBUSY = 0x8000;
+    private final int REG_CONFIG_OS_MASK = 0x8000;
+    private final int REG_CONFIG_OS_SINGLE = 0x8000;
+    private final int REG_CONFIG_OS_BUSY = 0x0000;
+    private final int REG_CONFIG_OS_NOTBUSY = 0x8000;
 
-    private int REG_CONFIG_MUX_MASK = 0x7000;
-    private int REG_CONFIG_MUX_DIFF_0_1 = 0x0000;
-    private int REG_CONFIG_MUX_DIFF_0_3 = 0x1000;
-    private int REG_CONFIG_MUX_DIFF_1_3 = 0x2000;
-    private int REG_CONFIG_MUX_DIFF_2_3 = 0x3000;
-    private int REG_CONFIG_MUX_SINGLE_0 = 0x4000;
-    private int REG_CONFIG_MUX_SINGLE_1 = 0x5000;
-    private int REG_CONFIG_MUX_SINGLE_2 = 0x6000;
-    private int REG_CONFIG_MUX_SINGLE_3 = 0x7000;
+    private final int REG_CONFIG_MUX_MASK = 0x7000;
+    private final int REG_CONFIG_MUX_DIFF_0_1 = 0x0000;
+    private final int REG_CONFIG_MUX_DIFF_0_3 = 0x1000;
+    private final int REG_CONFIG_MUX_DIFF_1_3 = 0x2000;
+    private final int REG_CONFIG_MUX_DIFF_2_3 = 0x3000;
+    private final int REG_CONFIG_MUX_SINGLE_0 = 0x4000;
+    private final int REG_CONFIG_MUX_SINGLE_1 = 0x5000;
+    private final int REG_CONFIG_MUX_SINGLE_2 = 0x6000;
+    private final int REG_CONFIG_MUX_SINGLE_3 = 0x7000;
 
-    private int REG_CONFIG_PGA_MASK = 0x0E00;
-    private int REG_CONFIG_PGA_6_144V = 0 << 9;
-    private int REG_CONFIG_PGA_4_096V = 1 << 9;
-    private int REG_CONFIG_PGA_2_048V = 2 << 9;
-    private int REG_CONFIG_PGA_1_024V = 3 << 9;
-    private int REG_CONFIG_PGA_0_512V = 4 << 9;
-    private int REG_CONFIG_PGA_0_256V = 5 << 9;
+    private final int REG_CONFIG_PGA_MASK = 0x0E00;
+    private final int REG_CONFIG_PGA_6_144V = 0 << 9;
+    private final int REG_CONFIG_PGA_4_096V = 1 << 9;
+    private final int REG_CONFIG_PGA_2_048V = 2 << 9;
+    private final int REG_CONFIG_PGA_1_024V = 3 << 9;
+    private final int REG_CONFIG_PGA_0_512V = 4 << 9;
+    private final int REG_CONFIG_PGA_0_256V = 5 << 9;
 
-    private int REG_CONFIG_MODE_MASK = 0x0100;
-    private int REG_CONFIG_MODE_CONTIN = 0 << 8;
-    private int REG_CONFIG_MODE_SINGLE = 1 << 8;
+    private final int REG_CONFIG_MODE_MASK = 0x0100;
+    private final int REG_CONFIG_MODE_CONTIN = 0 << 8;
+    private final int REG_CONFIG_MODE_SINGLE = 1 << 8;
 
-    private int REG_CONFIG_DR_MASK = 0x00E0;
-    private int REG_CONFIG_DR_8SPS = 0 << 5;
-    private int REG_CONFIG_DR_16SPS = 1 << 5;
-    private int REG_CONFIG_DR_32SPS = 2 << 5;
-    private int REG_CONFIG_DR_64SPS = 3 << 5;
-    private int REG_CONFIG_DR_128SPS = 4 << 5;
-    private int REG_CONFIG_DR_250SPS = 5 << 5;
-    private int REG_CONFIG_DR_475SPS = 6 << 5;
-    private int REG_CONFIG_DR_860SPS = 7 << 5;
+    private final int REG_CONFIG_DR_MASK = 0x00E0;
+    private final int REG_CONFIG_DR_8SPS = 0 << 5;
+    private final int REG_CONFIG_DR_16SPS = 1 << 5;
+    private final int REG_CONFIG_DR_32SPS = 2 << 5;
+    private final int REG_CONFIG_DR_64SPS = 3 << 5;
+    private final int REG_CONFIG_DR_128SPS = 4 << 5;
+    private final int REG_CONFIG_DR_250SPS = 5 << 5;
+    private final int REG_CONFIG_DR_475SPS = 6 << 5;
+    private final int REG_CONFIG_DR_860SPS = 7 << 5;
 
-    private int REG_CONFIG_CMODE_MASK = 0x0010;
-    private int REG_CONFIG_CMODE_TRAD = 0x0000;
-    private int REG_CONFIG_CMODE_WINDOW = 0x0010;
+    private final int REG_CONFIG_CMODE_MASK = 0x0010;
+    private final int REG_CONFIG_CMODE_TRAD = 0x0000;
+    private final int REG_CONFIG_CMODE_WINDOW = 0x0010;
 
-    private int REG_CONFIG_CPOL_MASK = 0x0008;
-    private int REG_CONFIG_CPOL_ACTVLOW = 0x0000;
-    private int REG_CONFIG_CPOL_ACTVHI = 0x0008;
+    private final int REG_CONFIG_CPOL_MASK = 0x0008;
+    private final int REG_CONFIG_CPOL_ACTVLOW = 0x0000;
+    private final int REG_CONFIG_CPOL_ACTVHI = 0x0008;
 
-    private int REG_CONFIG_CLAT_MASK = 0x0004;
-    private int REG_CONFIG_CLAT_NONLAT = 0x0000;
-    private int REG_CONFIG_CLAT_LATCH = 0x0004;
+    private final int REG_CONFIG_CLAT_MASK = 0x0004;
+    private final int REG_CONFIG_CLAT_NONLAT = 0x0000;
+    private final int REG_CONFIG_CLAT_LATCH = 0x0004;
 
-    private int REG_CONFIG_CQUE_MASK = 0x0003;
-    private int REG_CONFIG_CQUE_1CONV = 0x0000;
-    private int REG_CONFIG_CQUE_2CONV = 0x0001;
-    private int REG_CONFIG_CQUE_4CONV = 0x0002;
-    private int REG_CONFIG_CQUE_NONE = 0x0003;
+    private final int REG_CONFIG_CQUE_MASK = 0x0003;
+    private final int REG_CONFIG_CQUE_1CONV = 0x0000;
+    private final int REG_CONFIG_CQUE_2CONV = 0x0001;
+    private final int REG_CONFIG_CQUE_4CONV = 0x0002;
+    private final int REG_CONFIG_CQUE_NONE = 0x0003;
 
-    private HashMap<String, Integer> gains = new HashMap<String, Integer>();
-    private HashMap<String, Double> gainScaling = new HashMap<String, Double>();
-    private HashMap<String, String> typeSelection = new HashMap<String, String>();
-    private HashMap<Integer, Integer> sdrSelection = new HashMap<Integer, Integer>();
+    private final HashMap<String, Integer> gains = new HashMap<>();
+    private final HashMap<String, Double> gainScaling = new HashMap<>();
+    private final HashMap<String, String> typeSelection = new HashMap<>();
+    private final HashMap<Integer, Integer> sdrSelection = new HashMap<>();
 
     private String channel;
     private String gain;
@@ -130,9 +130,8 @@ public class ADS1115 {
     }
 
     public int readInt(int addr) throws IOException, InterruptedException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, addr, 2);
-        int v = (int) (1. * ((vals.get(0) << 8) | vals.get(1)));
-        return v;
+        List<Character> vals = i2c.readBulk(ADDRESS, addr, 2);
+        return (int) (1. * ((vals.get(0) << 8) | vals.get(1)));
     }
 
     public void initTemperature() throws IOException, InterruptedException {
@@ -141,7 +140,7 @@ public class ADS1115 {
     }
 
     private int readRegister(int register) throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, register, 2);
+        List<Character> vals = i2c.readBulk(ADDRESS, register, 2);
         return (vals.get(0) << 8) | vals.get(1);
     }
 

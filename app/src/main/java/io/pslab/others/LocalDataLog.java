@@ -625,7 +625,7 @@ public class LocalDataLog implements SoundMeterRecordables, DustSensorRecordable
      ***********************************************************************************************/
     @Override
     public SoundData getSoundMeterData(long timeStamp) {
-        return realm.where(SoundData.class).equalTo("time",timeStamp).findFirst();
+        return realm.where(SoundData.class).equalTo("time", timeStamp).findFirst();
     }
 
     @Override
@@ -650,7 +650,7 @@ public class LocalDataLog implements SoundMeterRecordables, DustSensorRecordable
 
     @Override
     public RealmResults<SoundData> getBlockOfSoundRecords(long block) {
-        return realm.where(SoundData.class).equalTo("block",block)
+        return realm.where(SoundData.class).equalTo("block", block)
                 .findAll();
     }
 }

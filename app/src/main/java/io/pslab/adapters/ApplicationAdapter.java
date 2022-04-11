@@ -10,16 +10,16 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.RecyclerView;
 
-import io.pslab.items.ApplicationItem;
-import io.pslab.R;
-
 import java.util.List;
+
+import io.pslab.R;
+import io.pslab.items.ApplicationItem;
 
 
 public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.Holder> {
 
-    private Context mContext;
-    private List<ApplicationItem> applicationList;
+    private final Context mContext;
+    private final List<ApplicationItem> applicationList;
     private final OnItemClickListener listener;
 
 
@@ -30,7 +30,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     /**
      * View holder for application list item
      */
-    public class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder {
 
         TextView header, description;
         ImageView applicationIcon;
@@ -48,12 +48,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
             applicationIcon.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             applicationIcon.setImageResource(applicationItem.getApplicationIcon());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(applicationItem);
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onItemClick(applicationItem));
         }
     }
 
