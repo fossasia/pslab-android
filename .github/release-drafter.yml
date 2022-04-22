@@ -10,12 +10,14 @@ categories:
   - title: ':wrench: Maintenance'
     labels: 
       - 'Chore'
-      - 'Dependencies'
   - title: ':page_facing_up: Documentation'
     label: 'Documentation'
 change-template: '- $TITLE (#$NUMBER) - @$AUTHOR'
 exclude-contributors:
-  - 'Dependabot'
+  - 'dependabot'
+  - 'dependabot[bot]'
+exclude-labels:
+  - 'Dependencies'
 template: |-
     ## Changes
     $CHANGES
