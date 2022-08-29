@@ -64,7 +64,7 @@ ext {
 
     // Map related versions
     osmVersion = '6.1.11'
-    mapsforgeVersion = '6.1.11'
+    mapsforgeVersion = '6.1.14'
     geoPackageVersion = '6.1.11'
     googleMapsVersion = '18.0.2'
 
