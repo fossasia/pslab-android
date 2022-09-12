@@ -29,7 +29,7 @@ This repository holds the Android App for performing experiments with [PSLab](ht
 ## Roadmap
  - [x] First we need to get communication between Android App and PSLab working.
  - [x] Implement Applications and expose PSLab Hardware functionality to the user.
- - [ ] Implement wireless connectivity
+ - [x] Implement wireless connectivity
 
 ## Screenshots
 
