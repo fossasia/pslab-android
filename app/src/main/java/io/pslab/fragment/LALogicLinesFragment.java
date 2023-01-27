@@ -218,7 +218,12 @@ public class LALogicLinesFragment extends Fragment {
         setAdapters();
         LogicalAnalyzerActivity laActivity = (LogicalAnalyzerActivity) getActivity();
         if (laActivity.isPlayback) {
-            setPlayBackData(laActivity.recordedLAData);
+            if (laActivity.recordedLAData.isEmpty()) {
+                CustomSnackBar.showSnackBar(container, getString(R.string.no_playback_data),
+                        null, null, Snackbar.LENGTH_SHORT);
+            } else {
+                setPlayBackData(laActivity.recordedLAData);
+            }
         }
         return rootView;
     }
@@ -349,7 +354,7 @@ public class LALogicLinesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (channelMode > 0) {
-                    if (scienceLab.isConnected()) {
+                    if (scienceLab != null && scienceLab.isConnected()) {
                         analyze_button.setClickable(false);
 
                         // Change all variables to default value
