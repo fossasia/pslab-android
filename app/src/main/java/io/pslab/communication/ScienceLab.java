@@ -1,23 +1,15 @@
 package io.pslab.communication;
 
+import static org.apache.commons.lang3.math.NumberUtils.max;
+import static java.lang.Math.abs;
+import static io.pslab.others.MathUtils.linSpace;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import io.pslab.activity.MainActivity;
-import io.pslab.communication.analogChannel.AnalogAquisitionChannel;
-import io.pslab.communication.analogChannel.AnalogConstants;
-import io.pslab.communication.analogChannel.AnalogInputSource;
-import io.pslab.communication.digitalChannel.DigitalChannel;
-import io.pslab.communication.peripherals.I2C;
-import io.pslab.communication.peripherals.MCP4728;
-import io.pslab.communication.peripherals.NRF24L01;
-import io.pslab.communication.peripherals.RadioLink;
-import io.pslab.communication.peripherals.SPI;
-import io.pslab.fragment.HomeFragment;
-import io.pslab.others.InitializationVariable;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -32,9 +24,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static java.lang.Math.abs;
-import static org.apache.commons.lang3.math.NumberUtils.max;
-import static io.pslab.others.MathUtils.linSpace;
+import io.pslab.activity.MainActivity;
+import io.pslab.communication.analogChannel.AnalogAquisitionChannel;
+import io.pslab.communication.analogChannel.AnalogConstants;
+import io.pslab.communication.analogChannel.AnalogInputSource;
+import io.pslab.communication.digitalChannel.DigitalChannel;
+import io.pslab.communication.peripherals.I2C;
+import io.pslab.communication.peripherals.MCP4728;
+import io.pslab.communication.peripherals.NRF24L01;
+import io.pslab.communication.peripherals.RadioLink;
+import io.pslab.communication.peripherals.SPI;
+import io.pslab.fragment.HomeFragment;
+import io.pslab.others.InitializationVariable;
 
 /**
  * Created by viveksb007 on 28/3/17.
@@ -2967,20 +2968,20 @@ public class ScienceLab {
 
     public void loadEquation(String channel, String function) {
         double[] span = new double[2];
-        if (function.equals("sine")) {
+        if ("sine".equals(function)) {
             span[0] = 0;
             span[1] = 2 * Math.PI;
             waveType.put(channel, "sine");
-        } else if (function.equals("tria")) {
-            span[0] = -1;
-            span[1] = 3;
+        } else if ("tria".equals(function)) {
+            span[0] = 0;
+            span[1] = 4;
             waveType.put(channel, "tria");
         } else {
             waveType.put(channel, "arbit");
         }
         double factor = (span[1] - span[0]) / 512;
-        ArrayList<Double> x = new ArrayList<>();
-        ArrayList<Double> y = new ArrayList<>();
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
         // for now using switch, proper way is to create an interface and pass it to loadEquation and call interface methods for calculation
         for (int i = 0; i < 512; i++) {
             x.add(span[0] + i * factor);
@@ -2989,17 +2990,17 @@ public class ScienceLab {
                     y.add(Math.sin(x.get(i)));
                     break;
                 case "tria":
-                    y.add(abs(x.get(i) % 4 - 2) - 1);
+                    y.add(Math.abs(x.get(i) % 4 -2));
                     break;
             }
         }
         loadTable(channel, y, waveType.get(channel), -1);
     }
 
-    private void loadTable(String channel, ArrayList<Double> y, String mode, double amp) {
+    private void loadTable(String channel, List<Double> y, String mode, double amp) {
         waveType.put(channel, mode);
-        ArrayList<String> channels = new ArrayList<>();
-        ArrayList<Double> points = y;
+        List<String> channels = new ArrayList<>();
+        List<Double> points = y;
         channels.add("SI1");
         channels.add("SI2");
         int num;
@@ -3017,12 +3018,12 @@ public class ScienceLab {
             y.set(i, y.get(i) - min);
         }
         double max = Collections.max(y);
-        ArrayList<Integer> yMod1 = new ArrayList<>();
+        List<Integer> yMod1 = new ArrayList<>();
         for (int i = 0; i < y.size(); i++) {
             double temp = 1 - (y.get(i) / max);
             yMod1.add((int) Math.round(LARGE_MAX - LARGE_MAX * temp));
         }
-        y = new ArrayList<Double>();
+        y = new ArrayList<>();
 
 
         for (int i = 0; i < points.size(); i += 16) {
@@ -3033,7 +3034,7 @@ public class ScienceLab {
             y.set(i, y.get(i) - min);
         }
         max = Collections.max(y);
-        ArrayList<Integer> yMod2 = new ArrayList<>();
+        List<Integer> yMod2 = new ArrayList<>();
         for (int i = 0; i < y.size(); i++) {
             double temp = 1 - (y.get(i) / max);
             yMod2.add((int) Math.round(SMALL_MAX - SMALL_MAX * temp));
