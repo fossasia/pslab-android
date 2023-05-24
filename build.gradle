@@ -36,7 +36,7 @@ ext {
     // Sdk and tools
     minSdkVersion = 23
     targetSdkVersion = 31
-    compileSdkVersion = 31
+    compileSdkVersion = 33
 
     // App dependencies
     androidAboutPageVersion = '1.3.1'
