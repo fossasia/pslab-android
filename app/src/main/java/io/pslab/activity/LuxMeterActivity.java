@@ -97,19 +97,17 @@ public class LuxMeterActivity extends PSLabSensor {
 
     @Override
     public void getDataFromDataLogger() {
-        if(SDK_INT >= 21) {
-            if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
-                //playingData = true;
-                viewingData = true;
-                recordedLuxData = LocalDataLog.with()
-                        .getBlockOfLuxRecords(getIntent().getExtras().getLong(DATA_BLOCK));
-                final LuxData data = recordedLuxData.get(0);
-                if (data != null) {
-                    final String title = titleFormat.format(data.getTime());
-                    final ActionBar actionBar = getSupportActionBar();
-                    if (actionBar != null) {
-                        actionBar.setTitle(title);
-                    }
+        if (SDK_INT >= 21 && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+            //playingData = true;
+            viewingData = true;
+            recordedLuxData = LocalDataLog.with()
+                    .getBlockOfLuxRecords(getIntent().getExtras().getLong(DATA_BLOCK));
+            final LuxData data = recordedLuxData.get(0);
+            if (data != null) {
+                final String title = titleFormat.format(data.getTime());
+                final ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.setTitle(title);
                 }
             }
         }
