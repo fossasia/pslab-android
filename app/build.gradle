@@ -1,10 +1,8 @@
-apply plugin: 'com.android.application'
-apply plugin: 'realm-android'
-apply plugin: "com.github.b3er.local.properties"
+plugins {
+    id 'com.android.application'
+}
 
-def KEYSTORE_FILE = rootProject.file('scripts/key.jks')
-def TRAVIS_BUILD = System.getenv("TRAVIS") == "true" && KEYSTORE_FILE.exists()
-def LOCAL_KEY_PRESENT = project.hasProperty('SIGNING_KEY_FILE') && rootProject.file(SIGNING_KEY_FILE).exists()
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -19,19 +17,12 @@ android {
     }
 
     signingConfigs {
-        if (TRAVIS_BUILD) {
-            release {
-                storeFile KEYSTORE_FILE
+        release {
+            if (System.getenv("KEYSTORE_FILE") != null) {
+                storeFile file(System.getenv('KEYSTORE_FILE'))
                 storePassword System.getenv("STORE_PASS")
                 keyAlias System.getenv("ALIAS")
                 keyPassword System.getenv("KEY_PASS")
-            }
-        } else if (LOCAL_KEY_PRESENT) {
-            release {
-                storeFile rootProject.file(SIGNING_KEY_FILE)
-                storePassword STORE_PASS
-                keyAlias ALIAS
-                keyPassword KEY_PASS
             }
         }
     }
@@ -45,8 +36,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "version", "${defaultConfig.versionName}"
-            if (LOCAL_KEY_PRESENT || TRAVIS_BUILD)
-                signingConfig signingConfigs.release
+            signingConfigs.release
         }
     }
     lintOptions {
@@ -62,15 +52,13 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Android stock libraries
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.android.material:material:1.6.0'
-    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'androidx.browser:browser:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.browser:browser:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Custom tools libraries
     implementation "com.github.PhilJay:MPAndroidChart:$rootProject.mpAndroidChartVersion"
@@ -106,24 +94,4 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "io.realm:android-adapters:$rootProject.realmAdapter"
-    testImplementation "junit:junit:$rootProject.junitVersion"
-    androidTestImplementation('androidx.test.ext:junit:1.1.3') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestImplementation('androidx.test:rules:1.4.0') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestImplementation('androidx.test.espresso:espresso-intents:3.4.0') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestImplementation('androidx.test.espresso:espresso-contrib:3.4.0') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'recyclerview-v7'
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-        exclude group: 'com.android.support', module: 'design'
-    }
 }
