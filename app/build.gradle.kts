@@ -7,6 +7,7 @@ apply(plugin = "realm-android")
 val keystoreExists = System.getenv("KEYSTORE_FILE") != null
 
 android {
+    namespace = "io.pslab"
     compileSdk = 33
 
     defaultConfig {
