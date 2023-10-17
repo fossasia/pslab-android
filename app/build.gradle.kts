@@ -16,7 +16,6 @@ android {
         targetSdk = 31
         versionCode = 22
         versionName = "2.1.0"
-        multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -64,7 +63,6 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.preference:preference:1.2.0")
     implementation("androidx.browser:browser:1.5.0")
-    implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Custom tools libraries
