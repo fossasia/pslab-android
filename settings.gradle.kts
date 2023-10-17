@@ -10,9 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
-        maven { url "https://plugins.gradle.org/m2/" }
+        maven("https://jitpack.io")
+        maven("https://plugins.gradle.org/m2/")
     }
 }
 rootProject.name = "PSLab"
-include ':app'
+include(":app")
