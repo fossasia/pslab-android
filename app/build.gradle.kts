@@ -77,7 +77,7 @@ dependencies {
     implementation("com.github.BeppiMenozzi:Knob:1.9.0")
     implementation("com.github.warkiz.widget:indicatorseekbar:2.1.2")
     implementation("com.github.Vatican-Cameos:CarouselPicker:1.2")
-    implementation("com.github.anastr:speedviewlib:1.6.0")
+    implementation("com.github.anastr:speedviewlib:1.6.1")
     implementation("com.github.GoodieBag:ProtractorView:v1.2")
     implementation("com.github.Triggertrap:SeekArc:v1.1")
 
