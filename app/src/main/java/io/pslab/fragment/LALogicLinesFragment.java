@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import in.goodiebag.carouselpicker.CarouselPicker;
 import io.pslab.DataFormatter;
 import io.pslab.R;
@@ -54,6 +53,7 @@ import io.pslab.activity.DataLoggerActivity;
 import io.pslab.activity.LogicalAnalyzerActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.digitalChannel.DigitalChannel;
+import io.pslab.databinding.LogicAnalyzerLogicLinesBinding;
 import io.pslab.models.LogicAnalyzerData;
 import io.pslab.models.SensorDataBlock;
 import io.pslab.others.CSVDataLine;
@@ -72,6 +72,8 @@ import io.realm.RealmResults;
  */
 
 public class LALogicLinesFragment extends Fragment {
+
+    private LogicAnalyzerLogicLinesBinding binding;
 
     private static final int EVERY_EDGE = 1;
     private static final int DISABLED = 0;
@@ -128,7 +130,6 @@ public class LALogicLinesFragment extends Fragment {
     private HashMap<String, Integer> channelMap;
     private ArrayList<Spinner> channelSelectSpinners;
     private ArrayList<Spinner> edgeSelectSpinners;
-    private View rootView;
 
     public static LALogicLinesFragment newInstance(Activity activity) {
         LALogicLinesFragment laLogicLinesFragment = new LALogicLinesFragment();
@@ -139,7 +140,6 @@ public class LALogicLinesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(getActivity());
         scienceLab = ScienceLabCommon.scienceLab;
         realm = LocalDataLog.with().getRealm();
         gpsLogger = new GPSLogger(getContext(), (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE));
@@ -154,31 +154,31 @@ public class LALogicLinesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.logic_analyzer_logic_lines, container, false);
+        binding = LogicAnalyzerLogicLinesBinding.inflate(inflater, container, false);
 
         // Heading
-        tvTimeUnit = rootView.findViewById(R.id.la_tv_time_unit);
+        tvTimeUnit = binding.laTvTimeUnit;
         tvTimeUnit.setText(getString(R.string.time_unit_la));
 
         // Carousel View
-        carouselPicker = rootView.findViewById(R.id.carouselPicker);
-        llChannel1 = rootView.findViewById(R.id.ll_chart_channel_1);
+        carouselPicker = binding.carouselPicker;
+        llChannel1 = binding.llChartChannel1;
         llChannel1.setVisibility(View.VISIBLE);
-        llChannel2 = rootView.findViewById(R.id.ll_chart_channel_2);
+        llChannel2 = binding.llChartChannel2;
         llChannel2.setVisibility(View.GONE);
-        llChannel3 = rootView.findViewById(R.id.ll_chart_channel_3);
+        llChannel3 = binding.llChartChannel3;
         llChannel3.setVisibility(View.GONE);
-        llChannel4 = rootView.findViewById(R.id.ll_chart_channel_4);
+        llChannel4 = binding.llChartChannel4;
         llChannel4.setVisibility(View.GONE);
-        channelSelectSpinner1 = rootView.findViewById(R.id.channel_select_spinner_1);
-        channelSelectSpinner2 = rootView.findViewById(R.id.channel_select_spinner_2);
-        channelSelectSpinner3 = rootView.findViewById(R.id.channel_select_spinner_3);
-        channelSelectSpinner4 = rootView.findViewById(R.id.channel_select_spinner_4);
-        edgeSelectSpinner1 = rootView.findViewById(R.id.edge_select_spinner_1);
-        edgeSelectSpinner2 = rootView.findViewById(R.id.edge_select_spinner_2);
-        edgeSelectSpinner3 = rootView.findViewById(R.id.edge_select_spinner_3);
-        edgeSelectSpinner4 = rootView.findViewById(R.id.edge_select_spinner_4);
-        analyze_button = rootView.findViewById(R.id.analyze_button);
+        channelSelectSpinner1 = binding.channelSelectSpinner1;
+        channelSelectSpinner2 = binding.channelSelectSpinner2;
+        channelSelectSpinner3 = binding.channelSelectSpinner3;
+        channelSelectSpinner4 = binding.channelSelectSpinner4;
+        edgeSelectSpinner1 = binding.edgeSelectSpinner1;
+        edgeSelectSpinner2 = binding.edgeSelectSpinner2;
+        edgeSelectSpinner3 = binding.edgeSelectSpinner3;
+        edgeSelectSpinner4 = binding.edgeSelectSpinner4;
+        analyze_button = binding.analyzeButton;
         channelMode = 1;
         channelSelectSpinners.add(channelSelectSpinner1);
         channelSelectSpinners.add(channelSelectSpinner2);
@@ -195,9 +195,9 @@ public class LALogicLinesFragment extends Fragment {
         channelMap.put(channels[2], 2);
         channelMap.put(channels[3], 3);
         // Axis Indicator
-        xCoordinateText = rootView.findViewById(R.id.x_coordinate_text);
+        xCoordinateText = binding.xCoordinateText;
         xCoordinateText.setText("Time:  0.0 mS");
-        progressBar = rootView.findViewById(R.id.la_progressBar);
+        progressBar = binding.laProgressBar;
         progressBar.setVisibility(View.GONE);
         ((LogicalAnalyzerActivity) getActivity()).setStatus(false);
 
@@ -206,7 +206,7 @@ public class LALogicLinesFragment extends Fragment {
         dataSets = new ArrayList<>();
 
         // Creating base layout for chart
-        logicLinesChart = rootView.findViewById(R.id.chart_la);
+        logicLinesChart = binding.chartLa;
         logicLinesChart.setBorderWidth(2);
         Legend legend = logicLinesChart.getLegend();
         legend.setTextColor(Color.WHITE);
@@ -225,7 +225,14 @@ public class LALogicLinesFragment extends Fragment {
                 setPlayBackData(laActivity.recordedLAData);
             }
         }
-        return rootView;
+        return binding.getRoot();
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     public void logData() {
@@ -264,7 +271,7 @@ public class LALogicLinesFragment extends Fragment {
                     .add(lon);
             csvLogger.writeCSVFile(data);
         }
-        CustomSnackBar.showSnackBar(rootView,
+        CustomSnackBar.showSnackBar(binding.getRoot(),
                 getString(R.string.csv_store_text) + " " + csvLogger.getCurrentFilePath()
                 , getString(R.string.open), new View.OnClickListener() {
                     @Override
