@@ -17,7 +17,7 @@ jobs:
 
     steps:
     - name: Download repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Java
       uses: actions/setup-java@v3
@@ -50,7 +50,7 @@ jobs:
 
     steps:
     - name: Clone APK branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: fossasia/pslab-android
         ref: apk
