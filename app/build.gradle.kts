@@ -44,6 +44,9 @@ android {
             signingConfig = if (keystoreExists) signingConfigs.getByName("release") else null
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
     lint {
         abortOnError = false
     }
