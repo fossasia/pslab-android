@@ -3,14 +3,12 @@ package io.pslab.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import butterknife.ButterKnife;
-import io.pslab.R;
+import io.pslab.databinding.SplashScreenBinding;
 import io.pslab.others.PSLabPermission;
 
 /**
@@ -19,20 +17,18 @@ import io.pslab.others.PSLabPermission;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private SplashScreenBinding binding;
+
     private Handler handler;
     private Runnable runnable;
-    private ImageView logo;
-    private ImageView text;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen);
-        ButterKnife.bind(this);
-        logo = findViewById(R.id.imageView);
-        text = findViewById(R.id.PSLabText);
-        logo.animate().alpha(1f).setDuration(2500);
-        text.animate().alpha(1f).setDuration(2500);
+        binding = SplashScreenBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        binding.imageView.animate().alpha(1f).setDuration(2500);
+        binding.PSLabText.animate().alpha(1f).setDuration(2500);
         PSLabPermission psLabPermission = PSLabPermission.getInstance();
         if (psLabPermission.checkPermissions(SplashActivity.this,
                 PSLabPermission.ALL_PERMISSION)) {
