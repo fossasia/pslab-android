@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,27 +22,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.MPU6050;
+import io.pslab.databinding.ActivityDataSensorLoggerBinding;
 import io.pslab.models.DataMPU6050;
 import io.pslab.models.SensorLogged;
 import io.pslab.others.CustomSnackBar;
@@ -53,6 +48,8 @@ import io.realm.RealmResults;
 
 
 public class SensorDataLoggerActivity extends AppCompatActivity {
+
+    private ActivityDataSensorLoggerBinding binding;
 
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST = 1;
     private static boolean hasPermission = false;
@@ -68,34 +65,25 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
     private final Object lock = new Object();
     private View customView;
     private Realm realm;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.fab)
-    FloatingActionButton scanFab;
-    @BindView(R.id.coordinator_layout)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.layout_container)
-    FrameLayout container;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_data_sensor_logger);
-        ButterKnife.bind(this);
+        binding = ActivityDataSensorLoggerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_REQUEST);
         } else {
             hasPermission = true;
         }
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle("Sensor Data Logger");
         }
         context = this;
         realm = Realm.getDefaultInstance();
-        scanFab.setOnClickListener(new View.OnClickListener() {
+        binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (scienceLab.isConnected()) {
@@ -119,7 +107,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                                         ListView sensorList = new ListView(context);
                                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listData);
                                         sensorList.setAdapter(adapter);
-                                        container.addView(sensorList);
+                                        binding.layoutContainer.addView(sensorList);
                                         sensorList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                             @Override
                                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -135,7 +123,7 @@ public class SensorDataLoggerActivity extends AppCompatActivity {
                     };
                     new Thread(detectSensors).start();
                 } else {
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Device not connected", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(binding.getRoot(), "Device not connected", Snackbar.LENGTH_SHORT);
                     View snackBarView = snackbar.getView();
                     TextView snackBarTextView = snackBarView.findViewById(R.id.snackbar_text);
                     snackBarTextView.setTextColor(Color.YELLOW);
