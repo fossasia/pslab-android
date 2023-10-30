@@ -89,7 +89,7 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.71828")
 
     // OKHTTP
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // ButterKnife
     val butterKnifeVersion = "10.2.3"
