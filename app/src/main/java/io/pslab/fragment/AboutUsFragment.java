@@ -13,20 +13,16 @@ import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.appbar.AppBarLayout;
-
 import io.pslab.R;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import io.pslab.databinding.FragmentAboutUsBinding;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
 
 public class AboutUsFragment extends Fragment {
 
-    @BindView(R.id.appBarAnim)
-    AppBarLayout appBarLayout;
+    private FragmentAboutUsBinding binding;
 
     public static AboutUsFragment newInstance() {
         return new AboutUsFragment();
@@ -39,9 +35,8 @@ public class AboutUsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_about_us, container, false);
+        binding = FragmentAboutUsBinding.inflate(inflater, container, false);
         simulateDayNight(3);
-        ButterKnife.bind(this, view);
         View aboutPage = new AboutPage(getActivity())
                 .isRTL(false)
                 .setImage(R.drawable.logo200x200)
@@ -58,8 +53,14 @@ public class AboutUsFragment extends Fragment {
                 .addItem(addDevelopers())
                 .create();
 
-        appBarLayout.addView(aboutPage, -1);
-        return view;
+        binding.appBarAnim.addView(aboutPage, -1);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override
