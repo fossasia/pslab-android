@@ -17,8 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.others.MathUtils;
 import io.pslab.others.SwipeGestureDetector;
@@ -30,13 +28,9 @@ public class GuideActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "customDialogPreference";
 
-    @BindView(R.id.bottom_sheet)
     LinearLayout bottomSheet;
-    @BindView(R.id.shadow)
     View shadowLayer;
-    @BindView(R.id.img_arrow)
     ImageView arrowUpDown;
-    @BindView(R.id.sheet_slide_text)
     TextView bottomSheetSlideText;
 
     BottomSheetBehavior<View> bottomSheetBehavior;
@@ -50,7 +44,11 @@ public class GuideActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
+
+        bottomSheet = findViewById(R.id.bottom_sheet);
+        shadowLayer = findViewById(R.id.shadow);
+        arrowUpDown = findViewById(R.id.img_arrow);
+        bottomSheetSlideText = findViewById(R.id.sheet_slide_text);
 
         setUpBottomSheet();
         shadowLayer.setOnClickListener(v -> {
