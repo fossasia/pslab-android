@@ -6,18 +6,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.pslab.R;
+import io.pslab.databinding.ActivitySettingsBinding;
 import io.pslab.fragment.AccelerometerSettingsFragment;
 import io.pslab.fragment.BaroMeterSettingsFragment;
 import io.pslab.fragment.CompassSettingsFragment;
@@ -34,22 +30,18 @@ import io.pslab.others.GPSLogger;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    @BindView(R.id.setting_toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.content)
-    FrameLayout content;
-    private Unbinder unBinder;
+    private ActivitySettingsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        unBinder = ButterKnife.bind(this);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("title");
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.settingToolbar);
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
@@ -107,7 +99,6 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unBinder.unbind();
     }
 
     @Override
