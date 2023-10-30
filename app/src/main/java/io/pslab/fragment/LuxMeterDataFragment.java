@@ -19,10 +19,7 @@ import androidx.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.github.anastr.speedviewlib.PointerSpeedometer;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -40,9 +37,6 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.LuxMeterActivity;
@@ -50,6 +44,7 @@ import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.BH1750;
 import io.pslab.communication.sensors.TSL2561;
+import io.pslab.databinding.FragmentLuxMeterDataBinding;
 import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.LuxData;
 import io.pslab.models.PSLabSensor;
@@ -67,6 +62,8 @@ import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
  */
 
 public class LuxMeterDataFragment extends Fragment implements OperationCallback {
+
+    private FragmentLuxMeterDataBinding binding;
 
     private static final CSVDataLine CSV_HEADER =
             new CSVDataLine()
@@ -89,19 +86,6 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
 
     private enum LUX_SENSOR {INBUILT_SENSOR, BH1750_SENSOR, TSL2561_SENSOR}
 
-    @BindView(R.id.lux_max)
-    TextView statMax;
-    @BindView(R.id.lux_min)
-    TextView statMin;
-    @BindView(R.id.lux_avg)
-    TextView statMean;
-    @BindView(R.id.label_lux_sensor)
-    TextView sensorLabel;
-    @BindView(R.id.chart_lux_meter)
-    LineChart mChart;
-    @BindView(R.id.light_meter)
-    PointerSpeedometer lightMeter;
-
     private Timer graphTimer;
     private SensorManager sensorManager;
     private Sensor sensor;
@@ -112,10 +96,8 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
     private float currentMin = 10000;
     private float currentMax = 0;
     private YAxis y;
-    private Unbinder unbinder;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private LuxMeterActivity luxSensor;
-    private View rootView;
 
     public static LuxMeterDataFragment newInstance() {
         return new LuxMeterDataFragment();
@@ -139,22 +121,21 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_lux_meter_data, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
+        binding = FragmentLuxMeterDataBinding.inflate(inflater, container, false);
         setupInstruments();
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (luxSensor.playingData) {
-            sensorLabel.setText(getResources().getString(R.string.lux_meter));
+            binding.labelLuxSensor.setText(getResources().getString(R.string.lux_meter));
             recordedLuxArray = new ArrayList<>();
             resetInstrumentData();
             playRecordedData();
         } else if (luxSensor.viewingData) {
-            sensorLabel.setText(getResources().getString(R.string.lux_meter));
+            binding.labelLuxSensor.setText(getResources().getString(R.string.lux_meter));
             recordedLuxArray = new ArrayList<>();
             resetInstrumentData();
             plotAllRecordedData();
@@ -165,8 +146,8 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
             currentMin = 10000;
             currentMax = 0;
             entries.clear();
-            mChart.clear();
-            mChart.invalidate();
+            binding.chartLuxMeter.clear();
+            binding.chartLuxMeter.invalidate();
             initiateLuxSensor(sensorType);
         } else if (returningFromPause) {
             updateGraphs();
@@ -182,7 +163,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
         if (sensorManager != null) {
             sensorManager.unregisterListener(lightSensorEventListener);
         }
-        unbinder.unbind();
+        binding = null;
     }
 
     private void plotAllRecordedData() {
@@ -197,16 +178,16 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                 }
                 Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
                 entries.add(entry);
-                lightMeter.setWithTremble(false);
-                lightMeter.setSpeedAt(d.getLux());
+                binding.lightMeter.setWithTremble(false);
+                binding.lightMeter.setSpeedAt(d.getLux());
                 sum += entry.getY();
             }
             y.setAxisMaximum(currentMax);
             y.setAxisMinimum(currentMin);
             y.setLabelCount(10);
-            statMax.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, currentMax));
-            statMin.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, currentMin));
-            statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / recordedLuxArray.size())));
+            binding.labelLuxStatMax.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, currentMax));
+            binding.labelLuxStatMin.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, currentMin));
+            binding.labelLuxStatAvg.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / recordedLuxArray.size())));
 
             LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
             dataSet.setDrawCircles(false);
@@ -214,11 +195,11 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
             dataSet.setLineWidth(2);
             LineData data = new LineData(dataSet);
 
-            mChart.setData(data);
-            mChart.notifyDataSetChanged();
-            mChart.setVisibleXRangeMaximum(80);
-            mChart.moveViewToX(data.getEntryCount());
-            mChart.invalidate();
+            binding.chartLuxMeter.setData(data);
+            binding.chartLuxMeter.notifyDataSetChanged();
+            binding.chartLuxMeter.setVisibleXRangeMaximum(80);
+            binding.chartLuxMeter.moveViewToX(data.getEntryCount());
+            binding.chartLuxMeter.invalidate();
         }
     }
 
@@ -257,23 +238,23 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                                 turns++;
                                 if (currentMax < d.getLux()) {
                                     currentMax = d.getLux();
-                                    statMax.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, d.getLux()));
+                                    binding.labelLuxStatMax.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, d.getLux()));
                                 }
                                 if (currentMin > d.getLux()) {
                                     currentMin = d.getLux();
-                                    statMin.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, d.getLux()));
+                                    binding.labelLuxStatMin.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, d.getLux()));
                                 }
                                 y.setAxisMaximum(currentMax);
                                 y.setAxisMinimum(currentMin);
                                 y.setLabelCount(10);
-                                lightMeter.setWithTremble(false);
-                                lightMeter.setSpeedAt(d.getLux());
+                                binding.lightMeter.setWithTremble(false);
+                                binding.lightMeter.setSpeedAt(d.getLux());
 
                                 Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getLux());
                                 entries.add(entry);
                                 count++;
                                 sum += entry.getY();
-                                statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.LUXMETER_DATA_FORMAT));
+                                binding.labelLuxStatAvg.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.LUXMETER_DATA_FORMAT));
 
                                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
                                 dataSet.setDrawCircles(false);
@@ -281,11 +262,11 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                                 dataSet.setLineWidth(2);
                                 LineData data = new LineData(dataSet);
 
-                                mChart.setData(data);
-                                mChart.notifyDataSetChanged();
-                                mChart.setVisibleXRangeMaximum(80);
-                                mChart.moveViewToX(data.getEntryCount());
-                                mChart.invalidate();
+                                binding.chartLuxMeter.setData(data);
+                                binding.chartLuxMeter.notifyDataSetChanged();
+                                binding.chartLuxMeter.setVisibleXRangeMaximum(80);
+                                binding.chartLuxMeter.moveViewToX(data.getEntryCount());
+                                binding.chartLuxMeter.invalidate();
                             } catch (IndexOutOfBoundsException e) {
                                 graphTimer.cancel();
                                 graphTimer = null;
@@ -349,9 +330,8 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                             .add(luxData.getLon())
             );
         }
-        View view = rootView.findViewById(R.id.luxmeter_linearlayout);
-        view.setDrawingCacheEnabled(true);
-        Bitmap b = view.getDrawingCache();
+        binding.luxmeterLinearlayout.setDrawingCacheEnabled(true);
+        Bitmap b = binding.luxmeterLinearlayout.getDrawingCache();
         try {
             b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + CSV_DIRECTORY + File.separator + luxSensor.getSensorName() +
@@ -363,26 +343,26 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
 
 
     private void setupInstruments() {
-        lightMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(luxSensor.LUXMETER_LIMIT, 10000));
+        binding.lightMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(luxSensor.LUXMETER_LIMIT, 10000));
 
-        XAxis x = mChart.getXAxis();
-        this.y = mChart.getAxisLeft();
-        YAxis y2 = mChart.getAxisRight();
+        XAxis x = binding.chartLuxMeter.getXAxis();
+        this.y = binding.chartLuxMeter.getAxisLeft();
+        YAxis y2 = binding.chartLuxMeter.getAxisRight();
 
-        mChart.setTouchEnabled(true);
-        mChart.setHighlightPerDragEnabled(true);
-        mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(true);
-        mChart.setDrawGridBackground(false);
-        mChart.setPinchZoom(true);
-        mChart.setScaleYEnabled(true);
-        mChart.setBackgroundColor(Color.BLACK);
-        mChart.getDescription().setEnabled(false);
+        binding.chartLuxMeter.setTouchEnabled(true);
+        binding.chartLuxMeter.setHighlightPerDragEnabled(true);
+        binding.chartLuxMeter.setDragEnabled(true);
+        binding.chartLuxMeter.setScaleEnabled(true);
+        binding.chartLuxMeter.setDrawGridBackground(false);
+        binding.chartLuxMeter.setPinchZoom(true);
+        binding.chartLuxMeter.setScaleYEnabled(true);
+        binding.chartLuxMeter.setBackgroundColor(Color.BLACK);
+        binding.chartLuxMeter.getDescription().setEnabled(false);
 
         LineData data = new LineData();
-        mChart.setData(data);
+        binding.chartLuxMeter.setData(data);
 
-        Legend l = mChart.getLegend();
+        Legend l = binding.chartLuxMeter.getLegend();
         l.setForm(Legend.LegendForm.LINE);
         l.setTextColor(Color.WHITE);
 
@@ -476,22 +456,22 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
     private void visualizeData() {
         if (currentMax < luxValue) {
             currentMax = luxValue;
-            statMax.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, luxValue));
+            binding.labelLuxStatMax.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, luxValue));
         }
         if (currentMin > luxValue) {
             currentMin = luxValue;
-            statMin.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, luxValue));
+            binding.labelLuxStatMin.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, luxValue));
         }
         y.setAxisMaximum(currentMax);
         y.setAxisMinimum(currentMin);
         y.setLabelCount(10);
         if (luxValue >= 0) {
-            lightMeter.setWithTremble(false);
-            lightMeter.setSpeedAt(luxValue);
+            binding.lightMeter.setWithTremble(false);
+            binding.lightMeter.setSpeedAt(luxValue);
             if (luxValue > highLimit)
-                lightMeter.setPointerColor(Color.RED);
+                binding.lightMeter.setPointerColor(Color.RED);
             else
-                lightMeter.setPointerColor(Color.WHITE);
+                binding.lightMeter.setPointerColor(Color.WHITE);
 
             timeElapsed = ((System.currentTimeMillis() - startTime) / updatePeriod);
             if (timeElapsed != previousTimeElapsed) {
@@ -503,7 +483,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
 
                 count++;
                 sum += entry.getY();
-                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / count)));
+                binding.labelLuxStatAvg.setText(String.format(Locale.getDefault(), PSLabSensor.LUXMETER_DATA_FORMAT, (sum / count)));
 
                 LineDataSet dataSet = new LineDataSet(entries, getString(R.string.lux));
                 dataSet.setDrawCircles(false);
@@ -511,11 +491,11 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                 dataSet.setLineWidth(2);
                 LineData data = new LineData(dataSet);
 
-                mChart.setData(data);
-                mChart.notifyDataSetChanged();
-                mChart.setVisibleXRangeMaximum(80);
-                mChart.moveViewToX(data.getEntryCount());
-                mChart.invalidate();
+                binding.chartLuxMeter.setData(data);
+                binding.chartLuxMeter.notifyDataSetChanged();
+                binding.chartLuxMeter.setVisibleXRangeMaximum(80);
+                binding.chartLuxMeter.moveViewToX(data.getEntryCount());
+                binding.chartLuxMeter.invalidate();
             }
         }
     }
@@ -544,11 +524,11 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
             sensorManager.unregisterListener(lightSensorEventListener);
         }
         startTime = System.currentTimeMillis();
-        statMax.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
-        statMin.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
-        statMean.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
-        lightMeter.setSpeedAt(0);
-        lightMeter.setWithTremble(false);
+        binding.labelLuxStatMax.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        binding.labelLuxStatMin.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        binding.labelLuxStatAvg.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        binding.lightMeter.setSpeedAt(0);
+        binding.lightMeter.setWithTremble(false);
         entries.clear();
     }
 
@@ -558,7 +538,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
         ScienceLab scienceLab;
         switch (s) {
             case INBUILT_SENSOR:
-                sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[0]);
+                binding.labelLuxSensor.setText(getResources().getStringArray(R.array.lux_sensors)[0]);
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
                 if (sensor == null) {
@@ -567,13 +547,13 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
                 } else {
                     float max = sensor.getMaximumRange() * 10000;
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(luxSensor.LUXMETER_LIMIT, max).apply();
-                    lightMeter.setMaxSpeed(max);
+                    binding.lightMeter.setMaxSpeed(max);
                     sensorManager.registerListener(lightSensorEventListener,
                             sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
             case BH1750_SENSOR:
-                sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[1]);
+                binding.labelLuxSensor.setText(getResources().getStringArray(R.array.lux_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {
                     ArrayList<Integer> data;
@@ -600,7 +580,7 @@ public class LuxMeterDataFragment extends Fragment implements OperationCallback 
 
                 break;
             case TSL2561_SENSOR:
-                sensorLabel.setText(getResources().getStringArray(R.array.lux_sensors)[2]);
+                binding.labelLuxSensor.setText(getResources().getStringArray(R.array.lux_sensors)[2]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {
                     try {
