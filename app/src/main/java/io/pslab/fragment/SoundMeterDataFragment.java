@@ -12,14 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.github.anastr.speedviewlib.PointerSpeedometer;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
@@ -42,11 +39,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.pslab.R;
 import io.pslab.activity.SoundMeterActivity;
+import io.pslab.databinding.FragmentSoundMeterDataBinding;
 import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
@@ -58,6 +53,8 @@ import io.pslab.others.CSVLogger;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class SoundMeterDataFragment extends Fragment implements OperationCallback {
+
+    private FragmentSoundMeterDataBinding binding;
 
     public static final String TAG = "SoundMeterFragment";
     private static final CSVDataLine CSV_HEADER =
@@ -76,22 +73,7 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
     private static double refIntensity;
     private static int movingAvgWindowSize;
 
-    @BindView(R.id.sound_max)
-    TextView statMax;
-    @BindView(R.id.sound_min)
-    TextView statMin;
-    @BindView(R.id.sound_avg)
-    TextView statMean;
-    @BindView(R.id.label_sound_sensor)
-    TextView sensorLabel;
-    @BindView(R.id.chart_sound_meter)
-    LineChart mChart;
-    @BindView(R.id.sound_meter)
-    PointerSpeedometer decibelMeter;
-
     private SoundMeterActivity soundMeter;
-    private View rootView;
-    private Unbinder unbinder;
     private AudioJack audioJack;
     private List<SoundData> recordedSoundData;
     private int counter;
@@ -187,10 +169,9 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_sound_meter_data, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
+        binding = FragmentSoundMeterDataBinding.inflate(inflater, container, false);
         setupInstruments();
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
@@ -230,7 +211,7 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 
     @Override
@@ -247,11 +228,11 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
      * ********************************************************************************************
      */
     private void setupInstruments() {
-        decibelMeter.setMaxSpeed(200.0f);
-        decibelMeter.setMinSpeed(0.0f);
-        decibelMeter.setWithTremble(false);
+        binding.soundMeter.setMaxSpeed(200.0f);
+        binding.soundMeter.setMinSpeed(0.0f);
+        binding.soundMeter.setWithTremble(false);
 
-        YAxis yAxis = mChart.getAxisLeft();
+        YAxis yAxis = binding.chartSoundMeter.getAxisLeft();
 
         yAxis.setAxisMaximum(200);
         yAxis.setAxisMinimum(0);
@@ -263,27 +244,27 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
         dangerLine.setTextColor(Color.RED);
         yAxis.addLimitLine(dangerLine);
 
-        XAxis x = mChart.getXAxis();
+        XAxis x = binding.chartSoundMeter.getXAxis();
 
         x.setTextColor(Color.WHITE);
         x.setDrawGridLines(true);
         x.setAvoidFirstLastClipping(true);
 
 
-        mChart.setTouchEnabled(true);
-        mChart.setHighlightPerDragEnabled(true);
-        mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(true);
-        mChart.setDrawGridBackground(false);
-        mChart.setPinchZoom(true);
-        mChart.setScaleYEnabled(true);
-        mChart.setBackgroundColor(Color.BLACK);
-        mChart.getDescription().setEnabled(false);
+        binding.chartSoundMeter.setTouchEnabled(true);
+        binding.chartSoundMeter.setHighlightPerDragEnabled(true);
+        binding.chartSoundMeter.setDragEnabled(true);
+        binding.chartSoundMeter.setScaleEnabled(true);
+        binding.chartSoundMeter.setDrawGridBackground(false);
+        binding.chartSoundMeter.setPinchZoom(true);
+        binding.chartSoundMeter.setScaleYEnabled(true);
+        binding.chartSoundMeter.setBackgroundColor(Color.BLACK);
+        binding.chartSoundMeter.getDescription().setEnabled(false);
 
         LineData data = new LineData();
-        mChart.setData(data);
+        binding.chartSoundMeter.setData(data);
 
-        Legend l = mChart.getLegend();
+        Legend l = binding.chartSoundMeter.getLegend();
         l.setForm(Legend.LegendForm.LINE);
         l.setTextColor(Color.WHITE);
 
@@ -389,10 +370,10 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
      * ********************************************************************************************
      */
     private void updateMeter(double loudness, double avgLoudness, double maxLoudness, double minLoudness) {
-        decibelMeter.setSpeedAt((float) loudness);
-        statMax.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT, maxLoudness));
-        statMin.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT, minLoudness));
-        statMean.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT, avgLoudness));
+        binding.soundMeter.setSpeedAt((float) loudness);
+        binding.labelSoundStatMax.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT, maxLoudness));
+        binding.labelSoundStatMin.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT, minLoudness));
+        binding.labelSoundStatAvg.setText(String.format(Locale.getDefault(), PSLabSensor.SOUNDMETER_DATA_FORMAT, avgLoudness));
     }
 
     private void updateChart(double loudness, double avgLoudness, double maxLoudness, double minLoudness, long startTime, long offset) {
@@ -405,15 +386,15 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
         dataSet.setDrawCircles(false);
         dataSet.setDrawValues(true);
         dataSet.setLineWidth(0.5f);
-        mChart.setData(new LineData(dataSet));
-        mChart.notifyDataSetChanged();
-        mChart.invalidate();
+        binding.chartSoundMeter.setData(new LineData(dataSet));
+        binding.chartSoundMeter.notifyDataSetChanged();
+        binding.chartSoundMeter.invalidate();
     }
 
     private void resetViews() {
         chartQ.clear();
-        mChart.clear();
-        decibelMeter.setSpeedAt(0.0f);
+        binding.chartSoundMeter.clear();
+        binding.soundMeter.setSpeedAt(0.0f);
         Log.i(TAG,"view reset complete");
     }
 
@@ -566,9 +547,8 @@ public class SoundMeterDataFragment extends Fragment implements OperationCallbac
                             .add(soundData.getLat())
                             .add(soundData.getLon()));
         }
-        View view = rootView.findViewById(R.id.soundmeter_linearlayout);
-        view.setDrawingCacheEnabled(true);
-        Bitmap b = view.getDrawingCache();
+        binding.soundmeterLinearlayout.setDrawingCacheEnabled(true);
+        Bitmap b = binding.soundmeterLinearlayout.getDrawingCache();
         try {
             b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + CSV_DIRECTORY + File.separator + soundMeter.getSensorName() +
