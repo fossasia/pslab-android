@@ -38,11 +38,10 @@ import java.io.IOException;
 
 import javax.annotation.Nullable;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.pslab.BuildConfig;
 import io.pslab.R;
 import io.pslab.communication.CommunicationHandler;
+import io.pslab.databinding.ActivityMainBinding;
 import io.pslab.fragment.AboutUsFragment;
 import io.pslab.fragment.FAQFragment;
 import io.pslab.fragment.HomeFragment;
@@ -58,13 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
-    @Nullable
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    private ActivityMainBinding binding;
 
     View navHeader;
     private ImageView imgProfile;
@@ -106,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         initialisationStatus = new InitializationVariable();
         initialisationDialog = new ProgressDialog(this);
@@ -133,10 +126,10 @@ public class MainActivity extends AppCompatActivity {
         usbDetachReceiver = new USBDetachReceiver(this);
         registerReceiver(usbDetachReceiver, usbDetachFilter);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.appBarMain.toolbar);
         mHandler = new Handler();
 
-        navHeader = navigationView.getHeaderView(0);
+        navHeader = binding.navView.getHeaderView(0);
         txtName = navHeader.findViewById(io.pslab.R.id.name);
         imgProfile = navHeader.findViewById(io.pslab.R.id.img_profile);
         activityTitles = getResources().getStringArray(io.pslab.R.array.nav_item_activity_titles);
@@ -156,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
     private void loadHomeFragment() {
         selectNavMenu();
         setToolbarTitle(activityTitles[navItemIndex]);
-        if (drawer != null && getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
-            drawer.closeDrawers();
+        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
+            binding.drawerLayout.closeDrawers();
             return;
         }
         Runnable mPendingRunnable = new Runnable() {
@@ -179,10 +172,8 @@ public class MainActivity extends AppCompatActivity {
         if (mPendingRunnable != null) {
             mHandler.post(mPendingRunnable);
         }
-        if (drawer != null) {
-            drawer.closeDrawers();
-            invalidateOptionsMenu();
-        }
+        binding.drawerLayout.closeDrawers();
+        invalidateOptionsMenu();
     }
 
     private Fragment getHomeFragment() throws IOException {
@@ -214,9 +205,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectNavMenu() {
-        int size_menu = navigationView.getMenu().size();
+        int size_menu = binding.navView.getMenu().size();
         for (int i = 0; i < size_menu; i++) {
-            final MenuItem item = navigationView.getMenu().getItem(i);
+            final MenuItem item = binding.navView.getMenu().getItem(i);
             if (item.hasSubMenu()) {
                 unCheckAllMenuItems(item.getSubMenu());
             } else {
@@ -227,22 +218,18 @@ public class MainActivity extends AppCompatActivity {
             case 0:
             case 1:
             case 2:
-                navigationView.getMenu().getItem(navItemIndex).setChecked(true);
-                break;
             case 5:
-                navigationView.getMenu().getItem(navItemIndex).setChecked(true);
-                break;
             case 8:
-                navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+                binding.navView.getMenu().getItem(navItemIndex).setChecked(true);
                 break;
             default:
-                navigationView.getMenu().getItem(0).setChecked(true);
+                binding.navView.getMenu().getItem(0).setChecked(true);
                 break;
         }
     }
 
     private void setUpNavigationView() {
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        binding.navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -255,9 +242,7 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_DEVICE;
                         break;
                     case R.id.nav_settings:
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        binding.drawerLayout.closeDrawers();
                         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                         intent.putExtra("title", "Settings");
                         startActivity(intent);
@@ -268,9 +253,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_rate:
                         customTabService.launchUrl("https://play.google.com/store/apps/details?id=io.pslab");
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        binding.drawerLayout.closeDrawers();
                         break;
                     case R.id.nav_help_feedback:
                         navItemIndex = 8;
@@ -278,20 +261,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_buy_pslab:
                         customTabService.launchUrl("https://pslab.io/shop/");
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        binding.drawerLayout.closeDrawers();
                         break;
                     case R.id.sensor_data_logger:
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        binding.drawerLayout.closeDrawers();
                         startActivity(new Intent(MainActivity.this, DataLoggerActivity.class));
                         break;
                     case R.id.nav_share_app:
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        binding.drawerLayout.closeDrawers();
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
                         shareIntent.setType("text/plain");
                         shareIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
@@ -300,9 +277,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(shareIntent);
                         return true;
                     case R.id.nav_generate_config:
-                        if (drawer != null) {
-                            drawer.closeDrawers();
-                        }
+                        binding.drawerLayout.closeDrawers();
                         startActivity(new Intent(MainActivity.this, CreateConfigActivity.class));
                         break;
                     default:
@@ -313,21 +288,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (drawer != null) {
-            ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, io.pslab.R.string.openDrawer, io.pslab.R.string.closeDrawer) {
-                @Override
-                public void onDrawerClosed(View drawerView) {
-                    super.onDrawerClosed(drawerView);
-                }
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.appBarMain.toolbar, io.pslab.R.string.openDrawer, io.pslab.R.string.closeDrawer) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
 
-                @Override
-                public void onDrawerOpened(View drawerView) {
-                    super.onDrawerOpened(drawerView);
-                }
-            };
-            drawer.setDrawerListener(actionBarDrawerToggle);
-            actionBarDrawerToggle.syncState();
-        }
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        binding.drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
     }
 
     private void setPSLabVersionIDs() {
@@ -341,8 +314,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame);
-        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawers();
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawers();
             return;
         }
         if (fragment instanceof HomeFragment && HomeFragment.isWebViewShowing) {
@@ -424,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayPSLabPinLayout() {
         CURRENT_TAG = TAG_PINLAYOUT;
-        navigationView.getMenu().getItem(navItemIndex).setChecked(false);
+        binding.navView.getMenu().getItem(navItemIndex).setChecked(false);
         setToolbarTitle(getResources().getString(R.string.pslab_pinlayout));
         Runnable mPendingRunnable = new Runnable() {
             @Override
