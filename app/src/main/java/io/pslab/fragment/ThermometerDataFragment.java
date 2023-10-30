@@ -19,10 +19,7 @@ import androidx.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.github.anastr.speedviewlib.PointerSpeedometer;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -40,15 +37,13 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.pslab.DataFormatter;
 import io.pslab.R;
 import io.pslab.activity.ThermometerActivity;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.SHT21;
+import io.pslab.databinding.ActivityThermometerBinding;
 import io.pslab.interfaces.OperationCallback;
 import io.pslab.models.PSLabSensor;
 import io.pslab.models.SensorDataBlock;
@@ -62,6 +57,8 @@ import static android.content.Context.SENSOR_SERVICE;
 import static io.pslab.others.CSVLogger.CSV_DIRECTORY;
 
 public class ThermometerDataFragment extends Fragment implements OperationCallback {
+
+    private ActivityThermometerBinding binding;
 
     private static final String TEMPERATURE = "temperature";
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
@@ -82,25 +79,6 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
 
     private enum THERMOMETER_SENSOR {INBUILT_SENSOR, SHT21_SENSOR}
 
-    @BindView(R.id.thermo_max)
-    TextView statMax;
-    @BindView(R.id.thermo_min)
-    TextView statMin;
-    @BindView(R.id.thermo_avg)
-    TextView statMean;
-    @BindView(R.id.label_thermo_sensor)
-    TextView sensorLabel;
-    @BindView(R.id.chart_thermo_meter)
-    LineChart mChart;
-    @BindView(R.id.thermo_meter)
-    PointerSpeedometer thermometer;
-    @BindView(R.id.label_thermo_stat_min)
-    TextView label_statMin;
-    @BindView(R.id.label_thermo_stat_avg)
-    TextView label_statAvg;
-    @BindView(R.id.label_thermo_stat_max)
-    TextView label_statMax;
-
     private Timer graphTimer;
     private SensorManager sensorManager;
     private Sensor sensor;
@@ -111,11 +89,9 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
     private float currentMin = 125;
     private float currentMax = -40;
     private YAxis y;
-    private Unbinder unbinder;
     private long previousTimeElapsed = (System.currentTimeMillis() - startTime) / updatePeriod;
     private ThermometerActivity thermoSensor;
     private ThermometerSettingsFragment thermoSettings;
-    private View rootView;
 
     public static ThermometerDataFragment newInstance() {
         return new ThermometerDataFragment();
@@ -139,22 +115,21 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.activity_thermometer, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
+        binding = ActivityThermometerBinding.inflate(inflater, container, false);
         setupInstruments();
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (thermoSensor.playingData) {
-            sensorLabel.setText(getResources().getString(R.string.thermometer));
+            binding.labelThermoSensor.setText(getResources().getString(R.string.thermometer));
             recordedThermoArray = new ArrayList<>();
             resetInstrumentData();
             playRecordedData();
         } else if (thermoSensor.viewingData) {
-            sensorLabel.setText(getResources().getString(R.string.thermometer));
+            binding.labelThermoSensor.setText(getResources().getString(R.string.thermometer));
             recordedThermoArray = new ArrayList<>();
             resetInstrumentData();
             plotAllRecordedData();
@@ -164,8 +139,8 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
             count = 0;
             setUnit();
             entries.clear();
-            mChart.clear();
-            mChart.invalidate();
+            binding.chartThermoMeter.clear();
+            binding.chartThermoMeter.invalidate();
             initiateThermoSensor(sensorType);
         } else if (returningFromPause) {
             updateGraphs();
@@ -181,7 +156,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
         if (sensorManager != null) {
             sensorManager.unregisterListener(thermoSensorEventListener);
         }
-        unbinder.unbind();
+        binding = null;
     }
 
     private void plotAllRecordedData() {
@@ -196,16 +171,16 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                 }
                 Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getTemp());
                 entries.add(entry);
-                thermometer.setWithTremble(false);
-                thermometer.setSpeedAt(d.getTemp());
+                binding.thermoMeter.setWithTremble(false);
+                binding.thermoMeter.setSpeedAt(d.getTemp());
                 sum += entry.getY();
             }
             y.setAxisMaximum(currentMax);
             y.setAxisMinimum(currentMin);
             y.setLabelCount(10);
-            statMax.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, currentMax));
-            statMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, currentMin));
-            statMean.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / recordedThermoArray.size())));
+            binding.thermoMax.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, currentMax));
+            binding.thermoMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, currentMin));
+            binding.thermoAvg.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / recordedThermoArray.size())));
 
             LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT, "°C"));
             dataSet.setDrawCircles(false);
@@ -213,11 +188,11 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
             dataSet.setLineWidth(2);
             LineData data = new LineData(dataSet);
 
-            mChart.setData(data);
-            mChart.notifyDataSetChanged();
-            mChart.setVisibleXRangeMaximum(800);
-            mChart.moveViewToX(data.getEntryCount());
-            mChart.invalidate();
+            binding.chartThermoMeter.setData(data);
+            binding.chartThermoMeter.notifyDataSetChanged();
+            binding.chartThermoMeter.setVisibleXRangeMaximum(800);
+            binding.chartThermoMeter.moveViewToX(data.getEntryCount());
+            binding.chartThermoMeter.invalidate();
         }
     }
 
@@ -256,23 +231,23 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                                 turns++;
                                 if (currentMax < d.getTemp()) {
                                     currentMax = d.getTemp();
-                                    statMax.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, d.getTemp()));
+                                    binding.thermoMax.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, d.getTemp()));
                                 }
                                 if (currentMin > d.getTemp()) {
                                     currentMin = d.getTemp();
-                                    statMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, d.getTemp()));
+                                    binding.thermoMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, d.getTemp()));
                                 }
                                 y.setAxisMaximum(currentMax);
                                 y.setAxisMinimum(currentMin);
                                 y.setLabelCount(10);
-                                thermometer.setWithTremble(false);
-                                thermometer.setSpeedAt(d.getTemp());
+                                binding.thermoMeter.setWithTremble(false);
+                                binding.thermoMeter.setSpeedAt(d.getTemp());
 
                                 Entry entry = new Entry((float) (d.getTime() - d.getBlock()) / 1000, d.getTemp());
                                 entries.add(entry);
                                 count++;
                                 sum += entry.getY();
-                                statMean.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.THERMOMETER_DATA_FORMAT));
+                                binding.thermoAvg.setText(DataFormatter.formatDouble((sum / count), PSLabSensor.THERMOMETER_DATA_FORMAT));
 
                                 LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT.toString(), "°C"));
                                 dataSet.setDrawCircles(false);
@@ -280,11 +255,11 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                                 dataSet.setLineWidth(2);
                                 LineData data = new LineData(dataSet);
 
-                                mChart.setData(data);
-                                mChart.notifyDataSetChanged();
-                                mChart.setVisibleXRangeMaximum(800);
-                                mChart.moveViewToX(data.getEntryCount());
-                                mChart.invalidate();
+                                binding.chartThermoMeter.setData(data);
+                                binding.chartThermoMeter.notifyDataSetChanged();
+                                binding.chartThermoMeter.setVisibleXRangeMaximum(800);
+                                binding.chartThermoMeter.moveViewToX(data.getEntryCount());
+                                binding.chartThermoMeter.invalidate();
                             } catch (IndexOutOfBoundsException e) {
                                 graphTimer.cancel();
                                 graphTimer = null;
@@ -348,9 +323,8 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                             .add(thermometerData.getLon())
             );
         }
-        View view = rootView.findViewById(R.id.thermometer_linearlayout);
-        view.setDrawingCacheEnabled(true);
-        Bitmap b = view.getDrawingCache();
+        binding.thermometerLinearlayout.setDrawingCacheEnabled(true);
+        Bitmap b = binding.thermometerLinearlayout.getDrawingCache();
         try {
             b.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + CSV_DIRECTORY + File.separator + thermoSensor.getSensorName() +
@@ -363,24 +337,24 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
 
     private void setupInstruments() {
         setUnit();
-        XAxis x = mChart.getXAxis();
-        this.y = mChart.getAxisLeft();
-        YAxis y2 = mChart.getAxisRight();
+        XAxis x = binding.chartThermoMeter.getXAxis();
+        this.y = binding.chartThermoMeter.getAxisLeft();
+        YAxis y2 = binding.chartThermoMeter.getAxisRight();
 
-        mChart.setTouchEnabled(true);
-        mChart.setHighlightPerDragEnabled(true);
-        mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(true);
-        mChart.setDrawGridBackground(false);
-        mChart.setPinchZoom(true);
-        mChart.setScaleYEnabled(true);
-        mChart.setBackgroundColor(Color.BLACK);
-        mChart.getDescription().setEnabled(false);
+        binding.chartThermoMeter.setTouchEnabled(true);
+        binding.chartThermoMeter.setHighlightPerDragEnabled(true);
+        binding.chartThermoMeter.setDragEnabled(true);
+        binding.chartThermoMeter.setScaleEnabled(true);
+        binding.chartThermoMeter.setDrawGridBackground(false);
+        binding.chartThermoMeter.setPinchZoom(true);
+        binding.chartThermoMeter.setScaleYEnabled(true);
+        binding.chartThermoMeter.setBackgroundColor(Color.BLACK);
+        binding.chartThermoMeter.getDescription().setEnabled(false);
 
         LineData data = new LineData();
-        mChart.setData(data);
+        binding.chartThermoMeter.setData(data);
 
-        Legend l = mChart.getLegend();
+        Legend l = binding.chartThermoMeter.getLegend();
         l.setForm(Legend.LegendForm.LINE);
         l.setTextColor(Color.WHITE);
 
@@ -476,22 +450,22 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
     private void visualizeData() {
         if (currentMax < tempValue) {
             currentMax = tempValue;
-            statMax.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, tempValue));
+            binding.thermoMax.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, tempValue));
         }
         if (currentMin > tempValue) {
             currentMin = tempValue;
-            statMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, tempValue));
+            binding.thermoMin.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, tempValue));
         }
         y.setAxisMaximum(currentMax);
         y.setAxisMinimum(currentMin);
         y.setLabelCount(10);
         if (tempValue >= 0) {
-            thermometer.setWithTremble(false);
-            thermometer.setSpeedAt(tempValue);
+            binding.thermoMeter.setWithTremble(false);
+            binding.thermoMeter.setSpeedAt(tempValue);
             if (tempValue > highLimit)
-                thermometer.setBackgroundCircleColor(Color.RED);
+                binding.thermoMeter.setBackgroundCircleColor(Color.RED);
             else {
-                thermometer.setBackgroundCircleColor(getResources().getColor(R.color.primaryBlue));
+                binding.thermoMeter.setBackgroundCircleColor(getResources().getColor(R.color.primaryBlue));
             }
 
             timeElapsed = ((System.currentTimeMillis() - startTime) / updatePeriod);
@@ -504,7 +478,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
 
                 count++;
                 sum += entry.getY();
-                statMean.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / count)));
+                binding.thermoAvg.setText(String.format(Locale.getDefault(), PSLabSensor.THERMOMETER_DATA_FORMAT, (sum / count)));
 
                 LineDataSet dataSet = new LineDataSet(entries, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(thermoSettings.KEY_THERMO_UNIT, "°C"));
                 dataSet.setDrawCircles(false);
@@ -512,11 +486,11 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                 dataSet.setLineWidth(2);
                 LineData data = new LineData(dataSet);
 
-                mChart.setData(data);
-                mChart.notifyDataSetChanged();
-                mChart.setVisibleXRangeMaximum(800);
-                mChart.moveViewToX(data.getEntryCount());
-                mChart.invalidate();
+                binding.chartThermoMeter.setData(data);
+                binding.chartThermoMeter.notifyDataSetChanged();
+                binding.chartThermoMeter.setVisibleXRangeMaximum(800);
+                binding.chartThermoMeter.moveViewToX(data.getEntryCount());
+                binding.chartThermoMeter.invalidate();
             }
         }
     }
@@ -544,11 +518,11 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
             sensorManager.unregisterListener(thermoSensorEventListener);
         }
         startTime = System.currentTimeMillis();
-        statMax.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
-        statMin.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
-        statMean.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
-        thermometer.setSpeedAt(0);
-        thermometer.setWithTremble(false);
+        binding.thermoMax.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        binding.thermoMin.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        binding.thermoAvg.setText(DataFormatter.formatDouble(0, DataFormatter.LOW_PRECISION_FORMAT));
+        binding.thermoMeter.setSpeedAt(0);
+        binding.thermoMeter.setWithTremble(false);
         entries.clear();
     }
 
@@ -558,7 +532,7 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
         ScienceLab scienceLab;
         switch (s) {
             case INBUILT_SENSOR:
-                sensorLabel.setText(getResources().getStringArray(R.array.thermo_sensors)[0]);
+                binding.labelThermoSensor.setText(getResources().getStringArray(R.array.thermo_sensors)[0]);
                 sensorManager = (SensorManager) getContext().getSystemService(SENSOR_SERVICE);
                 sensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
                 if (sensor == null) {
@@ -567,13 +541,13 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
                 } else {
                     float max = sensor.getMaximumRange();
                     PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(thermoSensor.THERMOMETER_MAX_LIMIT, max).apply();
-                    thermometer.setMaxSpeed(max);
+                    binding.thermoMeter.setMaxSpeed(max);
                     sensorManager.registerListener(thermoSensorEventListener,
                             sensor, SensorManager.SENSOR_DELAY_FASTEST);
                 }
                 break;
             case SHT21_SENSOR:
-                sensorLabel.setText(getResources().getStringArray(R.array.thermo_sensors)[1]);
+                binding.labelThermoSensor.setText(getResources().getStringArray(R.array.thermo_sensors)[1]);
                 scienceLab = ScienceLabCommon.scienceLab;
                 if (scienceLab.isConnected()) {
                     try {
@@ -607,21 +581,21 @@ public class ThermometerDataFragment extends Fragment implements OperationCallba
         if ("°F".equals(ThermometerDataFragment.unit)) {
             currentMax = 257;
             currentMin = -40;
-            thermometer.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MAX_LIMIT, 257));
-            thermometer.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT, -40));
-            label_statAvg.setText(R.string.avg_thermo_fahrenheit);
-            label_statMax.setText(R.string.max_thermo_fahrenheit);
-            label_statMin.setText(R.string.min_thermo_fahrenheit);
-            thermometer.setUnit("°F");
+            binding.thermoMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MAX_LIMIT, 257));
+            binding.thermoMeter.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT, -40));
+            binding.labelThermoStatAvg.setText(R.string.avg_thermo_fahrenheit);
+            binding.labelThermoStatMax.setText(R.string.max_thermo_fahrenheit);
+            binding.labelThermoStatMin.setText(R.string.min_thermo_fahrenheit);
+            binding.thermoMeter.setUnit("°F");
         } else {
             currentMax = 125;
             currentMin = -40;
-            thermometer.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MAX_LIMIT, 125));
-            thermometer.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT, -40));
-            label_statAvg.setText(R.string.avg_thermo_celcius);
-            label_statMax.setText(R.string.max_thermo_celcius);
-            label_statMin.setText(R.string.min_thermo_celcius);
-            thermometer.setUnit("°C");
+            binding.thermoMeter.setMaxSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MAX_LIMIT, 125));
+            binding.thermoMeter.setMinSpeed(PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(thermoSensor.THERMOMETER_MIN_LIMIT, -40));
+            binding.labelThermoStatAvg.setText(R.string.avg_thermo_celcius);
+            binding.labelThermoStatMax.setText(R.string.max_thermo_celcius);
+            binding.labelThermoStatMin.setText(R.string.min_thermo_celcius);
+            binding.thermoMeter.setUnit("°C");
         }
     }
 }
