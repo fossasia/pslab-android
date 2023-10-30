@@ -97,7 +97,7 @@ dependencies {
     implementation("com.jakewharton:butterknife:$butterKnifeVersion")
 
     // Map libraries
-    val osmDroidVersion = "6.1.11"
+    val osmDroidVersion = "6.1.17"
     implementation("org.osmdroid:osmdroid-android:$osmDroidVersion")
     implementation("org.osmdroid:osmdroid-mapsforge:$osmDroidVersion")
     implementation("org.osmdroid:osmdroid-geopackage:$osmDroidVersion")
