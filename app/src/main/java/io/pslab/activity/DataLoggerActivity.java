@@ -10,16 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,10 +26,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.adapters.SensorLoggerListAdapter;
+import io.pslab.databinding.ActivityDataLoggerBinding;
 import io.pslab.models.AccelerometerData;
 import io.pslab.models.BaroData;
 import io.pslab.models.CompassData;
@@ -59,12 +55,7 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     public static final String CALLER_ACTIVITY = "Caller";
 
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.data_logger_blank_view)
-    TextView blankView;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    private ActivityDataLoggerBinding binding;
 
     private ProgressBar deleteAllProgressBar;
     private RealmResults<SensorDataBlock> categoryData;
@@ -75,10 +66,11 @@ public class DataLoggerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_data_logger);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-        deleteAllProgressBar = findViewById(R.id.delete_all_progbar);
+        binding = ActivityDataLoggerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
+        deleteAllProgressBar = binding.deleteAllProgbar;
         deleteAllProgressBar.setVisibility(View.GONE);
         realm = LocalDataLog.with().getRealm();
         caller = getIntent().getStringExtra(CALLER_ACTIVITY);
@@ -151,7 +143,7 @@ public class DataLoggerActivity extends AppCompatActivity {
             @Override
             public void onChange(RealmResults<SensorDataBlock> sensorDataBlocks, OrderedCollectionChangeSet changeSet) {
                 if (categoryData.size() == 0) {
-                    DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
+                    binding.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
                 }
             }
         });
@@ -159,17 +151,17 @@ public class DataLoggerActivity extends AppCompatActivity {
 
     private void fillData() {
         if (categoryData.size() > 0) {
-            blankView.setVisibility(View.GONE);
+            binding.dataLoggerBlankView.setVisibility(View.GONE);
             SensorLoggerListAdapter adapter = new SensorLoggerListAdapter(categoryData, this);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                     this, LinearLayoutManager.VERTICAL, false);
-            recyclerView.setLayoutManager(linearLayoutManager);
+            binding.recyclerView.setLayoutManager(linearLayoutManager);
             DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
-            recyclerView.addItemDecoration(itemDecor);
-            recyclerView.setAdapter(adapter);
+            binding.recyclerView.addItemDecoration(itemDecor);
+            binding.recyclerView.setAdapter(adapter);
         } else {
-            recyclerView.setVisibility(View.GONE);
-            blankView.setVisibility(View.VISIBLE);
+            binding.recyclerView.setVisibility(View.GONE);
+            binding.dataLoggerBlankView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -270,7 +262,7 @@ public class DataLoggerActivity extends AppCompatActivity {
                 line = reader.readLine();
             }
             fillData();
-            DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
+            binding.toolbar.getMenu().findItem(R.id.delete_all).setVisible(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -348,9 +340,9 @@ public class DataLoggerActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             deleteAllProgressBar.setVisibility(View.GONE);
             if (LocalDataLog.with().getAllSensorBlocks().size() <= 0) {
-                blankView.setVisibility(View.VISIBLE);
+                binding.dataLoggerBlankView.setVisibility(View.VISIBLE);
             }
-            DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
+            binding.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
         }
     }
 }
