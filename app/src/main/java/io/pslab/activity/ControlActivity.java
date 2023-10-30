@@ -11,26 +11,24 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.pslab.R;
+import io.pslab.databinding.ActivityControlBinding;
 import io.pslab.fragment.ControlFragmentAdvanced;
 import io.pslab.fragment.ControlFragmentMain;
 import io.pslab.fragment.ControlFragmentRead;
 import io.pslab.others.ControlActivityCommon;
 
 public class ControlActivity extends AppCompatActivity {
-    ControlActivityCommon common = new ControlActivityCommon();
-    @BindView(R.id.navigation)
-    BottomNavigationView bottomNavigationView;
+
+    private ActivityControlBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_control);
-        ButterKnife.bind(this);
+        binding = ActivityControlBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        bottomNavigationView.setOnNavigationItemSelectedListener
+        binding.navigation.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
