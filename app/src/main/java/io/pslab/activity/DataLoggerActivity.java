@@ -1,7 +1,6 @@
 package io.pslab.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -82,15 +82,16 @@ public class DataLoggerActivity extends AppCompatActivity {
         deleteAllProgressBar.setVisibility(View.GONE);
         realm = LocalDataLog.with().getRealm();
         caller = getIntent().getStringExtra(CALLER_ACTIVITY);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if (caller == null) {
+            caller = getResources().getString(R.string.logged_data);
+        }
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setTitle(caller);
         }
 
-        if (caller == null)
-            caller = getResources().getString(R.string.logged_data);
-
-        getSupportActionBar().setTitle(caller);
         setCategoryData();
         fillData();
     }
@@ -149,7 +150,7 @@ public class DataLoggerActivity extends AppCompatActivity {
         categoryData.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SensorDataBlock>>() {
             @Override
             public void onChange(RealmResults<SensorDataBlock> sensorDataBlocks, OrderedCollectionChangeSet changeSet) {
-                if(categoryData.size()==0) {
+                if (categoryData.size() == 0) {
                     DataLoggerActivity.this.toolbar.getMenu().findItem(R.id.delete_all).setVisible(false);
                 }
             }
@@ -220,7 +221,7 @@ public class DataLoggerActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK && data != null) {
                 Uri uri = data.getData();
                 String path = uri.getPath();
                 path = path.replace("/root_path/", "/");

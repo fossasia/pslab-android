@@ -47,8 +47,7 @@
             android:textSize="@dimen/seekarc_edit_text"
             android:inputType="number"
             android:maxLines="1"
-            android:imeOptions="flagNoExtractUi"
-            />
+            android:imeOptions="flagNoExtractUi" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,7 +56,6 @@
             android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_toEndOf="@+id/degreeText"
-            android:layout_centerInParent="true"
-            />
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 </RelativeLayout>

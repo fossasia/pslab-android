@@ -8,10 +8,16 @@ categories:
   - title: ':bug: Bug Fixes'
     label: 'Fix'
   - title: ':wrench: Maintenance'
-    label: 'Chore'
+    labels: 
+      - 'Chore'
   - title: ':page_facing_up: Documentation'
     label: 'Documentation'
 change-template: '- $TITLE (#$NUMBER) - @$AUTHOR'
+exclude-contributors:
+  - 'dependabot'
+  - 'dependabot[bot]'
+exclude-labels:
+  - 'Dependencies'
 template: |-
     ## Changes
     $CHANGES

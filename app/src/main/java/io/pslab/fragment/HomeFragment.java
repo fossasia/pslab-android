@@ -198,6 +198,7 @@ public class HomeFragment extends Fragment {
         webView.setVisibility(View.GONE);
         svHomeContent.setVisibility(View.VISIBLE);
         isWebViewShowing = false;
+        webView.loadUrl("");
     }
 
     @Override

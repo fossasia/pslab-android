@@ -637,7 +637,7 @@
             android:layout_alignParentTop="true"
             android:background="@null"
             app:srcCompat="@drawable/circle_play_button"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editBox_samples_sensors"

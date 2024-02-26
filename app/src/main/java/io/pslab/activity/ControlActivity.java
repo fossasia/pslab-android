@@ -11,15 +11,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.pslab.R;
 import io.pslab.fragment.ControlFragmentAdvanced;
 import io.pslab.fragment.ControlFragmentMain;
 import io.pslab.fragment.ControlFragmentRead;
-
-import io.pslab.R;
 import io.pslab.others.ControlActivityCommon;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ControlActivity extends AppCompatActivity {
     ControlActivityCommon common = new ControlActivityCommon();
@@ -37,7 +35,7 @@ public class ControlActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         Fragment selectedFragment = null;
-                        Fragment fragment=getSupportFragmentManager().findFragmentById(R.id.frame_layout_control);
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout_control);
 
                         switch (item.getItemId()) {
                             case R.id.action_item1:
@@ -69,7 +67,7 @@ public class ControlActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        ControlActivityCommon.editTextValues=null;
+        ControlActivityCommon.editTextValues = null;
         finish();
     }
 }

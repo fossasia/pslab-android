@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/bottom_sheet_robotic_arm"
+    android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/bottom_sheet_side_margin"
@@ -22,7 +22,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/img_arrow_robotic_arm"
+            android:id="@+id/img_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -30,7 +30,7 @@
             android:src="@drawable/ic_arrow_drop_up_white_24dp" />
 
         <TextView
-            android:id="@+id/sheet_slide_text_robotic_arm"
+            android:id="@+id/sheet_slide_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

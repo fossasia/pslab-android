@@ -1,8 +1,12 @@
 package io.pslab.activity;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.content.SharedPreferences;
-import android.hardware.SensorManager;
 import android.hardware.Sensor;
+import android.hardware.SensorManager;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
@@ -93,13 +97,19 @@ public class LuxMeterActivity extends PSLabSensor {
 
     @Override
     public void getDataFromDataLogger() {
-        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
+        if (SDK_INT >= 21 && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
             //playingData = true;
             viewingData = true;
             recordedLuxData = LocalDataLog.with()
                     .getBlockOfLuxRecords(getIntent().getExtras().getLong(DATA_BLOCK));
-            String title = titleFormat.format(recordedLuxData.get(0).getTime());
-            getSupportActionBar().setTitle(title);
+            final LuxData data = recordedLuxData.get(0);
+            if (data != null) {
+                final String title = titleFormat.format(data.getTime());
+                final ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.setTitle(title);
+                }
+            }
         }
     }
 
@@ -136,7 +146,6 @@ public class LuxMeterActivity extends PSLabSensor {
         if (strValue.isEmpty()) return lowerBound;
         int value = Integer.parseInt(strValue);
         if (value > upperBound) return upperBound;
-        else if (value < lowerBound) return lowerBound;
-        else return value;
+        else return Math.max(value, lowerBound);
     }
 }

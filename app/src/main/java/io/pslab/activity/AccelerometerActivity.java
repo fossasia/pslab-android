@@ -1,11 +1,13 @@
 package io.pslab.activity;
 
 import android.content.SharedPreferences;
-import android.hardware.SensorManager;
 import android.hardware.Sensor;
-import androidx.fragment.app.Fragment;
+import android.hardware.SensorManager;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+
 import io.pslab.R;
 import io.pslab.fragment.AccelerometerDataFragment;
 import io.pslab.fragment.AccelerometerSettingsFragment;
@@ -99,8 +101,14 @@ public class AccelerometerActivity extends PSLabSensor {
             viewingData = true;
             recordedAccelerometerData = LocalDataLog.with()
                     .getBlockOfAccelerometerRecords(getIntent().getExtras().getLong(DATA_BLOCK));
-            String title = titleFormat.format(recordedAccelerometerData.get(0).getTime());
-            getSupportActionBar().setTitle(title);
+            final AccelerometerData data = recordedAccelerometerData.get(0);
+            if (data != null) {
+                final String title = titleFormat.format(data.getTime());
+                final ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.setTitle(title);
+                }
+            }
         }
     }
 

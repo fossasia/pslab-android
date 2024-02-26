@@ -3,19 +3,26 @@ package io.pslab.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Supplier;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.pslab.R;
 import io.pslab.activity.AccelerometerActivity;
@@ -42,7 +49,9 @@ import io.pslab.items.ApplicationItem;
  * Created by viveksb007 on 29/3/17.
  */
 
-public class InstrumentsFragment extends Fragment {
+public final class InstrumentsFragment extends Fragment {
+
+    private Map<String, Supplier<Intent>> intentSupplierMap;
 
     private ApplicationAdapter applicationAdapter;
     private List<ApplicationItem> applicationItemList;
@@ -54,55 +63,22 @@ public class InstrumentsFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.applications_fragment, container, false);
-        context = getActivity().getApplicationContext();
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
+                             @Nullable final Bundle savedInstanceState) {
+        intentSupplierMap = generateIntentMap();
+
+        final View view = inflater.inflate(R.layout.applications_fragment, container, false);
+        context = getContext();
         applicationItemList = new ArrayList<>();
-        applicationAdapter = new ApplicationAdapter(context, applicationItemList,
+        applicationAdapter = new ApplicationAdapter(applicationItemList,
                 item -> {
-                    Intent intent = null;
-                    String applicationName = item.getApplicationName();
-
-                    if (applicationName.equals(getString(R.string.oscilloscope))) {
-                        intent = new Intent(context, OscilloscopeActivity.class);
-                        intent.putExtra("who", "Instruments");
-                    }
-
-                    if (applicationName.equals(getString(R.string.multimeter)))
-                        intent = new Intent(context, MultimeterActivity.class);
-                    if (applicationName.equals(getString(R.string.logical_analyzer)))
-                        intent = new Intent(context, LogicalAnalyzerActivity.class);
-                    if (applicationName.equals(getString(R.string.sensors)))
-                        intent = new Intent(context, SensorActivity.class);
-                    if (applicationName.equals(getString(R.string.wave_generator)))
-                        intent = new Intent(context, WaveGeneratorActivity.class);
-                    if (applicationName.equals(getString(R.string.power_source)))
-                        intent = new Intent(context, PowerSourceActivity.class);
-                    if (applicationName.equals(getString(R.string.lux_meter)))
-                        intent = new Intent(context, LuxMeterActivity.class);
-                    if (applicationName.equals(getString(R.string.accelerometer)))
-                        intent = new Intent(context, AccelerometerActivity.class);
-                    if (applicationName.equals(getString(R.string.baro_meter)))
-                        intent = new Intent(context, BarometerActivity.class);
-                    if (applicationName.equals(getString(R.string.compass)))
-                        intent = new Intent(context, CompassActivity.class);
-                    if (applicationName.equals(getString(R.string.gyroscope)))
-                        intent = new Intent(context, GyroscopeActivity.class);
-                    if (applicationName.equals(getString(R.string.thermometer)))
-                        intent = new Intent(context, ThermometerActivity.class);
-                    if (applicationName.equals(getString(R.string.robotic_arm)))
-                        intent = new Intent(context, RoboticArmActivity.class);
-                    if (applicationName.equals(getString(R.string.gas_sensor)))
-                        intent = new Intent(context, GasSensorActivity.class);
-                    if (applicationName.equals(getString(R.string.dust_sensor)))
-                        intent = new Intent(context, DustSensorActivity.class);
-                    if (applicationName.equals(getString(R.string.sound_meter)))
-                        intent = new Intent(context, SoundMeterActivity.class);
-                    if (intent != null)
+                    final String applicationName = item.getApplicationName();
+                    final Intent intent = createIntent(applicationName);
+                    if (intent != null) {
                         startActivity(intent);
+                    }
                 });
-        int rows = context.getResources().getConfiguration().orientation
+        final int rows = context.getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_PORTRAIT ? 1 : 2;
 
         initiateViews(view, rows);
@@ -110,12 +86,17 @@ public class InstrumentsFragment extends Fragment {
         return view;
     }
 
+    private Intent createIntent(@NonNull final String applicationName) {
+        final Supplier<Intent> callable = intentSupplierMap.get(applicationName);
+        return callable == null ? null : callable.get();
+    }
+
     /**
      * Initiate Recycler view
      */
-    private void initiateViews(View view, int rows) {
-        RecyclerView listView = view.findViewById(R.id.applications_recycler_view);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, rows);
+    private void initiateViews(@NonNull final View view, final int rows) {
+        final RecyclerView listView = view.findViewById(R.id.applications_recycler_view);
+        final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, rows);
         listView.setLayoutManager(mLayoutManager);
         new LoadList().doTask(listView);
 
@@ -126,9 +107,9 @@ public class InstrumentsFragment extends Fragment {
      */
     private class LoadList {
 
-        private void doTask(RecyclerView listView) {
+        private void doTask(@NonNull final RecyclerView listView) {
 
-            int[] descriptions = new int[]{
+            final int[] descriptions = {
                     R.string.oscilloscope_description,
                     R.string.multimeter_description,
                     R.string.logic_analyzer_description,
@@ -202,8 +183,60 @@ public class InstrumentsFragment extends Fragment {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
+
+        final FragmentActivity activity = getActivity();
+        if (activity != null) {
+            final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                fragmentManager.beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
+            } else {
+                fragmentManager.beginTransaction().detach(this).commitNowAllowingStateLoss();
+                fragmentManager.beginTransaction().attach(this).commitNowAllowingStateLoss();
+            }
+        }
+    }
+
+    private Map<String, Supplier<Intent>> generateIntentMap() {
+        final Map<String, Supplier<Intent>> map = new HashMap<>();
+
+        map.put(getString(R.string.oscilloscope), () -> {
+            final Intent intent = new Intent(context, OscilloscopeActivity.class);
+            intent.putExtra("who", "Instruments");
+            return intent;
+        });
+        map.put(getString(R.string.multimeter), () ->
+                new Intent(context, MultimeterActivity.class));
+        map.put(getString(R.string.logical_analyzer), () ->
+                new Intent(context, LogicalAnalyzerActivity.class));
+        map.put(getString(R.string.sensors), () ->
+                new Intent(context, SensorActivity.class));
+        map.put(getString(R.string.wave_generator), () ->
+                new Intent(context, WaveGeneratorActivity.class));
+        map.put(getString(R.string.power_source), () ->
+                new Intent(context, PowerSourceActivity.class));
+        map.put(getString(R.string.lux_meter), () ->
+                new Intent(context, LuxMeterActivity.class));
+        map.put(getString(R.string.accelerometer), () ->
+                new Intent(context, AccelerometerActivity.class));
+        map.put(getString(R.string.baro_meter), () ->
+                new Intent(context, BarometerActivity.class));
+        map.put(getString(R.string.compass), () ->
+                new Intent(context, CompassActivity.class));
+        map.put(getString(R.string.gyroscope), () ->
+                new Intent(context, GyroscopeActivity.class));
+        map.put(getString(R.string.thermometer), () ->
+                new Intent(context, ThermometerActivity.class));
+        map.put(getString(R.string.robotic_arm), () ->
+                new Intent(context, RoboticArmActivity.class));
+        map.put(getString(R.string.gas_sensor), () ->
+                new Intent(context, GasSensorActivity.class));
+        map.put(getString(R.string.dust_sensor), () ->
+                new Intent(context, DustSensorActivity.class));
+        map.put(getString(R.string.sound_meter), () ->
+                new Intent(context, SoundMeterActivity.class));
+
+        return map;
     }
 }

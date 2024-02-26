@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/accelerometer_linearlayout"
+<LinearLayout android:id="@+id/accelerometer_linearlayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,6 +16,7 @@
         android:layout_weight="1"
         android:layout_margin="5dp"
         tools:layout="@layout/accelerometer_list_item" />
+
     <fragment
         android:id="@+id/accelerometer_y_axis_fragment"
         android:name="io.pslab.fragment.AccelerometerViewFragment"
@@ -25,6 +25,7 @@
         android:layout_weight="1"
         android:layout_margin="5dp"
         tools:layout="@layout/accelerometer_list_item" />
+
     <fragment
         android:id="@+id/accelerometer_z_axis_fragment"
         android:name="io.pslab.fragment.AccelerometerViewFragment"

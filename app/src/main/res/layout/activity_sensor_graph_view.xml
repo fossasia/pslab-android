@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/data_view_cl">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -225,11 +226,13 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/view_data_loc_padding"
                 android:paddingStart="@dimen/view_data_loc_padding">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/location"
                     android:textColor="@color/white" />
+
                 <TextView
                     android:id="@+id/loc_lat"
                     android:layout_width="wrap_content"
@@ -241,6 +244,7 @@
                     android:maxLines="1"
                     android:maxLength="9"
                     android:ellipsize="end" />
+
                 <TextView
                     android:id="@+id/loc_long"
                     android:layout_width="wrap_content"

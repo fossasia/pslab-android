@@ -8,13 +8,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +21,12 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -38,6 +37,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -218,7 +218,12 @@ public class LALogicLinesFragment extends Fragment {
         setAdapters();
         LogicalAnalyzerActivity laActivity = (LogicalAnalyzerActivity) getActivity();
         if (laActivity.isPlayback) {
-            setPlayBackData(laActivity.recordedLAData);
+            if (laActivity.recordedLAData.isEmpty()) {
+                CustomSnackBar.showSnackBar(container, getString(R.string.no_playback_data),
+                        null, null, Snackbar.LENGTH_SHORT);
+            } else {
+                setPlayBackData(laActivity.recordedLAData);
+            }
         }
         return rootView;
     }
@@ -349,7 +354,7 @@ public class LALogicLinesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (channelMode > 0) {
-                    if (scienceLab.isConnected()) {
+                    if (scienceLab != null && scienceLab.isConnected()) {
                         analyze_button.setClickable(false);
 
                         // Change all variables to default value
@@ -883,8 +888,10 @@ public class LALogicLinesFragment extends Fragment {
 
     @Override
     public void onStop() {
-        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
-            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.show();
+        }
         super.onStop();
     }
 
