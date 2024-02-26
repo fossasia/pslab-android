@@ -5,6 +5,7 @@ pluginManagement {
         mavenCentral()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -14,5 +15,6 @@ dependencyResolutionManagement {
         maven("https://plugins.gradle.org/m2/")
     }
 }
+
 rootProject.name = "PSLab"
 include(":app")
