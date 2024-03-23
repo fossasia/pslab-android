@@ -92,19 +92,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/display_box">
 
+
             <View
                 android:id="@+id/upper_box"
-                android:layout_width="296dp"
-                android:layout_height="146dp"
+                android:layout_width="@dimen/multimeter_length_0"
+                android:layout_height="@dimen/multimeter_length_0"
                 android:layout_marginStart="@dimen/multimeter_layout_margin_2"
                 android:layout_marginTop="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_layout_margin_2"
                 android:background="@drawable/rectangle_border"
-                app:layout_constraintBottom_toBottomOf="@+id/upper_line"
+                app:layout_constraintBottom_toTopOf="@+id/lower_line"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <TextView
                 android:id="@+id/upper_box_title"
@@ -247,13 +248,12 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/multimeter_measure_textsize"
                     android:textStyle="bold" />
-
             </LinearLayout>
 
             <View
                 android:id="@+id/knob_marker"
-                android:layout_width="160dp"
-                android:layout_height="156dp"
+                android:layout_width="@dimen/multimeter_knob_width"
+                android:layout_height="@dimen/multimeter_knob_height"
                 android:layout_marginStart="@dimen/multimeter_constraint_1"
                 android:layout_marginTop="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_constraint_1"
@@ -268,7 +268,7 @@
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
@@ -465,6 +465,13 @@
                 app:layout_constraintBottom_toBottomOf="@+id/lower_right_box"
                 app:layout_constraintEnd_toEndOf="@+id/lower_right_box"
                 app:layout_constraintStart_toStartOf="@+id/lower_right_box" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="158dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

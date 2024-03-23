@@ -101,9 +101,10 @@
     <dimen name="multimeter_measure_textsize">14sp</dimen>
     <dimen name="multimeter_button_text_padding">4dp</dimen>
     <dimen name="multimeter_heading_ll_text_size">16sp</dimen>
-    <dimen name="multimeter_textbox_height">110dp</dimen>
+    <dimen name="multimeter_textbox_height">62dp</dimen>
     <dimen name="multimeter_textbox_margin_top">10dp</dimen>
     <dimen name="multimeter_button_width">0dp</dimen>
+    <dimen name="multimeter_guideline_constraint_begin">156dp</dimen>
     <dimen name="multimeter_button_height">40dp</dimen>
     <dimen name="multimeter_left_button_margin_left">5dp</dimen>
     <dimen name="multimeter_left_button_margin_right">5dp</dimen>
@@ -137,6 +138,7 @@
     <dimen name="multimeter_length_0">0dp</dimen>
     <dimen name="multimeter_knob_width_xhdpi">192dp</dimen>
     <dimen name="multimeter_knob_height_xhdpi">190dp</dimen>
+
     
     <dimen name="multimeter_knobcircle_radius_1_xl_tablet">185dp</dimen>
     <dimen name="multimeter_knobcircle_radius_2_xl_tablet">180dp</dimen>

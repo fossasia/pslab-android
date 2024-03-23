@@ -38,8 +38,8 @@
 
         <TextView
             android:id="@+id/display_box"
-            android:layout_width="316dp"
-            android:layout_height="62dp"
+            android:layout_width="@dimen/multimeter_length_0"
+            android:layout_height="@dimen/multimeter_textbox_height"
             android:layout_marginStart="@dimen/multimeter_layout_margin_2"
             android:layout_marginEnd="@dimen/multimeter_layout_margin_2"
             android:background="@drawable/tv_border"
@@ -97,18 +97,17 @@
 
             <View
                 android:id="@+id/upper_box"
-                android:layout_width="299dp"
-                android:layout_height="130dp"
+                android:layout_width="@dimen/multimeter_length_0"
+                android:layout_height="@dimen/multimeter_length_0"
                 android:layout_marginStart="@dimen/multimeter_layout_margin_2"
                 android:layout_marginTop="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_layout_margin_2"
                 android:background="@drawable/rectangle_border"
-                app:layout_constraintBottom_toBottomOf="@+id/upper_line"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/upper_box_title"
@@ -133,7 +132,7 @@
                 android:id="@+id/upper_line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/multimeter_line_width"
-                android:layout_marginTop="@dimen/multimeter_constraint_2"
+                android:layout_marginTop="16dp"
                 android:background="@color/black"
                 android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@+id/ch3" />
@@ -152,10 +151,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
+
             <View
                 android:id="@+id/lower_left_box"
-                android:layout_width="194dp"
-                android:layout_height="194dp"
+                android:layout_width="@dimen/multimeter_length_0"
+                android:layout_height="@dimen/multimeter_length_0"
                 android:layout_marginStart="@dimen/multimeter_layout_margin_2"
                 android:layout_marginEnd="@dimen/multimeter_left_box_endmargin"
                 android:layout_marginBottom="@dimen/multimeter_constraint_1"
@@ -164,23 +164,21 @@
                 app:layout_constraintEnd_toStartOf="@+id/lower_right_box"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/lower_line"
-                app:layout_constraintVertical_bias="1.0" />
-
+                app:layout_constraintTop_toTopOf="@+id/lower_line" />
 
             <View
                 android:id="@+id/lower_right_box"
-                android:layout_width="103dp"
-                android:layout_height="189dp"
+                android:layout_width="@dimen/multimeter_length_0"
+                android:layout_height="@dimen/multimeter_length_0"
                 android:layout_marginStart="@dimen/multimeter_end_box_rightmargin"
                 android:layout_marginEnd="@dimen/multimeter_layout_margin_2"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/rectangle_border_black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/id1"
-                app:layout_constraintTop_toTopOf="@+id/lower_line"
-                app:layout_constraintVertical_bias="0.714" />
+                app:layout_constraintTop_toTopOf="@+id/lower_line" />
 
             <it.beppi.knoblibrary.Knob
                 android:id="@+id/knobs"
@@ -465,8 +463,8 @@
 
             <TextView
                 android:id="@+id/measure"
-                android:layout_width="91dp"
-                android:layout_height="27dp"
+                android:layout_width="@dimen/multimeter_length_0"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_constraint_1"
                 android:layout_marginBottom="@dimen/multimeter_left_button_margin_bottom"
@@ -478,6 +476,13 @@
                 app:layout_constraintEnd_toEndOf="@+id/lower_right_box"
                 app:layout_constraintStart_toStartOf="@+id/lower_right_box"
                 tools:ignore="TextSizeCheck" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="122dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
