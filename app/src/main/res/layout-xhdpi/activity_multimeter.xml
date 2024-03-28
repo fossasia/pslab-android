@@ -87,8 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_zero_dp"
             android:layout_marginTop="@dimen/multimeter_view_top_margin"
-            android:layout_marginBottom="@dimen/multimeter_constraint_1"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_view"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/display_box">
