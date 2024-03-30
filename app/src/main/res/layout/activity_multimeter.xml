@@ -88,7 +88,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/multimeter_length_0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -103,9 +103,8 @@
                 android:layout_marginTop="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_layout_margin_2"
                 android:background="@drawable/rectangle_border"
-                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintBottom_toTopOf="@id/guideline_upperbox"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -115,7 +114,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_constraint_1"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:paddingTop="@dimen/multimeter_button_text_padding"
                 android:paddingBottom="@dimen/multimeter_button_text_padding"
@@ -124,7 +122,6 @@
                 android:textSize="@dimen/multimeter_bottombutton_textsize"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/upper_box" />
 
@@ -132,7 +129,6 @@
                 android:id="@+id/upper_line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/multimeter_line_width"
-                android:layout_marginTop="16dp"
                 android:background="@color/black"
                 android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@+id/ch3" />
@@ -162,7 +158,6 @@
                 android:background="@drawable/rectangle_border_black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/lower_right_box"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/lower_line" />
 
@@ -172,11 +167,10 @@
                 android:layout_height="@dimen/multimeter_length_0"
                 android:layout_marginStart="@dimen/multimeter_end_box_rightmargin"
                 android:layout_marginEnd="@dimen/multimeter_layout_margin_2"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/multimeter_constraint_1"
                 android:background="@drawable/rectangle_border_black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/id1"
                 app:layout_constraintTop_toTopOf="@+id/lower_line" />
 
@@ -207,18 +201,16 @@
                 app:layout_constraintBottom_toBottomOf="@+id/knob_marker"
                 app:layout_constraintEnd_toEndOf="@+id/knob_marker"
                 app:layout_constraintStart_toStartOf="@+id/knob_marker"
-                app:layout_constraintTop_toTopOf="@+id/knob_marker"
-                tools:ignore="SpeakableTextPresentCheck" />
+                app:layout_constraintTop_toTopOf="@+id/knob_marker" />
 
             <LinearLayout
                 android:id="@+id/freq_count"
-                android:layout_width="194dp"
-                android:layout_height="27dp"
-                android:layout_marginBottom="4dp"
+                android:layout_width="@dimen/multimeter_freqcount_width"
+                android:layout_height="@dimen/multimeter_freqcount_height"
+                android:layout_marginBottom="@dimen/multimeter_left_box_endmargin"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@+id/lower_left_box"
-                app:layout_constraintStart_toStartOf="@+id/lower_left_box"
-                tools:ignore="TextSizeCheck">
+                app:layout_constraintStart_toStartOf="@+id/lower_left_box">
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/selector"
@@ -232,8 +224,7 @@
                     android:textSize="@dimen/multimeter_measure_textsize"
                     android:textStyle="bold"
                     android:theme="@style/SwitchCompatTheme"
-                    android:thumbTextPadding="@dimen/multimeter_margin_2"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:thumbTextPadding="@dimen/multimeter_margin_2" />
 
                 <TextView
                     android:layout_width="@dimen/multimeter_length_0"
@@ -251,8 +242,8 @@
 
             <View
                 android:id="@+id/knob_marker"
-                android:layout_width="152dp"
-                android:layout_height="140dp"
+                android:layout_width="@dimen/multimeter_knob_marker_width"
+                android:layout_height="@dimen/multimeter_knob_marker_height"
                 android:layout_marginStart="@dimen/multimeter_constraint_1"
                 android:layout_marginTop="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_constraint_1"
@@ -280,7 +271,6 @@
                 app:layout_constraintCircleAngle="@string/multimeter_angle_12"
                 app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_2"
                 app:layout_constraintEnd_toStartOf="@+id/textView2"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/textView3"
                 app:layout_constraintTop_toTopOf="@+id/textView2" />
 
@@ -338,7 +328,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/multimeter_constraint_3"
                 android:gravity="start"
                 android:text="@string/ch2"
                 android:textColor="@color/colorPrimary"
@@ -349,7 +339,6 @@
                 app:layout_constraintCircleAngle="@string/multimeter_angle_11"
                 app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3"
                 app:layout_constraintEnd_toStartOf="@+id/textView15"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toEndOf="@+id/knob_marker"
                 app:layout_constraintTop_toBottomOf="@+id/upper_box_title" />
@@ -368,7 +357,6 @@
                 app:layout_constraintCircleRadius="@dimen/multimeter_knobcircle_radius_3"
                 app:layout_constraintEnd_toEndOf="@+id/textView3"
                 app:layout_constraintEnd_toStartOf="@+id/knobs"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/upper_box"
                 app:layout_constraintStart_toStartOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -478,11 +466,11 @@
                 tools:ignore="TextSizeCheck" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
+                android:id="@+id/guideline_upperbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="122dp" />
+                app:layout_constraintGuide_begin="@dimen/multimeter_guideline_upperbox" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

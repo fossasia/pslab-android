@@ -195,6 +195,7 @@
     <string name="multimeter_angle_10">294</string>
     <string name="multimeter_angle_11">327</string>
     <string name="multimeter_angle_12">0</string>
+    <string name="multimter_cap">Multimeter CAP</string>
 
     <string name="set">SET</string>
     <string name="read">READ</string>

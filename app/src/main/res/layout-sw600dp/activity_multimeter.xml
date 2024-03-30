@@ -15,7 +15,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/top_app_bar_layout"
-        app:layout_constraintVertical_bias="0.48000002" />
+        app:layout_constraintVertical_bias="0.55" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/top_app_bar_layout"
@@ -58,7 +58,6 @@
             android:layout_height="@dimen/multimeter_length_0"
             android:layout_marginTop="@dimen/multimeter_constraint_2"
             android:layout_marginEnd="@dimen/multimeter_layout_margin"
-            android:layout_marginRight="@dimen/multimeter_layout_margin"
             android:textSize="@dimen/multimeter_quantity_dimen"
             app:layout_constraintBottom_toTopOf="@+id/view"
             app:layout_constraintEnd_toEndOf="@+id/display_box"
@@ -112,10 +111,8 @@
                 android:background="@drawable/rectangle_border"
                 app:layout_constraintBottom_toBottomOf="@+id/upper_line"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/upper_box_title"
@@ -135,10 +132,9 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/upper_line"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/upper_box"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.01" />
 
             <View
                 android:id="@+id/upper_line"
@@ -173,19 +169,15 @@
                 android:background="@drawable/rectangle_border_black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/lower_right_box"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/lower_line"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="@+id/lower_line" />
 
             <View
                 android:id="@+id/lower_right_box"
                 android:layout_width="@dimen/multimeter_length_0"
                 android:layout_height="@dimen/multimeter_length_0"
                 android:layout_marginStart="@dimen/multimeter_end_box_rightmargin"
-                android:layout_marginLeft="@dimen/multimeter_end_box_rightmargin"
                 android:layout_marginEnd="@dimen/multimeter_layout_margin_2"
-                android:layout_marginRight="@dimen/multimeter_layout_margin_2"
                 android:layout_marginBottom="@dimen/multimeter_constraint_1"
                 android:background="@drawable/rectangle_border_black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -200,10 +192,8 @@
                 android:layout_height="@dimen/multimeter_length_0"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="@dimen/multimeter_margin_3"
-                android:layout_marginLeft="@dimen/multimeter_margin_3"
                 android:layout_marginTop="@dimen/multimeter_margin_3"
                 android:layout_marginEnd="@dimen/multimeter_margin_2"
-                android:layout_marginRight="@dimen/multimeter_margin_2"
                 android:layout_marginBottom="@dimen/multimeter_margin_2"
                 android:layout_weight="1"
                 android:scaleX="1.5"
@@ -237,10 +227,9 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@+id/lower_left_box"
                 app:layout_constraintEnd_toEndOf="@+id/lower_left_box"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/lower_left_box"
                 app:layout_constraintTop_toTopOf="@+id/lower_left_box"
-                app:layout_constraintVertical_bias="0.685">
+                app:layout_constraintVertical_bias="0.846">
 
                 <androidx.appcompat.widget.SwitchCompat
 
@@ -276,8 +265,8 @@
 
             <View
                 android:id="@+id/knob_marker"
-                android:layout_width="204dp"
-                android:layout_height="202dp"
+                android:layout_width="@dimen/multimeter_knob_width_tablet"
+                android:layout_height="@dimen/multimeter_knob_heigth_tablet"
                 android:layout_marginStart="@dimen/multimeter_constraint_1"
                 android:layout_marginTop="@dimen/multimeter_constraint_1"
                 android:layout_marginEnd="@dimen/multimeter_constraint_1"
@@ -517,10 +506,10 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/lower_right_box"
                 app:layout_constraintEnd_toEndOf="@+id/lower_right_box"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/lower_right_box"
                 app:layout_constraintTop_toTopOf="@+id/lower_right_box"
-                app:layout_constraintVertical_bias="0.695" />
+                app:layout_constraintVertical_bias="0.839" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline3"

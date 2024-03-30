@@ -99,6 +99,7 @@
     <dimen name="multimeter_textbox_height_80">80dp</dimen>
     <dimen name="multimeter_bottombutton_textsize">18sp</dimen>
     <dimen name="multimeter_measure_textsize">14sp</dimen>
+    <dimen name="multimeter_voltage_textsize">14sp</dimen>
     <dimen name="multimeter_button_text_padding">4dp</dimen>
     <dimen name="multimeter_heading_ll_text_size">16sp</dimen>
     <dimen name="multimeter_textbox_height">62dp</dimen>
@@ -121,6 +122,9 @@
     <dimen name="multimeter_margin_3">7dp</dimen>
     <dimen name="multimeter_knob_width">185dp</dimen>
     <dimen name="multimeter_knob_height">183dp</dimen>
+    <dimen name="multimeter_knob_width_tablet">214dp</dimen>
+    <dimen name="multimeter_knob_heigth_tablet">212dp</dimen>
+    <dimen name="multimeter_knobs_margin_hdpi">5dp</dimen>
     <dimen name="multimeter_knobcircle_radius_1">90dp</dimen>
     <dimen name="multimeter_knobcircle_radius_2">85dp</dimen>
     <dimen name="multimeter_knobcircle_radius_3">90dp</dimen>
@@ -130,6 +134,10 @@
     <dimen name="multimeter_knobcircle_radius_2_xhdpi">249dp</dimen>
     <dimen name="multimeter_knobcircle_radius_1_xhdpi">253dp</dimen>
     <dimen name="multimeter_knobcircle_radius_3_xhdpi">255dp</dimen>
+    <dimen name="multimeter_knob_marker_height">140dp</dimen>
+    <dimen name="multimeter_knob_marker_width">152dp</dimen>
+    <dimen name="multimeter_freqcount_height">27dp</dimen>
+    <dimen name="multimeter_freqcount_width">194dp</dimen>
     <dimen name="multimeter_left_box_endmargin">4dp</dimen>
     <dimen name="multimeter_end_box_rightmargin">12dp</dimen>
     <dimen name="multimeter_layout_margin_2">10dp</dimen>
@@ -138,11 +146,12 @@
     <dimen name="multimeter_length_0">0dp</dimen>
     <dimen name="multimeter_knob_width_xhdpi">192dp</dimen>
     <dimen name="multimeter_knob_height_xhdpi">190dp</dimen>
+    <dimen name="multimeter_guideline_upperbox">122dp</dimen>
 
     
-    <dimen name="multimeter_knobcircle_radius_1_xl_tablet">185dp</dimen>
-    <dimen name="multimeter_knobcircle_radius_2_xl_tablet">180dp</dimen>
-    <dimen name="multimeter_knobcircle_radius_3_xl_tablet">185dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_1_xl_tablet">190dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_2_xl_tablet">190dp</dimen>
+    <dimen name="multimeter_knobcircle_radius_3_xl_tablet">190dp</dimen>
     <dimen name="multimeter_left_button_margin_bottom_tablet">8dp</dimen>
 
     <dimen name="wave_gen_control_text_size">14sp</dimen>
