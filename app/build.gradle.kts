@@ -17,6 +17,7 @@ android {
         targetSdk = 34
         versionCode = 22
         versionName = "3.1.0"
+        resConfigs("en","ru","ar","si","pl")
     }
 
     signingConfigs {
