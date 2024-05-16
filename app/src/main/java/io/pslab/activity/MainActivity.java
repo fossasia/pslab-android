@@ -305,6 +305,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                         startActivity(new Intent(MainActivity.this, CreateConfigActivity.class));
                         break;
+                    case R.id.nav_privacy_policy:
+                        customTabService.launchUrl("https://pslab.io/privacy-policy/");
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
+                        break;
                     default:
                         navItemIndex = 0;
                 }
