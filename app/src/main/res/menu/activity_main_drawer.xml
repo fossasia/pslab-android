@@ -56,5 +56,9 @@
             android:id="@+id/nav_share_app"
             android:icon="@drawable/share_icon"
             android:title="@string/nav_share" />
+        <item
+            android:id="@+id/nav_privacy_policy"
+            android:icon="@drawable/baseline_article_24"
+            android:title="@string/privacy_policy"/>
     </group>
 </menu>
