@@ -2,12 +2,14 @@ package io.pslab.activity;
 
 import static io.pslab.others.ScienceLabCommon.scienceLab;
 
+import android.Manifest;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -26,6 +29,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -76,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     private CustomTabsServiceConnection customTabsServiceConnection;
 
     public static int navItemIndex = 0;
+
+    int PERMISSION_ID = 44;
 
     private static final String TAG_DEVICE = "device";
     private static final String TAG_INSTRUMENTS = "instruments";
@@ -151,6 +157,33 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_INSTRUMENTS;
             loadHomeFragment();
         }
+        
+        checkPermissions();
+    }
+
+    private void checkPermissions() {
+        if(checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //Permission granted
+        } else {
+            requestLocationPermissions();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_ID && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            //Permission granted
+        } else {
+            Toast.makeText(this, "This app requires permission to access your location.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void requestLocationPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+        }, PERMISSION_ID);
     }
 
     private void loadHomeFragment() {
