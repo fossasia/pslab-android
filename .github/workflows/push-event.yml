@@ -16,115 +16,84 @@ jobs:
       branch: ${{ steps.branch-name.outputs.current_branch }}
 
     steps:
-    - name: Download repository
-      uses: actions/checkout@v3
+      - name: Download repository
+        uses: actions/checkout@v3
 
-    - uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-    - name: Setup Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'adopt'
-        java-version: '17'
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
 
-    - name: Prepare Build Keys
-      if: ${{ github.event_name != 'pull_request' && github.repository == 'fossasia/pslab-android' }}
-      env:
-        ENCRYPTED_F10B5E0E5262_IV: ${{ secrets.ENCRYPTED_F10B5E0E5262_IV }}
-        ENCRYPTED_F10B5E0E5262_KEY: ${{ secrets.ENCRYPTED_F10B5E0E5262_KEY }}
-      run: |
-        bash scripts/prep-key.sh
+      - name: Prepare Build Keys
+        env:
+          ENCRYPTED_F10B5E0E5262_IV: ${{ secrets.ENCRYPTED_F10B5E0E5262_IV }}
+          ENCRYPTED_F10B5E0E5262_KEY: ${{ secrets.ENCRYPTED_F10B5E0E5262_KEY }}
+        run: |
+          bash scripts/prep-key.sh
 
-    - name: Build with Gradle
-      env:
-        STORE_PASS: ${{ secrets.STORE_PASS }}
-        ALIAS: ${{ secrets.ALIAS }}
-        KEY_PASS: ${{ secrets.KEY_PASS }}
-      run: |
-        bash ./gradlew build --stacktrace
-        bash ./gradlew bundle --stacktrace
-    
-    - name: Store APK files
-      uses: actions/upload-artifact@v3
-      with:
-        name: apk-files
-        path: |
-          app/build/outputs/apk/debug/app-debug.apk
-          app/build/outputs/apk/release/app-release-unsigned.apk
-          app/build/outputs/bundle/debug/app-debug.aab
-          app/build/outputs/bundle/release/app-release.aab
+      - name: Build with Gradle
+        env:
+          STORE_PASS: ${{ secrets.STORE_PASS }}
+          ALIAS: ${{ secrets.ALIAS }}
+          KEY_PASS: ${{ secrets.KEY_PASS }}
+        run: |
+          bash ./gradlew build --stacktrace
+          bash ./gradlew bundle --stacktrace
+
+      - name: Upload APK Debug
+        uses: actions/upload-artifact@v4
+        with:
+          name: APK Debug generated
+          path: app/build/outputs/apk/debug
+
+      - name: Upload APK Release
+        uses: actions/upload-artifact@v4
+        with:
+          name: APK Release generated
+          path: app/build/outputs/apk/release
+
+      - name: Upload AAB Release
+        uses: actions/upload-artifact@v4
+        with:
+          name: AAB Release generated
+          path: app/build/outputs/bundle/release
+
+      - name: Upload APK/AAB's to apk branch
+        run: |
+          git config --global user.name "${{ github.workflow }}"
+          git config --global user.email "gh-actions@${{ github.repository_owner }}"
           
-    - name: Define branch
-      id: branch-name
-      run: echo "::set-output name=current_branch::${{ github.ref_name }}"
-
-  upload:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Clone APK branch
-      uses: actions/checkout@v3
-      with:
-        repository: fossasia/pslab-android
-        ref: apk
-    
-    - name: Clean APK branch for master builds
-      if: ${{ needs.build.outputs.branch == 'master' }}
-      run: |
-        rm -rf app-debug-master.apk || true
-        rm -rf app-release-unsigned-master.apk || true
-        rm -rf app-debug-master.aab || true
-        rm -rf app-release-master.aab || true
-        
-    - name: Clean APK branch for development builds
-      if: ${{ needs.build.outputs.branch == 'development' }}
-      run: |
-        rm -rf app-debug-development.apk || true
-        rm -rf app-release-unsigned-development.apk || true
-        rm -rf app-debug-development.aab || true
-        rm -rf app-release-development.aab || true
-
-    - name: Retrieve APK files
-      uses: actions/download-artifact@v3
-      with:
-        name: apk-files
-        
-    - name: Rename files in master branch
-      if: ${{ needs.build.outputs.branch == 'master' }}
-      run: |
-        mv apk/debug/app-debug.apk app-debug-master.apk
-        mv apk/release/app-release-unsigned.apk app-release-unsigned-master.apk
-        mv bundle/debug/app-debug.aab app-debug-master.aab
-        mv bundle/release/app-release.aab app-release-master.aab
-        
-    - name: Rename files in development branch
-      if: ${{ needs.build.outputs.branch == 'development' }}
-      run: |
-        mv apk/debug/app-debug.apk app-debug-development.apk
-        mv apk/release/app-release-unsigned.apk app-release-unsigned-development.apk
-        mv bundle/debug/app-debug.aab app-debug-development.aab
-        mv bundle/release/app-release.aab app-release-development.aab
-    
-    - name: Setup credentials
-      run: |
-        git config user.name 'github-actions[bot]'
-        git config user.email 'github-actions[bot]@users.noreply.github.com'
-        
-    - name: Update APK branch
-      run: |
-        git remote set-url --push origin https://github-actions[bot]:$GITHUB_TOKEN@github.com/${GITHUB_REPOSITORY}
-        git checkout --orphan temporary
-        git add .
-        git commit -m "release: build files from ${{ needs.build.outputs.branch }} branch"
-        git branch -D apk
-        git branch -m apk
-        git push origin apk -f --quiet > /dev/null
-
+          git clone --branch=apk https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} apk
+          cd apk
+          
+          if [[ ${{ github.ref_name }} =~ ^(master)$ ]]; then
+            rm -rf *
+          else
+            rm -rf pslab-dev*
+          fi
+          ls
+          
+          find ../app/build/outputs -type f \( -name '*.apk' -o -name '*.aab' \) -exec cp -v {} . \;
+          
+          branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          
+          for file in app*; do
+            mv $file pslab-$branch-${file#*-}
+          done
+          
+          git checkout --orphan temporary
+          git add --all .
+          git commit -am "[Auto] Update APK/AAB's from $branch ($(date +%Y-%m-%d.%H:%M:%S))"
+          git branch -D apk
+          git branch -m apk
+          git push --force origin apk
