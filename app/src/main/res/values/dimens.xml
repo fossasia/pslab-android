@@ -133,7 +133,8 @@
     <dimen name="multimeter_end_box_rightmargin">12dp</dimen>
     <dimen name="multimeter_layout_margin_2">10dp</dimen>
     <dimen name="multimeter_layout_margin_1">5dp</dimen>
-    <dimen name="multimeter_constraint_4">15dp</dimen>
+    <dimen name="multimeter_constraint_4">10dp</dimen>
+    <dimen name="multimeter_constraint_5">37dp</dimen>
     <dimen name="multimeter_length_0">0dp</dimen>
     <dimen name="multimeter_knob_width_xhdpi">192dp</dimen>
     <dimen name="multimeter_knob_height_xhdpi">190dp</dimen>
