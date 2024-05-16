@@ -15,7 +15,7 @@ android {
         applicationId = "io.pslab"
         minSdk = 31
         targetSdk = 34
-        versionCode = 23
+        versionCode = 24
         versionName = "3.1.0"
         resConfigs("en","ru","ar","si","pl")
     }
