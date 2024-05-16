@@ -4,7 +4,7 @@ plugins {
 
 apply(plugin = "realm-android")
 
-val KEYSTORE_FILE = rootProject.file("scripts/key.jks")
+val KEYSTORE_FILE = rootProject.file("scripts/pslab.jks")
 val GITHUB_BUILD = System.getenv("GITHUB_ACTIONS") == "true" && KEYSTORE_FILE.exists()
 
 android {
