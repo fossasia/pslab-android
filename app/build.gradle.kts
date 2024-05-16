@@ -4,7 +4,8 @@ plugins {
 
 apply(plugin = "realm-android")
 
-val keystoreExists = System.getenv("KEYSTORE_FILE") != null
+val KEYSTORE_FILE = rootProject.file("scripts/key.jks")
+val GITHUB_BUILD = System.getenv("GITHUB_ACTIONS") == "true" && KEYSTORE_FILE.exists()
 
 android {
     namespace = "io.pslab"
@@ -19,9 +20,9 @@ android {
     }
 
     signingConfigs {
-        if (keystoreExists) {
+        if (GITHUB_BUILD) {
             register("release") {
-                storeFile = file(System.getenv("KEYSTORE_FILE"))
+                storeFile = KEYSTORE_FILE
                 storePassword = System.getenv("STORE_PASS")
                 keyAlias = System.getenv("ALIAS")
                 keyPassword = System.getenv("KEY_PASS")
@@ -41,7 +42,7 @@ android {
                 "proguard-rules.pro"
             )
             resValue("string", "version", "${defaultConfig.versionName}")
-            signingConfig = if (keystoreExists) signingConfigs.getByName("release") else null
+            signingConfig = if (GITHUB_BUILD) signingConfigs.getByName("release") else null
         }
     }
     lint {
