@@ -55,6 +55,7 @@ import io.pslab.fragment.PSLabPinLayoutFragment;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.CustomTabService;
 import io.pslab.others.InitializationVariable;
+import io.pslab.others.PSLabPermission;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.receivers.USBDetachReceiver;
 
@@ -80,8 +81,6 @@ public class MainActivity extends AppCompatActivity {
     private CustomTabsServiceConnection customTabsServiceConnection;
 
     public static int navItemIndex = 0;
-
-    int PERMISSION_ID = 44;
 
     private static final String TAG_DEVICE = "device";
     private static final String TAG_INSTRUMENTS = "instruments";
@@ -157,35 +156,7 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_INSTRUMENTS;
             loadHomeFragment();
         }
-        
-        checkPermissions();
     }
-
-    private void checkPermissions() {
-        if(checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            //Permission granted
-        } else {
-            requestLocationPermissions();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_ID && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            //Permission granted
-        } else {
-            Toast.makeText(this, "This app requires permission to access your location.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void requestLocationPermissions() {
-        ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-        }, PERMISSION_ID);
-    }
-
     private void loadHomeFragment() {
         selectNavMenu();
         setToolbarTitle(activityTitles[navItemIndex]);
