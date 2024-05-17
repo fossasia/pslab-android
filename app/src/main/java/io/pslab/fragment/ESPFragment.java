@@ -1,5 +1,6 @@
 package io.pslab.fragment;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,9 +51,10 @@ public class ESPFragment extends DialogFragment {
             public void onClick(View v) {
                 espIPAddress = espIPEditText.getText().toString();
                 espConnectBtn.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                if (espIPAddress.length() == 0) {
-                    CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                            getString(R.string.incorrect_IP_address_message),null,null, Snackbar.LENGTH_SHORT);
+                Activity activity;
+                if (espIPAddress.isEmpty() && ((activity = getActivity()) != null)) {
+                    CustomSnackBar.showSnackBar(activity.findViewById(android.R.id.content),
+                            getString(R.string.incorrect_IP_address_message), null, null, Snackbar.LENGTH_SHORT);
 
                 } else {
                     new ESPTask().execute();
@@ -64,14 +66,15 @@ public class ESPFragment extends DialogFragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        espConnectBtn.performClick();
-                        return true;
-                    }
-                    return false;
+                    espConnectBtn.performClick();
+                    return true;
                 }
+                return false;
+            }
         });
         return rootView;
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -113,9 +116,10 @@ public class ESPFragment extends DialogFragment {
         protected void onPostExecute(String result) {
             espConnectProgressBar.setVisibility(View.GONE);
             espConnectBtn.setVisibility(View.VISIBLE);
-            if (result.length() == 0) {
-                CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        getString(R.string.incorrect_IP_address_message),null,null,Snackbar.LENGTH_SHORT);
+            Activity activity;
+            if (result.isEmpty() && ((activity = getActivity()) != null)) {
+                CustomSnackBar.showSnackBar(activity.findViewById(android.R.id.content),
+                        getString(R.string.incorrect_IP_address_message), null, null, Snackbar.LENGTH_SHORT);
             } else {
                 Log.v("Response", result);
             }
