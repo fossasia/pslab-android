@@ -1,9 +1,13 @@
 package io.pslab.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,17 +43,18 @@ public class SplashActivity extends AppCompatActivity {
             exitSplashScreen();
         }
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == PSLabPermission.PERMISSIONS_REQUIRED) {
+            exitSplashScreen();
+        }
+    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         handler.removeCallbacks(runnable);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(
-            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        exitSplashScreen();
     }
 
     private void exitSplashScreen() {
