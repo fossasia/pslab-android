@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "io.pslab"
-        minSdk = 31
+        minSdk = 24
         targetSdk = 34
         versionCode = 25
         versionName = "3.1.1"
