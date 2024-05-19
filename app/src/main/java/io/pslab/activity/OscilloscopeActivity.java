@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -336,12 +337,12 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                         if (isInBuiltMicSelected || (isMICSelected && scienceLab.isConnected())) {
                             captureTask = new CaptureTask();
                             captureTask.execute(CHANNEL.MIC.toString());
-                        }
-                        synchronized (lock) {
-                            try {
-                                lock.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                            synchronized (lock) {
+                                try {
+                                    lock.wait();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }

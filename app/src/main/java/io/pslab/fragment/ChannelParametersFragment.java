@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -245,7 +246,10 @@ public class ChannelParametersFragment extends Fragment {
                 ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
                 ((OscilloscopeActivity) getActivity()).isMICSelected = !isChecked;
                 if (isChecked) {
-                    pslabMicCheckBox.setChecked(false);
+                    if(pslabMicCheckBox.isChecked()) {
+                        pslabMicCheckBox.setChecked(false);
+                        ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
+                    }
                     if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
                         ((OscilloscopeActivity) getActivity()).isAudioInputSelected = false;
@@ -261,7 +265,10 @@ public class ChannelParametersFragment extends Fragment {
                 ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
                 ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = !isChecked;
                 if (isChecked) {
-                    builtInMicCheckBox.setChecked(false);
+                    if(builtInMicCheckBox.isChecked()) {
+                        builtInMicCheckBox.setChecked(false);
+                        ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
+                    }
                     if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
                         ((OscilloscopeActivity) getActivity()).isAudioInputSelected = false;
