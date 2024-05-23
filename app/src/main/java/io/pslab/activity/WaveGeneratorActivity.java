@@ -174,7 +174,7 @@ public class WaveGeneratorActivity extends GuideActivity {
     private AlertDialog waveDialog;
     private CSVLogger csvLogger;
     private WaveConst waveBtnActive, pwmBtnActive, prop_active, digital_mode;
-    private TextView activePropTv = null;
+    private TextView activePropTv;
     private CoordinatorLayout coordinatorLayout;
     private Realm realm;
     private GPSLogger gpsLogger;
@@ -417,12 +417,7 @@ public class WaveGeneratorActivity extends GuideActivity {
         seekBar.setOnSeekChangeListener(new OnSeekChangeListener() {
             @Override
             public void onSeeking(SeekParams seekParams) {
-                String valueText;
-                if ("\u00b0".equals(unit)) {
-                    valueText = seekParams.progress + unit;
-                } else {
-                    valueText = seekParams.progress + " " + unit;
-                }
+                String valueText = formatWithUnit(seekParams.progress, unit);
 
                 if (waveMonSelected) {
                     waveMonPropValueSelect.setText(valueText);
@@ -470,6 +465,8 @@ public class WaveGeneratorActivity extends GuideActivity {
         if (getResources().getBoolean(R.bool.isTablet)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
+
+        activePropTv = prop_active == WaveConst.FREQUENCY ? waveFreqValue : wavePhaseValue;
     }
 
     public void saveWaveConfig() {
@@ -678,11 +675,6 @@ public class WaveGeneratorActivity extends GuideActivity {
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     public void selectBtn(WaveConst btn_selected) {
 
         switch (btn_selected) {
@@ -835,16 +827,8 @@ public class WaveGeneratorActivity extends GuideActivity {
     }
 
     private void fetchPropertyValue(WaveConst btnActive, WaveConst property, String unit, TextView propTextView) {
-        Double value = (double) WaveGeneratorConstants.wave.get(btnActive).get(property);
-        String valueText;
-        switch (unit) {
-            case "\u00b0":
-                valueText = value.intValue() + unit;
-                break;
-            default:
-                valueText = value.intValue() + " " + unit;
-        }
-        propTextView.setText(valueText);
+        int value = WaveGeneratorConstants.wave.get(btnActive).get(property);
+        propTextView.setText(formatWithUnit(value, unit));
     }
 
     private void setSeekBar(IndicatorSeekBar seekBar) {
@@ -912,7 +896,7 @@ public class WaveGeneratorActivity extends GuideActivity {
     }
 
     private void decProgressSeekBar(IndicatorSeekBar seekBar) {
-        Integer value = seekBar.getProgress();
+        int value = seekBar.getProgress();
         value = value - leastCount;
         if (value < seekMin) {
             value = seekMin;
@@ -921,7 +905,7 @@ public class WaveGeneratorActivity extends GuideActivity {
     }
 
     private void setValue() {
-        Integer value = seekBar.getProgress();
+        int value = seekBar.getProgress();
 
         if (!waveMonSelected) {
             if (prop_active == WaveConst.FREQUENCY) {
@@ -940,16 +924,11 @@ public class WaveGeneratorActivity extends GuideActivity {
         }
         setWave();
         previewWave();
-        Double dValue = (double) value;
-        String valueText;
-        switch (unit) {
-            case "\u00b0":
-                valueText = dValue.intValue() + unit;
-                break;
-            default:
-                valueText = dValue.intValue() + " " + unit;
-        }
-        activePropTv.setText(valueText);
+        activePropTv.setText(formatWithUnit(value, unit));
+    }
+
+    private static String formatWithUnit(int value, String unit) {
+        return value + ("\u00b0".equals(unit) ? "" : " ") + unit;
     }
 
     private void previewWave() {
