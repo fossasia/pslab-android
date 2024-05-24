@@ -336,12 +336,12 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                         if (isInBuiltMicSelected || (isMICSelected && scienceLab.isConnected())) {
                             captureTask = new CaptureTask();
                             captureTask.execute(CHANNEL.MIC.toString());
-                        }
-                        synchronized (lock) {
-                            try {
-                                lock.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                            synchronized (lock) {
+                                try {
+                                    lock.wait();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
