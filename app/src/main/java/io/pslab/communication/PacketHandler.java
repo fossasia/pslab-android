@@ -5,10 +5,13 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import io.pslab.interfaces.HttpCallback;
@@ -52,7 +55,12 @@ public class PacketHandler {
             sendByte(mCommandsProto.GET_VERSION);
             // Read "<PSLAB Version String>\n"
             commonRead(VERSION_STRING_LENGTH + 1);
-            version = new String(Arrays.copyOfRange(buffer, 0, VERSION_STRING_LENGTH), Charset.forName("UTF-8"));
+            // Only use first line, just like in the Python implementation.
+            version = new BufferedReader(
+                    new InputStreamReader(
+                            new ByteArrayInputStream(buffer, 0, VERSION_STRING_LENGTH),
+                            StandardCharsets.UTF_8))
+                    .readLine();
         } catch (IOException e) {
             Log.e("Error in Communication", e.toString());
         }
@@ -214,7 +222,7 @@ public class PacketHandler {
                 public void success(JSONObject jsonObject) {
                     try {
                         //Server will send byte array
-                        buffer = (byte[])jsonObject.get("data");
+                        buffer = (byte[]) jsonObject.get("data");
                         bytesRead[0] = buffer.length;
                     } catch (JSONException e) {
                         e.printStackTrace();
