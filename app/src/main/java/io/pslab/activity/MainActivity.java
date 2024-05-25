@@ -2,14 +2,12 @@ package io.pslab.activity;
 
 import static io.pslab.others.ScienceLabCommon.scienceLab;
 
-import android.Manifest;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
@@ -21,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -29,7 +26,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -55,7 +51,6 @@ import io.pslab.fragment.PSLabPinLayoutFragment;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.CustomTabService;
 import io.pslab.others.InitializationVariable;
-import io.pslab.others.PSLabPermission;
 import io.pslab.others.ScienceLabCommon;
 import io.pslab.receivers.USBDetachReceiver;
 
@@ -157,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
             loadHomeFragment();
         }
     }
+
     private void loadHomeFragment() {
         selectNavMenu();
         setToolbarTitle(activityTitles[navItemIndex]);
@@ -510,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
                                     getString(R.string.device_connected_successfully), null, null, Snackbar.LENGTH_SHORT);
                             if (navItemIndex == 0) {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, InstrumentsFragment.newInstance()).commit();
-                            } else if (navItemIndex == 1) {
+                            } else if (navItemIndex == 2) {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(true, true)).commitAllowingStateLoss();
                             } else {
                                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
@@ -540,7 +536,7 @@ public class MainActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
                 if (navItemIndex == 0) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, InstrumentsFragment.newInstance()).commit();
-                } else if (navItemIndex == 1) {
+                } else if (navItemIndex == 2) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, HomeFragment.newInstance(true, true)).commitAllowingStateLoss();
                 }
                 CustomSnackBar.showSnackBar(findViewById(android.R.id.content),
