@@ -886,22 +886,12 @@ public class WaveGeneratorActivity extends GuideActivity {
         toggleSeekBtns(true);
     }
 
-    private void incProgressSeekBar(IndicatorSeekBar seekBar) {
-        float value = seekBar.getProgressFloat();
-        value = value + leastCount;
-        if (value > seekMax) {
-            value = seekMax;
-        }
-        seekBar.setProgress(value);
+    private void incProgressSeekBar() {
+        seekBar.setProgress(seekBar.getProgress() + leastCount);
     }
 
-    private void decProgressSeekBar(IndicatorSeekBar seekBar) {
-        int value = seekBar.getProgress();
-        value = value - leastCount;
-        if (value < seekMin) {
-            value = seekMin;
-        }
-        seekBar.setProgress(value);
+    private void decProgressSeekBar() {
+        seekBar.setProgress(seekBar.getProgress() - leastCount);
     }
 
     private void setValue() {
@@ -1055,7 +1045,7 @@ public class WaveGeneratorActivity extends GuideActivity {
         up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                incProgressSeekBar(seekBar);
+                incProgressSeekBar();
             }
         });
         up.setOnLongClickListener(new View.OnLongClickListener() {
@@ -1068,7 +1058,7 @@ public class WaveGeneratorActivity extends GuideActivity {
         down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                decProgressSeekBar(seekBar);
+                decProgressSeekBar();
             }
         });
         down.setOnLongClickListener(new View.OnLongClickListener() {
@@ -1133,9 +1123,9 @@ public class WaveGeneratorActivity extends GuideActivity {
                 wavegenHandler.post(new Runnable() {
                     public void run() {
                         if (increaseValue) {
-                            incProgressSeekBar(seekBar);
+                            incProgressSeekBar();
                         } else {
-                            decProgressSeekBar(seekBar);
+                            decProgressSeekBar();
                         }
                     }
                 });

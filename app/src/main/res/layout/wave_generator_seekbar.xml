@@ -11,11 +11,11 @@
         android:id="@+id/img_btn_down"
         android:layout_width="@dimen/length_0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/btn_padding"
         android:layout_marginLeft="@dimen/seek_btn_margin"
         android:layout_marginRight="@dimen/seek_btn_margin"
         android:layout_weight="0.1"
         android:background="@drawable/btn_back_rounded"
+        android:padding="@dimen/btn_padding"
         android:src="@drawable/ic_arrow_left_24dp"
         android:stateListAnimator="@animator/selector_animator" />
 
@@ -28,7 +28,9 @@
         android:layout_weight="1"
         app:isb_max="5000"
         app:isb_min="0"
+        app:isb_seek_smoothly="true"
         app:isb_show_indicator="none"
+        app:isb_thumb_adjust_auto="false"
         app:isb_thumb_color="@color/colorPrimary"
         app:isb_tick_marks_color="@color/colorPrimary"
         app:isb_ticks_count="50" />
@@ -38,11 +40,11 @@
         android:id="@+id/img_btn_up"
         android:layout_width="@dimen/length_0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/btn_padding"
         android:layout_marginLeft="@dimen/seek_btn_margin"
         android:layout_marginRight="@dimen/seek_btn_margin"
         android:layout_weight="0.1"
         android:background="@drawable/btn_back_rounded"
+        android:padding="@dimen/btn_padding"
         android:src="@drawable/ic_arrow_right_24dp"
         android:stateListAnimator="@animator/selector_animator" />
 
