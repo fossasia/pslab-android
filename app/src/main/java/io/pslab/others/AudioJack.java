@@ -19,7 +19,7 @@ public class AudioJack {
 
     private static final String TAG = "AudioJack";
 
-    private static final int SAMPLING_RATE = 44100;
+    public static final int SAMPLING_RATE = 44100;
     private static final int RECORDING_CHANNEL = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 

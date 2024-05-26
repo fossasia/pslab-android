@@ -1,6 +1,7 @@
 package io.pslab.activity;
 
 
+import static io.pslab.others.AudioJack.SAMPLING_RATE;
 import static io.pslab.others.MathUtils.map;
 
 import android.annotation.SuppressLint;
@@ -1027,12 +1028,14 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                         xDataString = new String[n];
                     }
                     for (int i = 0; i < n; i++) {
+                        float j = (float) (((double) i /SAMPLING_RATE)*1000000.0);
+                        j = j / ((timebase == 875) ? 1:1000);
                         float audioValue = (float) map(buffer[i], -32768, 32767, -3, 3);
                         if (!isFourierTransformSelected) {
                             if (noOfChannels == 1) {
-                                xDataString[i] = String.valueOf(2.0 * i);
+                                xDataString[i] = String.valueOf(j);
                             }
-                            entries.get(entries.size() - 1).add(new Entry(i, audioValue));
+                            entries.get(entries.size() - 1).add(new Entry(j, audioValue));
                         } else {
                             if (i < n / 2) {
                                 float y = (float) fftOut[i].abs() / samples;
