@@ -96,6 +96,7 @@
             android:screenOrientation="fullSensor" />
         <activity
             android:name=".activity.WaveGeneratorActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="fullSensor" />
         <activity
             android:name=".activity.AccelerometerActivity"
