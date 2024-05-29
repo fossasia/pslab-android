@@ -933,6 +933,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
+                fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
                 break;
@@ -945,6 +946,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
+                fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
                 break;
@@ -957,6 +959,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 pwmBtnPhase.setEnabled(true);
+                fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
                 break;
@@ -968,7 +971,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
                 wavePhaseValue.setText("--");
                 selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
-                fetchPropertyValue(waveBtnActive, WaveConst.FREQUENCY, getString(R.string.deg_text), waveFreqValue);
+                fetchPropertyValue(waveBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), waveFreqValue);
                 break;
 
         }
@@ -1058,6 +1061,22 @@ public class WaveGeneratorActivity extends GuideActivity {
             int value = WaveGeneratorConstants.wave.get(btnActive).get(property);
             propTextView.setText(formatWithUnit(value, unit));
         }
+        else {
+            if(property == WaveConst.FREQUENCY)
+            {
+                int value = WaveData.FREQ_MIN.getValue();
+                propTextView.setText(formatWithUnit(value, unit));
+            }
+            else if(property == WaveConst.PHASE)
+            {
+                int value = WaveData.PHASE_MIN.getValue();
+                propTextView.setText(formatWithUnit(value, unit));
+            }
+            else{
+                int value = WaveData.DUTY_MIN.getValue();
+                propTextView.setText(formatWithUnit(value, unit));
+            }
+        }
     }
 
     private void setSeekBar(IndicatorSeekBar seekBar) {
@@ -1144,7 +1163,7 @@ public class WaveGeneratorActivity extends GuideActivity {
 
         if (!waveMonSelected) {
             if (prop_active == WaveConst.FREQUENCY) {
-                WaveGeneratorConstants.wave.get(WaveConst.SQR1).put(prop_active, value);
+                WaveGeneratorConstants.wave.get(pwmBtnActive).put(prop_active, value);
             } else {
                 if (prop_active == WaveConst.DUTY) {
                     if (value != WaveData.DUTY_MIN.getValue()) {
