@@ -32,11 +32,10 @@
         android:id="@+id/checkBox_ch3_cp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/osc_cb_margin"
         android:layout_marginTop="@dimen/osc_cb_margin"
+        android:layout_marginEnd="@dimen/osc_cb_margin"
         android:textStyle="normal|bold"
-        app:layout_constraintEnd_toStartOf="@id/mic_radio_group"
-        app:layout_constraintStart_toEndOf="@id/spinner_channel_select_cp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -104,17 +103,17 @@
         android:id="@+id/mic_radio_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/osc_cb_margin"
         android:layout_marginEnd="@dimen/osc_cb_margin"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginBottom="@dimen/osc_cb_margin"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <CheckBox
             android:id="@+id/built_in_mic_cb"
             style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/osc_tv_margin"
             android:text="@string/built_in_mic_option"
             android:textStyle="normal|bold"
@@ -125,8 +124,7 @@
             android:id="@+id/pslab_mic_cb"
             style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/osc_cb_margin"
+            android:layout_height="match_parent"
             android:text="@string/pslab_mic_option"
             android:textStyle="normal|bold"
             app:layout_constraintBottom_toBottomOf="parent"
