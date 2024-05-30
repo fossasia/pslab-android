@@ -247,8 +247,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.FREQUENCY;
                             unit = getString(R.string.unit_hz);
                             activePropTv = waveFreqValue;
-                            waveMonPropSelect.setText(getString(R.string.wave_frequency));
-                            btnCtrlFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            btnCtrlFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             btnCtrlPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         case "PHASE":
@@ -256,9 +255,8 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.PHASE;
                             unit = getString(R.string.deg_text);
                             activePropTv = wavePhaseValue;
-                            waveMonPropSelect.setText(getString(R.string.phase_offset));
                             btnCtrlFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            btnCtrlPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            btnCtrlPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         default:
                             break;
@@ -273,8 +271,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.FREQUENCY;
                             unit = getString(R.string.unit_hz);
                             activePropTv = waveFreqValue;
-                            waveMonPropSelect.setText(getString(R.string.wave_frequency));
-                            btnCtrlFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            btnCtrlFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             btnCtrlPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         case "PHASE":
@@ -282,9 +279,8 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.PHASE;
                             unit = getString(R.string.deg_text);
                             activePropTv = wavePhaseValue;
-                            waveMonPropSelect.setText(getString(R.string.phase_offset));
                             btnCtrlFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            btnCtrlPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            btnCtrlPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         default:
                             break;
@@ -303,8 +299,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.FREQUENCY;
                             unit = getString(R.string.unit_hz);
                             activePropTv = pwmFreqValue;
-                            pwmMonPropSelect.setText(getString(R.string.frequecy_colon));
-                            pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
@@ -313,20 +308,18 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.PHASE;
                             unit = getString(R.string.deg_text);
                             activePropTv = pwmPhaseValue;
-                            pwmMonPropSelect.setText(getString(R.string.pwm_phase));
                             pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
-                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         case "DUTY":
                             waveMonSelected = false;
                             prop_active = WaveConst.DUTY;
                             unit = getString(R.string.unit_percent);
                             activePropTv = pwmDutyValue;
-                            pwmMonPropSelect.setText(getString(R.string.duty_cycle));
                             pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         default:
                             break;
@@ -340,8 +333,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.FREQUENCY;
                             unit = getString(R.string.unit_hz);
                             activePropTv = pwmFreqValue;
-                            pwmMonPropSelect.setText(getString(R.string.frequecy_colon));
-                            pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
@@ -350,20 +342,18 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.PHASE;
                             unit = getString(R.string.deg_text);
                             activePropTv = pwmPhaseValue;
-                            pwmMonPropSelect.setText(getString(R.string.pwm_phase));
                             pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
-                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         case "DUTY":
                             waveMonSelected = false;
                             prop_active = WaveConst.DUTY;
                             unit = getString(R.string.unit_percent);
                             activePropTv = pwmDutyValue;
-                            pwmMonPropSelect.setText(getString(R.string.duty_cycle));
                             pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         default:
                             break;
@@ -377,8 +367,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.FREQUENCY;
                             unit = getString(R.string.unit_hz);
                             activePropTv = pwmFreqValue;
-                            pwmMonPropSelect.setText(getString(R.string.frequecy_colon));
-                            pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
@@ -387,20 +376,18 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.PHASE;
                             unit = getString(R.string.deg_text);
                             activePropTv = pwmPhaseValue;
-                            pwmMonPropSelect.setText(getString(R.string.pwm_phase));
                             pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
-                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         case "DUTY":
                             waveMonSelected = false;
                             prop_active = WaveConst.DUTY;
                             unit = getString(R.string.unit_percent);
                             activePropTv = pwmDutyValue;
-                            pwmMonPropSelect.setText(getString(R.string.duty_cycle));
                             pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         default:
                             break;
@@ -414,8 +401,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.FREQUENCY;
                             unit = getString(R.string.unit_hz);
                             activePropTv = pwmFreqValue;
-                            pwmMonPropSelect.setText(getString(R.string.frequecy_colon));
-                            pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
@@ -424,20 +410,18 @@ public class WaveGeneratorActivity extends GuideActivity {
                             prop_active = WaveConst.PHASE;
                             unit = getString(R.string.deg_text);
                             activePropTv = pwmPhaseValue;
-                            pwmMonPropSelect.setText(getString(R.string.pwm_phase));
                             pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
-                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
+                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         case "DUTY":
                             waveMonSelected = false;
                             prop_active = WaveConst.DUTY;
                             unit = getString(R.string.unit_percent);
                             activePropTv = pwmDutyValue;
-                            pwmMonPropSelect.setText(getString(R.string.duty_cycle));
                             pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
-                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                            pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                             break;
                         default:
                             break;
@@ -1122,8 +1106,8 @@ public class WaveGeneratorActivity extends GuideActivity {
             waveMonPropValueSelect.setText("");
 
             if (prop_active.equals(WaveConst.FREQUENCY)) {
-                if(WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(prop_active) != null) {
-                    seekBar.setProgress(WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(prop_active));
+                if(WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active) != null) {
+                    seekBar.setProgress(WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active));
                 }
             } else {
                 if(WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active) != null) {
