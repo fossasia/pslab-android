@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - development
+      - versions
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -18,6 +19,8 @@ jobs:
     steps:
       - name: Download repository
         uses: actions/checkout@v3
+        with:
+          ref: versions
 
       - uses: actions/cache@v4
         with:
@@ -34,6 +37,41 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Update version
+        id: update_version
+        run: |
+          version_name_file=versionName
+          version_name=$(sed -n '1p' $version_name_file)
+          IFS='.' read -r -a version_parts <<< "$version_name"
+          major=${version_parts[0]}
+          minor=${version_parts[1]}
+          patch=${version_parts[2]}
+          next_patch=$((patch + 1))
+          next_patch_version_name="$major.$minor.$next_patch"
+          
+          echo "VERSION_NAME=$next_patch_version_name" >> $GITHUB_ENV
+          
+          version_code_file=versionCode
+          version_code=$(sed -n '1p' $version_code_file)
+          new_version_code=$((version_code + 1))
+          echo "VERSION_CODE=$new_version_code" >> $GITHUB_ENV
+          
+          echo "${{ env.VERSION_NAME }}" > $version_name_file
+          echo "${{ env.VERSION_CODE }}" > $version_code_file
+          
+          git config --global user.name "${{ github.workflow }}"
+          git config --global user.email "gh-actions@${{ github.repository_owner }}"
+          
+          git add .
+          git commit -m"Update versionName to ${{ env.VERSION_NAME }} and versionCode to ${{ env.VERSION_CODE }}"
+          
+          git push origin versions          
+
+      - name: Checkout development branch
+        uses: actions/checkout@v3
+        with:
+          ref: development
+
       - name: Prepare Build Keys
         env:
           ENCRYPTED_F10B5E0E5262_IV: ${{ secrets.ENCRYPTED_F10B5E0E5262_IV }}
@@ -46,6 +84,8 @@ jobs:
           STORE_PASS: ${{ secrets.STORE_PASS }}
           ALIAS: ${{ secrets.ALIAS }}
           KEY_PASS: ${{ secrets.KEY_PASS }}
+          VERSION_CODE: ${{ env.VERSION_CODE }}
+          VERSION_NAME: ${{ env.VERSION_NAME }}
         run: |
           bash ./gradlew build --stacktrace
           bash ./gradlew bundle --stacktrace
