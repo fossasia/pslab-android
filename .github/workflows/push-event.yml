@@ -37,35 +37,38 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Update version
-        id: update_version
+      - name: Hydrate and Update Version
+        id: android-version
         run: |
-          version_name_file=versionName
-          version_name=$(sed -n '1p' $version_name_file)
-          IFS='.' read -r -a version_parts <<< "$version_name"
-          major=${version_parts[0]}
-          minor=${version_parts[1]}
-          patch=${version_parts[2]}
-          next_patch=$((patch + 1))
-          next_patch_version_name="$major.$minor.$next_patch"
-          
-          echo "VERSION_NAME=$next_patch_version_name" >> $GITHUB_ENV
-          
-          version_code_file=versionCode
-          version_code=$(sed -n '1p' $version_code_file)
-          new_version_code=$((version_code + 1))
-          echo "VERSION_CODE=$new_version_code" >> $GITHUB_ENV
-          
-          echo "${{ env.VERSION_NAME }}" > $version_name_file
-          echo "${{ env.VERSION_CODE }}" > $version_code_file
-          
           git config --global user.name "${{ github.workflow }}"
           git config --global user.email "gh-actions@${{ github.repository_owner }}"
           
-          git add .
-          git commit -m"Update versionName to ${{ env.VERSION_NAME }} and versionCode to ${{ env.VERSION_CODE }}"
+          git clone --branch=version https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} version
+          cd version
+
+          # Read and increment version name
+          IFS='.' read -r major minor patch < versionName.txt
+          current_patch_version_name="$major.$minor.$patch"
+          echo "VERSION_NAME=$current_patch_version_name" >> $GITHUB_OUTPUT
           
-          git push origin versions          
+          next_patch=$((patch + 1))
+          next_patch_version_name="$major.$minor.$next_patch"
+          echo "$next_patch_version_name" > versionName.txt
+
+          # Read and increment version code
+          read -r version_code < versionCode.txt
+          echo "VERSION_CODE=$version_code" >> $GITHUB_OUTPUT
+          
+          new_version_code=$((version_code + 1))
+          echo "$new_version_code" > versionCode.txt
+
+          # Force push to version branch
+          git checkout --orphan temporary
+          git add --all .
+          git commit -am "[Auto] Update versionName: $next_patch_version_name & versionCode: $new_version_code ($(date +%Y-%m-%d.%H:%M:%S))"
+          git branch -D version
+          git branch -m version
+          git push --force origin version
 
       - name: Checkout development branch
         uses: actions/checkout@v3
