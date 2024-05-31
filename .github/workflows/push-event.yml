@@ -87,8 +87,8 @@ jobs:
           STORE_PASS: ${{ secrets.STORE_PASS }}
           ALIAS: ${{ secrets.ALIAS }}
           KEY_PASS: ${{ secrets.KEY_PASS }}
-          VERSION_CODE: ${{ env.VERSION_CODE }}
-          VERSION_NAME: ${{ env.VERSION_NAME }}
+          VERSION_CODE: ${{ steps.android-version.outputs.VERSION_CODE }}
+          VERSION_NAME: ${{ steps.android-version.outputs.VERSION_NAME }}
         run: |
           bash ./gradlew build --stacktrace
           bash ./gradlew bundle --stacktrace
