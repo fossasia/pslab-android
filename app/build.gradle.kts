@@ -16,7 +16,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = System.getenv("VERSION_CODE")?.toInt() ?: 1
-        versionName = System.getenv("VERSION_NAME")
+        versionName = System.getenv("VERSION_NAME") ?: "1.0.0"
         resConfigs("en","ru","ar","si","pl")
     }
 

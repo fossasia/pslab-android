@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - development
-      - versions
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -19,8 +18,6 @@ jobs:
     steps:
       - name: Download repository
         uses: actions/checkout@v3
-        with:
-          ref: versions
 
       - uses: actions/cache@v4
         with:
@@ -69,11 +66,6 @@ jobs:
           git branch -D version
           git branch -m version
           git push --force origin version
-
-      - name: Checkout development branch
-        uses: actions/checkout@v3
-        with:
-          ref: development
 
       - name: Prepare Build Keys
         env:
