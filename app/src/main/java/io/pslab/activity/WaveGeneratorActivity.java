@@ -917,7 +917,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
-                fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
+                fetchPropertyValue(WaveConst.SQR1, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
                 break;
@@ -930,7 +930,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
-                fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
+                fetchPropertyValue(WaveConst.SQR1, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
                 break;
@@ -943,7 +943,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 pwmBtnPhase.setEnabled(true);
-                fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
+                fetchPropertyValue(WaveConst.SQR1, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
                 break;
@@ -1106,8 +1106,8 @@ public class WaveGeneratorActivity extends GuideActivity {
             waveMonPropValueSelect.setText("");
 
             if (prop_active.equals(WaveConst.FREQUENCY)) {
-                if(WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active) != null) {
-                    seekBar.setProgress(WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active));
+                if(WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(prop_active) != null) {
+                    seekBar.setProgress(WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(prop_active));
                 }
             } else {
                 if(WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active) != null) {
@@ -1147,7 +1147,7 @@ public class WaveGeneratorActivity extends GuideActivity {
 
         if (!waveMonSelected) {
             if (prop_active == WaveConst.FREQUENCY) {
-                WaveGeneratorConstants.wave.get(pwmBtnActive).put(prop_active, value);
+                WaveGeneratorConstants.wave.get(WaveConst.SQR1).put(prop_active, value);
             } else {
                 if (prop_active == WaveConst.DUTY) {
                     if (value != WaveData.DUTY_MIN.getValue()) {
