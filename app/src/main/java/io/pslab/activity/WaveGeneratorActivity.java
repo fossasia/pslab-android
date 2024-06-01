@@ -577,7 +577,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 setSeekBar(seekBar);
                 pwmBtnFreq.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
-                pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
+                pwmBtnDuty.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
             }
         });
 
@@ -873,6 +873,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnCtrlWave2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
 
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
+                btnCtrlPhase.setVisibility(View.INVISIBLE);
                 wavePhaseValue.setText("--");
 
                 selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
@@ -889,6 +890,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnCtrlWave1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
 
                 btnCtrlPhase.setEnabled(true); // enable phase for wave2
+                btnCtrlPhase.setVisibility(View.VISIBLE);
 
                 selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
 
@@ -904,6 +906,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(false);  //phase disabled for sq1
+                pwmBtnPhase.setVisibility(View.INVISIBLE);
                 pwmPhaseValue.setText("--");
                 fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -956,6 +959,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnCtrlWave1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 btnCtrlWave2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
+                pwmBtnPhase.setVisibility(View.INVISIBLE);
                 wavePhaseValue.setText("--");
                 selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
                 fetchPropertyValue(waveBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), waveFreqValue);
@@ -1127,22 +1131,12 @@ public class WaveGeneratorActivity extends GuideActivity {
         toggleSeekBtns(true);
     }
 
-    private void incProgressSeekBar(IndicatorSeekBar seekBar) {
-        float value = seekBar.getProgressFloat();
-        value = value + leastCount;
-        if (value > seekMax) {
-            value = seekMax;
-        }
-        seekBar.setProgress(value);
+    private void incProgressSeekBar() {
+        seekBar.setProgress(seekBar.getProgress() + leastCount);
     }
 
-    private void decProgressSeekBar(IndicatorSeekBar seekBar) {
-        int value = seekBar.getProgress();
-        value = value - leastCount;
-        if (value < seekMin) {
-            value = seekMin;
-        }
-        seekBar.setProgress(value);
+    private void decProgressSeekBar() {
+        seekBar.setProgress(seekBar.getProgress() - leastCount);
     }
 
     private void setValue() {
@@ -1305,7 +1299,7 @@ public class WaveGeneratorActivity extends GuideActivity {
         up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                incProgressSeekBar(seekBar);
+                incProgressSeekBar();
             }
         });
         up.setOnLongClickListener(new View.OnLongClickListener() {
@@ -1318,7 +1312,7 @@ public class WaveGeneratorActivity extends GuideActivity {
         down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                decProgressSeekBar(seekBar);
+                decProgressSeekBar();
             }
         });
         down.setOnLongClickListener(new View.OnLongClickListener() {
@@ -1383,9 +1377,9 @@ public class WaveGeneratorActivity extends GuideActivity {
                 wavegenHandler.post(new Runnable() {
                     public void run() {
                         if (increaseValue) {
-                            incProgressSeekBar(seekBar);
+                            incProgressSeekBar();
                         } else {
-                            decProgressSeekBar(seekBar);
+                            decProgressSeekBar();
                         }
                     }
                 });

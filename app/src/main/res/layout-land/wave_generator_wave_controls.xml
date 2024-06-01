@@ -7,12 +7,13 @@
     <RelativeLayout
         android:id="@+id/square_mode_controls"
         android:layout_width="@dimen/length_0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/white"
         android:paddingLeft="@dimen/ctrl_inside_rl_padding"
         android:paddingRight="@dimen/ctrl_inside_rl_padding"
-        android:paddingBottom="@dimen/ctrl_inside_rl_padding">
+        android:paddingBottom="@dimen/ctrl_inside_rl_padding"
+        android:visibility="visible">
 
         <View
             android:layout_width="match_parent"
@@ -21,7 +22,7 @@
             android:background="@drawable/rectangle_border" />
 
         <TextView
-            android:id="@+id/contol_title_text"
+            android:id="@+id/control_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -37,7 +38,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/contol_title_text"
+            android:layout_below="@id/control_title_text"
             android:layout_marginLeft="@dimen/ctrl_inside_rl_padding"
             android:layout_marginRight="@dimen/ctrl_inside_rl_padding"
             android:layout_marginBottom="@dimen/ctrl_inside_rl_padding"
@@ -124,7 +125,7 @@
                 android:layout_height="@dimen/length_0dp"
                 android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded_light"
+                android:background="@drawable/btn_back_rounded"
                 android:stateListAnimator="@animator/selector_animator"
                 android:text="@string/text_freq"
                 android:textAllCaps="false"
@@ -188,7 +189,7 @@
     <RelativeLayout
         android:id="@+id/pwm_mode_controls"
         android:layout_width="@dimen/length_0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/white"
         android:paddingLeft="@dimen/ctrl_inside_rl_padding"
@@ -341,11 +342,11 @@
 
             <Button
                 android:id="@+id/pwm_btn_freq"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/dimen_zero_dp"
+                android:layout_height="@dimen/dimen_zero_dp"
                 android:layout_marginStart="@dimen/margin_btn"
                 android:layout_marginTop="@dimen/margin_btn"
-                android:background="@drawable/btn_back_rounded_light"
+                android:background="@drawable/btn_back_rounded"
                 android:stateListAnimator="@animator/selector_animator"
                 android:text="@string/text_freq"
                 android:textAllCaps="false"

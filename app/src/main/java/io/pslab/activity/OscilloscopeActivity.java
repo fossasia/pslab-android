@@ -115,7 +115,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     public boolean isCH2Selected;
     public boolean isCH3Selected;
     public boolean isMICSelected;
-    public boolean isInBuiltMicSelected;
+    public static boolean isInBuiltMicSelected;
     public boolean isAudioInputSelected;
     public boolean isTriggerSelected;
     public boolean isFourierTransformSelected;
