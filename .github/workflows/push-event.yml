@@ -137,3 +137,5 @@ jobs:
         uses: release-drafter/release-drafter@v6
         with:
           version: ${{ steps.android-version.outputs.VERSION_NAME }}
+          name: 'PSLab Version ${{ steps.android-version.outputs.VERSION_NAME }}'
+          tag: 'v${{ steps.android-version.outputs.VERSION_NAME }}'
