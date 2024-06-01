@@ -917,6 +917,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
+                pwmBtnPhase.setVisibility(View.VISIBLE);
                 fetchPropertyValue(WaveConst.SQR1, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -930,6 +931,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
+                pwmBtnPhase.setVisibility(View.VISIBLE);
                 fetchPropertyValue(WaveConst.SQR1, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -943,6 +945,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 pwmBtnPhase.setEnabled(true);
+                pwmBtnPhase.setVisibility(View.VISIBLE);
                 fetchPropertyValue(WaveConst.SQR1, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
