@@ -19,6 +19,7 @@ exclude-contributors:
   - 'dependabot[bot]'
 exclude-labels:
   - 'Dependencies'
+  - 'Chore'
 template: |-
     ## Changes
     $CHANGES
