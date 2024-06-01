@@ -51,7 +51,6 @@ jobs:
           next_patch=$((patch + 1))
           next_patch_version_name="$major.$minor.$next_patch"
           echo "$next_patch_version_name" > versionName.txt
-          echo "NEW_VERSION_NAME=$next_patch_version_name" >> $GITHUB_OUTPUT
 
           # Read and increment version code
           read -r version_code < versionCode.txt
@@ -137,4 +136,4 @@ jobs:
       - name: Run Release Drafter
         uses: release-drafter/release-drafter@v6
         with:
-          version: ${{ steps.android-version.outputs.NEW_VERSION_NAME }}
+          version: ${{ steps.android-version.outputs.VERSION_NAME }}
