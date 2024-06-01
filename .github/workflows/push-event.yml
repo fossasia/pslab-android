@@ -132,3 +132,8 @@ jobs:
           git branch -D apk
           git branch -m apk
           git push --force origin apk
+
+      - name: Run Release Drafter
+        uses: release-drafter/release-drafter@v6
+        with:
+          version: ${{ steps.android-version.outputs.VERSION_NAME }}
