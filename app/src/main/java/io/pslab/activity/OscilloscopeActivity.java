@@ -496,11 +496,10 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.run_stop:
-                if(isRunning) {
+                if (isRunning) {
                     isRunning = false;
                     item.setTitle(R.string.control_run);
-                }
-                else {
+                } else {
                     isRunning = true;
                     item.setTitle(R.string.control_stop);
                 }
@@ -1041,8 +1040,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                         xDataString = new String[n];
                     }
                     for (int i = 0; i < n; i++) {
-                        float j = (float) (((double) i /SAMPLING_RATE)*1000000.0);
-                        j = j / ((timebase == 875) ? 1:1000);
+                        float j = (float) (((double) i / SAMPLING_RATE) * 1000000.0);
+                        j = j / ((timebase == 875) ? 1 : 1000);
                         float audioValue = (float) map(buffer[i], -32768, 32767, -3, 3);
                         if (!isFourierTransformSelected) {
                             if (noOfChannels == 1) {
