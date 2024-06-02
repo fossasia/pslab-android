@@ -1056,4 +1056,6 @@
     <string name="limit_average">Average</string>
     <string name="no_playback_data">No data to display</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="control_stop">Stop</string>
+    <string name="control_run">Run</string>
 </resources>
