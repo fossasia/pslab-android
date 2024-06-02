@@ -3,6 +3,7 @@ tag-template: 'v$NEXT_PATCH_VERSION'
 categories:
   - title: ':rocket: Features and Enhancements'
     labels:
+      - 'feat'
       - 'Feature'
       - 'Enhancement'
   - title: ':bug: Bug Fixes'
@@ -18,6 +19,7 @@ exclude-contributors:
   - 'dependabot[bot]'
 exclude-labels:
   - 'Dependencies'
+  - 'Chore'
 template: |-
     ## Changes
     $CHANGES

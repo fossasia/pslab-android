@@ -687,6 +687,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnCtrlWave2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
 
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
+                btnCtrlPhase.setVisibility(View.INVISIBLE);
                 wavePhaseValue.setText("--");
 
                 selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
@@ -703,6 +704,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnCtrlWave1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
 
                 btnCtrlPhase.setEnabled(true); // enable phase for wave2
+                btnCtrlPhase.setVisibility(View.VISIBLE);
 
                 selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
 
@@ -718,6 +720,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(false);  //phase disabled for sq1
+                pwmBtnPhase.setVisibility(View.INVISIBLE);
                 pwmPhaseValue.setText("--");
                 fetchPropertyValue(pwmBtnActive, WaveConst.FREQUENCY, getString(R.string.unit_hz), pwmFreqValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
@@ -731,6 +734,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
+                pwmBtnPhase.setVisibility(View.VISIBLE);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
                 break;
@@ -743,6 +747,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 pwmBtnPhase.setEnabled(true);
+                pwmBtnPhase.setVisibility(View.VISIBLE);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
                 break;
@@ -755,6 +760,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnPwmSq3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnPwmSq4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 pwmBtnPhase.setEnabled(true);
+                pwmBtnPhase.setVisibility(View.VISIBLE);
                 fetchPropertyValue(pwmBtnActive, WaveConst.PHASE, getString(R.string.deg_text), pwmPhaseValue);
                 fetchPropertyValue(pwmBtnActive, WaveConst.DUTY, getString(R.string.unit_percent), pwmDutyValue);
                 break;
@@ -764,6 +770,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 btnCtrlWave1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded, null));
                 btnCtrlWave2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_back_rounded_light, null));
                 btnCtrlPhase.setEnabled(false);  //disable phase for wave
+                pwmBtnPhase.setVisibility(View.INVISIBLE);
                 wavePhaseValue.setText("--");
                 selectWaveform(WaveGeneratorConstants.wave.get(waveBtnActive).get(WaveConst.WAVETYPE));
                 fetchPropertyValue(waveBtnActive, WaveConst.FREQUENCY, getString(R.string.deg_text), waveFreqValue);
