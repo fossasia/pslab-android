@@ -226,8 +226,8 @@ public class WaveGeneratorActivity extends GuideActivity {
         scienceLab = ScienceLabCommon.scienceLab;
         seekBar.setSaveEnabled(false);
 
-        if(savedInstanceState != null) {
-            switch(Objects.requireNonNull(savedInstanceState.getString("digital_mode"))){
+        if (savedInstanceState != null) {
+            switch (Objects.requireNonNull(savedInstanceState.getString("digital_mode"))) {
                 case "SQUARE":
                     toggleDigitalMode(WaveConst.SQUARE);
                     break;
@@ -237,11 +237,11 @@ public class WaveGeneratorActivity extends GuideActivity {
                 default:
                     break;
             }
-            switch(Objects.requireNonNull(savedInstanceState.getString("waveBtnActive"))){
+            switch (Objects.requireNonNull(savedInstanceState.getString("waveBtnActive"))) {
                 case "WAVE1":
                     waveMonSelected = true;
                     selectBtn(WaveConst.WAVE1);
-                    switch(Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
+                    switch (Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
                         case "FREQUENCY":
                             waveMonSelected = true;
                             prop_active = WaveConst.FREQUENCY;
@@ -265,7 +265,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 case "WAVE2":
                     waveMonSelected = true;
                     selectBtn(WaveConst.WAVE2);
-                    switch(Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
+                    switch (Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
                         case "FREQUENCY":
                             waveMonSelected = true;
                             prop_active = WaveConst.FREQUENCY;
@@ -289,11 +289,11 @@ public class WaveGeneratorActivity extends GuideActivity {
                 default:
                     break;
             }
-            switch(Objects.requireNonNull(savedInstanceState.getString("pwmBtnActive"))){
+            switch (Objects.requireNonNull(savedInstanceState.getString("pwmBtnActive"))) {
                 case "SQR1":
                     waveMonSelected = false;
                     selectBtn(WaveConst.SQR1);
-                    switch(Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
+                    switch (Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
                         case "FREQUENCY":
                             waveMonSelected = false;
                             prop_active = WaveConst.FREQUENCY;
@@ -327,7 +327,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                     break;
                 case "SQR2":
                     selectBtn(WaveConst.SQR2);
-                    switch(Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
+                    switch (Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
                         case "FREQUENCY":
                             waveMonSelected = false;
                             prop_active = WaveConst.FREQUENCY;
@@ -361,7 +361,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                     break;
                 case "SQR3":
                     selectBtn(WaveConst.SQR3);
-                    switch(Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
+                    switch (Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
                         case "FREQUENCY":
                             waveMonSelected = false;
                             prop_active = WaveConst.FREQUENCY;
@@ -395,7 +395,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                     break;
                 case "SQR4":
                     selectBtn(WaveConst.SQR4);
-                    switch(Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
+                    switch (Objects.requireNonNull(savedInstanceState.getString("prop_active"))) {
                         case "FREQUENCY":
                             waveMonSelected = false;
                             prop_active = WaveConst.FREQUENCY;
@@ -430,8 +430,7 @@ public class WaveGeneratorActivity extends GuideActivity {
                 default:
                     break;
             }
-        }
-        else {
+        } else {
             enableInitialState();
         }
         waveDialog = createIntentDialog();
@@ -1051,19 +1050,14 @@ public class WaveGeneratorActivity extends GuideActivity {
         if (WaveGeneratorConstants.wave.get(btnActive).get(property) != null) {
             int value = WaveGeneratorConstants.wave.get(btnActive).get(property);
             propTextView.setText(formatWithUnit(value, unit));
-        }
-        else {
-            if(property == WaveConst.FREQUENCY)
-            {
+        } else {
+            if (property == WaveConst.FREQUENCY) {
                 int value = WaveData.FREQ_MIN.getValue();
                 propTextView.setText(formatWithUnit(value, unit));
-            }
-            else if(property == WaveConst.PHASE)
-            {
+            } else if (property == WaveConst.PHASE) {
                 int value = WaveData.PHASE_MIN.getValue();
                 propTextView.setText(formatWithUnit(value, unit));
-            }
-            else{
+            } else {
                 int value = WaveData.DUTY_MIN.getValue();
                 propTextView.setText(formatWithUnit(value, unit));
             }
@@ -1113,11 +1107,11 @@ public class WaveGeneratorActivity extends GuideActivity {
             waveMonPropValueSelect.setText("");
 
             if (prop_active.equals(WaveConst.FREQUENCY)) {
-                if(WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(prop_active) != null) {
+                if (WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(prop_active) != null) {
                     seekBar.setProgress(WaveGeneratorConstants.wave.get(WaveConst.SQR1).get(prop_active));
                 }
             } else {
-                if(WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active) != null) {
+                if (WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active) != null) {
                     seekBar.setProgress(WaveGeneratorConstants.wave.get(pwmBtnActive).get(prop_active));
                 }
             }
