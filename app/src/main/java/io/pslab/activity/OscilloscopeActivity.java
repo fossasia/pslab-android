@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -111,6 +112,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     public double timeGap;
     public double timebase;
     public double xAxisScale = 875f;
+    public double yAxisScale = 16f;
     public boolean isCH1Selected;
     public boolean isCH2Selected;
     public boolean isCH3Selected;
@@ -200,6 +202,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     private boolean isPlayingback = false;
     private boolean isPlaying = false;
     private MenuItem playMenu;
+    private ArrayList<ArrayList<Entry>> dataEntries = new ArrayList<>();
+    private String[] dataParamsChannels;
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
@@ -593,6 +597,11 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                     isPlaying = true;
                     item.setIcon(R.drawable.ic_pause_white_24dp);
                     playRecordedData();
+                }
+                break;
+            case R.id.auto_scale:
+                if (((isCH1Selected || isCH2Selected || isCH3Selected || isMICSelected) && scienceLab.isConnected()) || isInBuiltMicSelected) {
+                    autoScale();
                 }
                 break;
             default:
@@ -1119,6 +1128,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            dataEntries = new ArrayList<>(entries);
+            dataParamsChannels = paramsChannels.clone();
 
             List<ILineDataSet> dataSets = new ArrayList<>();
             for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {
@@ -1137,14 +1148,14 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 dataSets.add(dataSet);
             }
             LineData data = new LineData(dataSets);
-            if (!isFourierTransformSelected) {
-                setXAxisScale(xAxisScale);
-                setLeftYAxisScale(16, -16);
-                setRightYAxisScale(16, -16);
-            } else {
+            if (isFourierTransformSelected) {
                 setXAxisScale(maxFreq);
                 setLeftYAxisScale(maxAmp, 0);
                 setRightYAxisScale(maxAmp, 0);
+            } else {
+                setXAxisScale(xAxisScale);
+                setLeftYAxisScale(yAxisScale, -1 * yAxisScale);
+                setRightYAxisScale(yAxisScale, -1 * yAxisScale);
             }
             mChart.setData(data);
             mChart.notifyDataSetChanged();
@@ -1153,6 +1164,54 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 lock.notify();
             }
         }
+    }
+
+    public void autoScale() {
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+        double maxPeriod = Double.MIN_VALUE;
+        double yRange;
+        double yPadding;
+        for (int i = 0; i < dataEntries.size(); i++) {
+            if (!Objects.equals(dataParamsChannels[i], CHANNEL.MIC.toString())) {
+                ArrayList<Entry> entryArrayList = dataEntries.get(i);
+                for (int j = 0; j < entryArrayList.size(); j++) {
+                    Entry entry = entryArrayList.get(j);
+                    if (entry.getY() > maxY) {
+                        maxY = entry.getY();
+                    }
+                    if (entry.getY() < minY) {
+                        minY = entry.getY();
+                    }
+                }
+                double period = analyticsClass.getPeriod(entryArrayList);
+                if (period > maxPeriod) {
+                    maxPeriod = period;
+                }
+            } else {
+                ArrayList<Entry> entryArrayList = dataEntries.get(i);
+                for (int j = 0; j < entryArrayList.size(); j++) {
+                    Entry entry = entryArrayList.get(j);
+                    if (entry.getY() > maxY) {
+                        maxY = entry.getY();
+                    }
+                    if (entry.getY() < minY) {
+                        minY = entry.getY();
+                    }
+                }
+                double period = analyticsClass.getPeriod(entryArrayList);
+                if (period > maxPeriod) {
+                    maxPeriod = period;
+                }
+            }
+        }
+        yRange = maxY - minY;
+        yPadding = yRange * 0.1;
+        xAxisScale = maxPeriod * 5;
+        if (timebase == 875) {
+            xAxisScale = xAxisScale / 1000.0;
+        }
+        yAxisScale = maxY + yPadding;
     }
 
     public class XYPlotTask extends AsyncTask<String, Void, Void> {
