@@ -29,6 +29,7 @@
         android:roundIcon="@drawable/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:largeHeap="true"
         tools:replace="android:icon,android:allowBackup">
         <uses-library
             android:name="org.apache.http.legacy"
