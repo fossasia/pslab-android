@@ -245,7 +245,8 @@ public class ChannelParametersFragment extends Fragment {
                 ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
                 ((OscilloscopeActivity) getActivity()).isMICSelected = !isChecked;
                 if (isChecked) {
-                    if(pslabMicCheckBox.isChecked()) {
+                    ((OscilloscopeActivity) getActivity()).maxTimebase = 38.4f;
+                    if (pslabMicCheckBox.isChecked()) {
                         pslabMicCheckBox.setChecked(false);
                         ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
                     }
@@ -253,6 +254,8 @@ public class ChannelParametersFragment extends Fragment {
                         requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
                         ((OscilloscopeActivity) getActivity()).isAudioInputSelected = false;
                     }
+                } else {
+                    ((OscilloscopeActivity) getActivity()).maxTimebase = 102.4f;
                 }
             }
         });
@@ -264,7 +267,7 @@ public class ChannelParametersFragment extends Fragment {
                 ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
                 ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = !isChecked;
                 if (isChecked) {
-                    if(builtInMicCheckBox.isChecked()) {
+                    if (builtInMicCheckBox.isChecked()) {
                         builtInMicCheckBox.setChecked(false);
                         ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
                     }
@@ -285,7 +288,7 @@ public class ChannelParametersFragment extends Fragment {
                 ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = true;
             } else {
                 CustomSnackBar.showSnackBar(getActivity().findViewById(android.R.id.content),
-                        "This feature won't work.",null,null, Snackbar.LENGTH_SHORT);
+                        "This feature won't work.", null, null, Snackbar.LENGTH_SHORT);
                 if (builtInMicCheckBox.isChecked())
                     builtInMicCheckBox.toggle();
             }

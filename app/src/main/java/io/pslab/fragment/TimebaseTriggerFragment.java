@@ -46,6 +46,7 @@ public class TimebaseTriggerFragment extends Fragment {
         textViewTrigger = v.findViewById(R.id.tv_trigger_values_tt);
         spinnerTriggerChannelSelect = v.findViewById(R.id.spinner_trigger_channel_tt);
         checkBoxTrigger = v.findViewById(R.id.checkbox_trigger_tt);
+        seekBarTimebase.setSaveEnabled(false);
 
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
@@ -54,7 +55,7 @@ public class TimebaseTriggerFragment extends Fragment {
             textViewTimeBase.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         }
 
-        if(OscilloscopeActivity.isInBuiltMicSelected){
+        if (OscilloscopeActivity.isInBuiltMicSelected) {
             seekBarTimebase.setMax(6);
             seekBarTimebase.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -63,8 +64,8 @@ public class TimebaseTriggerFragment extends Fragment {
                     switch (progress) {
                         case 0:
                             textViewTimeBase.setText(getString(R.string.timebase_microsec, 875f));
-                            ((OscilloscopeActivity) getActivity()).xAxisScale = 875;
-                            ((OscilloscopeActivity) getActivity()).setXAxisScale(875);
+                            ((OscilloscopeActivity) getActivity()).xAxisScale = 0.875;
+                            ((OscilloscopeActivity) getActivity()).setXAxisScale(0.875);
                             ((OscilloscopeActivity) getActivity()).timebase = 875;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
                             ((OscilloscopeActivity) getActivity()).timeGap = 2;
@@ -133,8 +134,7 @@ public class TimebaseTriggerFragment extends Fragment {
                 }
             });
             seekBarTimebase.setProgress(0);
-        }
-        else {
+        } else {
             seekBarTimebase.setMax(8);
             seekBarTimebase.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -143,8 +143,8 @@ public class TimebaseTriggerFragment extends Fragment {
                     switch (progress) {
                         case 0:
                             textViewTimeBase.setText(getString(R.string.timebase_microsec, 875f));
-                            ((OscilloscopeActivity) getActivity()).xAxisScale = 875;
-                            ((OscilloscopeActivity) getActivity()).setXAxisScale(875);
+                            ((OscilloscopeActivity) getActivity()).xAxisScale = 0.875;
+                            ((OscilloscopeActivity) getActivity()).setXAxisScale(0.875);
                             ((OscilloscopeActivity) getActivity()).timebase = 875;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
                             ((OscilloscopeActivity) getActivity()).timeGap = 2;

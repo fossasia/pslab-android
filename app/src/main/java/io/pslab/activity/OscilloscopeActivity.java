@@ -111,6 +111,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     public int samples;
     public double timeGap;
     public double timebase;
+    public double maxTimebase = 102.4f;
     public double xAxisScale = 875f;
     public double yAxisScale = 16f;
     public boolean isCH1Selected;
@@ -1172,11 +1173,15 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         double maxPeriod = Double.MIN_VALUE;
         double yRange;
         double yPadding;
+        double[] voltage = new double[512];
         for (int i = 0; i < dataEntries.size(); i++) {
             if (!Objects.equals(dataParamsChannels[i], CHANNEL.MIC.toString())) {
                 ArrayList<Entry> entryArrayList = dataEntries.get(i);
                 for (int j = 0; j < entryArrayList.size(); j++) {
                     Entry entry = entryArrayList.get(j);
+                    if (j < voltage.length - 1) {
+                        voltage[j] = entry.getY();
+                    }
                     if (entry.getY() > maxY) {
                         maxY = entry.getY();
                     }
@@ -1184,7 +1189,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                         minY = entry.getY();
                     }
                 }
-                double period = analyticsClass.getPeriod(entryArrayList);
+                double frequency = analyticsClass.findFrequency(voltage, timeGap / 1000000.0);
+                double period = (1 / frequency) * 1000.0;
                 if (period > maxPeriod) {
                     maxPeriod = period;
                 }
@@ -1192,6 +1198,9 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 ArrayList<Entry> entryArrayList = dataEntries.get(i);
                 for (int j = 0; j < entryArrayList.size(); j++) {
                     Entry entry = entryArrayList.get(j);
+                    if (j < voltage.length - 1) {
+                        voltage[j] = entry.getY();
+                    }
                     if (entry.getY() > maxY) {
                         maxY = entry.getY();
                     }
@@ -1199,7 +1208,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                         minY = entry.getY();
                     }
                 }
-                double period = analyticsClass.getPeriod(entryArrayList);
+                double frequency = analyticsClass.findFrequency(voltage, ((double) 1 / SAMPLING_RATE));
+                double period = (1 / frequency) * 1000.0;
                 if (period > maxPeriod) {
                     maxPeriod = period;
                 }
@@ -1207,9 +1217,10 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         }
         yRange = maxY - minY;
         yPadding = yRange * 0.1;
-        xAxisScale = maxPeriod * 5;
-        if (timebase == 875) {
-            xAxisScale = xAxisScale / 1000.0;
+        if ((maxPeriod * 5) < maxTimebase) {
+            xAxisScale = maxPeriod * 5;
+        } else {
+            xAxisScale = maxTimebase;
         }
         yAxisScale = maxY + yPadding;
     }

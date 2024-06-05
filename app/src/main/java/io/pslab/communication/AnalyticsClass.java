@@ -10,7 +10,6 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
-
 import io.pslab.filters.BandstopFilter;
 import io.pslab.filters.Lfilter;
 
@@ -23,8 +22,6 @@ import static org.apache.commons.lang3.math.NumberUtils.max;
 import static org.apache.commons.math3.util.FastMath.abs;
 import static org.apache.commons.math3.util.FastMath.exp;
 import static org.apache.commons.math3.util.FastMath.sin;
-
-import com.github.mikephil.charting.data.Entry;
 
 /**
  * Created by akarshan on 5/13/17.
@@ -334,34 +331,6 @@ public class AnalyticsClass {
             }
         }
         return frequency[index];
-    }
-
-    public double getPeriod(ArrayList<Entry> entryArrayList) {
-        ArrayList<Double> peaks = new ArrayList<>();
-
-        boolean increasing = false;
-        double prevY = entryArrayList.get(0).getY();
-        for (int i = 1; i < entryArrayList.size(); i++) {
-            double currY = entryArrayList.get(i).getY();
-            if (currY > prevY && !increasing) {
-                peaks.add((double) entryArrayList.get(i).getX());
-                increasing = true;
-            } else if (currY < prevY && increasing) {
-                increasing = false;
-            }
-            prevY = currY;
-        }
-        ArrayList<Double> periods = new ArrayList<>();
-        for (int i = 1; i < peaks.size(); i++) {
-            double period = peaks.get(i) - peaks.get(i - 1);
-            periods.add(period);
-        }
-
-        double totalPeriod = 0;
-        for (double period : periods) {
-            totalPeriod += period;
-        }
-        return totalPeriod / periods.size();
     }
 
     public ArrayList<double[]> amplitudeSpectrum(double[] voltage, int samplingInterval, int nHarmonics) {
