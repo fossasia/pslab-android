@@ -512,8 +512,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                             audioJack = null;
                         }
 
-                        if (!(((isCH1Selected || isCH2Selected || isCH3Selected || isMICSelected) && scienceLab.isConnected()) || isInBuiltMicSelected)) {
-                            mChart.clearValues();
+                        if (!(((isCH1Selected || isCH2Selected || isCH3Selected || isMICSelected) && scienceLab.isConnected()) || isInBuiltMicSelected) && !mChart.isEmpty()) {
+                            mChart.post(() -> mChart.clearValues());
                         }
                     }
                 }
