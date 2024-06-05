@@ -6,12 +6,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
@@ -45,6 +44,8 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
 
     private ImageView colorMap;
 
+    private ImageView imgLayout;
+
     public static PSLabPinLayoutFragment newInstance() {
         return new PSLabPinLayoutFragment();
     }
@@ -53,16 +54,27 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pin_layout, container, false);
-        ImageView imgLayout = view.findViewById(R.id.img_pslab_pin_layout);
+        imgLayout = view.findViewById(R.id.img_pslab_pin_layout);
         colorMap = view.findViewById(R.id.img_pslab_color_map);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         imgLayout.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
                 frontSide ? R.drawable.pslab_v5_front_layout : R.drawable.pslab_v5_back_layout, null));
         colorMap.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
                 frontSide ? R.drawable.pslab_v5_front_colormap : R.drawable.pslab_v5_back_colormap, null));
         imgLayout.setOnTouchListener(this);
         populatePinDetails();
+    }
 
-        return view;
+    @Override
+    public void onPause() {
+        super.onPause();
+        imgLayout.setImageDrawable(null);
+        colorMap.setImageDrawable(null);
     }
 
     private void populatePinDetails() {
