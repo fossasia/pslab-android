@@ -1223,6 +1223,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
             xAxisScale = maxTimebase;
         }
         yAxisScale = maxY + yPadding;
+        samples = 512;
+        timeGap = (xAxisScale * 1000.0) / samples;
     }
 
     public class XYPlotTask extends AsyncTask<String, Void, Void> {
