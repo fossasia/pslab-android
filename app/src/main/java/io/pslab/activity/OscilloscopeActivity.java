@@ -1175,7 +1175,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         double yPadding;
         double[] voltage = new double[512];
         for (int i = 0; i < dataParamsChannels.length; i++) {
-            if (!Objects.equals(dataParamsChannels[i], CHANNEL.MIC.toString())) {
+            if (dataEntries.size() > i) {
                 ArrayList<Entry> entryArrayList = dataEntries.get(i);
                 for (int j = 0; j < entryArrayList.size(); j++) {
                     Entry entry = entryArrayList.get(j);
@@ -1189,26 +1189,12 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                         minY = entry.getY();
                     }
                 }
-                double frequency = analyticsClass.findFrequency(voltage, timeGap / 1000000.0);
-                double period = (1 / frequency) * 1000.0;
-                if (period > maxPeriod) {
-                    maxPeriod = period;
+                final double frequency;
+                if (Objects.equals(dataParamsChannels[i], CHANNEL.MIC.toString())) {
+                    frequency = analyticsClass.findFrequency(voltage, ((double) 1 / SAMPLING_RATE));
+                } else {
+                    frequency = analyticsClass.findFrequency(voltage, timeGap / 1000000.0);
                 }
-            } else {
-                ArrayList<Entry> entryArrayList = dataEntries.get(i);
-                for (int j = 0; j < entryArrayList.size(); j++) {
-                    Entry entry = entryArrayList.get(j);
-                    if (j < voltage.length - 1) {
-                        voltage[j] = entry.getY();
-                    }
-                    if (entry.getY() > maxY) {
-                        maxY = entry.getY();
-                    }
-                    if (entry.getY() < minY) {
-                        minY = entry.getY();
-                    }
-                }
-                double frequency = analyticsClass.findFrequency(voltage, ((double) 1 / SAMPLING_RATE));
                 double period = (1 / frequency) * 1000.0;
                 if (period > maxPeriod) {
                     maxPeriod = period;
