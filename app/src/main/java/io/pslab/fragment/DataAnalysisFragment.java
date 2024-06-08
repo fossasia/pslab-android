@@ -1,6 +1,7 @@
 package io.pslab.fragment;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -29,13 +30,15 @@ public class DataAnalysisFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_data_analysis, container, false);
+        View v = inflater.inflate(R.layout.fragment_data_analysis_main, container, false);
         String[] curveFits = {"Sine Fit", "Square Fit"};
         String[] channels = {"None", "CH1", "CH2", "CH3", "MIC"};
 
         spinnerCurveFit = v.findViewById(R.id.spinner_curve_fit_da);
         spinnerChannelSelect1 = v.findViewById(R.id.spinner_channel_select_da1);
         spinnerChannelSelect2 = v.findViewById(R.id.spinner_channel_select_da2);
+        Spinner spinnerChannelSelectHorizontalOffset = v.findViewById(R.id.spinner_channel_select_horizontal_offset);
+        Spinner spinnerChannelSelectVerticalOffset = v.findViewById(R.id.spinner_channel_select_vertical_offset);
         checkBoxFouierTransform = v.findViewById(R.id.checkBox_fourier_da);
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         ArrayAdapter<String> curveFitAdapter;
@@ -55,10 +58,15 @@ public class DataAnalysisFragment extends Fragment {
         spinnerCurveFit.setAdapter(curveFitAdapter);
         spinnerChannelSelect1.setAdapter(adapter);
         spinnerChannelSelect2.setAdapter(adapter);
+        spinnerChannelSelectHorizontalOffset.setAdapter(adapter);
+        spinnerChannelSelectVerticalOffset.setAdapter(adapter);
 
         spinnerCurveFit.setSelection(curveFitAdapter.getPosition("Sine Fit"), true);
         spinnerChannelSelect1.setSelection(adapter.getPosition("None"), true);
         spinnerChannelSelect2.setSelection(adapter.getPosition("None"), true);
+        spinnerChannelSelectHorizontalOffset.setSelection(adapter.getPosition("None"), true);
+        spinnerChannelSelectVerticalOffset.setSelection(adapter.getPosition("None"), true);
+
         spinnerCurveFit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
