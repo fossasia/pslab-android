@@ -1174,7 +1174,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         double yRange;
         double yPadding;
         double[] voltage = new double[512];
-        for (int i = 0; i < dataEntries.size(); i++) {
+        for (int i = 0; i < dataParamsChannels.length; i++) {
             if (!Objects.equals(dataParamsChannels[i], CHANNEL.MIC.toString())) {
                 ArrayList<Entry> entryArrayList = dataEntries.get(i);
                 for (int j = 0; j < entryArrayList.size(); j++) {
