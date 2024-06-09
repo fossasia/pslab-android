@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -110,7 +111,9 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     public int samples;
     public double timeGap;
     public double timebase;
+    public double maxTimebase = 102.4f;
     public double xAxisScale = 875f;
+    public double yAxisScale = 16f;
     public boolean isCH1Selected;
     public boolean isCH2Selected;
     public boolean isCH3Selected;
@@ -200,6 +203,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     private boolean isPlayingback = false;
     private boolean isPlaying = false;
     private MenuItem playMenu;
+    private ArrayList<ArrayList<Entry>> dataEntries = new ArrayList<>();
+    private String[] dataParamsChannels;
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
 
@@ -593,6 +598,11 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                     isPlaying = true;
                     item.setIcon(R.drawable.ic_pause_white_24dp);
                     playRecordedData();
+                }
+                break;
+            case R.id.auto_scale:
+                if (((isCH1Selected || isCH2Selected || isCH3Selected || isMICSelected) && scienceLab.isConnected()) || isInBuiltMicSelected) {
+                    autoScale();
                 }
                 break;
             default:
@@ -1119,6 +1129,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            dataEntries = new ArrayList<>(entries);
+            dataParamsChannels = paramsChannels.clone();
 
             List<ILineDataSet> dataSets = new ArrayList<>();
             for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {
@@ -1137,14 +1149,14 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 dataSets.add(dataSet);
             }
             LineData data = new LineData(dataSets);
-            if (!isFourierTransformSelected) {
-                setXAxisScale(xAxisScale);
-                setLeftYAxisScale(16, -16);
-                setRightYAxisScale(16, -16);
-            } else {
+            if (isFourierTransformSelected) {
                 setXAxisScale(maxFreq);
                 setLeftYAxisScale(maxAmp, 0);
                 setRightYAxisScale(maxAmp, 0);
+            } else {
+                setXAxisScale(xAxisScale);
+                setLeftYAxisScale(yAxisScale, -1 * yAxisScale);
+                setRightYAxisScale(yAxisScale, -1 * yAxisScale);
             }
             mChart.setData(data);
             mChart.notifyDataSetChanged();
@@ -1153,6 +1165,52 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 lock.notify();
             }
         }
+    }
+
+    public void autoScale() {
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+        double maxPeriod = Double.MIN_VALUE;
+        double yRange;
+        double yPadding;
+        double[] voltage = new double[512];
+        for (int i = 0; i < dataParamsChannels.length; i++) {
+            if (dataEntries.size() > i) {
+                ArrayList<Entry> entryArrayList = dataEntries.get(i);
+                for (int j = 0; j < entryArrayList.size(); j++) {
+                    Entry entry = entryArrayList.get(j);
+                    if (j < voltage.length - 1) {
+                        voltage[j] = entry.getY();
+                    }
+                    if (entry.getY() > maxY) {
+                        maxY = entry.getY();
+                    }
+                    if (entry.getY() < minY) {
+                        minY = entry.getY();
+                    }
+                }
+                final double frequency;
+                if (Objects.equals(dataParamsChannels[i], CHANNEL.MIC.toString())) {
+                    frequency = analyticsClass.findFrequency(voltage, ((double) 1 / SAMPLING_RATE));
+                } else {
+                    frequency = analyticsClass.findFrequency(voltage, timeGap / 1000000.0);
+                }
+                double period = (1 / frequency) * 1000.0;
+                if (period > maxPeriod) {
+                    maxPeriod = period;
+                }
+            }
+        }
+        yRange = maxY - minY;
+        yPadding = yRange * 0.1;
+        if ((maxPeriod * 5) < maxTimebase) {
+            xAxisScale = maxPeriod * 5;
+        } else {
+            xAxisScale = maxTimebase;
+        }
+        yAxisScale = maxY + yPadding;
+        samples = 512;
+        timeGap = (2 * xAxisScale * 1000.0) / samples;
     }
 
     public class XYPlotTask extends AsyncTask<String, Void, Void> {
