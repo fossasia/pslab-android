@@ -1148,12 +1148,14 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
             dataParamsChannels = paramsChannels.clone();
 
             List<ILineDataSet> dataSets = new ArrayList<>();
-            for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {
-                ArrayList<Entry> entryArrayList = entries.get(i);
-                for (int j = 0; j < entryArrayList.size(); j++) {
-                    Entry entry = entryArrayList.get(j);
-                    entry.setX((float) (entry.getX() - xOffsets.get(paramsChannels[i])));
-                    entry.setY((float) (entry.getY() + yOffsets.get(paramsChannels[i])));
+            if (!isFourierTransformSelected) {
+                for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {
+                    ArrayList<Entry> entryArrayList = entries.get(i);
+                    for (int j = 0; j < entryArrayList.size(); j++) {
+                        Entry entry = entryArrayList.get(j);
+                        entry.setX((float) (entry.getX() - xOffsets.get(paramsChannels[i])));
+                        entry.setY((float) (entry.getY() + yOffsets.get(paramsChannels[i])));
+                    }
                 }
             }
             for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {
