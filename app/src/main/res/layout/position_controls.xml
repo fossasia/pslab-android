@@ -11,7 +11,7 @@
         android:layout_width="@dimen/dimen_zero_dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/spinner_channel_select_vertical_offset"
-        app:layout_constraintEnd_toStartOf="@+id/textview_vertical_offset"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toEndOf="@+id/spinner_channel_select_vertical_offset"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,7 +20,7 @@
         android:layout_width="@dimen/dimen_zero_dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textview_horizontal_offset"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toEndOf="@+id/spinner_channel_select_horizontal_offset"
         app:layout_constraintTop_toTopOf="@+id/spinner_channel_select_horizontal_offset" />
 
@@ -34,11 +34,12 @@
 
     <TextView
         android:id="@+id/textview_vertical_offset"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/osc_cb_margin"
         app:layout_constraintBottom_toBottomOf="@+id/spinner_channel_select_vertical_offset"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/seekbar_vertical_offset"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
@@ -51,11 +52,19 @@
 
     <TextView
         android:id="@+id/textview_horizontal_offset"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/osc_cb_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/seekbar_horizontal_offset"
         app:layout_constraintTop_toTopOf="@+id/spinner_channel_select_horizontal_offset" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

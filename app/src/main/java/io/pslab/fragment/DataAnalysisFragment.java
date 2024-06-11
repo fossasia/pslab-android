@@ -11,10 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
+import io.pslab.others.FloatSeekBar;
 
 public class DataAnalysisFragment extends Fragment {
 
@@ -22,6 +25,12 @@ public class DataAnalysisFragment extends Fragment {
     private Spinner spinnerChannelSelect1;
     private Spinner spinnerChannelSelect2;
     private CheckBox checkBoxFouierTransform;
+    private Spinner spinnerChannelSelectHorizontalOffset;
+    private Spinner spinnerChannelSelectVerticalOffset;
+    private FloatSeekBar seekBarHorizontalOffset;
+    private FloatSeekBar seekBarVerticalOffset;
+    private TextView textViewHorizontalOffset;
+    private TextView textViewVerticalOffset;
 
     public static DataAnalysisFragment newInstance() {
         return new DataAnalysisFragment();
@@ -37,8 +46,12 @@ public class DataAnalysisFragment extends Fragment {
         spinnerCurveFit = v.findViewById(R.id.spinner_curve_fit_da);
         spinnerChannelSelect1 = v.findViewById(R.id.spinner_channel_select_da1);
         spinnerChannelSelect2 = v.findViewById(R.id.spinner_channel_select_da2);
-        Spinner spinnerChannelSelectHorizontalOffset = v.findViewById(R.id.spinner_channel_select_horizontal_offset);
-        Spinner spinnerChannelSelectVerticalOffset = v.findViewById(R.id.spinner_channel_select_vertical_offset);
+        spinnerChannelSelectHorizontalOffset = v.findViewById(R.id.spinner_channel_select_horizontal_offset);
+        spinnerChannelSelectVerticalOffset = v.findViewById(R.id.spinner_channel_select_vertical_offset);
+        seekBarHorizontalOffset = v.findViewById(R.id.seekbar_horizontal_offset);
+        seekBarVerticalOffset = v.findViewById(R.id.seekbar_vertical_offset);
+        textViewHorizontalOffset = v.findViewById(R.id.textview_horizontal_offset);
+        textViewVerticalOffset = v.findViewById(R.id.textview_vertical_offset);
         checkBoxFouierTransform = v.findViewById(R.id.checkBox_fourier_da);
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         ArrayAdapter<String> curveFitAdapter;
@@ -108,6 +121,78 @@ public class DataAnalysisFragment extends Fragment {
 
             }
         });
+
+        spinnerChannelSelectHorizontalOffset.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (spinnerChannelSelectHorizontalOffset.getSelectedItem() != "None") {
+                    seekBarHorizontalOffset.setValue(((OscilloscopeActivity) getActivity()).xOffsets.get(spinnerChannelSelectHorizontalOffset.getSelectedItem().toString()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinnerChannelSelectVerticalOffset.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (spinnerChannelSelectVerticalOffset.getSelectedItem() != "None") {
+                    seekBarVerticalOffset.setValue(((OscilloscopeActivity) getActivity()).yOffsets.get(spinnerChannelSelectVerticalOffset.getSelectedItem().toString()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        if (((OscilloscopeActivity) getActivity()).xAxisScale == 875) {
+            seekBarHorizontalOffset.setters(0, ((OscilloscopeActivity) getActivity()).xAxisScale / 1000.0);
+        } else {
+            seekBarHorizontalOffset.setters(0, ((OscilloscopeActivity) getActivity()).xAxisScale);
+        }
+        seekBarHorizontalOffset.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                textViewHorizontalOffset.setText(String.format("%sms", seekBarHorizontalOffset.getValue()));
+                ((OscilloscopeActivity) getActivity()).xOffsets.put(spinnerChannelSelectHorizontalOffset.getSelectedItem().toString(), seekBarHorizontalOffset.getValue());
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        seekBarHorizontalOffset.setProgress(0);
+
+        seekBarVerticalOffset.setters(-1 * ((OscilloscopeActivity) getActivity()).yAxisScale, ((OscilloscopeActivity) getActivity()).yAxisScale);
+        seekBarVerticalOffset.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                textViewVerticalOffset.setText(String.format("%sV", seekBarVerticalOffset.getValue()));
+                ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        seekBarVerticalOffset.setProgress(50);
 
         checkBoxFouierTransform.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
