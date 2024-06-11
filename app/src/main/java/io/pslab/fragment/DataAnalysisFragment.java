@@ -132,7 +132,7 @@ public class DataAnalysisFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                // Do nothing
             }
         });
 
@@ -146,7 +146,7 @@ public class DataAnalysisFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                // Do nothing
             }
         });
 
@@ -164,12 +164,12 @@ public class DataAnalysisFragment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                // Do nothing
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                // Do nothing
             }
         });
         seekBarHorizontalOffset.setProgress(0);
@@ -184,12 +184,12 @@ public class DataAnalysisFragment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                // Do nothing
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                // Do nothing
             }
         });
         seekBarVerticalOffset.setProgress(50);
