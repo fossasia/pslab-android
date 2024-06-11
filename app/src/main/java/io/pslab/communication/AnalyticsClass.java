@@ -10,6 +10,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
+
 import io.pslab.filters.BandstopFilter;
 import io.pslab.filters.Lfilter;
 
@@ -330,7 +331,12 @@ public class AnalyticsClass {
                 index = i;
             }
         }
-        return frequency[index];
+        double noiseThreshold = 0.1;
+        if (max >= noiseThreshold) {
+            return frequency[index];
+        } else {
+            return -1;
+        }
     }
 
     public ArrayList<double[]> amplitudeSpectrum(double[] voltage, int samplingInterval, int nHarmonics) {
