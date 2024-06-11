@@ -1,6 +1,8 @@
 package io.pslab.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -20,16 +22,17 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.pslab.R;
 import io.pslab.items.PinDetails;
 
 public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchListener {
 
-    private ArrayList<PinDetails> pinDetails = new ArrayList<>();
+    private final List<PinDetails> pinDetails = new ArrayList<>();
 
-    private Matrix matrix = new Matrix();
-    private Matrix savedMatrix = new Matrix();
+    private final Matrix matrix = new Matrix();
+    private final Matrix savedMatrix = new Matrix();
 
     public static boolean frontSide = true;
 
@@ -38,8 +41,8 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
     private static final int ZOOM = 2;
     private int mode = NONE;
 
-    private PointF start = new PointF();
-    private PointF mid = new PointF();
+    private final PointF start = new PointF();
+    private final PointF mid = new PointF();
     private float oldDist = 1f;
 
     private ImageView colorMap;
@@ -75,54 +78,61 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
         super.onPause();
         imgLayout.setImageDrawable(null);
         colorMap.setImageDrawable(null);
+        // Force garbage collection to avoid OOM on older devices.
+        System.gc();
     }
 
     private void populatePinDetails() {
-        pinDetails.add(new PinDetails("ESP", "ESP Programmer pin", Color.parseColor("#6b40a9"), Color.parseColor("#dc1616")));
-        pinDetails.add(new PinDetails("RXP", "Receiver pin for UART communication", Color.parseColor("#4372a2"), Color.parseColor("#1616dc")));
-        pinDetails.add(new PinDetails("TXP", "Transmitter pin for UART communication", Color.parseColor("#4372a2"), Color.parseColor("#37dc16")));
-        pinDetails.add(new PinDetails("GND", "Ground pin (0 V)", Color.parseColor("#ff4040"), Color.parseColor("#16dcda")));
-        pinDetails.add(new PinDetails("SI1", "Wave generator pin 1", Color.parseColor("#406743"), Color.parseColor("#226a0c")));
-        pinDetails.add(new PinDetails("SI2", "Wave generator pin 2", Color.parseColor("#406743"), Color.parseColor("#226aba")));
-        pinDetails.add(new PinDetails("SQ1", "PWM generator pin 1", Color.parseColor("#406743"), Color.parseColor("#baaa22")));
-        pinDetails.add(new PinDetails("SQ2", "PWM generator pin 2", Color.parseColor("#406743"), Color.parseColor("#22ba6d")));
-        pinDetails.add(new PinDetails("SQ3", "PWM generator pin 3", Color.parseColor("#406743"), Color.parseColor("#aa44aa")));
-        pinDetails.add(new PinDetails("SQ4", "PWM generator pin 4", Color.parseColor("#406743"), Color.parseColor("#d28080")));
-        pinDetails.add(new PinDetails("LA1", "Logic analyzer pin 1", Color.parseColor("#406743"), Color.parseColor("#0053ad")));
-        pinDetails.add(new PinDetails("LA2", "Logic analyzer pin 2", Color.parseColor("#406743"), Color.parseColor("#ad2d00")));
-        pinDetails.add(new PinDetails("LA3", "Logic analyzer pin 3", Color.parseColor("#406743"), Color.parseColor("#e7a4ff")));
-        pinDetails.add(new PinDetails("LA4", "Logic analyzer pin 4", Color.parseColor("#406743"), Color.parseColor("#e7a41a")));
-        pinDetails.add(new PinDetails("AC1", "Alternative channel input", Color.parseColor("#ffe040"), Color.parseColor("#b01498")));
-        pinDetails.add(new PinDetails("CH1", "Oscilloscope channel input 1", Color.parseColor("#ffe040"), Color.parseColor("#0b4189")));
-        pinDetails.add(new PinDetails("CH2", "Oscilloscope channel input 2", Color.parseColor("#ffe040"), Color.parseColor("#410b89")));
-        pinDetails.add(new PinDetails("CH3", "Oscilloscope channel input 3", Color.parseColor("#ffe040"), Color.parseColor("#41890b")));
-        pinDetails.add(new PinDetails("CHG", "Oscilloscope channel 3 gain set", Color.parseColor("#ffe040"), Color.parseColor("#89410b")));
-        pinDetails.add(new PinDetails("MIC", "External microphone input", Color.parseColor("#7d5840"), Color.parseColor("#890b41")));
-        pinDetails.add(new PinDetails("FRQ", "Frequency counter pin", Color.parseColor("#7d5840"), Color.parseColor("#ff0b41")));
-        pinDetails.add(new PinDetails("CAP", "Capacitance measurement pin", Color.parseColor("#7d5840"), Color.parseColor("#ff410b")));
-        pinDetails.add(new PinDetails("RES", "Resistance measurement pin", Color.parseColor("#7d5840"), Color.parseColor("#41ff0b")));
-        pinDetails.add(new PinDetails("VOL", "Voltage measurement pin", Color.parseColor("#7d5840"), Color.parseColor("#410bff")));
-        pinDetails.add(new PinDetails("PCS", "Programmable current source (3.3 mA)", Color.parseColor("#c3007c"), Color.parseColor("#3fa96f")));
-        pinDetails.add(new PinDetails("PV3", "Programmable voltage source 3 (0-3.3 V)", Color.parseColor("#c3007c"), Color.parseColor("#a93f6f")));
-        pinDetails.add(new PinDetails("PV2", "Programmable voltage source 2 (-+3.3 V)", Color.parseColor("#c3007c"), Color.parseColor("#a96f3f")));
-        pinDetails.add(new PinDetails("PV1", "Programmable voltage source 1 (-+5.0 V)", Color.parseColor("#c3007c"), Color.parseColor("#446e72")));
-        pinDetails.add(new PinDetails("SCL", "Serial clock pin for I2C", Color.parseColor("#4372a2"), Color.parseColor("#6e4472")));
-        pinDetails.add(new PinDetails("SDA", "Serial data pin for I2C", Color.parseColor("#4372a2"), Color.parseColor("#6e7244")));
-        pinDetails.add(new PinDetails("VDD", "Voltage supply pin (3.3 V)", Color.parseColor("#ff4040"), Color.parseColor("#d25c3c")));
-        pinDetails.add(new PinDetails("STA", "Bluetooth device state output pin", Color.parseColor("#4372a2"), Color.parseColor("#5c5c3c")));
-        pinDetails.add(new PinDetails("V+", "Voltage test pin (+8.0 V)", Color.parseColor("#ff4040"), Color.parseColor("#5cd23c")));
-        pinDetails.add(new PinDetails("ENA", "Bluetooth device enable/disable pin", Color.parseColor("#4372a2"), Color.parseColor("#5c143c")));
-        pinDetails.add(new PinDetails("V-", "Voltage test pin (-8.0 V)", Color.parseColor("#ff4040"), Color.parseColor("#5c3c14")));
-        pinDetails.add(new PinDetails("MCL", "Master clear pin for programmer", Color.parseColor("#4372a2"), Color.parseColor("#143c14")));
-        pinDetails.add(new PinDetails("PGM", "Mode pin for programmer", Color.parseColor("#4372a2"), Color.parseColor("#b73cf1")));
-        pinDetails.add(new PinDetails("PGC", "Clock pin for programmer", Color.parseColor("#4372a2"), Color.parseColor("#fff724")));
-        pinDetails.add(new PinDetails("PGD", "Data pin for programmer", Color.parseColor("#4372a2"), Color.parseColor("#724fff")));
-        pinDetails.add(new PinDetails("NRF", "Radio communication module using nRF24", Color.parseColor("#6b40a9"), Color.parseColor("#ffa64f")));
-        pinDetails.add(new PinDetails("USB", "Micro B type USB socket", Color.parseColor("#6b40a9"), Color.parseColor("#ff2b4f")));
-        pinDetails.add(new PinDetails("VCC", "Voltage supply pin (+5.0 V)", Color.parseColor("#ff4040"), Color.parseColor("#6b6500")));
-        pinDetails.add(new PinDetails("+5V", "Test pin +5.0 V", Color.parseColor("#ff4040"), Color.parseColor("#765f40")));
-        pinDetails.add(new PinDetails("D+", "Test pin for USB Data +", Color.parseColor("#6b40a9"), Color.parseColor("#681654")));
-        pinDetails.add(new PinDetails("D-", "Test pin for USB Data -", Color.parseColor("#6b40a9"), Color.parseColor("#a68b47")));
+        pinDetails.add(new PinDetails(getString(R.string.pin_esp_name), getString(R.string.pin_esp_description), getColor(R.color.category_usb), getColor(R.color.pin_esp)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_rxd_name), getString(R.string.pin_rxd_description), getColor(R.color.category_communication), getColor(R.color.pin_rxd)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_txd_name), getString(R.string.pin_txd_description), getColor(R.color.category_communication), getColor(R.color.pin_txd)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_gnd_name), getString(R.string.pin_gnd_description), getColor(R.color.category_voltage), getColor(R.color.pin_gnd)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_si1_name), getString(R.string.pin_si1_description), getColor(R.color.category_wavegen), getColor(R.color.pin_si1)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_si2_name), getString(R.string.pin_si2_description), getColor(R.color.category_wavegen), getColor(R.color.pin_si2)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_sq1_name), getString(R.string.pin_sq1_description), getColor(R.color.category_wavegen), getColor(R.color.pin_sq1)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_sq2_name), getString(R.string.pin_sq2_description), getColor(R.color.category_wavegen), getColor(R.color.pin_sq2)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_sq3_name), getString(R.string.pin_sq3_description), getColor(R.color.category_wavegen), getColor(R.color.pin_sq3)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_sq4_name), getString(R.string.pin_sq4_description), getColor(R.color.category_wavegen), getColor(R.color.pin_sq4)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_la1_name), getString(R.string.pin_la1_description), getColor(R.color.category_wavegen), getColor(R.color.pin_la1)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_la2_name), getString(R.string.pin_la2_description), getColor(R.color.category_wavegen), getColor(R.color.pin_la2)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_la3_name), getString(R.string.pin_la3_description), getColor(R.color.category_wavegen), getColor(R.color.pin_la3)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_la4_name), getString(R.string.pin_la4_description), getColor(R.color.category_wavegen), getColor(R.color.pin_la4)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_ac1_name), getString(R.string.pin_ac1_description), getColor(R.color.category_oscilloscope), getColor(R.color.pin_ac1)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_ch1_name), getString(R.string.pin_ch1_description), getColor(R.color.category_oscilloscope), getColor(R.color.pin_ch1)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_ch2_name), getString(R.string.pin_ch2_description), getColor(R.color.category_oscilloscope), getColor(R.color.pin_ch2)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_ch3_name), getString(R.string.pin_ch3_description), getColor(R.color.category_oscilloscope), getColor(R.color.pin_ch3)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_chg_name), getString(R.string.pin_chg_description), getColor(R.color.category_oscilloscope), getColor(R.color.pin_chg)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_mic_name), getString(R.string.pin_mic_description), getColor(R.color.category_measurement), getColor(R.color.pin_mic)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_frq_name), getString(R.string.pin_frq_description), getColor(R.color.category_measurement), getColor(R.color.pin_frq)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_cap_name), getString(R.string.pin_cap_description), getColor(R.color.category_measurement), getColor(R.color.pin_cap)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_res_name), getString(R.string.pin_res_description), getColor(R.color.category_measurement), getColor(R.color.pin_res)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_vol_name), getString(R.string.pin_vol_description), getColor(R.color.category_measurement), getColor(R.color.pin_vol)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_pcs_name), getString(R.string.pin_pcs_description), getColor(R.color.category_power_source), getColor(R.color.pin_pcs)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_pv3_name), getString(R.string.pin_pv3_description), getColor(R.color.category_power_source), getColor(R.color.pin_pv3)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_pv2_name), getString(R.string.pin_pv2_description), getColor(R.color.category_power_source), getColor(R.color.pin_pv2)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_pv1_name), getString(R.string.pin_pv1_description), getColor(R.color.category_power_source), getColor(R.color.pin_pv1)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_scl_name), getString(R.string.pin_scl_description), getColor(R.color.category_communication), getColor(R.color.pin_scl)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_sda_name), getString(R.string.pin_sda_description), getColor(R.color.category_communication), getColor(R.color.pin_sda)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_vdd_name), getString(R.string.pin_vdd_description), getColor(R.color.category_voltage), getColor(R.color.pin_vdd)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_sta_name), getString(R.string.pin_sta_description), getColor(R.color.category_communication), getColor(R.color.pin_sta)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_vpl_name), getString(R.string.pin_vpl_description), getColor(R.color.category_voltage), getColor(R.color.pin_vpl)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_ena_name), getString(R.string.pin_ena_description), getColor(R.color.category_communication), getColor(R.color.pin_ena)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_vmi_name), getString(R.string.pin_vmi_description), getColor(R.color.category_voltage), getColor(R.color.pin_vmi)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_mcl_name), getString(R.string.pin_mcl_description), getColor(R.color.category_communication), getColor(R.color.pin_mcl)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_pgm_name), getString(R.string.pin_pgm_description), getColor(R.color.category_communication), getColor(R.color.pin_pgm)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_pgc_name), getString(R.string.pin_pgc_description), getColor(R.color.category_communication), getColor(R.color.pin_pgc)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_pgd_name), getString(R.string.pin_pgd_description), getColor(R.color.category_communication), getColor(R.color.pin_pgd)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_nrf_name), getString(R.string.pin_nrf_description), getColor(R.color.category_usb), getColor(R.color.pin_nrf)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_usb_name), getString(R.string.pin_usb_description), getColor(R.color.category_usb), getColor(R.color.pin_usb)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_vcc_name), getString(R.string.pin_vcc_description), getColor(R.color.category_voltage), getColor(R.color.pin_vcc)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_pl5_name), getString(R.string.pin_pl5_description), getColor(R.color.category_voltage), getColor(R.color.pin_pl5)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_dpl_name), getString(R.string.pin_dpl_description), getColor(R.color.category_usb), getColor(R.color.pin_dpl)));
+        pinDetails.add(new PinDetails(getString(R.string.pin_dmi_name), getString(R.string.pin_dmi_description), getColor(R.color.category_usb), getColor(R.color.pin_dmi)));
+    }
+
+    private int getColor(int colorId) {
+        final Context context = getContext();
+        return context == null ? 0 : context.getColor(colorId);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -189,6 +199,12 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
     }
 
     private void displayPinDescription(PinDetails pin) {
+        final Activity activity = getActivity();
+
+        if (activity == null) {
+            return;
+        }
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.pin_description_dialog, null);
@@ -205,11 +221,10 @@ public class PSLabPinLayoutFragment extends Fragment implements View.OnTouchList
         builder.create();
         final AlertDialog dialog = builder.show();
 
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
+        dialogButton.setOnTouchListener((v, event) -> {
+            view.performClick();
+            dialog.dismiss();
+            return true;
         });
     }
 
