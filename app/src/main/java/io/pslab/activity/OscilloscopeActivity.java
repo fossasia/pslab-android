@@ -134,6 +134,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     public String curveFittingChannel2;
     public String xyPlotXAxisChannel;
     public String xyPlotYAxisChannel;
+    public HashMap<String, Double> xOffsets;
+    public HashMap<String, Double> yOffsets;
     public double trigger;
     public Plot2D graph;
     @BindView(R.id.layout_dock_os1)
@@ -268,6 +270,18 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         timebase = 875;
         samples = 512;
         timeGap = 2;
+
+        xOffsets = new HashMap<>();
+        xOffsets.put(CHANNEL.CH1.toString(), 0.0);
+        xOffsets.put(CHANNEL.CH2.toString(), 0.0);
+        xOffsets.put(CHANNEL.CH3.toString(), 0.0);
+        xOffsets.put(CHANNEL.MIC.toString(), 0.0);
+        yOffsets = new HashMap<>();
+        yOffsets.put(CHANNEL.CH1.toString(), 0.0);
+        yOffsets.put(CHANNEL.CH2.toString(), 0.0);
+        yOffsets.put(CHANNEL.CH3.toString(), 0.0);
+        yOffsets.put(CHANNEL.MIC.toString(), 0.0);
+
         sineFit = true;
         squareFit = false;
         isDataAnalysisFragSelected = false;
@@ -1134,6 +1148,16 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
             dataParamsChannels = paramsChannels.clone();
 
             List<ILineDataSet> dataSets = new ArrayList<>();
+            if (!isFourierTransformSelected) {
+                for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {
+                    ArrayList<Entry> entryArrayList = entries.get(i);
+                    for (int j = 0; j < entryArrayList.size(); j++) {
+                        Entry entry = entryArrayList.get(j);
+                        entry.setX((float) (entry.getX() - xOffsets.get(paramsChannels[i])));
+                        entry.setY((float) (entry.getY() + yOffsets.get(paramsChannels[i])));
+                    }
+                }
+            }
             for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {
                 LineDataSet dataSet;
                 dataSet = new LineDataSet(entries.get(i), paramsChannels[i]);
