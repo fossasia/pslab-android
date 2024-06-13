@@ -1,11 +1,9 @@
 package io.pslab.fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +15,8 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
@@ -203,6 +203,14 @@ public class DataAnalysisFragment extends Fragment {
         });
         seekBarVerticalOffset.setProgress(50);
 
+        editTextHorizontalOffset.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextHorizontalOffset.setCursorVisible(true);
+                return false;
+            }
+        });
+
         editTextHorizontalOffset.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -217,6 +225,15 @@ public class DataAnalysisFragment extends Fragment {
                         seekBarHorizontalOffset.setProgress(0);
                     }
                 }
+                editTextHorizontalOffset.setCursorVisible(false);
+                return false;
+            }
+        });
+
+        editTextVerticalOffset.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextVerticalOffset.setCursorVisible(true);
                 return false;
             }
         });
@@ -235,6 +252,8 @@ public class DataAnalysisFragment extends Fragment {
                         seekBarVerticalOffset.setProgress(50);
                     }
                 }
+                editTextVerticalOffset.setCursorVisible(false);
+
                 return false;
             }
         });
