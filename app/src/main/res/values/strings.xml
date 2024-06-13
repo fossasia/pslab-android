@@ -1039,7 +1039,7 @@
     <string name="compass_default_0">0</string>
     <string name="unknown">Unknown</string>
     <string name="rateapp">Rate App</string>
-   
+
     <string name="sound_meter">Sound Meter</string>
     <string name="sound_meter_desc">To measure the loudness in the environment in decibel(dB)</string>
     <string name="sound_meter_intro">Sound meter Introduction</string>
@@ -1060,4 +1060,96 @@
     <string name="auto_scale">Auto</string>
     <string name="control_stop">Stop</string>
     <string name="control_run">Run</string>
+
+    <string name="pin_esp_name" translatable="false">ESP</string>
+    <string name="pin_esp_description">ESP Programmer pin</string>
+    <string name="pin_rxd_name" translatable="false">RXD</string>
+    <string name="pin_rxd_description">Receiver pin for UART communication</string>
+    <string name="pin_txd_name" translatable="false">TXD</string>
+    <string name="pin_txd_description">Transmitter pin for UART communication</string>
+    <string name="pin_gnd_name" translatable="false">GND</string>
+    <string name="pin_gnd_description">Ground pin (0 V)</string>
+    <string name="pin_si1_name" translatable="false">SI1</string>
+    <string name="pin_si1_description">Wave generator pin 1</string>
+    <string name="pin_si2_name" translatable="false">SI2</string>
+    <string name="pin_si2_description">Wave generator pin 2</string>
+    <string name="pin_sq1_name" translatable="false">SQ1</string>
+    <string name="pin_sq1_description">PWM generator pin 1</string>
+    <string name="pin_sq2_name" translatable="false">SQ2</string>
+    <string name="pin_sq2_description">PWM generator pin 2</string>
+    <string name="pin_sq3_name" translatable="false">SQ3</string>
+    <string name="pin_sq3_description">PWM generator pin 3</string>
+    <string name="pin_sq4_name" translatable="false">SQ4</string>
+    <string name="pin_sq4_description">PWM generator pin 4</string>
+    <string name="pin_la1_name" translatable="false">LA1</string>
+    <string name="pin_la1_description">Logic analyzer pin 1</string>
+    <string name="pin_la2_name" translatable="false">LA2</string>
+    <string name="pin_la2_description">Logic analyzer pin 2</string>
+    <string name="pin_la3_name" translatable="false">LA3</string>
+    <string name="pin_la3_description">Logic analyzer pin 3</string>
+    <string name="pin_la4_name" translatable="false">LA4</string>
+    <string name="pin_la4_description">Logic analyzer pin 4</string>
+    <string name="pin_ac1_name" translatable="false">AC1</string>
+    <string name="pin_ac1_description">Alternative channel input</string>
+    <string name="pin_ch1_name" translatable="false">CH1</string>
+    <string name="pin_ch1_description">Oscilloscope channel input 1</string>
+    <string name="pin_ch2_name" translatable="false">CH2</string>
+    <string name="pin_ch2_description">Oscilloscope channel input 2</string>
+    <string name="pin_ch3_name" translatable="false">CH3</string>
+    <string name="pin_ch3_description">Oscilloscope channel input 3</string>
+    <string name="pin_chg_name" translatable="false">CHG</string>
+    <string name="pin_chg_description">Oscilloscope channel 3 gain set</string>
+    <string name="pin_mic_name" translatable="false">MIC</string>
+    <string name="pin_mic_description">External microphone input</string>
+    <string name="pin_frq_name" translatable="false">FRQ</string>
+    <string name="pin_frq_description">Frequency counter pin</string>
+    <string name="pin_cap_name" translatable="false">CAP</string>
+    <string name="pin_cap_description">Capacitance measurement pin</string>
+    <string name="pin_res_name" translatable="false">RES</string>
+    <string name="pin_res_description">Resistance measurement pin</string>
+    <string name="pin_vol_name" translatable="false">VOL</string>
+    <string name="pin_vol_description">Voltage measurement pin</string>
+    <string name="pin_pcs_name" translatable="false">PCS</string>
+    <string name="pin_pcs_description">Programmable current source (3.3 mA)</string>
+    <string name="pin_pv3_name" translatable="false">PV3</string>
+    <string name="pin_pv3_description">Programmable voltage source 3 (0-3.3 V)</string>
+    <string name="pin_pv2_name" translatable="false">PV2</string>
+    <string name="pin_pv2_description">Programmable voltage source 2 (-+3.3 V)</string>
+    <string name="pin_pv1_name" translatable="false">PV1</string>
+    <string name="pin_pv1_description">Programmable voltage source 1 (-+5.0 V)</string>
+    <string name="pin_scl_name" translatable="false">SCL</string>
+    <string name="pin_scl_description">Serial clock pin for I2C</string>
+    <string name="pin_sda_name" translatable="false">SDA</string>
+    <string name="pin_sda_description">Serial data pin for I2C</string>
+    <string name="pin_vdd_name" translatable="false">VDD</string>
+    <string name="pin_vdd_description">Voltage supply pin (3.3 V)</string>
+    <string name="pin_sta_name" translatable="false">STA</string>
+    <string name="pin_sta_description">Bluetooth device state output pin</string>
+    <string name="pin_vpl_name" translatable="false">V+"</string>
+    <string name="pin_vpl_description">Voltage test pin (+8.0 V)"</string>
+    <string name="pin_ena_name" translatable="false">ENA</string>
+    <string name="pin_ena_description">Bluetooth device enable/disable pin</string>
+    <string name="pin_vmi_name" translatable="false">V-"</string>
+    <string name="pin_vmi_description">Voltage test pin (-8.0 V)"</string>
+    <string name="pin_mcl_name" translatable="false">MCL</string>
+    <string name="pin_mcl_description">Master clear pin for programmer</string>
+    <string name="pin_pgm_name" translatable="false">PGM</string>
+    <string name="pin_pgm_description">Mode pin for programmer</string>
+    <string name="pin_pgc_name" translatable="false">PGC</string>
+    <string name="pin_pgc_description">Clock pin for programmer</string>
+    <string name="pin_pgd_name" translatable="false">PGD</string>
+    <string name="pin_pgd_description">Data pin for programmer</string>
+    <string name="pin_nrf_name" translatable="false">NRF</string>
+    <string name="pin_nrf_description">Radio communication module using nRF24</string>
+    <string name="pin_usb_name" translatable="false">USB</string>
+    <string name="pin_usb_description">Micro B type USB socket</string>
+    <string name="pin_vcc_name" translatable="false">VCC</string>
+    <string name="pin_vcc_description">Voltage supply pin (+5.0 V)</string>
+    <string name="pin_pl5_name" translatable="false">+5V</string>
+    <string name="pin_pl5_description">Test pin +5.0 V</string>
+    <string name="pin_dpl_name" translatable="false">D+"</string>
+    <string name="pin_dpl_description">Test pin for USB Data +"</string>
+    <string name="pin_dmi_name" translatable="false">D-"</string>
+    <string name="pin_dmi_description">Test pin for USB Data -"</string>
+
 </resources>
