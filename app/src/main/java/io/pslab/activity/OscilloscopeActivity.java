@@ -1230,7 +1230,11 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         yPadding = yRange * 0.1;
         if (maxPeriod > 0) {
             xAxisScale = Math.min((maxPeriod * 5), maxTimebase);
-            yAxisScale = maxY + yPadding;
+            if (Math.abs(maxY) >= Math.abs(minY)) {
+                yAxisScale = maxY + yPadding;
+            } else {
+                yAxisScale = -1 * (minY - yPadding);
+            }
             samples = 512;
             timeGap = (2 * xAxisScale * 1000.0) / samples;
         } else {
