@@ -33,13 +33,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textview_vertical_offset"
-        android:layout_width="0dp"
+        android:id="@+id/textview_vertical_offset_unit"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/osc_cb_margin"
+        android:text="@string/unit_volts"
         app:layout_constraintBottom_toBottomOf="@+id/spinner_channel_select_vertical_offset"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekbar_vertical_offset"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
@@ -51,13 +51,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textview_horizontal_offset"
-        android:layout_width="0dp"
+        android:id="@+id/textview_horizontal_offset_unit"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/osc_cb_margin"
+        android:text="@string/unit_milliseconds"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekbar_horizontal_offset"
         app:layout_constraintTop_toTopOf="@+id/spinner_channel_select_horizontal_offset" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -66,5 +66,33 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.8" />
+
+    <EditText
+        android:id="@+id/edittext_vertical_offset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:imeOptions="actionDone"
+        android:inputType="numberSigned|numberDecimal"
+        android:minWidth="@dimen/edittext_min_width"
+        android:textAlignment="viewEnd"
+        android:textAppearance="@android:style/TextAppearance.Material.Small"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_channel_select_vertical_offset"
+        app:layout_constraintEnd_toStartOf="@+id/textview_vertical_offset_unit"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edittext_horizontal_offset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:imeOptions="actionDone"
+        android:inputType="numberSigned|numberDecimal"
+        android:minWidth="@dimen/edittext_min_width"
+        android:textAlignment="viewEnd"
+        android:textAppearance="@android:style/TextAppearance.Material.Small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textview_horizontal_offset_unit"
+        app:layout_constraintTop_toTopOf="@+id/spinner_channel_select_horizontal_offset" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
