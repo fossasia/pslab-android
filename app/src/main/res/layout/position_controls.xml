@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:imeOptions="actionDone"
-        android:inputType="numberSigned|numberDecimal"
+        android:inputType="numberDecimal"
         android:minWidth="@dimen/edittext_min_width"
         android:textAlignment="viewEnd"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
