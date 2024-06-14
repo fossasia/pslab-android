@@ -1,19 +1,22 @@
 package io.pslab.fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
@@ -29,8 +32,9 @@ public class DataAnalysisFragment extends Fragment {
     private Spinner spinnerChannelSelectVerticalOffset;
     private FloatSeekBar seekBarHorizontalOffset;
     private FloatSeekBar seekBarVerticalOffset;
-    private TextView textViewHorizontalOffset;
-    private TextView textViewVerticalOffset;
+    private EditText editTextHorizontalOffset;
+    private EditText editTextVerticalOffset;
+    boolean _ignore = false;
 
     public static DataAnalysisFragment newInstance() {
         return new DataAnalysisFragment();
@@ -50,8 +54,8 @@ public class DataAnalysisFragment extends Fragment {
         spinnerChannelSelectVerticalOffset = v.findViewById(R.id.spinner_channel_select_vertical_offset);
         seekBarHorizontalOffset = v.findViewById(R.id.seekbar_horizontal_offset);
         seekBarVerticalOffset = v.findViewById(R.id.seekbar_vertical_offset);
-        textViewHorizontalOffset = v.findViewById(R.id.textview_horizontal_offset);
-        textViewVerticalOffset = v.findViewById(R.id.textview_vertical_offset);
+        editTextHorizontalOffset = v.findViewById(R.id.edittext_horizontal_offset);
+        editTextVerticalOffset = v.findViewById(R.id.edittext_vertical_offset);
         checkBoxFouierTransform = v.findViewById(R.id.checkBox_fourier_da);
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         ArrayAdapter<String> curveFitAdapter;
@@ -158,8 +162,10 @@ public class DataAnalysisFragment extends Fragment {
         seekBarHorizontalOffset.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                textViewHorizontalOffset.setText(String.format("%sms", seekBarHorizontalOffset.getValue()));
-                ((OscilloscopeActivity) getActivity()).xOffsets.put(spinnerChannelSelectHorizontalOffset.getSelectedItem().toString(), seekBarHorizontalOffset.getValue());
+                if (!_ignore) {
+                    editTextHorizontalOffset.setText(String.format("%s", seekBarHorizontalOffset.getValue()));
+                    ((OscilloscopeActivity) getActivity()).xOffsets.put(spinnerChannelSelectHorizontalOffset.getSelectedItem().toString(), seekBarHorizontalOffset.getValue());
+                }
             }
 
             @Override
@@ -172,14 +178,17 @@ public class DataAnalysisFragment extends Fragment {
                 // Do nothing
             }
         });
+        seekBarHorizontalOffset.setProgress(100);
         seekBarHorizontalOffset.setProgress(0);
 
         seekBarVerticalOffset.setters(-1 * ((OscilloscopeActivity) getActivity()).yAxisScale, ((OscilloscopeActivity) getActivity()).yAxisScale);
         seekBarVerticalOffset.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                textViewVerticalOffset.setText(String.format("%sV", seekBarVerticalOffset.getValue()));
-                ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
+                if (!_ignore) {
+                    editTextVerticalOffset.setText(String.format("%s", seekBarVerticalOffset.getValue()));
+                    ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
+                }
             }
 
             @Override
@@ -194,13 +203,87 @@ public class DataAnalysisFragment extends Fragment {
         });
         seekBarVerticalOffset.setProgress(50);
 
+        editTextHorizontalOffset.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextHorizontalOffset.setCursorVisible(true);
+                return false;
+            }
+        });
+
+        editTextHorizontalOffset.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    if (!editTextHorizontalOffset.getText().toString().isEmpty() && !editTextHorizontalOffset.getText().toString().equals("-") && !editTextHorizontalOffset.getText().toString().equals(".") && !editTextVerticalOffset.getText().toString().equals("-.")) {
+                        double xAxisScale = (((OscilloscopeActivity) getActivity()).xAxisScale == 875) ? ((OscilloscopeActivity) getActivity()).xAxisScale / 1000.0 : ((OscilloscopeActivity) getActivity()).xAxisScale;
+                        _ignore = true;
+                        if (Double.parseDouble(editTextHorizontalOffset.getText().toString()) > xAxisScale) {
+                            editTextHorizontalOffset.setText(String.format("%s", xAxisScale));
+                            seekBarHorizontalOffset.setValue(xAxisScale);
+                            ((OscilloscopeActivity) getActivity()).xOffsets.put(spinnerChannelSelectHorizontalOffset.getSelectedItem().toString(), seekBarHorizontalOffset.getValue());
+                            _ignore = false;
+                        } else {
+                            seekBarHorizontalOffset.setValue(Double.parseDouble(editTextHorizontalOffset.getText().toString()));
+                            editTextHorizontalOffset.setText(String.format("%s", Double.parseDouble(editTextHorizontalOffset.getText().toString())));
+                            ((OscilloscopeActivity) getActivity()).xOffsets.put(spinnerChannelSelectHorizontalOffset.getSelectedItem().toString(), seekBarHorizontalOffset.getValue());
+                            _ignore = false;
+                        }
+                    } else {
+                        seekBarHorizontalOffset.setProgress(0);
+                    }
+                }
+                editTextHorizontalOffset.setCursorVisible(false);
+                return false;
+            }
+        });
+
+        editTextVerticalOffset.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextVerticalOffset.setCursorVisible(true);
+                return false;
+            }
+        });
+
+        editTextVerticalOffset.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    if (!editTextVerticalOffset.getText().toString().isEmpty() && !editTextVerticalOffset.getText().toString().equals("-") && !editTextVerticalOffset.getText().toString().equals(".") && !editTextVerticalOffset.getText().toString().equals("-.")) {
+                        _ignore = true;
+                        if (Double.parseDouble(editTextVerticalOffset.getText().toString()) > ((OscilloscopeActivity) getActivity()).yAxisScale) {
+                            editTextVerticalOffset.setText(String.format("%s", ((OscilloscopeActivity) getActivity()).yAxisScale));
+                            seekBarVerticalOffset.setValue(((OscilloscopeActivity) getActivity()).yAxisScale);
+                            ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
+                            _ignore = false;
+                        } else if (Double.parseDouble(editTextVerticalOffset.getText().toString()) < -((OscilloscopeActivity) getActivity()).yAxisScale) {
+                            editTextVerticalOffset.setText(String.format("%s", -((OscilloscopeActivity) getActivity()).yAxisScale));
+                            seekBarVerticalOffset.setValue(-((OscilloscopeActivity) getActivity()).yAxisScale);
+                            ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
+                            _ignore = false;
+                        } else {
+                            seekBarVerticalOffset.setValue(Double.parseDouble(editTextVerticalOffset.getText().toString()));
+                            editTextVerticalOffset.setText(String.format("%s", Double.parseDouble(editTextVerticalOffset.getText().toString())));
+                            ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
+                            _ignore = false;
+                        }
+                    } else {
+                        seekBarVerticalOffset.setProgress(50);
+                    }
+                }
+                editTextVerticalOffset.setCursorVisible(false);
+
+                return false;
+            }
+        });
+
         checkBoxFouierTransform.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ((OscilloscopeActivity) getActivity()).isFourierTransformSelected = isChecked;
             }
         });
-
         return v;
     }
 }
