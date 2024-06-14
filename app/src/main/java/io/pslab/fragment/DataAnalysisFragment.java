@@ -216,11 +216,19 @@ public class DataAnalysisFragment extends Fragment {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE) {
                     if (!editTextHorizontalOffset.getText().toString().isEmpty() && !editTextHorizontalOffset.getText().toString().equals("-") && !editTextHorizontalOffset.getText().toString().equals(".") && !editTextVerticalOffset.getText().toString().equals("-.")) {
+                        double xAxisScale = (((OscilloscopeActivity) getActivity()).xAxisScale == 875) ? ((OscilloscopeActivity) getActivity()).xAxisScale / 1000.0 : ((OscilloscopeActivity) getActivity()).xAxisScale;
                         _ignore = true;
-                        seekBarHorizontalOffset.setValue(Double.parseDouble(editTextHorizontalOffset.getText().toString()));
-                        editTextHorizontalOffset.setText(String.format("%s", Double.parseDouble(editTextHorizontalOffset.getText().toString())));
-                        ((OscilloscopeActivity) getActivity()).xOffsets.put(spinnerChannelSelectHorizontalOffset.getSelectedItem().toString(), seekBarHorizontalOffset.getValue());
-                        _ignore = false;
+                        if (Double.parseDouble(editTextHorizontalOffset.getText().toString()) > xAxisScale) {
+                            editTextHorizontalOffset.setText(String.format("%s", xAxisScale));
+                            seekBarHorizontalOffset.setValue(xAxisScale);
+                            ((OscilloscopeActivity) getActivity()).xOffsets.put(spinnerChannelSelectHorizontalOffset.getSelectedItem().toString(), seekBarHorizontalOffset.getValue());
+                            _ignore = false;
+                        } else {
+                            seekBarHorizontalOffset.setValue(Double.parseDouble(editTextHorizontalOffset.getText().toString()));
+                            editTextHorizontalOffset.setText(String.format("%s", Double.parseDouble(editTextHorizontalOffset.getText().toString())));
+                            ((OscilloscopeActivity) getActivity()).xOffsets.put(spinnerChannelSelectHorizontalOffset.getSelectedItem().toString(), seekBarHorizontalOffset.getValue());
+                            _ignore = false;
+                        }
                     } else {
                         seekBarHorizontalOffset.setProgress(0);
                     }
@@ -244,10 +252,22 @@ public class DataAnalysisFragment extends Fragment {
                 if (i == EditorInfo.IME_ACTION_DONE) {
                     if (!editTextVerticalOffset.getText().toString().isEmpty() && !editTextVerticalOffset.getText().toString().equals("-") && !editTextVerticalOffset.getText().toString().equals(".") && !editTextVerticalOffset.getText().toString().equals("-.")) {
                         _ignore = true;
-                        seekBarVerticalOffset.setValue(Double.parseDouble(editTextVerticalOffset.getText().toString()));
-                        editTextVerticalOffset.setText(String.format("%s", Double.parseDouble(editTextVerticalOffset.getText().toString())));
-                        ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
-                        _ignore = false;
+                        if (Double.parseDouble(editTextVerticalOffset.getText().toString()) > ((OscilloscopeActivity) getActivity()).yAxisScale) {
+                            editTextVerticalOffset.setText(String.format("%s", ((OscilloscopeActivity) getActivity()).yAxisScale));
+                            seekBarVerticalOffset.setValue(((OscilloscopeActivity) getActivity()).yAxisScale);
+                            ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
+                            _ignore = false;
+                        } else if (Double.parseDouble(editTextVerticalOffset.getText().toString()) < -((OscilloscopeActivity) getActivity()).yAxisScale) {
+                            editTextVerticalOffset.setText(String.format("%s", -((OscilloscopeActivity) getActivity()).yAxisScale));
+                            seekBarVerticalOffset.setValue(-((OscilloscopeActivity) getActivity()).yAxisScale);
+                            ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
+                            _ignore = false;
+                        } else {
+                            seekBarVerticalOffset.setValue(Double.parseDouble(editTextVerticalOffset.getText().toString()));
+                            editTextVerticalOffset.setText(String.format("%s", Double.parseDouble(editTextVerticalOffset.getText().toString())));
+                            ((OscilloscopeActivity) getActivity()).yOffsets.put(spinnerChannelSelectVerticalOffset.getSelectedItem().toString(), seekBarVerticalOffset.getValue());
+                            _ignore = false;
+                        }
                     } else {
                         seekBarVerticalOffset.setProgress(50);
                     }
