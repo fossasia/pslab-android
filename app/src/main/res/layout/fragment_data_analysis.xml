@@ -3,9 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_custom_border"
     tools:context="io.pslab.fragment.DataAnalysisFragment">
 
+    <View
+        android:id="@+id/border_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_5dp"
+        android:background="@drawable/rounded_custom_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:includeFontPadding="false"
+        android:paddingLeft="@dimen/ctrl_title_text_padding"
+        android:paddingRight="@dimen/ctrl_title_text_padding"
+        android:text="@string/data_analysis"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_osc"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/spinner_curve_fit_da"
@@ -20,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/osc_spinner_height"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/border_view" />
 
     <Spinner
         android:id="@+id/spinner_channel_select_da2"
@@ -36,6 +62,6 @@
         android:layout_marginTop="@dimen/osc_cb_margin"
         android:text="@string/fourier_transforms"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/border_view" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

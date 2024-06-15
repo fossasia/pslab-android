@@ -3,14 +3,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_custom_border"
     tools:context="io.pslab.fragment.TimebaseTriggerFragment">
+
+    <View
+        android:id="@+id/border_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_5dp"
+        android:background="@drawable/rounded_custom_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:includeFontPadding="false"
+        android:paddingLeft="@dimen/ctrl_title_text_padding"
+        android:paddingRight="@dimen/ctrl_title_text_padding"
+        android:text="@string/timebase_trigger_title"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_osc"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="@dimen/timebase_margin_end"
-        android:layout_marginStart="@dimen/timebase_margin_start">
+        android:layout_alignTop="@id/border_view"
+        android:layout_marginStart="@dimen/timebase_margin_start"
+        android:layout_marginTop="@dimen/margin_5dp"
+        android:layout_marginEnd="@dimen/timebase_margin_end">
 
         <TableRow
             android:layout_width="match_parent"
@@ -44,13 +73,13 @@
                 android:id="@+id/seekBar_timebase_tt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/checkbox_trigger_tt"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/checkbox_trigger_tt"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="0dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
                 android:layout_weight="1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -73,20 +102,20 @@
                 android:id="@+id/checkbox_trigger_tt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/tv_timebase_label_tt"
                 android:layout_below="@+id/seekBar2"
+                android:layout_alignStart="@+id/tv_timebase_label_tt"
+                android:layout_alignLeft="@+id/tv_timebase_label_tt"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:paddingEnd="10dp"
                 android:paddingStart="0dp"
+                android:paddingLeft="0dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
                 android:text="@string/trigger"
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp"
                 android:textStyle="normal|bold"
                 app:layout_constraintTop_toBottomOf="@+id/seekBar_timebase_tt"
-                tools:layout_editor_absoluteX="318dp"
-                android:layout_alignLeft="@+id/tv_timebase_label_tt"
-                android:paddingRight="10dp"
-                android:paddingLeft="0dp" />
+                tools:layout_editor_absoluteX="318dp" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -107,9 +136,9 @@
                 android:id="@+id/seekBar_trigger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/checkbox_trigger_tt"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/checkbox_trigger_tt"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -120,9 +149,9 @@
                 android:id="@+id/tv_trigger_values_tt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
                 android:layout_gravity="center_vertical"
                 android:text="@string/text_view" />
         </TableRow>

@@ -3,8 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_custom_border"
     tools:context="io.pslab.fragment.ChannelParametersFragment">
+
+    <View
+        android:id="@+id/border_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_5dp"
+        android:background="@drawable/rounded_custom_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_text"
+        android:includeFontPadding="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/ctrl_title_text_padding"
+        android:paddingRight="@dimen/ctrl_title_text_padding"
+        android:text="@string/channels"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_osc"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/checkBox_ch1_cp"
@@ -15,7 +42,7 @@
         android:text="@string/ch1"
         android:textStyle="normal|bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/border_view" />
 
     <CheckBox
         android:id="@+id/checkBox_ch2_cp"
@@ -36,7 +63,7 @@
         android:layout_marginEnd="@dimen/osc_cb_margin"
         android:textStyle="normal|bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/border_view" />
 
     <TextView
         android:id="@+id/tv_range1_cp"
@@ -48,7 +75,7 @@
         android:text="@string/range"
         android:textColor="@color/cardview_dark_background"
         app:layout_constraintLeft_toRightOf="@+id/checkBox_ch1_cp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/border_view" />
 
     <TextView
         android:id="@+id/tv_range2_cp"
@@ -77,14 +104,14 @@
         android:layout_height="@dimen/osc_spinner_height"
         android:layout_marginStart="@dimen/osc_cb_margin"
         app:layout_constraintLeft_toRightOf="@+id/spinner_range_ch1_cp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/border_view" />
 
     <Spinner
         android:id="@+id/spinner_range_ch1_cp"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/osc_spinner_height"
         app:layout_constraintLeft_toRightOf="@+id/tv_range1_cp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/border_view"
         android:layout_marginStart="@dimen/osc_cb_margin" />
 
     <TextView
