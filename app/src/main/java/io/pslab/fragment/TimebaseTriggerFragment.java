@@ -22,6 +22,7 @@ import io.pslab.others.FloatSeekBar;
 public class TimebaseTriggerFragment extends Fragment {
 
     private Spinner spinnerTriggerChannelSelect;
+    private Spinner spinnerTriggerModeSelect;
     private FloatSeekBar seekBarTimebase;
     private FloatSeekBar seekBarTrigger;
     private TextView textViewTimeBase;
@@ -45,6 +46,7 @@ public class TimebaseTriggerFragment extends Fragment {
         textViewTimeBase = v.findViewById(R.id.tv_timebase_values_tt);
         textViewTrigger = v.findViewById(R.id.tv_trigger_values_tt);
         spinnerTriggerChannelSelect = v.findViewById(R.id.spinner_trigger_channel_tt);
+        spinnerTriggerModeSelect = v.findViewById(R.id.spinner_trigger_mode_tt);
         checkBoxTrigger = v.findViewById(R.id.checkbox_trigger_tt);
         seekBarTimebase.setSaveEnabled(false);
 
@@ -68,7 +70,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(0.875);
                             ((OscilloscopeActivity) getActivity()).timebase = 875;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 1:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 1f));
@@ -76,7 +78,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(1);
                             ((OscilloscopeActivity) getActivity()).timebase = 1000;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 2:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 2f));
@@ -84,7 +86,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(2);
                             ((OscilloscopeActivity) getActivity()).timebase = 2000;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 3:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 4f));
@@ -92,7 +94,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(4);
                             ((OscilloscopeActivity) getActivity()).timebase = 4000;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 4:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 8f));
@@ -100,7 +102,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(8);
                             ((OscilloscopeActivity) getActivity()).timebase = 8000;
                             ((OscilloscopeActivity) getActivity()).samples = 1024;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 5:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 25.60));
@@ -108,7 +110,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(25.60);
                             ((OscilloscopeActivity) getActivity()).timebase = 25600;
                             ((OscilloscopeActivity) getActivity()).samples = 1024;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 6:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 38.40));
@@ -116,7 +118,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(38.40);
                             ((OscilloscopeActivity) getActivity()).timebase = 38400;
                             ((OscilloscopeActivity) getActivity()).timebase = 1024;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         default:
                             break;
@@ -147,7 +149,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(0.875);
                             ((OscilloscopeActivity) getActivity()).timebase = 875;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 1:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 1f));
@@ -155,7 +157,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(1);
                             ((OscilloscopeActivity) getActivity()).timebase = 1000;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 2:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 2f));
@@ -163,7 +165,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(2);
                             ((OscilloscopeActivity) getActivity()).timebase = 2000;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 3:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 4f));
@@ -171,7 +173,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(4);
                             ((OscilloscopeActivity) getActivity()).timebase = 4000;
                             ((OscilloscopeActivity) getActivity()).samples = 512;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 4:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 8f));
@@ -179,7 +181,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(8);
                             ((OscilloscopeActivity) getActivity()).timebase = 8000;
                             ((OscilloscopeActivity) getActivity()).samples = 1024;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 5:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 25.60));
@@ -187,7 +189,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(25.60);
                             ((OscilloscopeActivity) getActivity()).timebase = 25600;
                             ((OscilloscopeActivity) getActivity()).samples = 1024;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 6:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 38.40));
@@ -195,7 +197,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(38.40);
                             ((OscilloscopeActivity) getActivity()).timebase = 38400;
                             ((OscilloscopeActivity) getActivity()).timebase = 1024;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 7:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 51.20));
@@ -203,7 +205,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(51.20);
                             ((OscilloscopeActivity) getActivity()).timebase = 51200;
                             ((OscilloscopeActivity) getActivity()).samples = 1024;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 8:
                             textViewTimeBase.setText(getString(R.string.timebase_milisec, 102.40));
@@ -211,7 +213,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(102.40);
                             ((OscilloscopeActivity) getActivity()).timebase = 102400;
                             ((OscilloscopeActivity) getActivity()).samples = 1024;
-                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase)/ ((OscilloscopeActivity) getActivity()).samples;
+                            ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         default:
                             break;
@@ -271,6 +273,43 @@ public class TimebaseTriggerFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        String[] modes = {"Rising Edge", "Falling Edge", "Dual Edge"};
+        ArrayAdapter<String> modesAdapter;
+        if (tabletSize) {
+            modesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner_tablet, modes);
+        } else {
+            modesAdapter = new ArrayAdapter<>(this.getActivity(), R.layout.custom_spinner, modes);
+        }
+
+        modesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+        spinnerTriggerModeSelect.setAdapter(modesAdapter);
+        spinnerTriggerModeSelect.setSelection(modesAdapter.getPosition("Rising Edge"), true);
+        ((OscilloscopeActivity) getActivity()).triggerMode = "RISING";
+        spinnerTriggerModeSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (spinnerTriggerModeSelect.getItemAtPosition(position).toString()) {
+                    case "Rising Edge":
+                        ((OscilloscopeActivity) getActivity()).triggerMode = "RISING";
+                        break;
+                    case "Falling Edge":
+                        ((OscilloscopeActivity) getActivity()).triggerMode = "FALLING";
+                        break;
+                    case "Dual Edge":
+                        ((OscilloscopeActivity) getActivity()).triggerMode = "DUAL";
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
             }
         });
 
