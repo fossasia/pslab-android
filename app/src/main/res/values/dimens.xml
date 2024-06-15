@@ -168,6 +168,7 @@
     <dimen name="osc_main_margin">5dp</dimen>
     <dimen name="osc_image_weight">2</dimen>
     <dimen name="osc_divider_line">2dp</dimen>
+    <dimen name="osc_spinner_margin">2dp</dimen>
     <dimen name="text_elevation">24dp</dimen>
     <dimen name="osc_play_button_height">50dp</dimen>
     <dimen name="osc_play_button_widht">50dp</dimen>

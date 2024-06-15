@@ -38,7 +38,7 @@
         android:layout_height="match_parent"
         android:layout_alignTop="@id/border_view"
         android:layout_marginStart="@dimen/timebase_margin_start"
-        android:layout_marginTop="@dimen/margin_5dp"
+        android:layout_marginTop="@dimen/osc_cb_margin"
         android:layout_marginEnd="@dimen/timebase_margin_end">
 
         <TableRow

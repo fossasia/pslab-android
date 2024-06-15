@@ -35,6 +35,7 @@
     <io.pslab.others.FloatSeekBar
         android:id="@+id/seekbar_vertical_offset"
         android:layout_width="@dimen/dimen_zero_dp"
+        android:layout_marginTop="@dimen/osc_spinner_margin"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/spinner_channel_select_vertical_offset"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -52,6 +53,7 @@
 
     <Spinner
         android:id="@+id/spinner_channel_select_vertical_offset"
+        android:layout_marginTop="@dimen/osc_spinner_margin"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/osc_spinner_height"
         android:layout_marginStart="@dimen/osc_cb_margin"
@@ -62,6 +64,7 @@
         android:id="@+id/textview_vertical_offset_unit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/osc_spinner_margin"
         android:layout_marginEnd="@dimen/osc_cb_margin"
         android:text="@string/unit_volts"
         app:layout_constraintBottom_toBottomOf="@+id/spinner_channel_select_vertical_offset"
@@ -97,6 +100,7 @@
         android:id="@+id/edittext_vertical_offset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/osc_spinner_margin"
         android:background="@null"
         android:cursorVisible="false"
         android:imeOptions="actionDone"
