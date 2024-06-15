@@ -1153,5 +1153,9 @@
     <string name="pin_dpl_description">Test pin for USB Data +"</string>
     <string name="pin_dmi_name" translatable="false">D-"</string>
     <string name="pin_dmi_description">Test pin for USB Data -"</string>
+    <string name="channels">Channels</string>
+    <string name="timebase_trigger_title">Timebase \u0026 Trigger</string>
+    <string name="title_offsets">Offsets</string>
+    <string name="title_xy_plot">XY Plot</string>
 
 </resources>
