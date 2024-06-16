@@ -2,18 +2,24 @@ package io.pslab.fragment;
 
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import org.apache.commons.lang3.math.NumberUtils;
 
 import io.pslab.R;
 import io.pslab.activity.OscilloscopeActivity;
@@ -26,8 +32,9 @@ public class TimebaseTriggerFragment extends Fragment {
     private FloatSeekBar seekBarTimebase;
     private FloatSeekBar seekBarTrigger;
     private TextView textViewTimeBase;
-    private TextView textViewTrigger;
+    private EditText editTextTrigger;
     private CheckBox checkBoxTrigger;
+    boolean _ignore = false;
 
 
     public static TimebaseTriggerFragment newInstance() {
@@ -44,7 +51,7 @@ public class TimebaseTriggerFragment extends Fragment {
         seekBarTimebase = v.findViewById(R.id.seekBar_timebase_tt);
         seekBarTrigger = v.findViewById(R.id.seekBar_trigger);
         textViewTimeBase = v.findViewById(R.id.tv_timebase_values_tt);
-        textViewTrigger = v.findViewById(R.id.tv_trigger_values_tt);
+        editTextTrigger = v.findViewById(R.id.tv_trigger_values_tt);
         spinnerTriggerChannelSelect = v.findViewById(R.id.spinner_trigger_channel_tt);
         spinnerTriggerModeSelect = v.findViewById(R.id.spinner_trigger_mode_tt);
         checkBoxTrigger = v.findViewById(R.id.checkbox_trigger_tt);
@@ -53,7 +60,7 @@ public class TimebaseTriggerFragment extends Fragment {
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
         if (tabletSize) {
-            textViewTrigger.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            editTextTrigger.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             textViewTimeBase.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         }
 
@@ -232,12 +239,14 @@ public class TimebaseTriggerFragment extends Fragment {
             });
             seekBarTimebase.setProgress(0);
         }
-        seekBarTrigger.setters(-16.5, 16.5);
+        seekBarTrigger.setters(-1 * ((OscilloscopeActivity) getActivity()).yAxisScale, ((OscilloscopeActivity) getActivity()).yAxisScale);
         seekBarTrigger.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textViewTrigger.setText(String.format("%s V", seekBarTrigger.getValue()));
-                ((OscilloscopeActivity) getActivity()).trigger = seekBarTrigger.getValue();
+                if (!_ignore) {
+                    editTextTrigger.setText(String.format("%s V", seekBarTrigger.getValue()));
+                    ((OscilloscopeActivity) getActivity()).trigger = seekBarTrigger.getValue();
+                }
             }
 
             @Override
@@ -310,6 +319,47 @@ public class TimebaseTriggerFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Do nothing
+            }
+        });
+
+        editTextTrigger.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextTrigger.setCursorVisible(true);
+                return false;
+            }
+        });
+
+        editTextTrigger.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    String voltageValue = editTextTrigger.getText().toString().replace("V", "");
+                    voltageValue = voltageValue.replace(" ", "");
+                    if (NumberUtils.isCreatable(voltageValue)) {
+                        _ignore = true;
+                        if (Double.parseDouble(voltageValue) > ((OscilloscopeActivity) getActivity()).yAxisScale) {
+                            editTextTrigger.setText(String.format("%s V", ((OscilloscopeActivity) getActivity()).yAxisScale));
+                            seekBarTrigger.setValue(((OscilloscopeActivity) getActivity()).yAxisScale);
+                            ((OscilloscopeActivity) getActivity()).trigger = seekBarTrigger.getValue();
+                            _ignore = false;
+                        } else if (Double.parseDouble(voltageValue) < -((OscilloscopeActivity) getActivity()).yAxisScale) {
+                            editTextTrigger.setText(String.format("%s V", -((OscilloscopeActivity) getActivity()).yAxisScale));
+                            seekBarTrigger.setValue(-((OscilloscopeActivity) getActivity()).yAxisScale);
+                            ((OscilloscopeActivity) getActivity()).trigger = seekBarTrigger.getValue();
+                            _ignore = false;
+                        } else {
+                            seekBarTrigger.setValue(Double.parseDouble(voltageValue));
+                            editTextTrigger.setText(String.format("%s V", Double.parseDouble(voltageValue)));
+                            ((OscilloscopeActivity) getActivity()).trigger = seekBarTrigger.getValue();
+                            _ignore = false;
+                        }
+                    } else {
+                        seekBarTrigger.setProgress(50);
+                    }
+                }
+                editTextTrigger.setCursorVisible(false);
+                return false;
             }
         });
 
