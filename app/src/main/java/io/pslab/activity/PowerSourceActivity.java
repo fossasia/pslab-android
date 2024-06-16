@@ -29,6 +29,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
@@ -190,17 +192,24 @@ public class PowerSourceActivity extends GuideActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     String voltageValue = displayPV1.getText().toString();
                     voltageValue = voltageValue.replace("V", "");
-                    float voltage = Float.parseFloat(voltageValue);
-                    if (voltage < -5.00f) {
-                        voltage = -5.00f;
+                    if (NumberUtils.isCreatable(voltageValue)) {
+                        float voltage = Float.parseFloat(voltageValue);
+                        if (voltage < -5.00f) {
+                            voltage = -5.00f;
+                            displayPV1.setText(voltage + " V");
+                        }
+                        if (voltage > 5.00f) {
+                            voltage = 5.00f;
+                            displayPV1.setText(voltage + " V");
+                        }
+                        controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
+                                5.00f, -5.00f));
+                    } else {
+                        float voltage = -5.00f;
                         displayPV1.setText(voltage + " V");
+                        controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
+                                5.00f, -5.00f));
                     }
-                    if (voltage > 5.00f) {
-                        voltage = 5.00f;
-                        displayPV1.setText(voltage + " V");
-                    }
-                    controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
-                            5.00f, -5.00f));
                 }
                 return false;
             }
@@ -212,17 +221,24 @@ public class PowerSourceActivity extends GuideActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     String voltageValue = displayPV2.getText().toString();
                     voltageValue = voltageValue.replace("V", "");
-                    float voltage = Float.parseFloat(voltageValue);
-                    if (voltage < -3.30f) {
-                        voltage = -3.30f;
+                    if (NumberUtils.isCreatable(voltageValue)) {
+                        float voltage = Float.parseFloat(voltageValue);
+                        if (voltage < -3.30f) {
+                            voltage = -3.30f;
+                            displayPV2.setText(voltage + " V");
+                        }
+                        if (voltage > 3.30f) {
+                            voltage = 3.30f;
+                            displayPV2.setText(voltage + " V");
+                        }
+                        controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
+                                3.30f, -3.30f));
+                    } else {
+                        float voltage = -3.30f;
                         displayPV2.setText(voltage + " V");
+                        controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
+                                3.30f, -3.30f));
                     }
-                    if (voltage > 3.30f) {
-                        voltage = 3.30f;
-                        displayPV2.setText(voltage + " V");
-                    }
-                    controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
-                            3.30f, -3.30f));
                 }
                 return false;
             }
@@ -234,17 +250,24 @@ public class PowerSourceActivity extends GuideActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     String voltageValue = displayPV3.getText().toString();
                     voltageValue = voltageValue.replace("V", "");
-                    float voltage = Float.parseFloat(voltageValue);
-                    if (voltage < 0.00f) {
-                        voltage = 0.00f;
+                    if (NumberUtils.isCreatable(voltageValue)) {
+                        float voltage = Float.parseFloat(voltageValue);
+                        if (voltage < 0.00f) {
+                            voltage = 0.00f;
+                            displayPV3.setText(voltage + " V");
+                        }
+                        if (voltage > 3.30f) {
+                            voltage = 3.30f;
+                            displayPV3.setText(voltage + " V");
+                        }
+                        controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
+                                3.30f, 0.00f));
+                    } else {
+                        float voltage = 0.00f;
                         displayPV3.setText(voltage + " V");
+                        controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
+                                3.30f, 0.00f));
                     }
-                    if (voltage > 3.30f) {
-                        voltage = 3.30f;
-                        displayPV3.setText(voltage + " V");
-                    }
-                    controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
-                            3.30f, 0.00f));
                 }
                 return false;
             }
@@ -256,17 +279,24 @@ public class PowerSourceActivity extends GuideActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     String currentValue = displayPCS.getText().toString();
                     currentValue = currentValue.replace("mA", "");
-                    float current = Float.parseFloat(currentValue);
-                    if (current < 0.00f) {
-                        current = 0.00f;
+                    if (NumberUtils.isCreatable(currentValue)) {
+                        float current = Float.parseFloat(currentValue);
+                        if (current < 0.00f) {
+                            current = 0.00f;
+                            displayPCS.setText(current + " mA");
+                        }
+                        if (current > 3.30f) {
+                            current = 3.30f;
+                            displayPCS.setText(current + " mA");
+                        }
+                        controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
+                                3.30f, 0.00f));
+                    } else {
+                        float current = 0.00f;
                         displayPCS.setText(current + " mA");
+                        controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
+                                3.30f, 0.00f));
                     }
-                    if (current > 3.30f) {
-                        current = 3.30f;
-                        displayPCS.setText(current + " mA");
-                    }
-                    controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
-                            3.30f, 0.00f));
                 }
                 return false;
             }
