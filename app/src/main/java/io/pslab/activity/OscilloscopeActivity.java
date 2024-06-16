@@ -122,6 +122,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     public static boolean isInBuiltMicSelected;
     public boolean isAudioInputSelected;
     public boolean isTriggerSelected;
+    public boolean isTriggered;
     public boolean isFourierTransformSelected;
     public boolean isXYPlotSelected;
     private boolean isDataAnalysisFragSelected;
@@ -130,6 +131,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     public boolean isCH1FrequencyRequired;
     public boolean isCH2FrequencyRequired;
     public String triggerChannel;
+    public String triggerMode;
     public String curveFittingChannel1;
     public String curveFittingChannel2;
     public String xyPlotXAxisChannel;
@@ -210,6 +212,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     private String[] dataParamsChannels;
 
     private enum CHANNEL {CH1, CH2, CH3, MIC}
+
+    private enum MODE {RISING, FALLING, DUAL}
 
     public OscilloscopeActivity() {
         super(R.layout.activity_oscilloscope);
@@ -975,20 +979,21 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
             try {
                 double[] xData;
                 double[] yData;
+                double xValue;
                 ArrayList<String[]> yDataString = new ArrayList<>();
                 String[] xDataString = null;
                 maxAmp = 0;
-                scienceLab.captureTraces(4, samples, timeGap, channel, isTriggerSelected, null);
+                scienceLab.captureTraces(4, samples, timeGap, channel, false, null);
                 Thread.sleep((long) (samples * timeGap * 1e-3));
                 for (int i = 0; i < noOfChannels; i++) {
                     entries.add(new ArrayList<>());
                     channel = channels[i];
+                    isTriggered = false;
                     HashMap<String, double[]> data;
-                    if (triggerChannel.equals(channel))
-                        scienceLab.configureTrigger(channelIndexMap.get(channel), channel, trigger, null, null);
                     data = scienceLab.fetchTrace(channelIndexMap.get(channel));
                     xData = data.get("x");
                     yData = data.get("y");
+                    xValue = xData[0];
                     int n = Math.min(xData.length, yData.length);
                     xDataString = new String[n];
                     yDataString.add(new String[n]);
@@ -1003,10 +1008,34 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                     double factor = samples * timeGap * 1e-3;
                     maxFreq = (n / 2 - 1) / factor;
                     double mA = 0;
+                    double prevY = yData[0];
+                    boolean increasing = false;
                     for (int j = 0; j < n; j++) {
+                        double currY = yData[j];
                         xData[j] = xData[j] / ((timebase == 875) ? 1 : 1000);
                         if (!isFourierTransformSelected) {
-                            entries.get(i).add(new Entry((float) xData[j], (float) yData[j]));
+                            if (isTriggerSelected && triggerChannel.equals(channel)) {
+                                if (currY > prevY) {
+                                    increasing = true;
+                                } else if (currY < prevY && increasing) {
+                                    increasing = false;
+                                }
+                                if (isTriggered) {
+                                    double k = xValue / ((timebase == 875) ? 1 : 1000);
+                                    entries.get(i).add(new Entry((float) k, (float) yData[j]));
+                                    xValue += timeGap;
+                                }
+                                if (Objects.equals(triggerMode, MODE.RISING.toString()) && prevY < trigger && currY >= trigger && increasing) {
+                                    isTriggered = true;
+                                } else if (Objects.equals(triggerMode, MODE.FALLING.toString()) && prevY > trigger && currY <= trigger && !increasing) {
+                                    isTriggered = true;
+                                } else if (Objects.equals(triggerMode, MODE.DUAL.toString()) && ((prevY < trigger && currY >= trigger && increasing) || (prevY > trigger && currY <= trigger && !increasing))) {
+                                    isTriggered = true;
+                                }
+                                prevY = currY;
+                            } else {
+                                entries.get(i).add(new Entry((float) xData[j], (float) yData[j]));
+                            }
                         } else {
                             if (j < n / 2) {
                                 float y = (float) fftOut[j].abs() / samples;
@@ -1071,6 +1100,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
 
                 if (isInBuiltMicSelected) {
                     noOfChannels++;
+                    isTriggered = false;
                     entries.add(new ArrayList<>());
                     if (audioJack == null) {
                         audioJack = new AudioJack("input");
@@ -1094,15 +1124,41 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                     if (xDataString == null) {
                         xDataString = new String[n];
                     }
+                    float prevY = (float) map(buffer[0], -32768, 32767, -3, 3);
+                    boolean increasing = false;
+                    double xDataPoint = 0;
                     for (int i = 0; i < n; i++) {
                         float j = (float) (((double) i / SAMPLING_RATE) * 1000000.0);
                         j = j / ((timebase == 875) ? 1 : 1000);
                         float audioValue = (float) map(buffer[i], -32768, 32767, -3, 3);
+                        float currY = audioValue;
                         if (!isFourierTransformSelected) {
                             if (noOfChannels == 1) {
                                 xDataString[i] = String.valueOf(j);
                             }
-                            entries.get(entries.size() - 1).add(new Entry(j, audioValue));
+                            if (isTriggerSelected && triggerChannel.equals(CHANNEL.MIC.toString())) {
+                                if (currY > prevY) {
+                                    increasing = true;
+                                } else if (currY < prevY) {
+                                    increasing = false;
+                                }
+                                if (Objects.equals(triggerMode, MODE.RISING.toString()) && prevY < trigger && currY >= trigger && increasing) {
+                                    isTriggered = true;
+                                } else if (Objects.equals(triggerMode, MODE.FALLING.toString()) && prevY > trigger && currY <= trigger && !increasing) {
+                                    isTriggered = true;
+                                } else if (Objects.equals(triggerMode, MODE.DUAL.toString()) && ((prevY < trigger && currY >= trigger && increasing) || (prevY > trigger && currY <= trigger && !increasing))) {
+                                    isTriggered = true;
+                                }
+                                if (isTriggered) {
+                                    float k = (float) ((xDataPoint / SAMPLING_RATE) * 1000000.0);
+                                    k = k / ((timebase == 875) ? 1 : 1000);
+                                    entries.get(entries.size() - 1).add(new Entry(k, audioValue));
+                                    xDataPoint++;
+                                }
+                                prevY = currY;
+                            } else {
+                                entries.get(entries.size() - 1).add(new Entry(j, audioValue));
+                            }
                         } else {
                             if (i < n / 2) {
                                 float y = (float) fftOut[i].abs() / samples;
