@@ -76,7 +76,6 @@ public class PowerSourceActivity extends GuideActivity {
     private static final String VOLTAGE_FORMAT = "%f V";
     private static final String CURRENT_FORMAT = "%f mA";
 
-
     private static final int CONTROLLER_MIN = 1;
     private static final int PV1_CONTROLLER_MAX = 1001;
     private static final int PV2_CONTROLLER_MAX = 661;
