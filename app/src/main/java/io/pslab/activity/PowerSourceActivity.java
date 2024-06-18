@@ -213,7 +213,7 @@ public class PowerSourceActivity extends GuideActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     final String voltageValue = remove(displayPV1.getText(), "V", "\\+").trim();
-                    final float voltage = PV1_VOLTAGE_RANGE.clamp(parseFloat(voltageValue, 0.0f));
+                    final float voltage = PV1_VOLTAGE_RANGE.clamp(parseFloat(voltageValue, PV1_VOLTAGE_RANGE.getLower()));
                     setText(displayPV1, VOLTAGE_FORMAT, voltage);
                     controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
                             PV1_VOLTAGE_RANGE.getUpper(), PV1_VOLTAGE_RANGE.getLower()));
@@ -227,7 +227,7 @@ public class PowerSourceActivity extends GuideActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     final String voltageValue = remove(displayPV2.getText(), "V", "\\+").trim();
-                    final float voltage = PV2_VOLTAGE_RANGE.clamp(parseFloat(voltageValue, 0.0f));
+                    final float voltage = PV2_VOLTAGE_RANGE.clamp(parseFloat(voltageValue, PV2_VOLTAGE_RANGE.getLower()));
                     setText(displayPV2, VOLTAGE_FORMAT, voltage);
                     controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
                             PV2_VOLTAGE_RANGE.getUpper(), PV2_VOLTAGE_RANGE.getLower()));
@@ -241,7 +241,7 @@ public class PowerSourceActivity extends GuideActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     final String voltageValue = remove(displayPV3.getText(), "V", "\\+").trim();
-                    final float voltage = PV3_VOLTAGE_RANGE.clamp(parseFloat(voltageValue, 0.0f));
+                    final float voltage = PV3_VOLTAGE_RANGE.clamp(parseFloat(voltageValue, PV3_VOLTAGE_RANGE.getLower()));
                     setText(displayPV3, VOLTAGE_FORMAT, voltage);
                     controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
                             PV3_VOLTAGE_RANGE.getUpper(), PV3_VOLTAGE_RANGE.getLower()));
@@ -255,7 +255,7 @@ public class PowerSourceActivity extends GuideActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     final String currentValue = remove(displayPCS.getText(), "mA", "\\+").trim();
-                    final float current = PCS_CURRENT_RANGE.clamp(parseFloat(currentValue, 0.0f));
+                    final float current = PCS_CURRENT_RANGE.clamp(parseFloat(currentValue, PCS_CURRENT_RANGE.getLower()));
                     setText(displayPV3, CURRENT_FORMAT, current);
                     controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
                             PCS_CURRENT_RANGE.getUpper(), PCS_CURRENT_RANGE.getLower()));
