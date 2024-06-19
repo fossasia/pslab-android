@@ -9,6 +9,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.util.Log;
+import android.util.Range;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +22,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -29,8 +33,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
@@ -56,6 +60,8 @@ import io.realm.RealmResults;
 
 public class PowerSourceActivity extends GuideActivity {
 
+    private final static String TAG = PowerSourceActivity.class.getSimpleName();
+
     public static final String POWER_PREFERENCES = "Power_Preferences";
     private static final CSVDataLine CSV_HEADER = new CSVDataLine()
             .add("Timestamp")
@@ -67,15 +73,31 @@ public class PowerSourceActivity extends GuideActivity {
             .add("Latitude")
             .add("Longitude");
 
-    private final int CONTROLLER_MIN = 1;
-    private final int PV1_CONTROLLER_MAX = 1001;
-    private final int PV2_CONTROLLER_MAX = 661;
-    private final int PV3_CONTROLLER_MAX = 331;
-    private final int PCS_CONTROLLER_MAX = 331;
+    private static final String VOLTAGE_FORMAT = "%f V";
+    private static final String CURRENT_FORMAT = "%f mA";
 
-    private final long LONG_CLICK_DELAY = 100;
-    private final String KEY_LOG = "has_log";
-    private final String DATA_BLOCK = "data_block";
+    private static final int CONTROLLER_MIN = 1;
+    private static final int PV1_CONTROLLER_MAX = 1001;
+    private static final int PV2_CONTROLLER_MAX = 661;
+    private static final int PV3_CONTROLLER_MAX = 331;
+    private static final int PCS_CONTROLLER_MAX = 331;
+
+    private static final Range<Float> PV1_VOLTAGE_RANGE = Range.create(-5.0f, 5.0f);
+    private static final Range<Float> PV2_VOLTAGE_RANGE = Range.create(-3.30f, 3.30f);
+    private static final Range<Float> PV3_VOLTAGE_RANGE = Range.create(0.0f, 3.30f);
+    private static final Range<Float> PCS_CURRENT_RANGE = Range.create(0.0f, 3.30f);
+
+    private final NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+
+    /**
+     * Step of one tap on an up or down button.
+     */
+    private static final float STEP = 0.01f;
+
+    private static final long LONG_CLICK_DELAY = 100;
+    private static final String KEY_LOG = "has_log";
+    private static final String DATA_BLOCK = "data_block";
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.power_card_pv1_controller)
@@ -190,26 +212,11 @@ public class PowerSourceActivity extends GuideActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String voltageValue = displayPV1.getText().toString();
-                    voltageValue = voltageValue.replace("V", "");
-                    if (NumberUtils.isCreatable(voltageValue)) {
-                        float voltage = Float.parseFloat(voltageValue);
-                        if (voltage < -5.00f) {
-                            voltage = -5.00f;
-                            displayPV1.setText(voltage + " V");
-                        }
-                        if (voltage > 5.00f) {
-                            voltage = 5.00f;
-                            displayPV1.setText(voltage + " V");
-                        }
-                        controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
-                                5.00f, -5.00f));
-                    } else {
-                        float voltage = -5.00f;
-                        displayPV1.setText(voltage + " V");
-                        controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
-                                5.00f, -5.00f));
-                    }
+                    final String voltageValue = remove(displayPV1.getText(), "V", "\\+").trim();
+                    final float voltage = PV1_VOLTAGE_RANGE.clamp(parseFloat(voltageValue, PV1_VOLTAGE_RANGE.getLower()));
+                    setText(displayPV1, VOLTAGE_FORMAT, voltage);
+                    controllerPV1.setProgress(mapPowerToProgress(voltage, PV1_CONTROLLER_MAX,
+                            PV1_VOLTAGE_RANGE.getUpper(), PV1_VOLTAGE_RANGE.getLower()));
                 }
                 return false;
             }
@@ -219,26 +226,11 @@ public class PowerSourceActivity extends GuideActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String voltageValue = displayPV2.getText().toString();
-                    voltageValue = voltageValue.replace("V", "");
-                    if (NumberUtils.isCreatable(voltageValue)) {
-                        float voltage = Float.parseFloat(voltageValue);
-                        if (voltage < -3.30f) {
-                            voltage = -3.30f;
-                            displayPV2.setText(voltage + " V");
-                        }
-                        if (voltage > 3.30f) {
-                            voltage = 3.30f;
-                            displayPV2.setText(voltage + " V");
-                        }
-                        controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
-                                3.30f, -3.30f));
-                    } else {
-                        float voltage = -3.30f;
-                        displayPV2.setText(voltage + " V");
-                        controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
-                                3.30f, -3.30f));
-                    }
+                    final String voltageValue = remove(displayPV2.getText(), "V", "\\+").trim();
+                    final float voltage = PV2_VOLTAGE_RANGE.clamp(parseFloat(voltageValue, PV2_VOLTAGE_RANGE.getLower()));
+                    setText(displayPV2, VOLTAGE_FORMAT, voltage);
+                    controllerPV2.setProgress(mapPowerToProgress(voltage, PV2_CONTROLLER_MAX,
+                            PV2_VOLTAGE_RANGE.getUpper(), PV2_VOLTAGE_RANGE.getLower()));
                 }
                 return false;
             }
@@ -248,26 +240,11 @@ public class PowerSourceActivity extends GuideActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String voltageValue = displayPV3.getText().toString();
-                    voltageValue = voltageValue.replace("V", "");
-                    if (NumberUtils.isCreatable(voltageValue)) {
-                        float voltage = Float.parseFloat(voltageValue);
-                        if (voltage < 0.00f) {
-                            voltage = 0.00f;
-                            displayPV3.setText(voltage + " V");
-                        }
-                        if (voltage > 3.30f) {
-                            voltage = 3.30f;
-                            displayPV3.setText(voltage + " V");
-                        }
-                        controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
-                                3.30f, 0.00f));
-                    } else {
-                        float voltage = 0.00f;
-                        displayPV3.setText(voltage + " V");
-                        controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
-                                3.30f, 0.00f));
-                    }
+                    final String voltageValue = remove(displayPV3.getText(), "V", "\\+").trim();
+                    final float voltage = PV3_VOLTAGE_RANGE.clamp(parseFloat(voltageValue, PV3_VOLTAGE_RANGE.getLower()));
+                    setText(displayPV3, VOLTAGE_FORMAT, voltage);
+                    controllerPV3.setProgress(mapPowerToProgress(voltage, PV3_CONTROLLER_MAX,
+                            PV3_VOLTAGE_RANGE.getUpper(), PV3_VOLTAGE_RANGE.getLower()));
                 }
                 return false;
             }
@@ -277,26 +254,11 @@ public class PowerSourceActivity extends GuideActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String currentValue = displayPCS.getText().toString();
-                    currentValue = currentValue.replace("mA", "");
-                    if (NumberUtils.isCreatable(currentValue)) {
-                        float current = Float.parseFloat(currentValue);
-                        if (current < 0.00f) {
-                            current = 0.00f;
-                            displayPCS.setText(current + " mA");
-                        }
-                        if (current > 3.30f) {
-                            current = 3.30f;
-                            displayPCS.setText(current + " mA");
-                        }
-                        controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
-                                3.30f, 0.00f));
-                    } else {
-                        float current = 0.00f;
-                        displayPCS.setText(current + " mA");
-                        controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
-                                3.30f, 0.00f));
-                    }
+                    final String currentValue = remove(displayPCS.getText(), "mA", "\\+").trim();
+                    final float current = PCS_CURRENT_RANGE.clamp(parseFloat(currentValue, PCS_CURRENT_RANGE.getLower()));
+                    setText(displayPV3, CURRENT_FORMAT, current);
+                    controllerPCS.setProgress(mapPowerToProgress(current, PCS_CONTROLLER_MAX,
+                            PCS_CURRENT_RANGE.getUpper(), PCS_CURRENT_RANGE.getLower()));
                 }
                 return false;
             }
@@ -318,13 +280,13 @@ public class PowerSourceActivity extends GuideActivity {
         monitorLongClicks(upPCS, downPCS);
 
         updateDisplay(displayPV1, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PV1),
-                PV1_CONTROLLER_MAX, 5.00f, -5.00f)), Pin.PV1);
+                PV1_CONTROLLER_MAX, PV1_VOLTAGE_RANGE.getUpper(), PV1_VOLTAGE_RANGE.getLower())), Pin.PV1);
         updateDisplay(displayPV2, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PV2),
-                PV2_CONTROLLER_MAX, 3.30f, -3.30f)), Pin.PV2);
+                PV2_CONTROLLER_MAX, PV2_VOLTAGE_RANGE.getUpper(), PV2_VOLTAGE_RANGE.getLower())), Pin.PV2);
         updateDisplay(displayPV3, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PV3),
-                PV3_CONTROLLER_MAX, 3.30f, 0.00f)), Pin.PV3);
+                PV3_CONTROLLER_MAX, PV3_VOLTAGE_RANGE.getUpper(), PV3_VOLTAGE_RANGE.getLower())), Pin.PV3);
         updateDisplay(displayPCS, limitDigits(mapProgressToPower(retrievePowerValues(Pin.PCS),
-                PCS_CONTROLLER_MAX, 3.30f, 0.00f)), Pin.PCS);
+                PCS_CONTROLLER_MAX, PCS_CURRENT_RANGE.getUpper(), PCS_CURRENT_RANGE.getLower())), Pin.PCS);
 
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(KEY_LOG)) {
             recordedPowerData = LocalDataLog.with()
@@ -336,6 +298,59 @@ public class PowerSourceActivity extends GuideActivity {
         if (getResources().getBoolean(R.bool.isTablet)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
+
+        if (!scienceLab.isConnected() && savedInstanceState != null) {
+            displayPV1.setText(savedInstanceState.getString("displayPV1"));
+            displayPV1.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            displayPV2.setText(savedInstanceState.getString("displayPV2"));
+            displayPV2.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            displayPV3.setText(savedInstanceState.getString("displayPV3"));
+            displayPV3.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            displayPCS.setText(savedInstanceState.getString("displayPCS"));
+            displayPCS.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        }
+    }
+
+    /**
+     * Parses text to produce a number respecting the current locale of the system.
+     *
+     * @param toBeParsed   text to be parsed
+     * @param defaultValue fallback value to be used if text cannot be parsed
+     * @return number parsed from text
+     */
+    private float parseFloat(@NonNull String toBeParsed, float defaultValue) {
+        float parsedValue = defaultValue;
+        try {
+            parsedValue = numberFormat.parse(toBeParsed).floatValue();
+        } catch (ParseException e) {
+            Log.e(TAG, "Unable to parse " + toBeParsed, e);
+        }
+
+        return parsedValue;
+    }
+
+    /**
+     * Turns a value into a String representation that respects the current locale of the device
+     * and sets it to a TextVew.
+     *
+     * @param textView UI element which will display the text
+     * @param format   formatted String which value will be inserted to
+     * @param value    the value to display
+     */
+    private static void setText(@NonNull TextView textView, @NonNull String format, float value) {
+        textView.setText(String.format(Locale.getDefault(), format, value));
+    }
+
+    private String remove(@NonNull Editable input, @NonNull String... toBeRemoved) {
+        return remove(input.toString(), toBeRemoved);
+    }
+
+    private String remove(@NonNull String input, @NonNull String... toBeRemoved) {
+        String output = input;
+        for (String s : toBeRemoved) {
+            output = output.replaceAll(s, "");
+        }
+        return output;
     }
 
     /**
@@ -484,6 +499,14 @@ public class PowerSourceActivity extends GuideActivity {
         return true;
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString("displayPV1", displayPV1.getText().toString());
+        outState.putString("displayPV2", displayPV2.getText().toString());
+        outState.putString("displayPV3", displayPV3.getText().toString());
+        outState.putString("displayPCS", displayPCS.getText().toString());
+        super.onSaveInstanceState(outState);
+    }
 
     /**
      * Initiates and sets up power knob controller
@@ -610,29 +633,29 @@ public class PowerSourceActivity extends GuideActivity {
     private void incrementValue(Pin pin) {
         switch (pin) {
             case PV1:
-                if (voltagePV1 < 5.00f) {
-                    voltagePV1 += 0.01f;
+                if (voltagePV1 < PV1_VOLTAGE_RANGE.getUpper()) {
+                    voltagePV1 += STEP;
                     updateDisplay(displayPV1, voltagePV1, Pin.PV1);
                     updateController(controllerPV1, Pin.PV1);
                 }
                 break;
             case PV2:
-                if (voltagePV2 < 3.30f) {
-                    voltagePV2 += 0.01f;
+                if (voltagePV2 < PV2_VOLTAGE_RANGE.getUpper()) {
+                    voltagePV2 += STEP;
                     updateDisplay(displayPV2, voltagePV2, Pin.PV2);
                     updateController(controllerPV2, Pin.PV2);
                 }
                 break;
             case PV3:
-                if (voltagePV3 < 3.30f) {
-                    voltagePV3 += 0.01f;
+                if (voltagePV3 < PV3_VOLTAGE_RANGE.getUpper()) {
+                    voltagePV3 += STEP;
                     updateDisplay(displayPV3, voltagePV3, Pin.PV3);
                     updateController(controllerPV3, Pin.PV3);
                 }
                 break;
             case PCS:
-                if (currentPCS < 3.30f) {
-                    currentPCS += 0.01f;
+                if (currentPCS < PCS_CURRENT_RANGE.getUpper()) {
+                    currentPCS += STEP;
                     updateDisplay(displayPCS, currentPCS, Pin.PCS);
                     updateController(controllerPCS, Pin.PCS);
                 }
@@ -650,29 +673,29 @@ public class PowerSourceActivity extends GuideActivity {
     private void decrementValue(Pin pin) {
         switch (pin) {
             case PV1:
-                if (voltagePV1 > -5.00f) {
-                    voltagePV1 -= 0.01f;
+                if (voltagePV1 > PV1_VOLTAGE_RANGE.getLower()) {
+                    voltagePV1 -= STEP;
                     updateDisplay(displayPV1, voltagePV1, Pin.PV1);
                     updateController(controllerPV1, Pin.PV1);
                 }
                 break;
             case PV2:
-                if (voltagePV2 > -3.30f) {
-                    voltagePV2 -= 0.01f;
+                if (voltagePV2 > PV2_VOLTAGE_RANGE.getLower()) {
+                    voltagePV2 -= STEP;
                     updateDisplay(displayPV2, voltagePV2, Pin.PV2);
                     updateController(controllerPV2, Pin.PV2);
                 }
                 break;
             case PV3:
-                if (voltagePV3 > 0.00f) {
-                    voltagePV3 -= 0.01f;
+                if (voltagePV3 > PV3_VOLTAGE_RANGE.getLower()) {
+                    voltagePV3 -= STEP;
                     updateDisplay(displayPV3, voltagePV3, Pin.PV3);
                     updateController(controllerPV3, Pin.PV3);
                 }
                 break;
             case PCS:
-                if (currentPCS > 0.00f) {
-                    currentPCS -= 0.01f;
+                if (currentPCS > PCS_CURRENT_RANGE.getLower()) {
+                    currentPCS -= STEP;
                     updateDisplay(displayPCS, currentPCS, Pin.PCS);
                     updateController(controllerPCS, Pin.PCS);
                 }
@@ -692,19 +715,19 @@ public class PowerSourceActivity extends GuideActivity {
         switch (pin) {
             case PV1:
                 controller.setProgress(mapPowerToProgress(voltagePV1, PV1_CONTROLLER_MAX,
-                        5.00f, -5.00f));
+                        PV1_VOLTAGE_RANGE.getUpper(), PV1_VOLTAGE_RANGE.getLower()));
                 break;
             case PV2:
                 controller.setProgress(mapPowerToProgress(voltagePV2, PV2_CONTROLLER_MAX,
-                        3.30f, -3.30f));
+                        PV2_VOLTAGE_RANGE.getUpper(), PV2_VOLTAGE_RANGE.getLower()));
                 break;
             case PV3:
                 controller.setProgress(mapPowerToProgress(voltagePV3, PV3_CONTROLLER_MAX,
-                        3.30f, 0.00f));
+                        PV3_VOLTAGE_RANGE.getUpper(), PV3_VOLTAGE_RANGE.getLower()));
                 break;
             case PCS:
                 controller.setProgress(mapPowerToProgress(currentPCS, PCS_CONTROLLER_MAX,
-                        3.30f, 0.00f));
+                        PCS_CURRENT_RANGE.getUpper(), PCS_CURRENT_RANGE.getLower()));
                 break;
             default:
                 break;
@@ -737,22 +760,22 @@ public class PowerSourceActivity extends GuideActivity {
         switch (pin) {
             case PV1:
                 voltagePV1 = limitDigits(mapProgressToPower(progress, PV1_CONTROLLER_MAX,
-                        5.00f, -5.00f));
+                        PV1_VOLTAGE_RANGE.getUpper(), PV1_VOLTAGE_RANGE.getLower()));
                 updateDisplay(displayPV1, voltagePV1, pin);
                 break;
             case PV2:
                 voltagePV2 = limitDigits(mapProgressToPower(progress, PV2_CONTROLLER_MAX,
-                        3.30f, -3.30f));
+                        PV2_VOLTAGE_RANGE.getUpper(), PV2_VOLTAGE_RANGE.getLower()));
                 updateDisplay(displayPV2, voltagePV2, pin);
                 break;
             case PV3:
                 voltagePV3 = limitDigits(mapProgressToPower(progress, PV3_CONTROLLER_MAX,
-                        3.30f, 0.00f));
+                        PV3_VOLTAGE_RANGE.getUpper(), PV3_VOLTAGE_RANGE.getLower()));
                 updateDisplay(displayPV3, voltagePV3, pin);
                 break;
             case PCS:
                 currentPCS = limitDigits(mapProgressToPower(progress, PCS_CONTROLLER_MAX,
-                        3.30f, 0.00f));
+                        PCS_CURRENT_RANGE.getUpper(), PCS_CURRENT_RANGE.getLower()));
                 updateDisplay(displayPCS, currentPCS, pin);
                 break;
             default:
@@ -954,14 +977,22 @@ public class PowerSourceActivity extends GuideActivity {
         voltagePV2 = data.getPv2();
         voltagePV3 = data.getPv3();
         currentPCS = data.getPcs();
-        controllerPV1.setProgress(mapPowerToProgress(voltagePV1, PV1_CONTROLLER_MAX, 5.00f, -5.00f));
-        setMappedPower(Pin.PV1, mapPowerToProgress(voltagePV1, PV1_CONTROLLER_MAX, 5.00f, -5.00f));
-        controllerPV2.setProgress(mapPowerToProgress(voltagePV2, PV2_CONTROLLER_MAX, 3.30f, -3.30f));
-        setMappedPower(Pin.PV2, mapPowerToProgress(voltagePV2, PV2_CONTROLLER_MAX, 3.30f, -3.30f));
-        controllerPV3.setProgress(mapPowerToProgress(voltagePV3, PV3_CONTROLLER_MAX, 3.30f, 0.00f));
-        setMappedPower(Pin.PV3, mapPowerToProgress(voltagePV3, PV3_CONTROLLER_MAX, 3.30f, 0.00f));
-        controllerPCS.setProgress(mapPowerToProgress(currentPCS, PCS_CONTROLLER_MAX, 3.30f, 0.00f));
-        setMappedPower(Pin.PCS, mapPowerToProgress(currentPCS, PCS_CONTROLLER_MAX, 3.30f, 0.00f));
+        controllerPV1.setProgress(mapPowerToProgress(voltagePV1, PV1_CONTROLLER_MAX,
+                PV1_VOLTAGE_RANGE.getUpper(), PV1_VOLTAGE_RANGE.getLower()));
+        setMappedPower(Pin.PV1, mapPowerToProgress(voltagePV1, PV1_CONTROLLER_MAX,
+                PV1_VOLTAGE_RANGE.getUpper(), PV1_VOLTAGE_RANGE.getLower()));
+        controllerPV2.setProgress(mapPowerToProgress(voltagePV2, PV2_CONTROLLER_MAX,
+                PV2_VOLTAGE_RANGE.getUpper(), PV2_VOLTAGE_RANGE.getLower()));
+        setMappedPower(Pin.PV2, mapPowerToProgress(voltagePV2, PV2_CONTROLLER_MAX,
+                PV2_VOLTAGE_RANGE.getUpper(), PV2_VOLTAGE_RANGE.getLower()));
+        controllerPV3.setProgress(mapPowerToProgress(voltagePV3, PV3_CONTROLLER_MAX,
+                PV3_VOLTAGE_RANGE.getUpper(), PV3_VOLTAGE_RANGE.getLower()));
+        setMappedPower(Pin.PV3, mapPowerToProgress(voltagePV3, PV3_CONTROLLER_MAX,
+                PV3_VOLTAGE_RANGE.getUpper(), PV3_VOLTAGE_RANGE.getLower()));
+        controllerPCS.setProgress(mapPowerToProgress(currentPCS, PCS_CONTROLLER_MAX,
+                PCS_CURRENT_RANGE.getUpper(), PCS_CURRENT_RANGE.getLower()));
+        setMappedPower(Pin.PCS, mapPowerToProgress(currentPCS, PCS_CONTROLLER_MAX,
+                PCS_CURRENT_RANGE.getUpper(), PCS_CURRENT_RANGE.getLower()));
         currentPosition++;
     }
 
