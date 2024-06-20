@@ -53,6 +53,8 @@ public class CommunicationHandler {
             driver = drivers.get(0);
             mUsbDevice = driver.getDevice();
         }
+        mReadBuffer = new byte[DEFAULT_READ_BUFFER_SIZE];
+        mWriteBuffer = new byte[DEFAULT_WRITE_BUFFER_SIZE];
     }
 
     public void open() throws IOException {
@@ -67,11 +69,7 @@ public class CommunicationHandler {
         port = driver.getPorts().get(0);
         port.open(mConnection);
         port.setParameters(1000000, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
-
-        mReadBuffer = new byte[DEFAULT_READ_BUFFER_SIZE];
-        mWriteBuffer = new byte[DEFAULT_WRITE_BUFFER_SIZE];
         clear();
-        //Thread.sleep(1000);
     }
 
     public boolean isDeviceFound() {
@@ -87,14 +85,11 @@ public class CommunicationHandler {
             return;
         }
         port.close();
-        mConnection.close();
         connected = false;
-        mConnection = null;
     }
 
     public int read(byte[] dest, int bytesToBeRead, int timeoutMillis) throws IOException {
         int numBytesRead = 0;
-        //synchronized (mReadBufferLock) {
         int readNow;
         Log.v(TAG, "TO read : " + bytesToBeRead);
         int bytesToBeReadTemp = bytesToBeRead;
@@ -104,22 +99,18 @@ public class CommunicationHandler {
                 Log.e(TAG, "Read Error: " + bytesToBeReadTemp);
                 return numBytesRead;
             } else {
-                //Log.v(TAG, "Read something" + mReadBuffer);
                 System.arraycopy(mReadBuffer, 0, dest, numBytesRead, readNow);
                 numBytesRead += readNow;
                 bytesToBeReadTemp -= readNow;
-                //Log.v(TAG, "READ : " + numBytesRead);
-                //Log.v(TAG, "REMAINING: " + bytesToBeRead);
             }
         }
-        //}
         Log.v("Bytes Read", "" + numBytesRead);
         return numBytesRead;
     }
 
     public void write(byte[] src, int timeoutMillis) throws IOException {
         int writeLength;
-        writeLength = mWriteBuffer.length;
+        writeLength = src.length;
         port.write(src, writeLength, timeoutMillis);
     }
 
