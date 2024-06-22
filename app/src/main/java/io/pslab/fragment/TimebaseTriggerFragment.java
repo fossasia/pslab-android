@@ -124,7 +124,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).xAxisScale = 38.40;
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(38.40);
                             ((OscilloscopeActivity) getActivity()).timebase = 38400;
-                            ((OscilloscopeActivity) getActivity()).timebase = 1024;
+                            ((OscilloscopeActivity) getActivity()).samples = 1024;
                             ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         default:
@@ -203,7 +203,7 @@ public class TimebaseTriggerFragment extends Fragment {
                             ((OscilloscopeActivity) getActivity()).xAxisScale = 38.40;
                             ((OscilloscopeActivity) getActivity()).setXAxisScale(38.40);
                             ((OscilloscopeActivity) getActivity()).timebase = 38400;
-                            ((OscilloscopeActivity) getActivity()).timebase = 1024;
+                            ((OscilloscopeActivity) getActivity()).samples = 1024;
                             ((OscilloscopeActivity) getActivity()).timeGap = (2 * ((OscilloscopeActivity) getActivity()).timebase) / ((OscilloscopeActivity) getActivity()).samples;
                             break;
                         case 7:

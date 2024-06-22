@@ -1156,6 +1156,7 @@
     <string name="channels">Channels</string>
     <string name="timebase_trigger_title">Timebase \u0026 Trigger</string>
     <string name="title_offsets">Offsets</string>
+    <string name="measurements">Automatic Measurements</string>
     <string name="title_xy_plot">XY Plot</string>
 
 </resources>

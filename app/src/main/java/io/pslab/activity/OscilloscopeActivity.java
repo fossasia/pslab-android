@@ -34,6 +34,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -61,6 +64,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.activity.guide.GuideActivity;
+import io.pslab.adapters.OscilloscopeMeasurementsAdapter;
 import io.pslab.communication.AnalyticsClass;
 import io.pslab.communication.ScienceLab;
 import io.pslab.fragment.ChannelParametersFragment;
@@ -76,6 +80,7 @@ import io.pslab.others.CSVLogger;
 import io.pslab.others.CustomSnackBar;
 import io.pslab.others.GPSLogger;
 import io.pslab.others.LocalDataLog;
+import io.pslab.others.OscilloscopeMeasurements;
 import io.pslab.others.Plot2D;
 import io.pslab.others.ScienceLabCommon;
 import io.realm.Realm;
@@ -164,6 +169,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     TextView xyPlotTextView;
     @BindView(R.id.parent_layout)
     View parentLayout;
+    @BindView(R.id.recyclerView)
+    RecyclerView measurementsList;
     private Fragment channelParametersFragment;
     private Fragment timebaseTriggerFragment;
     private Fragment dataAnalysisFragment;
@@ -184,6 +191,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     private double maxAmp, maxFreq;
     private boolean isRecording = false;
     private boolean isRunning = true;
+    private boolean isMeasurementsChecked = false;
     private Realm realm;
     public RealmResults<OscilloscopeData> recordedOscilloscopeData;
     private CSVLogger csvLogger;
@@ -201,7 +209,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     private double lon;
     public boolean isPlaybackFourierChecked = false;
     private HashMap<String, Integer> channelIndexMap;
-    private final Integer[] channelColors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.MAGENTA};
+    public static final Integer[] channelColors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.MAGENTA};
     private final String[] loggingYdata = new String[4];
     public String xyPlotAxis1 = "CH1";
     public String xyPlotAxis2 = "CH2";
@@ -211,9 +219,11 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     private ArrayList<ArrayList<Entry>> dataEntries = new ArrayList<>();
     private String[] dataParamsChannels;
 
-    private enum CHANNEL {CH1, CH2, CH3, MIC}
+    public enum CHANNEL {CH1, CH2, CH3, MIC}
 
     private enum MODE {RISING, FALLING, DUAL}
+
+    public enum ChannelMeasurements {FREQUENCY, PERIOD, AMPLITUDE, POSITIVE_PEAK, NEGATIVE_PEAK}
 
     public OscilloscopeActivity() {
         super(R.layout.activity_oscilloscope);
@@ -324,6 +334,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         timebaseTiggerTextView.setOnClickListener(this);
         dataAnalysisTextView.setOnClickListener(this);
         xyPlotTextView.setOnClickListener(this);
+
+        measurementsList = findViewById(R.id.recyclerView);
 
         chartInit();
 
@@ -624,6 +636,16 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                     autoScale();
                 }
                 break;
+            case R.id.measurements:
+                if (!isMeasurementsChecked) {
+                    isMeasurementsChecked = true;
+                    item.setChecked(true);
+                    measurementsList.setVisibility(View.VISIBLE);
+                } else {
+                    isMeasurementsChecked = false;
+                    item.setChecked(false);
+                    measurementsList.setVisibility(View.INVISIBLE);
+                }
             default:
                 break;
         }
@@ -1214,6 +1236,43 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                     }
                 }
             }
+
+            if (!isFourierTransformSelected) {
+                for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {
+                    CHANNEL channel = CHANNEL.valueOf(paramsChannels[i]);
+                    double minY = Double.MAX_VALUE;
+                    double maxY = -1 * Double.MIN_VALUE;
+                    double yRange;
+                    double[] voltage = new double[512];
+                    ArrayList<Entry> entryArrayList = dataEntries.get(i);
+                    for (int j = 0; j < entryArrayList.size(); j++) {
+                        Entry entry = entryArrayList.get(j);
+                        if (j < voltage.length - 1) {
+                            voltage[j] = entry.getY();
+                        }
+                        if (entry.getY() > maxY) {
+                            maxY = entry.getY();
+                        }
+                        if (entry.getY() < minY) {
+                            minY = entry.getY();
+                        }
+                    }
+                    final double frequency;
+                    if (Objects.equals(dataParamsChannels[i], CHANNEL.MIC.toString())) {
+                        frequency = analyticsClass.findFrequency(voltage, ((double) 1 / SAMPLING_RATE));
+                    } else {
+                        frequency = analyticsClass.findFrequency(voltage, timeGap / 1000000.0);
+                    }
+                    double period = (1 / frequency) * 1000.0;
+                    yRange = maxY - minY;
+                    OscilloscopeMeasurements.channel.get(channel).put(ChannelMeasurements.FREQUENCY, frequency);
+                    OscilloscopeMeasurements.channel.get(channel).put(ChannelMeasurements.PERIOD, period);
+                    OscilloscopeMeasurements.channel.get(channel).put(ChannelMeasurements.AMPLITUDE, yRange);
+                    OscilloscopeMeasurements.channel.get(channel).put(ChannelMeasurements.POSITIVE_PEAK, maxY);
+                    OscilloscopeMeasurements.channel.get(channel).put(ChannelMeasurements.NEGATIVE_PEAK, minY);
+                }
+            }
+
             for (int i = 0; i < Math.min(entries.size(), paramsChannels.length); i++) {
                 LineDataSet dataSet;
                 dataSet = new LineDataSet(entries.get(i), paramsChannels[i]);
@@ -1238,6 +1297,13 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 setXAxisScale(xAxisScale);
                 setLeftYAxisScale(yAxisScale, -1 * yAxisScale);
                 setRightYAxisScale(yAxisScale, -1 * yAxisScale);
+            }
+            if (isMeasurementsChecked) {
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(OscilloscopeActivity.this);
+                measurementsList.setItemAnimator(new DefaultItemAnimator());
+                measurementsList.setLayoutManager(layoutManager);
+                OscilloscopeMeasurementsAdapter adapter = new OscilloscopeMeasurementsAdapter(dataParamsChannels, channelColors);
+                measurementsList.setAdapter(adapter);
             }
             mChart.setData(data);
             mChart.notifyDataSetChanged();
@@ -1272,9 +1338,9 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 }
                 final double frequency;
                 if (Objects.equals(dataParamsChannels[i], CHANNEL.MIC.toString())) {
-                    frequency = analyticsClass.findFrequency(voltage, ((double) 1 / SAMPLING_RATE));
+                    frequency = analyticsClass.findSignalFrequency(voltage, ((double) 1 / SAMPLING_RATE));
                 } else {
-                    frequency = analyticsClass.findFrequency(voltage, timeGap / 1000000.0);
+                    frequency = analyticsClass.findSignalFrequency(voltage, timeGap / 1000000.0);
                 }
                 double period = (1 / frequency) * 1000.0;
                 if (period > maxPeriod) {

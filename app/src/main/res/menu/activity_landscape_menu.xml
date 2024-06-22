@@ -30,4 +30,11 @@
         android:icon="@drawable/menu_icon_guide"
         android:title="@string/show_guide"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/measurements"
+        android:checkable="true"
+        android:title="@string/measurements"
+        app:actionViewClass="android.widget.CheckBox"
+        app:showAsAction="never" />
+
 </menu>

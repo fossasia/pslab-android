@@ -138,7 +138,7 @@
     <dimen name="multimeter_length_0">0dp</dimen>
     <dimen name="multimeter_knob_width_xhdpi">192dp</dimen>
     <dimen name="multimeter_knob_height_xhdpi">190dp</dimen>
-    
+
     <dimen name="multimeter_knobcircle_radius_1_xl_tablet">173dp</dimen>
     <dimen name="multimeter_knobcircle_radius_2_xl_tablet">167dp</dimen>
     <dimen name="multimeter_knobcircle_radius_3_xl_tablet">176dp</dimen>
@@ -176,6 +176,10 @@
     <dimen name="osc_spinner_margin_bottom">13dp</dimen>
     <dimen name="osc_text_size_large">18sp</dimen>
     <dimen name="osc_spinner_padding">2dp</dimen>
+    <dimen name="osc_recyclerview_padding">4dp</dimen>
+    <dimen name="measurements_card_radius">4dp</dimen>
+    <dimen name="measurements_card_elevation">8dp</dimen>
+    <dimen name="measurements_card_padding">4dp</dimen>
 
     <dimen name="modified_spinner_height">40dp</dimen>
     <dimen name="spinner_text_size">15sp</dimen>
