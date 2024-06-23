@@ -307,7 +307,7 @@ public class AnalyticsClass {
         return new double[]{returnAmplitude, returnFrequency, returnPhase, returnDC, returnOffset};
     }
 
-    public double findFrequency(double[] voltage, double samplingInterval) {
+    public double findSignalFrequency(double[] voltage, double samplingInterval) {
         int voltageLength = voltage.length;
         double[] frequency;
         double[] amplitude;
@@ -337,6 +337,33 @@ public class AnalyticsClass {
         } else {
             return -1;
         }
+    }
+
+    public double findFrequency(double[] voltage, double samplingInterval) {
+        int voltageLength = voltage.length;
+        double[] frequency;
+        double[] amplitude;
+        int index = 0;
+        double max = 0;
+        Complex[] complex;
+        DescriptiveStatistics stats = new DescriptiveStatistics();
+        for (int i = 0; i < voltageLength; i++)
+            stats.addValue(voltage[i]);
+        double voltageMean = stats.getMean();
+        for (int i = 0; i < voltageLength; i++)
+            voltage[i] = voltage[i] - voltageMean;                                                                  // remove DC component
+        frequency = Arrays.copyOfRange(fftFrequency(voltageLength, samplingInterval), 0, voltageLength / 2);        // take only the +ive half of the frequncy array
+        FastFourierTransformer fastFourierTransformer = new FastFourierTransformer(DftNormalization.STANDARD);
+        complex = fastFourierTransformer.transform(voltage, TransformType.FORWARD);
+        amplitude = new double[complex.length / 2];
+        for (int i = 0; i < complex.length / 2; i++) {                                                                 // take only the +ive half of the fft result
+            amplitude[i] = complex[i].abs() / voltageLength;
+            if (amplitude[i] > max) {                                                                                // search for the tallest peak, the fundamental
+                max = amplitude[i];
+                index = i;
+            }
+        }
+        return frequency[index];
     }
 
     public ArrayList<double[]> amplitudeSpectrum(double[] voltage, int samplingInterval, int nHarmonics) {

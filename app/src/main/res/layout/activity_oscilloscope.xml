@@ -316,6 +316,15 @@
                 android:layout_marginBottom="@dimen/osc_main_margin"
                 android:layout_toStartOf="@+id/layout_dock_os1" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/layout_chart_os"
+                android:layout_alignEnd="@id/layout_chart_os"
+                android:layout_marginEnd="@dimen/osc_recyclerview_padding"
+                android:background="@color/black" />
+
         </RelativeLayout>
 
         <View
