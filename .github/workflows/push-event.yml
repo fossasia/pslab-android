@@ -28,6 +28,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Setup Ruby
+        if: ${{ github.repository == 'fossasia/pslab-android' }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Prepare Bundler
+        if: ${{ github.repository == 'fossasia/pslab-android' }}
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -132,6 +145,14 @@ jobs:
           git branch -D apk
           git branch -m apk
           git push --force origin apk
+
+      - name: Update app in Open Testing track
+        if: ${{ github.repository == 'fossasia/pslab-android' }}
+        run: |
+          bundle exec fastlane uploadToOpenTesting
+          if [[ $? -ne 0 ]]; then
+              exit 1
+          fi
 
       - name: Run Release Drafter
         uses: release-drafter/release-drafter@v6
