@@ -1,68 +1,57 @@
 package io.pslab.communication;
 
-import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
-import android.hardware.usb.UsbEndpoint;
-import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
-import android.os.Build;
-import android.os.SystemClock;
 import android.util.Log;
 
+import com.hoho.android.usbserial.driver.CdcAcmSerialDriver;
+import com.hoho.android.usbserial.driver.Cp21xxSerialDriver;
+import com.hoho.android.usbserial.driver.ProbeTable;
+import com.hoho.android.usbserial.driver.UsbSerialDriver;
+import com.hoho.android.usbserial.driver.UsbSerialPort;
+import com.hoho.android.usbserial.driver.UsbSerialProber;
+
 import java.io.IOException;
+import java.util.List;
 
 public class CommunicationHandler {
-
     private final String TAG = this.getClass().getSimpleName();
-    private static final int PSLAB_VENDOR_ID = 1240;
-    private static final int PSLAB_PRODUCT_ID = 223;
-
-    private UsbInterface mControlInterface;
-    private UsbInterface mDataInterface;
-
-    private UsbEndpoint mControlEndpoint;
-    private UsbEndpoint mReadEndpoint;
-    private UsbEndpoint mWriteEndpoint;
-
-    private boolean mRts = false;
-    private boolean mDtr = false;
+    private static final int PSLAB_VENDOR_ID_V5 = 1240;
+    private static final int PSLAB_PRODUCT_ID_V5 = 223;
+    private static final int PSLAB_VENDOR_ID_V6 = 0x10C4;
+    private static final int PSLAB_PRODUCT_ID_V6 = 0xEA60;
     private boolean connected = false, device_found = false;
-
-    private static final int USB_RECIP_INTERFACE = 0x01;
-    private static final int USB_RT_ACM = UsbConstants.USB_TYPE_CLASS | USB_RECIP_INTERFACE;
-
-    private static final int SET_LINE_CODING = 0x20;  // USB CDC 1.1 section 6.2
-    private static final int GET_LINE_CODING = 0x21;
-    private static final int SET_CONTROL_LINE_STATE = 0x22;
-    private static final int SEND_BREAK = 0x23;
+    private UsbManager mUsbManager;
+    private UsbDeviceConnection mConnection;
+    private UsbSerialDriver driver;
+    private UsbSerialPort port;
+    public UsbDevice mUsbDevice;
+    List<UsbSerialDriver> drivers;
 
     private static final int DEFAULT_READ_BUFFER_SIZE = 32 * 1024;
     private static final int DEFAULT_WRITE_BUFFER_SIZE = 32 * 1024;
 
-    public UsbDevice mUsbDevice = null;
-
-    protected final Object mReadBufferLock = new Object();
-    protected final Object mWriteBufferLock = new Object();
-
     private byte[] mReadBuffer;
     private byte[] mWriteBuffer;
-
-    private UsbDeviceConnection mConnection;
-
-    private UsbManager mUsbManager;
 
     public CommunicationHandler(UsbManager usbManager) {
         this.mUsbManager = usbManager;
         mUsbDevice = null;
-        for (final UsbDevice device : mUsbManager.getDeviceList().values()) {
-            Log.d(TAG, "VID : " + device.getVendorId() + "PID : " + device.getProductId());
-            if (device.getVendorId() == PSLAB_VENDOR_ID && device.getProductId() == PSLAB_PRODUCT_ID) {
-                Log.d(TAG, "Found PSLAB Device");
-                mUsbDevice = device;
-                device_found = true;
-                break;
-            }
+        ProbeTable customTable = new ProbeTable();
+        customTable.addProduct(PSLAB_VENDOR_ID_V5, PSLAB_PRODUCT_ID_V5, CdcAcmSerialDriver.class);
+        customTable.addProduct(PSLAB_VENDOR_ID_V6, PSLAB_PRODUCT_ID_V6, Cp21xxSerialDriver.class);
+
+        UsbSerialProber prober = new UsbSerialProber(customTable);
+        drivers = prober.findAllDrivers(usbManager);
+
+        if (drivers.isEmpty()) {
+            Log.d(TAG, "No drivers found");
+        } else {
+            Log.d(TAG, "Found PSLab device");
+            device_found = true;
+            driver = drivers.get(0);
+            mUsbDevice = driver.getDevice();
         }
         mReadBuffer = new byte[DEFAULT_READ_BUFFER_SIZE];
         mWriteBuffer = new byte[DEFAULT_WRITE_BUFFER_SIZE];
@@ -73,33 +62,13 @@ public class CommunicationHandler {
             throw new IOException("Device not Connected");
         }
         mConnection = mUsbManager.openDevice(mUsbDevice);
-        Log.d(TAG, "Claiming interfaces, count=" + mUsbDevice.getInterfaceCount());
-        mConnection.controlTransfer(0x21, 0x22, 0x1, 0, null, 0, 0);
-
-        mControlInterface = mUsbDevice.getInterface(0);
-        Log.d(TAG, "Control interface=" + mControlInterface);
-
-        if (!mConnection.claimInterface(mControlInterface, true)) {
-            throw new IOException("Could not claim control interface.");
+        if (mConnection == null) {
+            throw new IOException("Could not open device.");
         }
-
-        mControlEndpoint = mControlInterface.getEndpoint(0);
-        Log.d(TAG, "Control endpoint direction: " + mControlEndpoint.getDirection());
-
-        Log.d(TAG, "Claiming data interface.");
-        mDataInterface = mUsbDevice.getInterface(1);
-        Log.d(TAG, "data interface=" + mDataInterface);
-
-        if (!mConnection.claimInterface(mDataInterface, true)) {
-            throw new IOException("Could not claim data interface.");
-        }
-        mReadEndpoint = mDataInterface.getEndpoint(1);
-        Log.d(TAG, "Read endpoint direction: " + mReadEndpoint.getDirection());
-        mWriteEndpoint = mDataInterface.getEndpoint(0);
-        Log.d(TAG, "Write endpoint direction: " + mWriteEndpoint.getDirection());
         connected = true;
-        setBaudRate(1000000);
-        //Thread.sleep(1000);
+        port = driver.getPorts().get(0);
+        port.open(mConnection);
+        port.setParameters(1000000, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
         clear();
     }
 
@@ -115,113 +84,60 @@ public class CommunicationHandler {
         if (mConnection == null) {
             return;
         }
-        mConnection.releaseInterface(mDataInterface);
-        mConnection.releaseInterface(mControlInterface);
-        mConnection.close();
+        port.close();
         connected = false;
-        mConnection = null;
     }
 
     public int read(byte[] dest, int bytesToBeRead, int timeoutMillis) throws IOException {
+        if (mUsbDevice.getProductId() == PSLAB_PRODUCT_ID_V5 && mUsbDevice.getVendorId() == PSLAB_VENDOR_ID_V5) {
+            return readCdcAcm(dest, bytesToBeRead, timeoutMillis);
+        }
         int numBytesRead = 0;
-        //synchronized (mReadBufferLock) {
         int readNow;
         Log.v(TAG, "TO read : " + bytesToBeRead);
         int bytesToBeReadTemp = bytesToBeRead;
         while (numBytesRead < bytesToBeRead) {
-            readNow = mConnection.bulkTransfer(mReadEndpoint, mReadBuffer, bytesToBeReadTemp, timeoutMillis);
-            if (readNow < 0) {
+            readNow = port.read(mReadBuffer, bytesToBeReadTemp, timeoutMillis);
+            if (readNow == 0) {
                 Log.e(TAG, "Read Error: " + bytesToBeReadTemp);
                 return numBytesRead;
             } else {
-                //Log.v(TAG, "Read something" + mReadBuffer);
                 System.arraycopy(mReadBuffer, 0, dest, numBytesRead, readNow);
                 numBytesRead += readNow;
                 bytesToBeReadTemp -= readNow;
-                //Log.v(TAG, "READ : " + numBytesRead);
-                //Log.v(TAG, "REMAINING: " + bytesToBeRead);
             }
         }
-        //}
         Log.v("Bytes Read", "" + numBytesRead);
         return numBytesRead;
     }
 
-    public int write(byte[] src, int timeoutMillis) throws IOException {
-        if (Build.VERSION.SDK_INT < 18) {
-            return writeSupportAPI(src, timeoutMillis);
-        }
-        int written = 0;
-        while (written < src.length) {
-            int writeLength, amtWritten;
-            //synchronized (mWriteBufferLock) {
-            writeLength = Math.min(mWriteBuffer.length, src.length - written);
-            // bulk transfer supports offset from API 18
-            amtWritten = mConnection.bulkTransfer(mWriteEndpoint, src, written, writeLength, timeoutMillis);
-            //}
-            if (amtWritten < 0) {
-                throw new IOException("Error writing " + writeLength
-                        + " bytes at offset " + written + " length=" + src.length);
-            }
-            written += amtWritten;
-        }
-        return written;
-    }
-
-
-    // For supporting devices with API version < 18
-    private int writeSupportAPI(byte[] src, int timeoutMillis) throws IOException {
-        int written = 0;
-        while (written < src.length) {
-            final int writeLength;
-            final int amtWritten;
-            //synchronized (mWriteBufferLock) {
-            final byte[] writeBuffer;
-            writeLength = Math.min(src.length - written, mWriteBuffer.length);
-            if (written == 0) {
-                writeBuffer = src;
+    public int readCdcAcm(byte[] dest, int bytesToBeRead, int timeoutMillis) throws IOException {
+        int numBytesRead = 0;
+        int readNow;
+        Log.v(TAG, "TO read : " + bytesToBeRead);
+        int bytesToBeReadTemp = bytesToBeRead;
+        while (numBytesRead < bytesToBeRead) {
+            readNow = mConnection.bulkTransfer(mUsbDevice.getInterface(1).getEndpoint(1), mReadBuffer, bytesToBeReadTemp, timeoutMillis);
+            if (readNow < 0) {
+                Log.e(TAG, "Read Error: " + bytesToBeReadTemp);
+                return numBytesRead;
             } else {
-                // bulkTransfer does not support offsets for API level < 18, so make a copy.
-                System.arraycopy(src, written, mWriteBuffer, 0, writeLength);
-                writeBuffer = mWriteBuffer;
+                System.arraycopy(mReadBuffer, 0, dest, numBytesRead, readNow);
+                numBytesRead += readNow;
+                bytesToBeReadTemp -= readNow;
             }
-            amtWritten = mConnection.bulkTransfer(mWriteEndpoint, writeBuffer, writeLength, timeoutMillis);
-            //}
-            if (amtWritten <= 0) {
-                throw new IOException("Error writing " + writeLength
-                        + " bytes at offset " + written + " length=" + src.length);
-            }
-            written += amtWritten;
         }
-        return written;
+        Log.v("Bytes Read", "" + numBytesRead);
+        return numBytesRead;
     }
 
-
-    private void clear() {
-        mConnection.bulkTransfer(mReadEndpoint, mReadBuffer, 100, 50);
+    public void write(byte[] src, int timeoutMillis) throws IOException {
+        int writeLength;
+        writeLength = src.length;
+        port.write(src, writeLength, timeoutMillis);
     }
 
-    private void setBaudRate(int baudRate) {
-        byte[] msg = {
-                (byte) (baudRate & 0xff),
-                (byte) ((baudRate >> 8) & 0xff),
-                (byte) ((baudRate >> 16) & 0xff),
-                (byte) ((baudRate >> 24) & 0xff),
-                (byte) 0,
-                (byte) 0,
-                (byte) 8};
-        sendAcmControlMessage(SET_LINE_CODING, 0, msg);
-        SystemClock.sleep(100);
-        clear();
+    private void clear() throws IOException {
+        port.read(mReadBuffer, 100, 50);
     }
-
-    private int sendAcmControlMessage(int request, int value, byte[] buf) {
-        return mConnection.controlTransfer(USB_RT_ACM, request, value, 0, buf, buf != null ? buf.length : 0, 5000);
-    }
-
-    public void setDtrRts() {
-        int value = (mRts ? 0x2 : 0) | (mDtr ? 0x1 : 0);
-        sendAcmControlMessage(SET_CONTROL_LINE_STATE, value, null);
-    }
-
 }
