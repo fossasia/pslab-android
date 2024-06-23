@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/recycler_view_margin"
+        android:layout_marginTop="@dimen/recycler_view_margin"
         android:elevation="@dimen/measurements_card_elevation"
         android:padding="@dimen/measurements_card_padding"
         app:cardBackgroundColor="#4DFFFFFF"
@@ -33,6 +33,8 @@
                 android:layout_marginEnd="@dimen/osc_spinner_margin"
                 android:layout_marginBottom="@dimen/osc_spinner_margin"
                 android:background="#00FFFFFF"
+                android:paddingStart="@dimen/osc_recyclerview_padding"
+                android:paddingEnd="@dimen/osc_recyclerview_padding"
                 android:textSize="@dimen/osc_axis_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -322,8 +322,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/layout_chart_os"
                 android:layout_alignEnd="@id/layout_chart_os"
-                android:background="@color/black"
-                android:padding="@dimen/osc_recyclerview_padding" />
+                android:layout_marginEnd="@dimen/osc_recyclerview_padding"
+                android:background="@color/black" />
 
         </RelativeLayout>
 

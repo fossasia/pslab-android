@@ -39,9 +39,16 @@ public class OscilloscopeMeasurementsAdapter extends RecyclerView.Adapter<Oscill
             double negativePeak = OscilloscopeMeasurements.channel.get(channel).get(ChannelMeasurements.NEGATIVE_PEAK);
             DecimalFormat df = new DecimalFormat("#.##");
             df.setRoundingMode(RoundingMode.CEILING);
-            String string = "Vpp: " + df.format(amplitude) + " V\nVp+: " + df.format(positivePeak) + " V  Vp-: " + df.format(negativePeak) + " V\nf: " + df.format(frequency) + " Hz  P: " + df.format(period) + " ms";
-            measurementsView.setTextColor(channelColor);
-            measurementsView.setText(string);
+            if (frequency >= 1000) {
+                frequency /= 1000;
+                String string = "Vpp: " + df.format(amplitude) + " V\nVp+: " + df.format(positivePeak) + " V  Vp-: " + df.format(negativePeak) + " V\nf: " + df.format(frequency) + " kHz  P: " + df.format(period) + " ms";
+                measurementsView.setTextColor(channelColor);
+                measurementsView.setText(string);
+            } else {
+                String string = "Vpp: " + df.format(amplitude) + " V\nVp+: " + df.format(positivePeak) + " V  Vp-: " + df.format(negativePeak) + " V\nf: " + df.format(frequency) + " Hz  P: " + df.format(period) + " ms";
+                measurementsView.setTextColor(channelColor);
+                measurementsView.setText(string);
+            }
         }
     }
 
