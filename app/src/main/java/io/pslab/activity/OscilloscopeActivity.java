@@ -341,6 +341,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
 
         final Runnable runnable = new Runnable() {
 
+            private final List<String> channels = new ArrayList<>();
+
             @Override
             public void run() {
                 //Thread to check which checkbox is enabled
@@ -350,154 +352,35 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                             audioJack = new AudioJack("input");
                         }
 
-                        if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && !isCH3Selected && !isAudioInputSelected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH1.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (scienceLab.isConnected() && isCH2Selected && !isCH1Selected && !isCH3Selected && !isAudioInputSelected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH2.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (scienceLab.isConnected() && isCH3Selected && !isCH1Selected && !isCH2Selected && !isAudioInputSelected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH3.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (isAudioInputSelected && !isCH1Selected && !isCH2Selected && !isCH3Selected && !isXYPlotSelected) {
-                            if (isInBuiltMicSelected || (isMICSelected && scienceLab.isConnected())) {
-                                captureTask = new CaptureTask();
-                                captureTask.execute(CHANNEL.MIC.toString());
-                                synchronized (lock) {
-                                    try {
-                                        lock.wait();
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        }
-
-                        if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && !isCH3Selected && !isAudioInputSelected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH1.toString(), CHANNEL.CH2.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (scienceLab.isConnected() && isCH1Selected && !isCH2Selected && isCH3Selected && !isAudioInputSelected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH1.toString(), CHANNEL.CH3.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (scienceLab.isConnected() && isAudioInputSelected && isCH1Selected && !isCH3Selected && !isCH2Selected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH1.toString(), CHANNEL.MIC.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (scienceLab.isConnected() && isCH2Selected && isCH3Selected && !isCH1Selected && !isAudioInputSelected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH2.toString(), CHANNEL.CH3.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (scienceLab.isConnected() && isCH2Selected && isAudioInputSelected && !isCH3Selected && !isCH1Selected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH2.toString(), CHANNEL.MIC.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (scienceLab.isConnected() && isCH3Selected && isAudioInputSelected && !isCH2Selected && !isCH1Selected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH3.toString(), CHANNEL.MIC.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && isCH3Selected && !isAudioInputSelected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH1.toString(), CHANNEL.CH2.toString(), CHANNEL.CH3.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                        if (scienceLab.isConnected() && isCH1Selected && isCH2Selected && isCH3Selected && isAudioInputSelected && !isXYPlotSelected) {
-                            captureTask = new CaptureTask();
-                            captureTask.execute(CHANNEL.CH1.toString(), CHANNEL.CH2.toString(), CHANNEL.CH3.toString(), CHANNEL.MIC.toString());
-                            synchronized (lock) {
-                                try {
-                                    lock.wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
+                        channels.clear();
 
                         if (scienceLab.isConnected() && isXYPlotSelected) {
                             xyPlotTask = new XYPlotTask();
                             xyPlotTask.execute(xyPlotAxis1, xyPlotAxis2);
+                            synchronized (lock) {
+                                try {
+                                    lock.wait();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else {
+                            if (scienceLab.isConnected()) {
+                                if (isCH1Selected) {
+                                    channels.add(CHANNEL.CH1.toString());
+                                }
+                                if (isCH2Selected) {
+                                    channels.add(CHANNEL.CH2.toString());
+                                }
+                                if (isCH3Selected) {
+                                    channels.add(CHANNEL.CH3.toString());
+                                }
+                            }
+                            if (isAudioInputSelected && isInBuiltMicSelected || (scienceLab.isConnected() && isMICSelected)) {
+                                channels.add(CHANNEL.MIC.toString());
+                            }
+                            captureTask = new CaptureTask();
+                            captureTask.execute(channels.toArray(new String[0]));
                             synchronized (lock) {
                                 try {
                                     lock.wait();
