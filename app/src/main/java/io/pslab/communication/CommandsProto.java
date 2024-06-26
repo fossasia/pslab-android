@@ -10,12 +10,6 @@ public class CommandsProto {
     public int MAX_SAMPLES = 10000;
     public int DATA_SPLITTING = 60;
 
-    public int FLASH = 1;
-    public int READ_FLASH = 1;
-    public int WRITE_FLASH = 2;
-    public int WRITE_BULK_FLASH = 3;
-    public int READ_BULK_FLASH = 4;
-
     public int ADC = 2;
     public int CAPTURE_ONE = 1;
     public int CAPTURE_TWO = 2;
@@ -163,6 +157,7 @@ public class CommandsProto {
     public int READ_LOG = 18;
     public int RESTORE_STANDALONE = 19;
     public int GET_ALTERNATE_HIGH_FREQUENCY = 20;
+    public int SET_RGB_COMMON = 21;
     public int SET_RGB3 = 22;
 
     public int START_CTMU = 23;
@@ -242,6 +237,16 @@ public class CommandsProto {
 
     public int TEN_BIT = 10;
     public int TWELVE_BIT = 12;
+
+    public byte[] pack(int value) {
+        byte[] bytes = new byte[4];
+        int length = bytes.length;
+        for (int i = 0; i < length; i++) {
+            bytes[length - i - 1] = (byte) (value & 0xFF);
+            value >>= 8;
+        }
+        return bytes;
+    }
 
     public String applySIPrefix(double value, String unit, int precision) {
         boolean negative = false;

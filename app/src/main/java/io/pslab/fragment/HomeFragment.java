@@ -75,10 +75,7 @@ public class HomeFragment extends Fragment {
         if (booleanVariable == null) {
             booleanVariable = new InitializationVariable();
         }
-        if (scienceLab.calibrated)
-            booleanVariable.setVariable(true);
-        else
-            booleanVariable.setVariable(false);
+        booleanVariable.setVariable(true);
     }
 
     @Nullable

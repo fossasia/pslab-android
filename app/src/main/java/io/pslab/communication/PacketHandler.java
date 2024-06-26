@@ -67,6 +67,22 @@ public class PacketHandler {
         return version;
     }
 
+    public String readLine() {
+        String line = "";
+        try {
+            commonRead(CommunicationHandler.DEFAULT_READ_BUFFER_SIZE);
+            line = new BufferedReader(
+                    new InputStreamReader(
+                            new ByteArrayInputStream(buffer, 0, CommunicationHandler.DEFAULT_READ_BUFFER_SIZE),
+                            StandardCharsets.UTF_8))
+                    .readLine();
+            return line;
+        } catch (IOException e) {
+            Log.e("Error in Communication", e.toString());
+        }
+        return line;
+    }
+
     public void sendByte(int val) throws IOException {
         if (!connected) {
             throw new IOException("Device not connected");
@@ -212,7 +228,7 @@ public class PacketHandler {
         return new byte[]{-1};
     }
 
-    private int commonRead(int bytesToRead) throws IOException {
+    public int commonRead(int bytesToRead) throws IOException {
         final int[] bytesRead = {0};
         if (mCommunicationHandler.isConnected()) {
             bytesRead[0] = mCommunicationHandler.read(buffer, bytesToRead, timeout);
@@ -239,7 +255,7 @@ public class PacketHandler {
         return bytesRead[0];
     }
 
-    private void commonWrite(byte[] data) throws IOException {
+    public void commonWrite(byte[] data) throws IOException {
         if (mCommunicationHandler.isConnected()) {
             mCommunicationHandler.write(data, timeout);
         } else if (ScienceLabCommon.isWifiConnected()) {
