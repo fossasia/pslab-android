@@ -21,9 +21,9 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/weight_scale"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
+                    android:layout_weight="@dimen/power_card_panel_weight"
                     android:orientation="horizontal">
 
                     <!-- PV1 -->
@@ -41,7 +41,7 @@
                             <LinearLayout
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="@dimen/power_card_panel_land_weight"
+                                android:layout_weight="@dimen/power_card_panel_weight"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -77,17 +77,6 @@
                                     android:orientation="horizontal">
 
                                     <io.pslab.items.SquareImageButton
-                                        android:id="@+id/power_card_pv1_up"
-                                        android:layout_width="@dimen/weight_scale"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/power_card_tiny_margin"
-                                        android:layout_marginLeft="@dimen/power_card_tiny_margin"
-                                        android:layout_weight="@dimen/power_card_button_weight"
-                                        android:scaleType="fitCenter"
-                                        android:src="@drawable/ic_arrow_drop_up_white_24dp"
-                                        android:theme="@style/AppTheme.Button" />
-
-                                    <io.pslab.items.SquareImageButton
                                         android:id="@+id/power_card_pv1_down"
                                         android:layout_width="@dimen/weight_scale"
                                         android:layout_height="wrap_content"
@@ -96,6 +85,17 @@
                                         android:layout_weight="@dimen/power_card_button_weight"
                                         android:scaleType="fitCenter"
                                         android:src="@drawable/ic_arrow_drop_down_white_24dp"
+                                        android:theme="@style/AppTheme.Button" />
+
+                                    <io.pslab.items.SquareImageButton
+                                        android:id="@+id/power_card_pv1_up"
+                                        android:layout_width="@dimen/weight_scale"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/power_card_tiny_margin"
+                                        android:layout_marginLeft="@dimen/power_card_tiny_margin"
+                                        android:layout_weight="@dimen/power_card_button_weight"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                         android:theme="@style/AppTheme.Button" />
                                 </LinearLayout>
 
@@ -125,7 +125,7 @@
                 <RelativeLayout
                     android:layout_width="@dimen/length_0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
+                    android:layout_weight="@dimen/power_card_panel_weight"
                     android:orientation="horizontal">
                     <!-- PV2 -->
                     <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -142,7 +142,7 @@
                             <LinearLayout
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="@dimen/power_card_panel_land_weight"
+                                android:layout_weight="@dimen/power_card_panel_weight"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -178,17 +178,6 @@
                                     android:orientation="horizontal">
 
                                     <io.pslab.items.SquareImageButton
-                                        android:id="@+id/power_card_pv2_up"
-                                        android:layout_width="@dimen/weight_scale"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/power_card_tiny_margin"
-                                        android:layout_marginLeft="@dimen/power_card_tiny_margin"
-                                        android:layout_weight="@dimen/power_card_button_weight"
-                                        android:scaleType="fitCenter"
-                                        android:src="@drawable/ic_arrow_drop_up_white_24dp"
-                                        android:theme="@style/AppTheme.Button" />
-
-                                    <io.pslab.items.SquareImageButton
                                         android:id="@+id/power_card_pv2_down"
                                         android:layout_width="@dimen/weight_scale"
                                         android:layout_height="wrap_content"
@@ -197,6 +186,17 @@
                                         android:layout_weight="@dimen/power_card_button_weight"
                                         android:scaleType="fitCenter"
                                         android:src="@drawable/ic_arrow_drop_down_white_24dp"
+                                        android:theme="@style/AppTheme.Button" />
+
+                                    <io.pslab.items.SquareImageButton
+                                        android:id="@+id/power_card_pv2_up"
+                                        android:layout_width="@dimen/weight_scale"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/power_card_tiny_margin"
+                                        android:layout_marginLeft="@dimen/power_card_tiny_margin"
+                                        android:layout_weight="@dimen/power_card_button_weight"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                         android:theme="@style/AppTheme.Button" />
                                 </LinearLayout>
 
@@ -231,9 +231,9 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/weight_scale"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
+                    android:layout_weight="@dimen/power_card_panel_weight"
                     android:orientation="horizontal">
 
                     <!-- PV3 -->
@@ -251,7 +251,7 @@
                             <LinearLayout
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="@dimen/power_card_panel_land_weight"
+                                android:layout_weight="@dimen/power_card_panel_weight"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -287,17 +287,6 @@
                                     android:orientation="horizontal">
 
                                     <io.pslab.items.SquareImageButton
-                                        android:id="@+id/power_card_pv3_up"
-                                        android:layout_width="@dimen/weight_scale"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/power_card_tiny_margin"
-                                        android:layout_marginLeft="@dimen/power_card_tiny_margin"
-                                        android:layout_weight="@dimen/power_card_button_weight"
-                                        android:scaleType="fitCenter"
-                                        android:src="@drawable/ic_arrow_drop_up_white_24dp"
-                                        android:theme="@style/AppTheme.Button" />
-
-                                    <io.pslab.items.SquareImageButton
                                         android:id="@+id/power_card_pv3_down"
                                         android:layout_width="@dimen/weight_scale"
                                         android:layout_height="wrap_content"
@@ -306,6 +295,17 @@
                                         android:layout_weight="@dimen/power_card_button_weight"
                                         android:scaleType="fitCenter"
                                         android:src="@drawable/ic_arrow_drop_down_white_24dp"
+                                        android:theme="@style/AppTheme.Button" />
+
+                                    <io.pslab.items.SquareImageButton
+                                        android:id="@+id/power_card_pv3_up"
+                                        android:layout_width="@dimen/weight_scale"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/power_card_tiny_margin"
+                                        android:layout_marginLeft="@dimen/power_card_tiny_margin"
+                                        android:layout_weight="@dimen/power_card_button_weight"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                         android:theme="@style/AppTheme.Button" />
                                 </LinearLayout>
 
@@ -333,9 +333,9 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/weight_scale"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
+                    android:layout_weight="@dimen/power_card_panel_weight"
                     android:orientation="horizontal">
 
                     <!-- PCS -->
@@ -353,7 +353,7 @@
                             <LinearLayout
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="@dimen/power_card_panel_land_weight"
+                                android:layout_weight="@dimen/power_card_panel_weight"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -390,17 +390,6 @@
                                     android:orientation="horizontal">
 
                                     <io.pslab.items.SquareImageButton
-                                        android:id="@+id/power_card_pcs_up"
-                                        android:layout_width="@dimen/weight_scale"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/power_card_tiny_margin"
-                                        android:layout_marginLeft="@dimen/power_card_tiny_margin"
-                                        android:layout_weight="@dimen/power_card_button_weight"
-                                        android:scaleType="fitCenter"
-                                        android:src="@drawable/ic_arrow_drop_up_white_24dp"
-                                        android:theme="@style/AppTheme.Button" />
-
-                                    <io.pslab.items.SquareImageButton
                                         android:id="@+id/power_card_pcs_down"
                                         android:layout_width="@dimen/weight_scale"
                                         android:layout_height="wrap_content"
@@ -409,6 +398,17 @@
                                         android:layout_weight="@dimen/power_card_button_weight"
                                         android:scaleType="fitCenter"
                                         android:src="@drawable/ic_arrow_drop_down_white_24dp"
+                                        android:theme="@style/AppTheme.Button" />
+
+                                    <io.pslab.items.SquareImageButton
+                                        android:id="@+id/power_card_pcs_up"
+                                        android:layout_width="@dimen/weight_scale"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/power_card_tiny_margin"
+                                        android:layout_marginLeft="@dimen/power_card_tiny_margin"
+                                        android:layout_weight="@dimen/power_card_button_weight"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                         android:theme="@style/AppTheme.Button" />
                                 </LinearLayout>
                             </LinearLayout>
