@@ -50,8 +50,8 @@ jobs:
       - name: Hydrate and Update Version
         id: android-version
         run: |
-          git config --global user.name "${{ github.workflow }}"
-          git config --global user.email "gh-actions@${{ github.repository_owner }}"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
           git clone --branch=version https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} version
           cd version
@@ -118,8 +118,8 @@ jobs:
 
       - name: Upload APK/AAB's to apk branch
         run: |
-          git config --global user.name "${{ github.workflow }}"
-          git config --global user.email "gh-actions@${{ github.repository_owner }}"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
           git clone --branch=apk https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} apk
           cd apk
