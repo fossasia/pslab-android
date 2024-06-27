@@ -156,8 +156,12 @@ jobs:
           fi
 
       - name: Run Release Drafter
+        id: run-release-drafter
         uses: release-drafter/release-drafter@v6
         with:
           version: ${{ steps.android-version.outputs.VERSION_NAME }}
-          name: 'PSLab Version ${{ steps.android-version.outputs.VERSION_NAME }}'
-          tag: 'v${{ steps.android-version.outputs.VERSION_NAME }}'
+
+      - name: Create and Upload Assets
+        run: |
+          echo "${{ steps.android-version.outputs.VERSION_CODE }}" > ./versionCode.txt
+          gh release upload ${{ steps.run-release-drafter.outputs.tag_name }} apk/pslab-development-release.apk ./versionCode.txt --clobber
