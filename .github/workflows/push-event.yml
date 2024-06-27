@@ -156,8 +156,48 @@ jobs:
           fi
 
       - name: Run Release Drafter
+        id: run-release-drafter
         uses: release-drafter/release-drafter@v6
         with:
           version: ${{ steps.android-version.outputs.VERSION_NAME }}
-          name: 'PSLab Version ${{ steps.android-version.outputs.VERSION_NAME }}'
-          tag: 'v${{ steps.android-version.outputs.VERSION_NAME }}'
+
+      - name: Delete Existing Assets
+        id: delete-assets
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: assets } = await github.rest.repos.listReleaseAssets({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: ${{ steps.run-release-drafter.outputs.id }}
+            });
+
+             for (const asset of assets) {
+              await github.rest.repos.deleteReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                asset_id: asset.id
+              });
+              console.log(`Deleted asset: ${asset.name}`);
+            }
+
+      - name: Upload APK Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.run-release-drafter.outputs.upload_url }}
+          asset_path: app/build/outputs/apk/release/pslab-development-release.apk
+          asset_name: pslab-development-release.apk
+          asset_content_type: application/octet-stream
+
+      - name: Create Version Asset
+        run: |
+          mkdir -p app/build/outputs/version
+          echo "${{ steps.android-version.outputs.VERSION_CODE }}" > app/build/outputs/version/versionCode.txt
+
+      - name: Upload Version Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.run-release-drafter.outputs.upload_url }}
+          asset_path: app/build/outputs/version/versionCode.txt
+          asset_name: versionCode.txt
+          asset_content_type: text/plain
