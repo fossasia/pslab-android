@@ -13,6 +13,7 @@ import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommunicationHandler {
@@ -106,6 +107,7 @@ public class CommunicationHandler {
         while (numBytesRead < bytesToBeRead) {
             readNow = port.read(mReadBuffer, bytesToBeReadTemp, timeoutMillis);
             if (readNow == 0) {
+                Log.e(TAG, Arrays.toString(Thread.currentThread().getStackTrace()));
                 Log.e(TAG, "Read Error: " + bytesToBeReadTemp);
                 return numBytesRead;
             } else {

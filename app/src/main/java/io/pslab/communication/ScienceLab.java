@@ -173,12 +173,6 @@ public class ScienceLab {
             }
             spi.setParameters(1, 7, 1, 0, null);
         }
-        nrf = new NRF24L01(mPacketHandler);
-        if (nrf.ready) {
-            aboutArray.add("Radio Transceiver is : Installed");
-        } else {
-            aboutArray.add("Radio Transceiver is : Not Installed");
-        }
         this.clearBuffer(0, samples);
     }
 
@@ -625,7 +619,6 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.GET_VOLTAGE_SUMMED);
             mPacketHandler.sendByte(chosa);
             int vSum = mPacketHandler.getVoltageSummation();
-            mPacketHandler.getAcknowledgement();
             return vSum / 16.0;
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
@@ -1826,7 +1819,6 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.FETCH_COUNT);
             int count = mPacketHandler.getVoltageSummation();
-            mPacketHandler.getAcknowledgement();
             return 10 * count;
         } catch (IOException e) {
             e.printStackTrace();
@@ -1869,7 +1861,7 @@ public class ScienceLab {
         int samples = 500;
         if (time > 5000 && time < 10e6) {
             if (time > 50e3) samples = 250;
-            double RC = this.captureCapacitance(samples, (int) (time / samples))[1]; // todo : complete statement after writing captureCapacitance method
+            double RC = this.captureCapacitance(samples, (int) (time / samples))[1];
             return RC / 10e3;
         } else {
             Log.v(TAG, "cap out of range " + time + cap);
@@ -1891,7 +1883,6 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.GET_CAP_RANGE);
             mPacketHandler.sendInt(cTime);
             int vSum = mPacketHandler.getVoltageSummation();
-            mPacketHandler.getAcknowledgement();
             double v = vSum * 3.3 / 16 / 4095;
             double c = -cTime * 1e-6 / 1e4 / Math.log(1 - v / 3.3);
             return new double[]{v, c};
@@ -1979,7 +1970,6 @@ public class ScienceLab {
             do VCode = mPacketHandler.getVoltageSummation();
             while (VCode == -1 & i++ < 10);
             double v = 3.3 * VCode / 4095;
-            mPacketHandler.getAcknowledgement();
             double chargeCurrent = this.currents[currentRange] * (100 + trim) / 100.0;
             double c = 0;
             if (v != 0)
