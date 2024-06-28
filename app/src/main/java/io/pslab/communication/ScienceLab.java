@@ -179,7 +179,7 @@ public class ScienceLab {
         } else {
             aboutArray.add("Radio Transceiver is : Not Installed");
         }
-        dac = new MCP4728(mPacketHandler, i2c);
+        this.clearBuffer(0, samples);
     }
 
     /**
@@ -206,229 +206,6 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Blocking call that fetches an oscilloscope trace from the specified input channel
-     *
-     * @param channel Channel to select as input. ['CH1','CH2','CH3','MIC',RES']
-     * @param samples Number of samples to fetch. Maximum 10000
-     * @param timeGap Timegap between samples in microseconds
-     * @return Arrays X(timestamps),Y(Corresponding Voltage values)
-     */
-    public HashMap<String, double[]> captureOne(String channel, int samples, double timeGap) {
-        return this.captureFullSpeed(channel, samples, timeGap, new ArrayList<String>(), null);
-    }
-
-    /**
-     * Blocking call that fetches oscilloscope traces from CH1,CH2
-     *
-     * @param samples       Number of samples to fetch. Maximum 5000
-     * @param timeGap       Timegap between samples in microseconds
-     * @param traceOneRemap Choose the analog input for channel 1. It is connected to CH1 by default. Channel 2 always reads CH2.
-     * @param trigger       boolean whether trigger is selected or not
-     * @return Arrays X(timestamps),Y1(Voltage at CH1),Y2(Voltage at CH2)
-     */
-    public HashMap<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap, boolean trigger) {
-        if (traceOneRemap == null) traceOneRemap = "CH1";
-        this.captureTraces(2, samples, timeGap, traceOneRemap, trigger, null);
-        try {
-            Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        while (this.oscilloscopeProgress()[0] == 0) ;
-        this.fetchChannel(1);
-        this.fetchChannel(2);
-        HashMap<String, double[]> retData = new HashMap<>();
-        retData.put("x", this.aChannels.get(0).getXAxis());
-        retData.put("y1", this.aChannels.get(0).getYAxis());
-        retData.put("y2", this.aChannels.get(1).getYAxis());
-        return retData;
-    }
-
-    /**
-     * Blocking call that fetches oscilloscope traces from CH1,CH2,CH3,MIC
-     *
-     * @param samples       Number of samples to fetch. Maximum 2500
-     * @param timeGap       Timegap between samples in microseconds. Minimum 1.75uS
-     * @param traceOneRemap Choose the analog input for channel 1. It is connected to CH1 by default. Channel 2 always reads CH2.
-     * @param trigger       boolean whether trigger is selected or not
-     * @return Arrays X(timestamps),Y1(Voltage at CH1),Y2(Voltage at CH2),Y3(Voltage at CH3),Y4(Voltage at CH4)
-     */
-    public HashMap<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap, boolean trigger) {
-        if (traceOneRemap == null) traceOneRemap = "CH1";
-        this.captureTraces(4, samples, timeGap, traceOneRemap, trigger, null);
-        try {
-            Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        while (this.oscilloscopeProgress()[0] == 0) ;
-        HashMap<String, double[]> retData = new HashMap<>();
-        HashMap<String, double[]> tempMap = this.fetchTrace(1);
-        retData.put("x", tempMap.get("x"));
-        retData.put("y", tempMap.get("y"));
-        retData.put("y2", this.fetchTrace(2).get("y"));
-        retData.put("y3", this.fetchTrace(3).get("y"));
-        retData.put("y4", this.fetchTrace(4).get("y"));
-        return retData;
-    }
-
-    /**
-     * Blocking call that fetches oscilloscope traces from a set of specified channels
-     *
-     * @param samples Number of samples to fetch. Maximum 10000/(total specified channels)
-     * @param timeGap Timegap between samples in microseconds.
-     * @param args    Channel names
-     * @return Arrays X(timestamps),Y1,Y2 ..
-     */
-    public Map<String, ArrayList<Double>> captureMultiple(int samples, double timeGap, List<String> args) {
-        if (args.size() == 0) {
-            Log.v(TAG, "Please specify channels to record");
-            return null;
-        }
-        timeGap = (int) (timeGap * 8) / 8;
-        if (timeGap < 1.5) timeGap = (int) (1.5 * 8) / 8;
-        int totalChannels = args.size();
-        int totalSamples = samples * totalChannels;
-        if (totalSamples > this.MAX_SAMPLES) {
-            Log.v(TAG, "Sample limit exceeded. 10,000 max");
-            totalSamples = this.MAX_SAMPLES;
-            samples = this.MAX_SAMPLES / totalChannels;
-        }
-        int channelSelection = 0;
-        for (String channel : args) {
-            channelSelection |= (1 << this.analogInputSources.get(channel).CHOSA);
-        }
-        Log.v(TAG, "Selection " + channelSelection + args.size() + Integer.toHexString(channelSelection | ((totalChannels - 1) << 12)));
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            mPacketHandler.sendByte(mCommandsProto.CAPTURE_MULTIPLE);
-            mPacketHandler.sendInt(channelSelection | ((totalChannels - 1) << 12));
-            mPacketHandler.sendInt(totalSamples);
-            mPacketHandler.sendInt((int) this.timebase * 8);
-            mPacketHandler.getAcknowledgement();
-            Log.v(TAG, "Wait");
-            Thread.sleep((long) (1e-6 * totalSamples * timeGap + .01) * 1000);
-            Log.v(TAG, "Done");
-            ArrayList<Integer> listData = new ArrayList<>();
-            for (int i = 0; i < totalSamples / this.dataSplitting; i++) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(0);
-                mPacketHandler.sendInt(this.dataSplitting);
-                mPacketHandler.sendInt(i * this.dataSplitting);
-                byte[] data = new byte[this.dataSplitting * 2 + 1];
-                mPacketHandler.read(data, this.dataSplitting * 2 + 1);
-                for (int j = 0; j < data.length - 1; j++)
-                    listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
-            }
-
-            if ((totalSamples % this.dataSplitting) != 0) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(0);
-                mPacketHandler.sendInt(totalSamples % this.dataSplitting);
-                mPacketHandler.sendInt(totalSamples - totalSamples % this.dataSplitting);
-                byte[] data = new byte[2 * (totalSamples % this.dataSplitting) + 1];
-                mPacketHandler.read(data, 2 * (totalSamples % this.dataSplitting) + 1);
-                for (int j = 0; j < data.length - 1; j++)
-                    listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
-            }
-            for (int i = 0; i < totalSamples; i++) {
-                this.buffer[i] = (listData.get(i * 2) | (listData.get(i * 2 + 1) << 8));
-            }
-            Map<String, ArrayList<Double>> retData = new LinkedHashMap<>();
-            ArrayList<Double> timeBase = new ArrayList<>();
-            double factor = timeGap * (samples - 1) / samples;
-            for (double i = 0; i < timeGap * (samples - 1); i += factor) timeBase.add(i);
-            retData.put("time", timeBase);
-            for (int i = 0; i < totalChannels; i++) {
-                ArrayList<Double> yValues = new ArrayList<>();
-                for (int j = i; j < totalSamples; j += totalChannels) {
-                    yValues.add(buffer[j]);
-                }
-                retData.put("CH" + String.valueOf(i + 1), yValues);
-            }
-            return retData;
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private void captureFullSpeedInitialize(String channel, int samples, double timeGap, List<String> args, Integer interval) {
-        if (interval == null) interval = 1000;
-        timeGap = (int) (timeGap * 8) / 8;
-        if (timeGap < 0.5) timeGap = (int) (0.5 * 8) / 8;
-        if (samples > this.MAX_SAMPLES) {
-            Log.v(TAG, "Sample limit exceeded. 10,000 max");
-            samples = this.MAX_SAMPLES;
-        }
-        this.timebase = (int) (timeGap * 8) / 8;
-        this.samples = samples;
-        int CHOSA = this.analogInputSources.get(channel).CHOSA;
-        this.aChannels.get(0).setParams(channel, samples, 0, this.timebase, 10, this.analogInputSources.get(channel), null);
-        this.channelsInBuffer = 1;
-
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            if (args.contains("SET_LOW"))
-                mPacketHandler.sendByte(mCommandsProto.SET_LO_CAPTURE);
-            else if (args.contains("SET_HIGH"))
-                mPacketHandler.sendByte(mCommandsProto.SET_HI_CAPTURE);
-            else if (args.contains("FIRE_PULSES")) {
-                mPacketHandler.sendByte(mCommandsProto.PULSE_TRAIN);
-                Log.v(TAG, "Firing SQR1 pulses for " + interval + " uSec");
-            } else
-                mPacketHandler.sendByte(mCommandsProto.CAPTURE_DMASPEED);
-            mPacketHandler.sendByte(CHOSA);
-            mPacketHandler.sendInt(samples);
-            mPacketHandler.sendInt((int) timeGap * 8);
-            if (args.contains("FIRE_PULSES")) {
-                mPacketHandler.sendInt(interval);
-                Thread.sleep((long) (interval * 1e-6));
-            }
-            mPacketHandler.getAcknowledgement();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
-     *
-     * @param channel  Channel name 'CH1','CH2','CH3','MIC','RES'
-     * @param samples  Number of samples to fetch. Maximum 10000/(total specified channels)
-     * @param timeGap  Timegap between samples in microseconds.
-     * @param args     Specify if SQR1 must be toggled right before capturing.
-     *                 'SET_LOW': Set SQR1 to 0V
-     *                 'SET_HIGH': Set SQR1 to 1V
-     *                 'FIRE_PULSES': output a preset frequency on SQR1 for a given interval (keyword arg 'interval' must be specified or it will default to 1000uS) before acquiring data. This is used for measuring speed of sound using piezos if no arguments are specified, a regular capture will be executed.
-     * @param interval Units: uS. Necessary if 'FIRE_PULSES' argument was supplied. Default 1000uS
-     * @return Timestamp array ,voltage_value array
-     */
-    public HashMap<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
-        /*
-         * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
-         */
-
-        this.captureFullSpeedInitialize(channel, samples, timeGap, args, interval);
-
-        try {
-            Thread.sleep((long) (1000 * (1e-6 * this.samples * this.timebase + 0.1 + ((interval != null) ? interval : 0) * 1e-6)));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        this.fetchChannel(1);
-        HashMap<String, double[]> retData = new HashMap<>();
-        retData.put("x", this.aChannels.get(0).getXAxis());
-        retData.put("y", this.aChannels.get(0).getYAxis());
-        return retData;
     }
 
     private void captureFullSpeedHrInitialize(String channel, int samples, double timeGap, List<String> args) {
@@ -499,7 +276,6 @@ public class ScienceLab {
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
                 for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
             }
 
             if ((samples % this.dataSplitting) != 0) {
@@ -512,7 +288,6 @@ public class ScienceLab {
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
                 for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
             }
 
             for (int i = 0; i < samples; i++) {
@@ -543,8 +318,6 @@ public class ScienceLab {
     public void captureTraces(int number, int samples, double timeGap, String channelOneInput, Boolean trigger, Integer CH123SA) {
         if (CH123SA == null) CH123SA = 0;
         if (channelOneInput == null) channelOneInput = "CH1";
-        int triggerOrNot = 0;
-        if (trigger) triggerOrNot = 0x80;
         this.timebase = timeGap;
         this.timebase = (int) (this.timebase * 8) / 8;
         if (!this.analogInputSources.containsKey(channelOneInput)) {
@@ -552,35 +325,47 @@ public class ScienceLab {
             return;
         }
         int CHOSA = this.analogInputSources.get(channelOneInput).CHOSA;
+        this.aChannels.get(0).setParams(channelOneInput, samples, 0, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
         try {
             mPacketHandler.sendByte(mCommandsProto.ADC);
             if (number == 1) {
-                if (this.timebase < 1.5)
-                    this.timebase = (int) (1.5 * 8) / 8;
-                if (samples > this.MAX_SAMPLES) samples = this.MAX_SAMPLES;
-                this.aChannels.get(0).setParams(channelOneInput, samples, 0, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
-                mPacketHandler.sendByte(mCommandsProto.CAPTURE_ONE);
-                mPacketHandler.sendByte(CHOSA | triggerOrNot);
+                if (timeGap < 0.5)
+                    this.timebase = (int) (0.5 * 8) / 8;
+                if (samples > this.MAX_SAMPLES)
+                    samples = this.MAX_SAMPLES;
+                if (trigger) {
+                    if (timeGap < 0.75)
+                        this.timebase = (int) (0.75 * 8) / 8;
+                    mPacketHandler.sendByte(mCommandsProto.CAPTURE_ONE);
+                    mPacketHandler.sendByte(CHOSA | 0x80);
+                } else if (timeGap > 1) {
+                    this.aChannels.get(0).setParams(channelOneInput, samples, 0, this.timebase, 12, this.analogInputSources.get(channelOneInput), null);
+                    mPacketHandler.sendByte(mCommandsProto.CAPTURE_DMASPEED);
+                    mPacketHandler.sendByte(CHOSA | 0x80);
+                } else {
+                    mPacketHandler.sendByte(mCommandsProto.CAPTURE_DMASPEED);
+                    mPacketHandler.sendByte(CHOSA);
+                }
             } else if (number == 2) {
-                if (this.timebase < 1.75)
-                    this.timebase = (int) (1.75 * 8) / 8;
-                if (samples > this.MAX_SAMPLES / 2) samples = this.MAX_SAMPLES / 2;
-                this.aChannels.get(0).setParams(channelOneInput, samples, 0, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
+                if (timeGap < 0.875)
+                    this.timebase = (int) (0.875 * 8) / 8;
+                if (samples > this.MAX_SAMPLES / 2)
+                    samples = this.MAX_SAMPLES / 2;
                 this.aChannels.get(1).setParams("CH2", samples, samples, this.timebase, 10, this.analogInputSources.get("CH2"), null);
                 mPacketHandler.sendByte(mCommandsProto.CAPTURE_TWO);
-                mPacketHandler.sendByte(CHOSA | triggerOrNot);
-            } else if (number == 3 | number == 4) {
-                if (this.timebase < 1.75)
+                mPacketHandler.sendByte(CHOSA | (0x80 * (trigger ? 1 : 0)));
+            } else {
+                if (timeGap < 1.75)
                     this.timebase = (int) (1.75 * 8) / 8;
-                if (samples > this.MAX_SAMPLES / 4) samples = this.MAX_SAMPLES / 4;
-                this.aChannels.get(0).setParams(channelOneInput, samples, 0, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
+                if (samples > this.MAX_SAMPLES / 4)
+                    samples = this.MAX_SAMPLES / 4;
                 int i = 1;
                 for (String temp : new String[]{"CH2", "CH3", "MIC"}) {
                     this.aChannels.get(i).setParams(temp, samples, i * samples, this.timebase, 10, this.analogInputSources.get(temp), null);
                     i++;
                 }
                 mPacketHandler.sendByte(mCommandsProto.CAPTURE_FOUR);
-                mPacketHandler.sendByte(CHOSA | (CH123SA << 4) | triggerOrNot);
+                mPacketHandler.sendByte(CHOSA | (CH123SA << 4) | (0x80 * (trigger ? 1 : 0)));
             }
             this.samples = samples;
             mPacketHandler.sendInt(samples);
@@ -594,43 +379,13 @@ public class ScienceLab {
     }
 
     /**
-     * Instruct the ADC to start sampling. Use fetchTrace to retrieve the data
-     *
-     * @param channel Channel to acquire data from 'CH1', 'CH2', 'CH3', 'MIC'
-     * @param samples Total points to store per channel. Maximum 3200 total.
-     * @param timeGap Timegap between two successive samples (in uSec)
-     * @param trigger Whether or not to trigger the oscilloscope based on the voltage level set by
-     */
-    public void captureHighResolutionTraces(String channel, int samples, double timeGap, Boolean trigger) {
-        int triggerOrNot = 0;
-        if (trigger) triggerOrNot = 0x80;
-        this.timebase = timeGap;
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            int CHOSA = this.analogInputSources.get(channel).CHOSA;
-            if (this.timebase < 3) this.timebase = 3;
-            if (samples > this.MAX_SAMPLES) samples = this.MAX_SAMPLES;
-            this.aChannels.get(0).setParams(channel, samples, 0, timebase, 12, this.analogInputSources.get(channel), null);
-            mPacketHandler.sendByte(mCommandsProto.CAPTURE_12BIT);
-            mPacketHandler.sendByte(CHOSA | triggerOrNot);
-            this.samples = samples;
-            mPacketHandler.sendInt(samples);
-            mPacketHandler.sendInt((int) this.timebase * 8);
-            mPacketHandler.getAcknowledgement();
-            this.channelsInBuffer = 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Fetches a channel(1-4) captured by :func:captureTraces called prior to this, and returns xAxis,yAxis
      *
      * @param channelNumber Any of the maximum of four channels that the oscilloscope captured. 1/2/3/4
      * @return time array,voltage array
      */
     public HashMap<String, double[]> fetchTrace(int channelNumber) {
-        this.fetchChannel(channelNumber);
+        this.fetchData(channelNumber);
         HashMap<String, double[]> retData = new HashMap<>();
         retData.put("x", this.aChannels.get(channelNumber - 1).getXAxis());
         retData.put("y", this.aChannels.get(channelNumber - 1).getYAxis());
@@ -670,48 +425,29 @@ public class ScienceLab {
             return false;
         }
         Log.v("Samples", "" + samples);
-        this.fetchBuffer(this.aChannels.get(channelNumber - 1).bufferIndex, samples);
-
-        Log.v("RAW DATA:", Arrays.toString(Arrays.copyOfRange(buffer, 0, samples)));
-
-        this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
-        return true;
-    }
-
-    private boolean fetchChannel(int channelNumber) {
-        int samples = this.aChannels.get(channelNumber - 1).length;
-        if (channelNumber > this.channelsInBuffer) {
-            Log.v(TAG, "Channel Unavailable");
-            return false;
-        }
-        Log.v("Samples", "" + samples);
         Log.v("Data Splitting", "" + this.dataSplitting);
         ArrayList<Integer> listData = new ArrayList<>();
         try {
             for (int i = 0; i < samples / this.dataSplitting; i++) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(channelNumber - 1);
+                mPacketHandler.sendByte(mCommandsProto.COMMON);
+                mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
+                mPacketHandler.sendInt(this.aChannels.get(channelNumber - 1).bufferIndex + (i * this.dataSplitting));
                 mPacketHandler.sendInt(this.dataSplitting);
-                mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2 + 1];
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
                 for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
             }
 
             if ((samples % this.dataSplitting) != 0) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(channelNumber - 1);
+                mPacketHandler.sendByte(mCommandsProto.COMMON);
+                mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
+                mPacketHandler.sendInt(this.aChannels.get(channelNumber - 1).bufferIndex + samples - samples % this.dataSplitting);
                 mPacketHandler.sendInt(samples % this.dataSplitting);
-                mPacketHandler.sendInt(samples - samples % this.dataSplitting);
                 byte[] data = new byte[2 * (samples % this.dataSplitting) + 1];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting) + 1);
                 for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
             }
 
         } catch (IOException e) {
@@ -721,45 +457,12 @@ public class ScienceLab {
 
         for (int i = 0; i < listData.size() / 2; i++) {
             this.buffer[i] = (listData.get(i * 2)) | (listData.get(i * 2 + 1) << 8);
-
-            // Hack for now
             while (this.buffer[i] > 1023) this.buffer[i] -= 1023;
-
-            //(listData.get(i * 2)) | ((listData.get(i * 2 + 1) & 0xff) << 8);
-            //ByteBuffer.wrap(new byte[]{listData.get(i * 2), listData.get(i * 2 + 1)}).order(ByteOrder.LITTLE_ENDIAN).getShort();
-            //(listData.get(i * 2)) | (listData.get(i * 2 + 1) << 8);
         }
 
         Log.v("RAW DATA:", Arrays.toString(Arrays.copyOfRange(buffer, 0, samples)));
 
         this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
-        return true;
-    }
-
-
-    public boolean fetchChannelOneShot(int channelNumber) {
-        int offset = 0;
-        int samples = this.aChannels.get(channelNumber - 1).length;
-        if (channelNumber > this.channelsInBuffer) {
-            Log.e(TAG, "Channel unavailable");
-            return false;
-        }
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-            mPacketHandler.sendByte(channelNumber - 1);
-            mPacketHandler.sendInt(samples);
-            mPacketHandler.sendInt(offset);
-            byte[] data = new byte[samples * 2 + 1];
-            mPacketHandler.read(data, samples * 2 + 1);
-            //mPacketHandler.getAcknowledgement();
-            for (int i = 0; i < samples; i++) {
-                this.buffer[i] = (((int) data[i * 2] & 0xff) | (((int) data[i * 2 + 1] & 0xff) << 8));
-            }
-            this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return true;
     }
 
@@ -891,43 +594,6 @@ public class ScienceLab {
         if (this.analogInputSources.get(channelName).gainPGA != 0) {
             this.setGain(channelName, 0, true);
         }
-    }
-
-    private double autoSelectRange(String channelName, double V) {
-        double[] keys = new double[]{8.0, 4.0, 3.0, 2.0, 1.5, 1.0, 0.5, 0.0};
-        Map<Double, Integer> cutoffs = new HashMap<>();
-        cutoffs.put(8.0, 0);
-        cutoffs.put(4.0, 1);
-        cutoffs.put(3.0, 2);
-        cutoffs.put(2.0, 3);
-        cutoffs.put(1.5, 4);
-        cutoffs.put(1.0, 5);
-        cutoffs.put(0.5, 6);
-        cutoffs.put(0.0, 7);
-
-        int g = 0;
-        for (double key : keys) {
-            if (Math.abs(V) > key) {
-                g = cutoffs.get(key);
-                break;
-            }
-        }
-        this.setGain(channelName, g, true);
-        return g;
-    }
-
-    private void autoRangeScope(double tg) {
-        Map<String, double[]> tmp = this.captureTwo(1000, tg, null, false);
-        double[] x = tmp.get("x");
-        double[] y1 = tmp.get("y1");
-        double[] y2 = tmp.get("y2");
-        for (int i = 0; i < y1.length; i++) {
-            y1[i] = Math.abs(y1[i]);
-            y2[i] = Math.abs(y2[i]);
-        }
-        this.autoSelectRange("CH1", max(y1));
-        this.autoSelectRange("CH2", max(y2));
-
     }
 
     /**
@@ -1093,10 +759,6 @@ public class ScienceLab {
     public boolean isConnected() {
         return mCommunicationHandler.isConnected();
     }
-
-
-
-
 
     /* DIGITAL SECTION */
 

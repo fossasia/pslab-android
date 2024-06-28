@@ -31,7 +31,7 @@ public class PacketHandler {
     private CommunicationHandler mCommunicationHandler = null;
     public static String version = "";
     private CommandsProto mCommandsProto;
-    private int timeout = 500, VERSION_STRING_LENGTH = 15;
+    private int timeout = 500, VERSION_STRING_LENGTH = 8;
     ByteBuffer burstBuffer = ByteBuffer.allocate(2000);
     private HttpAsyncTask httpAsyncTask;
 
