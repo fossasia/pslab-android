@@ -153,7 +153,7 @@ public class ScienceLab {
         gainValues = mAnalogConstants.gains;
         this.buffer = new double[10000];
         Arrays.fill(this.buffer, 0);
-        SOCKET_CAPACITANCE = 42e-12;
+        SOCKET_CAPACITANCE = 5e-11;
         resistanceScaling = 1;
         allDigitalChannels = DigitalChannel.digitalChannelNames;
         gains.put("CH1", 0);
@@ -172,6 +172,7 @@ public class ScienceLab {
             }
             spi.setParameters(1, 7, 1, 0, null);
         }
+        dac = new MCP4728(mPacketHandler, i2c);
         this.clearBuffer(0, samples);
     }
 
@@ -824,31 +825,17 @@ public class ScienceLab {
 		Measures time taken for 16 rising edges of input signal.
 		returns the frequency in Hertz
         */
-        if (channel == null) channel = "FRQ";
-        if (timeout == null) timeout = 2;
+        if (channel == null) channel = "LA1";
+        LinkedHashMap<String, Integer> data;
         try {
-            mPacketHandler.sendByte(mCommandsProto.COMMON);
-            mPacketHandler.sendByte(mCommandsProto.GET_FREQUENCY);
-            int timeoutMSB = ((int) (timeout * 64e6)) >> 16;
-            mPacketHandler.sendInt(timeoutMSB);
-            mPacketHandler.sendByte(this.calculateDigitalChannel(channel));
-            Thread.sleep(timeoutMSB);
-            byte[] data = new byte[10];
-            mPacketHandler.read(data, 10);
-            int tmt = data[0];
-            long[] x = new long[2];
-            x[0] = ByteBuffer.wrap(Arrays.copyOfRange(data, 1, 5)).order(ByteOrder.LITTLE_ENDIAN).getInt();
-            x[1] = ByteBuffer.wrap(Arrays.copyOfRange(data, 5, 9)).order(ByteOrder.LITTLE_ENDIAN).getInt();
-            //mPacketHandler.getAcknowledgement();
-            if (tmt != 0) return null;
-            if ((x[1] - x[0]) != 0)
-                return 16 * 64e6 / (x[1] - x[0]);
-        } catch (IOException e) {
-            e.printStackTrace();
+            startOneChannelLA(channel, 1, channel, 3);
+            Thread.sleep(1000);
+            data = getLAInitialStates();
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return fetchLAChannelFrequency(calculateDigitalChannel(channel), data);
     }
 
     /**
@@ -1733,6 +1720,49 @@ public class ScienceLab {
 
         dChan.generateAxes();
         return true;
+    }
+
+    public double fetchLAChannelFrequency(Integer channelNumber, LinkedHashMap<String, Integer> initialStates) {
+        DigitalChannel dChan = this.dChannels.get(channelNumber);
+
+        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+        tempMap.put("LA1", initialStates.get("LA1"));
+        tempMap.put("LA2", initialStates.get("LA2"));
+        tempMap.put("LA3", initialStates.get("LA3"));
+        tempMap.put("LA4", initialStates.get("LA4"));
+        tempMap.put("RES", initialStates.get("RES"));
+
+        //  Used LinkedHashMap above (initialStates) in which iteration is done sequentially as <key-value> were inserted
+        int i = 0;
+        for (Map.Entry<String, Integer> entry : initialStates.entrySet()) {
+            if (dChan.channelNumber == i) {
+                i = entry.getValue();
+                break;
+            }
+            i++;
+        }
+
+        int[] temp = this.fetchIntDataFromLA(i, dChan.channelNumber + 1);
+        double[] data = new double[temp.length - 1];
+        if (temp[0] == 1) {
+            for (int j = 1; j < temp.length; j++) {
+                data[j - 1] = temp[j];
+            }
+        } else {
+            Log.e("Error : ", "Can't load data");
+            return -1;
+        }
+        dChan.loadData(tempMap, data);
+
+        dChan.generateAxes();
+        int count = 0;
+        double[] yAxis = dChan.getYAxis();
+        for (int j = 1; j < yAxis.length; j++) {
+            if(yAxis[i] != yAxis[i-1]) {
+                count++;
+            }
+        }
+        return count/4;
     }
 
     public DigitalChannel getDigitalChannel(int i) {
