@@ -1273,7 +1273,7 @@ public class ScienceLab {
         if (triggerChannel == null) triggerChannel = "LA1";
         if (triggerMode == null) triggerMode = 3;
         try {
-            this.clearBuffer(0, this.MAX_SAMPLES / 2);
+            this.clearBuffer(0, this.MAX_SAMPLES);
             mPacketHandler.sendByte(mCommandsProto.TIMING);
             mPacketHandler.sendByte(mCommandsProto.START_ALTERNATE_ONE_CHAN_LA);
             mPacketHandler.sendInt(this.MAX_SAMPLES / 4);
@@ -1502,14 +1502,16 @@ public class ScienceLab {
         try {
             mPacketHandler.sendByte(mCommandsProto.TIMING);
             mPacketHandler.sendByte(mCommandsProto.GET_INITIAL_DIGITAL_STATES);
-            int initial = mPacketHandler.getInt();
-            int A = (mPacketHandler.getInt() - initial) / 2;
-            int B = (mPacketHandler.getInt() - initial) / 2;
-            int C = (mPacketHandler.getInt() - initial) / 2;
-            int D = (mPacketHandler.getInt() - initial) / 2;
-            int s = mPacketHandler.getByte();
-            int sError = mPacketHandler.getByte();
-            mPacketHandler.getAcknowledgement();
+            byte[] initialStatesBytes = new byte[13];
+            mPacketHandler.read(initialStatesBytes, 13);
+            int initial = (initialStatesBytes[0] & 0xff) | ((initialStatesBytes[1] << 8) & 0xff00);
+            int A = (((initialStatesBytes[2] & 0xff) | ((initialStatesBytes[3] << 8) & 0xff00)) - initial) / 2;
+            int B = (((initialStatesBytes[4] & 0xff) | ((initialStatesBytes[5] << 8) & 0xff00)) - initial) / 2 - MAX_SAMPLES / 4;
+            int C = (((initialStatesBytes[6] & 0xff) | ((initialStatesBytes[7] << 8) & 0xff00)) - initial) / 2 - 2 * MAX_SAMPLES / 4;
+            int D = (((initialStatesBytes[8] & 0xff) | ((initialStatesBytes[9] << 8) & 0xff00)) - initial) / 2 - 3 * MAX_SAMPLES / 4;
+            int s = initialStatesBytes[10];
+            int sError = initialStatesBytes[11];
+            //mPacketHandler.getAcknowledgement();
 
             if (A == 0) A = this.MAX_SAMPLES / 4;
             if (B == 0) B = this.MAX_SAMPLES / 4;
@@ -1548,7 +1550,7 @@ public class ScienceLab {
             else
                 retData.put("LA4", 0);
 
-            if ((s & 16) != 16)
+            if ((s & 16) != 0)
                 retData.put("RES", 1);
             else
                 retData.put("RES", 0);
@@ -1583,31 +1585,39 @@ public class ScienceLab {
     public int[] fetchIntDataFromLA(Integer bytes, Integer channel) {
         if (channel == null) channel = 1;
         try {
-            mPacketHandler.sendByte(mCommandsProto.TIMING);
-            mPacketHandler.sendByte(mCommandsProto.FETCH_INT_DMA_DATA);
-            mPacketHandler.sendInt(bytes);
-            mPacketHandler.sendByte(channel - 1);
-            byte[] readData = new byte[bytes * 2];
-            mPacketHandler.read(readData, bytes * 2);
-            Log.v("Bytes Obtained : ", String.valueOf(readData.length));
+            ArrayList<Integer> l = new ArrayList<>();
+            for (int i = 0; i < bytes / this.dataSplitting; i++) {
+                mPacketHandler.sendByte(mCommandsProto.COMMON);
+                mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
+                mPacketHandler.sendInt(2500 * (channel - 1) + (i * this.dataSplitting));
+                mPacketHandler.sendInt(this.dataSplitting);
+                byte[] data = new byte[this.dataSplitting * 2 + 1];
+                mPacketHandler.read(data, this.dataSplitting * 2 + 1);
+                for (int j = 0; j < data.length - 1; j++)
+                    l.add((int) data[j] & 0xff);
+            }
 
-            if (readData.length > 0) {
-
-                ArrayList<Integer> l = new ArrayList<>();
-                for (int i = 0; i < readData.length; i += 1) {
-                    l.add((int) readData[i] & 0xff);
-                }
-
+            if ((bytes % this.dataSplitting) != 0) {
+                mPacketHandler.sendByte(mCommandsProto.COMMON);
+                mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
+                mPacketHandler.sendInt(bytes - bytes % this.dataSplitting);
+                mPacketHandler.sendInt(bytes % this.dataSplitting);
+                byte[] data = new byte[2 * (bytes % this.dataSplitting) + 1];
+                mPacketHandler.read(data, 2 * (bytes % this.dataSplitting) + 1);
+                for (int j = 0; j < data.length - 1; j++)
+                    l.add((int) data[j] & 0xff);
+            }
+            if (!l.isEmpty()) {
                 StringBuilder stringBuilder = new StringBuilder();
-                int[] timeStamps = new int[(int) readData.length / 2 + 1];
-                for (int i = 0; i < (int) (readData.length / 2); i++) {
-                    double t = (l.get(i * 2) | (l.get(i * 2 + 1) << 8));
-                    timeStamps[i + 1] = (int) t;
+                int[] timeStamps = new int[(int) bytes + 1];
+                for (int i = 0; i < (int) (bytes); i++) {
+                    int t = (l.get(i * 2) | (l.get(i * 2 + 1) << 8));
+                    timeStamps[i + 1] = t;
                     stringBuilder.append(String.valueOf(t));
                     stringBuilder.append(" ");
                 }
                 Log.v("Fetched points : ", stringBuilder.toString());
-                mPacketHandler.getAcknowledgement();
+                //mPacketHandler.getAcknowledgement();
                 Arrays.sort(timeStamps);
                 timeStamps[0] = 1;
                 return timeStamps;
