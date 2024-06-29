@@ -1,6 +1,5 @@
 package io.pslab.communication;
 
-import static org.apache.commons.lang3.math.NumberUtils.max;
 import static java.lang.Math.pow;
 import static io.pslab.others.MathUtils.linSpace;
 
@@ -833,17 +832,21 @@ public class ScienceLab {
             int timeoutMSB = ((int) (timeout * 64e6)) >> 16;
             mPacketHandler.sendInt(timeoutMSB);
             mPacketHandler.sendByte(this.calculateDigitalChannel(channel));
-            mPacketHandler.waitForData(); // todo : complete "waitForData"
-            int tmt = mPacketHandler.getByte();
+            Thread.sleep(timeoutMSB);
+            byte[] data = new byte[10];
+            mPacketHandler.read(data, 10);
+            int tmt = data[0];
             long[] x = new long[2];
-            x[0] = mPacketHandler.getLong();
-            x[1] = mPacketHandler.getLong();
-            mPacketHandler.getAcknowledgement();
+            x[0] = ByteBuffer.wrap(Arrays.copyOfRange(data, 1, 5)).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            x[1] = ByteBuffer.wrap(Arrays.copyOfRange(data, 5, 9)).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            //mPacketHandler.getAcknowledgement();
             if (tmt != 0) return null;
             if ((x[1] - x[0]) != 0)
                 return 16 * 64e6 / (x[1] - x[0]);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
