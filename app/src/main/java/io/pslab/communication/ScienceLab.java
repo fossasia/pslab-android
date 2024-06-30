@@ -153,7 +153,7 @@ public class ScienceLab {
         gainValues = mAnalogConstants.gains;
         this.buffer = new double[10000];
         Arrays.fill(this.buffer, 0);
-        SOCKET_CAPACITANCE = 5e-11;
+        SOCKET_CAPACITANCE = 46e-12;
         resistanceScaling = 1;
         allDigitalChannels = DigitalChannel.digitalChannelNames;
         gains.put("CH1", 0);
@@ -816,10 +816,9 @@ public class ScienceLab {
      * Returns the frequency in Hertz
      *
      * @param channel The input to measure frequency from. ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
-     * @param timeout This is a blocking call which will wait for one full wavelength before returning the calculated frequency. Use the timeout option if you're unsure of the input signal. Returns 0 if timed out
      * @return frequency
      */
-    public Double getFrequency(String channel, Integer timeout) {
+    public Double getFrequency(String channel) {
         /*
         Frequency measurement on IDx.
 		Measures time taken for 16 rising edges of input signal.
@@ -829,9 +828,9 @@ public class ScienceLab {
         LinkedHashMap<String, Integer> data;
         try {
             startOneChannelLA(channel, 1, channel, 3);
-            Thread.sleep(1000);
+            Thread.sleep(250);
             data = getLAInitialStates();
-            Thread.sleep(1000);
+            Thread.sleep(250);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -1762,7 +1761,7 @@ public class ScienceLab {
                 count++;
             }
         }
-        return count/4;
+        return count;
     }
 
     public DigitalChannel getDigitalChannel(int i) {

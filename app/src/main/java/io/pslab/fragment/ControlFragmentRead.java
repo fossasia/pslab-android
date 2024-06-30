@@ -106,7 +106,7 @@ public class ControlFragmentRead extends Fragment {
             public void onClick(View view) {
                 String channel = spinnerControlRead1.getSelectedItem().toString();
                 if (scienceLab.isConnected()) {
-                    Double frequency = scienceLab.getFrequency(channel, null);
+                    Double frequency = scienceLab.getFrequency(channel);
                     tvControlRead3.setText(DataFormatter.formatDouble(frequency, DataFormatter.MEDIUM_PRECISION_FORMAT));
                 }
             }
