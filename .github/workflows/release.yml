@@ -27,6 +27,13 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
+      - name: Prepare Build Keys
+        env:
+          ENCRYPTED_F10B5E0E5262_IV: ${{ secrets.ENCRYPTED_F10B5E0E5262_IV }}
+          ENCRYPTED_F10B5E0E5262_KEY: ${{ secrets.ENCRYPTED_F10B5E0E5262_KEY }}
+        run: |
+          bash scripts/prep-key.sh
+  
       - name: Download Assets
         id: download-assets
         run: |
@@ -39,7 +46,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          git clone --branch=fastlane https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} fastlane
+          git clone --branch=fastlane --depth=1 https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} fastlane
           cd fastlane
           
           echo "${{ github.event.release.body }}" > metadata/android/en-US/changelogs/${{ steps.download-assets.outputs.VERSION_CODE }}.txt
