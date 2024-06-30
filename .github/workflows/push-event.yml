@@ -53,7 +53,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          git clone --branch=version https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} version
+          git clone --branch=version --depth=1 https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} version
           cd version
 
           # Read and increment version name
@@ -121,7 +121,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          git clone --branch=apk https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} apk
+          git clone --branch=apk --depth=1 https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} apk
           cd apk
           
           if [[ ${{ github.ref_name }} =~ ^(master)$ ]]; then
@@ -149,7 +149,7 @@ jobs:
       - name: Update app in Open Testing track
         if: ${{ github.repository == 'fossasia/pslab-android' }}
         run: |
-          git clone --branch=fastlane https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} fastlane
+          git clone --branch=fastlane --depth=1 https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} fastlane
           bundle exec fastlane uploadToOpenTesting
           if [[ $? -ne 0 ]]; then
               exit 1
