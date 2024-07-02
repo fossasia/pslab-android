@@ -28,6 +28,7 @@ import io.pslab.communication.analogChannel.AnalogAquisitionChannel;
 import io.pslab.communication.analogChannel.AnalogConstants;
 import io.pslab.communication.analogChannel.AnalogInputSource;
 import io.pslab.communication.digitalChannel.DigitalChannel;
+import io.pslab.communication.peripherals.DACChannel;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.peripherals.MCP4728;
 import io.pslab.communication.peripherals.NRF24L01;
@@ -56,6 +57,8 @@ public class ScienceLab {
     HashMap<String, String> waveType = new HashMap<>();
     ArrayList<AnalogAquisitionChannel> aChannels = new ArrayList<>();
     ArrayList<DigitalChannel> dChannels = new ArrayList<>();
+    public Map<String, DACChannel> dacChannels = new LinkedHashMap<>();
+    private Map<String, Double> values = new LinkedHashMap<>();
 
     private CommunicationHandler mCommunicationHandler;
     private PacketHandler mPacketHandler;
@@ -139,6 +142,21 @@ public class ScienceLab {
         squareWaveFrequency.put("SQR2", 0.0);
         squareWaveFrequency.put("SQR3", 0.0);
         squareWaveFrequency.put("SQR4", 0.0);
+        if (CommunicationHandler.PSLAB_VERSION == 6) {
+            dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3e-3}, 0, 0));
+            dacChannels.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1, 1));
+            dacChannels.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2, 0));
+            dacChannels.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3, 1));
+        } else {
+            dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3e-3}, 0, 0));
+            dacChannels.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1, 1));
+            dacChannels.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2, 2));
+            dacChannels.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3, 3));
+        }
+        values.put("PV1", 0.);
+        values.put("PV2", 0.);
+        values.put("PV3", 0.);
+        values.put("PCS", 0.);
     }
 
     private void runInitSequence() throws IOException {
@@ -1757,7 +1775,7 @@ public class ScienceLab {
         int count = 0;
         double[] yAxis = dChan.getYAxis();
         for (int j = 1; j < yAxis.length; j++) {
-            if(yAxis[i] != yAxis[i-1]) {
+            if (yAxis[i] != yAxis[i - 1]) {
                 count++;
             }
         }
@@ -2675,36 +2693,70 @@ public class ScienceLab {
 
     /*  ANALOG OUTPUTS  */
 
+    private void setVoltage(String channel, float voltage) {
+        DACChannel dacChannel = dacChannels.get(channel);
+        int v = (int) (Math.round(dacChannel.VToCode.value(voltage)));
+        try {
+            mPacketHandler.sendByte(mCommandsProto.DAC);
+            mPacketHandler.sendByte(mCommandsProto.SET_POWER);
+            mPacketHandler.sendByte(dacChannel.channelCode);
+            mPacketHandler.sendInt(v);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        values.put(channel, (double) voltage);
+    }
+
+    private void setCurrent(float current) {
+        DACChannel dacChannel = dacChannels.get("PCS");
+        int v = 3300 - (int) (Math.round(dacChannel.VToCode.value(current)));
+        try {
+            mPacketHandler.sendByte(mCommandsProto.DAC);
+            mPacketHandler.sendByte(mCommandsProto.SET_POWER);
+            mPacketHandler.sendByte(dacChannel.channelCode);
+            mPacketHandler.sendInt(v);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        values.put("PCS", (double) current);
+    }
+
+    private double getVoltage(String channel) {
+        return this.values.get(channel);
+    }
+
     public void setPV1(float value) {
-        this.dac.setVoltage("PV1", value);
+        this.setVoltage("PV1", value);
     }
 
     public void setPV2(float value) {
-        this.dac.setVoltage("PV2", value);
+        this.setVoltage("PV2", value);
     }
 
     public void setPV3(float value) {
-        this.dac.setVoltage("PV3", value);
+        this.setVoltage("PV3", value);
     }
 
     public void setPCS(float value) {
-        this.dac.setCurrent(value);
+        this.setCurrent(value);
     }
 
     public double getPV1() {
-        return this.dac.getVoltage("PV1");
+        return this.getVoltage("PV1");
     }
 
     public double getPV2() {
-        return this.dac.getVoltage("PV2");
+        return this.getVoltage("PV2");
     }
 
     public double getPV3() {
-        return this.dac.getVoltage("PV3");
+        return this.getVoltage("PV3");
     }
 
     public double getPCS() {
-        return this.dac.getVoltage("PCS");
+        return this.getVoltage("PCS");
     }
 
     /* READ PROGRAM AND DATA ADDRESSES */

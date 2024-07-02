@@ -75,6 +75,7 @@ public class CommandsProto {
     public int DAC = 6;
     public int SET_DAC = 1;
     public int SET_CALIBRATED_DAC = 2;
+    public int SET_POWER = 3;
 
 
     public int WAVEGEN = 7;

@@ -14,22 +14,24 @@ public class DACChannel {
     private int offset;
     public double[] range;
     private double slope, intercept;
-    PolynomialFunction VToCode;
+    public PolynomialFunction VToCode;
+    public int channelCode;
     PolynomialFunction CodeToV;
     String calibrationEnabled;
     private List<Double> calibrationTable = new ArrayList<>();
 
-    public DACChannel(String name, double[] span, int channum) {
+    public DACChannel(String name, double[] span, int channum, int channelCode) {
         this.name = name;
         this.range = span;
         this.channum = channum;
         this.slope = span[1] - span[0];
         this.intercept = span[0];
-        this.VToCode = new PolynomialFunction(new double[]{-4095. * intercept / slope, 4095. / slope});
-        this.CodeToV = new PolynomialFunction(new double[]{intercept, slope / 4095.});
+        this.VToCode = new PolynomialFunction(new double[]{-3300. * intercept / slope, 3300. / slope});
+        this.CodeToV = new PolynomialFunction(new double[]{intercept, slope / 3300.});
         this.calibrationEnabled = "false";
         this.slope = 1;
         this.offset = 0;
+        this.channelCode = channelCode;
     }
 
     public void loadCalibrationTable(List<Double> table) {
