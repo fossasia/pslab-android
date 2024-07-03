@@ -69,6 +69,7 @@ public class ScienceLab {
     private PacketHandler mPacketHandler;
     private CommandsProto mCommandsProto;
     private AnalogConstants mAnalogConstants;
+    private int LAChannelFrequency;
     public I2C i2c;
     public SPI spi;
     public NRF24L01 nrf;
@@ -138,6 +139,7 @@ public class ScienceLab {
         currentScalars = new int[]{1, 2, 3, 0};
         dataSplitting = mCommandsProto.DATA_SPLITTING;
         allAnalogChannels = mAnalogConstants.allAnalogChannels;
+        LAChannelFrequency = 0;
         for (String aChannel : allAnalogChannels) {
             analogInputSources.put(aChannel, new AnalogInputSource(aChannel));
         }
@@ -148,12 +150,12 @@ public class ScienceLab {
         squareWaveFrequency.put("SQR3", 0.0);
         squareWaveFrequency.put("SQR4", 0.0);
         if (CommunicationHandler.PSLAB_VERSION == 6) {
-            dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3e-3}, 0, 0));
+            dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3}, 0, 0));
             dacChannels.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1, 1));
             dacChannels.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2, 0));
             dacChannels.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3, 1));
         } else {
-            dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3e-3}, 0, 0));
+            dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3}, 0, 0));
             dacChannels.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1, 1));
             dacChannels.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2, 2));
             dacChannels.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3, 3));
@@ -1784,7 +1786,13 @@ public class ScienceLab {
                 count++;
             }
         }
-        return count;
+        if (count == this.MAX_SAMPLES/2 - 2) {
+            LAChannelFrequency = 0;
+        }
+        else if (count != 0 && count != this.MAX_SAMPLES/2 - 2 && LAChannelFrequency != count) {
+            LAChannelFrequency = count;
+        }
+        return LAChannelFrequency;
     }
 
     public DigitalChannel getDigitalChannel(int i) {
