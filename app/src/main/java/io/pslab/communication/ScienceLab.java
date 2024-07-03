@@ -3,6 +3,7 @@ package io.pslab.communication;
 import static java.lang.Math.pow;
 import static io.pslab.others.MathUtils.linSpace;
 
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -13,6 +14,8 @@ import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,8 +50,10 @@ public class ScienceLab {
     public int DDS_CLOCK, MAX_SAMPLES, samples, triggerLevel, triggerChannel, errorCount,
             channelsInBuffer, digitalChannelsInBuffer, dataSplitting;
     public double sin1Frequency, sin2Frequency;
-    double[] currents, currentScalars, gainValues, buffer;
+    double[] currents, gainValues, buffer;
+    int[] currentScalars;
     double SOCKET_CAPACITANCE, resistanceScaling, timebase;
+    double CAPACITOR_DISCHARGE_VOLTAGE = 0.01 * 3.3;
     public boolean streaming;
     String[] allAnalogChannels, allDigitalChannels;
     HashMap<String, AnalogInputSource> analogInputSources = new HashMap<>();
@@ -130,7 +135,7 @@ public class ScienceLab {
         channelsInBuffer = 0;
         digitalChannelsInBuffer = 0;
         currents = new double[]{0.55e-3, 0.55e-6, 0.55e-5, 0.55e-4};
-        currentScalars = new double[]{1.0, 1.0, 1.0, 1.0};
+        currentScalars = new int[]{1, 2, 3, 0};
         dataSplitting = mCommandsProto.DATA_SPLITTING;
         allAnalogChannels = mAnalogConstants.allAnalogChannels;
         for (String aChannel : allAnalogChannels) {
@@ -1886,7 +1891,7 @@ public class ScienceLab {
         return -1;
     }
 
-    public void chargeCap(int state, int t) {
+    public void setCap(int state, int t) {
         try {
             mPacketHandler.sendByte(mCommandsProto.ADC);
             mPacketHandler.sendByte(mCommandsProto.SET_CAP);
@@ -1900,7 +1905,7 @@ public class ScienceLab {
 
     public double[] captureCapacitance(int samples, int timeGap) {
         AnalyticsClass analyticsClass = new AnalyticsClass();
-        this.chargeCap(1, 50000);
+        this.setCap(1, 50000);
         Map<String, double[]> data = this.captureFullSpeedHr("CAP", samples, timeGap, Arrays.asList("READ_CAP"));
         double[] x = data.get("x");
         double[] y = data.get("y");
@@ -1937,7 +1942,7 @@ public class ScienceLab {
      */
     public double[] getCapacitorRange(int cTime) {
         // returns values as a double array arr[0] = v,  arr[1] = c
-        this.chargeCap(0, 30000);
+        this.dischargeCap(30000, 1000);
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.GET_CAP_RANGE);
@@ -1971,13 +1976,39 @@ public class ScienceLab {
         return range;
     }
 
+    public void dischargeCap(int dischargeTime, double timeout) {
+        Instant startTime = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startTime = Instant.now();
+        }
+        double voltage = getVoltage("CAP", 1);
+        double previousVoltage = voltage;
+
+        while (voltage > CAPACITOR_DISCHARGE_VOLTAGE) {
+            setCap(0, dischargeTime);
+            voltage = getVoltage("CAP", 1);
+
+            if (Math.abs(previousVoltage - voltage) < CAPACITOR_DISCHARGE_VOLTAGE) {
+                break;
+            }
+
+            previousVoltage = voltage;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (Duration.between(startTime, Instant.now()).toMillis() > timeout) {
+                    break;
+                }
+            }
+        }
+    }
+
     /**
      * Measures capacitance of component connected between CAP and ground
      *
      * @return Capacitance (F)
      */
     public Double getCapacitance() {
-        double[] GOOD_VOLTS = new double[]{2.5, 2.8};
+        double[] GOOD_VOLTS = new double[]{2.5, 3.3};
         int CT = 10;
         int CR = 1;
         int iterations = 0;
@@ -1985,7 +2016,8 @@ public class ScienceLab {
         while (System.currentTimeMillis() / 1000 - startTime < 5) {
             if (CT > 65000) {
                 Log.v(TAG, "CT too high");
-                return this.capacitanceViaRCDischarge();
+                CT = (int) (CT / pow(10, 4 - CR));
+                CR = 0;
             }
             double[] temp = getCapacitance(CR, 0, CT);
             double V = temp[0];
@@ -2003,18 +2035,22 @@ public class ScienceLab {
                 } else if (iterations == 10)
                     return null;
                 else return C;
-            } else if (V <= 0.1 && CR < 3)
-                CR += 1;
-            else if (CR == 3) {
-                Log.v(TAG, "Capture mode");
-                return this.capacitanceViaRCDischarge();
+            } else if (V <= 0.1 && CR <= 3)
+                if (CR == 3) {
+                    CR = 0;
+                } else {
+                    CR += 1;
+                }
+            else if (CR == 0) {
+                Log.v(TAG, "Capacitance too high!");
+                return null;
             }
         }
         return null;
     }
 
     public double[] getCapacitance(int currentRange, double trim, int chargeTime) {  // time in uSec
-        this.chargeCap(0, 30000);
+        this.dischargeCap(30000, 1000);
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.GET_CAPACITANCE);
@@ -2032,8 +2068,14 @@ public class ScienceLab {
             double v = 3.3 * VCode / 4095;
             double chargeCurrent = this.currents[currentRange] * (100 + trim) / 100.0;
             double c = 0;
-            if (v != 0)
-                c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE) / this.currentScalars[currentRange];
+            if (v != 0) {
+                if (currentRange == 0) {
+                    c = (chargeCurrent * chargeTime * 1e-6 / 2.5 - this.SOCKET_CAPACITANCE);
+                }
+                else {
+                    c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE);
+                }
+            }
             return new double[]{v, c};
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
