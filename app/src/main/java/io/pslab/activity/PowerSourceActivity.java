@@ -156,7 +156,6 @@ public class PowerSourceActivity extends GuideActivity {
     private boolean isPlayingBack = false;
     private MenuItem stopMenu;
     private MenuItem playMenu;
-    private boolean _ignore = false;
 
     private float voltagePV1 = 0.00f, voltagePV2 = 0.00f, voltagePV3 = 0.00f, currentPCS = 0.00f;
 

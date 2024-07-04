@@ -239,11 +239,12 @@ public class CommandsProto {
     public int TWELVE_BIT = 12;
 
     public byte[] pack(int value) {
+        int intValue = value;
         byte[] bytes = new byte[4];
         int length = bytes.length;
         for (int i = 0; i < length; i++) {
-            bytes[length - i - 1] = (byte) (value & 0xFF);
-            value >>= 8;
+            bytes[length - i - 1] = (byte) (intValue & 0xFF);
+            intValue >>= 8;
         }
         return bytes;
     }
