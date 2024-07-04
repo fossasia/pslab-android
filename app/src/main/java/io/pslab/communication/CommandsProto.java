@@ -21,10 +21,10 @@ public class CommandsProto {
     public int SET_PGA_GAIN = 8;
     public int GET_VOLTAGE = 9;
     public int GET_VOLTAGE_SUMMED = 10;
-    public int START_ADC_STREAMING = 11;
+    // public int START_ADC_STREAMING = 11;
     public int SELECT_PGA_CHANNEL = 12;
     public int CAPTURE_12BIT = 13;
-    public int CAPTURE_MULTIPLE = 14;
+    // public int CAPTURE_MULTIPLE = 14;
     public int SET_HI_CAPTURE = 15;
     public int SET_LO_CAPTURE = 16;
 
@@ -58,7 +58,6 @@ public class CommandsProto {
     public int I2C_INIT = 14;
     public int I2C_PULLDOWN_SCL = 15;
     public int I2C_DISABLE_SMBUS = 16;
-    public int I2C_START_SCOPE = 17;
 
 
     public int UART_2 = 5;
@@ -209,17 +208,17 @@ public class CommandsProto {
 
 
     public int NONSTANDARD_IO = 14;
-    public int HX711_HEADER = 1;
+    // public int HX711_HEADER = 1;
     public int HCSR04_HEADER = 2;
-    public int AM2302_HEADER = 3;
-    public int TCD1304_HEADER = 4;
-    public int STEPPER_MOTOR = 5;
+    // public int AM2302_HEADER = 3;
+    // public int TCD1304_HEADER = 4;
+    // public int STEPPER_MOTOR = 5;
 
 
     public int PASSTHROUGHS = 15;
     public int PASS_UART = 1;
 
-    public int STOP_STREAMING = 253;
+    // public int STOP_STREAMING = 253;
 
     public int EVERY_SIXTEENTH_RISING_EDGE = 0b101;
     public int EVERY_FOURTH_RISING_EDGE = 0b100;

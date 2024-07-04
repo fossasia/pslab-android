@@ -539,16 +539,48 @@ public class PowerSourceActivity extends GuideActivity {
                     setPower(pin);
                     switch (pin) {
                         case PV1:
-                            controllerPV3.setProgress((int) (progress * 3.3 / 10));
+                            if ((int) (progress * 3.3 / 10) > PV3_CONTROLLER_MAX) {
+                                controllerPV3.setProgress(PV3_CONTROLLER_MAX);
+                            }
+                            else if ((int) (progress * 3.3 / 10) < CONTROLLER_MIN) {
+                                controllerPV3.setProgress(CONTROLLER_MIN);
+                            }
+                            else {
+                                controllerPV3.setProgress((int) (progress * 3.3 / 10));
+                            }
                             break;
                         case PV2:
-                            controllerPCS.setProgress(progress / 2);
+                            if (PCS_CONTROLLER_MAX - (progress / 2) > PCS_CONTROLLER_MAX) {
+                                controllerPCS.setProgress(PCS_CONTROLLER_MAX);
+                            }
+                            else if (PCS_CONTROLLER_MAX - (progress / 2) < CONTROLLER_MIN) {
+                                controllerPCS.setProgress(CONTROLLER_MIN);
+                            }
+                            else {
+                                controllerPCS.setProgress(PCS_CONTROLLER_MAX - (progress / 2));
+                            }
                             break;
                         case PV3:
-                            controllerPV1.setProgress((int) (progress * 10 / 3.3));
+                            if ((int) (progress * 10 / 3.3) > PV1_CONTROLLER_MAX) {
+                                controllerPV1.setProgress(PV1_CONTROLLER_MAX);
+                            }
+                            else if ((int) (progress * 10 / 3.3) < CONTROLLER_MIN) {
+                                controllerPV1.setProgress(CONTROLLER_MIN);
+                            }
+                            else {
+                                controllerPV1.setProgress((int) (progress * 10 / 3.3));
+                            }
                             break;
                         case PCS:
-                            controllerPV2.setProgress(progress * 2);
+                            if (PV2_CONTROLLER_MAX - (progress * 2) > PV2_CONTROLLER_MAX) {
+                                controllerPV2.setProgress(PV2_CONTROLLER_MAX);
+                            }
+                            else if (PV2_CONTROLLER_MAX - (progress * 2) < CONTROLLER_MIN) {
+                                controllerPV2.setProgress(CONTROLLER_MIN);
+                            }
+                            else {
+                                controllerPV2.setProgress(PV2_CONTROLLER_MAX - (progress * 2));
+                            }
                             break;
                         default:
                             break;

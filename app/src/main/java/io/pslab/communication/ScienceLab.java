@@ -1,5 +1,6 @@
 package io.pslab.communication;
 
+import static java.lang.Math.max;
 import static java.lang.Math.pow;
 import static io.pslab.others.MathUtils.linSpace;
 
@@ -716,44 +717,6 @@ public class ScienceLab {
             Log.e(TAG, "Error in filling Buffer");
         }
 
-    }
-
-    /**
-     * Instruct the ADC to start streaming 8-bit data. use stop_streaming to stop
-     *
-     * @param tg      Timegap. 250KHz clock
-     * @param channel Channel 'CH1'... 'CH9','IN1','RES'
-     * @throws IOException
-     */
-    private void startStreaming(int tg, String channel) throws IOException {
-        if (this.streaming)
-            this.stopStreaming();
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            mPacketHandler.sendByte(mCommandsProto.START_ADC_STREAMING);
-            mPacketHandler.sendByte(this.calcCHOSA(channel));
-            mPacketHandler.sendInt(tg);
-            this.streaming = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Start streaming failed");
-        }
-    }
-
-    /**
-     * Instruct the ADC to stop streaming data
-     *
-     * @throws IOException
-     */
-    private void stopStreaming() throws IOException {
-        if (this.streaming) {
-            mPacketHandler.sendByte(mCommandsProto.STOP_STREAMING);
-            byte[] data = new byte[2000];
-            mPacketHandler.read(data, 2000);
-            //mPacketHandler.flush(); flush not implemented
-        } else
-            Log.e(TAG, "Not streaming");
-        this.streaming = false;
     }
 
     public void setDataSplitting(int dataSplitting) {
@@ -2918,26 +2881,6 @@ public class ScienceLab {
     }
 
     /* MOTOR SIGNALLING */
-
-    public void stepperMotor(int steps, int delay, int direction) {
-        try {
-            mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
-            mPacketHandler.sendByte(mCommandsProto.STEPPER_MOTOR);
-            mPacketHandler.sendInt((steps << 1) | direction);
-            mPacketHandler.sendInt(delay);
-            Thread.sleep((long) (steps * delay * 1e-3 * 1000));
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void stepForward(int steps, int delay) {
-        this.stepperMotor(steps, delay, 1);
-    }
-
-    public void stepBackward(int steps, int delay) {
-        this.stepperMotor(steps, delay, 0);
-    }
 
     public void servo4(double angle1, double angle2, double angle3, double angle4) {
         int params = (1 << 5) | 2;
