@@ -1786,10 +1786,9 @@ public class ScienceLab {
                 count++;
             }
         }
-        if (count == this.MAX_SAMPLES/2 - 2) {
+        if (count == this.MAX_SAMPLES / 2 - 2) {
             LAChannelFrequency = 0;
-        }
-        else if (count != 0 && count != this.MAX_SAMPLES/2 - 2 && LAChannelFrequency != count) {
+        } else if (count != 0 && count != this.MAX_SAMPLES / 2 - 2 && LAChannelFrequency != count) {
             LAChannelFrequency = count;
         }
         return LAChannelFrequency;
@@ -2051,7 +2050,7 @@ public class ScienceLab {
                 }
             else if (CR == 0) {
                 Log.v(TAG, "Capacitance too high!");
-                return null;
+                return capacitanceViaRCDischarge();
             }
         }
         return null;
@@ -2077,12 +2076,7 @@ public class ScienceLab {
             double chargeCurrent = this.currents[currentRange] * (100 + trim) / 100.0;
             double c = 0;
             if (v != 0) {
-                if (currentRange == 0) {
-                    c = (chargeCurrent * chargeTime * 1e-6 / 2.5 - this.SOCKET_CAPACITANCE);
-                }
-                else {
-                    c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE);
-                }
+                c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE);
             }
             return new double[]{v, c};
         } catch (IOException | InterruptedException e) {

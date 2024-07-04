@@ -44,6 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.activity.guide.GuideActivity;
+import io.pslab.communication.CommunicationHandler;
 import io.pslab.communication.ScienceLab;
 import io.pslab.items.SquareImageButton;
 import io.pslab.models.PowerSourceData;
@@ -155,6 +156,7 @@ public class PowerSourceActivity extends GuideActivity {
     private boolean isPlayingBack = false;
     private MenuItem stopMenu;
     private MenuItem playMenu;
+    private boolean _ignore = false;
 
     private float voltagePV1 = 0.00f, voltagePV2 = 0.00f, voltagePV3 = 0.00f, currentPCS = 0.00f;
 
@@ -516,23 +518,62 @@ public class PowerSourceActivity extends GuideActivity {
      * @param controllerLimit maximum value the knob can handle
      */
     private void monitorControllers(Croller controller, final Pin pin, int controllerLimit) {
-        controller.setMax(controllerLimit);
-        controller.setProgress(retrievePowerValues(pin));
-        controller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
-            @Override
-            public void onProgressChanged(Croller croller, int progress) {
-                setMappedPower(pin, progress);
-                removeCursor();
-            }
+        if (CommunicationHandler.PSLAB_VERSION == 6) {
+            controller.setMax(controllerLimit);
+            controller.setProgress(retrievePowerValues(pin));
+            controller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
+                private int progress;
 
-            @Override
-            public void onStartTrackingTouch(Croller croller) {/**/}
+                @Override
+                public void onProgressChanged(Croller croller, int progress) {
+                    setMappedPower(pin, progress);
+                    this.progress = progress;
+                    removeCursor();
+                }
 
-            @Override
-            public void onStopTrackingTouch(Croller croller) {
-                setPower(pin);
-            }
-        });
+                @Override
+                public void onStartTrackingTouch(Croller croller) { /**/ }
+
+                @Override
+                public void onStopTrackingTouch(Croller croller) {
+                    setPower(pin);
+                    switch (pin) {
+                        case PV1:
+                            controllerPV3.setProgress((int) (progress * 3.3 / 10));
+                            break;
+                        case PV2:
+                            controllerPCS.setProgress(progress / 2);
+                            break;
+                        case PV3:
+                            controllerPV1.setProgress((int) (progress * 10 / 3.3));
+                            break;
+                        case PCS:
+                            controllerPV2.setProgress(progress * 2);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+        } else {
+            controller.setMax(controllerLimit);
+            controller.setProgress(retrievePowerValues(pin));
+            controller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
+                @Override
+                public void onProgressChanged(Croller croller, int progress) {
+                    setMappedPower(pin, progress);
+                    removeCursor();
+                }
+
+                @Override
+                public void onStartTrackingTouch(Croller croller) {/**/}
+
+                @Override
+                public void onStopTrackingTouch(Croller croller) {
+                    setPower(pin);
+                }
+            });
+        }
     }
 
     private void removeCursor() {
