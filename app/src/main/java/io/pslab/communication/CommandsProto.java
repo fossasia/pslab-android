@@ -142,6 +142,8 @@ public class CommandsProto {
     public int GET_INDUCTANCE = 4;
 
     public int GET_VERSION = 5;
+    public int GET_FW_VERSION = 6;
+    public int DEBUG_IS_ENABLED = 7;
 
     public int RETRIEVE_BUFFER = 8;
     public int GET_HIGH_FREQUENCY = 9;

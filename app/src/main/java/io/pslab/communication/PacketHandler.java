@@ -31,7 +31,8 @@ public class PacketHandler {
     private CommunicationHandler mCommunicationHandler = null;
     public static String version = "";
     private CommandsProto mCommandsProto;
-    private int timeout = 500, VERSION_STRING_LENGTH = 8;
+    private int timeout = 500, VERSION_STRING_LENGTH = 8, FW_VERSION_LENGTH = 3;
+    public static int PSLAB_FW_VERSION = 0;
     ByteBuffer burstBuffer = ByteBuffer.allocate(2000);
     private HttpAsyncTask httpAsyncTask;
 
@@ -65,6 +66,22 @@ public class PacketHandler {
             Log.e("Error in Communication", e.toString());
         }
         return version;
+    }
+
+    public int getFirmwareVersion() {
+        try {
+            sendByte(mCommandsProto.COMMON);
+            sendByte(mCommandsProto.GET_FW_VERSION);
+            int numByteRead = commonRead(FW_VERSION_LENGTH);
+            if (numByteRead == 1) {
+                return 2;
+            } else {
+                return buffer[0];
+            }
+        } catch (IOException e) {
+            Log.e("Error in Communication", e.toString());
+        }
+        return 0;
     }
 
     public String readLine() {
