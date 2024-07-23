@@ -15,39 +15,54 @@
             android:orientation="vertical">
 
             <!-- PV1 -->
-            <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/power_source_card_margin"
-                card_view:cardCornerRadius="@dimen/power_source_card_corner">
+                app:cardCornerRadius="@dimen/power_source_card_corner">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="@dimen/weight_scale"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/power_card_panel_weight"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_weight="@dimen/power_card_panel_weight">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline_pv1_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.26" />
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/power_card_big_margin"
-                            android:layout_marginTop="@dimen/power_card_medium_margin"
-                            android:layout_marginRight="@dimen/power_card_big_margin"
+                            android:id="@+id/textView_pv1"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginTop="@dimen/margin_10dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:autoText="false"
                             android:text="@string/power_card_pv1"
-                            android:textSize="@dimen/power_card_header_text"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="@dimen/power_card_header_text"
+                            app:autoSizeTextType="uniform"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline_pv1_2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <EditText
                             android:id="@+id/power_card_pv1_display"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/weight_scale"
-                            android:layout_margin="@dimen/power_card_large_margin"
-                            android:layout_weight="1"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginTop="@dimen/margin_2dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:layout_marginBottom="@dimen/margin_2dp"
                             android:background="@drawable/control_edittext"
                             android:cursorVisible="false"
                             android:gravity="center"
@@ -56,21 +71,30 @@
                             android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
                             android:singleLine="true"
-                            android:textSize="@dimen/power_card_display_text" />
+                            android:textSize="@dimen/power_card_display_text"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline_pv1_4"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline_pv1_2" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/power_card_tiny_margin"
+                            android:id="@+id/linearLayout2"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline_pv1_4">
 
                             <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pv1_down"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
-                                android:layout_marginRight="@dimen/power_card_tiny_margin"
+                                android:layout_marginEnd="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_down_white_24dp"
@@ -81,20 +105,26 @@
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/power_card_tiny_margin"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline_pv1_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.58" />
 
-                    </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.sdsmdg.harjot.crollerTest.Croller
                         android:id="@+id/power_card_pv1_controller"
                         android:layout_width="@dimen/weight_scale"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/power_card_big_margin"
                         android:layout_weight="@dimen/power_card_button_weight"
@@ -110,39 +140,54 @@
             </androidx.cardview.widget.CardView>
 
             <!-- PV2 -->
-            <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/power_source_card_margin"
-                card_view:cardCornerRadius="@dimen/power_source_card_corner">
+                app:cardCornerRadius="@dimen/power_source_card_corner">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="@dimen/weight_scale"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/power_card_panel_weight"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_weight="@dimen/power_card_panel_weight">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline_pv2_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.26" />
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/power_card_big_margin"
-                            android:layout_marginTop="@dimen/power_card_medium_margin"
-                            android:layout_marginRight="@dimen/power_card_big_margin"
+                            android:id="@+id/textView_pv2"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginTop="@dimen/margin_10dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:autoText="false"
                             android:text="@string/power_card_pv2"
-                            android:textSize="@dimen/power_card_header_text"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="@dimen/power_card_header_text"
+                            app:autoSizeTextType="uniform"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline_pv2_2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <EditText
                             android:id="@+id/power_card_pv2_display"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/weight_scale"
-                            android:layout_margin="@dimen/power_card_large_margin"
-                            android:layout_weight="1"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginTop="@dimen/margin_2dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:layout_marginBottom="@dimen/margin_2dp"
                             android:background="@drawable/control_edittext"
                             android:cursorVisible="false"
                             android:gravity="center"
@@ -151,21 +196,31 @@
                             android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
                             android:singleLine="true"
-                            android:textSize="@dimen/power_card_display_text" />
+                            android:textSize="@dimen/power_card_display_text"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline_pv2_4"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline_pv2_2" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/power_card_tiny_margin"
+                            android:id="@+id/linearLayout3"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:layout_marginBottom="@dimen/length_0dp"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline_pv2_4">
 
                             <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pv2_down"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
-                                android:layout_marginRight="@dimen/power_card_tiny_margin"
+                                android:layout_marginEnd="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_down_white_24dp"
@@ -176,19 +231,26 @@
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/power_card_tiny_margin"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
-                    </LinearLayout>
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline_pv2_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.58" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.sdsmdg.harjot.crollerTest.Croller
                         android:id="@+id/power_card_pv2_controller"
                         android:layout_width="@dimen/weight_scale"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/power_card_big_margin"
                         android:layout_weight="@dimen/power_card_button_weight"
@@ -204,39 +266,54 @@
             </androidx.cardview.widget.CardView>
 
             <!-- PV3 -->
-            <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/power_source_card_margin"
-                card_view:cardCornerRadius="@dimen/power_source_card_corner">
+                app:cardCornerRadius="@dimen/power_source_card_corner">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="@dimen/weight_scale"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/power_card_panel_weight"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_weight="@dimen/power_card_panel_weight">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline_pv3_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.26" />
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/power_card_big_margin"
-                            android:layout_marginTop="@dimen/power_card_medium_margin"
-                            android:layout_marginRight="@dimen/power_card_big_margin"
+                            android:id="@+id/textView_pv3"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginTop="@dimen/margin_10dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:autoText="false"
                             android:text="@string/power_card_pv3"
-                            android:textSize="@dimen/power_card_header_text"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="@dimen/power_card_header_text"
+                            app:autoSizeTextType="uniform"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline_pv3_2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <EditText
                             android:id="@+id/power_card_pv3_display"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/weight_scale"
-                            android:layout_margin="@dimen/power_card_large_margin"
-                            android:layout_weight="1"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginTop="@dimen/margin_2dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:layout_marginBottom="@dimen/margin_2dp"
                             android:background="@drawable/control_edittext"
                             android:cursorVisible="false"
                             android:gravity="center"
@@ -245,21 +322,30 @@
                             android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
                             android:singleLine="true"
-                            android:textSize="@dimen/power_card_display_text" />
+                            android:textSize="@dimen/power_card_display_text"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline_pv3_4"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline_pv3_2" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/power_card_tiny_margin"
+                            android:id="@+id/linearLayout4"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline_pv3_4">
 
                             <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pv3_down"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
-                                android:layout_marginRight="@dimen/power_card_tiny_margin"
+                                android:layout_marginEnd="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_down_white_24dp"
@@ -270,20 +356,26 @@
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/power_card_tiny_margin"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
 
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline_pv3_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.58" />
 
-                    </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.sdsmdg.harjot.crollerTest.Croller
                         android:id="@+id/power_card_pv3_controller"
                         android:layout_width="@dimen/weight_scale"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/power_card_big_margin"
                         android:layout_weight="@dimen/power_card_button_weight"
@@ -299,63 +391,86 @@
             </androidx.cardview.widget.CardView>
 
             <!-- PCS -->
-            <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/power_source_card_margin"
-                card_view:cardCornerRadius="@dimen/power_source_card_corner">
+                app:cardCornerRadius="@dimen/power_source_card_corner">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="@dimen/weight_scale"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="@dimen/power_card_panel_weight"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_weight="@dimen/power_card_panel_weight">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline_pcs_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.26" />
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/power_card_big_margin"
-                            android:layout_marginTop="@dimen/power_card_medium_margin"
-                            android:layout_marginRight="@dimen/power_card_big_margin"
+                            android:id="@+id/textView_pcs"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginTop="@dimen/margin_10dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:autoText="false"
                             android:text="@string/power_card_pcs"
-                            android:textSize="@dimen/power_card_header_text"
-                            android:textStyle="bold" />
-
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="@dimen/power_card_header_text"
+                            app:autoSizeTextType="uniform"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline_pcs_2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <EditText
                             android:id="@+id/power_card_pcs_display"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/weight_scale"
-                            android:layout_margin="@dimen/power_card_large_margin"
-                            android:layout_weight="1"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginTop="@dimen/margin_2dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            android:layout_marginBottom="@dimen/margin_2dp"
                             android:background="@drawable/control_edittext"
                             android:cursorVisible="false"
                             android:gravity="center"
                             android:imeOptions="actionDone"
                             android:inputType="numberDecimal"
-                            android:maxLength="8"
+                            android:maxLength="7"
                             android:padding="@dimen/power_card_medium_margin"
                             android:singleLine="true"
-                            android:textSize="@dimen/power_card_display_text" />
+                            android:textSize="@dimen/power_card_display_text"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline_pcs_4"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline_pcs_2" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/power_card_tiny_margin"
+                            android:id="@+id/linearLayout5"
+                            android:layout_width="@dimen/length_0dp"
+                            android:layout_height="@dimen/length_0dp"
+                            android:layout_marginStart="@dimen/margin_10dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline_pcs_4">
 
                             <io.pslab.items.SquareImageButton
                                 android:id="@+id/power_card_pcs_down"
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
-                                android:layout_marginRight="@dimen/power_card_tiny_margin"
+                                android:layout_marginEnd="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_down_white_24dp"
@@ -366,18 +481,26 @@
                                 android:layout_width="@dimen/weight_scale"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/power_card_tiny_margin"
-                                android:layout_marginLeft="@dimen/power_card_tiny_margin"
                                 android:layout_weight="@dimen/power_card_button_weight"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_arrow_drop_up_white_24dp"
                                 android:theme="@style/AppTheme.Button" />
                         </LinearLayout>
-                    </LinearLayout>
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline_pcs_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.58" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.sdsmdg.harjot.crollerTest.Croller
                         android:id="@+id/power_card_pcs_controller"
                         android:layout_width="@dimen/weight_scale"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/power_card_big_margin"
                         android:layout_weight="@dimen/power_card_button_weight"
