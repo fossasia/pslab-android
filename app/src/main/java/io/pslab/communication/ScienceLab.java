@@ -56,7 +56,8 @@ public class ScienceLab {
     double[] currents, gainValues, buffer;
     int[] currentScalars;
     double SOCKET_CAPACITANCE, resistanceScaling, timebase;
-    double CAPACITOR_DISCHARGE_VOLTAGE = 0.01 * 3.3;
+    private static final double CAPACITOR_DISCHARGE_VOLTAGE = 0.01 * 3.3;
+    private static final int CTMU_CHANNEL = 0b11110;
     public boolean streaming;
     String[] allAnalogChannels, allDigitalChannels;
     HashMap<String, AnalogInputSource> analogInputSources = new HashMap<>();
@@ -163,7 +164,7 @@ public class ScienceLab {
     }
 
     private void runInitSequence() throws IOException {
-        getFirmwareVersion();
+        fetchFirmwareVersion();
         ArrayList<String> aboutArray = new ArrayList<>();
         if (!isConnected()) {
             Log.e(TAG, "Check hardware connections. Not connected");
@@ -216,7 +217,7 @@ public class ScienceLab {
         }
     }
 
-    public void getFirmwareVersion() {
+    public void fetchFirmwareVersion() {
         if (isConnected()) {
             PacketHandler.PSLAB_FW_VERSION = mPacketHandler.getFirmwareVersion();
             if (PacketHandler.PSLAB_FW_VERSION == 2) {
@@ -1871,7 +1872,7 @@ public class ScienceLab {
         return -1;
     }
 
-    public void setCap(int state, int t) {
+    public void setCapacitorState(int state, int t) {
         try {
             mPacketHandler.sendByte(mCommandsProto.ADC);
             mPacketHandler.sendByte(mCommandsProto.SET_CAP);
@@ -1885,7 +1886,7 @@ public class ScienceLab {
 
     public double[] captureCapacitance(int samples, int timeGap) {
         AnalyticsClass analyticsClass = new AnalyticsClass();
-        this.setCap(1, 50000);
+        this.setCapacitorState(1, 50000);
         Map<String, double[]> data = this.captureFullSpeedHr("CAP", samples, timeGap, Arrays.asList("READ_CAP"));
         double[] x = data.get("x");
         double[] y = data.get("y");
@@ -1965,7 +1966,7 @@ public class ScienceLab {
         double previousVoltage = voltage;
 
         while (voltage > CAPACITOR_DISCHARGE_VOLTAGE) {
-            setCap(0, dischargeTime);
+            setCapacitorState(0, dischargeTime);
             voltage = getVoltage("CAP", 1);
 
             if (Math.abs(previousVoltage - voltage) < CAPACITOR_DISCHARGE_VOLTAGE) {
@@ -2066,7 +2067,7 @@ public class ScienceLab {
     public double getTemperature() {
         // TODO: Get rid of magic numbers
         int cs = 3;
-        double V = getCTMUVoltage(0b11110, cs, 0);
+        double V = getCTMUVoltage(CTMU_CHANNEL, cs, 0);
         if (cs == 1) {
             return (646 - V * 1000) / 1.92; // current source = 1
         } else if (cs == 2) {
@@ -2142,7 +2143,7 @@ public class ScienceLab {
         }
     }
 
-    public void reset() {
+    public void resetDevice() {
         /*
         Reset the device. Standalone mode will be enabled if an OLED is connected to the I2C port.
         */
@@ -2710,7 +2711,7 @@ public class ScienceLab {
 
     /*  ANALOG OUTPUTS  */
 
-    private void setVoltage(String channel, float voltage) {
+    public void setVoltage(String channel, float voltage) {
         DACChannel dacChannel = dacChannels.get(channel);
         int v = (int) (Math.round(dacChannel.VToCode.value(voltage)));
         try {
