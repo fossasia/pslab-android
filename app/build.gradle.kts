@@ -74,15 +74,15 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.github.bmelnychuk:atv:1.2.9")
     implementation("de.hdodenhof:circleimageview:3.1.0")
-    implementation("com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.4")
+    implementation("com.github.devlight:navigationtabstrip:1.0.4")
     implementation("com.afollestad.material-dialogs", "commons", "0.9.6.0")
     implementation("com.github.mik3y:usb-serial-for-android:3.7.3")
-    implementation("com.github.medyo:android-about-page:1.3.1")
+    implementation("com.github.medyo:android-about-page:1.3")
     implementation("com.github.tiagohm.MarkdownView:library:0.19.0")
     implementation("com.github.mirrajabi:search-dialog:1.2.4")
-    implementation("com.sdsmdg.harjot:croller:1.0.7")
+    implementation(files("../libs/croller-release.aar"))
     implementation("com.github.BeppiMenozzi:Knob:1.9.0")
-    implementation("com.github.warkiz.widget:indicatorseekbar:2.1.2")
+    implementation("com.github.warkiz:IndicatorSeekBar:v2.1.1")
     implementation("com.github.Vatican-Cameos:CarouselPicker:1.2")
     implementation("com.github.anastr:speedviewlib:1.6.1")
     implementation("com.github.GoodieBag:ProtractorView:v1.2")
@@ -113,5 +113,5 @@ dependencies {
     }
 
     // Realm
-    implementation("io.realm:android-adapters:4.0.0")
+    implementation("com.github.realm:realm-android-adapters:v4.0.0")
 }
