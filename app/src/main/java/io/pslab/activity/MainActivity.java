@@ -353,9 +353,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void showFirmwareDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Legacy Firmware Detected");
+        builder.setTitle(R.string.legacy_title);
         builder.setCancelable(false);
-        builder.setMessage("We have detected that your PSLab device is running legacy firmware. Please note that support for this firmware has ended. For the best experience and continued support, please update your device to the latest firmware version.");
+        builder.setMessage(R.string.legacy_message);
         builder.setIcon(android.R.drawable.ic_dialog_alert);
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         builder.create().show();

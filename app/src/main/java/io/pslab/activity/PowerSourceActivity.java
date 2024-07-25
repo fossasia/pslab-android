@@ -535,6 +535,13 @@ public class PowerSourceActivity extends GuideActivity {
             @Override
             public void onStopTrackingTouch(Croller croller) {
                 setPower(pin);
+                /*
+                  V6 hardware has two pairs of paired channels:
+                           0: PCS & PVS2
+                           1: PVS1 & PVS3
+                       Paired channels share relative output levels, i.e. if PV1 outputs 5 V
+                       then PV3 outputs 3.3 V.
+                 */
                 switch (pin) {
                     case PV1:
                         if ((int) (progress * 3.3 / 10) > PV3_CONTROLLER_MAX) {
