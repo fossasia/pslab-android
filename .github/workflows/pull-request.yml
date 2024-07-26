@@ -20,6 +20,16 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Save PR number
+        run: |
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NR
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: pr
+          path: pr/
+
       - name: Build with Gradle
         run: |
           bash ./gradlew build --stacktrace
@@ -30,12 +40,3 @@ jobs:
           name: apk-files
           path: |
             app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Save PR number
-        run: |
-          mkdir -p ./pr
-          echo ${{ github.event.number }} > ./pr/NR
-      - uses: actions/upload-artifact@v3
-        with:
-          name: pr
-          path: pr/
