@@ -146,9 +146,8 @@ public class I2C {
         packetHandler.sendByte(deviceAddress);
         packetHandler.sendByte(registerAddress);
         packetHandler.sendByte(bytesToRead);
-        byte[] data = new byte[bytesToRead];
-        packetHandler.read(data, bytesToRead);
-        packetHandler.getAcknowledgement();
+        byte[] data = new byte[bytesToRead + 1];
+        packetHandler.read(data, bytesToRead + 1);
         ArrayList<Character> charData = new ArrayList<>();
         for (int i = 0; i < bytesToRead; i++) {
             charData.add((char) data[i]);

@@ -1,6 +1,5 @@
 package io.pslab.communication;
 
-import static java.lang.Math.max;
 import static java.lang.Math.pow;
 import static io.pslab.others.MathUtils.linSpace;
 
@@ -9,7 +8,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.appcompat.app.AlertDialog;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
@@ -36,9 +34,6 @@ import io.pslab.communication.analogChannel.AnalogInputSource;
 import io.pslab.communication.digitalChannel.DigitalChannel;
 import io.pslab.communication.peripherals.DACChannel;
 import io.pslab.communication.peripherals.I2C;
-import io.pslab.communication.peripherals.MCP4728;
-import io.pslab.communication.peripherals.NRF24L01;
-import io.pslab.communication.peripherals.SPI;
 import io.pslab.fragment.HomeFragment;
 import io.pslab.others.InitializationVariable;
 
@@ -75,9 +70,6 @@ public class ScienceLab {
     private AnalogConstants mAnalogConstants;
     private int LAChannelFrequency;
     public I2C i2c;
-    public SPI spi;
-    public NRF24L01 nrf;
-    public MCP4728 dac;
 
     /**
      * Constructor
@@ -185,7 +177,6 @@ public class ScienceLab {
             dChannels.add(new DigitalChannel(i));
         }
         i2c = new I2C(mPacketHandler);
-        spi = new SPI(mPacketHandler);
         if (isConnected()) {
             for (String temp : new String[]{"CH1", "CH2"}) {
                 this.setGain(temp, 0, true);
@@ -193,9 +184,7 @@ public class ScienceLab {
             for (String temp : new String[]{"SI1", "SI2"}) {
                 loadEquation(temp, "sine");
             }
-            spi.setParameters(1, 7, 1, 0, null);
         }
-        dac = new MCP4728(mPacketHandler, i2c);
         this.clearBuffer(0, samples);
     }
 
