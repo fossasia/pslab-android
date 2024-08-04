@@ -1063,6 +1063,8 @@
     <string name="control_stop">Stop</string>
     <string name="control_run">Run</string>
 
+    <string name="legacy_title">Legacy Firmware Detected</string>
+    <string name="legacy_message">We have detected that your PSLab device is running legacy firmware. Please note that support for this firmware has ended. For the best experience and continued support, please update your device to the latest firmware version.</string>
     <string name="pin_esp_name" translatable="false">ESP</string>
     <string name="pin_esp_description">ESP Programmer pin</string>
     <string name="pin_rxd_name" translatable="false">RXD</string>

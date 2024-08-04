@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
     private static final int TIME_INTERVAL = 2000;
     private long mBackPressed;
+    private static MainActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_INSTRUMENTS;
             loadHomeFragment();
         }
+        instance = this;
     }
 
     private void loadHomeFragment() {
@@ -183,6 +186,10 @@ public class MainActivity extends AppCompatActivity {
             drawer.closeDrawers();
             invalidateOptionsMenu();
         }
+    }
+
+    public static MainActivity getInstance() {
+        return instance;
     }
 
     private Fragment getHomeFragment() throws IOException {
@@ -342,6 +349,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             txtName.setText(getString(R.string.device_not_found));
         }
+    }
+
+    public void showFirmwareDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.legacy_title);
+        builder.setCancelable(false);
+        builder.setMessage(R.string.legacy_message);
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.create().show();
+
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommunicationHandler {
@@ -21,6 +22,7 @@ public class CommunicationHandler {
     private static final int PSLAB_PRODUCT_ID_V5 = 223;
     private static final int PSLAB_VENDOR_ID_V6 = 0x10C4;
     private static final int PSLAB_PRODUCT_ID_V6 = 0xEA60;
+    public static int PSLAB_VERSION;
     private boolean connected = false, device_found = false;
     private UsbManager mUsbManager;
     private UsbDeviceConnection mConnection;
@@ -29,8 +31,8 @@ public class CommunicationHandler {
     public UsbDevice mUsbDevice;
     List<UsbSerialDriver> drivers;
 
-    private static final int DEFAULT_READ_BUFFER_SIZE = 32 * 1024;
-    private static final int DEFAULT_WRITE_BUFFER_SIZE = 32 * 1024;
+    public static final int DEFAULT_READ_BUFFER_SIZE = 32 * 1024;
+    public static final int DEFAULT_WRITE_BUFFER_SIZE = 32 * 1024;
 
     private byte[] mReadBuffer;
     private byte[] mWriteBuffer;
@@ -57,7 +59,7 @@ public class CommunicationHandler {
         mWriteBuffer = new byte[DEFAULT_WRITE_BUFFER_SIZE];
     }
 
-    public void open() throws IOException {
+    public void open(int baudRate) throws IOException {
         if (!device_found) {
             throw new IOException("Device not Connected");
         }
@@ -65,10 +67,16 @@ public class CommunicationHandler {
         if (mConnection == null) {
             throw new IOException("Could not open device.");
         }
+        if (mUsbDevice.getProductId() == PSLAB_PRODUCT_ID_V6 && mUsbDevice.getVendorId() == PSLAB_VENDOR_ID_V6) {
+            PSLAB_VERSION = 6;
+        }
+        else {
+            PSLAB_VERSION = 5;
+        }
         connected = true;
         port = driver.getPorts().get(0);
         port.open(mConnection);
-        port.setParameters(1000000, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
+        port.setParameters(baudRate, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
         clear();
     }
 
@@ -89,7 +97,7 @@ public class CommunicationHandler {
     }
 
     public int read(byte[] dest, int bytesToBeRead, int timeoutMillis) throws IOException {
-        if (mUsbDevice.getProductId() == PSLAB_PRODUCT_ID_V5 && mUsbDevice.getVendorId() == PSLAB_VENDOR_ID_V5) {
+        if (PSLAB_VERSION == 5) {
             return readCdcAcm(dest, bytesToBeRead, timeoutMillis);
         }
         int numBytesRead = 0;
@@ -99,6 +107,7 @@ public class CommunicationHandler {
         while (numBytesRead < bytesToBeRead) {
             readNow = port.read(mReadBuffer, bytesToBeReadTemp, timeoutMillis);
             if (readNow == 0) {
+                Log.e(TAG, Arrays.toString(Thread.currentThread().getStackTrace()));
                 Log.e(TAG, "Read Error: " + bytesToBeReadTemp);
                 return numBytesRead;
             } else {

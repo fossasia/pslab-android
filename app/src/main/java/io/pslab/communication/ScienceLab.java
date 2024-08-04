@@ -1,38 +1,39 @@
 package io.pslab.communication;
 
-import static org.apache.commons.lang3.math.NumberUtils.max;
+import static java.lang.Math.pow;
 import static io.pslab.others.MathUtils.linSpace;
 
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.Objects;
 
 import io.pslab.activity.MainActivity;
 import io.pslab.communication.analogChannel.AnalogAquisitionChannel;
 import io.pslab.communication.analogChannel.AnalogConstants;
 import io.pslab.communication.analogChannel.AnalogInputSource;
 import io.pslab.communication.digitalChannel.DigitalChannel;
+import io.pslab.communication.peripherals.DACChannel;
 import io.pslab.communication.peripherals.I2C;
-import io.pslab.communication.peripherals.MCP4728;
-import io.pslab.communication.peripherals.NRF24L01;
-import io.pslab.communication.peripherals.RadioLink;
-import io.pslab.communication.peripherals.SPI;
 import io.pslab.fragment.HomeFragment;
 import io.pslab.others.InitializationVariable;
 
@@ -44,27 +45,15 @@ public class ScienceLab {
 
     private static final String TAG = "ScienceLab";
     public static Thread initialisationThread;
-
-    private int CAP_AND_PCS = 0;
-    private int ADC_SHIFTS_LOCATION1 = 1;
-    private int ADC_SHIFTS_LOCATION2 = 2;
-    private int ADC_POLYNOMIALS_LOCATION = 3;
-
-    private int DAC_SHIFTS_PV1A = 4;
-    private int DAC_SHIFTS_PV1B = 5;
-    private int DAC_SHIFTS_PV2A = 6;
-    private int DAC_SHIFTS_PV2B = 7;
-    private int DAC_SHIFTS_PV3A = 8;
-    private int DAC_SHIFTS_PV3B = 9;
-
-    public int BAUD = 1000000;
     public int DDS_CLOCK, MAX_SAMPLES, samples, triggerLevel, triggerChannel, errorCount,
             channelsInBuffer, digitalChannelsInBuffer, dataSplitting;
     public double sin1Frequency, sin2Frequency;
-    double[] currents, currentScalars, gainValues, buffer;
+    double[] currents, gainValues, buffer;
+    int[] currentScalars;
     double SOCKET_CAPACITANCE, resistanceScaling, timebase;
-    public boolean streaming, calibrated = false;
-
+    private static final double CAPACITOR_DISCHARGE_VOLTAGE = 0.01 * 3.3;
+    private static final int CTMU_CHANNEL = 0b11110;
+    public boolean streaming;
     String[] allAnalogChannels, allDigitalChannels;
     HashMap<String, AnalogInputSource> analogInputSources = new HashMap<>();
     HashMap<String, Double> squareWaveFrequency = new HashMap<>();
@@ -72,15 +61,15 @@ public class ScienceLab {
     HashMap<String, String> waveType = new HashMap<>();
     ArrayList<AnalogAquisitionChannel> aChannels = new ArrayList<>();
     ArrayList<DigitalChannel> dChannels = new ArrayList<>();
+    public Map<String, DACChannel> dacChannels = new LinkedHashMap<>();
+    private Map<String, Double> values = new LinkedHashMap<>();
 
     private CommunicationHandler mCommunicationHandler;
     private PacketHandler mPacketHandler;
     private CommandsProto mCommandsProto;
     private AnalogConstants mAnalogConstants;
+    private int LAChannelFrequency;
     public I2C i2c;
-    public SPI spi;
-    private NRF24L01 nrf;
-    private MCP4728 dac;
 
     /**
      * Constructor
@@ -93,7 +82,7 @@ public class ScienceLab {
         mCommunicationHandler = communicationHandler;
         if (isDeviceFound() && MainActivity.hasPermission) {
             try {
-                mCommunicationHandler.open();
+                mCommunicationHandler.open(1000000);
                 //Thread.sleep(200);
                 mPacketHandler = new PacketHandler(50, mCommunicationHandler);
             } catch (IOException | NullPointerException e) {
@@ -110,11 +99,10 @@ public class ScienceLab {
                         @Override
                         public void run() {
                             try {
-                                runInitSequence(true);
+                                runInitSequence();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            calibrated = true;
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -144,9 +132,10 @@ public class ScienceLab {
         channelsInBuffer = 0;
         digitalChannelsInBuffer = 0;
         currents = new double[]{0.55e-3, 0.55e-6, 0.55e-5, 0.55e-4};
-        currentScalars = new double[]{1.0, 1.0, 1.0, 1.0};
+        currentScalars = new int[]{1, 2, 3, 0};
         dataSplitting = mCommandsProto.DATA_SPLITTING;
         allAnalogChannels = mAnalogConstants.allAnalogChannels;
+        LAChannelFrequency = 0;
         for (String aChannel : allAnalogChannels) {
             analogInputSources.put(aChannel, new AnalogInputSource(aChannel));
         }
@@ -156,9 +145,18 @@ public class ScienceLab {
         squareWaveFrequency.put("SQR2", 0.0);
         squareWaveFrequency.put("SQR3", 0.0);
         squareWaveFrequency.put("SQR4", 0.0);
+        dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3}, 0, 0));
+        dacChannels.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1, 1));
+        dacChannels.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2, 0));
+        dacChannels.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3, 1));
+        values.put("PV1", 0.);
+        values.put("PV2", 0.);
+        values.put("PV3", 0.);
+        values.put("PCS", 0.);
     }
 
-    private void runInitSequence(Boolean loadCalibrationData) throws IOException {
+    private void runInitSequence() throws IOException {
+        fetchFirmwareVersion();
         ArrayList<String> aboutArray = new ArrayList<>();
         if (!isConnected()) {
             Log.e(TAG, "Check hardware connections. Not connected");
@@ -170,7 +168,7 @@ public class ScienceLab {
         gainValues = mAnalogConstants.gains;
         this.buffer = new double[10000];
         Arrays.fill(this.buffer, 0);
-        SOCKET_CAPACITANCE = 42e-12;
+        SOCKET_CAPACITANCE = 46e-12;
         resistanceScaling = 1;
         allDigitalChannels = DigitalChannel.digitalChannelNames;
         gains.put("CH1", 0);
@@ -179,7 +177,6 @@ public class ScienceLab {
             dChannels.add(new DigitalChannel(i));
         }
         i2c = new I2C(mPacketHandler);
-        spi = new SPI(mPacketHandler);
         if (isConnected()) {
             for (String temp : new String[]{"CH1", "CH2"}) {
                 this.setGain(temp, 0, true);
@@ -187,302 +184,8 @@ public class ScienceLab {
             for (String temp : new String[]{"SI1", "SI2"}) {
                 loadEquation(temp, "sine");
             }
-            spi.setParameters(1, 7, 1, 0, null);
         }
-        nrf = new NRF24L01(mPacketHandler);
-        if (nrf.ready) {
-            aboutArray.add("Radio Transceiver is : Installed");
-        } else {
-            aboutArray.add("Radio Transceiver is : Not Installed");
-        }
-        dac = new MCP4728(mPacketHandler, i2c);
-        this.calibrated = false;
-        // Check for calibration data if connected. And process them if found
-        if (loadCalibrationData && isConnected()) {
-
-            /* CAPS AND PCS CALIBRATION */
-            byte[] capAndPCS = readBulkFlash(this.CAP_AND_PCS, 8 * 4 + 5); // 5 for READY and 32 (8 float numbers) for data
-
-            ArrayList<Byte> capsAndPCSByteData = new ArrayList<>();
-
-            for (byte temp : capAndPCS) {
-                capsAndPCSByteData.add(temp);
-            }
-
-            /*
-            for (int i = 0; i <= 37 / 16; i++) {
-                byte[] temp = readFlash(CAP_AND_PCS, i);
-                for (byte a : temp) {
-                    capsAndPCSByteData.add(a);
-                }
-            }
-            */
-
-            String isReady = "";
-            for (int i = 0; i < 5; i++) {
-                try {
-                    isReady += new String(new byte[]{capsAndPCSByteData.get(i)}, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-            if ("READY".equals(isReady)) {
-                ArrayList<Float> scalars = new ArrayList<>();
-                for (int i = 0; i < 8; i++) {
-                    // unpacking byte data to float, total 32 bytes -> 8 floats of 4 bytes each
-                    scalars.add(Float.intBitsToFloat(
-                            (capsAndPCSByteData.get(5 + i * 4) & 0xFF) |
-                                    (capsAndPCSByteData.get(5 + i * 4 + 1) & 0xFF) << 8 |
-                                    (capsAndPCSByteData.get(5 + i * 4 + 2) & 0xFF) << 16 |
-                                    (capsAndPCSByteData.get(5 + i * 4 + 3) & 0xFF) << 24)
-                    );
-                }
-                this.SOCKET_CAPACITANCE = scalars.get(0);
-                this.dac.chans.get("PCS").loadCalibrationTwopoint(scalars.get(1), scalars.get(2).intValue());
-                double[] tempScalars = new double[scalars.size() - 4];
-
-                for (int i = 4; i < scalars.size(); i++) {
-                    tempScalars[i - 4] = scalars.get(i);
-                }
-                this.calibrateCTMU(tempScalars);
-                this.resistanceScaling = scalars.get(3);
-                // add info in aboutArray
-            } else {
-                this.SOCKET_CAPACITANCE = 42e-12;
-                Log.v(TAG, "Cap and PCS calibration invalid");
-            }
-
-
-            /* POLYNOMIAL DATA FOR CALIBRATION */
-            //byte[] polynomials = readBulkFlash(this.ADC_POLYNOMIALS_LOCATION, 2048);
-
-            ArrayList<Byte> polynomialsByteData = new ArrayList<>();
-            for (int i = 0; i < 2048 / 16; i++) {
-                byte[] temp = readFlash(ADC_POLYNOMIALS_LOCATION, i);
-                for (byte a : temp) {
-                    polynomialsByteData.add(a);
-                }
-            }
-
-            //Log.v("PolynomialByteDataSize:", "" + polynomialsByteData.size());
-
-            String polynomialByteString = "";
-            for (int i = 0; i < 2048; i++) {
-                try {
-                    polynomialByteString += new String(new byte[]{polynomialsByteData.get(i)}, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // todo : change to "PSLab" after PSLab firmware is ready
-            if ("SEELablet".equals(polynomialByteString.substring(0, 9))) {
-                Log.v(TAG, "ADC calibration found...");
-                this.calibrated = true;
-                ArrayList<Byte> adcShifts = new ArrayList<>();
-                for (int i = 0; i < 2048 / 16; i++) {
-                    byte[] temp = readFlash(ADC_SHIFTS_LOCATION1, i);
-                    for (byte a : temp) {
-                        adcShifts.add(a);
-                    }
-                }
-                for (int i = 0; i < 2048 / 16; i++) {
-                    byte[] temp = readFlash(ADC_SHIFTS_LOCATION2, i);
-                    for (byte a : temp) {
-                        adcShifts.add(a);
-                    }
-                }
-                String[] polySections = polynomialByteString.split("STOP");
-                String adcSlopeOffsets = polySections[0];
-                String dacSlopeIntercept = polySections[1];
-                String inlSlopeIntercept = polySections[2];
-
-                Log.v("adcSlopeOffsets", adcSlopeOffsets);
-                Log.v("dacSlopeIntercept", dacSlopeIntercept);
-                Log.v("inlSlopeIntercept", inlSlopeIntercept);
-
-                Map<String, ArrayList<Double[]>> polyDict = new LinkedHashMap<>();
-                String[] adcSlopeOffsetsSplit = adcSlopeOffsets.split(Pattern.quote(">|"));
-                /*
-                for (String temp : adcSlopeOffsetsSplit) {
-                    Log.v("zz", temp);
-                }
-                */
-                for (int i = 0; i < adcSlopeOffsetsSplit.length; i++) {
-                    if (i == 0) continue;
-                    //Log.v("" + i, adcSlopeOffsetsSplit[i]);
-                    String cals = adcSlopeOffsetsSplit[i].substring(5);
-                    polyDict.put(adcSlopeOffsetsSplit[i].substring(0, 3), new ArrayList<Double[]>());
-                    for (int j = 0; j < cals.length() / 16; j++) {
-                        Double[] poly = new Double[4];
-                        for (int k = 0; k < 4; k++) {
-                            Float f = ByteBuffer.wrap(cals.substring((16 * j) + (k * 4), (16 * j) + (k * 4) + 4).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat();
-                            poly[k] = (double) f;
-                        }
-                        polyDict.get(adcSlopeOffsetsSplit[i].substring(0, 3)).add(poly);
-                    }
-                }
-
-                double[] inlSlopeInterceptD = new double[]{ByteBuffer.wrap(inlSlopeIntercept.substring(0, 4).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat(), ByteBuffer.wrap(inlSlopeIntercept.substring(4, 8).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat()};
-                double[] adcShiftsDouble = new double[adcShifts.size()];
-                for (int i = 0; i < adcShifts.size(); i++) {
-                    adcShiftsDouble[i] = ByteBuffer.wrap(new byte[]{0, adcShifts.get(i)}).order(ByteOrder.LITTLE_ENDIAN).getShort();
-                }
-                for (Map.Entry<String, AnalogInputSource> entry : this.analogInputSources.entrySet()) {
-                    this.analogInputSources.get(entry.getKey()).loadCalibrationTable(adcShiftsDouble, inlSlopeInterceptD[0], inlSlopeInterceptD[1]);
-                    if (polyDict.containsKey(entry.getKey())) {
-                        this.analogInputSources.get(entry.getKey()).loadPolynomials(polyDict.get(entry.getKey()));
-                        this.analogInputSources.get(entry.getKey()).calibrationReady = true;
-                    }
-                    this.analogInputSources.get(entry.getKey()).regenerateCalibration();
-                }
-
-                String[] dacSlopeInterceptSplit = dacSlopeIntercept.split(Pattern.quote(">|"));
-                for (int i = 0; i < dacSlopeInterceptSplit.length; i++) {
-                    if (i == 0) continue;
-                    String name = dacSlopeInterceptSplit[i].substring(0, 3);
-                    double[] fits = new double[6];
-                    try {
-                        for (int j = 0; j < 6; j++) {
-                            fits[j] = ByteBuffer.wrap(dacSlopeInterceptSplit[i].substring(5 + j * 4, 5 + (j + 1) * 4).getBytes()).order(ByteOrder.LITTLE_ENDIAN).getFloat();
-                        }
-                    } catch (StringIndexOutOfBoundsException e) {
-                        e.printStackTrace();
-                        continue;
-                    }
-                    double slope = fits[0];
-                    double intercept = fits[1];
-                    double[] fitVals = Arrays.copyOfRange(fits, 2, fits.length);
-                    if ("PV1".equals(name) | "PV2".equals(name) | "PV3".equals(name)) {
-
-                        double[] DACX = new double[4096];
-                        double factor = (this.dac.chans.get(name).range[1] - this.dac.chans.get(name).range[0]) / 4096;
-                        int index = 0;
-                        for (double j = this.dac.chans.get(name).range[0]; index < 4096; j += factor) {
-                            DACX[index++] = j;
-                        }
-
-                        /*
-                        Log.v("factor", "" + factor);
-                        Log.v("rang0", "" + this.dac.chans.get(name).range[0]);
-                        Log.v("rang1", "" + this.dac.chans.get(name).range[1]);
-                        Log.v("DACX", Arrays.toString(DACX));
-                        Log.v("Last", "" + DACX[4095]);
-                        */
-
-                        ArrayList<Byte> OFF = new ArrayList<>();
-                        if ("PV1".equals(name)) {
-                            for (int j = 0; j < 2048 / 16; j++) {
-                                byte[] temp = readFlash(DAC_SHIFTS_PV1A, j);
-                                for (byte a : temp) {
-                                    OFF.add(a);
-                                }
-                            }
-                            for (int j = 0; j < 2048 / 16; j++) {
-                                byte[] temp = readFlash(DAC_SHIFTS_PV1B, j);
-                                for (byte a : temp) {
-                                    OFF.add(a);
-                                }
-                            }
-                        }
-                        if ("PV2".equals(name)) {
-                            for (int j = 0; j < 2048 / 16; j++) {
-                                byte[] temp = readFlash(DAC_SHIFTS_PV2A, j);
-                                for (byte a : temp) {
-                                    OFF.add(a);
-                                }
-                            }
-                            for (int j = 0; j < 2048 / 16; j++) {
-                                byte[] temp = readFlash(DAC_SHIFTS_PV2B, j);
-                                for (byte a : temp) {
-                                    OFF.add(a);
-                                }
-                            }
-                        }
-                        if ("PV3".equals(name)) {
-                            for (int j = 0; j < 2048 / 16; j++) {
-                                byte[] temp = readFlash(DAC_SHIFTS_PV3A, j);
-                                for (byte a : temp) {
-                                    OFF.add(a);
-                                }
-                            }
-                            for (int j = 0; j < 2048 / 16; j++) {
-                                byte[] temp = readFlash(DAC_SHIFTS_PV3B, j);
-                                for (byte a : temp) {
-                                    OFF.add(a);
-                                }
-                            }
-                        }
-
-                        ArrayUtils.reverse(fitVals);
-                        PolynomialFunction fitFunction = new PolynomialFunction(fitVals);
-                        double[] yData = new double[DACX.length];
-                        for (int j = 0; j < DACX.length; j++) {
-                            yData[j] = fitFunction.value(DACX[j]) - (OFF.get(j) * slope + intercept);
-                        }
-                        int LOOKBEHIND = 100;
-                        int LOOKAHEAD = 100;
-                        ArrayList<Double> offset = new ArrayList<>();
-                        for (int j = 0; j < 4096; j++) {
-                            double[] temp = new double[Math.min(4095, j + LOOKAHEAD) - Math.max(j - LOOKBEHIND, 0)];
-                            for (int k = Math.max(j - LOOKBEHIND, 0), p = 0; k < Math.min(4095, j + LOOKAHEAD); k++, p++) {
-                                temp[p] = yData[k] - DACX[j];
-                                if (temp[p] < 0) temp[p] = -temp[p];
-                            }
-                            // finding minimum in temp array
-                            double min = temp[0];
-                            for (double aTemp : temp) {
-                                if (min > aTemp)
-                                    min = aTemp;
-                            }
-                            offset.add(min - (j - Math.max(j - LOOKBEHIND, 0)));
-                        }
-                        this.dac.chans.get(name).loadCalibrationTable(offset);
-
-                    }
-                }
-
-
-                /*
-                int count = 0;
-                int tempADC = 0, tempDAC = 0;
-                for (int i = 0; i < polynomialsByteData.size() - 3; i++) {
-                    if (polynomialsByteData.get(i) == 'S' && polynomialsByteData.get(i + 1) == 'T' && polynomialsByteData.get(i + 2) == 'O' && polynomialsByteData.get(i + 3) == 'P') {
-                        switch (count) {
-                            case 0:
-                                tempADC = i;
-                                count++;
-                                break;
-                            case 1:
-                                tempDAC = i;
-                                count++;
-                                break;
-                        }
-                    }
-                }
-                List<Byte> adcSlopeOffsets = polynomialsByteData.subList(0, tempADC);  //Arrays.copyOfRange(polynomials, 0, tempADC);
-                List<Byte> dacSlopeIntercept = polynomialsByteData.subList(tempADC + 4, tempDAC);  //Arrays.copyOfRange(polynomials, tempADC + 4, tempDAC);
-                List<Byte> inlSlopeIntercept = polynomialsByteData.subList(tempDAC + 4, polynomialsByteData.size());  //Arrays.copyOfRange(polynomials, tempDAC + 4, polynomialsByteData.size());
-                int marker = 0;
-                List<List<Byte>> tempSplit = new ArrayList<>();
-                for (int i = 0; i < adcSlopeOffsets.size() - 1; i++) {
-                    if (adcSlopeOffsets.get(i) == '>' && adcSlopeOffsets.get(i + 1) == '|') {
-                        if (marker != 0) {
-                            tempSplit.add(adcSlopeOffsets.subList(marker, i));
-                        }
-                        marker = i + 2;
-                    }
-                }
-                Map<Byte, ArrayList<Float>> polyDict = new LinkedHashMap<>();
-                for (List<Byte> temp : tempSplit) {
-                    List<Byte> temp_ = temp.subList(5, temp.size());
-                    for (int i = 0; i < temp_.size() / 16; i++) {
-                    }
-                }
-                */
-
-            }
-        }
+        this.clearBuffer(0, samples);
     }
 
     /**
@@ -495,16 +198,6 @@ public class ScienceLab {
         return (volt / current) * this.resistanceScaling;
     }
 
-    public void ignoreCalibration() {
-        for (Map.Entry<String, AnalogInputSource> tempAnalogInputSource : this.analogInputSources.entrySet()) {
-            tempAnalogInputSource.getValue().ignoreCalibration();
-            tempAnalogInputSource.getValue().regenerateCalibration();
-        }
-        for (String temp : new String[]{"PV1", "PV2", "PV3"}) {
-            this.dac.ignoreCalibration(temp);
-        }
-    }
-
     public String getVersion() throws IOException {
         if (isConnected()) {
             return mPacketHandler.getVersion();
@@ -513,17 +206,18 @@ public class ScienceLab {
         }
     }
 
-    public Map<Integer, ArrayList<Integer>> getRadioLinks() {
-        try {
-            return this.nrf.getNodeList();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void fetchFirmwareVersion() {
+        if (isConnected()) {
+            PacketHandler.PSLAB_FW_VERSION = mPacketHandler.getFirmwareVersion();
+            if (PacketHandler.PSLAB_FW_VERSION == 2) {
+                MainActivity.getInstance().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity.getInstance().showFirmwareDialog();
+                    }
+                });
+            }
         }
-        return null;
-    }
-
-    public RadioLink newRadioLink() {
-        return new RadioLink(this.nrf, -1);
     }
 
     public void close() {
@@ -532,229 +226,6 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Blocking call that fetches an oscilloscope trace from the specified input channel
-     *
-     * @param channel Channel to select as input. ['CH1','CH2','CH3','MIC',RES']
-     * @param samples Number of samples to fetch. Maximum 10000
-     * @param timeGap Timegap between samples in microseconds
-     * @return Arrays X(timestamps),Y(Corresponding Voltage values)
-     */
-    public HashMap<String, double[]> captureOne(String channel, int samples, double timeGap) {
-        return this.captureFullSpeed(channel, samples, timeGap, new ArrayList<String>(), null);
-    }
-
-    /**
-     * Blocking call that fetches oscilloscope traces from CH1,CH2
-     *
-     * @param samples       Number of samples to fetch. Maximum 5000
-     * @param timeGap       Timegap between samples in microseconds
-     * @param traceOneRemap Choose the analog input for channel 1. It is connected to CH1 by default. Channel 2 always reads CH2.
-     * @param trigger       boolean whether trigger is selected or not
-     * @return Arrays X(timestamps),Y1(Voltage at CH1),Y2(Voltage at CH2)
-     */
-    public HashMap<String, double[]> captureTwo(int samples, double timeGap, String traceOneRemap, boolean trigger) {
-        if (traceOneRemap == null) traceOneRemap = "CH1";
-        this.captureTraces(2, samples, timeGap, traceOneRemap, trigger, null);
-        try {
-            Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        while (this.oscilloscopeProgress()[0] == 0) ;
-        this.fetchChannel(1);
-        this.fetchChannel(2);
-        HashMap<String, double[]> retData = new HashMap<>();
-        retData.put("x", this.aChannels.get(0).getXAxis());
-        retData.put("y1", this.aChannels.get(0).getYAxis());
-        retData.put("y2", this.aChannels.get(1).getYAxis());
-        return retData;
-    }
-
-    /**
-     * Blocking call that fetches oscilloscope traces from CH1,CH2,CH3,MIC
-     *
-     * @param samples       Number of samples to fetch. Maximum 2500
-     * @param timeGap       Timegap between samples in microseconds. Minimum 1.75uS
-     * @param traceOneRemap Choose the analog input for channel 1. It is connected to CH1 by default. Channel 2 always reads CH2.
-     * @param trigger       boolean whether trigger is selected or not
-     * @return Arrays X(timestamps),Y1(Voltage at CH1),Y2(Voltage at CH2),Y3(Voltage at CH3),Y4(Voltage at CH4)
-     */
-    public HashMap<String, double[]> captureFour(int samples, double timeGap, String traceOneRemap, boolean trigger) {
-        if (traceOneRemap == null) traceOneRemap = "CH1";
-        this.captureTraces(4, samples, timeGap, traceOneRemap, trigger, null);
-        try {
-            Thread.sleep((long) (1e-6 * this.samples * this.timebase + 0.1) * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        while (this.oscilloscopeProgress()[0] == 0) ;
-        HashMap<String, double[]> retData = new HashMap<>();
-        HashMap<String, double[]> tempMap = this.fetchTrace(1);
-        retData.put("x", tempMap.get("x"));
-        retData.put("y", tempMap.get("y"));
-        retData.put("y2", this.fetchTrace(2).get("y"));
-        retData.put("y3", this.fetchTrace(3).get("y"));
-        retData.put("y4", this.fetchTrace(4).get("y"));
-        return retData;
-    }
-
-    /**
-     * Blocking call that fetches oscilloscope traces from a set of specified channels
-     *
-     * @param samples Number of samples to fetch. Maximum 10000/(total specified channels)
-     * @param timeGap Timegap between samples in microseconds.
-     * @param args    Channel names
-     * @return Arrays X(timestamps),Y1,Y2 ..
-     */
-    public Map<String, ArrayList<Double>> captureMultiple(int samples, double timeGap, List<String> args) {
-        if (args.size() == 0) {
-            Log.v(TAG, "Please specify channels to record");
-            return null;
-        }
-        timeGap = (int) (timeGap * 8) / 8;
-        if (timeGap < 1.5) timeGap = (int) (1.5 * 8) / 8;
-        int totalChannels = args.size();
-        int totalSamples = samples * totalChannels;
-        if (totalSamples > this.MAX_SAMPLES) {
-            Log.v(TAG, "Sample limit exceeded. 10,000 max");
-            totalSamples = this.MAX_SAMPLES;
-            samples = this.MAX_SAMPLES / totalChannels;
-        }
-        int channelSelection = 0;
-        for (String channel : args) {
-            channelSelection |= (1 << this.analogInputSources.get(channel).CHOSA);
-        }
-        Log.v(TAG, "Selection " + channelSelection + args.size() + Integer.toHexString(channelSelection | ((totalChannels - 1) << 12)));
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            mPacketHandler.sendByte(mCommandsProto.CAPTURE_MULTIPLE);
-            mPacketHandler.sendInt(channelSelection | ((totalChannels - 1) << 12));
-            mPacketHandler.sendInt(totalSamples);
-            mPacketHandler.sendInt((int) this.timebase * 8);
-            mPacketHandler.getAcknowledgement();
-            Log.v(TAG, "Wait");
-            Thread.sleep((long) (1e-6 * totalSamples * timeGap + .01) * 1000);
-            Log.v(TAG, "Done");
-            ArrayList<Integer> listData = new ArrayList<>();
-            for (int i = 0; i < totalSamples / this.dataSplitting; i++) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(0);
-                mPacketHandler.sendInt(this.dataSplitting);
-                mPacketHandler.sendInt(i * this.dataSplitting);
-                byte[] data = new byte[this.dataSplitting * 2 + 1];
-                mPacketHandler.read(data, this.dataSplitting * 2 + 1);
-                for (int j = 0; j < data.length - 1; j++)
-                    listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
-            }
-
-            if ((totalSamples % this.dataSplitting) != 0) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(0);
-                mPacketHandler.sendInt(totalSamples % this.dataSplitting);
-                mPacketHandler.sendInt(totalSamples - totalSamples % this.dataSplitting);
-                byte[] data = new byte[2 * (totalSamples % this.dataSplitting) + 1];
-                mPacketHandler.read(data, 2 * (totalSamples % this.dataSplitting) + 1);
-                for (int j = 0; j < data.length - 1; j++)
-                    listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
-            }
-            for (int i = 0; i < totalSamples; i++) {
-                this.buffer[i] = (listData.get(i * 2) | (listData.get(i * 2 + 1) << 8));
-            }
-            Map<String, ArrayList<Double>> retData = new LinkedHashMap<>();
-            ArrayList<Double> timeBase = new ArrayList<>();
-            double factor = timeGap * (samples - 1) / samples;
-            for (double i = 0; i < timeGap * (samples - 1); i += factor) timeBase.add(i);
-            retData.put("time", timeBase);
-            for (int i = 0; i < totalChannels; i++) {
-                ArrayList<Double> yValues = new ArrayList<>();
-                for (int j = i; j < totalSamples; j += totalChannels) {
-                    yValues.add(buffer[j]);
-                }
-                retData.put("CH" + String.valueOf(i + 1), yValues);
-            }
-            return retData;
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private void captureFullSpeedInitialize(String channel, int samples, double timeGap, List<String> args, Integer interval) {
-        if (interval == null) interval = 1000;
-        timeGap = (int) (timeGap * 8) / 8;
-        if (timeGap < 0.5) timeGap = (int) (0.5 * 8) / 8;
-        if (samples > this.MAX_SAMPLES) {
-            Log.v(TAG, "Sample limit exceeded. 10,000 max");
-            samples = this.MAX_SAMPLES;
-        }
-        this.timebase = (int) (timeGap * 8) / 8;
-        this.samples = samples;
-        int CHOSA = this.analogInputSources.get(channel).CHOSA;
-        this.aChannels.get(0).setParams(channel, samples, this.timebase, 10, this.analogInputSources.get(channel), null);
-        this.channelsInBuffer = 1;
-
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            if (args.contains("SET_LOW"))
-                mPacketHandler.sendByte(mCommandsProto.SET_LO_CAPTURE);
-            else if (args.contains("SET_HIGH"))
-                mPacketHandler.sendByte(mCommandsProto.SET_HI_CAPTURE);
-            else if (args.contains("FIRE_PULSES")) {
-                mPacketHandler.sendByte(mCommandsProto.PULSE_TRAIN);
-                Log.v(TAG, "Firing SQR1 pulses for " + interval + " uSec");
-            } else
-                mPacketHandler.sendByte(mCommandsProto.CAPTURE_DMASPEED);
-            mPacketHandler.sendByte(CHOSA);
-            mPacketHandler.sendInt(samples);
-            mPacketHandler.sendInt((int) timeGap * 8);
-            if (args.contains("FIRE_PULSES")) {
-                mPacketHandler.sendInt(interval);
-                Thread.sleep((long) (interval * 1e-6));
-            }
-            mPacketHandler.getAcknowledgement();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
-     *
-     * @param channel  Channel name 'CH1','CH2','CH3','MIC','RES'
-     * @param samples  Number of samples to fetch. Maximum 10000/(total specified channels)
-     * @param timeGap  Timegap between samples in microseconds.
-     * @param args     Specify if SQR1 must be toggled right before capturing.
-     *                 'SET_LOW': Set SQR1 to 0V
-     *                 'SET_HIGH': Set SQR1 to 1V
-     *                 'FIRE_PULSES': output a preset frequency on SQR1 for a given interval (keyword arg 'interval' must be specified or it will default to 1000uS) before acquiring data. This is used for measuring speed of sound using piezos if no arguments are specified, a regular capture will be executed.
-     * @param interval Units: uS. Necessary if 'FIRE_PULSES' argument was supplied. Default 1000uS
-     * @return Timestamp array ,voltage_value array
-     */
-    public HashMap<String, double[]> captureFullSpeed(String channel, int samples, double timeGap, List<String> args, Integer interval) {
-        /*
-         * Blocking call that fetches oscilloscope traces from a single oscilloscope channel at a maximum speed of 2MSPS
-         */
-
-        this.captureFullSpeedInitialize(channel, samples, timeGap, args, interval);
-
-        try {
-            Thread.sleep((long) (1000 * (1e-6 * this.samples * this.timebase + 0.1 + ((interval != null) ? interval : 0) * 1e-6)));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        this.fetchChannel(1);
-        HashMap<String, double[]> retData = new HashMap<>();
-        retData.put("x", this.aChannels.get(0).getXAxis());
-        retData.put("y", this.aChannels.get(0).getYAxis());
-        return retData;
     }
 
     private void captureFullSpeedHrInitialize(String channel, int samples, double timeGap, List<String> args) {
@@ -825,7 +296,6 @@ public class ScienceLab {
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
                 for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
             }
 
             if ((samples % this.dataSplitting) != 0) {
@@ -838,7 +308,6 @@ public class ScienceLab {
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting));
                 for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
             }
 
             for (int i = 0; i < samples; i++) {
@@ -869,8 +338,6 @@ public class ScienceLab {
     public void captureTraces(int number, int samples, double timeGap, String channelOneInput, Boolean trigger, Integer CH123SA) {
         if (CH123SA == null) CH123SA = 0;
         if (channelOneInput == null) channelOneInput = "CH1";
-        int triggerOrNot = 0;
-        if (trigger) triggerOrNot = 0x80;
         this.timebase = timeGap;
         this.timebase = (int) (this.timebase * 8) / 8;
         if (!this.analogInputSources.containsKey(channelOneInput)) {
@@ -878,35 +345,47 @@ public class ScienceLab {
             return;
         }
         int CHOSA = this.analogInputSources.get(channelOneInput).CHOSA;
+        this.aChannels.get(0).setParams(channelOneInput, samples, 0, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
         try {
             mPacketHandler.sendByte(mCommandsProto.ADC);
             if (number == 1) {
-                if (this.timebase < 1.5)
-                    this.timebase = (int) (1.5 * 8) / 8;
-                if (samples > this.MAX_SAMPLES) samples = this.MAX_SAMPLES;
-                this.aChannels.get(0).setParams(channelOneInput, samples, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
-                mPacketHandler.sendByte(mCommandsProto.CAPTURE_ONE);
-                mPacketHandler.sendByte(CHOSA | triggerOrNot);
+                if (timeGap < 0.5)
+                    this.timebase = (int) (0.5 * 8) / 8;
+                if (samples > this.MAX_SAMPLES)
+                    samples = this.MAX_SAMPLES;
+                if (trigger) {
+                    if (timeGap < 0.75)
+                        this.timebase = (int) (0.75 * 8) / 8;
+                    mPacketHandler.sendByte(mCommandsProto.CAPTURE_ONE);
+                    mPacketHandler.sendByte(CHOSA | 0x80);
+                } else if (timeGap > 1) {
+                    this.aChannels.get(0).setParams(channelOneInput, samples, 0, this.timebase, 12, this.analogInputSources.get(channelOneInput), null);
+                    mPacketHandler.sendByte(mCommandsProto.CAPTURE_DMASPEED);
+                    mPacketHandler.sendByte(CHOSA | 0x80);
+                } else {
+                    mPacketHandler.sendByte(mCommandsProto.CAPTURE_DMASPEED);
+                    mPacketHandler.sendByte(CHOSA);
+                }
             } else if (number == 2) {
-                if (this.timebase < 1.75)
-                    this.timebase = (int) (1.75 * 8) / 8;
-                if (samples > this.MAX_SAMPLES / 2) samples = this.MAX_SAMPLES / 2;
-                this.aChannels.get(0).setParams(channelOneInput, samples, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
-                this.aChannels.get(1).setParams("CH2", samples, this.timebase, 10, this.analogInputSources.get("CH2"), null);
+                if (timeGap < 0.875)
+                    this.timebase = (int) (0.875 * 8) / 8;
+                if (samples > this.MAX_SAMPLES / 2)
+                    samples = this.MAX_SAMPLES / 2;
+                this.aChannels.get(1).setParams("CH2", samples, samples, this.timebase, 10, this.analogInputSources.get("CH2"), null);
                 mPacketHandler.sendByte(mCommandsProto.CAPTURE_TWO);
-                mPacketHandler.sendByte(CHOSA | triggerOrNot);
-            } else if (number == 3 | number == 4) {
-                if (this.timebase < 1.75)
+                mPacketHandler.sendByte(CHOSA | (0x80 * (trigger ? 1 : 0)));
+            } else {
+                if (timeGap < 1.75)
                     this.timebase = (int) (1.75 * 8) / 8;
-                if (samples > this.MAX_SAMPLES / 4) samples = this.MAX_SAMPLES / 4;
-                this.aChannels.get(0).setParams(channelOneInput, samples, this.timebase, 10, this.analogInputSources.get(channelOneInput), null);
+                if (samples > this.MAX_SAMPLES / 4)
+                    samples = this.MAX_SAMPLES / 4;
                 int i = 1;
                 for (String temp : new String[]{"CH2", "CH3", "MIC"}) {
-                    this.aChannels.get(i).setParams(temp, samples, this.timebase, 10, this.analogInputSources.get(temp), null);
+                    this.aChannels.get(i).setParams(temp, samples, i * samples, this.timebase, 10, this.analogInputSources.get(temp), null);
                     i++;
                 }
                 mPacketHandler.sendByte(mCommandsProto.CAPTURE_FOUR);
-                mPacketHandler.sendByte(CHOSA | (CH123SA << 4) | triggerOrNot);
+                mPacketHandler.sendByte(CHOSA | (CH123SA << 4) | (0x80 * (trigger ? 1 : 0)));
             }
             this.samples = samples;
             mPacketHandler.sendInt(samples);
@@ -920,43 +399,13 @@ public class ScienceLab {
     }
 
     /**
-     * Instruct the ADC to start sampling. Use fetchTrace to retrieve the data
-     *
-     * @param channel Channel to acquire data from 'CH1', 'CH2', 'CH3', 'MIC'
-     * @param samples Total points to store per channel. Maximum 3200 total.
-     * @param timeGap Timegap between two successive samples (in uSec)
-     * @param trigger Whether or not to trigger the oscilloscope based on the voltage level set by
-     */
-    public void captureHighResolutionTraces(String channel, int samples, double timeGap, Boolean trigger) {
-        int triggerOrNot = 0;
-        if (trigger) triggerOrNot = 0x80;
-        this.timebase = timeGap;
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            int CHOSA = this.analogInputSources.get(channel).CHOSA;
-            if (this.timebase < 3) this.timebase = 3;
-            if (samples > this.MAX_SAMPLES) samples = this.MAX_SAMPLES;
-            this.aChannels.get(0).setParams(channel, samples, timebase, 12, this.analogInputSources.get(channel), null);
-            mPacketHandler.sendByte(mCommandsProto.CAPTURE_12BIT);
-            mPacketHandler.sendByte(CHOSA | triggerOrNot);
-            this.samples = samples;
-            mPacketHandler.sendInt(samples);
-            mPacketHandler.sendInt((int) this.timebase * 8);
-            mPacketHandler.getAcknowledgement();
-            this.channelsInBuffer = 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Fetches a channel(1-4) captured by :func:captureTraces called prior to this, and returns xAxis,yAxis
      *
      * @param channelNumber Any of the maximum of four channels that the oscilloscope captured. 1/2/3/4
      * @return time array,voltage array
      */
     public HashMap<String, double[]> fetchTrace(int channelNumber) {
-        this.fetchChannel(channelNumber);
+        this.fetchData(channelNumber);
         HashMap<String, double[]> retData = new HashMap<>();
         retData.put("x", this.aChannels.get(channelNumber - 1).getXAxis());
         retData.put("y", this.aChannels.get(channelNumber - 1).getYAxis());
@@ -989,8 +438,7 @@ public class ScienceLab {
         return new int[]{conversionDone, samples};
     }
 
-
-    private boolean fetchChannel(int channelNumber) {
+    private boolean fetchData(int channelNumber) {
         int samples = this.aChannels.get(channelNumber - 1).length;
         if (channelNumber > this.channelsInBuffer) {
             Log.v(TAG, "Channel Unavailable");
@@ -1001,29 +449,25 @@ public class ScienceLab {
         ArrayList<Integer> listData = new ArrayList<>();
         try {
             for (int i = 0; i < samples / this.dataSplitting; i++) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(channelNumber - 1);
+                mPacketHandler.sendByte(mCommandsProto.COMMON);
+                mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
+                mPacketHandler.sendInt(this.aChannels.get(channelNumber - 1).bufferIndex + (i * this.dataSplitting));
                 mPacketHandler.sendInt(this.dataSplitting);
-                mPacketHandler.sendInt(i * this.dataSplitting);
                 byte[] data = new byte[this.dataSplitting * 2 + 1];
                 mPacketHandler.read(data, this.dataSplitting * 2 + 1);
                 for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
             }
 
             if ((samples % this.dataSplitting) != 0) {
-                mPacketHandler.sendByte(mCommandsProto.ADC);
-                mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-                mPacketHandler.sendByte(channelNumber - 1);
+                mPacketHandler.sendByte(mCommandsProto.COMMON);
+                mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
+                mPacketHandler.sendInt(this.aChannels.get(channelNumber - 1).bufferIndex + samples - samples % this.dataSplitting);
                 mPacketHandler.sendInt(samples % this.dataSplitting);
-                mPacketHandler.sendInt(samples - samples % this.dataSplitting);
                 byte[] data = new byte[2 * (samples % this.dataSplitting) + 1];
                 mPacketHandler.read(data, 2 * (samples % this.dataSplitting) + 1);
                 for (int j = 0; j < data.length - 1; j++)
                     listData.add((int) data[j] & 0xff);
-                //mPacketHandler.getAcknowledgement();
             }
 
         } catch (IOException e) {
@@ -1033,45 +477,12 @@ public class ScienceLab {
 
         for (int i = 0; i < listData.size() / 2; i++) {
             this.buffer[i] = (listData.get(i * 2)) | (listData.get(i * 2 + 1) << 8);
-
-            // Hack for now
             while (this.buffer[i] > 1023) this.buffer[i] -= 1023;
-
-            //(listData.get(i * 2)) | ((listData.get(i * 2 + 1) & 0xff) << 8);
-            //ByteBuffer.wrap(new byte[]{listData.get(i * 2), listData.get(i * 2 + 1)}).order(ByteOrder.LITTLE_ENDIAN).getShort();
-            //(listData.get(i * 2)) | (listData.get(i * 2 + 1) << 8);
         }
 
         Log.v("RAW DATA:", Arrays.toString(Arrays.copyOfRange(buffer, 0, samples)));
 
         this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
-        return true;
-    }
-
-
-    public boolean fetchChannelOneShot(int channelNumber) {
-        int offset = 0;
-        int samples = this.aChannels.get(channelNumber - 1).length;
-        if (channelNumber > this.channelsInBuffer) {
-            Log.e(TAG, "Channel unavailable");
-            return false;
-        }
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            mPacketHandler.sendByte(mCommandsProto.GET_CAPTURE_CHANNEL);
-            mPacketHandler.sendByte(channelNumber - 1);
-            mPacketHandler.sendInt(samples);
-            mPacketHandler.sendInt(offset);
-            byte[] data = new byte[samples * 2 + 1];
-            mPacketHandler.read(data, samples * 2 + 1);
-            //mPacketHandler.getAcknowledgement();
-            for (int i = 0; i < samples; i++) {
-                this.buffer[i] = (((int) data[i * 2] & 0xff) | (((int) data[i * 2 + 1] & 0xff) << 8));
-            }
-            this.aChannels.get(channelNumber - 1).yAxis = this.aChannels.get(channelNumber - 1).fixValue(Arrays.copyOfRange(this.buffer, 0, samples));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return true;
     }
 
@@ -1104,8 +515,8 @@ public class ScienceLab {
                 if (level < 0) level = 0;
                 else if (level > 1023) level = 1023;
             }
-            if (level > Math.pow(2, resolution - 1))
-                level = Math.pow(2, resolution - 1);
+            if (level > pow(2, resolution - 1))
+                level = pow(2, resolution - 1);
             else if (level < 0)
                 level = 0;
             mPacketHandler.sendInt((int) level);
@@ -1205,43 +616,6 @@ public class ScienceLab {
         }
     }
 
-    private double autoSelectRange(String channelName, double V) {
-        double[] keys = new double[]{8.0, 4.0, 3.0, 2.0, 1.5, 1.0, 0.5, 0.0};
-        Map<Double, Integer> cutoffs = new HashMap<>();
-        cutoffs.put(8.0, 0);
-        cutoffs.put(4.0, 1);
-        cutoffs.put(3.0, 2);
-        cutoffs.put(2.0, 3);
-        cutoffs.put(1.5, 4);
-        cutoffs.put(1.0, 5);
-        cutoffs.put(0.5, 6);
-        cutoffs.put(0.0, 7);
-
-        int g = 0;
-        for (double key : keys) {
-            if (Math.abs(V) > key) {
-                g = cutoffs.get(key);
-                break;
-            }
-        }
-        this.setGain(channelName, g, true);
-        return g;
-    }
-
-    private void autoRangeScope(double tg) {
-        Map<String, double[]> tmp = this.captureTwo(1000, tg, null, false);
-        double[] x = tmp.get("x");
-        double[] y1 = tmp.get("y1");
-        double[] y2 = tmp.get("y2");
-        for (int i = 0; i < y1.length; i++) {
-            y1[i] = Math.abs(y1[i]);
-            y2[i] = Math.abs(y2[i]);
-        }
-        this.autoSelectRange("CH1", max(y1));
-        this.autoSelectRange("CH2", max(y2));
-
-    }
-
     /**
      * Return the voltage on the selected channel
      *
@@ -1271,7 +645,6 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.GET_VOLTAGE_SUMMED);
             mPacketHandler.sendByte(chosa);
             int vSum = mPacketHandler.getVoltageSummation();
-            mPacketHandler.getAcknowledgement();
             return vSum / 16.0;
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
@@ -1287,15 +660,15 @@ public class ScienceLab {
      * @param totalPoints      Total points to fetch
      */
     private void fetchBuffer(int startingPosition, int totalPoints) {
-        startingPosition = 0;
-        totalPoints = 100;
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
             mPacketHandler.sendInt(startingPosition);
             mPacketHandler.sendInt(totalPoints);
             for (int i = 0; i < totalPoints; i++) {
-                this.buffer[i] = mPacketHandler.getInt();
+                byte[] data = new byte[2];
+                mPacketHandler.read(data, 2);
+                this.buffer[i] = (data[0] & 0xff) | ((data[1] << 8) & 0xff00);
             }
             mPacketHandler.getAcknowledgement();
         } catch (IOException e) {
@@ -1346,44 +719,6 @@ public class ScienceLab {
 
     }
 
-    /**
-     * Instruct the ADC to start streaming 8-bit data. use stop_streaming to stop
-     *
-     * @param tg      Timegap. 250KHz clock
-     * @param channel Channel 'CH1'... 'CH9','IN1','RES'
-     * @throws IOException
-     */
-    private void startStreaming(int tg, String channel) throws IOException {
-        if (this.streaming)
-            this.stopStreaming();
-        try {
-            mPacketHandler.sendByte(mCommandsProto.ADC);
-            mPacketHandler.sendByte(mCommandsProto.START_ADC_STREAMING);
-            mPacketHandler.sendByte(this.calcCHOSA(channel));
-            mPacketHandler.sendInt(tg);
-            this.streaming = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Start streaming failed");
-        }
-    }
-
-    /**
-     * Instruct the ADC to stop streaming data
-     *
-     * @throws IOException
-     */
-    private void stopStreaming() throws IOException {
-        if (this.streaming) {
-            mPacketHandler.sendByte(mCommandsProto.STOP_STREAMING);
-            byte[] data = new byte[2000];
-            mPacketHandler.read(data, 2000);
-            //mPacketHandler.flush(); flush not implemented
-        } else
-            Log.e(TAG, "Not streaming");
-        this.streaming = false;
-    }
-
     public void setDataSplitting(int dataSplitting) {
         this.dataSplitting = dataSplitting;
     }
@@ -1405,10 +740,6 @@ public class ScienceLab {
     public boolean isConnected() {
         return mCommunicationHandler.isConnected();
     }
-
-
-
-
 
     /* DIGITAL SECTION */
 
@@ -1473,36 +804,25 @@ public class ScienceLab {
      * Returns the frequency in Hertz
      *
      * @param channel The input to measure frequency from. ['LA1','LA2','LA3','LA4','RES','EXT','FRQ']
-     * @param timeout This is a blocking call which will wait for one full wavelength before returning the calculated frequency. Use the timeout option if you're unsure of the input signal. Returns 0 if timed out
      * @return frequency
      */
-    public Double getFrequency(String channel, Integer timeout) {
+    public Double getFrequency(String channel) {
         /*
         Frequency measurement on IDx.
 		Measures time taken for 16 rising edges of input signal.
 		returns the frequency in Hertz
         */
-        if (channel == null) channel = "FRQ";
-        if (timeout == null) timeout = 2;
+        if (channel == null) channel = "LA1";
+        LinkedHashMap<String, Integer> data;
         try {
-            mPacketHandler.sendByte(mCommandsProto.COMMON);
-            mPacketHandler.sendByte(mCommandsProto.GET_FREQUENCY);
-            int timeoutMSB = ((int) (timeout * 64e6)) >> 16;
-            mPacketHandler.sendInt(timeoutMSB);
-            mPacketHandler.sendByte(this.calculateDigitalChannel(channel));
-            mPacketHandler.waitForData(); // todo : complete "waitForData"
-            int tmt = mPacketHandler.getByte();
-            long[] x = new long[2];
-            x[0] = mPacketHandler.getLong();
-            x[1] = mPacketHandler.getLong();
-            mPacketHandler.getAcknowledgement();
-            if (tmt != 0) return null;
-            if ((x[1] - x[0]) != 0)
-                return 16 * 64e6 / (x[1] - x[0]);
-        } catch (IOException e) {
-            e.printStackTrace();
+            startOneChannelLA(channel, 1, channel, 3);
+            Thread.sleep(250);
+            data = getLAInitialStates();
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        return null;
+        return fetchLAChannelFrequency(calculateDigitalChannel(channel), data);
     }
 
     /**
@@ -1930,7 +1250,7 @@ public class ScienceLab {
         if (triggerChannel == null) triggerChannel = "LA1";
         if (triggerMode == null) triggerMode = 3;
         try {
-            this.clearBuffer(0, this.MAX_SAMPLES / 2);
+            this.clearBuffer(0, this.MAX_SAMPLES);
             mPacketHandler.sendByte(mCommandsProto.TIMING);
             mPacketHandler.sendByte(mCommandsProto.START_ALTERNATE_ONE_CHAN_LA);
             mPacketHandler.sendInt(this.MAX_SAMPLES / 4);
@@ -2159,14 +1479,16 @@ public class ScienceLab {
         try {
             mPacketHandler.sendByte(mCommandsProto.TIMING);
             mPacketHandler.sendByte(mCommandsProto.GET_INITIAL_DIGITAL_STATES);
-            int initial = mPacketHandler.getInt();
-            int A = (mPacketHandler.getInt() - initial) / 2;
-            int B = (mPacketHandler.getInt() - initial) / 2;
-            int C = (mPacketHandler.getInt() - initial) / 2;
-            int D = (mPacketHandler.getInt() - initial) / 2;
-            int s = mPacketHandler.getByte();
-            int sError = mPacketHandler.getByte();
-            mPacketHandler.getAcknowledgement();
+            byte[] initialStatesBytes = new byte[13];
+            mPacketHandler.read(initialStatesBytes, 13);
+            int initial = (initialStatesBytes[0] & 0xff) | ((initialStatesBytes[1] << 8) & 0xff00);
+            int A = (((initialStatesBytes[2] & 0xff) | ((initialStatesBytes[3] << 8) & 0xff00)) - initial) / 2;
+            int B = (((initialStatesBytes[4] & 0xff) | ((initialStatesBytes[5] << 8) & 0xff00)) - initial) / 2 - MAX_SAMPLES / 4;
+            int C = (((initialStatesBytes[6] & 0xff) | ((initialStatesBytes[7] << 8) & 0xff00)) - initial) / 2 - 2 * MAX_SAMPLES / 4;
+            int D = (((initialStatesBytes[8] & 0xff) | ((initialStatesBytes[9] << 8) & 0xff00)) - initial) / 2 - 3 * MAX_SAMPLES / 4;
+            int s = initialStatesBytes[10];
+            int sError = initialStatesBytes[11];
+            //mPacketHandler.getAcknowledgement();
 
             if (A == 0) A = this.MAX_SAMPLES / 4;
             if (B == 0) B = this.MAX_SAMPLES / 4;
@@ -2205,7 +1527,7 @@ public class ScienceLab {
             else
                 retData.put("LA4", 0);
 
-            if ((s & 16) != 16)
+            if ((s & 16) != 0)
                 retData.put("RES", 1);
             else
                 retData.put("RES", 0);
@@ -2240,31 +1562,39 @@ public class ScienceLab {
     public int[] fetchIntDataFromLA(Integer bytes, Integer channel) {
         if (channel == null) channel = 1;
         try {
-            mPacketHandler.sendByte(mCommandsProto.TIMING);
-            mPacketHandler.sendByte(mCommandsProto.FETCH_INT_DMA_DATA);
-            mPacketHandler.sendInt(bytes);
-            mPacketHandler.sendByte(channel - 1);
-            byte[] readData = new byte[bytes * 2];
-            mPacketHandler.read(readData, bytes * 2);
-            Log.v("Bytes Obtained : ", String.valueOf(readData.length));
+            ArrayList<Integer> l = new ArrayList<>();
+            for (int i = 0; i < bytes / this.dataSplitting; i++) {
+                mPacketHandler.sendByte(mCommandsProto.COMMON);
+                mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
+                mPacketHandler.sendInt(2500 * (channel - 1) + (i * this.dataSplitting));
+                mPacketHandler.sendInt(this.dataSplitting);
+                byte[] data = new byte[this.dataSplitting * 2 + 1];
+                mPacketHandler.read(data, this.dataSplitting * 2 + 1);
+                for (int j = 0; j < data.length - 1; j++)
+                    l.add((int) data[j] & 0xff);
+            }
 
-            if (readData.length > 0) {
-
-                ArrayList<Integer> l = new ArrayList<>();
-                for (int i = 0; i < readData.length; i += 1) {
-                    l.add((int) readData[i] & 0xff);
-                }
-
+            if ((bytes % this.dataSplitting) != 0) {
+                mPacketHandler.sendByte(mCommandsProto.COMMON);
+                mPacketHandler.sendByte(mCommandsProto.RETRIEVE_BUFFER);
+                mPacketHandler.sendInt(bytes - bytes % this.dataSplitting);
+                mPacketHandler.sendInt(bytes % this.dataSplitting);
+                byte[] data = new byte[2 * (bytes % this.dataSplitting) + 1];
+                mPacketHandler.read(data, 2 * (bytes % this.dataSplitting) + 1);
+                for (int j = 0; j < data.length - 1; j++)
+                    l.add((int) data[j] & 0xff);
+            }
+            if (!l.isEmpty()) {
                 StringBuilder stringBuilder = new StringBuilder();
-                int[] timeStamps = new int[(int) readData.length / 2 + 1];
-                for (int i = 0; i < (int) (readData.length / 2); i++) {
-                    double t = (l.get(i * 2) | (l.get(i * 2 + 1) << 8));
-                    timeStamps[i + 1] = (int) t;
+                int[] timeStamps = new int[(int) bytes + 1];
+                for (int i = 0; i < (int) (bytes); i++) {
+                    int t = (l.get(i * 2) | (l.get(i * 2 + 1) << 8));
+                    timeStamps[i + 1] = t;
                     stringBuilder.append(String.valueOf(t));
                     stringBuilder.append(" ");
                 }
                 Log.v("Fetched points : ", stringBuilder.toString());
-                mPacketHandler.getAcknowledgement();
+                //mPacketHandler.getAcknowledgement();
                 Arrays.sort(timeStamps);
                 timeStamps[0] = 1;
                 return timeStamps;
@@ -2379,6 +1709,54 @@ public class ScienceLab {
         return true;
     }
 
+    public double fetchLAChannelFrequency(Integer channelNumber, LinkedHashMap<String, Integer> initialStates) {
+        DigitalChannel dChan = this.dChannels.get(channelNumber);
+
+        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+        tempMap.put("LA1", initialStates.get("LA1"));
+        tempMap.put("LA2", initialStates.get("LA2"));
+        tempMap.put("LA3", initialStates.get("LA3"));
+        tempMap.put("LA4", initialStates.get("LA4"));
+        tempMap.put("RES", initialStates.get("RES"));
+
+        //  Used LinkedHashMap above (initialStates) in which iteration is done sequentially as <key-value> were inserted
+        int i = 0;
+        for (Map.Entry<String, Integer> entry : initialStates.entrySet()) {
+            if (dChan.channelNumber == i) {
+                i = entry.getValue();
+                break;
+            }
+            i++;
+        }
+
+        int[] temp = this.fetchIntDataFromLA(i, dChan.channelNumber + 1);
+        double[] data = new double[temp.length - 1];
+        if (temp[0] == 1) {
+            for (int j = 1; j < temp.length; j++) {
+                data[j - 1] = temp[j];
+            }
+        } else {
+            Log.e("Error : ", "Can't load data");
+            return -1;
+        }
+        dChan.loadData(tempMap, data);
+
+        dChan.generateAxes();
+        int count = 0;
+        double[] yAxis = dChan.getYAxis();
+        for (int j = 1; j < yAxis.length; j++) {
+            if (yAxis[i] != yAxis[i - 1]) {
+                count++;
+            }
+        }
+        if (count == this.MAX_SAMPLES / 2 - 2) {
+            LAChannelFrequency = 0;
+        } else if (count != 0 && count != this.MAX_SAMPLES / 2 - 2 && LAChannelFrequency != count) {
+            LAChannelFrequency = count;
+        }
+        return LAChannelFrequency;
+    }
+
     public DigitalChannel getDigitalChannel(int i) {
         return dChannels.get(i);
     }
@@ -2476,7 +1854,6 @@ public class ScienceLab {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.FETCH_COUNT);
             int count = mPacketHandler.getVoltageSummation();
-            mPacketHandler.getAcknowledgement();
             return 10 * count;
         } catch (IOException e) {
             e.printStackTrace();
@@ -2484,7 +1861,7 @@ public class ScienceLab {
         return -1;
     }
 
-    public void chargeCap(int state, int t) {
+    public void setCapacitorState(int state, int t) {
         try {
             mPacketHandler.sendByte(mCommandsProto.ADC);
             mPacketHandler.sendByte(mCommandsProto.SET_CAP);
@@ -2498,7 +1875,7 @@ public class ScienceLab {
 
     public double[] captureCapacitance(int samples, int timeGap) {
         AnalyticsClass analyticsClass = new AnalyticsClass();
-        this.chargeCap(1, 50000);
+        this.setCapacitorState(1, 50000);
         Map<String, double[]> data = this.captureFullSpeedHr("CAP", samples, timeGap, Arrays.asList("READ_CAP"));
         double[] x = data.get("x");
         double[] y = data.get("y");
@@ -2519,7 +1896,7 @@ public class ScienceLab {
         int samples = 500;
         if (time > 5000 && time < 10e6) {
             if (time > 50e3) samples = 250;
-            double RC = this.captureCapacitance(samples, (int) (time / samples))[1]; // todo : complete statement after writing captureCapacitance method
+            double RC = this.captureCapacitance(samples, (int) (time / samples))[1];
             return RC / 10e3;
         } else {
             Log.v(TAG, "cap out of range " + time + cap);
@@ -2535,13 +1912,12 @@ public class ScienceLab {
      */
     public double[] getCapacitorRange(int cTime) {
         // returns values as a double array arr[0] = v,  arr[1] = c
-        this.chargeCap(0, 30000);
+        this.dischargeCap(30000, 1000);
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.GET_CAP_RANGE);
             mPacketHandler.sendInt(cTime);
             int vSum = mPacketHandler.getVoltageSummation();
-            mPacketHandler.getAcknowledgement();
             double v = vSum * 3.3 / 16 / 4095;
             double c = -cTime * 1e-6 / 1e4 / Math.log(1 - v / 3.3);
             return new double[]{v, c};
@@ -2559,7 +1935,7 @@ public class ScienceLab {
     public double[] getCapacitorRange() {
         double[] range = new double[]{1.5, 50e-12};
         for (int i = 0; i < 4; i++) {
-            range = getCapacitorRange(50 * (int) (Math.pow(10, i)));
+            range = getCapacitorRange(50 * (int) (pow(10, i)));
             if (range[0] > 1.5) {
                 if (i == 0 && range[0] > 3.28) {
                     range[1] = 50e-12;
@@ -2570,13 +1946,39 @@ public class ScienceLab {
         return range;
     }
 
+    public void dischargeCap(int dischargeTime, double timeout) {
+        Instant startTime = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startTime = Instant.now();
+        }
+        double voltage = getVoltage("CAP", 1);
+        double previousVoltage = voltage;
+
+        while (voltage > CAPACITOR_DISCHARGE_VOLTAGE) {
+            setCapacitorState(0, dischargeTime);
+            voltage = getVoltage("CAP", 1);
+
+            if (Math.abs(previousVoltage - voltage) < CAPACITOR_DISCHARGE_VOLTAGE) {
+                break;
+            }
+
+            previousVoltage = voltage;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (Duration.between(startTime, Instant.now()).toMillis() > timeout) {
+                    break;
+                }
+            }
+        }
+    }
+
     /**
      * Measures capacitance of component connected between CAP and ground
      *
      * @return Capacitance (F)
      */
     public Double getCapacitance() {
-        double[] GOOD_VOLTS = new double[]{2.5, 2.8};
+        double[] GOOD_VOLTS = new double[]{2.5, 3.3};
         int CT = 10;
         int CR = 1;
         int iterations = 0;
@@ -2584,7 +1986,8 @@ public class ScienceLab {
         while (System.currentTimeMillis() / 1000 - startTime < 5) {
             if (CT > 65000) {
                 Log.v(TAG, "CT too high");
-                return this.capacitanceViaRCDischarge();
+                CT = (int) (CT / pow(10, 4 - CR));
+                CR = 0;
             }
             double[] temp = getCapacitance(CR, 0, CT);
             double V = temp[0];
@@ -2602,18 +2005,22 @@ public class ScienceLab {
                 } else if (iterations == 10)
                     return null;
                 else return C;
-            } else if (V <= 0.1 && CR < 3)
-                CR += 1;
-            else if (CR == 3) {
-                Log.v(TAG, "Capture mode");
-                return this.capacitanceViaRCDischarge();
+            } else if (V <= 0.1 && CR <= 3)
+                if (CR == 3) {
+                    CR = 0;
+                } else {
+                    CR += 1;
+                }
+            else if (CR == 0) {
+                Log.v(TAG, "Capacitance too high!");
+                return capacitanceViaRCDischarge();
             }
         }
         return null;
     }
 
     public double[] getCapacitance(int currentRange, double trim, int chargeTime) {  // time in uSec
-        this.chargeCap(0, 30000);
+        this.dischargeCap(30000, 1000);
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.GET_CAPACITANCE);
@@ -2629,11 +2036,11 @@ public class ScienceLab {
             do VCode = mPacketHandler.getVoltageSummation();
             while (VCode == -1 & i++ < 10);
             double v = 3.3 * VCode / 4095;
-            mPacketHandler.getAcknowledgement();
             double chargeCurrent = this.currents[currentRange] * (100 + trim) / 100.0;
             double c = 0;
-            if (v != 0)
-                c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE) / this.currentScalars[currentRange];
+            if (v != 0) {
+                c = (chargeCurrent * chargeTime * 1e-6 / v - this.SOCKET_CAPACITANCE);
+            }
             return new double[]{v, c};
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -2642,53 +2049,64 @@ public class ScienceLab {
     }
 
     /**
-     * Fetch the processor's temperature.
+     * Temperature of the MCU in degrees Celsius.
      *
-     * @return the processor's temperature.
+     * @return temperature : double
      */
-    public Double getTemperature() {
+    public double getTemperature() {
+        // TODO: Get rid of magic numbers
         int cs = 3;
-        double V = getCTMUVoltage("", cs, 0); // todo inspect this binary channel
-        return (760 - V * 1000) / 1.56; // current source = 3 for best results
-    }
-
-    public void calibrateCTMU(double[] scalars) {
-        this.currents = new double[]{0.55e-3, 0.55e-6, 0.55e-5, 0.55e-4};
-        this.currentScalars = scalars;
+        double V = getCTMUVoltage(CTMU_CHANNEL, cs, 0);
+        if (cs == 1) {
+            return (646 - V * 1000) / 1.92; // current source = 1
+        } else if (cs == 2) {
+            return (701.5 - V * 1000) / 1.74; // current source = 2
+        } else {
+            return (760 - V * 1000) / 1.56; // current source = 3
+        }
     }
 
     /**
-     * get_ctmu_voltage(5,2)  will activate a constant current source of 5.5uA on IN1 and then measure the voltage at the output.
-     * If a diode is used to connect IN1 to ground, the forward voltage drop of the diode will be returned.
+     * Control the Charge Time Measurement Unit (CTMU).
+     * <p>get_ctmu_voltage(5,2)  will activate a constant current source of 5.5uA on CAP and then measure the voltage at the output.</p>
+     * <p>If a diode is used to connect CAP to ground, the forward voltage drop of the diode will be returned, e.g. 0.6 V for a 4148 diode.</p>
+     * <p>If a resistor is connected, Ohm's law will be followed within reasonable limits.</p>
      *
-     * @param channel
-     * @param cRange  CRange=0   implies 550uA,
-     *                CRange=1   implies 0.55uA,
-     *                CRange=2   implies 5.5uA,
-     *                CRange=3   implies 55uA
-     * @param tgen
-     * @return Voltage
+     * @param channel int
+     *                <p>Pin number on which to generate a current and measure output
+     *                voltage. Refer to the PIC24EP64GP204 datasheet for channel</p>
+     *                numbering.
+     * @param cRange  {0, 1, 2, 3}
+     *                <p>0 -> 550 uA
+     *                1 -> 550 nA
+     *                2 -> 5.5 uA
+     *                3 -> 55 uA</p>
+     * @param tgen    int, optional
+     *                <p>Use Time Delay mode instead of Measurement mode. The default value
+     *                is True.</p>
+     * @return voltage : double
      */
-    public double getCTMUVoltage(String channel, int cRange, int tgen) {
-        if (tgen == -1) tgen = 1;
-        int channelI = 0;
-        if ("CAP".equals(channel))
-            channelI = 5;
+    public double getCTMUVoltage(int channel, int cRange, int tgen) {
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.GET_CTMU_VOLTAGE);
-            mPacketHandler.sendByte((channelI) | (cRange << 5) | (tgen << 7));
-            int v = mPacketHandler.getInt();
+            mPacketHandler.sendByte((channel) | (cRange << 5) | (tgen << 7));
+            double raw_voltage = (double) mPacketHandler.getInt() / 16; // 16*voltage across the current source
             mPacketHandler.getAcknowledgement();
-            return (3.3 * v / 16 / 4095.);
+            double max_voltage = 3.3;
+            double resolution = 12;
+            return (max_voltage * raw_voltage / (pow(2, resolution) - 1));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return -1;
     }
 
-    public void startCTMU(int cRange, int trim, int tgen) { // naming of arguments ??
-        if (tgen == -1) tgen = 1;
+    public double getCTMUVoltage(int channel, int cRange) {
+        return getCTMUVoltage(channel, cRange, 1);
+    }
+
+    public void startCTMU(int cRange, int trim, int tgen) {
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.START_CTMU);
@@ -2698,6 +2116,10 @@ public class ScienceLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void startCTMU(int cRange, int trim) {
+        startCTMU(cRange, trim, 1);
     }
 
     public void stopCTMU() {
@@ -2710,9 +2132,9 @@ public class ScienceLab {
         }
     }
 
-    public void resetHardware() {
+    public void resetDevice() {
         /*
-        Resets the device, and standalone mode will be enabled if an OLED is connected to the I2C port
+        Reset the device. Standalone mode will be enabled if an OLED is connected to the I2C port.
         */
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
@@ -2722,101 +2144,105 @@ public class ScienceLab {
         }
     }
 
-    public byte[] readFlash(int page, int location) {
-        /*  Reads 16 BYTES from the specified location  */
-        try {
-            mPacketHandler.sendByte(mCommandsProto.FLASH);
-            mPacketHandler.sendByte(mCommandsProto.READ_FLASH);
-            mPacketHandler.sendByte(page);
-            mPacketHandler.sendByte(location);
-            byte[] data = new byte[17];
-            mPacketHandler.read(data, 17);
-            //mPacketHandler.getAcknowledgement();
-            return Arrays.copyOfRange(data, 0, 16);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    /**
+     * Reboot and stay in bootloader mode.
+     *
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void enterBootloader() throws IOException, InterruptedException {
+        mCommunicationHandler.close();
+        mCommunicationHandler.open(460800);
+        mPacketHandler = new PacketHandler(50, mCommunicationHandler);
+        // The PSLab's RGB LED flashes some colors on boot.
+        int bootLightShowTime = 600;
+        // Wait before sending magic number to make sure UART is initialized.
+        Thread.sleep(bootLightShowTime / 2);
+        // PIC24 UART RX buffer is four bytes deep; no need to time it perfectly.
+        mPacketHandler.commonWrite(mCommandsProto.pack(0xDECAFBAD));
+        // Wait until lightshow is done to prevent accidentally overwriting magic number.
+        Thread.sleep(bootLightShowTime);
     }
 
-    public byte[] readBulkFlash(int page, int numOfBytes) {
-        /*  Reads BYTES from the specified location  */
-
-        try {
-            mPacketHandler.sendByte(mCommandsProto.FLASH);
-            mPacketHandler.sendByte(mCommandsProto.READ_BULK_FLASH);
-            int bytesToRead = numOfBytes;
-            if (numOfBytes % 2 == 1) bytesToRead += 1;
-            mPacketHandler.sendInt(bytesToRead);
-            mPacketHandler.sendByte(page);
-            byte[] data = new byte[bytesToRead + 1];
-            mPacketHandler.read(data, bytesToRead + 1);
-            //mPacketHandler.getAcknowledgement();
-            if (numOfBytes % 2 == 1)
-                return Arrays.copyOfRange(data, 0, data.length - 1);
-            else
-                return Arrays.copyOfRange(data, 0, data.length);
-        } catch (IOException e) {
-            e.printStackTrace();
+    /**
+     * Set shade of a WS2812 RGB LED.
+     *
+     * @param colors ArrayList
+     *               <p>List of three values between 0-255, where each value is the
+     *               intensity of red, green and blue, respectively. When daisy
+     *               chaining several LEDs, colors should be a list of three-value
+     *               lists.</p>
+     * @param output {"RGB", "PGC", "SQ1"}, optional
+     *               <p>Pin on which to output the pulse train setting the LED color. The
+     *               default value, "RGB", sets the color of the built-in WS2812B
+     *               (PSLav v6 only).</p>
+     * @param order  String, optional
+     *               <p>Color order of the connected LED as a three-letter string. The
+     *               built-in LED has order "GRB", which is the default.</p>
+     */
+    public void RGBLED(ArrayList<ArrayList<Integer>> colors, String output, String order) {
+        HashMap<String, Integer> pins = new HashMap<>();
+        int pin;
+        if (CommunicationHandler.PSLAB_VERSION == 6) {
+            pins.put("ONBOARD", 0);
+            pins.put("SQR1", 1);
+            pins.put("SQR2", 2);
+            pins.put("SQR3", 3);
+            pins.put("SQR4", 4);
+        } else {
+            pins.put("RGB", mCommandsProto.SET_RGB1);
+            pins.put("PGC", mCommandsProto.SET_RGB2);
+            pins.put("SQ1", mCommandsProto.SET_RGB3);
         }
-        return null;
-    }
 
-    public void writeFlash(int page, int location, String data) {
-        /*
-        write a 16 BYTE string to the selected location (0-63)
-
-        DO NOT USE THIS UNLESS YOU'RE ABSOLUTELY SURE KNOW THIS!
-		YOU MAY END UP OVERWRITING THE CALIBRATION DATA, AND WILL HAVE
-		TO GO THROUGH THE TROUBLE OF GETTING IT FROM THE MANUFACTURER AND
-		RE-FLASHING IT.
-        */
-        while (data.length() < 16) data += '.';
-        try {
-            mPacketHandler.sendByte(mCommandsProto.FLASH);
-            mPacketHandler.sendByte(mCommandsProto.WRITE_FLASH);
-            mPacketHandler.sendByte(page);
-            mPacketHandler.sendByte(location);
-            mCommunicationHandler.write(data.getBytes(), 500);
-            Thread.sleep(100);
-            mPacketHandler.getAcknowledgement();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        if (!pins.containsKey(output)) {
+            String outputPins = String.join(", ", pins.keySet());
+            throw new IllegalArgumentException("Invalid output: " + output + ". output must be one of : " + outputPins);
         }
-    }
+        pin = Objects.requireNonNull(pins.get(output));
 
-    public void writeBulkFlash(int location, ArrayList<Integer> data) {
-        /*
-        write a byte array to the entire flash page. Erases any other data
-
-        DO NOT USE THIS UNLESS YOU'RE ABSOLUTELY SURE KNOW THIS!
-		YOU MAY END UP OVERWRITING THE CALIBRATION DATA, AND WILL HAVE
-		TO GO THROUGH THE TROUBLE OF GETTING IT FROM THE MANUFACTURER AND
-		RE-FLASHING IT.
-        */
-        if (data.size() % 2 == 1) data.add(0);
-        try {
-            mPacketHandler.sendByte(mCommandsProto.FLASH);
-            mPacketHandler.sendByte(mCommandsProto.WRITE_BULK_FLASH);
-            mPacketHandler.sendInt(data.size());
-            mPacketHandler.sendByte(location);
-            for (int a : data) {
-                mPacketHandler.sendByte(a);
-            }
-            mPacketHandler.getAcknowledgement();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        boolean equal = true;
-        byte[] receiveData = readBulkFlash(location, data.size());
-        for (int i = 0; i < data.size(); i++) {
-            if (receiveData[i] != (data.get(i) & 0xff)) {
-                equal = false;
-                Log.v(TAG, "Verification by read-back failed");
+        for (ArrayList<Integer> color : colors) {
+            if (color.size() != 3) {
+                throw new IllegalArgumentException("Invalid colo; each color list must have three values.");
             }
         }
-        if (equal)
-            Log.v(TAG, "Verification by read-back successful");
+
+        order = order.toUpperCase(Locale.ROOT);
+        char[] orderChars = order.toCharArray();
+        Arrays.sort(orderChars);
+        if (!Arrays.equals(orderChars, new char[]{'B', 'G', 'R'})) {
+            throw new IllegalArgumentException("Invalid order: " + order + ". order must contain 'R', 'G', and 'B'.");
+        }
+
+        try {
+            mPacketHandler.sendByte(mCommandsProto.COMMON);
+
+            if (CommunicationHandler.PSLAB_VERSION == 6) {
+                mPacketHandler.sendByte(mCommandsProto.SET_RGB_COMMON);
+            } else {
+                mPacketHandler.sendByte(pin);
+            }
+
+            mPacketHandler.sendByte(colors.size() * 3);
+
+            for (ArrayList<Integer> color : colors) {
+                mPacketHandler.sendByte(color.get(order.indexOf('R')));
+                mPacketHandler.sendByte(color.get(order.indexOf('G')));
+                mPacketHandler.sendByte(color.get(order.indexOf('B')));
+            }
+
+            if (CommunicationHandler.PSLAB_VERSION == 6) {
+                mPacketHandler.sendByte(pin);
+            }
+
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void RGBLED(ArrayList<Integer> colors, String output) {
+        RGBLED(new ArrayList<>(Collections.singletonList(colors)), output, "GRB");
     }
 
     /* WAVEGEN SECTION */
@@ -3274,127 +2700,135 @@ public class ScienceLab {
 
     /*  ANALOG OUTPUTS  */
 
-    public void setPV1(float value) {
-        this.dac.setVoltage("PV1", value);
-    }
-
-    public void setPV2(float value) {
-        this.dac.setVoltage("PV2", value);
-    }
-
-    public void setPV3(float value) {
-        this.dac.setVoltage("PV3", value);
-    }
-
-    public void setPCS(float value) {
-        this.dac.setCurrent(value);
-    }
-
-    public double getPV1() {
-        return this.dac.getVoltage("PV1");
-    }
-
-    public double getPV2() {
-        return this.dac.getVoltage("PV2");
-    }
-
-    public double getPV3() {
-        return this.dac.getVoltage("PV3");
-    }
-
-    public double getPCS() {
-        return this.dac.getVoltage("PCS");
-    }
-
-    public void WS2812B(int[][] colors, String output) {
-        if (output == null) output = "CS1";
-        int pin;
-        switch (output) {
-            case "CS1":
-                pin = mCommandsProto.SET_RGB1;
-                break;
-            case "CS2":
-                pin = mCommandsProto.SET_RGB2;
-                break;
-            case "SQR1":
-                pin = mCommandsProto.SET_RGB3;
-                break;
-            default:
-                Log.e(TAG, "Invalid Output");
-                return;
-        }
+    public void setVoltage(String channel, float voltage) {
+        DACChannel dacChannel = dacChannels.get(channel);
+        int v = (int) (Math.round(dacChannel.VToCode.value(voltage)));
         try {
-            mPacketHandler.sendByte(mCommandsProto.COMMON);
-            mPacketHandler.sendByte(pin);
-            mPacketHandler.sendByte(colors.length * 3);
-            // todo : cross check access of 2D colors array
-            for (int[] col : colors) {
-                mPacketHandler.sendByte(col[1]); // Green
-                mPacketHandler.sendByte(col[0]); // Red
-                mPacketHandler.sendByte(col[2]); // Blue
-            }
+            mPacketHandler.sendByte(mCommandsProto.DAC);
+            mPacketHandler.sendByte(mCommandsProto.SET_POWER);
+            mPacketHandler.sendByte(dacChannel.channelCode);
+            mPacketHandler.sendInt(v);
             mPacketHandler.getAcknowledgement();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        values.put(channel, (double) voltage);
     }
 
+    private void setCurrent(float current) {
+        DACChannel dacChannel = dacChannels.get("PCS");
+        int v = 3300 - (int) (Math.round(dacChannel.VToCode.value(current)));
+        try {
+            mPacketHandler.sendByte(mCommandsProto.DAC);
+            mPacketHandler.sendByte(mCommandsProto.SET_POWER);
+            mPacketHandler.sendByte(dacChannel.channelCode);
+            mPacketHandler.sendInt(v);
+            mPacketHandler.getAcknowledgement();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        values.put("PCS", (double) current);
+    }
+
+    private double getVoltage(String channel) {
+        return this.values.get(channel);
+    }
+
+    public void setPV1(float value) {
+        this.setVoltage("PV1", value);
+    }
+
+    public void setPV2(float value) {
+        this.setVoltage("PV2", value);
+    }
+
+    public void setPV3(float value) {
+        this.setVoltage("PV3", value);
+    }
+
+    public void setPCS(float value) {
+        this.setCurrent(value);
+    }
+
+    public double getPV1() {
+        return this.getVoltage("PV1");
+    }
+
+    public double getPV2() {
+        return this.getVoltage("PV2");
+    }
+
+    public double getPV3() {
+        return this.getVoltage("PV3");
+    }
+
+    public double getPCS() {
+        return this.getVoltage("PCS");
+    }
 
     /* READ PROGRAM AND DATA ADDRESSES */
 
     public long deviceID() {
-        int a = readProgramAddress(0x800FF8);
-        int b = readProgramAddress(0x800FFa);
-        int c = readProgramAddress(0x800FFc);
-        int d = readProgramAddress(0x800FFe);
+        long a = readProgramAddress(0x800FF8);
+        long b = readProgramAddress(0x800FFA);
+        long c = readProgramAddress(0x800FFC);
+        long d = readProgramAddress(0x800FFE);
         long value = d | (c << 16) | (b << 32) | (a << 48);
         Log.v(TAG, "device ID : " + value);
         return value;
     }
 
-
+    /**
+     * Return the value stored at the specified address in program memory.
+     *
+     * @param address int
+     *                <p>Address to read from. Refer to PIC24EP64GP204 programming manual.</p>
+     * @return data : int <p>16-bit wide value read from program memory.</p>
+     */
     public int readProgramAddress(int address) {
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.READ_PROGRAM_ADDRESS);
             mPacketHandler.sendInt(address & 0xffff);
             mPacketHandler.sendInt((address >> 16) & 0xffff);
-            int value = mPacketHandler.getInt();
+            int data = mPacketHandler.getInt();
             mPacketHandler.getAcknowledgement();
-            return value;
+            return data;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return -1;
     }
 
-    public void writeProgramAddress(int address, int value) {
-        try {
-            mPacketHandler.sendByte(mCommandsProto.COMMON);
-            mPacketHandler.sendByte(mCommandsProto.WRITE_PROGRAM_ADDRESS);
-            mPacketHandler.sendInt(address & 0xffff);
-            mPacketHandler.sendInt((address >> 16) & 0xffff);
-            mPacketHandler.sendInt(value);
-            mPacketHandler.getAcknowledgement();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Return the value stored at the specified address in RAM.
+     *
+     * @param address int
+     *                <p>Address to read from. Refer to PIC24EP64GP204 programming manual.</p>
+     * @return data : int <p>16-bit wide value read from RAM.</p>
+     */
     public int readDataAddress(int address) {
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.READ_DATA_ADDRESS);
             mPacketHandler.sendInt(address & 0xffff);
-            int value = mPacketHandler.getInt();
+            int data = mPacketHandler.getInt();
             mPacketHandler.getAcknowledgement();
-            return value;
+            return data;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return -1;
     }
 
+    /**
+     * Write a value to the specified address in RAM.
+     *
+     * @param address int
+     *                <p>Address to write to. Refer to PIC24EP64GP204 programming manual.</p>
+     * @param value   int
+     *                <p>Value to write to RAM.</p>
+     */
     public void writeDataAddress(int address, int value) {
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
@@ -3407,27 +2841,46 @@ public class ScienceLab {
         }
     }
 
-    /* MOTOR SIGNALLING */
-
-    public void stepperMotor(int steps, int delay, int direction) {
+    /**
+     * Relay all data received by the device to TXD/RXD.
+     * <p>
+     * If a period > 0.5 seconds elapses between two transmit/receive events,
+     * the device resets and resumes normal mode. This timeout feature has
+     * been implemented in lieu of a hard reset option.
+     * </p>
+     * <p>
+     * Can be used to load programs into secondary microcontrollers with
+     * bootloaders such as ATMEGA OR ESP8266.
+     * </p>
+     *
+     * @param baudrate int
+     *                 <p>Baudrate of the UART bus.</p>
+     * @param persist  bool, optional
+     *                 <p>If set to True, the device will stay in passthrough mode until the
+     *                 next power cycle. Otherwise(default scenario), the device will
+     *                 return to normal operation if no data is sent/received for a period
+     *                 greater than one second at a time.</p>
+     */
+    public void enableUARTPassThrough(int baudrate, boolean persist) {
         try {
-            mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
-            mPacketHandler.sendByte(mCommandsProto.STEPPER_MOTOR);
-            mPacketHandler.sendInt((steps << 1) | direction);
-            mPacketHandler.sendInt(delay);
-            Thread.sleep((long) (steps * delay * 1e-3 * 1000));
-        } catch (IOException | InterruptedException e) {
+            mPacketHandler.sendByte(mCommandsProto.PASSTHROUGHS);
+            mPacketHandler.sendByte(mCommandsProto.PASS_UART);
+            if (persist)
+                mPacketHandler.sendByte(1);
+            else
+                mPacketHandler.sendByte(0);
+            mPacketHandler.sendInt((int) Math.round(((64e6 / baudrate) / 4) - 1));
+            Log.v(TAG, "BRG2VAL: " + Math.round(((64e6 / baudrate) / 4) - 1));
+            // sleep for 0.1 sec
+            byte[] junk = new byte[100];
+            mPacketHandler.read(junk, 100);
+            // Log junk to see :D
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void stepForward(int steps, int delay) {
-        this.stepperMotor(steps, delay, 1);
-    }
-
-    public void stepBackward(int steps, int delay) {
-        this.stepperMotor(steps, delay, 0);
-    }
+    /* MOTOR SIGNALLING */
 
     public void servo4(double angle1, double angle2, double angle3, double angle4) {
         int params = (1 << 5) | 2;
@@ -3449,124 +2902,20 @@ public class ScienceLab {
         }
     }
 
-    public void enableUARTPassThrough(int baudrate, boolean persist) {
-        try {
-            mPacketHandler.sendByte(mCommandsProto.PASSTHROUGHS);
-            mPacketHandler.sendByte(mCommandsProto.PASS_UART);
-            if (persist)
-                mPacketHandler.sendByte(1);
-            else
-                mPacketHandler.sendByte(0);
-            mPacketHandler.sendInt((int) Math.round(((64e6 / baudrate) / 4) - 1));
-            Log.v(TAG, "BRG2VAL: " + Math.round(((64e6 / baudrate) / 4) - 1));
-            // sleep for 0.1 sec
-            byte[] junk = new byte[100];
-            mPacketHandler.read(junk, 100);
-            // Log junk to see :D
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public double estimateDistance() {
-        try {
-            mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
-            mPacketHandler.sendByte(mCommandsProto.HCSR04_HEADER);
-            int timeoutMSB = (int) ((0.3 * 64e6)) >> 16;
-            mPacketHandler.sendInt(timeoutMSB);
-            long A = mPacketHandler.getLong();
-            long B = mPacketHandler.getLong();
-            int timeout = mPacketHandler.getInt();
-            mPacketHandler.getAcknowledgement();
-            if (timeout >= timeoutMSB || B == 0) return 0;
-            return (330 * (B - A + 20) / 64e6) / 2;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public void opticalArray(double ss, int delay, String channel, int resolution, int tweak) { // ss- stands for?
-        int samples = 3694;
-        if (resolution == -1) resolution = 10;
-        if (tweak == -1) tweak = 1;
-
-        try {
-            mPacketHandler.sendByte(mCommandsProto.NONSTANDARD_IO);
-            mPacketHandler.sendByte(mCommandsProto.TCD1304_HEADER);
-            if (resolution == 10)
-                mPacketHandler.sendByte(calcCHOSA(channel));
-            else
-                mPacketHandler.sendByte(calcCHOSA(channel) | 0x80);
-            mPacketHandler.sendByte(tweak);
-            mPacketHandler.sendInt(delay);
-            mPacketHandler.sendInt((int) ss * 64);
-            this.timebase = ss;
-            this.aChannels.get(0).setParams("CH1", samples, this.timebase, resolution, this.analogInputSources.get(channel), null);
-            this.samples = samples;
-            this.channelsInBuffer = 1;
-            // sleep for (2 * delay * 1e-6)
-            mPacketHandler.getAcknowledgement();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setUARTBaud(int BAUD) {
-        try {
-            mPacketHandler.sendByte(mCommandsProto.UART_2);
-            mPacketHandler.sendByte(mCommandsProto.SET_BAUD);
-            mPacketHandler.sendInt((int) Math.round(((64e6 / BAUD) / 4) - 1));
-            Log.v(TAG, "BRG2VAL: " + Math.round(((64e6 / BAUD) / 4) - 1));
-            mPacketHandler.getAcknowledgement();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void writeUART(char character) {
-        try {
-            mPacketHandler.sendByte(mCommandsProto.UART_2);
-            mPacketHandler.sendByte(mCommandsProto.SEND_BYTE);
-            mPacketHandler.sendByte(character);
-            mPacketHandler.getAcknowledgement();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public byte readUART() {
-        try {
-            mPacketHandler.sendByte(mCommandsProto.UART_2);
-            mPacketHandler.sendByte(mCommandsProto.READ_BYTE);
-            return mPacketHandler.getByte();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public int readUARTStatus() {
-        try {
-            mPacketHandler.sendByte(mCommandsProto.UART_2);
-            mPacketHandler.sendByte(mCommandsProto.READ_UART2_STATUS);
-            return mPacketHandler.getByte();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public void readLog() {
+    /**
+     * Read hardware debug log.
+     *
+     * @return log : String <p>Bytes read from the hardware debug log.</p>
+     */
+    public String readLog() {
+        String log = "";
         try {
             mPacketHandler.sendByte(mCommandsProto.COMMON);
             mPacketHandler.sendByte(mCommandsProto.READ_LOG);
-            // String log =  mPacketHandler.readline()   -- implement readline in PacketHandler
-            mPacketHandler.getAcknowledgement();
-            // return log;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return mPacketHandler.readLine();
     }
 
     public void disconnect() throws IOException {

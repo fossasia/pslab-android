@@ -10,12 +10,6 @@ public class CommandsProto {
     public int MAX_SAMPLES = 10000;
     public int DATA_SPLITTING = 60;
 
-    public int FLASH = 1;
-    public int READ_FLASH = 1;
-    public int WRITE_FLASH = 2;
-    public int WRITE_BULK_FLASH = 3;
-    public int READ_BULK_FLASH = 4;
-
     public int ADC = 2;
     public int CAPTURE_ONE = 1;
     public int CAPTURE_TWO = 2;
@@ -27,10 +21,10 @@ public class CommandsProto {
     public int SET_PGA_GAIN = 8;
     public int GET_VOLTAGE = 9;
     public int GET_VOLTAGE_SUMMED = 10;
-    public int START_ADC_STREAMING = 11;
+    // public int START_ADC_STREAMING = 11;
     public int SELECT_PGA_CHANNEL = 12;
     public int CAPTURE_12BIT = 13;
-    public int CAPTURE_MULTIPLE = 14;
+    // public int CAPTURE_MULTIPLE = 14;
     public int SET_HI_CAPTURE = 15;
     public int SET_LO_CAPTURE = 16;
 
@@ -64,7 +58,6 @@ public class CommandsProto {
     public int I2C_INIT = 14;
     public int I2C_PULLDOWN_SCL = 15;
     public int I2C_DISABLE_SMBUS = 16;
-    public int I2C_START_SCOPE = 17;
 
 
     public int UART_2 = 5;
@@ -81,6 +74,7 @@ public class CommandsProto {
     public int DAC = 6;
     public int SET_DAC = 1;
     public int SET_CALIBRATED_DAC = 2;
+    public int SET_POWER = 3;
 
 
     public int WAVEGEN = 7;
@@ -148,6 +142,8 @@ public class CommandsProto {
     public int GET_INDUCTANCE = 4;
 
     public int GET_VERSION = 5;
+    public int GET_FW_VERSION = 6;
+    public int DEBUG_IS_ENABLED = 7;
 
     public int RETRIEVE_BUFFER = 8;
     public int GET_HIGH_FREQUENCY = 9;
@@ -163,6 +159,7 @@ public class CommandsProto {
     public int READ_LOG = 18;
     public int RESTORE_STANDALONE = 19;
     public int GET_ALTERNATE_HIGH_FREQUENCY = 20;
+    public int SET_RGB_COMMON = 21;
     public int SET_RGB3 = 22;
 
     public int START_CTMU = 23;
@@ -213,17 +210,17 @@ public class CommandsProto {
 
 
     public int NONSTANDARD_IO = 14;
-    public int HX711_HEADER = 1;
+    // public int HX711_HEADER = 1;
     public int HCSR04_HEADER = 2;
-    public int AM2302_HEADER = 3;
-    public int TCD1304_HEADER = 4;
-    public int STEPPER_MOTOR = 5;
+    // public int AM2302_HEADER = 3;
+    // public int TCD1304_HEADER = 4;
+    // public int STEPPER_MOTOR = 5;
 
 
     public int PASSTHROUGHS = 15;
     public int PASS_UART = 1;
 
-    public int STOP_STREAMING = 253;
+    // public int STOP_STREAMING = 253;
 
     public int EVERY_SIXTEENTH_RISING_EDGE = 0b101;
     public int EVERY_FOURTH_RISING_EDGE = 0b100;
@@ -242,6 +239,17 @@ public class CommandsProto {
 
     public int TEN_BIT = 10;
     public int TWELVE_BIT = 12;
+
+    public byte[] pack(int value) {
+        int intValue = value;
+        byte[] bytes = new byte[4];
+        int length = bytes.length;
+        for (int i = 0; i < length; i++) {
+            bytes[length - i - 1] = (byte) (intValue & 0xFF);
+            intValue >>= 8;
+        }
+        return bytes;
+    }
 
     public String applySIPrefix(double value, String unit, int precision) {
         boolean negative = false;

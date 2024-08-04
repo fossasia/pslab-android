@@ -31,7 +31,8 @@ public class PacketHandler {
     private CommunicationHandler mCommunicationHandler = null;
     public static String version = "";
     private CommandsProto mCommandsProto;
-    private int timeout = 500, VERSION_STRING_LENGTH = 15;
+    private int timeout = 500, VERSION_STRING_LENGTH = 8, FW_VERSION_LENGTH = 3;
+    public static int PSLAB_FW_VERSION = 0;
     ByteBuffer burstBuffer = ByteBuffer.allocate(2000);
     private HttpAsyncTask httpAsyncTask;
 
@@ -65,6 +66,38 @@ public class PacketHandler {
             Log.e("Error in Communication", e.toString());
         }
         return version;
+    }
+
+    public int getFirmwareVersion() {
+        try {
+            sendByte(mCommandsProto.COMMON);
+            sendByte(mCommandsProto.GET_FW_VERSION);
+            int numByteRead = commonRead(FW_VERSION_LENGTH);
+            if (numByteRead == 1) {
+                return 2;
+            } else {
+                return buffer[0];
+            }
+        } catch (IOException e) {
+            Log.e("Error in Communication", e.toString());
+        }
+        return 0;
+    }
+
+    public String readLine() {
+        String line = "";
+        try {
+            commonRead(CommunicationHandler.DEFAULT_READ_BUFFER_SIZE);
+            line = new BufferedReader(
+                    new InputStreamReader(
+                            new ByteArrayInputStream(buffer, 0, CommunicationHandler.DEFAULT_READ_BUFFER_SIZE),
+                            StandardCharsets.UTF_8))
+                    .readLine();
+            return line;
+        } catch (IOException e) {
+            Log.e("Error in Communication", e.toString());
+        }
+        return line;
     }
 
     public void sendByte(int val) throws IOException {
@@ -212,7 +245,7 @@ public class PacketHandler {
         return new byte[]{-1};
     }
 
-    private int commonRead(int bytesToRead) throws IOException {
+    public int commonRead(int bytesToRead) throws IOException {
         final int[] bytesRead = {0};
         if (mCommunicationHandler.isConnected()) {
             bytesRead[0] = mCommunicationHandler.read(buffer, bytesToRead, timeout);
@@ -239,7 +272,7 @@ public class PacketHandler {
         return bytesRead[0];
     }
 
-    private void commonWrite(byte[] data) throws IOException {
+    public void commonWrite(byte[] data) throws IOException {
         if (mCommunicationHandler.isConnected()) {
             mCommunicationHandler.write(data, timeout);
         } else if (ScienceLabCommon.isWifiConnected()) {

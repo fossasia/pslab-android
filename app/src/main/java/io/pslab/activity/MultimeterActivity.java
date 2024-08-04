@@ -307,7 +307,7 @@ public class MultimeterActivity extends GuideActivity {
         try {
             if (!switchIsChecked) {
                 if (scienceLab.isConnected()) {
-                    Double frequency = scienceLab.getFrequency(knobMarker[knobState], null);
+                    Double frequency = scienceLab.getFrequency(knobMarker[knobState]);
                     saveAndSetData(DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT), getString(R.string.frequency_unit));
                     if (recordData)
                         record(knobMarker[knobState], DataFormatter.formatDouble(frequency, DataFormatter.LOW_PRECISION_FORMAT) + getString(R.string.frequency_unit));

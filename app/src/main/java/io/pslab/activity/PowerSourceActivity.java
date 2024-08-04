@@ -44,6 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.activity.guide.GuideActivity;
+import io.pslab.communication.CommunicationHandler;
 import io.pslab.communication.ScienceLab;
 import io.pslab.items.SquareImageButton;
 import io.pslab.models.PowerSourceData;
@@ -519,18 +520,68 @@ public class PowerSourceActivity extends GuideActivity {
         controller.setMax(controllerLimit);
         controller.setProgress(retrievePowerValues(pin));
         controller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
+            private int progress;
+
             @Override
             public void onProgressChanged(Croller croller, int progress) {
                 setMappedPower(pin, progress);
+                this.progress = progress;
                 removeCursor();
             }
 
             @Override
-            public void onStartTrackingTouch(Croller croller) {/**/}
+            public void onStartTrackingTouch(Croller croller) { /**/ }
 
             @Override
             public void onStopTrackingTouch(Croller croller) {
                 setPower(pin);
+                /*
+                  V6 hardware has two pairs of paired channels:
+                           0: PCS & PVS2
+                           1: PVS1 & PVS3
+                       Paired channels share relative output levels, i.e. if PV1 outputs 5 V
+                       then PV3 outputs 3.3 V.
+                 */
+                switch (pin) {
+                    case PV1:
+                        if ((int) (progress * 3.3 / 10) > PV3_CONTROLLER_MAX) {
+                            controllerPV3.setProgress(PV3_CONTROLLER_MAX);
+                        } else if ((int) (progress * 3.3 / 10) < CONTROLLER_MIN) {
+                            controllerPV3.setProgress(CONTROLLER_MIN);
+                        } else {
+                            controllerPV3.setProgress((int) (progress * 3.3 / 10));
+                        }
+                        break;
+                    case PV2:
+                        if (PCS_CONTROLLER_MAX - (progress / 2) > PCS_CONTROLLER_MAX) {
+                            controllerPCS.setProgress(PCS_CONTROLLER_MAX);
+                        } else if (PCS_CONTROLLER_MAX - (progress / 2) < CONTROLLER_MIN) {
+                            controllerPCS.setProgress(CONTROLLER_MIN);
+                        } else {
+                            controllerPCS.setProgress(PCS_CONTROLLER_MAX - (progress / 2));
+                        }
+                        break;
+                    case PV3:
+                        if ((int) (progress * 10 / 3.3) > PV1_CONTROLLER_MAX) {
+                            controllerPV1.setProgress(PV1_CONTROLLER_MAX);
+                        } else if ((int) (progress * 10 / 3.3) < CONTROLLER_MIN) {
+                            controllerPV1.setProgress(CONTROLLER_MIN);
+                        } else {
+                            controllerPV1.setProgress((int) (progress * 10 / 3.3));
+                        }
+                        break;
+                    case PCS:
+                        if (PV2_CONTROLLER_MAX - (progress * 2) > PV2_CONTROLLER_MAX) {
+                            controllerPV2.setProgress(PV2_CONTROLLER_MAX);
+                        } else if (PV2_CONTROLLER_MAX - (progress * 2) < CONTROLLER_MIN) {
+                            controllerPV2.setProgress(CONTROLLER_MIN);
+                        } else {
+                            controllerPV2.setProgress(PV2_CONTROLLER_MAX - (progress * 2));
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }

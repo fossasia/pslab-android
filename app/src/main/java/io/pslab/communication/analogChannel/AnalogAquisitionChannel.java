@@ -12,6 +12,7 @@ public class AnalogAquisitionChannel {
     private AnalogInputSource analogInputSource;
     private double gain;
     private String channel;
+    public int bufferIndex;
     private double calibration_ref196;
     public int length;
     private double timebase;
@@ -25,6 +26,7 @@ public class AnalogAquisitionChannel {
         resolution = 10;
         length = 100;
         timebase = 1.;
+        bufferIndex = 0;
         Arrays.fill(xAxis, 0);
         Arrays.fill(yAxis, 0);
         analogInputSource = new AnalogInputSource("CH1");
@@ -49,12 +51,13 @@ public class AnalogAquisitionChannel {
         xAxis[pos] = fixValue(new double[]{val})[0];
     }
 
-    public void setParams(String channel, int length, double timebase, int resolution, AnalogInputSource source, Double gain) {
+    public void setParams(String channel, int length, int bufferIndex, double timebase, int resolution, AnalogInputSource source, Double gain) {
         if (gain != null) this.gain = gain;
         if (source != null) this.analogInputSource = source;
         if (channel != null) this.channel = channel;
         if (resolution != -1) this.resolution = resolution;
         if (length != -1) this.length = length;
+        if (bufferIndex != -1) this.bufferIndex = bufferIndex;
         if (timebase != -1) this.timebase = timebase;
         regenerateXAxis();
     }
