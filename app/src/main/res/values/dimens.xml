@@ -50,7 +50,7 @@
     <dimen name="power_card_button_weight">1</dimen>
     <dimen name="power_card_large_margin">13dp</dimen>
 
-    <item name="power_card_panel_weight" format="float" type="dimen">0.8</item>
+    <item name="power_card_panel_weight" format="float" type="dimen">1.0</item>
 
     <dimen name="sensor_title_font">16sp</dimen>
     <dimen name="sensor_body_font">14sp</dimen>
@@ -411,6 +411,9 @@
     <dimen name="sensor_control_dock_image_button_width">60dp</dimen>
     <dimen name="margin_50dp">50dp</dimen>
     <dimen name="margin_5dp">5dp</dimen>
+    <dimen name="margin_2dp">2dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
     <dimen name="text_size_8sp">8sp</dimen>
     <dimen name="sensor_image_height">90dp</dimen>
     <dimen name="edittext_min_width">1dp</dimen>
