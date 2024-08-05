@@ -130,7 +130,7 @@ public class ADS1115 {
     }
 
     public int readInt(int addr) throws IOException, InterruptedException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, addr, 2);
+        ArrayList<Integer> vals = i2c.readBulk(ADDRESS, addr, 2);
         int v = (int) (1. * ((vals.get(0) << 8) | vals.get(1)));
         return v;
     }
@@ -141,7 +141,7 @@ public class ADS1115 {
     }
 
     private int readRegister(int register) throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, register, 2);
+        ArrayList<Integer> vals = i2c.readBulk(ADDRESS, register, 2);
         return (vals.get(0) << 8) | vals.get(1);
     }
 

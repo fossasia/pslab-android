@@ -65,7 +65,7 @@ public class MPU6050 {
 
     }
 
-    private ArrayList<Character> getVals(int addr, int bytesToRead) throws IOException {
+    private ArrayList<Integer> getVals(int addr, int bytesToRead) throws IOException {
         return i2c.readBulk(ADDRESS, addr, bytesToRead);
     }
 
@@ -84,7 +84,7 @@ public class MPU6050 {
     }
 
     public ArrayList<Double> getRaw() throws IOException, NullPointerException {
-        ArrayList<Character> vals = getVals(0x3B, 14);
+        ArrayList<Integer> vals = getVals(0x3B, 14);
         ArrayList<Double> raw = new ArrayList<>();
         if (vals.size() == 14) {
             int a;
@@ -107,7 +107,7 @@ public class MPU6050 {
     }
 
     public double[] getAcceleration() throws IOException {
-        ArrayList<Character> vals = getVals(0x3B, 6);
+        ArrayList<Integer> vals = getVals(0x3B, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);
@@ -116,13 +116,13 @@ public class MPU6050 {
     }
 
     public double getTemperature() throws IOException {
-        ArrayList<Character> vals = getVals(0x41, 6);
+        ArrayList<Integer> vals = getVals(0x41, 6);
         int t = vals.get(0) << 8 | vals.get(1);
         return t / 65535.;
     }
 
     public double[] getGyroscope() throws IOException {
-        ArrayList<Character> vals = getVals(0x43, 6);
+        ArrayList<Integer> vals = getVals(0x43, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);

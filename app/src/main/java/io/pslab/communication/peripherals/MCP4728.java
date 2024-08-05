@@ -72,7 +72,7 @@ public class MCP4728 {
             i2c.start(addr, 0);
             i2c.send(0x0);
             i2c.restart(addr, 1);
-            i2c.read(24);
+            i2c._read(24);
             i2c.stop();
         } catch (IOException e) {
             e.printStackTrace();

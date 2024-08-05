@@ -48,7 +48,7 @@ public class TSL2561 {
 
     private I2C i2c;
     private int full, infra;
-    private ArrayList<Character> infraList, fullList;
+    private ArrayList<Integer> infraList, fullList;
     private ArrayList<java.io.Serializable> setGain = new ArrayList<java.io.Serializable>(Arrays.asList("1x", "16x"));
     private ArrayList<java.io.Serializable> setTiming = new ArrayList<java.io.Serializable>(Arrays.asList(0, 1, 2));
 
@@ -72,7 +72,7 @@ public class TSL2561 {
     }
 
     public int getID() throws IOException {
-        ArrayList<Character> _ID_ = i2c.readBulk(ADDRESS, REGISTER_ID, 1);
+        ArrayList<Integer> _ID_ = i2c.readBulk(ADDRESS, REGISTER_ID, 1);
         int ID = Integer.parseInt(Character.getNumericValue(_ID_.get(0)) + "", 16);
         Log.d("ID", Integer.toString(ID));
         return ID;
