@@ -18,35 +18,35 @@ import static java.lang.Math.pow;
 
 public class BMP180 {
 
-    private String TAG = "BMP180";
+    private static final String TAG = "BMP180";
     // BMP180 default address
-    private int ADDRESS = 0x77;
+    private static final int ADDRESS = 0x77;
 
     // Operating Modes
-    private int ULTRALOWPOWER = 0;
-    private int STANDARD = 1;
-    private int HIGHRES = 2;
-    private int ULTRAHIGHRES = 3;
+    private static final int ULTRALOWPOWER = 0;
+    private static final int STANDARD = 1;
+    private static final int HIGHRES = 2;
+    private static final int ULTRAHIGHRES = 3;
 
     // BMP180 Registers
-    private int CAL_AC1 = 0xAA;
-    private int CAL_AC2 = 0xAC;
-    private int CAL_AC3 = 0xAE;
-    private int CAL_AC4 = 0xB0;
-    private int CAL_AC5 = 0xB2;
-    private int CAL_AC6 = 0xB4;
-    private int CAL_B1 = 0xB6;
-    private int CAL_B2 = 0xB8;
-    private int CAL_MB = 0xBA;
-    private int CAL_MC = 0xBC;
-    private int CAL_MD = 0xBE;
-    private int CONTROL = 0xF4;
-    private int TEMPDATA = 0xF6;
-    private int PRESSDATA = 0xF6;
+    private static final int CAL_AC1 = 0xAA;
+    private static final int CAL_AC2 = 0xAC;
+    private static final int CAL_AC3 = 0xAE;
+    private static final int CAL_AC4 = 0xB0;
+    private static final int CAL_AC5 = 0xB2;
+    private static final int CAL_AC6 = 0xB4;
+    private static final int CAL_B1 = 0xB6;
+    private static final int CAL_B2 = 0xB8;
+    private static final int CAL_MB = 0xBA;
+    private static final int CAL_MC = 0xBC;
+    private static final int CAL_MD = 0xBE;
+    private static final int CONTROL = 0xF4;
+    private static final int TEMPDATA = 0xF6;
+    private static final int PRESSDATA = 0xF6;
 
     // BMP180 Commands
-    private int READTEMPCMD = 0x2E;
-    private int READPRESSURECMD = 0x34;
+    private static final int READTEMPCMD = 0x2E;
+    private static final int READPRESSURECMD = 0x34;
 
     private int mode = HIGHRES;
     private int oversampling = mode;
@@ -56,10 +56,20 @@ public class BMP180 {
     public String name = "Altimeter BMP180";
 
     private I2C i2c;
-    private int ac1, ac2, ac3, ac4, ac5, ac6, b1, b2, mb, mc, md;
-    private double temperature, pressure;
-    private final double seaLevelPressure = 101325.0;
-    private ArrayList<Integer> setOverSampling = new ArrayList<>(Arrays.asList(ULTRALOWPOWER, STANDARD, HIGHRES, ULTRAHIGHRES));
+    private int ac1;
+    private int ac2;
+    private int ac3;
+    private int ac4;
+    private int ac5;
+    private int ac6;
+    private int b1;
+    private int b2;
+    private int mb;
+    private int mc;
+    private int md;
+    private double temperature;
+    private double pressure;
+    private static final double SEA_LEVEL_PRESSURE = 101325.0;
 
     public BMP180(I2C i2c, ScienceLab scienceLab) throws IOException, InterruptedException {
         this.i2c = i2c;
@@ -158,7 +168,7 @@ public class BMP180 {
 
     public double altitude() {
         // Calculation from section 3.6 of the datasheet
-        return (44330.0 * (1 - pow(pressure / seaLevelPressure, 1 / 5.255)));
+        return (44330.0 * (1 - pow(pressure / SEA_LEVEL_PRESSURE, 1 / 5.255)));
     }
 
     public double seaLevel(double pressure, double altitude) {

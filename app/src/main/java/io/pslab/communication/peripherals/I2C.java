@@ -98,10 +98,10 @@ public class I2C {
 
     public ArrayList<Byte> simpleRead(int address, int numBytes) throws IOException {
         this.start(address, 1);
-        return this._read(numBytes);
+        return this.read(numBytes);
     }
 
-    public ArrayList<Byte> _read(int length) throws IOException {
+    public ArrayList<Byte> read(int length) throws IOException {
         ArrayList<Byte> data = new ArrayList<>();
         for (int i = 0; i < length - 1; i++) {
             packetHandler.sendByte(commandsProto.I2C_HEADER);
@@ -149,8 +149,8 @@ public class I2C {
         byte[] data = new byte[bytesToRead + 1];
         packetHandler.read(data, bytesToRead + 1);
         ArrayList<Integer> intData = new ArrayList<>();
-        for (int i = 0; i < bytesToRead; i++) {
-            intData.add((int) data[i]);
+        for (byte b : data) {
+            intData.add((int) b);
         }
         return intData;
     }
@@ -204,8 +204,9 @@ public class I2C {
     }
 
     public ArrayList<Integer> scan(Integer frequency) throws IOException {
-        if (frequency == null) frequency = 125000;
-        config(frequency);
+        Integer freq = frequency;
+        if (frequency == null) freq = 125000;
+        config(freq);
         ArrayList<Integer> addresses = new ArrayList<>();
         for (int i = 0; i < 128; i++) {
             int x = start(i, 0);
