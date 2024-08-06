@@ -18,109 +18,157 @@ import static java.lang.Math.pow;
 
 public class BMP180 {
 
-    private String TAG = "BMP180";
-    private int ADDRESS = 0x77;
-    private int REG_CONTROL = 0xF4;
-    private int REG_RESULT = 0xF6;
-    private int CMD_TEMP = 0x2E;
-    private int CMD_P0 = 0x34;
-    private int CMD_P1 = 0x74;
-    private int CMD_P2 = 0xB4;
-    private int CMD_P3 = 0xF4;
-    private int oversampling = 0;
+    private static final String TAG = "BMP180";
+    // BMP180 default address
+    private static final int ADDRESS = 0x77;
+
+    // Operating Modes
+    private static final int ULTRALOWPOWER = 0;
+    private static final int STANDARD = 1;
+    private static final int HIGHRES = 2;
+    private static final int ULTRAHIGHRES = 3;
+
+    // BMP180 Registers
+    private static final int CAL_AC1 = 0xAA;
+    private static final int CAL_AC2 = 0xAC;
+    private static final int CAL_AC3 = 0xAE;
+    private static final int CAL_AC4 = 0xB0;
+    private static final int CAL_AC5 = 0xB2;
+    private static final int CAL_AC6 = 0xB4;
+    private static final int CAL_B1 = 0xB6;
+    private static final int CAL_B2 = 0xB8;
+    private static final int CAL_MB = 0xBA;
+    private static final int CAL_MC = 0xBC;
+    private static final int CAL_MD = 0xBE;
+    private static final int CONTROL = 0xF4;
+    private static final int TEMPDATA = 0xF6;
+    private static final int PRESSDATA = 0xF6;
+
+    // BMP180 Commands
+    private static final int READTEMPCMD = 0x2E;
+    private static final int READPRESSURECMD = 0x34;
+
+    private int mode = HIGHRES;
+    private int oversampling = mode;
 
     public int NUMPLOTS = 3;
     public String[] PLOTNAMES = {"Temperature", "Pressure", "Altitude"};
     public String name = "Altimeter BMP180";
 
     private I2C i2c;
-    private int MB;
-    private double c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, y2, p0, p1, p2, temperature, pressure, baseline;
-    private ArrayList<Integer> setOverSampling = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
+    private int ac1;
+    private int ac2;
+    private int ac3;
+    private int ac4;
+    private int ac5;
+    private int ac6;
+    private int b1;
+    private int b2;
+    private int mb;
+    private int mc;
+    private int md;
+    private double temperature;
+    private double pressure;
+    private static final double SEA_LEVEL_PRESSURE = 101325.0;
 
     public BMP180(I2C i2c, ScienceLab scienceLab) throws IOException, InterruptedException {
         this.i2c = i2c;
         if (scienceLab.isConnected()) {
-            MB = readInt(0xBA);
-            c3 = 160 * pow(2, -15) * readInt(0xAE);
-            c4 = pow(10, -3) * pow(2, -15) * readUInt(0xB0);
-            b1 = pow(160, 2) * pow(2, -30) * readInt(0xB6);
-            c5 = (pow(2, -15) / 160) * readUInt(0xB2);
-            c6 = readUInt(0xB4);
-            mc = (pow(2, 11) / pow(160, 2)) * readInt(0xBC);
-            md = readInt(0xBE) / 160.0;
-            x0 = readInt(0xAA);
-            x1 = 160.0 * pow(2, -13) * readInt(0xAC);
-            x2 = pow(160, 2) * pow(2, -25) * readInt(0xB8);
-            y0 = c4 * pow(2, 15);
-            y1 = c4 * c3;
-            y2 = c4 * b1;
-            p0 = (3791.0 - 8.0) / 1600.0;
-            p1 = 1.0 - 7357.0 * pow(2, -20);
-            p2 = 3038.0 * 100.0 * pow(2, -36);
-            temperature = 25;
+            ac1 = readInt16(CAL_AC1);
+            ac2 = readInt16(CAL_AC2);
+            ac3 = readInt16(CAL_AC3);
+            ac4 = readUInt16(CAL_AC4);
+            ac5 = readUInt16(CAL_AC5);
+            ac6 = readUInt16(CAL_AC6);
+            b1 = readInt16(CAL_B1);
+            b2 = readInt16(CAL_B2);
+            mb = readInt16(CAL_MB);
+            mc = readInt16(CAL_MC);
+            md = readInt16(CAL_MD);
 
-            Log.v("calib", Arrays.toString((new double[]{c3, c4, b1, c5, c6, mc, md, x0, x1, x2, y0, y1, p0, p1, p2})));
-            initTemperature();
-            readTemperature();
-            initPressure();
-            baseline = readPressure();
+            Log.v("calib", Arrays.toString((new double[]{ac1, ac2, ac3, ac4, ac5, ac6, b1, b2, mb, mc, md})));
         }
     }
 
-    private short readInt(int address) throws IOException {
-        return (short) readUInt(address);   //short is equivalent to numpy.int16()
+    private int readInt16(int address) throws IOException {
+        ArrayList<Integer> data = i2c.read(ADDRESS, 2, address);
+        int value = ((data.get(0) & 0xFF) << 8) | (data.get(1) & 0xFF);
+        if ((value & 0x8000) != 0) {  // Check if the sign bit is set
+            value |= 0xFFFF0000;  // Sign-extend to 32 bits
+        }
+        return value;
     }
 
-    private double readUInt(int address) throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, address, 2);
-        return 1. * ((vals.get(0) << 8) | vals.get(1));
+    private int readUInt16(int address) throws IOException {
+        ArrayList<Integer> data = i2c.read(ADDRESS, 2, address);
+        return ((data.get(0) & 0xFF) << 8) | (data.get(1) & 0xFF);
     }
 
-    private void initTemperature() throws IOException, InterruptedException {
-        i2c.writeBulk(ADDRESS, new int[]{REG_CONTROL, CMD_TEMP});
+    private int readRawTemperature() throws IOException, InterruptedException {
+        i2c.write(ADDRESS, new int[]{READTEMPCMD}, CONTROL);
         TimeUnit.MILLISECONDS.sleep(5);
+        int raw = readUInt16(TEMPDATA);
+        return raw;
     }
 
-    private Double readTemperature() throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, REG_RESULT, 2);
-        if (vals.size() == 2) {
-            double t = (vals.get(0) << 8) + vals.get(1);
-            double a = c5 * (t - c6);
-            temperature = a + (mc / (a + md));
-            return temperature;
-        } else
-            return null;
+    private Double readTemperature() throws IOException, InterruptedException {
+        int ut = readRawTemperature();
+        // Calculations from section 3.5 of the datasheet
+        int x1 = ((ut - ac6) * ac5) >> 15;
+        int x2 = (mc << 11) / (x1 + md);
+        int b5 = x1 + x2;
+        temperature = ((b5 + 8) >> 4) / 10.0;
+        return temperature;
     }
 
     public void setOversampling(int num) {
         oversampling = num;
     }
 
-    private void initPressure() throws IOException, InterruptedException {
-        int[] os = {0x34, 0x74, 0xb4, 0xf4};
+    private int readRawPressure() throws IOException, InterruptedException {
         int[] delays = {5, 8, 14, 26};
-        i2c.writeBulk(ADDRESS, new int[]{REG_CONTROL, oversampling});
+        i2c.write(ADDRESS, new int[]{READPRESSURECMD + (mode << 6)}, CONTROL);
         TimeUnit.MILLISECONDS.sleep(delays[oversampling]);
+        int msb = i2c.readByte(ADDRESS, PRESSDATA) & 0xFF;
+        int lsb = i2c.readByte(ADDRESS, PRESSDATA + 1) & 0xFF;
+        int xlsb = i2c.readByte(ADDRESS, PRESSDATA + 2) & 0xFF;
+        return ((msb << 16) + (lsb << 8) + xlsb) >> (8 - mode);
     }
 
-    private Double readPressure() throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, REG_RESULT, 3);
-        if (vals.size() == 3) {
-            double p = 1. * (vals.get(0) << 8) + vals.get(1) + (vals.get(2) / 256.0);
-            double s = temperature - 25.0;
-            double x = (x2 * pow(s, 2)) + (x1 * s) + x0;
-            double y = (y2 * pow(s, 2)) + (y1 * s) + y0;
-            double z = (p - x) / y;
-            pressure = (p2 * pow(z, 2)) + (p1 * z) + p0;
-            return pressure;
-        } else
-            return null;
+    private Double readPressure() throws IOException, InterruptedException {
+        int ut = readRawTemperature();
+        int up = readRawPressure();
+        // Calculations from section 3.5 of the datasheet
+        int x1 = ((ut - ac6) * ac5) >> 15;
+        int x2 = (mc << 11) / (x1 + md);
+        int b5 = x1 + x2;
+        // Pressure Calculations
+        int b6 = b5 - 4000;
+        x1 = (b2 * (b6 * b6) >> 12) >> 11;
+        x2 = (ac2 * b6) >> 11;
+        int x3 = x1 + x2;
+        int b3 = (((ac1 * 4 + x3) << mode) + 2) / 4;
+        x1 = (ac3 * b6) >> 13;
+        x2 = (b1 * ((b6 * b6) >> 12)) >> 16;
+        x3 = ((x1 + x2) + 2) >> 2;
+        int b4 = (ac4 * (x3 + 32768)) >> 15;
+        int b7 = (up - b3) * (50000 >> mode);
+        int p;
+        if (b7 < 0x80000000) {
+            p = (b7 * 2) / b4;
+        } else {
+            p = (b7 / b4) * 2;
+        }
+        x1 = (p >> 8) * (p >> 8);
+        x1 = (x1 * 3038) >> 16;
+        x2 = (-7357 * p) >> 16;
+        pressure = p + ((x1 + x2 + 3791) >> 4);
+        return pressure;
     }
 
     public double altitude() {
-        // baseline pressure needs to be provided
-        return (44330.0 * (1 - pow(pressure / baseline, 1 / 5.255)));
+        // Calculation from section 3.6 of the datasheet
+        return (44330.0 * (1 - pow(pressure / SEA_LEVEL_PRESSURE, 1 / 5.255)));
     }
 
     public double seaLevel(double pressure, double altitude) {
@@ -129,11 +177,9 @@ public class BMP180 {
     }
 
     public double[] getRaw() throws IOException, InterruptedException {
-        initTemperature();
         temperature = readTemperature();
-        initPressure();
         pressure = readPressure();
-        return (new double[]{temperature, pressure, altitude()});
+        return (new double[]{temperature, altitude(), pressure});
     }
 
 }

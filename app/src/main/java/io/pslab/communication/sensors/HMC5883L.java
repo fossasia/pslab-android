@@ -80,13 +80,13 @@ public class HMC5883L {
         writeCONFB();
     }
 
-    public ArrayList<Character> getVals(int addr, int bytes) throws IOException {
+    public ArrayList<Integer> getVals(int addr, int bytes) throws IOException {
         return i2c.readBulk(ADDRESS, addr, bytes);
     }
 
     public ArrayList<Double> getRaw() throws IOException {
         ArrayList<Double> returnList = new ArrayList<>();
-        ArrayList<Character> vals = getVals(0x03, 6);
+        ArrayList<Integer> vals = getVals(0x03, 6);
         if (vals.size() == 6) {
             for (int a = 0; a < 3; a++) {
                 returnList.add((vals.get(a * 2) << 8 | vals.get(a * 2 + 1)) / scaling.get(gainValue));

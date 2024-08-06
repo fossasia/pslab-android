@@ -140,7 +140,7 @@ public class I2C {
         return val;
     }
 
-    public ArrayList<Character> readBulk(int deviceAddress, int registerAddress, int bytesToRead) throws IOException {
+    public ArrayList<Integer> readBulk(int deviceAddress, int registerAddress, int bytesToRead) throws IOException {
         packetHandler.sendByte(commandsProto.I2C_HEADER);
         packetHandler.sendByte(commandsProto.I2C_READ_BULK);
         packetHandler.sendByte(deviceAddress);
@@ -148,11 +148,29 @@ public class I2C {
         packetHandler.sendByte(bytesToRead);
         byte[] data = new byte[bytesToRead + 1];
         packetHandler.read(data, bytesToRead + 1);
-        ArrayList<Character> charData = new ArrayList<>();
-        for (int i = 0; i < bytesToRead; i++) {
-            charData.add((char) data[i]);
+        ArrayList<Integer> intData = new ArrayList<>();
+        for (byte b : data) {
+            intData.add((int) b);
         }
-        return charData;
+        return intData;
+    }
+
+    public ArrayList<Integer> read(int deviceAddress, int bytesToRead, int registerAddress) throws IOException {
+        return readBulk(deviceAddress, registerAddress, bytesToRead);
+    }
+
+    public int readByte(int deviceAddress, int registerAddress) throws IOException {
+        return read(deviceAddress, 1, registerAddress).get(0);
+    }
+
+    public int readInt(int deviceAddress, int registerAddress) throws IOException {
+        ArrayList<Integer> data = read(deviceAddress, 2, registerAddress);
+        return data.get(0) << 8 | data.get(1);
+    }
+
+    public long readLong(int deviceAddress, int registerAddress) throws IOException {
+        ArrayList<Integer> data = read(deviceAddress, 4, registerAddress);
+        return data.get(0) << 24 | data.get(1) << 16 | data.get(2) << 8 | data.get(3);
     }
 
     public void writeBulk(int deviceAddress, int[] data) throws IOException {
@@ -166,9 +184,29 @@ public class I2C {
         packetHandler.getAcknowledgement();
     }
 
+    public void write(int deviceAddress, int[] data, int registerAddress) throws IOException {
+        int[] finalData = new int[data.length + 1];
+        finalData[0] = registerAddress;
+        System.arraycopy(data, 0, finalData, 1, data.length);
+        writeBulk(deviceAddress, finalData);
+    }
+
+    public void writeByte(int deviceAddress, int registerAddress, int data) throws IOException {
+        write(deviceAddress, new int[]{data}, registerAddress);
+    }
+
+    public void writeInt(int deviceAddress, int registerAddress, int data) throws IOException {
+        write(deviceAddress, new int[]{data & 0xff, (data >> 8) & 0xff}, registerAddress);
+    }
+
+    public void writeLong(int deviceAddress, int registerAddress, long data) throws IOException {
+        write(deviceAddress, new int[]{(int) (data & 0xff), (int) ((data >> 8) & 0xff), (int) ((data >> 16) & 0xff), (int) ((data >> 24) & 0xff)}, registerAddress);
+    }
+
     public ArrayList<Integer> scan(Integer frequency) throws IOException {
-        if (frequency == null) frequency = 100000;
-        config(frequency);
+        Integer freq = frequency;
+        if (frequency == null) freq = 125000;
+        config(freq);
         ArrayList<Integer> addresses = new ArrayList<>();
         for (int i = 0; i < 128; i++) {
             int x = start(i, 0);

@@ -67,7 +67,7 @@ public class MPU925x {
         }
     }
 
-    private ArrayList<Character> getVals(int addr, int bytestoread) throws IOException {
+    private ArrayList<Integer> getVals(int addr, int bytestoread) throws IOException {
         return i2c.readBulk(ADDRESS, addr, bytestoread);
     }
 
@@ -86,7 +86,7 @@ public class MPU925x {
     }
 
     public ArrayList<Double> getRaw() throws IOException, NullPointerException {
-        ArrayList<Character> vals = getVals(0x3B, 14);
+        ArrayList<Integer> vals = getVals(0x3B, 14);
         ArrayList<Double> raw = new ArrayList<>();
         if (vals.size() == 14) {
             for (int a = 0; a < 3; a++)
@@ -109,7 +109,7 @@ public class MPU925x {
 
     public double[] getAcceleration() throws IOException {
         //Return a list of 3 values for acceleration vector
-        ArrayList<Character> vals = getVals(0x3B, 6);
+        ArrayList<Integer> vals = getVals(0x3B, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);
@@ -118,14 +118,14 @@ public class MPU925x {
 
     public double getTemperature() throws IOException {
         //Return temperature
-        ArrayList<Character> vals = getVals(0x41, 6);
+        ArrayList<Integer> vals = getVals(0x41, 6);
         int t = vals.get(0) << 8 | vals.get(1);
         return t / 65535.;
     }
 
     public double[] getGyroscope() throws IOException {
         //Return a list of 3 values for angular velocity vector
-        ArrayList<Character> vals = getVals(0x43, 6);
+        ArrayList<Integer> vals = getVals(0x43, 6);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);
@@ -135,7 +135,7 @@ public class MPU925x {
 
     public double[] getMagneticField() throws IOException {
         //Return a list of 3 values for magnetic field vector
-        ArrayList<Character> vals = i2c.readBulk(AK8963_ADDRESS, 0X03, 7);
+        ArrayList<Integer> vals = i2c.readBulk(AK8963_ADDRESS, 0X03, 7);
         int ax = vals.get(0) << 8 | vals.get(1);
         int ay = vals.get(2) << 8 | vals.get(3);
         int az = vals.get(4) << 8 | vals.get(5);

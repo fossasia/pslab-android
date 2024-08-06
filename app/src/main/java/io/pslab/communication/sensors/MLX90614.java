@@ -48,17 +48,17 @@ public class MLX90614 {
     }
 
     public void readReg(int address) throws IOException {
-        ArrayList<Character> x = getVals(address, 2);
+        ArrayList<Integer> x = getVals(address, 2);
         Log.v(TAG, Integer.toHexString(address) + " " + Integer.toHexString(x.get(0) | (x.get(1) << 8)));
     }
 
-    private ArrayList<Character> getVals(int addr, int bytes) throws IOException {
-        ArrayList<Character> vals = i2c.readBulk(ADDRESS, addr, bytes);
+    private ArrayList<Integer> getVals(int addr, int bytes) throws IOException {
+        ArrayList<Integer> vals = i2c.readBulk(ADDRESS, addr, bytes);
         return vals;
     }
 
     public Double getRaw() throws IOException {
-        ArrayList<Character> vals = getVals(source, 3);
+        ArrayList<Integer> vals = getVals(source, 3);
         if (vals.size() == 3)
             return ((((vals.get(1) & 0x007f) << 8) + vals.get(0)) * 0.02) - 0.01 - 273.15;
         else
