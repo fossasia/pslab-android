@@ -243,10 +243,10 @@ public class ChannelParametersFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = isChecked;
                 ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
-                ((OscilloscopeActivity) getActivity()).isMICSelected = !isChecked;
                 if (isChecked) {
                     ((OscilloscopeActivity) getActivity()).maxTimebase = 38.4f;
                     if (pslabMicCheckBox.isChecked()) {
+                        ((OscilloscopeActivity) getActivity()).isMICSelected = false;
                         pslabMicCheckBox.setChecked(false);
                         ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
                     }
@@ -265,9 +265,9 @@ public class ChannelParametersFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ((OscilloscopeActivity) getActivity()).isMICSelected = isChecked;
                 ((OscilloscopeActivity) getActivity()).isAudioInputSelected = isChecked;
-                ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = !isChecked;
                 if (isChecked) {
                     if (builtInMicCheckBox.isChecked()) {
+                        ((OscilloscopeActivity) getActivity()).isInBuiltMicSelected = false;
                         builtInMicCheckBox.setChecked(false);
                         ((OscilloscopeActivity) getActivity()).isAudioInputSelected = true;
                     }

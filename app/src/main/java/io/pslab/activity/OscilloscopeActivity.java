@@ -507,7 +507,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                             }
                         }
 
-                        if ((!isInBuiltMicSelected || !isAudioInputSelected) && audioJack != null) {
+                        if ((!isInBuiltMicSelected) && audioJack != null) {
                             audioJack.release();
                             audioJack = null;
                         }
