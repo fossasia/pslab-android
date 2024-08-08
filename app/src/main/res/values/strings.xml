@@ -273,6 +273,7 @@
     <string name="mlx90614">mlx90614</string>
     <string name="bmp180">bmp180</string>
     <string name="mpu925x">mpu925x</string>
+    <string name="vl53l0x">VL53L0X</string>
 
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
@@ -1062,6 +1063,8 @@
     <string name="auto_scale">Auto</string>
     <string name="control_stop">Stop</string>
     <string name="control_run">Run</string>
+    <string name="distance">Distance</string>
+    <string name="distance_unit">(mm)</string>
 
     <string name="legacy_title">Legacy Firmware Detected</string>
     <string name="legacy_message">We have detected that your PSLab device is running legacy firmware. Please note that support for this firmware has ended. For the best experience and continued support, please update your device to the latest firmware version.</string>

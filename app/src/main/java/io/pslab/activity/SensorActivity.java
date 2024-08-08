@@ -36,6 +36,7 @@ import io.pslab.sensors.SensorMPU6050;
 import io.pslab.sensors.SensorMPU925X;
 import io.pslab.sensors.SensorSHT21;
 import io.pslab.sensors.SensorTSL2561;
+import io.pslab.sensors.SensorVL53L0X;
 
 /**
  * Created by asitava on 18/6/17.
@@ -79,6 +80,7 @@ public class SensorActivity extends GuideActivity {
         sensorAddr.put(0x40, "SHT21");
         sensorAddr.put(0x39, "TSL2561");
         sensorAddr.put(0x69, "MPU925x");
+        sensorAddr.put(0x29, "VL53L0X");
 
         adapter = new ArrayAdapter<>(getApplication(), R.layout.sensor_list_item, R.id.tv_sensor_list_item, dataName);
 
@@ -127,6 +129,10 @@ public class SensorActivity extends GuideActivity {
                     break;
                 case "MPU925x":
                     intent = new Intent(getApplication(), SensorMPU925X.class);
+                    startActivity(intent);
+                    break;
+                case "VL53L0X":
+                    intent = new Intent(getApplication(), SensorVL53L0X.class);
                     startActivity(intent);
                     break;
                 default:
