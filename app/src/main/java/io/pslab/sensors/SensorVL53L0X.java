@@ -86,7 +86,7 @@ public class SensorVL53L0X extends AppCompatActivity {
         entries = new ArrayList<>();
         try {
             sensorVL53L0X = new VL53L0X(i2c, scienceLab);
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -225,12 +225,12 @@ public class SensorVL53L0X extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                // Do nothing
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                // Do nothing
             }
         });
     }
@@ -246,7 +246,7 @@ public class SensorVL53L0X extends AppCompatActivity {
                 if (sensorVL53L0X != null) {
                     dataVL53L0X = sensorVL53L0X.getRaw();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
