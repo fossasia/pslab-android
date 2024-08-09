@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,7 +12,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"
+    <uses-permission
+        android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"
         tools:ignore="HighSamplingRate" />
 
     <uses-feature
@@ -21,11 +23,11 @@
 
     <application
         android:name=".PSLabApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
-        android:allowBackup="false"
-        android:fullBackupContent="false"
-        android:dataExtractionRules="@xml/data_extraction_rules"
         android:roundIcon="@drawable/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -47,9 +49,9 @@
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.SplashActivity"
+            android:exported="true"
             android:screenOrientation="user"
-            android:theme="@style/AppThemeSplash"
-            android:exported="true">
+            android:theme="@style/AppThemeSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,8 +61,8 @@
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTask"
-            android:exported="false">
+            android:exported="false"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
@@ -129,6 +131,7 @@
         <activity android:name=".sensors.SensorSHT21" />
         <activity android:name=".sensors.SensorMPU6050" />
         <activity android:name=".sensors.SensorTSL2561" />
+        <activity android:name=".sensors.SensorVL53L0X" />
     </application>
 
 </manifest>
