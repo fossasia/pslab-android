@@ -132,6 +132,8 @@
         <activity android:name=".sensors.SensorMPU6050" />
         <activity android:name=".sensors.SensorTSL2561" />
         <activity android:name=".sensors.SensorVL53L0X" />
+        <activity android:name=".sensors.SensorCCS811" />
+
     </application>
 
 </manifest>
