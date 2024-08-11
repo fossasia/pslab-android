@@ -88,7 +88,7 @@ public class SensorCCS811 extends AppCompatActivity {
         try {
             sensorCCS811 = new CCS811(i2c, scienceLab);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         entrieseCO2 = new ArrayList<>();
@@ -270,12 +270,12 @@ public class SensorCCS811 extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                // Do nothing
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                // Do nothing
             }
         });
     }
