@@ -171,9 +171,9 @@ public class VL53L0X {
             }
             int configControl = i2c.readByte(ADDRESS, MSRC_CONFIG_CONTROL) | (DISABLE_SIGNAL_RATE_MSRC | DISABLE_SIGNAL_RATE_PRE_RANGE);
 
-            i2c.write(ADDRESS, new int[configControl], MSRC_CONFIG_CONTROL);
+            i2c.write(ADDRESS, new int[]{configControl}, MSRC_CONFIG_CONTROL);
 
-            i2c.write(ADDRESS, new int[0xFF], SYSTEM_SEQUENCE_CONFIG);
+            i2c.write(ADDRESS, new int[]{0xFF}, SYSTEM_SEQUENCE_CONFIG);
 
             spadConfig();
 
