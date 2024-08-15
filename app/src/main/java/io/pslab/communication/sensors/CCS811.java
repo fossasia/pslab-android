@@ -17,22 +17,33 @@ public class CCS811 {
     private static final int HW_ID = 0x20;            // HW_ID # R 1 byte Hardware ID. The value is 0x81
     private static final int FW_BOOT_VERSION = 0x23;  // FW_Boot_Version # R 2 bytes firmware version number for the boot code. Firmware Application Version. The first 2 bytes contain
     private static final int FW_APP_VERSION = 0x24;   // FW_App_Version # R 2 bytes the firmware version number for the application code
-    private static final int SW_RESET = 0xFF;         // SW_RESET # W 4 bytes to this register in a single sequence the device will reset and return to BOOT mode.
+    private static final int MEAS_MODE = 0x01;        // MEAS_MODE # R/W 1 byte Measurement mode and conditions register Algorithm result.
 
     // Figure 25: CCS811 Bootloader Register Map
     // Address Register R/W Size Description
     private static final int HW_Version = 0x21;
+    private static final int APP_START = 0xF4;
+
+    // Measurement Mode
+    private static final int DRIVE_MODE_1SEC = 0x01;
 
     public CCS811(I2C i2c, ScienceLab scienceLab) throws Exception {
         this.i2c = i2c;
         if (scienceLab.isConnected()) {
             fetchID();
-            softwareReset();
+            appStart();
+            Thread.sleep(100);
+            disableInterrupt();
+            setMeasMode();
         }
     }
 
-    private void softwareReset() throws IOException {
-        i2c.write(ADDRESS, new int[]{0x11, 0xE5, 0x72, 0x8A}, SW_RESET);
+    private void setMeasMode() throws IOException {
+        i2c.write(ADDRESS, new int[]{1 << 2 | CCS811.DRIVE_MODE_1SEC << 4}, MEAS_MODE);
+    }
+
+    private void disableInterrupt() throws IOException {
+        i2c.write(ADDRESS, new int[]{1 << 2 | 3 << 4}, MEAS_MODE);
     }
 
     private void fetchID() throws IOException, InterruptedException {
@@ -49,6 +60,10 @@ public class CCS811 {
         Log.d("CCS811", "Hardware Version: " + hardwareVersion);
         Log.d("CCS811", "Boot Version: " + bootVersion);
         Log.d("CCS811", "App Version: " + appVersion);
+    }
+
+    private void appStart() throws IOException {
+        i2c.write(ADDRESS, new int[]{}, APP_START);
     }
 
     private String decodeError(int error) {
@@ -74,15 +89,15 @@ public class CCS811 {
         return "Error: " + e.substring(2);
     }
 
-    public double[] getRaw() throws IOException {
+    public int[] getRaw() throws IOException {
         ArrayList<Integer> data = i2c.read(ADDRESS, 8, ALG_RESULT_DATA);
-        double eCO2 = (data.get(0) & 0xFF) * 256 + (data.get(1) & 0xFF);
-        double TVOC = (data.get(2) & 0xFF) * 256 + (data.get(3) & 0xFF);
+        int eCO2 = ((data.get(0) & 0xFF) << 8) | (data.get(1) & 0xFF);
+        int TVOC = ((data.get(2) & 0xFF) << 8) | (data.get(3) & 0xFF);
         int errorId = data.get(5) & 0xFF;
 
         if (errorId > 0) {
             Log.d("CCS811", decodeError(errorId));
         }
-        return (new double[]{eCO2, TVOC});
+        return (new int[]{eCO2, TVOC});
     }
 }

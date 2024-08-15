@@ -282,9 +282,9 @@ public class SensorCCS811 extends AppCompatActivity {
 
     private class SensorDataFetch extends AsyncTask<Void, Void, Void> {
 
-        private double[] dataCS811;
-        private Double dataCCS811eCO2;
-        private Double dataCCS811TVOC;
+        private int[] dataCS811;
+        private int dataCCS811eCO2;
+        private int dataCCS811TVOC;
         private long timeElapsed;
 
         @Override
@@ -299,8 +299,8 @@ public class SensorCCS811 extends AppCompatActivity {
                 e.printStackTrace();
             }
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
-            entrieseCO2.add(new Entry((float) timeElapsed, dataCCS811eCO2.floatValue()));
-            entriesTVOC.add(new Entry((float) timeElapsed, dataCCS811TVOC.floatValue()));
+            entrieseCO2.add(new Entry((float) timeElapsed, dataCCS811eCO2));
+            entriesTVOC.add(new Entry((float) timeElapsed, dataCCS811TVOC));
             return null;
         }
 
