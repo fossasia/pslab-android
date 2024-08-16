@@ -274,6 +274,7 @@
     <string name="bmp180">bmp180</string>
     <string name="mpu925x">mpu925x</string>
     <string name="vl53l0x">VL53L0X</string>
+    <string name="ccs811">CCS811</string>
 
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
@@ -289,6 +290,8 @@
     <string name="gx">Gx</string>
     <string name="gy">Gy</string>
     <string name="gz">Gz</string>
+    <string name="eCO2">eCO2</string>
+    <string name="eTVOC">TVOC</string>
     <string name="temp">Temp</string>
     <string name="luminosity">Luminosity</string>
     <string name="humidity">Humidity</string>
@@ -310,7 +313,11 @@
     <string name="set_rate">Set Rate</string>
     <string name="plot_accelerometer">Plot - Accelerometer</string>
     <string name="plot_gyroscope">Plot - Gyroscope</string>
+    <string name="plot_eCO2">Plot - eCO2</string>
+    <string name="plot_eTVOC">Plot - TVOC</string>
     <string name="rad">(rad)</string>
+    <string name="ppm">(ppm)</string>
+    <string name="ppb">(ppb)</string>
     <string name="angle">Angle</string>
     <string name="time">Time (sec)</string>
     <string name="infinite_symbol">∞</string>
