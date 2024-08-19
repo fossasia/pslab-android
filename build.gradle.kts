@@ -9,5 +9,5 @@ buildscript {
 }
 
 plugins {
-    id("com.android.application") version "8.4.1" apply false
+    id("com.android.application") version "8.5.2" apply false
 }
