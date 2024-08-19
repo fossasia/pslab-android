@@ -275,6 +275,7 @@
     <string name="mpu925x">mpu925x</string>
     <string name="vl53l0x">VL53L0X</string>
     <string name="ccs811">CCS811</string>
+    <string name="apds9960">APDS9960</string>
 
     <string name="raw_data">Raw Data</string>
     <string name="configure">Configure</string>
@@ -290,8 +291,18 @@
     <string name="gx">Gx</string>
     <string name="gy">Gy</string>
     <string name="gz">Gz</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="clear">Clear</string>
+    <string name="gesture">Gesture</string>
     <string name="eCO2">eCO2</string>
     <string name="eTVOC">TVOC</string>
+    <string name="plot_lux">Plot - Light Lux</string>
+    <string name="plot_proximity">Plot - Proximity</string>
+    <string name="proximity">Prox</string>
+    <string name="lux_unit">(lx)</string>
+    <string name="light_lux">Lux</string>
     <string name="temp">Temp</string>
     <string name="luminosity">Luminosity</string>
     <string name="humidity">Humidity</string>
@@ -327,6 +338,11 @@
     <string name="alt">Alt.</string>
     <string name="meter">(m)</string>
     <string name="pascal">(Pa)</string>
+
+    <string name="up">UP</string>
+    <string name="down">DOWN</string>
+    <string name="left">LEFT</string>
+    <string name="right">RIGHT</string>
 
     <string-array name="tsl2561_gain_spinner">
         <item>No gain</item>
