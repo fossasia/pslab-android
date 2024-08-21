@@ -61,7 +61,7 @@ jobs:
 
             let comment_id;
             for (const comment of comments.data) {
-              if (comment.user.type === 'Bot') {
+              if (comment.user.login === 'github-actions[bot]') {
                 comment_id = comment.id;
                 break;
               }
@@ -103,7 +103,7 @@ jobs:
 
             let comment_id;
             for (const comment of comments.data) {
-              if (comment.user.type === 'Bot') {
+              if (comment.user.login === 'github-actions[bot]') {
                 comment_id = comment.id;
                 break;
               }
