@@ -41,12 +41,19 @@ jobs:
           read -r version_code < versionCode.txt
           echo "VERSION_CODE=$version_code" >> $GITHUB_OUTPUT
 
-      - name: Add Changelogs to fastlane branch
-        run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
           git clone --branch=fastlane --depth=1 https://${{ github.repository_owner }}:${{ github.token }}@github.com/${{ github.repository }} fastlane
+
+      - name: Android Screenshot Workflow
+        uses: ./.github/actions/screenshot-android
+        with:
+          ANDROID_EMULATOR_API: ${{ env.ANDROID_EMULATOR_API }}
+          ANDROID_EMULATOR_ARCH: ${{ env.ANDROID_EMULATOR_ARCH }}
+
+      - name: Add Changelogs to fastlane branch
+        run: |
           cd fastlane
           
           echo "${{ github.event.release.body }}" > metadata/android/en-US/changelogs/${{ steps.download-assets.outputs.VERSION_CODE }}.txt
@@ -54,7 +61,7 @@ jobs:
           # Force push to fastlane branch
           git checkout --orphan temporary
           git add --all .
-          git commit -am "[Auto] Add changelogs for versionCode: ${{ steps.download-assets.outputs.VERSION_CODE }} ($(date +%Y-%m-%d.%H:%M:%S))"
+          git commit -am "[Auto] Update metadata for versionCode: ${{ steps.download-assets.outputs.VERSION_CODE }} ($(date +%Y-%m-%d.%H:%M:%S))"
           git branch -D fastlane
           git branch -m fastlane
           git push --force origin fastlane
