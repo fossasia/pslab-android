@@ -3,6 +3,7 @@ package io.pslab.sensors;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -37,6 +38,7 @@ import io.pslab.communication.sensors.CCS811;
 import io.pslab.others.ScienceLabCommon;
 
 public class SensorAPDS9960 extends AppCompatActivity {
+    private final String TAG = this.getClass().getSimpleName();
     private static int counter;
     private final Object lock = new Object();
     private ScienceLab scienceLab;
@@ -92,7 +94,7 @@ public class SensorAPDS9960 extends AppCompatActivity {
         try {
             sensorAPDS9960 = new APDS9960(i2c, scienceLab);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Sensor initialization failed.");
         }
 
         entriesLux = new ArrayList<>();
@@ -115,13 +117,13 @@ public class SensorAPDS9960 extends AppCompatActivity {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                Log.e(TAG, "Thread interrupted while waiting.");
                             }
                         }
                         try {
                             Thread.sleep(timeGap);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            Log.e(TAG, "Thread interrupted during sleep.");
                         }
                     }
                 }
@@ -304,7 +306,7 @@ public class SensorAPDS9960 extends AppCompatActivity {
                     dataAPDS9960Proximity = sensorAPDS9960.getProximity();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Sensor data fetch failed.");
             }
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
             entriesLux.add(new Entry((float) timeElapsed, (float) dataAPDS9960Lux));
