@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -34,7 +35,6 @@ import io.pslab.R;
 import io.pslab.communication.ScienceLab;
 import io.pslab.communication.peripherals.I2C;
 import io.pslab.communication.sensors.APDS9960;
-import io.pslab.communication.sensors.CCS811;
 import io.pslab.others.ScienceLabCommon;
 
 public class SensorAPDS9960 extends AppCompatActivity {
@@ -48,6 +48,7 @@ public class SensorAPDS9960 extends AppCompatActivity {
     private TextView tvSensorAPDS9960Blue;
     private TextView tvSensorAPDS9960Clear;
     private TextView tvSensorAPDS9960Proximity;
+    private TextView tvSensorAPDS9960Gesture;
     private APDS9960 sensorAPDS9960;
     private LineChart mChartLux;
     private LineChart mChartProximity;
@@ -61,6 +62,7 @@ public class SensorAPDS9960 extends AppCompatActivity {
     private SeekBar timeGapSeekbar;
     private TextView timeGapLabel;
     private ImageButton playPauseButton;
+    private Spinner spinnerMode;
     private boolean play;
     private boolean runIndefinitely;
     private int timeGap;
@@ -87,7 +89,7 @@ public class SensorAPDS9960 extends AppCompatActivity {
         playPauseButton = findViewById(R.id.imageButton_play_pause_sensor);
         setSensorDock();
         sensorDock.setVisibility(View.VISIBLE);
-
+        spinnerMode = findViewById(R.id.spinner_sensor_apds9960);
 
         scienceLab = ScienceLabCommon.scienceLab;
         I2C i2c = scienceLab.i2c;
@@ -136,6 +138,7 @@ public class SensorAPDS9960 extends AppCompatActivity {
         tvSensorAPDS9960Blue = findViewById(R.id.tv_sensor_apds9960_blue);
         tvSensorAPDS9960Clear = findViewById(R.id.tv_sensor_apds9960_clear);
         tvSensorAPDS9960Proximity = findViewById(R.id.tv_sensor_apds9960_proximity);
+        tvSensorAPDS9960Gesture = findViewById(R.id.tv_sensor_apds9960_gesture);
         mChartLux = findViewById(R.id.chart_sensor_apds9960_lux);
         mChartProximity = findViewById(R.id.chart_sensor_apds9960_proximity);
 
@@ -292,21 +295,29 @@ public class SensorAPDS9960 extends AppCompatActivity {
         private int[] dataAPDS9960Color;
         private double dataAPDS9960Lux;
         private int dataAPDS9960Proximity;
+        private int dataAPDS9960Gesture;
         private long timeElapsed;
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
                 if (sensorAPDS9960 != null) {
-                    sensorAPDS9960.enableGesture(false);
-                    sensorAPDS9960.enableColor(true);
-                    sensorAPDS9960.enableProximity(true);
-                    dataAPDS9960Color = sensorAPDS9960.getColorData();
-                    dataAPDS9960Lux = (-0.32466 * dataAPDS9960Color[0]) + (1.57837 * dataAPDS9960Color[1]) + (-0.73191 * dataAPDS9960Color[2]);
-                    dataAPDS9960Proximity = sensorAPDS9960.getProximity();
+                    if (spinnerMode.getSelectedItemPosition() == 0) {
+                        sensorAPDS9960.enableGesture(false);
+                        sensorAPDS9960.enableColor(true);
+                        sensorAPDS9960.enableProximity(true);
+                        dataAPDS9960Color = sensorAPDS9960.getColorData();
+                        dataAPDS9960Lux = (-0.32466 * dataAPDS9960Color[0]) + (1.57837 * dataAPDS9960Color[1]) + (-0.73191 * dataAPDS9960Color[2]);
+                        dataAPDS9960Proximity = sensorAPDS9960.getProximity();
+                    } else {
+                        sensorAPDS9960.enableColor(false);
+                        sensorAPDS9960.enableGesture(true);
+                        sensorAPDS9960.enableProximity(true);
+                        dataAPDS9960Gesture = sensorAPDS9960.getGesture();
+                    }
                 }
-            } catch (IOException e) {
-                Log.e(TAG, "Sensor data fetch failed.");
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
             }
             timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
             entriesLux.add(new Entry((float) timeElapsed, (float) dataAPDS9960Lux));
@@ -316,31 +327,50 @@ public class SensorAPDS9960 extends AppCompatActivity {
 
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            tvSensorAPDS9960Red.setText(DataFormatter.formatDouble(dataAPDS9960Color[0], DataFormatter.HIGH_PRECISION_FORMAT));
-            tvSensorAPDS9960Green.setText(DataFormatter.formatDouble(dataAPDS9960Color[1], DataFormatter.HIGH_PRECISION_FORMAT));
-            tvSensorAPDS9960Blue.setText(DataFormatter.formatDouble(dataAPDS9960Color[2], DataFormatter.HIGH_PRECISION_FORMAT));
-            tvSensorAPDS9960Clear.setText(DataFormatter.formatDouble(dataAPDS9960Color[3], DataFormatter.HIGH_PRECISION_FORMAT));
-            tvSensorAPDS9960Proximity.setText(DataFormatter.formatDouble(dataAPDS9960Proximity, DataFormatter.HIGH_PRECISION_FORMAT));
+            if (spinnerMode.getSelectedItemPosition() == 0) {
+                tvSensorAPDS9960Red.setText(DataFormatter.formatDouble(dataAPDS9960Color[0], DataFormatter.HIGH_PRECISION_FORMAT));
+                tvSensorAPDS9960Green.setText(DataFormatter.formatDouble(dataAPDS9960Color[1], DataFormatter.HIGH_PRECISION_FORMAT));
+                tvSensorAPDS9960Blue.setText(DataFormatter.formatDouble(dataAPDS9960Color[2], DataFormatter.HIGH_PRECISION_FORMAT));
+                tvSensorAPDS9960Clear.setText(DataFormatter.formatDouble(dataAPDS9960Color[3], DataFormatter.HIGH_PRECISION_FORMAT));
+                tvSensorAPDS9960Proximity.setText(DataFormatter.formatDouble(dataAPDS9960Proximity, DataFormatter.HIGH_PRECISION_FORMAT));
 
-            LineDataSet dataSet1 = new LineDataSet(entriesLux, getString(R.string.eCO2));
-            LineDataSet dataSet2 = new LineDataSet(entriesProximity, getString(R.string.eTVOC));
+                LineDataSet dataSet1 = new LineDataSet(entriesLux, getString(R.string.light_lux));
+                LineDataSet dataSet2 = new LineDataSet(entriesProximity, getString(R.string.proximity));
 
-            dataSet1.setDrawCircles(true);
-            dataSet2.setDrawCircles(true);
+                dataSet1.setDrawCircles(true);
+                dataSet2.setDrawCircles(true);
 
-            LineData data = new LineData(dataSet1);
-            mChartLux.setData(data);
-            mChartLux.notifyDataSetChanged();
-            mChartLux.setVisibleXRangeMaximum(10);
-            mChartLux.moveViewToX(data.getEntryCount());
-            mChartLux.invalidate();
+                LineData data = new LineData(dataSet1);
+                mChartLux.setData(data);
+                mChartLux.notifyDataSetChanged();
+                mChartLux.setVisibleXRangeMaximum(10);
+                mChartLux.moveViewToX(data.getEntryCount());
+                mChartLux.invalidate();
 
-            LineData data2 = new LineData(dataSet2);
-            mChartProximity.setData(data2);
-            mChartProximity.notifyDataSetChanged();
-            mChartProximity.setVisibleXRangeMaximum(10);
-            mChartProximity.moveViewToX(data2.getEntryCount());
-            mChartProximity.invalidate();
+                LineData data2 = new LineData(dataSet2);
+                mChartProximity.setData(data2);
+                mChartProximity.notifyDataSetChanged();
+                mChartProximity.setVisibleXRangeMaximum(10);
+                mChartProximity.moveViewToX(data2.getEntryCount());
+                mChartProximity.invalidate();
+            } else {
+                switch (dataAPDS9960Gesture) {
+                    case 1:
+                        tvSensorAPDS9960Gesture.setText(R.string.up);
+                        break;
+                    case 2:
+                        tvSensorAPDS9960Gesture.setText(R.string.down);
+                        break;
+                    case 3:
+                        tvSensorAPDS9960Gesture.setText(R.string.left);
+                        break;
+                    case 4:
+                        tvSensorAPDS9960Gesture.setText(R.string.right);
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             samplesEditBox.setText(String.valueOf(counter));
             if (counter == 0 && !runIndefinitely) {

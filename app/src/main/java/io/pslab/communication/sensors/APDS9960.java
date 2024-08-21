@@ -17,6 +17,7 @@ public class APDS9960 {
     private static final int APDS9960_PILT = 0x89;
     private static final int APDS9960_PERS = 0x8C;
     private static final int APDS9960_CONTROL = 0x8F;
+    private static final int APDS9960_STATUS = 0x93;
     private static final int APDS9960_CDATAL = 0x94;
     private static final int APDS9960_PDATA = 0x9C;
     private static final int APDS9960_GPENTH = 0xA0;
@@ -25,12 +26,17 @@ public class APDS9960 {
     private static final int APDS9960_GCONF2 = 0xA3;
     private static final int APDS9960_GPULSE = 0xA6;
     private static final int APDS9960_GCONF4 = 0xAB;
+    private static final int APDS9960_GFLVL = 0xAE;
+    private static final int APDS9960_GSTATUS = 0xAF;
     private static final int APDS9960_AICLEAR = 0xE7;
+    private static final int APDS9960_GFIFO_U = 0xFC;
 
     private static final int BIT_MASK_ENABLE_EN = 0x01;
     private static final int BIT_MASK_ENABLE_COLOR = 0x02;
     private static final int BIT_MASK_ENABLE_PROX = 0x04;
     private static final int BIT_MASK_ENABLE_GESTURE = 0x40;
+    private static final int BIT_MASK_STATUS_GINT = 0x04;
+    private static final int BIT_MASK_GSTATUS_GFOV = 0x02;
     private static final int BIT_MASK_GCONF4_GFIFO_CLR = 0x04;
 
     private static final int BIT_POS_PERS_PPERS = 4;
@@ -131,6 +137,99 @@ public class APDS9960 {
                 colorData16(APDS9960_CDATAL + 6),
                 colorData16(APDS9960_CDATAL)
         };
+    }
+
+    public int getGesture() throws IOException, InterruptedException {
+        if (getBit(APDS9960_GSTATUS, BIT_MASK_GSTATUS_GFOV)) {
+            setBit(APDS9960_GCONF4, BIT_MASK_GCONF4_GFIFO_CLR, true);
+            int waitCycles = 0;
+            while (!getBit(APDS9960_STATUS, BIT_MASK_STATUS_GINT) && waitCycles <= 30) {
+                Thread.sleep(3);
+                waitCycles++;
+            }
+        }
+        ArrayList<ArrayList<Integer>> frame = new ArrayList<>();
+        int datasetsAvailable = i2c.read(APDS9960_I2C_ADDRESS, 1, APDS9960_GFLVL).get(0) & 0xFF;
+
+        if (getBit(APDS9960_STATUS, BIT_MASK_STATUS_GINT) && datasetsAvailable > 0) {
+            while (true) {
+                int datasetCount = i2c.read(APDS9960_I2C_ADDRESS, 1, APDS9960_GFLVL).get(0) & 0xFF;
+                if (datasetCount == 0) break;
+
+                ArrayList<Integer> buffer = i2c.read(APDS9960_I2C_ADDRESS, Math.min(128, datasetCount * 4), APDS9960_GFIFO_U);
+
+                for (int i = 0; i < datasetCount; i++) {
+                    ArrayList<Integer> bufferDataset = new ArrayList<>(4);
+                    for (int j = 0; j < 4; j++) {
+                        bufferDataset.add(buffer.get(i * 4 + j) & 0xFF);
+                    }
+
+                    boolean fullySaturated = bufferDataset.stream().allMatch(val -> val == 255);
+                    boolean fullyZero = bufferDataset.stream().allMatch(val -> val == 0);
+                    boolean highCount = bufferDataset.stream().allMatch(val -> val >= 30);
+
+                    if (!fullySaturated && !fullyZero && highCount) {
+                        if (frame.size() < 2) {
+                            frame.add(bufferDataset);
+                        } else {
+                            frame.set(1, bufferDataset);
+                        }
+                    }
+                }
+                Thread.sleep(30);
+            }
+        }
+
+        if (frame.size() < 2) {
+            return 0;
+        }
+
+        int[] frame0 = frame.get(0).stream().mapToInt(Integer::intValue).toArray();
+        int[] frame1 = frame.get(1).stream().mapToInt(Integer::intValue).toArray();
+
+        int frUd = calcDelta(frame0[0], frame0[1]);
+        int frLr = calcDelta(frame0[2], frame0[3]);
+        int lrUd = calcDelta(frame1[0], frame1[1]);
+        int lrLr = calcDelta(frame1[2], frame1[3]);
+
+        int deltaUd = lrUd - frUd;
+        int deltaLr = lrLr - frLr;
+
+        int stateUd = getState(deltaUd);
+        int stateLr = getState(deltaLr);
+
+        return determineGesture(stateUd, stateLr, deltaUd, deltaLr);
+    }
+
+    private int calcDelta(int a, int b) {
+        return ((a - b) * 100) / (a + b);
+    }
+
+    private int getState(int delta) {
+        if (delta >= 30) return 1;
+        if (delta <= -30) return -1;
+        return 0;
+    }
+
+    private int determineGesture(int stateUd, int stateLr, int deltaUd, int deltaLr) {
+        if (stateUd == -1 && stateLr == 0) return 1;
+        if (stateUd == 1 && stateLr == 0) return 2;
+        if (stateUd == 0 && stateLr == -1) return 3;
+        if (stateUd == 0 && stateLr == 1) return 4;
+
+        boolean udDominant = Math.abs(deltaUd) > Math.abs(deltaLr);
+        if (stateUd == -1 && stateLr == 1) return udDominant ? 1 : 4;
+        if (stateUd == 1 && stateLr == -1) return udDominant ? 2 : 3;
+        if (stateUd == -1) return udDominant ? 1 : 3;
+        if (stateUd == 1) return udDominant ? 2 : 3;
+
+        return 0;
+    }
+
+
+    private Boolean getBit(int register, int mask) throws IOException {
+        ArrayList<Integer> data = i2c.read(APDS9960_I2C_ADDRESS, 1, register);
+        return (((data.get(0) & 0xFF) & mask) == 0) ? false : true;
     }
 
     private void setBit(int register, int mask, Boolean value) throws IOException {

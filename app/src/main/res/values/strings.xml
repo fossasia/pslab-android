@@ -344,6 +344,11 @@
     <string name="left">LEFT</string>
     <string name="right">RIGHT</string>
 
+    <string-array name="apds9960_spinner">
+        <item>Color, Proximity and Ambient Light</item>
+        <item>Gesture</item>
+    </string-array>
+
     <string-array name="tsl2561_gain_spinner">
         <item>No gain</item>
         <item>1x</item>

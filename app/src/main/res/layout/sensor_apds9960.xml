@@ -286,6 +286,253 @@
                 android:layout_marginLeft="@dimen/card_margin"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="@dimen/card_margin"
+                android:layout_marginRight="@dimen/card_margin"
+                android:padding="3dp">
+
+                <TextView
+                    android:id="@+id/card_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="start"
+                    android:background="@color/colorPrimary"
+                    android:padding="@dimen/title_padding"
+                    android:text="@string/raw_data"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sensor_title_font"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/margin_50dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/red"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/gesture"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/blue"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/clear"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:background="@drawable/tv_border"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:id="@+id/tv_sensor_apds9960_gesture"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:background="@drawable/tv_border"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:background="@drawable/tv_border"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:background="@drawable/tv_border"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/proximity"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:background="@drawable/tv_border"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:visibility="invisible"
+                            tools:visibility="invisible" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="@dimen/card_margin"
+                android:layout_marginLeft="@dimen/card_margin"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/card_margin"
                 android:layout_marginRight="@dimen/card_margin">
 
                 <TextView
@@ -411,8 +658,7 @@
                 android:layout_marginLeft="@dimen/card_margin"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="@dimen/card_margin"
-                android:layout_marginRight="@dimen/card_margin"
-                android:layout_marginBottom="@dimen/card_margin_bottom">
+                android:layout_marginRight="@dimen/card_margin">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -511,6 +757,75 @@
                         android:background="#000" />
 
                 </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/card_margin"
+                android:layout_marginLeft="@dimen/card_margin"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/card_margin"
+                android:layout_marginRight="@dimen/card_margin"
+                android:layout_marginBottom="@dimen/card_margin_bottom">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="start"
+                    android:background="@color/colorPrimary"
+                    android:padding="@dimen/title_padding"
+                    android:text="@string/configure"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sensor_title_font"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/mode"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/sensor_body_font"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
+
+                        <Spinner
+                            android:id="@+id/spinner_sensor_apds9960"
+                            android:layout_width="120dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:entries="@array/apds9960_spinner" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
