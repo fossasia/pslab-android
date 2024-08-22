@@ -38,7 +38,7 @@ import io.pslab.communication.sensors.APDS9960;
 import io.pslab.others.ScienceLabCommon;
 
 public class SensorAPDS9960 extends AppCompatActivity {
-    private final String TAG = this.getClass().getSimpleName();
+    private static final String TAG = "APDS9960";
     private static int counter;
     private final Object lock = new Object();
     private ScienceLab scienceLab;
