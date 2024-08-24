@@ -145,10 +145,17 @@ public class ScienceLab {
         squareWaveFrequency.put("SQR2", 0.0);
         squareWaveFrequency.put("SQR3", 0.0);
         squareWaveFrequency.put("SQR4", 0.0);
-        dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3}, 0, 0));
-        dacChannels.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1, 1));
-        dacChannels.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2, 0));
-        dacChannels.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3, 1));
+        if (CommunicationHandler.PSLAB_VERSION == 6) {
+            dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3}, 0, 0));
+            dacChannels.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1, 1));
+            dacChannels.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2, 0));
+            dacChannels.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3, 1));
+        } else {
+            dacChannels.put("PCS", new DACChannel("PCS", new double[]{0, 3.3}, 0, 0));
+            dacChannels.put("PV3", new DACChannel("PV3", new double[]{0, 3.3}, 1, 1));
+            dacChannels.put("PV2", new DACChannel("PV2", new double[]{-3.3, 3.3}, 2, 2));
+            dacChannels.put("PV1", new DACChannel("PV1", new double[]{-5., 5.}, 3, 3));
+        }
         values.put("PV1", 0.);
         values.put("PV2", 0.);
         values.put("PV3", 0.);
