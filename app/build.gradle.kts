@@ -44,7 +44,7 @@ android {
                 "proguard-rules.pro"
             )
             resValue("string", "version", "${defaultConfig.versionName}")
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (GITHUB_BUILD) signingConfigs.getByName("release") else null
         }
     }
     lint {
