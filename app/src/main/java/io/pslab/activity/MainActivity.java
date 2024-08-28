@@ -32,6 +32,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -324,6 +325,10 @@ public class MainActivity extends AppCompatActivity {
                             drawer.closeDrawers();
                         }
                         break;
+                    case R.id.nav_third_party_libs:
+                        OssLicensesMenuActivity.setActivityTitle(getString(R.string.third_party_libs));
+                        startActivity(new Intent(MainActivity.this, OssLicensesMenuActivity.class));
+                        break;
                     default:
                         navItemIndex = 0;
                 }
@@ -472,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
     private void attemptToGetUSBPermission() {
         if (!("android.hardware.usb.action.USB_DEVICE_ATTACHED".equals(getIntent().getAction()))) {
             if (communicationHandler.isDeviceFound() && !usbManager.hasPermission(communicationHandler.mUsbDevice)) {
-                mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+                    mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
                 IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
                 registerReceiver(mUsbReceiver, filter);
                 receiverRegister = true;

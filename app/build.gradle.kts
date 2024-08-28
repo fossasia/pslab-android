@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 apply(plugin = "realm-android")
@@ -17,7 +18,7 @@ android {
         targetSdk = 34
         versionCode = System.getenv("VERSION_CODE")?.toInt() ?: 1
         versionName = System.getenv("VERSION_NAME") ?: "1.0.0"
-        resConfigs("en","ru","ar","si","pl")
+        resConfigs("en", "ru", "ar", "si", "pl")
     }
 
     signingConfigs {
@@ -43,7 +44,7 @@ android {
                 "proguard-rules.pro"
             )
             resValue("string", "version", "${defaultConfig.versionName}")
-            signingConfig = if (GITHUB_BUILD) signingConfigs.getByName("release") else null
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     lint {
@@ -114,4 +115,8 @@ dependencies {
 
     // Realm
     implementation("com.github.realm:realm-android-adapters:v4.0.0")
+
+    // OSS license plugin
+    implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
+
 }
