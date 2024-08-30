@@ -273,6 +273,12 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUTUS;
                         break;
+                    case R.id.nav_documentation:
+                        customTabService.launchUrl("https://docs.pslab.io/");
+                        if (drawer != null) {
+                            drawer.closeDrawers();
+                        }
+                        break;
                     case R.id.nav_rate:
                         customTabService.launchUrl("https://play.google.com/store/apps/details?id=io.pslab");
                         if (drawer != null) {
