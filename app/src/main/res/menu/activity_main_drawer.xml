@@ -38,6 +38,11 @@
             android:icon="@drawable/ic_info_black_24dp"
             android:title="@string/nav_about_us" />
         <item
+            android:id="@+id/nav_documentation"
+            android:checkable="true"
+            android:icon="@drawable/baseline_menu_book_24"
+            android:title="@string/nav_documentation" />
+        <item
             android:id="@+id/nav_rate"
             android:checkable="true"
             android:icon="@android:drawable/btn_star"

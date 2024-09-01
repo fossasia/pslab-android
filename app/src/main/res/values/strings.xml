@@ -10,6 +10,7 @@
     <string name="nav_instruments">Instruments</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_about_us">About Us</string>
+    <string name="nav_documentation">Documentation</string>
     <string name="nav_buy_pslab">Buy PSLab</string>
     <string name="nav_report">Feedback &amp; Bugs</string>
     <string name="nav_help_feedback">FAQ</string>
