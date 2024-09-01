@@ -45,7 +45,7 @@
         <item
             android:id="@+id/nav_rate"
             android:checkable="true"
-            android:icon="@android:drawable/btn_star"
+            android:icon="@drawable/baseline_star_24"
             android:title="@string/rateapp" />
         <item
             android:id="@+id/nav_buy_pslab"
@@ -64,6 +64,10 @@
         <item
             android:id="@+id/nav_privacy_policy"
             android:icon="@drawable/baseline_article_24"
-            android:title="@string/privacy_policy"/>
+            android:title="@string/privacy_policy" />
+        <item
+            android:id="@+id/nav_third_party_libs"
+            android:icon="@drawable/baseline_attribution_24"
+            android:title="@string/third_party_libs" />
     </group>
 </menu>

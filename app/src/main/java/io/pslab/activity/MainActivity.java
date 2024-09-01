@@ -32,6 +32,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -323,6 +324,10 @@ public class MainActivity extends AppCompatActivity {
                         if (drawer != null) {
                             drawer.closeDrawers();
                         }
+                        break;
+                    case R.id.nav_third_party_libs:
+                        OssLicensesMenuActivity.setActivityTitle(getString(R.string.third_party_libs));
+                        startActivity(new Intent(MainActivity.this, OssLicensesMenuActivity.class));
                         break;
                     default:
                         navItemIndex = 0;

@@ -1088,6 +1088,7 @@
     <string name="unit_volts">\u0020V</string>
     <string name="no_playback_data">No data to display</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="third_party_libs">Open Source Licenses</string>
     <string name="auto_scale_error">No input found</string>
     <string name="auto_scale">Auto</string>
     <string name="control_stop">Stop</string>
