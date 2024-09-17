@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -351,8 +352,6 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 //Thread to check which checkbox is enabled
                 while (monitor) {
                     if (isRunning) {
-                        setChannelRangeEnabledState(false);
-
                         if (isInBuiltMicSelected && audioJack == null) {
                             audioJack = new AudioJack("input");
                         }
@@ -444,6 +443,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         playMenu = menu.findItem(R.id.play_data);
         menu.findItem(R.id.record_pause_data).setVisible(!isPlayingback);
         menu.findItem(R.id.play_data).setVisible(isPlayingback);
+        setChannelRangeEnabledState(false);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -451,8 +451,15 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         spinnerRangeCh1 = findViewById(R.id.spinner_range_ch1_cp);
         spinnerRangeCh2 = findViewById(R.id.spinner_range_ch2_cp);
 
-        spinnerRangeCh1.setEnabled(isEnabled);
-        spinnerRangeCh2.setEnabled(isEnabled);
+        Log.d("@LOGGGGGGG", "setChannelRangeEnabledState: " + spinnerRangeCh1 + spinnerRangeCh2);
+
+        if (spinnerRangeCh1 != null) {
+            spinnerRangeCh1.setEnabled(isEnabled);
+        }
+
+        if (spinnerRangeCh2 != null) {
+            spinnerRangeCh2.setEnabled(isEnabled);
+        }
     }
 
     @Override
