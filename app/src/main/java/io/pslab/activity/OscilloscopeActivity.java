@@ -15,16 +15,19 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -218,6 +221,10 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     private MenuItem playMenu;
     private ArrayList<ArrayList<Entry>> dataEntries = new ArrayList<>();
     private String[] dataParamsChannels;
+    private CheckBox checkBoxCH1;
+    private CheckBox checkBoxCH2;
+    private Spinner spinnerRangeCh1;
+    private Spinner spinnerRangeCh2;
 
     public enum CHANNEL {CH1, CH2, CH3, MIC}
 
@@ -442,6 +449,14 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
         return super.onPrepareOptionsMenu(menu);
     }
 
+    public void setChannelRangeEnabledState(boolean isEnabled) {
+        spinnerRangeCh1 = findViewById(R.id.spinner_range_ch1_cp);
+        spinnerRangeCh2 = findViewById(R.id.spinner_range_ch2_cp);
+
+        spinnerRangeCh1.setEnabled(isEnabled);
+        spinnerRangeCh2.setEnabled(isEnabled);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -452,9 +467,11 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 if (isRunning) {
                     isRunning = false;
                     item.setTitle(R.string.control_run);
+                    setChannelRangeEnabledState(true);
                 } else {
                     isRunning = true;
                     item.setTitle(R.string.control_stop);
+                    setChannelRangeEnabledState(false);
                 }
                 break;
             case R.id.record_pause_data:
