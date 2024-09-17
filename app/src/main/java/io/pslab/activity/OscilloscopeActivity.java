@@ -15,14 +15,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -221,8 +219,6 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     private MenuItem playMenu;
     private ArrayList<ArrayList<Entry>> dataEntries = new ArrayList<>();
     private String[] dataParamsChannels;
-    private CheckBox checkBoxCH1;
-    private CheckBox checkBoxCH2;
     private Spinner spinnerRangeCh1;
     private Spinner spinnerRangeCh2;
 
@@ -355,6 +351,8 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
                 //Thread to check which checkbox is enabled
                 while (monitor) {
                     if (isRunning) {
+                        setChannelRangeEnabledState(false);
+
                         if (isInBuiltMicSelected && audioJack == null) {
                             audioJack = new AudioJack("input");
                         }
