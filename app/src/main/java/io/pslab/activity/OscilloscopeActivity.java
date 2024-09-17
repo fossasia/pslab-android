@@ -15,7 +15,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -450,9 +449,7 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     public void setChannelRangeEnabledState(boolean isEnabled) {
         spinnerRangeCh1 = findViewById(R.id.spinner_range_ch1_cp);
         spinnerRangeCh2 = findViewById(R.id.spinner_range_ch2_cp);
-
-        Log.d("@LOGGGGGGG", "setChannelRangeEnabledState: " + spinnerRangeCh1 + spinnerRangeCh2);
-
+        
         if (spinnerRangeCh1 != null) {
             spinnerRangeCh1.setEnabled(isEnabled);
         }
