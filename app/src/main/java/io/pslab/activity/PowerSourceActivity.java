@@ -44,7 +44,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pslab.R;
 import io.pslab.activity.guide.GuideActivity;
-import io.pslab.communication.CommunicationHandler;
 import io.pslab.communication.ScienceLab;
 import io.pslab.items.SquareImageButton;
 import io.pslab.models.PowerSourceData;
@@ -88,7 +87,7 @@ public class PowerSourceActivity extends GuideActivity {
     private static final Range<Float> PV3_VOLTAGE_RANGE = Range.create(0.0f, 3.30f);
     private static final Range<Float> PCS_CURRENT_RANGE = Range.create(0.0f, 3.30f);
 
-    private final NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+    private final NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.ROOT);
 
     /**
      * Step of one tap on an up or down button.
