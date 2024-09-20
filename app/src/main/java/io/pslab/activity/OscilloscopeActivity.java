@@ -219,8 +219,6 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     private MenuItem playMenu;
     private ArrayList<ArrayList<Entry>> dataEntries = new ArrayList<>();
     private String[] dataParamsChannels;
-    private Spinner spinnerRangeCh1;
-    private Spinner spinnerRangeCh2;
 
     public enum CHANNEL {CH1, CH2, CH3, MIC}
 
@@ -447,13 +445,12 @@ public class OscilloscopeActivity extends GuideActivity implements View.OnClickL
     }
 
     public void setChannelRangeEnabledState(boolean isEnabled) {
-        spinnerRangeCh1 = findViewById(R.id.spinner_range_ch1_cp);
-        spinnerRangeCh2 = findViewById(R.id.spinner_range_ch2_cp);
-        
+        Spinner spinnerRangeCh1 = findViewById(R.id.spinner_range_ch1_cp);
         if (spinnerRangeCh1 != null) {
             spinnerRangeCh1.setEnabled(isEnabled);
         }
 
+        Spinner spinnerRangeCh2 = findViewById(R.id.spinner_range_ch2_cp);
         if (spinnerRangeCh2 != null) {
             spinnerRangeCh2.setEnabled(isEnabled);
         }
