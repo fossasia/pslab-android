@@ -91,7 +91,7 @@ dependencies {
 
     // Apache commons
     implementation("org.apache.commons:commons-math3:3.6.1")
-    implementation("org.apache.commons:commons-lang3:3.14.0")
+    implementation("org.apache.commons:commons-lang3:3.17.0")
 
     // Picasso
     implementation("com.squareup.picasso:picasso:2.71828")
