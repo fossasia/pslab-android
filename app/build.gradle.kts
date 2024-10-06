@@ -91,7 +91,7 @@ dependencies {
 
     // Apache commons
     implementation("org.apache.commons:commons-math3:3.6.1")
-    implementation("org.apache.commons:commons-lang3:3.14.0")
+    implementation("org.apache.commons:commons-lang3:3.17.0")
 
     // Picasso
     implementation("com.squareup.picasso:picasso:2.71828")
@@ -105,9 +105,9 @@ dependencies {
     implementation("com.jakewharton:butterknife:$butterKnifeVersion")
 
     // Map libraries
-    implementation("org.osmdroid:osmdroid-android:6.1.18")
+    implementation("org.osmdroid:osmdroid-android:6.1.20")
     implementation("org.osmdroid:osmdroid-mapsforge:6.1.20")
-    implementation("org.osmdroid:osmdroid-geopackage:6.1.18") {
+    implementation("org.osmdroid:osmdroid-geopackage:6.1.20") {
         exclude("org.osmdroid.gpkg")
         exclude("ormlite-core")
         exclude("com.j256.ormlite")

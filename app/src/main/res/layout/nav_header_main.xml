@@ -13,14 +13,14 @@
         android:layout_centerVertical="true"
         android:baselineAlignBottom="true"
         android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:padding="@dimen/nav_header_padding">
 
         <ImageView
             android:id="@+id/img_profile"
             android:layout_width="@dimen/profile_width"
             android:layout_height="@dimen/profile_height"
-            android:src="@drawable/ic_nav_header_logo"
-            android:contentDescription="@string/app_name" />
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_nav_header_logo" />
 
         <TextView
             android:id="@+id/name"
