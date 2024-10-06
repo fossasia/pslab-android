@@ -107,7 +107,7 @@ dependencies {
     // Map libraries
     implementation("org.osmdroid:osmdroid-android:6.1.18")
     implementation("org.osmdroid:osmdroid-mapsforge:6.1.18")
-    implementation("org.osmdroid:osmdroid-geopackage:6.1.18") {
+    implementation("org.osmdroid:osmdroid-geopackage:6.1.20") {
         exclude("org.osmdroid.gpkg")
         exclude("ormlite-core")
         exclude("com.j256.ormlite")
