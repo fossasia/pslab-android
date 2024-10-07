@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("io.realm:realm-gradle-plugin:10.18.0")
+        classpath("io.realm:realm-gradle-plugin:10.19.0")
         classpath("com.google.android.gms:oss-licenses-plugin:0.10.6")
 
     }
