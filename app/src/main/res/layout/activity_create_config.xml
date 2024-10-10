@@ -83,7 +83,7 @@
                         android:layout_width="@dimen/width_zero"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="@dimen/weight_three"
+                        android:layout_weight="@dimen/weight_four"
                         android:hint="@string/time_interval_hint"
                         android:imeOptions="actionDone"
                         android:inputType="number"
@@ -94,7 +94,7 @@
                         android:layout_width="@dimen/width_zero"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="@dimen/weight_one" />
+                        android:layout_weight="@dimen/weight_three" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
