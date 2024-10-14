@@ -18,7 +18,7 @@ android {
         targetSdk = 34
         versionCode = System.getenv("VERSION_CODE")?.toInt() ?: 1
         versionName = System.getenv("VERSION_NAME") ?: "1.0.0"
-        resConfigs("en", "ru", "ar", "si", "pl")
+        resourceConfigurations += setOf("en", "ru", "ar", "si", "pl")
     }
 
     signingConfigs {
