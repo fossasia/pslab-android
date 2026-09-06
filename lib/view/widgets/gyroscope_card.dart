@@ -78,12 +78,14 @@ class _GyroscopeCardState extends State<GyroscopeCard> {
       '${appLocalizations.minValue}${minVal.toStringAsFixed(1)}',
       maxLines: 1,
       softWrap: false,
+      overflow: TextOverflow.ellipsis,
       style: minMaxStyle,
     );
     final Widget maxText = Text(
       '${appLocalizations.maxValue}${maxVal.toStringAsFixed(1)}',
       maxLines: 1,
       softWrap: false,
+      overflow: TextOverflow.ellipsis,
       style: minMaxStyle,
     );
 
@@ -492,6 +494,7 @@ class _GyroscopeCardState extends State<GyroscopeCard> {
                       '${widget.axis.toUpperCase()} AXIS',
                       maxLines: 1,
                       softWrap: false,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
