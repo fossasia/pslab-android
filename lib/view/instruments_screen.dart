@@ -226,16 +226,23 @@ class _InstrumentsScreenState extends State<InstrumentsScreen> {
                             itemCount: _filteredIndices.length,
                             itemBuilder: (context, index) {
                               final int originalIndex = _filteredIndices[index];
-                              return GestureDetector(
+                              return Semantics(
+                                button: true,
+                                excludeSemantics: true,
+                                label:
+                                    '${_instrumentDatas[originalIndex].heading}. ${_instrumentDatas[originalIndex].description}',
                                 onTap: () => _onItemTapped(originalIndex),
-                                child: ApplicationsListItem(
-                                  heading: _instrumentDatas[originalIndex]
-                                      .heading
-                                      .toUpperCase(),
-                                  description: _instrumentDatas[originalIndex]
-                                      .description,
-                                  instrumentIcon:
-                                      instrumentIcons[originalIndex],
+                                child: GestureDetector(
+                                  onTap: () => _onItemTapped(originalIndex),
+                                  child: ApplicationsListItem(
+                                    heading: _instrumentDatas[originalIndex]
+                                        .heading
+                                        .toUpperCase(),
+                                    description: _instrumentDatas[originalIndex]
+                                        .description,
+                                    instrumentIcon:
+                                        instrumentIcons[originalIndex],
+                                  ),
                                 ),
                               );
                             },
@@ -249,16 +256,23 @@ class _InstrumentsScreenState extends State<InstrumentsScreen> {
                             itemCount: _filteredIndices.length,
                             itemBuilder: (context, index) {
                               final int originalIndex = _filteredIndices[index];
-                              return GestureDetector(
+                              return Semantics(
+                                button: true,
+                                excludeSemantics: true,
+                                label:
+                                    '${_instrumentDatas[originalIndex].heading}. ${_instrumentDatas[originalIndex].description}',
                                 onTap: () => _onItemTapped(originalIndex),
-                                child: ApplicationsListItem(
-                                  heading: _instrumentDatas[originalIndex]
-                                      .heading
-                                      .toUpperCase(),
-                                  description: _instrumentDatas[originalIndex]
-                                      .description,
-                                  instrumentIcon:
-                                      instrumentIcons[originalIndex],
+                                child: GestureDetector(
+                                  onTap: () => _onItemTapped(originalIndex),
+                                  child: ApplicationsListItem(
+                                    heading: _instrumentDatas[originalIndex]
+                                        .heading
+                                        .toUpperCase(),
+                                    description: _instrumentDatas[originalIndex]
+                                        .description,
+                                    instrumentIcon:
+                                        instrumentIcons[originalIndex],
+                                  ),
                                 ),
                               );
                             },
