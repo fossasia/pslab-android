@@ -117,10 +117,10 @@ packages:
     dependency: "direct dev"
     description:
       name: build_runner
-      sha256: "90363d438bd9f84a4d5bbb83352251f57d2d9d771bc95a44e6a33fe25fa52774"
+      sha256: "894c243f6bc32015fec466ce30a6925bd537a77a426ee5bf481120477eb3de67"
       url: "https://pub.dev"
     source: hosted
-    version: "2.16.0"
+    version: "2.16.1"
   built_collection:
     dependency: transitive
     description:
