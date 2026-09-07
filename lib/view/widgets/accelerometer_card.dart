@@ -78,12 +78,14 @@ class _AccelerometerCardState extends State<AccelerometerCard> {
       '${appLocalizations.minValue}${minVal.toStringAsFixed(1)}',
       maxLines: 1,
       softWrap: false,
+      overflow: TextOverflow.ellipsis,
       style: minMaxStyle,
     );
     final Widget maxText = Text(
       '${appLocalizations.maxValue}${maxVal.toStringAsFixed(1)}',
       maxLines: 1,
       softWrap: false,
+      overflow: TextOverflow.ellipsis,
       style: minMaxStyle,
     );
 
@@ -122,14 +124,16 @@ class _AccelerometerCardState extends State<AccelerometerCard> {
           ),
         ),
         SizedBox(width: currentToMinGap),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            minText,
-            SizedBox(width: minToMaxGap),
-            maxText,
-          ],
+        Flexible(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(child: minText),
+              SizedBox(width: minToMaxGap),
+              Flexible(child: maxText),
+            ],
+          ),
         ),
       ],
     );
@@ -487,6 +491,7 @@ class _AccelerometerCardState extends State<AccelerometerCard> {
                       '${widget.axis.toUpperCase()} AXIS',
                       maxLines: 1,
                       softWrap: false,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
