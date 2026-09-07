@@ -124,14 +124,16 @@ class _GyroscopeCardState extends State<GyroscopeCard> {
           ),
         ),
         SizedBox(width: currentToMinGap),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            minText,
-            SizedBox(width: minToMaxGap),
-            maxText,
-          ],
+        Flexible(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(child: minText),
+              SizedBox(width: minToMaxGap),
+              Flexible(child: maxText),
+            ],
+          ),
         ),
       ],
     );
