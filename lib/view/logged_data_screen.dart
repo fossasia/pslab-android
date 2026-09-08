@@ -837,10 +837,8 @@ class _LoggedDataScreenState extends State<LoggedDataScreen> {
                                             double latitude = 0;
                                             double longitude = 0;
                                             if (data[data.length - 1][
-                                                    data[data.length - 1]
-                                                            .length -
-                                                        2]
-                                                is double) {
+                                                data[data.length - 1].length -
+                                                    2] is double) {
                                               latitude = data[data.length - 1][
                                                       data[data.length - 1]
                                                               .length -
