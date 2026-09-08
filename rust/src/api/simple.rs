@@ -172,14 +172,11 @@ fn setup_device(handle: DeviceHandle<GlobalContext>) -> Result<()> {
         .map_err(|e| anyhow!("Failed to get config: {}", e))?;
 
     let is_v6_cp210x = desc.vendor_id() == 0x10C4 && desc.product_id() == 0xEA60;
-    // Identifies both V5 and Pico as standard CDC devices
     let is_cdc_acm = desc.vendor_id() == 1240 || desc.vendor_id() == 0xCAFE;
 
     let mut ep_in = 0;
     let mut ep_out = 0;
     let mut data_interface_num = 0;
-
-    // Safely locate and lock onto the correct Data Interface containing the Bulk endpoints
     for interface in config.interfaces() {
         for interface_desc in interface.descriptors() {
             let mut temp_in = 0;
@@ -194,8 +191,6 @@ fn setup_device(handle: DeviceHandle<GlobalContext>) -> Result<()> {
                     }
                 }
             }
-
-            // If both bulk endpoints are found, lock the interface and stop searching
             if temp_in != 0 && temp_out != 0 {
                 ep_in = temp_in;
                 ep_out = temp_out;
@@ -213,8 +208,6 @@ fn setup_device(handle: DeviceHandle<GlobalContext>) -> Result<()> {
     }
 
     let _ = handle.set_auto_detach_kernel_driver(true);
-
-    // CDC ACM devices (like Pico) explicitly require Interface 0 to be claimed for control commands
     if is_cdc_acm {
         let _ = handle.claim_interface(0);
     }
@@ -251,8 +244,6 @@ fn setup_device(handle: DeviceHandle<GlobalContext>) -> Result<()> {
         line_coding.push(0x00);
         line_coding.push(0x00);
         line_coding.push(0x08);
-
-        // explicitly target Interface 0 for CDC Control Commands
         let _ = handle.write_control(req_type, 0x20, 0, 0, &line_coding, timeout);
         let _ = handle.write_control(req_type, 0x22, 0x03, 0, &[], timeout);
     }
