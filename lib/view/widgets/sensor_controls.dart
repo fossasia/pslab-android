@@ -195,11 +195,12 @@ class _SensorControlsWidgetState extends State<SensorControlsWidget> {
     return Semantics(
       button: true,
       excludeSemantics: true,
-      selected: widget.isLooping,
+      toggled: widget.isLooping,
       label: appLocalizations.loopMode,
       onTap: widget.onLoop,
       child: GestureDetector(
         onTap: widget.onLoop,
+        behavior: HitTestBehavior.opaque,
         child: SizedBox(
           width: 48,
           height: 48,
