@@ -15,6 +15,7 @@ class CommonScaffold extends StatefulWidget {
   final VoidCallback? onOptionsPressed;
   final VoidCallback? onRecordPressed;
   final Future<void> Function()? onBackPressed;
+  final VoidCallback? onSaveDataPressed;
   final bool isRecording;
   final String icRecord = 'assets/icons/ic_record_white.png';
   final String icStopRecord = 'assets/icons/ic_record_stop_white.png';
@@ -34,6 +35,7 @@ class CommonScaffold extends StatefulWidget {
     this.onOptionsPressed,
     this.onRecordPressed,
     this.onBackPressed,
+    this.onSaveDataPressed,
     this.isRecording = false,
     this.isPlayingBack = false,
     this.isPlaybackPaused = false,
@@ -222,6 +224,19 @@ class _CommonScaffoldState extends State<CommonScaffold> {
           ),
         );
       }
+    }
+
+    if (widget.onSaveDataPressed != null) {
+      responsiveActions.add(
+        IconButton(
+          onPressed: widget.onSaveDataPressed,
+          tooltip: appLocalizations.saveData,
+          icon: Icon(
+            Icons.save,
+            color: appBarContentColor,
+          ),
+        ),
+      );
     }
 
     if (!isSmall && widget.onGuidePressed != null) {
