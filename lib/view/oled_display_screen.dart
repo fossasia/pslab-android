@@ -101,7 +101,7 @@ class _OledDisplayScreenState extends State<OledDisplayScreen> {
     });
   }
 
-  void _toggleRecording() async {
+  void _saveData() async {
     final exportData = _provider.generateExportData();
     await ExportHelper.handleSaveData(
       context: context,
@@ -141,7 +141,7 @@ class _OledDisplayScreenState extends State<OledDisplayScreen> {
             title: appLocalizations.oledDisplayTitle,
             onOptionsPressed: _showOptionsMenu,
             onGuidePressed: () => setState(() => _showGuide = true),
-            onRecordPressed: _toggleRecording,
+            onSaveDataPressed: _saveData,
             isRecording: _provider.isRecording,
             isPlayingBack: _provider.isPlayingBack,
             body: SafeArea(
