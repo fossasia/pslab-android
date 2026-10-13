@@ -41,6 +41,7 @@ class _BarometerScreenState extends State<BarometerScreen> {
   late BarometerStateProvider _provider;
   bool _showGuide = false;
   static const imagePath = 'assets/images/guide_images/i2_sensor_guides.png';
+  Future<void>? _recordingStartFuture;
 
   I2C? _i2c;
   ScienceLab? _scienceLab;
@@ -194,14 +195,17 @@ class _BarometerScreenState extends State<BarometerScreen> {
 
   Future<void> _toggleRecording() async {
     if (_provider.isRecording) {
-      final data = _provider.stopRecording();
-      await ExportHelper.handleSaveData(
-        context: context,
-        instrumentName: appLocalizations.barometer.toLowerCase(),
-        data: data,
-      );
+      await _saveRecording();
     } else {
-      await _provider.startRecording();
+      final startFuture = _provider.startRecording();
+      _recordingStartFuture = startFuture;
+      try {
+        await startFuture;
+      } finally {
+        if (identical(_recordingStartFuture, startFuture)) {
+          _recordingStartFuture = null;
+        }
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -213,6 +217,32 @@ class _BarometerScreenState extends State<BarometerScreen> {
         ),
       );
     }
+  }
+
+  Future<void> _saveRecording() async {
+    final data = _provider.stopRecording();
+    await ExportHelper.handleSaveData(
+      context: context,
+      instrumentName: appLocalizations.barometer.toLowerCase(),
+      data: data,
+    );
+  }
+
+  Future<void> _handleBackPressed() async {
+    final startFuture = _recordingStartFuture;
+    if (startFuture != null) {
+      try {
+        await startFuture;
+      } catch (_) {
+        return;
+      }
+    }
+    if (!mounted) return;
+    if (_provider.isRecording) {
+      await _saveRecording();
+    }
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   @override
@@ -277,6 +307,7 @@ class _BarometerScreenState extends State<BarometerScreen> {
               onOptionsPressed:
                   provider.isPlayingBack ? null : _showOptionsMenu,
               onRecordPressed: provider.isPlayingBack ? null : _toggleRecording,
+              onBackPressed: _handleBackPressed,
               isRecording: provider.isRecording,
               isPlayingBack: provider.isPlayingBack,
               isPlaybackPaused: provider.isPlaybackPaused,
@@ -334,12 +365,7 @@ class _BarometerScreenState extends State<BarometerScreen> {
           ExperimentOverlayWidget(
             onExperimentComplete: () async {
               if (_provider.isRecording) {
-                final data = _provider.stopRecording();
-                await ExportHelper.handleSaveData(
-                  context: context,
-                  instrumentName: appLocalizations.barometer.toLowerCase(),
-                  data: data,
-                );
+                await _saveRecording();
               }
               if (context.mounted) {
                 Navigator.pop(context);
