@@ -35,6 +35,7 @@ class _GasSensorScreenState extends State<GasSensorScreen> {
   late GasSensorStateProvider _gasProvider;
   late GasSensorConfigProvider _configProvider;
   bool _showGuide = false;
+  Future<void>? _recordingStartFuture;
 
   static const imagePath = 'assets/images/guide_images/gas_sensor_guide.png';
 
@@ -168,14 +169,17 @@ class _GasSensorScreenState extends State<GasSensorScreen> {
 
   Future<void> _toggleRecording() async {
     if (_gasProvider.isRecording) {
-      final data = _gasProvider.stopRecording();
-      await ExportHelper.handleSaveData(
-        context: context,
-        instrumentName: appLocalizations.gasSensor.toLowerCase(),
-        data: data,
-      );
+      await _saveRecording();
     } else {
-      await _gasProvider.startRecording();
+      final startFuture = _gasProvider.startRecording();
+      _recordingStartFuture = startFuture;
+      try {
+        await startFuture;
+      } finally {
+        if (identical(_recordingStartFuture, startFuture)) {
+          _recordingStartFuture = null;
+        }
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -187,6 +191,32 @@ class _GasSensorScreenState extends State<GasSensorScreen> {
         ),
       );
     }
+  }
+
+  Future<void> _saveRecording() async {
+    final data = _gasProvider.stopRecording();
+    await ExportHelper.handleSaveData(
+      context: context,
+      instrumentName: appLocalizations.gasSensor.toLowerCase(),
+      data: data,
+    );
+  }
+
+  Future<void> _handleBackPressed() async {
+    final startFuture = _recordingStartFuture;
+    if (startFuture != null) {
+      try {
+        await startFuture;
+      } catch (_) {
+        return;
+      }
+    }
+    if (!mounted) return;
+    if (_gasProvider.isRecording) {
+      await _saveRecording();
+    }
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   @override
@@ -211,6 +241,7 @@ class _GasSensorScreenState extends State<GasSensorScreen> {
                 onGuidePressed: _showInstrumentGuide,
                 onRecordPressed:
                     provider.isPlayingData() ? null : _toggleRecording,
+                onBackPressed: _handleBackPressed,
                 isRecording: provider.isRecording,
                 isPlayingBack: provider.isPlayingData(),
                 isPlaybackPaused: provider.isPlaybackPaused,
