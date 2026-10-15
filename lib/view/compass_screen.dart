@@ -44,6 +44,7 @@ class _CompassScreenContentState extends State<CompassScreenContent> {
 
   late CompassProvider _provider;
   late CompassConfigProvider _configProvider;
+  Future<void>? _recordingStartFuture;
 
   bool _showGuide = false;
   static const String guideImagePath = 'assets/images/find_mobile_axis.png';
@@ -152,14 +153,17 @@ class _CompassScreenContentState extends State<CompassScreenContent> {
 
   Future<void> _toggleRecording() async {
     if (_provider.isRecording) {
-      final data = _provider.stopRecording();
-      await ExportHelper.handleSaveData(
-        context: context,
-        instrumentName: appLocalizations.compass.toLowerCase(),
-        data: data,
-      );
+      await _saveRecording();
     } else {
-      await _provider.startRecording();
+      final startFuture = _provider.startRecording();
+      _recordingStartFuture = startFuture;
+      try {
+        await startFuture;
+      } finally {
+        if (identical(_recordingStartFuture, startFuture)) {
+          _recordingStartFuture = null;
+        }
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -171,6 +175,32 @@ class _CompassScreenContentState extends State<CompassScreenContent> {
         ),
       );
     }
+  }
+
+  Future<void> _saveRecording() async {
+    final data = _provider.stopRecording();
+    await ExportHelper.handleSaveData(
+      context: context,
+      instrumentName: appLocalizations.compass.toLowerCase(),
+      data: data,
+    );
+  }
+
+  Future<void> _handleBackPressed() async {
+    final startFuture = _recordingStartFuture;
+    if (startFuture != null) {
+      try {
+        await startFuture;
+      } catch (_) {
+        return;
+      }
+    }
+    if (!mounted) return;
+    if (_provider.isRecording) {
+      await _saveRecording();
+    }
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   List<Widget> _getCompassContent() {
@@ -254,6 +284,7 @@ class _CompassScreenContentState extends State<CompassScreenContent> {
                   compassProvider.isPlayingBack ? null : _showOptionsMenu,
               onRecordPressed:
                   compassProvider.isPlayingBack ? null : _toggleRecording,
+              onBackPressed: _handleBackPressed,
               isRecording: compassProvider.isRecording,
               isPlayingBack: compassProvider.isPlayingBack,
               isPlaybackPaused: compassProvider.isPlaybackPaused,
