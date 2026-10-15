@@ -1,3 +1,4 @@
+
 use anyhow::{anyhow, Result};
 use flutter_rust_bridge::frb;
 use lazy_static::lazy_static;
@@ -100,6 +101,10 @@ pub fn init_labrador_desktop() -> Result<()> {
             .claim_interface(0)
             .map_err(|e| anyhow!("Failed to claim interface 0: {}", e))?;
 
+        if let Ok(_) = handle.claim_interface(2) {
+            let _ = handle.set_alternate_setting(2, 1);
+        }
+
         *USB_HANDLE.lock().unwrap() = Some(Arc::new(handle));
         Ok(())
     }
@@ -186,9 +191,14 @@ pub fn init_android(fd: i32) -> Result<()> {
         let handle = unsafe { context.open_device_with_fd(fd as RawFd) }
             .map_err(|e| anyhow!("Failed to open Android FD: {}", e))?;
         let desc = handle.device().device_descriptor()?;
-        if desc.vendor_id() == 0x03EB && desc.product_id() == 0xBA94 {
+        if desc.vendor_id() == 0x03EB && (desc.product_id() == 0xBA94 || desc.product_id() == 0x2FE4) {
             let _ = handle.set_auto_detach_kernel_driver(true);
-            handle.claim_interface(0)?;
+            let _ = handle.claim_interface(0);
+            if desc.product_id() == 0xBA94 {
+                if let Ok(_) = handle.claim_interface(2) {
+                    let _ = handle.set_alternate_setting(2, 1);
+                }
+            }
             *USB_HANDLE.lock().unwrap() = Some(Arc::new(handle));
             return Ok(());
         }
@@ -368,6 +378,11 @@ pub fn set_dtr(state: bool) -> Result<()> {
     #[cfg(target_os = "android")]
     {
         if let Some(handle) = USB_HANDLE.lock().unwrap().as_ref() {
+            if let Ok(desc) = handle.device().device_descriptor() {
+                if desc.vendor_id() == 0x03EB && desc.product_id() == 0xBA94 {
+                    return Ok(());
+                }
+            }
             let interface_num = *INTERFACE_ID.lock().unwrap();
             let desc = handle.device().device_descriptor().unwrap();
             let is_cdc_acm = desc.vendor_id() == 1240 || desc.vendor_id() == 0x2E8A;
@@ -409,6 +424,11 @@ pub fn set_rts(state: bool) -> Result<()> {
     #[cfg(target_os = "android")]
     {
         if let Some(handle) = USB_HANDLE.lock().unwrap().as_ref() {
+            if let Ok(desc) = handle.device().device_descriptor() {
+                if desc.vendor_id() == 0x03EB && desc.product_id() == 0xBA94 {
+                    return Ok(());
+                }
+            }
             let interface_num = *INTERFACE_ID.lock().unwrap();
             let desc = handle.device().device_descriptor().unwrap();
             let is_cdc_acm = desc.vendor_id() == 1240 || desc.vendor_id() == 0x2E8A;
@@ -560,12 +580,20 @@ pub fn close_usb() {
 
             #[cfg(target_os = "android")]
             {
-                let req_type = request_type(Direction::Out, RequestType::Vendor, Recipient::Device);
-                let _ = handle.write_control(req_type, 0x00, 0x0000, interface_num as u16, &[], Duration::from_millis(100));
-                let _ = handle.write_control(req_type, 0x12, 0x000F, interface_num as u16, &[], Duration::from_millis(100));
+                let is_labrador = if let Ok(desc) = handle.device().device_descriptor() {
+                    desc.vendor_id() == 0x03EB && desc.product_id() == 0xBA94
+                } else {
+                    false
+                };
+                if !is_labrador {
+                    let req_type = request_type(Direction::Out, RequestType::Vendor, Recipient::Device);
+                    let _ = handle.write_control(req_type, 0x00, 0x0000, interface_num as u16, &[], Duration::from_millis(100));
+                    let _ = handle.write_control(req_type, 0x12, 0x000F, interface_num as u16, &[], Duration::from_millis(100));
+                }
             }
 
             let _ = handle.release_interface(interface_num);
+            let _ = handle.release_interface(2);
             let _ = handle.release_interface(0);
         }
     }

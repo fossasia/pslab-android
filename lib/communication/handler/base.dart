@@ -1,8 +1,16 @@
 import 'dart:typed_data';
 
+class Board {
+  final String version;
+  final int vid;
+  final int pid;
+  const Board({required this.version, required this.vid, required this.pid});
+}
+
 interface class CommunicationHandler {
   bool connected = false;
   bool deviceFound = false;
+  Board? openedBoard;
 
   Future<void> initialize() {
     throw UnimplementedError();

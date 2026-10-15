@@ -279,11 +279,6 @@ class _TimebaseTriggerState extends State<TimebaseTriggerWidget> {
                                   oscilloscopeStateProvider.timebaseSlider =
                                       next!;
                                   oscilloscopeStateProvider.setTimebase(next);
-                                  oscilloscopeStateProvider.samples =
-                                      (next >= 4) ? 1024 : 512;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
                                 });
                               }
                             }
@@ -308,62 +303,6 @@ class _TimebaseTriggerState extends State<TimebaseTriggerWidget> {
                                   oscilloscopeStateProvider.setTimebase(value);
                                 },
                               );
-                              switch (value) {
-                                case 0:
-                                  oscilloscopeStateProvider.samples = 512;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
-                                  break;
-                                case 1:
-                                  oscilloscopeStateProvider.samples = 512;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
-                                  break;
-                                case 2:
-                                  oscilloscopeStateProvider.samples = 512;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
-                                  break;
-                                case 3:
-                                  oscilloscopeStateProvider.samples = 512;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
-                                  break;
-                                case 4:
-                                  oscilloscopeStateProvider.samples = 1024;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
-                                  break;
-                                case 5:
-                                  oscilloscopeStateProvider.samples = 1024;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
-                                  break;
-                                case 6:
-                                  oscilloscopeStateProvider.samples = 1024;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
-                                  break;
-                                case 7:
-                                  oscilloscopeStateProvider.samples = 1024;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
-                                  break;
-                                default:
-                                  oscilloscopeStateProvider.samples = 512;
-                                  oscilloscopeStateProvider.timeGap =
-                                      (2 * oscilloscopeStateProvider.timebase) /
-                                          oscilloscopeStateProvider.samples;
-                                  break;
-                              }
                             },
                           ),
                         ),

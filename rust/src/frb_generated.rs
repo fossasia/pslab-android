@@ -39,7 +39,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.13.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 641606677;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -433368525;
 
 // Section: executor
 
@@ -47,7 +47,7 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
-fn wire__crate__api__simple__check_desktop_device_present_impl(
+fn wire__crate__api__common__check_desktop_device_present_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -70,13 +70,13 @@ fn wire__crate__api__simple__check_desktop_device_present_impl(
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
-                let output_ok = Ok::<_, ()>(crate::api::simple::check_desktop_device_present())?;
+                let output_ok = Ok::<_, ()>(crate::api::common::check_desktop_device_present())?;
                 std::result::Result::Ok(output_ok)
             })())
         },
     )
 }
-fn wire__crate__api__simple__close_usb_impl(
+fn wire__crate__api__common__close_usb_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -100,7 +100,7 @@ fn wire__crate__api__simple__close_usb_impl(
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
                 let output_ok = Ok::<_, ()>({
-                    crate::api::simple::close_usb();
+                    crate::api::common::close_usb();
                 })?;
                 std::result::Result::Ok(output_ok)
             })())
@@ -147,7 +147,49 @@ fn wire__crate__api__bootloader__flash_firmware_impl(
         },
     )
 }
-fn wire__crate__api__simple__get_available_ports_impl(
+fn wire__crate__api__labrador_bootloader__flash_labrador_firmware_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "flash_labrador_firmware",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_hex_str = <String>::sse_decode(&mut deserializer);
+            let api_progress_sink = <StreamSink<
+                crate::api::bootloader::FlashState,
+                flutter_rust_bridge::for_generated::SseCodec,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || {
+                        let output_ok = crate::api::labrador_bootloader::flash_labrador_firmware(
+                            api_hex_str,
+                            api_progress_sink,
+                        )?;
+                        std::result::Result::Ok(output_ok)
+                    })(),
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__common__get_available_ports_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -170,13 +212,13 @@ fn wire__crate__api__simple__get_available_ports_impl(
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
-                let output_ok = Ok::<_, ()>(crate::api::simple::get_available_ports())?;
+                let output_ok = Ok::<_, ()>(crate::api::common::get_available_ports())?;
                 std::result::Result::Ok(output_ok)
             })())
         },
     )
 }
-fn wire__crate__api__simple__init_android_impl(
+fn wire__crate__api__common__init_android_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -203,7 +245,7 @@ fn wire__crate__api__simple__init_android_impl(
             move |context| {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                     (move || {
-                        let output_ok = crate::api::simple::init_android(api_fd)?;
+                        let output_ok = crate::api::common::init_android(api_fd)?;
                         std::result::Result::Ok(output_ok)
                     })(),
                 )
@@ -211,7 +253,7 @@ fn wire__crate__api__simple__init_android_impl(
         },
     )
 }
-fn wire__crate__api__simple__init_desktop_impl(
+fn wire__crate__api__common__init_desktop_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -239,7 +281,7 @@ fn wire__crate__api__simple__init_desktop_impl(
             move |context| {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                     (move || {
-                        let output_ok = crate::api::simple::init_desktop(api_vid, api_pid)?;
+                        let output_ok = crate::api::common::init_desktop(api_vid, api_pid)?;
                         std::result::Result::Ok(output_ok)
                     })(),
                 )
@@ -247,7 +289,7 @@ fn wire__crate__api__simple__init_desktop_impl(
         },
     )
 }
-fn wire__crate__api__simple__init_desktop_by_port_impl(
+fn wire__crate__api__common__init_desktop_by_port_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -274,7 +316,7 @@ fn wire__crate__api__simple__init_desktop_by_port_impl(
             move |context| {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                     (move || {
-                        let output_ok = crate::api::simple::init_desktop_by_port(api_port_name)?;
+                        let output_ok = crate::api::common::init_desktop_by_port(api_port_name)?;
                         std::result::Result::Ok(output_ok)
                     })(),
                 )
@@ -282,7 +324,585 @@ fn wire__crate__api__simple__init_desktop_by_port_impl(
         },
     )
 }
-fn wire__crate__api__simple__pop_web_tx_data_impl(
+fn wire__crate__api__common__init_labrador_desktop_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "init_labrador_desktop",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::common::init_labrador_desktop()?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_calculate_digital_out_state_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_calculate_digital_out_state",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_channel = <u8>::sse_decode(&mut deserializer);
+            let api_state = <bool>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let output_ok =
+                    Ok::<_, ()>(crate::api::labrador::labrador_calculate_digital_out_state(
+                        api_channel,
+                        api_state,
+                    ))?;
+                std::result::Result::Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_calculate_gain_mask_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_calculate_gain_mask",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_gain = <f64>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let output_ok =
+                    Ok::<_, ()>(crate::api::labrador::labrador_calculate_gain_mask(api_gain))?;
+                std::result::Result::Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_calculate_psu_duty_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_calculate_psu_duty",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_voltage = <f64>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let output_ok = Ok::<_, ()>(crate::api::labrador::labrador_calculate_psu_duty(
+                    api_voltage,
+                ))?;
+                std::result::Result::Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_calculate_wave_payload_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_calculate_wave_payload",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_channel = <u8>::sse_decode(&mut deserializer);
+            let api_frequency_hz = <f64>::sse_decode(&mut deserializer);
+            let api_wave_type = <String>::sse_decode(&mut deserializer);
+            let api_amplitude_v = <f64>::sse_decode(&mut deserializer);
+            let api_offset_v = <f64>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::labrador::labrador_calculate_wave_payload(
+                        api_channel,
+                        api_frequency_hz,
+                        api_wave_type,
+                        api_amplitude_v,
+                        api_offset_v,
+                    )?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_fetch_interpolated_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_fetch_interpolated",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_channel = <u8>::sse_decode(&mut deserializer);
+            let api_sample_window_secs = <f64>::sse_decode(&mut deserializer);
+            let api_num_samples = <u32>::sse_decode(&mut deserializer);
+            let api__delay_offset_secs = <f64>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let output_ok = Ok::<_, ()>(crate::api::labrador::labrador_fetch_interpolated(
+                    api_channel,
+                    api_sample_window_secs,
+                    api_num_samples,
+                    api__delay_offset_secs,
+                ))?;
+                std::result::Result::Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_fetch_raw_bytes_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_fetch_raw_bytes",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_channel = <u8>::sse_decode(&mut deserializer);
+            let api_num_bytes = <u32>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let output_ok = Ok::<_, ()>(crate::api::labrador::labrador_fetch_raw_bytes(
+                    api_channel,
+                    api_num_bytes,
+                ))?;
+                std::result::Result::Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_generate_analog_wave_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_generate_analog_wave",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_channel = <u8>::sse_decode(&mut deserializer);
+            let api_frequency_hz = <f64>::sse_decode(&mut deserializer);
+            let api_wave_type = <String>::sse_decode(&mut deserializer);
+            let api_amplitude_v = <f64>::sse_decode(&mut deserializer);
+            let api_offset_v = <f64>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::labrador::labrador_generate_analog_wave(
+                        api_channel,
+                        api_frequency_hz,
+                        api_wave_type,
+                        api_amplitude_v,
+                        api_offset_v,
+                    )?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_push_web_bulk_data_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_push_web_bulk_data",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_data = <Vec<u8>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let output_ok = Ok::<_, ()>({
+                    crate::api::labrador::labrador_push_web_bulk_data(api_data);
+                })?;
+                std::result::Result::Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_set_digital_out_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_set_digital_out",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_channel = <u8>::sse_decode(&mut deserializer);
+            let api_state = <bool>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok =
+                        crate::api::labrador::labrador_set_digital_out(api_channel, api_state)?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_set_psu_voltage_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_set_psu_voltage",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_voltage = <f64>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::labrador::labrador_set_psu_voltage(api_voltage)?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_set_trigger_enabled_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_set_trigger_enabled",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_enabled = <bool>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok =
+                        crate::api::labrador::labrador_set_trigger_enabled(api_enabled)?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_start_logic_analyzer_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_start_logic_analyzer",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_channels = <u8>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok =
+                        crate::api::labrador::labrador_start_logic_analyzer(api_channels)?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_start_multimeter_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_start_multimeter",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::labrador::labrador_start_multimeter()?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_start_oscilloscope_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_start_oscilloscope",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_channels = <u8>::sse_decode(&mut deserializer);
+            let api_gain = <f64>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok =
+                        crate::api::labrador::labrador_start_oscilloscope(api_channels, api_gain)?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_stop_streaming_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_stop_streaming",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let output_ok = Ok::<_, ()>({
+                    crate::api::labrador::labrador_stop_streaming();
+                })?;
+                std::result::Result::Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__labrador__labrador_wave_payload_default_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "labrador_wave_payload_default",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok =
+                        Ok::<_, ()>(crate::api::labrador::LabradorWavePayload::default())?;
+                    std::result::Result::Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__common__pop_web_tx_data_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -305,13 +925,13 @@ fn wire__crate__api__simple__pop_web_tx_data_impl(
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
-                let output_ok = Ok::<_, ()>(crate::api::simple::pop_web_tx_data())?;
+                let output_ok = Ok::<_, ()>(crate::api::common::pop_web_tx_data())?;
                 std::result::Result::Ok(output_ok)
             })())
         },
     )
 }
-fn wire__crate__api__simple__push_web_data_impl(
+fn wire__crate__api__common__push_web_data_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -336,14 +956,14 @@ fn wire__crate__api__simple__push_web_data_impl(
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
                 let output_ok = Ok::<_, ()>({
-                    crate::api::simple::push_web_data(api_data);
+                    crate::api::common::push_web_data(api_data);
                 })?;
                 std::result::Result::Ok(output_ok)
             })())
         },
     )
 }
-fn wire__crate__api__simple__query_scpi_binary_raw_rust_impl(
+fn wire__crate__api__common__query_scpi_binary_raw_rust_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -370,7 +990,7 @@ fn wire__crate__api__simple__query_scpi_binary_raw_rust_impl(
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, ()>((move || {
-                    let output_ok = Ok::<_, ()>(crate::api::simple::query_scpi_binary_raw_rust(
+                    let output_ok = Ok::<_, ()>(crate::api::common::query_scpi_binary_raw_rust(
                         api_command,
                         api_timeout_ms,
                     ))?;
@@ -380,7 +1000,7 @@ fn wire__crate__api__simple__query_scpi_binary_raw_rust_impl(
         },
     )
 }
-fn wire__crate__api__simple__query_scpi_binary_rust_impl(
+fn wire__crate__api__common__query_scpi_binary_rust_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -407,7 +1027,7 @@ fn wire__crate__api__simple__query_scpi_binary_rust_impl(
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, ()>((move || {
-                    let output_ok = Ok::<_, ()>(crate::api::simple::query_scpi_binary_rust(
+                    let output_ok = Ok::<_, ()>(crate::api::common::query_scpi_binary_rust(
                         api_command,
                         api_timeout_ms,
                     ))?;
@@ -417,7 +1037,7 @@ fn wire__crate__api__simple__query_scpi_binary_rust_impl(
         },
     )
 }
-fn wire__crate__api__simple__read_data_impl(
+fn wire__crate__api__common__read_data_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -444,7 +1064,7 @@ fn wire__crate__api__simple__read_data_impl(
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, ()>((move || {
-                    let output_ok = Ok::<_, ()>(crate::api::simple::read_data(
+                    let output_ok = Ok::<_, ()>(crate::api::common::read_data(
                         api_bytes_to_read,
                         api_timeout_ms,
                     ))?;
@@ -454,7 +1074,7 @@ fn wire__crate__api__simple__read_data_impl(
         },
     )
 }
-fn wire__crate__api__simple__read_web_data_impl(
+fn wire__crate__api__common__read_web_data_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -478,13 +1098,13 @@ fn wire__crate__api__simple__read_web_data_impl(
             let api_bytes_to_read = <u32>::sse_decode(&mut deserializer);
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
-                let output_ok = Ok::<_, ()>(crate::api::simple::read_web_data(api_bytes_to_read))?;
+                let output_ok = Ok::<_, ()>(crate::api::common::read_web_data(api_bytes_to_read))?;
                 std::result::Result::Ok(output_ok)
             })())
         },
     )
 }
-fn wire__crate__api__simple__send_scpi_raw_rust_impl(
+fn wire__crate__api__common__send_scpi_raw_rust_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -509,14 +1129,14 @@ fn wire__crate__api__simple__send_scpi_raw_rust_impl(
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
                 let output_ok = Ok::<_, ()>({
-                    crate::api::simple::send_scpi_raw_rust(api_command);
+                    crate::api::common::send_scpi_raw_rust(api_command);
                 })?;
                 std::result::Result::Ok(output_ok)
             })())
         },
     )
 }
-fn wire__crate__api__simple__send_scpi_rust_impl(
+fn wire__crate__api__common__send_scpi_rust_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -541,14 +1161,14 @@ fn wire__crate__api__simple__send_scpi_rust_impl(
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
                 let output_ok = Ok::<_, ()>({
-                    crate::api::simple::send_scpi_rust(api_command);
+                    crate::api::common::send_scpi_rust(api_command);
                 })?;
                 std::result::Result::Ok(output_ok)
             })())
         },
     )
 }
-fn wire__crate__api__simple__set_baud_rate_impl(
+fn wire__crate__api__common__set_baud_rate_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -573,14 +1193,14 @@ fn wire__crate__api__simple__set_baud_rate_impl(
             deserializer.end();
             transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                 (move || {
-                    let output_ok = crate::api::simple::set_baud_rate(api_baud_rate)?;
+                    let output_ok = crate::api::common::set_baud_rate(api_baud_rate)?;
                     std::result::Result::Ok(output_ok)
                 })(),
             )
         },
     )
 }
-fn wire__crate__api__simple__set_dtr_impl(
+fn wire__crate__api__common__set_dtr_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -605,14 +1225,14 @@ fn wire__crate__api__simple__set_dtr_impl(
             deserializer.end();
             transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                 (move || {
-                    let output_ok = crate::api::simple::set_dtr(api_state)?;
+                    let output_ok = crate::api::common::set_dtr(api_state)?;
                     std::result::Result::Ok(output_ok)
                 })(),
             )
         },
     )
 }
-fn wire__crate__api__simple__set_rts_impl(
+fn wire__crate__api__common__set_rts_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -637,7 +1257,7 @@ fn wire__crate__api__simple__set_rts_impl(
             deserializer.end();
             transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                 (move || {
-                    let output_ok = crate::api::simple::set_rts(api_state)?;
+                    let output_ok = crate::api::common::set_rts(api_state)?;
                     std::result::Result::Ok(output_ok)
                 })(),
             )
@@ -716,7 +1336,7 @@ fn wire__crate__api__audio__stop_microphone_impl(
         },
     )
 }
-fn wire__crate__api__simple__wifi_connect_impl(
+fn wire__crate__api__common__wifi_connect_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -744,7 +1364,7 @@ fn wire__crate__api__simple__wifi_connect_impl(
             move |context| {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                     (move || {
-                        let output_ok = crate::api::simple::wifi_connect(api_host, api_port)?;
+                        let output_ok = crate::api::common::wifi_connect(api_host, api_port)?;
                         std::result::Result::Ok(output_ok)
                     })(),
                 )
@@ -752,7 +1372,7 @@ fn wire__crate__api__simple__wifi_connect_impl(
         },
     )
 }
-fn wire__crate__api__simple__wifi_disconnect_impl(
+fn wire__crate__api__common__wifi_disconnect_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -776,14 +1396,14 @@ fn wire__crate__api__simple__wifi_disconnect_impl(
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
                 let output_ok = Ok::<_, ()>({
-                    crate::api::simple::wifi_disconnect();
+                    crate::api::common::wifi_disconnect();
                 })?;
                 std::result::Result::Ok(output_ok)
             })())
         },
     )
 }
-fn wire__crate__api__simple__wifi_read_impl(
+fn wire__crate__api__common__wifi_read_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -810,7 +1430,7 @@ fn wire__crate__api__simple__wifi_read_impl(
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, ()>((move || {
-                    let output_ok = Ok::<_, ()>(crate::api::simple::wifi_read(
+                    let output_ok = Ok::<_, ()>(crate::api::common::wifi_read(
                         api_bytes_to_read,
                         api_timeout_ms,
                     ))?;
@@ -820,7 +1440,7 @@ fn wire__crate__api__simple__wifi_read_impl(
         },
     )
 }
-fn wire__crate__api__simple__wifi_write_impl(
+fn wire__crate__api__common__wifi_write_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -845,14 +1465,14 @@ fn wire__crate__api__simple__wifi_write_impl(
             deserializer.end();
             transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                 (move || {
-                    let output_ok = crate::api::simple::wifi_write(api_data)?;
+                    let output_ok = crate::api::common::wifi_write(api_data)?;
                     std::result::Result::Ok(output_ok)
                 })(),
             )
         },
     )
 }
-fn wire__crate__api__simple__write_data_impl(
+fn wire__crate__api__common__write_data_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
@@ -877,7 +1497,7 @@ fn wire__crate__api__simple__write_data_impl(
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
                 let output_ok = Ok::<_, ()>({
-                    crate::api::simple::write_data(api_data);
+                    crate::api::common::write_data(api_data);
                 })?;
                 std::result::Result::Ok(output_ok)
             })())
@@ -978,6 +1598,24 @@ impl SseDecode for i32 {
     }
 }
 
+impl SseDecode for crate::api::labrador::LabradorWavePayload {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_requestId = <u8>::sse_decode(deserializer);
+        let mut var_timerPeriod = <u16>::sse_decode(deserializer);
+        let mut var_clockDivider = <u16>::sse_decode(deserializer);
+        let mut var_tripleMask = <u8>::sse_decode(deserializer);
+        let mut var_samples = <Vec<u8>>::sse_decode(deserializer);
+        return crate::api::labrador::LabradorWavePayload {
+            request_id: var_requestId,
+            timer_period: var_timerPeriod,
+            clock_divider: var_clockDivider,
+            triple_mask: var_tripleMask,
+            samples: var_samples,
+        };
+    }
+}
+
 impl SseDecode for Vec<String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1050,23 +1688,35 @@ fn pde_ffi_dispatcher_primary_impl(
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
         3 => wire__crate__api__bootloader__flash_firmware_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__crate__api__simple__init_android_impl(port, ptr, rust_vec_len, data_len),
-        6 => wire__crate__api__simple__init_desktop_impl(port, ptr, rust_vec_len, data_len),
-        7 => wire__crate__api__simple__init_desktop_by_port_impl(port, ptr, rust_vec_len, data_len),
-        10 => wire__crate__api__simple__query_scpi_binary_raw_rust_impl(
+        4 => wire__crate__api__labrador_bootloader__flash_labrador_firmware_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => {
-            wire__crate__api__simple__query_scpi_binary_rust_impl(port, ptr, rust_vec_len, data_len)
+        6 => wire__crate__api__common__init_android_impl(port, ptr, rust_vec_len, data_len),
+        7 => wire__crate__api__common__init_desktop_impl(port, ptr, rust_vec_len, data_len),
+        8 => wire__crate__api__common__init_desktop_by_port_impl(port, ptr, rust_vec_len, data_len),
+        25 => wire__crate__api__labrador__labrador_wave_payload_default_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        28 => wire__crate__api__common__query_scpi_binary_raw_rust_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        29 => {
+            wire__crate__api__common__query_scpi_binary_rust_impl(port, ptr, rust_vec_len, data_len)
         }
-        12 => wire__crate__api__simple__read_data_impl(port, ptr, rust_vec_len, data_len),
-        19 => wire__crate__api__audio__start_microphone_impl(port, ptr, rust_vec_len, data_len),
-        20 => wire__crate__api__audio__stop_microphone_impl(port, ptr, rust_vec_len, data_len),
-        21 => wire__crate__api__simple__wifi_connect_impl(port, ptr, rust_vec_len, data_len),
-        23 => wire__crate__api__simple__wifi_read_impl(port, ptr, rust_vec_len, data_len),
+        30 => wire__crate__api__common__read_data_impl(port, ptr, rust_vec_len, data_len),
+        37 => wire__crate__api__audio__start_microphone_impl(port, ptr, rust_vec_len, data_len),
+        38 => wire__crate__api__audio__stop_microphone_impl(port, ptr, rust_vec_len, data_len),
+        39 => wire__crate__api__common__wifi_connect_impl(port, ptr, rust_vec_len, data_len),
+        41 => wire__crate__api__common__wifi_read_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -1080,21 +1730,85 @@ fn pde_ffi_dispatcher_sync_impl(
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
         1 => {
-            wire__crate__api__simple__check_desktop_device_present_impl(ptr, rust_vec_len, data_len)
+            wire__crate__api__common__check_desktop_device_present_impl(ptr, rust_vec_len, data_len)
         }
-        2 => wire__crate__api__simple__close_usb_impl(ptr, rust_vec_len, data_len),
-        4 => wire__crate__api__simple__get_available_ports_impl(ptr, rust_vec_len, data_len),
-        8 => wire__crate__api__simple__pop_web_tx_data_impl(ptr, rust_vec_len, data_len),
-        9 => wire__crate__api__simple__push_web_data_impl(ptr, rust_vec_len, data_len),
-        13 => wire__crate__api__simple__read_web_data_impl(ptr, rust_vec_len, data_len),
-        14 => wire__crate__api__simple__send_scpi_raw_rust_impl(ptr, rust_vec_len, data_len),
-        15 => wire__crate__api__simple__send_scpi_rust_impl(ptr, rust_vec_len, data_len),
-        16 => wire__crate__api__simple__set_baud_rate_impl(ptr, rust_vec_len, data_len),
-        17 => wire__crate__api__simple__set_dtr_impl(ptr, rust_vec_len, data_len),
-        18 => wire__crate__api__simple__set_rts_impl(ptr, rust_vec_len, data_len),
-        22 => wire__crate__api__simple__wifi_disconnect_impl(ptr, rust_vec_len, data_len),
-        24 => wire__crate__api__simple__wifi_write_impl(ptr, rust_vec_len, data_len),
-        25 => wire__crate__api__simple__write_data_impl(ptr, rust_vec_len, data_len),
+        2 => wire__crate__api__common__close_usb_impl(ptr, rust_vec_len, data_len),
+        5 => wire__crate__api__common__get_available_ports_impl(ptr, rust_vec_len, data_len),
+        9 => wire__crate__api__common__init_labrador_desktop_impl(ptr, rust_vec_len, data_len),
+        10 => wire__crate__api__labrador__labrador_calculate_digital_out_state_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        11 => wire__crate__api__labrador__labrador_calculate_gain_mask_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        12 => wire__crate__api__labrador__labrador_calculate_psu_duty_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        13 => wire__crate__api__labrador__labrador_calculate_wave_payload_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        14 => wire__crate__api__labrador__labrador_fetch_interpolated_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        15 => {
+            wire__crate__api__labrador__labrador_fetch_raw_bytes_impl(ptr, rust_vec_len, data_len)
+        }
+        16 => wire__crate__api__labrador__labrador_generate_analog_wave_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        17 => wire__crate__api__labrador__labrador_push_web_bulk_data_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        18 => {
+            wire__crate__api__labrador__labrador_set_digital_out_impl(ptr, rust_vec_len, data_len)
+        }
+        19 => {
+            wire__crate__api__labrador__labrador_set_psu_voltage_impl(ptr, rust_vec_len, data_len)
+        }
+        20 => wire__crate__api__labrador__labrador_set_trigger_enabled_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        21 => wire__crate__api__labrador__labrador_start_logic_analyzer_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        22 => {
+            wire__crate__api__labrador__labrador_start_multimeter_impl(ptr, rust_vec_len, data_len)
+        }
+        23 => wire__crate__api__labrador__labrador_start_oscilloscope_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        24 => wire__crate__api__labrador__labrador_stop_streaming_impl(ptr, rust_vec_len, data_len),
+        26 => wire__crate__api__common__pop_web_tx_data_impl(ptr, rust_vec_len, data_len),
+        27 => wire__crate__api__common__push_web_data_impl(ptr, rust_vec_len, data_len),
+        31 => wire__crate__api__common__read_web_data_impl(ptr, rust_vec_len, data_len),
+        32 => wire__crate__api__common__send_scpi_raw_rust_impl(ptr, rust_vec_len, data_len),
+        33 => wire__crate__api__common__send_scpi_rust_impl(ptr, rust_vec_len, data_len),
+        34 => wire__crate__api__common__set_baud_rate_impl(ptr, rust_vec_len, data_len),
+        35 => wire__crate__api__common__set_dtr_impl(ptr, rust_vec_len, data_len),
+        36 => wire__crate__api__common__set_rts_impl(ptr, rust_vec_len, data_len),
+        40 => wire__crate__api__common__wifi_disconnect_impl(ptr, rust_vec_len, data_len),
+        42 => wire__crate__api__common__wifi_write_impl(ptr, rust_vec_len, data_len),
+        43 => wire__crate__api__common__write_data_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -1129,6 +1843,30 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::bootloader::FlashState>
     for crate::api::bootloader::FlashState
 {
     fn into_into_dart(self) -> crate::api::bootloader::FlashState {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::labrador::LabradorWavePayload {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.request_id.into_into_dart().into_dart(),
+            self.timer_period.into_into_dart().into_dart(),
+            self.clock_divider.into_into_dart().into_dart(),
+            self.triple_mask.into_into_dart().into_dart(),
+            self.samples.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::labrador::LabradorWavePayload
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::labrador::LabradorWavePayload>
+    for crate::api::labrador::LabradorWavePayload
+{
+    fn into_into_dart(self) -> crate::api::labrador::LabradorWavePayload {
         self
     }
 }
@@ -1212,6 +1950,17 @@ impl SseEncode for i32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for crate::api::labrador::LabradorWavePayload {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <u8>::sse_encode(self.request_id, serializer);
+        <u16>::sse_encode(self.timer_period, serializer);
+        <u16>::sse_encode(self.clock_divider, serializer);
+        <u8>::sse_encode(self.triple_mask, serializer);
+        <Vec<u8>>::sse_encode(self.samples, serializer);
     }
 }
 

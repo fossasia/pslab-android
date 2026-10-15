@@ -54,6 +54,8 @@ class MainActivity : FlutterActivity(), SensorEventListener {
     internal var pendingPermissionResult: MethodChannel.Result? = null
     internal var usbEventSink: EventChannel.EventSink? = null
     internal var usbHardwareReceiver: BroadcastReceiver? = null
+    internal var currentUsbConnection: UsbDeviceConnection? = null
+    internal var currentUsbDevice: UsbDevice? = null
     internal var isListening = false
     internal var currentTemperature = 0.0f
 
@@ -149,6 +151,10 @@ class MainActivity : FlutterActivity(), SensorEventListener {
         super.onDestroy()
         stopTemperatureUpdates()
         unregisterUsbHardwareReceiver()
+        try {
+            currentUsbConnection?.close()
+        } catch (_: Exception) {}
+        currentUsbConnection = null
     }
 
     override fun onPause() {
@@ -212,18 +218,70 @@ class MainActivity : FlutterActivity(), SensorEventListener {
     }
 
     private fun handleUsbMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        if ("getAndroidFd" == call.method) {
-            val vid = call.argument<Number>("vid")
-            val pid = call.argument<Number>("pid")
+        when (call.method) {
+            "getAndroidFd" -> {
+                val vid = call.argument<Number>("vid")
+                val pid = call.argument<Number>("pid")
 
-            if (vid == null || pid == null) {
-                result.error("INVALID_ARGS", "Missing VID or PID arguments", null)
-                return
+                if (vid == null || pid == null) {
+                    result.error("INVALID_ARGS", "Missing VID or PID arguments", null)
+                    return
+                }
+
+                getUsbFileDescriptor(vid.toInt(), pid.toInt(), result)
             }
+            "claimInterface" -> {
+                val ifaceIndex = call.argument<Int>("interface") ?: 0
+                val conn = currentUsbConnection
+                val dev = currentUsbDevice
+                if (conn == null || dev == null) {
+                    result.error("NO_CONN", "No active USB connection", null)
+                    return
+                }
+                if (ifaceIndex < dev.interfaceCount) {
+                    val iface = dev.getInterface(ifaceIndex)
+                    val claimed = conn.claimInterface(iface, true)
+                    result.success(claimed)
+                } else {
+                    result.error("INVALID_IFACE", "Interface index $ifaceIndex out of bounds", null)
+                }
+            }
+            "controlTransfer" -> {
+                val requestType = call.argument<Int>("requestType") ?: 0
+                val request = call.argument<Int>("request") ?: 0
+                val value = call.argument<Int>("value") ?: 0
+                val index = call.argument<Int>("index") ?: 0
+                val data = call.argument<ByteArray>("data")
+                val length = call.argument<Int>("length") ?: (data?.size ?: 0)
+                val timeout = call.argument<Int>("timeout") ?: 1000
 
-            getUsbFileDescriptor(vid.toInt(), pid.toInt(), result)
-        } else {
-            result.notImplemented()
+                val conn = currentUsbConnection
+                if (conn == null) {
+                    result.error("NO_CONN", "No active USB connection", null)
+                    return
+                }
+
+                val buffer = data ?: ByteArray(length)
+                val transferred = conn.controlTransfer(requestType, request, value, index, buffer, length, timeout)
+                if (transferred < 0) {
+                    result.error("TRANSFER_FAIL", "Control transfer returned $transferred", null)
+                } else {
+                    if ((requestType and 0x80) != 0) {
+                        result.success(buffer.copyOf(transferred))
+                    } else {
+                        result.success(transferred)
+                    }
+                }
+            }
+            "closeUsb" -> {
+                try {
+                    currentUsbConnection?.close()
+                } catch (_: Exception) {}
+                currentUsbConnection = null
+                currentUsbDevice = null
+                result.success(true)
+            }
+            else -> result.notImplemented()
         }
     }
 }
@@ -238,6 +296,13 @@ private fun MainActivity.registerUsbHardwareReceiver() {
                     (UsbManager.ACTION_USB_DEVICE_ATTACHED == action ||
                             UsbManager.ACTION_USB_DEVICE_DETACHED == action)
                 ) {
+                    if (UsbManager.ACTION_USB_DEVICE_DETACHED == action) {
+                        try {
+                            currentUsbConnection?.close()
+                        } catch (_: Exception) {}
+                        currentUsbConnection = null
+                        currentUsbDevice = null
+                    }
                     usbEventSink?.success(action)
                 }
             }
@@ -307,9 +372,14 @@ private fun MainActivity.getUsbFileDescriptor(vid: Int, pid: Int, result: Method
     }
 }
 
-private fun openAndReturnFd(usbManager: UsbManager, device: UsbDevice, result: MethodChannel.Result) {
+private fun MainActivity.openAndReturnFd(usbManager: UsbManager, device: UsbDevice, result: MethodChannel.Result) {
+    try {
+        currentUsbConnection?.close()
+    } catch (_: Exception) {}
     val connection = usbManager.openDevice(device)
     if (connection != null) {
+        currentUsbConnection = connection
+        currentUsbDevice = device
         val fd = connection.fileDescriptor
         result.success(fd)
     } else {
@@ -332,7 +402,7 @@ private fun MainActivity.requestUsbPermission(usbManager: UsbManager, device: Us
         override fun onReceive(context: Context?, intent: Intent?) {
             context?.unregisterReceiver(this)
             if (intent?.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false) == true) {
-                openAndReturnFd(usbManager, device, result)
+                this@requestUsbPermission.openAndReturnFd(usbManager, device, result)
             } else {
                 result.error("DENIED", "User denied runtime OS permission to access device hardware", null)
             }

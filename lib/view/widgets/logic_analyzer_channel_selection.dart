@@ -8,6 +8,8 @@ import 'package:pslab/l10n/app_localizations.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/providers/logic_analyzer_state_provider.dart';
 import 'package:pslab/theme/colors.dart';
+import 'package:pslab/providers/board_state_provider.dart';
+import 'package:pslab/hal/labrador_board.dart';
 
 enum _LAControlType { channelCount, channel, edge }
 
@@ -52,7 +54,11 @@ class _LogicAnalyzerChannelSelectionState
   DateTime _lastScrollStep = DateTime.fromMillisecondsSinceEpoch(0);
 
   static const int _minChannels = 1;
-  static const int _maxChannels = 4;
+  int get _maxChannels {
+    final board = getIt.get<BoardStateProvider>().activeBoard;
+    if (board is LabradorHardwareBoard) return 2;
+    return 4;
+  }
 
   bool get _usesPointer =>
       kIsWeb ||
@@ -63,12 +69,20 @@ class _LogicAnalyzerChannelSelectionState
   @override
   void initState() {
     super.initState();
-    channelNames = [
-      appLocalizations.channelLA1,
-      appLocalizations.channelLA2,
-      appLocalizations.channelLA3,
-      appLocalizations.channelLA4,
-    ];
+    final board = getIt.get<BoardStateProvider>().activeBoard;
+    if (board is LabradorHardwareBoard) {
+      channelNames = [
+        appLocalizations.channelLA1,
+        appLocalizations.channelLA2,
+      ];
+    } else {
+      channelNames = [
+        appLocalizations.channelLA1,
+        appLocalizations.channelLA2,
+        appLocalizations.channelLA3,
+        appLocalizations.channelLA4,
+      ];
+    }
     analysisOptions = [
       appLocalizations.analysisOptionEveryEdge.toUpperCase(),
       appLocalizations.analysisOptionEveryFallingEdge.toUpperCase(),
@@ -419,12 +433,17 @@ class _LogicAnalyzerChannelSelectionState
         ),
         child: CarouselSlider(
           carouselController: _carouselController,
-          items: [
-            appLocalizations.noOfChannelsOne,
-            appLocalizations.noOfChannelsTwo,
-            appLocalizations.noOfChannelsThree,
-            appLocalizations.noOfChannelsFour,
-          ]
+          items: (_maxChannels == 2
+                  ? [
+                      appLocalizations.noOfChannelsOne,
+                      appLocalizations.noOfChannelsTwo,
+                    ]
+                  : [
+                      appLocalizations.noOfChannelsOne,
+                      appLocalizations.noOfChannelsTwo,
+                      appLocalizations.noOfChannelsThree,
+                      appLocalizations.noOfChannelsFour,
+                    ])
               .map(
                 (label) => Center(
                   child: Text(

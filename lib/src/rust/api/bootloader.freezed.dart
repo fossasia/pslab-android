@@ -342,7 +342,9 @@ class FlashState_Writing extends FlashState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, progressPercent);
+  int get hashCode {
+    return Object.hash(runtimeType, progressPercent);
+  }
 
   @override
   String toString() {
@@ -446,7 +448,9 @@ class FlashState_Error extends FlashState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, message);
+  int get hashCode {
+    return Object.hash(runtimeType, message);
+  }
 
   @override
   String toString() {

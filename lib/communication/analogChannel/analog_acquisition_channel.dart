@@ -19,6 +19,8 @@ class AnalogAcquisitionChannel {
     _analogInputSource = AnalogInputSource('CH1');
   }
 
+  int get resolution => _resolution;
+
   List<double> fixValue(List<double> val) {
     List<double> calcData = List.filled(val.length, 0.0);
     if (_resolution == 12) {

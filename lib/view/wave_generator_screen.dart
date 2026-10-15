@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pslab/communication/science_lab.dart';
 import 'package:pslab/constants.dart';
 import 'package:pslab/l10n/app_localizations.dart';
 import 'package:pslab/providers/locator.dart';
@@ -16,6 +15,7 @@ import 'package:pslab/view/widgets/export_helper.dart';
 import 'package:pslab/view/widgets/guide_widget.dart';
 import 'package:pslab/view/widgets/wave_generator_graph.dart';
 import 'package:pslab/view/widgets/wave_generator_main_controls.dart';
+import 'package:pslab/providers/board_state_provider.dart';
 
 class WaveGeneratorScreen extends StatefulWidget {
   final String sineWaveCircuit =
@@ -44,6 +44,9 @@ class _WaveGeneratorScreenState extends State<WaveGeneratorScreen> {
     _provider.setConfigProvider(_configProvider!);
     if (widget.playbackData != null) {
       _provider.loadPlaybackData(widget.playbackData!);
+    } else {
+      _provider.previewWave();
+      _provider.setWave();
     }
     super.initState();
   }
@@ -287,6 +290,8 @@ class _WaveGeneratorScreenState extends State<WaveGeneratorScreen> {
 
                                         setState(
                                           () {
+                                            provider.isDigitalActive = false;
+                                            provider.isAnalogActive = true;
                                             provider.waveGeneratorConstants
                                                     .modeSelected =
                                                 WaveConst.square;
@@ -294,6 +299,7 @@ class _WaveGeneratorScreenState extends State<WaveGeneratorScreen> {
                                             provider.previewWave();
                                           },
                                         );
+                                        provider.setWave();
                                       },
                                     ),
                                   ),
@@ -329,12 +335,15 @@ class _WaveGeneratorScreenState extends State<WaveGeneratorScreen> {
 
                                         setState(
                                           () {
+                                            provider.isAnalogActive = false;
+                                            provider.isDigitalActive = true;
                                             provider.waveGeneratorConstants
                                                 .modeSelected = WaveConst.pwm;
                                             provider.propSelected = null;
                                             provider.previewWave();
                                           },
                                         );
+                                        provider.setWave();
                                       },
                                     ),
                                   ),
@@ -357,8 +366,14 @@ class _WaveGeneratorScreenState extends State<WaveGeneratorScreen> {
                     icon: const Icon(Icons.play_arrow, color: Colors.white),
                     tooltip: appLocalizations.selectInstrument,
                     onSelected: (value) {
+                      final bool isBoardConnected = getIt
+                              .get<BoardStateProvider>()
+                              .activeBoard
+                              ?.isConnected ==
+                          true;
+
                       if (value == appLocalizations.oscilloscope) {
-                        if (getIt.get<ScienceLab>().isConnected()) {
+                        if (isBoardConnected) {
                           if (Navigator.canPop(context) &&
                               ModalRoute.of(context)?.settings.name ==
                                   '/oscilloscope') {
@@ -381,7 +396,7 @@ class _WaveGeneratorScreenState extends State<WaveGeneratorScreen> {
                           );
                         }
                       } else {
-                        if (getIt.get<ScienceLab>().isConnected()) {
+                        if (isBoardConnected) {
                           if (Navigator.canPop(context) &&
                               ModalRoute.of(context)?.settings.name ==
                                   '/logicAnalyzer') {

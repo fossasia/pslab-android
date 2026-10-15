@@ -22,6 +22,8 @@ import 'package:pslab/view/widgets/oscilloscope_screen_tabs.dart';
 import 'package:pslab/view/widgets/timebase_trigger_widget.dart';
 import 'package:pslab/view/widgets/xyplot_widget.dart';
 
+import 'package:pslab/providers/board_state_provider.dart';
+import 'package:pslab/hal/labrador_oscilloscope.dart';
 import '../providers/oscilloscope_state_provider.dart';
 
 class OscilloscopeScreen extends StatefulWidget {
@@ -48,6 +50,11 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   OscilloscopeRecordingMetadata? _playbackMetadata;
   @override
   void initState() {
+    final activeBoard = getIt.get<BoardStateProvider>().activeBoard;
+    if (activeBoard?.oscilloscope is LabradorOscilloscope) {
+      (activeBoard!.oscilloscope as LabradorOscilloscope).resetState();
+    }
+
     _provider = OscilloscopeStateProvider();
     _configProvider = OscilloscopeConfigProvider();
     _provider.setConfigProvider(_configProvider!);
@@ -303,6 +310,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
   @override
   void dispose() {
+    _provider.dispose();
     if (widget.playbackData == null) {
       _setPortraitOrientation();
     }

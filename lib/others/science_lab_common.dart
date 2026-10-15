@@ -3,7 +3,7 @@ import 'package:pslab/communication/science_lab.dart';
 import 'package:pslab/others/logger_service.dart';
 import 'package:pslab/communication/handler/wifi_comms_handler.dart';
 
-import 'package:pslab/communication/handler/router/platform_handler.dart';
+import 'package:pslab/communication/pslab_communication/platform_handler.dart';
 
 class ScienceLabCommon {
   static late ScienceLab _scienceLab;

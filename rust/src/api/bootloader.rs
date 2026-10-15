@@ -3,7 +3,7 @@ use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
 use std::io::Cursor;
 
 use crate::frb_generated::StreamSink;
-use crate::api::simple::{read_data, set_baud_rate, write_data};
+use crate::api::common::{read_data, set_baud_rate, write_data};
 
 const FLASH_UNLOCK_KEY: u32 = 0x00AA0055;
 

@@ -5,7 +5,9 @@
 
 import 'api/audio.dart';
 import 'api/bootloader.dart';
-import 'api/simple.dart';
+import 'api/common.dart';
+import 'api/labrador.dart';
+import 'api/labrador_bootloader.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' as ffi;
@@ -44,6 +46,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int dco_decode_i_32(dynamic raw);
+
+  @protected
+  LabradorWavePayload dco_decode_labrador_wave_payload(dynamic raw);
 
   @protected
   List<String> dco_decode_list_String(dynamic raw);
@@ -96,6 +101,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int sse_decode_i_32(SseDeserializer deserializer);
 
   @protected
+  LabradorWavePayload sse_decode_labrador_wave_payload(
+      SseDeserializer deserializer);
+
+  @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer);
 
   @protected
@@ -145,6 +154,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_labrador_wave_payload(
+      LabradorWavePayload self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer);
