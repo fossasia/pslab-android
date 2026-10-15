@@ -1,14 +1,14 @@
 use anyhow::{anyhow, Result};
 use flutter_rust_bridge::frb;
 use lazy_static::lazy_static;
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 use rusb::{request_type, Direction, Recipient, RequestType};
 use std::collections::VecDeque;
 use std::sync::Mutex;
 use std::time::Duration;
 use std::f64::consts::PI;
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 use crate::api::common::USB_HANDLE;
 
 lazy_static! {
@@ -56,7 +56,7 @@ pub fn labrador_start_oscilloscope(channels: u8, gain: f64) -> Result<()> {
     let mode: u16 = if channels >= 2 { 2 } else { 0 };
     *CURRENT_MODE.lock().unwrap() = mode;
 
-    #[cfg(not(target_family = "wasm"))]
+    #[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
     {
         let handle_arc = {
             let guard = USB_HANDLE.lock().unwrap();
@@ -103,7 +103,7 @@ pub fn labrador_start_oscilloscope(channels: u8, gain: f64) -> Result<()> {
         spawn_stream_thread();
     }
 
-    #[cfg(target_family = "wasm")]
+    #[cfg(any(target_family = "wasm", target_os = "ios"))]
     {
         let _ = gain;
         LABRADOR_CH1_BUFFER.lock().unwrap().clear();
@@ -119,7 +119,7 @@ pub fn labrador_start_multimeter() -> Result<()> {
     let mode: u16 = 7;
     *CURRENT_MODE.lock().unwrap() = mode;
 
-    #[cfg(not(target_family = "wasm"))]
+    #[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
     {
         let handle_arc = {
             let guard = USB_HANDLE.lock().unwrap();
@@ -141,7 +141,7 @@ pub fn labrador_start_multimeter() -> Result<()> {
         spawn_stream_thread();
     }
 
-    #[cfg(target_family = "wasm")]
+    #[cfg(any(target_family = "wasm", target_os = "ios"))]
     {
         LABRADOR_CH1_BUFFER.lock().unwrap().clear();
         RAW_USB_QUEUE.lock().unwrap().clear();
@@ -155,7 +155,7 @@ pub fn labrador_start_logic_analyzer(channels: u8) -> Result<()> {
     let mode: u16 = if channels >= 2 { 4 } else { 3 };
     *CURRENT_MODE.lock().unwrap() = mode;
 
-    #[cfg(not(target_family = "wasm"))]
+    #[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
     {
         let handle_arc = {
             let guard = USB_HANDLE.lock().unwrap();
@@ -200,7 +200,7 @@ pub fn labrador_start_logic_analyzer(channels: u8) -> Result<()> {
         spawn_stream_thread();
     }
 
-    #[cfg(target_family = "wasm")]
+    #[cfg(any(target_family = "wasm", target_os = "ios"))]
     {
         LABRADOR_CH1_BUFFER.lock().unwrap().clear();
         LABRADOR_CH2_BUFFER.lock().unwrap().clear();
@@ -297,7 +297,7 @@ fn process_raw_bulk_frames(
     }
 }
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 fn spawn_stream_thread() {
     let mut streaming = LABRADOR_STREAMING.lock().unwrap();
     if *streaming { return; }
@@ -558,7 +558,7 @@ pub fn labrador_set_psu_voltage(voltage: f64) -> Result<()> {
 
     println!("Setting PSU voltage: {:.2}V -> target duty={}", voltage, duty_psu);
 
-    #[cfg(not(target_family = "wasm"))]
+    #[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
     {
         let handle_arc = {
             let guard = USB_HANDLE.lock().unwrap();
@@ -708,7 +708,7 @@ pub fn labrador_generate_analog_wave(
 
     let payload = labrador_calculate_wave_payload(channel, frequency_hz, wave_type, amplitude_v, offset_v)?;
 
-    #[cfg(not(target_family = "wasm"))]
+    #[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
     {
         let handle_arc = {
             let guard = USB_HANDLE.lock().unwrap();
@@ -754,7 +754,7 @@ pub fn labrador_calculate_digital_out_state(channel: u8, state: bool) -> u16 {
 pub fn labrador_set_digital_out(channel: u8, state: bool) -> Result<()> {
     let dig_state = labrador_calculate_digital_out_state(channel, state);
 
-    #[cfg(not(target_family = "wasm"))]
+    #[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
     {
         let handle_arc = {
             let guard = USB_HANDLE.lock().unwrap();

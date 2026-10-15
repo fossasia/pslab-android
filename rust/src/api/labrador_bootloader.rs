@@ -2,11 +2,11 @@ use anyhow::{anyhow, Result};
 use crate::frb_generated::StreamSink;
 use crate::api::bootloader::FlashState;
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 use rusb::{request_type, Direction, Recipient, RequestType, DeviceHandle, GlobalContext, UsbContext};
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 use std::time::Duration;
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 use crate::api::common::USB_HANDLE;
 
 const DFU_DNLOAD: u8 = 1;
@@ -23,7 +23,7 @@ const FLIP2_CMD_START_APP: u8 = 0x03;
 const FLIP2_CMD_GROUP_SELECT: u8 = 0x06;
 const FLIP2_CMD_SELECT_MEMORY: u8 = 0x03;
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 fn clr_status(handle: &DeviceHandle<GlobalContext>) -> Result<()> {
     let timeout = Duration::from_millis(1000);
     let _ = handle.write_control(
@@ -37,7 +37,7 @@ fn clr_status(handle: &DeviceHandle<GlobalContext>) -> Result<()> {
     Ok(())
 }
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 fn get_status(handle: &DeviceHandle<GlobalContext>) -> Result<(u8, u8)> {
     let timeout = Duration::from_millis(1000);
     let mut buf = [0u8; 6];
@@ -55,7 +55,7 @@ fn get_status(handle: &DeviceHandle<GlobalContext>) -> Result<(u8, u8)> {
     Ok((buf[0], buf[4])) 
 }
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 fn dnload(handle: &DeviceHandle<GlobalContext>, block_num: u16, data: &[u8]) -> Result<()> {
     let timeout = Duration::from_millis(2000);
     let n = handle.write_control(
@@ -113,16 +113,16 @@ fn parse_hex_flash_image(hex_str: &str) -> Result<(Vec<u8>, usize)> {
 pub fn flash_labrador_firmware(hex_str: String, progress_sink: StreamSink<FlashState>) -> Result<()> {
     let _ = progress_sink.add(FlashState::Connecting);
 
-    #[cfg(target_family = "wasm")]
+    #[cfg(any(target_family = "wasm", target_os = "ios"))]
     {
         let _ = hex_str;
         let _ = progress_sink.add(FlashState::Error {
-            message: "Native DFU flasher is not available on Web (Web uses WebUSB driver)".to_string(),
+            message: "Native DFU flasher is not available on this platform".to_string(),
         });
         Ok(())
     }
 
-    #[cfg(not(target_family = "wasm"))]
+    #[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
     {
         match flash_labrador_inner(&hex_str, &progress_sink) {
             Ok(_) => Ok(()),
@@ -135,7 +135,7 @@ pub fn flash_labrador_firmware(hex_str: String, progress_sink: StreamSink<FlashS
     }
 }
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 fn flash_labrador_inner(hex_str: &str, progress_sink: &StreamSink<FlashState>) -> Result<()> {
     let handle = {
         let guard = USB_HANDLE.lock().unwrap();

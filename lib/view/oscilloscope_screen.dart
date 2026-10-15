@@ -389,8 +389,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<OscilloscopeStateProvider>(
-          create: (_) => _provider,
+        ChangeNotifierProvider<OscilloscopeStateProvider>.value(
+          value: _provider,
         ),
       ],
       child: Consumer<OscilloscopeStateProvider>(

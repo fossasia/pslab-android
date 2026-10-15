@@ -18,13 +18,13 @@ use std::net::TcpStream;
 #[cfg(not(target_family = "wasm"))]
 use tungstenite::{stream::MaybeTlsStream, Message, WebSocket};
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 use rusb::{
     request_type, DeviceHandle, Direction, GlobalContext, Recipient, RequestType, TransferType,
     UsbContext,
 };
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
 lazy_static! {
     pub static ref USB_HANDLE: Mutex<Option<Arc<DeviceHandle<GlobalContext>>>> = Mutex::new(None);
     static ref EP_IN: Mutex<u8> = Mutex::new(0);
@@ -568,7 +568,7 @@ pub fn read_data(bytes_to_read: u32, timeout_ms: u32) -> Vec<u8> {
 
 #[frb(sync)]
 pub fn close_usb() {
-    #[cfg(not(target_family = "wasm"))]
+    #[cfg(all(not(target_family = "wasm"), not(target_os = "ios")))]
     {
         *ANDROID_RUN_THREAD.lock().unwrap() = false;
         if let Ok(mut buffer) = ANDROID_RX_BUFFER.lock() {
