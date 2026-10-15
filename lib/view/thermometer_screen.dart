@@ -29,6 +29,7 @@ class _ThermometerScreenState extends State<ThermometerScreen> {
   AppLocalizations appLocalizations = getIt.get<AppLocalizations>();
   late ThermometerStateProvider _temperatureProvider;
   late ThermometerConfigProvider _configProvider;
+  Future<void>? _recordingStartFuture;
 
   bool _showGuide = false;
   bool _snackbarShown = false;
@@ -165,14 +166,17 @@ class _ThermometerScreenState extends State<ThermometerScreen> {
 
   Future<void> _toggleRecording() async {
     if (_temperatureProvider.isRecording) {
-      final data = _temperatureProvider.stopRecording();
-      await ExportHelper.handleSaveData(
-        context: context,
-        instrumentName: appLocalizations.thermometer.toLowerCase(),
-        data: data,
-      );
+      await _saveRecording();
     } else {
-      await _temperatureProvider.startRecording();
+      final startFuture = _temperatureProvider.startRecording();
+      _recordingStartFuture = startFuture;
+      try {
+        await startFuture;
+      } finally {
+        if (identical(_recordingStartFuture, startFuture)) {
+          _recordingStartFuture = null;
+        }
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -184,6 +188,32 @@ class _ThermometerScreenState extends State<ThermometerScreen> {
         ),
       );
     }
+  }
+
+  Future<void> _saveRecording() async {
+    final data = _temperatureProvider.stopRecording();
+    await ExportHelper.handleSaveData(
+      context: context,
+      instrumentName: appLocalizations.thermometer.toLowerCase(),
+      data: data,
+    );
+  }
+
+  Future<void> _handleBackPressed() async {
+    final startFuture = _recordingStartFuture;
+    if (startFuture != null) {
+      try {
+        await startFuture;
+      } catch (_) {
+        return;
+      }
+    }
+    if (!mounted) return;
+    if (_temperatureProvider.isRecording) {
+      await _saveRecording();
+    }
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   @override
@@ -221,6 +251,7 @@ class _ThermometerScreenState extends State<ThermometerScreen> {
                     provider.isPlayingBack ? null : _showOptionsMenu,
                 onRecordPressed:
                     provider.isPlayingBack ? null : _toggleRecording,
+                onBackPressed: _handleBackPressed,
                 isRecording: provider.isRecording,
                 isPlayingBack: provider.isPlayingBack,
                 isPlaybackPaused: provider.isPlaybackPaused,

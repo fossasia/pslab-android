@@ -32,6 +32,7 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
   late PowerSourceStateProvider _provider;
   late PowerSourceConfigProvider? _configProvider;
   bool _showGuide = false;
+  Future<void>? _recordingStartFuture;
   final TextEditingController _pv1Controller = TextEditingController();
   final TextEditingController _pv2Controller = TextEditingController();
   final TextEditingController _pv3Controller = TextEditingController();
@@ -258,14 +259,19 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
 
   Future<void> _toggleRecording() async {
     if (_provider.isRecording) {
-      final data = _provider.stopRecording();
-      await ExportHelper.handleSaveData(
-        context: context,
-        instrumentName: appLocalizations.powerSource.toLowerCase(),
-        data: data,
-      );
+      await _saveRecording();
     } else {
-      bool hasStarted = await _provider.startRecording();
+      final startFuture = _provider.startRecording();
+      _recordingStartFuture = startFuture;
+
+      late bool hasStarted;
+      try {
+        hasStarted = await startFuture;
+      } finally {
+        if (identical(_recordingStartFuture, startFuture)) {
+          _recordingStartFuture = null;
+        }
+      }
       if (!mounted) return;
       if (hasStarted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -289,6 +295,32 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
         );
       }
     }
+  }
+
+  Future<void> _saveRecording() async {
+    final data = _provider.stopRecording();
+    await ExportHelper.handleSaveData(
+      context: context,
+      instrumentName: appLocalizations.powerSource.toLowerCase(),
+      data: data,
+    );
+  }
+
+  Future<void> _handleBackPressed() async {
+    final startFuture = _recordingStartFuture;
+    if (startFuture != null) {
+      try {
+        await startFuture;
+      } catch (_) {
+        return;
+      }
+    }
+    if (!mounted) return;
+    if (_provider.isRecording) {
+      await _saveRecording();
+    }
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   Widget _buildPowerCard({
@@ -727,6 +759,7 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
                 onGuidePressed: _showInstrumentGuide,
                 onRecordPressed:
                     provider.isPlayingBack ? null : _toggleRecording,
+                onBackPressed: _handleBackPressed,
                 isRecording: provider.isRecording,
                 isPlayingBack: provider.isPlayingBack,
                 isPlaybackPaused: provider.isPlaybackPaused,

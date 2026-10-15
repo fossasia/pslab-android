@@ -14,6 +14,8 @@ class CommonScaffold extends StatefulWidget {
   final VoidCallback? onGuidePressed;
   final VoidCallback? onOptionsPressed;
   final VoidCallback? onRecordPressed;
+  final Future<void> Function()? onBackPressed;
+  final VoidCallback? onSaveDataPressed;
   final bool isRecording;
   final String icRecord = 'assets/icons/ic_record_white.png';
   final String icStopRecord = 'assets/icons/ic_record_stop_white.png';
@@ -32,6 +34,8 @@ class CommonScaffold extends StatefulWidget {
     this.onGuidePressed,
     this.onOptionsPressed,
     this.onRecordPressed,
+    this.onBackPressed,
+    this.onSaveDataPressed,
     this.isRecording = false,
     this.isPlayingBack = false,
     this.isPlaybackPaused = false,
@@ -47,6 +51,7 @@ class _CommonScaffoldState extends State<CommonScaffold> {
   Timer? _recordingTimer;
   Duration _recordingElapsed = Duration.zero;
   DateTime? _recordingStartedAt;
+  bool _isHandlingBack = false;
 
   @override
   void initState() {
@@ -92,6 +97,31 @@ class _CommonScaffoldState extends State<CommonScaffold> {
     _recordingTimer = null;
     _recordingElapsed = Duration.zero;
     _recordingStartedAt = null;
+  }
+
+  Future<void> _handleBackPressed() async {
+    if (_isHandlingBack) return;
+    _isHandlingBack = true;
+
+    try {
+      if (!widget.isPlayingBack) {
+        _setPortraitOrientation();
+      }
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+      if (widget.onBackPressed != null) {
+        await widget.onBackPressed!();
+        return;
+      }
+
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    } finally {
+      if (mounted) {
+        _isHandlingBack = false;
+      }
+    }
   }
 
   String _formatRecordingDuration(Duration duration) {
@@ -196,6 +226,19 @@ class _CommonScaffoldState extends State<CommonScaffold> {
       }
     }
 
+    if (widget.onSaveDataPressed != null) {
+      responsiveActions.add(
+        IconButton(
+          onPressed: widget.onSaveDataPressed,
+          tooltip: appLocalizations.saveData,
+          icon: Icon(
+            Icons.save,
+            color: appBarContentColor,
+          ),
+        ),
+      );
+    }
+
     if (!isSmall && widget.onGuidePressed != null) {
       responsiveActions.add(
         IconButton(
@@ -235,15 +278,7 @@ class _CommonScaffoldState extends State<CommonScaffold> {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) return;
-
-        if (!widget.isPlayingBack) {
-          _setPortraitOrientation();
-        }
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-
-        if (context.mounted) {
-          Navigator.of(context).pop(result);
-        }
+        unawaited(_handleBackPressed());
       },
       child: MediaQuery.removePadding(
         context: context,
@@ -269,12 +304,7 @@ class _CommonScaffoldState extends State<CommonScaffold> {
                   constraints:
                       const BoxConstraints(minWidth: 32, minHeight: 32),
                   onPressed: () {
-                    if (!widget.isPlayingBack) {
-                      _setPortraitOrientation();
-                    }
-                    SystemChrome.setEnabledSystemUIMode(
-                        SystemUiMode.edgeToEdge);
-                    Navigator.maybePop(context);
+                    unawaited(_handleBackPressed());
                   },
                   icon: Icon(
                     Icons.arrow_back,
