@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:pslab/communication/science_lab.dart';
+import 'package:pslab/hal/labrador_board.dart';
+import 'package:pslab/hal/power_source_interface.dart';
 import 'package:pslab/others/logger_service.dart';
+import 'package:pslab/providers/board_state_provider.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/providers/power_source_config_provider.dart';
 
@@ -13,6 +16,7 @@ enum Pin {
   pv2,
   pv3,
   pcs,
+  psu,
 }
 
 class PowerSourceStateProvider extends ChangeNotifier {
@@ -21,15 +25,26 @@ class PowerSourceStateProvider extends ChangeNotifier {
   late double voltagePV2;
   late double voltagePV3;
   late double currentPCS;
+  late double voltagePSU;
+  bool isPsuEnabled = false;
 
   late List<double> rangePV1;
   late List<double> rangePV2;
   late List<double> rangePV3;
   late List<double> rangePCS;
+  late List<double> rangePSU;
 
   late double step;
 
   late ScienceLab _scienceLab;
+  late BoardStateProvider _boardState;
+
+  PowerSourceInterface? get activePowerSource =>
+      _boardState.activeBoard?.powerSource;
+
+  bool get isLabrador =>
+      _boardState.activeBoard is LabradorHardwareBoard ||
+      (activePowerSource != null && activePowerSource!.isPsuSupported);
 
   bool _isPlayingBack = false;
   bool get isPlayingBack => _isPlayingBack;
@@ -53,15 +68,19 @@ class PowerSourceStateProvider extends ChangeNotifier {
     voltagePV2 = -3.30;
     voltagePV3 = 0.00;
     currentPCS = 0.00;
+    voltagePSU = 4.50;
+    isPsuEnabled = false;
 
     rangePV1 = [-5.00, 5.00];
     rangePV2 = [-3.30, 3.30];
     rangePV3 = [0.00, 3.30];
     rangePCS = [0.00, 3.30];
+    rangePSU = [4.50, 12.00];
 
     step = 0.01;
 
     _scienceLab = getIt.get<ScienceLab>();
+    _boardState = getIt.get<BoardStateProvider>();
     _isRecording = false;
   }
 
@@ -123,6 +142,10 @@ class PowerSourceStateProvider extends ChangeNotifier {
         range = rangePCS;
         sections = 330;
         break;
+      case Pin.psu:
+        range = rangePSU;
+        sections = 750;
+        break;
     }
     final clampedValue = value.clamp(range[0], range[1]);
     return ((clampedValue - range[0]) / (range[1] - range[0])) * sections;
@@ -148,16 +171,47 @@ class PowerSourceStateProvider extends ChangeNotifier {
         range = rangePCS;
         sections = 330;
         break;
+      case Pin.psu:
+        range = rangePSU;
+        sections = 750;
+        break;
     }
     final clampedIndex = index.clamp(0, sections);
     return (clampedIndex / sections) * (range[1] - range[0]) + range[0];
+  }
+
+  Future<void> setPSU(double value) async {
+    final clampedValue = value.clamp(rangePSU[0], rangePSU[1]);
+    voltagePSU = clampedValue;
+    isPsuEnabled = true;
+    await activePowerSource?.setPsuVoltage(voltagePSU);
+    notifyListeners();
+  }
+
+  Future<void> togglePSU(bool enabled) async {
+    isPsuEnabled = enabled;
+    if (isPsuEnabled) {
+      await activePowerSource?.setPsuVoltage(voltagePSU);
+    } else {
+      await activePowerSource?.disablePsu();
+    }
+    notifyListeners();
+  }
+
+  void setStep(double newStep) {
+    step = newStep;
+    notifyListeners();
   }
 
   Future<void> setPV1(double value) async {
     final clampedValue = value.clamp(rangePV1[0], rangePV1[1]);
     voltagePV1 = clampedValue;
     voltagePV3 = (3.3 / 2) * (1 + (voltagePV1 / 5.0));
-    await _scienceLab.setPV1(voltagePV1);
+    if (activePowerSource != null) {
+      await activePowerSource!.setPV1(voltagePV1);
+    } else {
+      await _scienceLab.setPV1(voltagePV1);
+    }
     notifyListeners();
   }
 
@@ -165,7 +219,11 @@ class PowerSourceStateProvider extends ChangeNotifier {
     final clampedValue = value.clamp(rangePV2[0], rangePV2[1]);
     voltagePV2 = clampedValue;
     currentPCS = (3.3 - voltagePV2) / 2;
-    await _scienceLab.setPV2(voltagePV2);
+    if (activePowerSource != null) {
+      await activePowerSource!.setPV2(voltagePV2);
+    } else {
+      await _scienceLab.setPV2(voltagePV2);
+    }
     notifyListeners();
   }
 
@@ -173,7 +231,11 @@ class PowerSourceStateProvider extends ChangeNotifier {
     final clampedValue = value.clamp(rangePV3[0], rangePV3[1]);
     voltagePV3 = clampedValue;
     voltagePV1 = 5 * (2 * voltagePV3 / 3.3 - 1);
-    await _scienceLab.setPV3(voltagePV3);
+    if (activePowerSource != null) {
+      await activePowerSource!.setPV3(voltagePV3);
+    } else {
+      await _scienceLab.setPV3(voltagePV3);
+    }
     notifyListeners();
   }
 
@@ -181,7 +243,11 @@ class PowerSourceStateProvider extends ChangeNotifier {
     final clampedValue = value.clamp(rangePCS[0], rangePCS[1]);
     currentPCS = clampedValue;
     voltagePV2 = 3.3 - 2 * currentPCS;
-    await _scienceLab.setPCS(currentPCS);
+    if (activePowerSource != null) {
+      await activePowerSource!.setPCS(currentPCS);
+    } else {
+      await _scienceLab.setPCS(currentPCS);
+    }
     notifyListeners();
   }
 
@@ -199,6 +265,9 @@ class PowerSourceStateProvider extends ChangeNotifier {
       case Pin.pcs:
         await setPCS(value);
         break;
+      case Pin.psu:
+        await setPSU(value);
+        break;
     }
   }
 
@@ -212,6 +281,8 @@ class PowerSourceStateProvider extends ChangeNotifier {
         return voltagePV3;
       case Pin.pcs:
         return currentPCS;
+      case Pin.psu:
+        return voltagePSU;
     }
   }
 
@@ -223,14 +294,19 @@ class PowerSourceStateProvider extends ChangeNotifier {
 
     final currentRow = _playbackData![_playbackIndex];
     if (currentRow.length > 2) {
-      voltagePV1 = double.tryParse(currentRow[2].toString()) ?? 0.00;
-      voltagePV2 = double.tryParse(currentRow[3].toString()) ?? 0.00;
-      voltagePV3 = double.tryParse(currentRow[4].toString()) ?? 0.00;
-      currentPCS = double.tryParse(currentRow[5].toString()) ?? 0.00;
-      setValue(voltagePV1, Pin.pv1);
-      setValue(voltagePV2, Pin.pv2);
-      setValue(voltagePV3, Pin.pv3);
-      setValue(currentPCS, Pin.pcs);
+      if (isLabrador) {
+        voltagePSU = double.tryParse(currentRow[2].toString()) ?? 4.50;
+        setValue(voltagePSU, Pin.psu);
+      } else {
+        voltagePV1 = double.tryParse(currentRow[2].toString()) ?? 0.00;
+        voltagePV2 = double.tryParse(currentRow[3].toString()) ?? 0.00;
+        voltagePV3 = double.tryParse(currentRow[4].toString()) ?? 0.00;
+        currentPCS = double.tryParse(currentRow[5].toString()) ?? 0.00;
+        setValue(voltagePV1, Pin.pv1);
+        setValue(voltagePV2, Pin.pv2);
+        setValue(voltagePV3, Pin.pv3);
+        setValue(currentPCS, Pin.pcs);
+      }
       _playbackIndex++;
       notifyListeners();
     } else {
@@ -310,7 +386,9 @@ class PowerSourceStateProvider extends ChangeNotifier {
   }
 
   Future<bool> startRecording() async {
-    if (!_scienceLab.isConnected()) {
+    final bool connected = _scienceLab.isConnected() ||
+        _boardState.activeBoard?.isConnected == true;
+    if (!connected) {
       return false;
     }
     if (_configProvider.config.includeLocationData) {
@@ -318,36 +396,52 @@ class PowerSourceStateProvider extends ChangeNotifier {
     }
     _isRecording = true;
     _recordedData = [
-      [
-        'Timestamp',
-        'DateTime',
-        'PV1',
-        'PV2',
-        'PV3',
-        'PCS',
-        'Latitude',
-        'Longitude'
-      ]
+      isLabrador
+          ? ['Timestamp', 'DateTime', 'PSU_V', 'Latitude', 'Longitude']
+          : [
+              'Timestamp',
+              'DateTime',
+              'PV1',
+              'PV2',
+              'PV3',
+              'PCS',
+              'Latitude',
+              'Longitude'
+            ]
     ];
     _loggingTimer = Timer.periodic(
         Duration(milliseconds: _configProvider.config.loggingInterval),
         (timer) {
       final now = DateTime.now();
       final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
-      _recordedData.add([
-        now.millisecondsSinceEpoch.toString(),
-        dateFormat.format(now),
-        voltagePV1.toStringAsFixed(2),
-        voltagePV2.toStringAsFixed(2),
-        voltagePV3.toStringAsFixed(2),
-        currentPCS.toStringAsFixed(2),
-        _configProvider.config.includeLocationData
-            ? currentPosition?.latitude.toString() ?? 0
-            : 0,
-        _configProvider.config.includeLocationData
-            ? currentPosition?.longitude.toString() ?? 0
-            : 0
-      ]);
+      if (isLabrador) {
+        _recordedData.add([
+          now.millisecondsSinceEpoch.toString(),
+          dateFormat.format(now),
+          voltagePSU.toStringAsFixed(2),
+          _configProvider.config.includeLocationData
+              ? currentPosition?.latitude.toString() ?? 0
+              : 0,
+          _configProvider.config.includeLocationData
+              ? currentPosition?.longitude.toString() ?? 0
+              : 0
+        ]);
+      } else {
+        _recordedData.add([
+          now.millisecondsSinceEpoch.toString(),
+          dateFormat.format(now),
+          voltagePV1.toStringAsFixed(2),
+          voltagePV2.toStringAsFixed(2),
+          voltagePV3.toStringAsFixed(2),
+          currentPCS.toStringAsFixed(2),
+          _configProvider.config.includeLocationData
+              ? currentPosition?.latitude.toString() ?? 0
+              : 0,
+          _configProvider.config.includeLocationData
+              ? currentPosition?.longitude.toString() ?? 0
+              : 0
+        ]);
+      }
     });
     notifyListeners();
     return true;

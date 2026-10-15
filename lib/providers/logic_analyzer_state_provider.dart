@@ -12,6 +12,10 @@ import 'package:pslab/others/logger_service.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/providers/logic_analyzer_config_provider.dart';
 import 'package:pslab/theme/colors.dart';
+import 'package:pslab/providers/board_state_provider.dart';
+import 'package:pslab/hal/hardware_board.dart';
+import 'package:pslab/hal/labrador_board.dart';
+import 'package:pslab/hal/logic_analyzer_interface.dart';
 
 class LogicAnalyzerStateProvider extends ChangeNotifier {
   LogicAnalyzerConfigProvider? _configProvider;
@@ -67,7 +71,6 @@ class LogicAnalyzerStateProvider extends ChangeNotifier {
   bool isPlaybackPaused = false;
   Timer? _playbackTimer;
   static const Duration _playbackTick = Duration(milliseconds: 50);
-  // Total time the playhead takes to sweep across the whole recording.
   static const Duration _playbackSweep = Duration(seconds: 5);
 
   void startPlaybackAnimation() {
@@ -158,6 +161,30 @@ class LogicAnalyzerStateProvider extends ChangeNotifier {
     _scienceLab = getIt<ScienceLab>();
     isProcessing = false;
     isData = false;
+    updateAvailableChannels();
+  }
+
+  void updateAvailableChannels() {
+    final board = getIt.get<BoardStateProvider>().activeBoard;
+    if (board is LabradorHardwareBoard) {
+      channelNames = [
+        appLocalizations.channelLA1,
+        appLocalizations.channelLA2,
+      ];
+      channels = channelNames;
+      if (channelMode > 2) {
+        channelMode = 2;
+      }
+    } else {
+      channelNames = [
+        appLocalizations.channelLA1,
+        appLocalizations.channelLA2,
+        appLocalizations.channelLA3,
+        appLocalizations.channelLA4,
+      ];
+      channels = channelNames;
+    }
+    notifyListeners();
   }
 
   void setConfigProvider(
@@ -199,7 +226,15 @@ class LogicAnalyzerStateProvider extends ChangeNotifier {
   }
 
   Future<bool> analyze() async {
-    if (!_scienceLab.isConnected()) {
+    final boardProvider = getIt.get<BoardStateProvider>();
+    final HardwareBoard? board = boardProvider.activeBoard;
+    final LogicAnalyzerInterface? logicAnalyzer = board?.logicAnalyzer;
+    final bool isLabrador = board is LabradorHardwareBoard;
+
+    final bool isBoardConnected =
+        (board?.isConnected ?? false) || _scienceLab.isConnected();
+
+    if (!isBoardConnected) {
       return false;
     }
     isProcessing = true;
@@ -212,7 +247,10 @@ class LogicAnalyzerStateProvider extends ChangeNotifier {
       analysisEdgesNames.clear();
       digitalChannels.clear();
 
-      switch (channelMode) {
+      final int effectiveMode =
+          isLabrador ? channelMode.clamp(1, 2) : channelMode;
+
+      switch (effectiveMode) {
         case 1:
           analysisChannelNames.add(channelSelectSpinner1);
           analysisEdgesNames.add(edgeSelectSpinner1);
@@ -251,29 +289,60 @@ class LogicAnalyzerStateProvider extends ChangeNotifier {
           break;
       }
 
-      switch (channelMode) {
-        case 1:
-          await captureOne(analysisChannelNames[0], analysisEdgesNames[0]);
+      if (logicAnalyzer != null && isLabrador) {
+        final Map<String, String> edgeOptions = {};
+        for (int i = 0; i < analysisChannelNames.length; i++) {
+          edgeOptions[analysisChannelNames[i]] = analysisEdgesNames[i];
+        }
+
+        final dataMap = await logicAnalyzer.capture(
+          channels: analysisChannelNames,
+          edgeOptions: edgeOptions,
+        );
+
+        for (int i = 0; i < analysisChannelNames.length; i++) {
+          final chName = analysisChannelNames[i];
+          final chData = dataMap[chName] ??
+              LogicChannelData(
+                timestampsUs: [0.0, 10000.0],
+                logicLevels: [0.0, 0.0],
+              );
+          singleChannelEveryEdge(chData.timestampsUs, chData.logicLevels);
+          currentChannel++;
+        }
+
+        if (effectiveMode == 1) {
           maxY = singleChannelAxisMax;
           minY = singleChannelAxisMin;
-          break;
-        case 2:
-          await captureTwo(analysisChannelNames, analysisEdgesNames);
+        } else {
           maxY = twoChannelAxisMax;
           minY = twoChannelAxisMin;
-          break;
-        case 3:
-          await captureThree(analysisChannelNames, analysisEdgesNames);
-          maxY = threeChannelAxisMax;
-          minY = threeChannelAxisMin;
-          break;
-        case 4:
-          await captureFour(analysisChannelNames, analysisEdgesNames);
-          maxY = fourChannelAxisMax;
-          minY = fourChannelAxisMin;
-          break;
-        default:
-          break;
+        }
+      } else {
+        switch (channelMode) {
+          case 1:
+            await captureOne(analysisChannelNames[0], analysisEdgesNames[0]);
+            maxY = singleChannelAxisMax;
+            minY = singleChannelAxisMin;
+            break;
+          case 2:
+            await captureTwo(analysisChannelNames, analysisEdgesNames);
+            maxY = twoChannelAxisMax;
+            minY = twoChannelAxisMin;
+            break;
+          case 3:
+            await captureThree(analysisChannelNames, analysisEdgesNames);
+            maxY = threeChannelAxisMax;
+            minY = threeChannelAxisMin;
+            break;
+          case 4:
+            await captureFour(analysisChannelNames, analysisEdgesNames);
+            maxY = fourChannelAxisMax;
+            minY = fourChannelAxisMin;
+            break;
+          default:
+            break;
+        }
       }
       isData = true;
       return true;
@@ -877,7 +946,6 @@ class LogicAnalyzerStateProvider extends ChangeNotifier {
     setConfigData();
     isData = true;
     isPlayingBack = true;
-    // startPlaybackAnimation() already calls notifyListeners().
     startPlaybackAnimation();
   }
 

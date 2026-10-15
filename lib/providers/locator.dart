@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:pslab/l10n/app_localizations.dart';
 import 'package:pslab/communication/handler/base.dart';
 
-import 'package:pslab/communication/handler/router/platform_handler.dart';
+import 'package:pslab/communication/pslab_communication/platform_handler.dart';
 
 import 'package:pslab/communication/science_lab.dart';
 import 'package:pslab/others/science_lab_common.dart';

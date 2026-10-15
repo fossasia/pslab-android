@@ -5,7 +5,9 @@
 
 import 'api/audio.dart';
 import 'api/bootloader.dart';
-import 'api/simple.dart';
+import 'api/common.dart';
+import 'api/labrador.dart';
+import 'api/labrador_bootloader.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'frb_generated.dart';
@@ -70,7 +72,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.13.0';
 
   @override
-  int get rustContentHash => 641606677;
+  int get rustContentHash => -433368525;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -82,60 +84,115 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  bool crateApiSimpleCheckDesktopDevicePresent();
+  bool crateApiCommonCheckDesktopDevicePresent();
 
-  void crateApiSimpleCloseUsb();
+  void crateApiCommonCloseUsb();
 
   Stream<FlashState> crateApiBootloaderFlashFirmware({required String hexStr});
 
-  List<String> crateApiSimpleGetAvailablePorts();
+  Stream<FlashState> crateApiLabradorBootloaderFlashLabradorFirmware(
+      {required String hexStr});
 
-  Future<void> crateApiSimpleInitAndroid({required int fd});
+  List<String> crateApiCommonGetAvailablePorts();
 
-  Future<void> crateApiSimpleInitDesktop({required int vid, required int pid});
+  Future<void> crateApiCommonInitAndroid({required int fd});
 
-  Future<void> crateApiSimpleInitDesktopByPort({required String portName});
+  Future<void> crateApiCommonInitDesktop({required int vid, required int pid});
 
-  Uint8List crateApiSimplePopWebTxData();
+  Future<void> crateApiCommonInitDesktopByPort({required String portName});
 
-  void crateApiSimplePushWebData({required List<int> data});
+  void crateApiCommonInitLabradorDesktop();
 
-  Future<Uint8List> crateApiSimpleQueryScpiBinaryRawRust(
+  int crateApiLabradorLabradorCalculateDigitalOutState(
+      {required int channel, required bool state});
+
+  int crateApiLabradorLabradorCalculateGainMask({required double gain});
+
+  int crateApiLabradorLabradorCalculatePsuDuty({required double voltage});
+
+  LabradorWavePayload crateApiLabradorLabradorCalculateWavePayload(
+      {required int channel,
+      required double frequencyHz,
+      required String waveType,
+      required double amplitudeV,
+      required double offsetV});
+
+  Float64List crateApiLabradorLabradorFetchInterpolated(
+      {required int channel,
+      required double sampleWindowSecs,
+      required int numSamples,
+      required double delayOffsetSecs});
+
+  Uint8List crateApiLabradorLabradorFetchRawBytes(
+      {required int channel, required int numBytes});
+
+  void crateApiLabradorLabradorGenerateAnalogWave(
+      {required int channel,
+      required double frequencyHz,
+      required String waveType,
+      required double amplitudeV,
+      required double offsetV});
+
+  void crateApiLabradorLabradorPushWebBulkData({required List<int> data});
+
+  void crateApiLabradorLabradorSetDigitalOut(
+      {required int channel, required bool state});
+
+  void crateApiLabradorLabradorSetPsuVoltage({required double voltage});
+
+  void crateApiLabradorLabradorSetTriggerEnabled({required bool enabled});
+
+  void crateApiLabradorLabradorStartLogicAnalyzer({required int channels});
+
+  void crateApiLabradorLabradorStartMultimeter();
+
+  void crateApiLabradorLabradorStartOscilloscope(
+      {required int channels, required double gain});
+
+  void crateApiLabradorLabradorStopStreaming();
+
+  Future<LabradorWavePayload> crateApiLabradorLabradorWavePayloadDefault();
+
+  Uint8List crateApiCommonPopWebTxData();
+
+  void crateApiCommonPushWebData({required List<int> data});
+
+  Future<Uint8List> crateApiCommonQueryScpiBinaryRawRust(
       {required List<int> command, required int timeoutMs});
 
-  Future<Uint8List> crateApiSimpleQueryScpiBinaryRust(
+  Future<Uint8List> crateApiCommonQueryScpiBinaryRust(
       {required String command, required int timeoutMs});
 
-  Future<Uint8List> crateApiSimpleReadData(
+  Future<Uint8List> crateApiCommonReadData(
       {required int bytesToRead, required int timeoutMs});
 
-  Uint8List crateApiSimpleReadWebData({required int bytesToRead});
+  Uint8List crateApiCommonReadWebData({required int bytesToRead});
 
-  void crateApiSimpleSendScpiRawRust({required List<int> command});
+  void crateApiCommonSendScpiRawRust({required List<int> command});
 
-  void crateApiSimpleSendScpiRust({required String command});
+  void crateApiCommonSendScpiRust({required String command});
 
-  void crateApiSimpleSetBaudRate({required int baudRate});
+  void crateApiCommonSetBaudRate({required int baudRate});
 
-  void crateApiSimpleSetDtr({required bool state});
+  void crateApiCommonSetDtr({required bool state});
 
-  void crateApiSimpleSetRts({required bool state});
+  void crateApiCommonSetRts({required bool state});
 
   Stream<Float64List> crateApiAudioStartMicrophone();
 
   Future<void> crateApiAudioStopMicrophone();
 
-  Future<void> crateApiSimpleWifiConnect(
+  Future<void> crateApiCommonWifiConnect(
       {required String host, required int port});
 
-  void crateApiSimpleWifiDisconnect();
+  void crateApiCommonWifiDisconnect();
 
-  Future<Uint8List> crateApiSimpleWifiRead(
+  Future<Uint8List> crateApiCommonWifiRead(
       {required int bytesToRead, required int timeoutMs});
 
-  void crateApiSimpleWifiWrite({required List<int> data});
+  void crateApiCommonWifiWrite({required List<int> data});
 
-  void crateApiSimpleWriteData({required List<int> data});
+  void crateApiCommonWriteData({required List<int> data});
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -147,7 +204,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  bool crateApiSimpleCheckDesktopDevicePresent() {
+  bool crateApiCommonCheckDesktopDevicePresent() {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -157,20 +214,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_bool,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleCheckDesktopDevicePresentConstMeta,
+      constMeta: kCrateApiCommonCheckDesktopDevicePresentConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleCheckDesktopDevicePresentConstMeta =>
+  TaskConstMeta get kCrateApiCommonCheckDesktopDevicePresentConstMeta =>
       const TaskConstMeta(
         debugName: "check_desktop_device_present",
         argNames: [],
       );
 
   @override
-  void crateApiSimpleCloseUsb() {
+  void crateApiCommonCloseUsb() {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -180,13 +237,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleCloseUsbConstMeta,
+      constMeta: kCrateApiCommonCloseUsbConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleCloseUsbConstMeta => const TaskConstMeta(
+  TaskConstMeta get kCrateApiCommonCloseUsbConstMeta => const TaskConstMeta(
         debugName: "close_usb",
         argNames: [],
       );
@@ -220,59 +277,63 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  List<String> crateApiSimpleGetAvailablePorts() {
+  Stream<FlashState> crateApiLabradorBootloaderFlashLabradorFirmware(
+      {required String hexStr}) {
+    final progressSink = RustStreamSink<FlashState>();
+    unawaited(handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(hexStr, serializer);
+        sse_encode_StreamSink_flash_state_Sse(progressSink, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 4, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiLabradorBootloaderFlashLabradorFirmwareConstMeta,
+      argValues: [hexStr, progressSink],
+      apiImpl: this,
+    )));
+    return progressSink.stream;
+  }
+
+  TaskConstMeta get kCrateApiLabradorBootloaderFlashLabradorFirmwareConstMeta =>
+      const TaskConstMeta(
+        debugName: "flash_labrador_firmware",
+        argNames: ["hexStr", "progressSink"],
+      );
+
+  @override
+  List<String> crateApiCommonGetAvailablePorts() {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_String,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleGetAvailablePortsConstMeta,
+      constMeta: kCrateApiCommonGetAvailablePortsConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleGetAvailablePortsConstMeta =>
+  TaskConstMeta get kCrateApiCommonGetAvailablePortsConstMeta =>
       const TaskConstMeta(
         debugName: "get_available_ports",
         argNames: [],
       );
 
   @override
-  Future<void> crateApiSimpleInitAndroid({required int fd}) {
+  Future<void> crateApiCommonInitAndroid({required int fd}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_i_32(fd, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 5, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: sse_decode_AnyhowException,
-      ),
-      constMeta: kCrateApiSimpleInitAndroidConstMeta,
-      argValues: [fd],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiSimpleInitAndroidConstMeta => const TaskConstMeta(
-        debugName: "init_android",
-        argNames: ["fd"],
-      );
-
-  @override
-  Future<void> crateApiSimpleInitDesktop({required int vid, required int pid}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_u_16(vid, serializer);
-        sse_encode_u_16(pid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 6, port: port_);
       },
@@ -280,23 +341,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
-      constMeta: kCrateApiSimpleInitDesktopConstMeta,
-      argValues: [vid, pid],
+      constMeta: kCrateApiCommonInitAndroidConstMeta,
+      argValues: [fd],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleInitDesktopConstMeta => const TaskConstMeta(
-        debugName: "init_desktop",
-        argNames: ["vid", "pid"],
+  TaskConstMeta get kCrateApiCommonInitAndroidConstMeta => const TaskConstMeta(
+        debugName: "init_android",
+        argNames: ["fd"],
       );
 
   @override
-  Future<void> crateApiSimpleInitDesktopByPort({required String portName}) {
+  Future<void> crateApiCommonInitDesktop({required int vid, required int pid}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(portName, serializer);
+        sse_encode_u_16(vid, serializer);
+        sse_encode_u_16(pid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 7, port: port_);
       },
@@ -304,264 +366,311 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
-      constMeta: kCrateApiSimpleInitDesktopByPortConstMeta,
+      constMeta: kCrateApiCommonInitDesktopConstMeta,
+      argValues: [vid, pid],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonInitDesktopConstMeta => const TaskConstMeta(
+        debugName: "init_desktop",
+        argNames: ["vid", "pid"],
+      );
+
+  @override
+  Future<void> crateApiCommonInitDesktopByPort({required String portName}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(portName, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 8, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiCommonInitDesktopByPortConstMeta,
       argValues: [portName],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleInitDesktopByPortConstMeta =>
+  TaskConstMeta get kCrateApiCommonInitDesktopByPortConstMeta =>
       const TaskConstMeta(
         debugName: "init_desktop_by_port",
         argNames: ["portName"],
       );
 
   @override
-  Uint8List crateApiSimplePopWebTxData() {
+  void crateApiCommonInitLabradorDesktop() {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9)!;
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: null,
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
       ),
-      constMeta: kCrateApiSimplePopWebTxDataConstMeta,
+      constMeta: kCrateApiCommonInitLabradorDesktopConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimplePopWebTxDataConstMeta => const TaskConstMeta(
-        debugName: "pop_web_tx_data",
+  TaskConstMeta get kCrateApiCommonInitLabradorDesktopConstMeta =>
+      const TaskConstMeta(
+        debugName: "init_labrador_desktop",
         argNames: [],
       );
 
   @override
-  void crateApiSimplePushWebData({required List<int> data}) {
+  int crateApiLabradorLabradorCalculateDigitalOutState(
+      {required int channel, required bool state}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_list_prim_u_8_loose(data, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9)!;
+        sse_encode_u_8(channel, serializer);
+        sse_encode_bool(state, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10)!;
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
+        decodeSuccessData: sse_decode_u_16,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimplePushWebDataConstMeta,
-      argValues: [data],
+      constMeta: kCrateApiLabradorLabradorCalculateDigitalOutStateConstMeta,
+      argValues: [channel, state],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimplePushWebDataConstMeta => const TaskConstMeta(
-        debugName: "push_web_data",
-        argNames: ["data"],
-      );
+  TaskConstMeta
+      get kCrateApiLabradorLabradorCalculateDigitalOutStateConstMeta =>
+          const TaskConstMeta(
+            debugName: "labrador_calculate_digital_out_state",
+            argNames: ["channel", "state"],
+          );
 
   @override
-  Future<Uint8List> crateApiSimpleQueryScpiBinaryRawRust(
-      {required List<int> command, required int timeoutMs}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_list_prim_u_8_loose(command, serializer);
-        sse_encode_u_32(timeoutMs, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 10, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiSimpleQueryScpiBinaryRawRustConstMeta,
-      argValues: [command, timeoutMs],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiSimpleQueryScpiBinaryRawRustConstMeta =>
-      const TaskConstMeta(
-        debugName: "query_scpi_binary_raw_rust",
-        argNames: ["command", "timeoutMs"],
-      );
-
-  @override
-  Future<Uint8List> crateApiSimpleQueryScpiBinaryRust(
-      {required String command, required int timeoutMs}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(command, serializer);
-        sse_encode_u_32(timeoutMs, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 11, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiSimpleQueryScpiBinaryRustConstMeta,
-      argValues: [command, timeoutMs],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiSimpleQueryScpiBinaryRustConstMeta =>
-      const TaskConstMeta(
-        debugName: "query_scpi_binary_rust",
-        argNames: ["command", "timeoutMs"],
-      );
-
-  @override
-  Future<Uint8List> crateApiSimpleReadData(
-      {required int bytesToRead, required int timeoutMs}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_u_32(bytesToRead, serializer);
-        sse_encode_u_32(timeoutMs, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 12, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiSimpleReadDataConstMeta,
-      argValues: [bytesToRead, timeoutMs],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiSimpleReadDataConstMeta => const TaskConstMeta(
-        debugName: "read_data",
-        argNames: ["bytesToRead", "timeoutMs"],
-      );
-
-  @override
-  Uint8List crateApiSimpleReadWebData({required int bytesToRead}) {
+  int crateApiLabradorLabradorCalculateGainMask({required double gain}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_u_32(bytesToRead, serializer);
+        sse_encode_f_64(gain, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_u_16,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiLabradorLabradorCalculateGainMaskConstMeta,
+      argValues: [gain],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorCalculateGainMaskConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_calculate_gain_mask",
+        argNames: ["gain"],
+      );
+
+  @override
+  int crateApiLabradorLabradorCalculatePsuDuty({required double voltage}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_f_64(voltage, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 12)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_u_16,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiLabradorLabradorCalculatePsuDutyConstMeta,
+      argValues: [voltage],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorCalculatePsuDutyConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_calculate_psu_duty",
+        argNames: ["voltage"],
+      );
+
+  @override
+  LabradorWavePayload crateApiLabradorLabradorCalculateWavePayload(
+      {required int channel,
+      required double frequencyHz,
+      required String waveType,
+      required double amplitudeV,
+      required double offsetV}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_u_8(channel, serializer);
+        sse_encode_f_64(frequencyHz, serializer);
+        sse_encode_String(waveType, serializer);
+        sse_encode_f_64(amplitudeV, serializer);
+        sse_encode_f_64(offsetV, serializer);
         return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 13)!;
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: null,
+        decodeSuccessData: sse_decode_labrador_wave_payload,
+        decodeErrorData: sse_decode_AnyhowException,
       ),
-      constMeta: kCrateApiSimpleReadWebDataConstMeta,
-      argValues: [bytesToRead],
+      constMeta: kCrateApiLabradorLabradorCalculateWavePayloadConstMeta,
+      argValues: [channel, frequencyHz, waveType, amplitudeV, offsetV],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleReadWebDataConstMeta => const TaskConstMeta(
-        debugName: "read_web_data",
-        argNames: ["bytesToRead"],
+  TaskConstMeta get kCrateApiLabradorLabradorCalculateWavePayloadConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_calculate_wave_payload",
+        argNames: [
+          "channel",
+          "frequencyHz",
+          "waveType",
+          "amplitudeV",
+          "offsetV"
+        ],
       );
 
   @override
-  void crateApiSimpleSendScpiRawRust({required List<int> command}) {
+  Float64List crateApiLabradorLabradorFetchInterpolated(
+      {required int channel,
+      required double sampleWindowSecs,
+      required int numSamples,
+      required double delayOffsetSecs}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_list_prim_u_8_loose(command, serializer);
+        sse_encode_u_8(channel, serializer);
+        sse_encode_f_64(sampleWindowSecs, serializer);
+        sse_encode_u_32(numSamples, serializer);
+        sse_encode_f_64(delayOffsetSecs, serializer);
         return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 14)!;
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
+        decodeSuccessData: sse_decode_list_prim_f_64_strict,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleSendScpiRawRustConstMeta,
-      argValues: [command],
+      constMeta: kCrateApiLabradorLabradorFetchInterpolatedConstMeta,
+      argValues: [channel, sampleWindowSecs, numSamples, delayOffsetSecs],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleSendScpiRawRustConstMeta =>
+  TaskConstMeta get kCrateApiLabradorLabradorFetchInterpolatedConstMeta =>
       const TaskConstMeta(
-        debugName: "send_scpi_raw_rust",
-        argNames: ["command"],
+        debugName: "labrador_fetch_interpolated",
+        argNames: [
+          "channel",
+          "sampleWindowSecs",
+          "numSamples",
+          "delayOffsetSecs"
+        ],
       );
 
   @override
-  void crateApiSimpleSendScpiRust({required String command}) {
+  Uint8List crateApiLabradorLabradorFetchRawBytes(
+      {required int channel, required int numBytes}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(command, serializer);
+        sse_encode_u_8(channel, serializer);
+        sse_encode_u_32(numBytes, serializer);
         return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 15)!;
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
+        decodeSuccessData: sse_decode_list_prim_u_8_strict,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleSendScpiRustConstMeta,
-      argValues: [command],
+      constMeta: kCrateApiLabradorLabradorFetchRawBytesConstMeta,
+      argValues: [channel, numBytes],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleSendScpiRustConstMeta => const TaskConstMeta(
-        debugName: "send_scpi_rust",
-        argNames: ["command"],
+  TaskConstMeta get kCrateApiLabradorLabradorFetchRawBytesConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_fetch_raw_bytes",
+        argNames: ["channel", "numBytes"],
       );
 
   @override
-  void crateApiSimpleSetBaudRate({required int baudRate}) {
+  void crateApiLabradorLabradorGenerateAnalogWave(
+      {required int channel,
+      required double frequencyHz,
+      required String waveType,
+      required double amplitudeV,
+      required double offsetV}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_u_32(baudRate, serializer);
+        sse_encode_u_8(channel, serializer);
+        sse_encode_f_64(frequencyHz, serializer);
+        sse_encode_String(waveType, serializer);
+        sse_encode_f_64(amplitudeV, serializer);
+        sse_encode_f_64(offsetV, serializer);
         return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 16)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
-      constMeta: kCrateApiSimpleSetBaudRateConstMeta,
-      argValues: [baudRate],
+      constMeta: kCrateApiLabradorLabradorGenerateAnalogWaveConstMeta,
+      argValues: [channel, frequencyHz, waveType, amplitudeV, offsetV],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleSetBaudRateConstMeta => const TaskConstMeta(
-        debugName: "set_baud_rate",
-        argNames: ["baudRate"],
+  TaskConstMeta get kCrateApiLabradorLabradorGenerateAnalogWaveConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_generate_analog_wave",
+        argNames: [
+          "channel",
+          "frequencyHz",
+          "waveType",
+          "amplitudeV",
+          "offsetV"
+        ],
       );
 
   @override
-  void crateApiSimpleSetDtr({required bool state}) {
+  void crateApiLabradorLabradorPushWebBulkData({required List<int> data}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_bool(state, serializer);
+        sse_encode_list_prim_u_8_loose(data, serializer);
         return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 17)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
-        decodeErrorData: sse_decode_AnyhowException,
+        decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleSetDtrConstMeta,
-      argValues: [state],
+      constMeta: kCrateApiLabradorLabradorPushWebBulkDataConstMeta,
+      argValues: [data],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleSetDtrConstMeta => const TaskConstMeta(
-        debugName: "set_dtr",
-        argNames: ["state"],
+  TaskConstMeta get kCrateApiLabradorLabradorPushWebBulkDataConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_push_web_bulk_data",
+        argNames: ["data"],
       );
 
   @override
-  void crateApiSimpleSetRts({required bool state}) {
+  void crateApiLabradorLabradorSetDigitalOut(
+      {required int channel, required bool state}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_u_8(channel, serializer);
         sse_encode_bool(state, serializer);
         return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18)!;
       },
@@ -569,13 +678,446 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
-      constMeta: kCrateApiSimpleSetRtsConstMeta,
+      constMeta: kCrateApiLabradorLabradorSetDigitalOutConstMeta,
+      argValues: [channel, state],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorSetDigitalOutConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_set_digital_out",
+        argNames: ["channel", "state"],
+      );
+
+  @override
+  void crateApiLabradorLabradorSetPsuVoltage({required double voltage}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_f_64(voltage, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiLabradorLabradorSetPsuVoltageConstMeta,
+      argValues: [voltage],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorSetPsuVoltageConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_set_psu_voltage",
+        argNames: ["voltage"],
+      );
+
+  @override
+  void crateApiLabradorLabradorSetTriggerEnabled({required bool enabled}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_bool(enabled, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 20)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiLabradorLabradorSetTriggerEnabledConstMeta,
+      argValues: [enabled],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorSetTriggerEnabledConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_set_trigger_enabled",
+        argNames: ["enabled"],
+      );
+
+  @override
+  void crateApiLabradorLabradorStartLogicAnalyzer({required int channels}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_u_8(channels, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 21)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiLabradorLabradorStartLogicAnalyzerConstMeta,
+      argValues: [channels],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorStartLogicAnalyzerConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_start_logic_analyzer",
+        argNames: ["channels"],
+      );
+
+  @override
+  void crateApiLabradorLabradorStartMultimeter() {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 22)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiLabradorLabradorStartMultimeterConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorStartMultimeterConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_start_multimeter",
+        argNames: [],
+      );
+
+  @override
+  void crateApiLabradorLabradorStartOscilloscope(
+      {required int channels, required double gain}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_u_8(channels, serializer);
+        sse_encode_f_64(gain, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 23)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiLabradorLabradorStartOscilloscopeConstMeta,
+      argValues: [channels, gain],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorStartOscilloscopeConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_start_oscilloscope",
+        argNames: ["channels", "gain"],
+      );
+
+  @override
+  void crateApiLabradorLabradorStopStreaming() {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 24)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiLabradorLabradorStopStreamingConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorStopStreamingConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_stop_streaming",
+        argNames: [],
+      );
+
+  @override
+  Future<LabradorWavePayload> crateApiLabradorLabradorWavePayloadDefault() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 25, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_labrador_wave_payload,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiLabradorLabradorWavePayloadDefaultConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLabradorLabradorWavePayloadDefaultConstMeta =>
+      const TaskConstMeta(
+        debugName: "labrador_wave_payload_default",
+        argNames: [],
+      );
+
+  @override
+  Uint8List crateApiCommonPopWebTxData() {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 26)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_prim_u_8_strict,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiCommonPopWebTxDataConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonPopWebTxDataConstMeta => const TaskConstMeta(
+        debugName: "pop_web_tx_data",
+        argNames: [],
+      );
+
+  @override
+  void crateApiCommonPushWebData({required List<int> data}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_list_prim_u_8_loose(data, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 27)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiCommonPushWebDataConstMeta,
+      argValues: [data],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonPushWebDataConstMeta => const TaskConstMeta(
+        debugName: "push_web_data",
+        argNames: ["data"],
+      );
+
+  @override
+  Future<Uint8List> crateApiCommonQueryScpiBinaryRawRust(
+      {required List<int> command, required int timeoutMs}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_list_prim_u_8_loose(command, serializer);
+        sse_encode_u_32(timeoutMs, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 28, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_prim_u_8_strict,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiCommonQueryScpiBinaryRawRustConstMeta,
+      argValues: [command, timeoutMs],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonQueryScpiBinaryRawRustConstMeta =>
+      const TaskConstMeta(
+        debugName: "query_scpi_binary_raw_rust",
+        argNames: ["command", "timeoutMs"],
+      );
+
+  @override
+  Future<Uint8List> crateApiCommonQueryScpiBinaryRust(
+      {required String command, required int timeoutMs}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(command, serializer);
+        sse_encode_u_32(timeoutMs, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 29, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_prim_u_8_strict,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiCommonQueryScpiBinaryRustConstMeta,
+      argValues: [command, timeoutMs],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonQueryScpiBinaryRustConstMeta =>
+      const TaskConstMeta(
+        debugName: "query_scpi_binary_rust",
+        argNames: ["command", "timeoutMs"],
+      );
+
+  @override
+  Future<Uint8List> crateApiCommonReadData(
+      {required int bytesToRead, required int timeoutMs}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_u_32(bytesToRead, serializer);
+        sse_encode_u_32(timeoutMs, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 30, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_prim_u_8_strict,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiCommonReadDataConstMeta,
+      argValues: [bytesToRead, timeoutMs],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonReadDataConstMeta => const TaskConstMeta(
+        debugName: "read_data",
+        argNames: ["bytesToRead", "timeoutMs"],
+      );
+
+  @override
+  Uint8List crateApiCommonReadWebData({required int bytesToRead}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_u_32(bytesToRead, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 31)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_prim_u_8_strict,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiCommonReadWebDataConstMeta,
+      argValues: [bytesToRead],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonReadWebDataConstMeta => const TaskConstMeta(
+        debugName: "read_web_data",
+        argNames: ["bytesToRead"],
+      );
+
+  @override
+  void crateApiCommonSendScpiRawRust({required List<int> command}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_list_prim_u_8_loose(command, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 32)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiCommonSendScpiRawRustConstMeta,
+      argValues: [command],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonSendScpiRawRustConstMeta =>
+      const TaskConstMeta(
+        debugName: "send_scpi_raw_rust",
+        argNames: ["command"],
+      );
+
+  @override
+  void crateApiCommonSendScpiRust({required String command}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(command, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 33)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiCommonSendScpiRustConstMeta,
+      argValues: [command],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonSendScpiRustConstMeta => const TaskConstMeta(
+        debugName: "send_scpi_rust",
+        argNames: ["command"],
+      );
+
+  @override
+  void crateApiCommonSetBaudRate({required int baudRate}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_u_32(baudRate, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 34)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiCommonSetBaudRateConstMeta,
+      argValues: [baudRate],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonSetBaudRateConstMeta => const TaskConstMeta(
+        debugName: "set_baud_rate",
+        argNames: ["baudRate"],
+      );
+
+  @override
+  void crateApiCommonSetDtr({required bool state}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_bool(state, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 35)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiCommonSetDtrConstMeta,
       argValues: [state],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleSetRtsConstMeta => const TaskConstMeta(
+  TaskConstMeta get kCrateApiCommonSetDtrConstMeta => const TaskConstMeta(
+        debugName: "set_dtr",
+        argNames: ["state"],
+      );
+
+  @override
+  void crateApiCommonSetRts({required bool state}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_bool(state, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 36)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiCommonSetRtsConstMeta,
+      argValues: [state],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiCommonSetRtsConstMeta => const TaskConstMeta(
         debugName: "set_rts",
         argNames: ["state"],
       );
@@ -588,7 +1130,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_StreamSink_list_prim_f_64_strict_Sse(sink, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 19, port: port_);
+            funcId: 37, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -613,7 +1155,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 20, port: port_);
+            funcId: 38, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -632,7 +1174,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiSimpleWifiConnect(
+  Future<void> crateApiCommonWifiConnect(
       {required String host, required int port}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -640,48 +1182,48 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(host, serializer);
         sse_encode_u_16(port, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 21, port: port_);
+            funcId: 39, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
-      constMeta: kCrateApiSimpleWifiConnectConstMeta,
+      constMeta: kCrateApiCommonWifiConnectConstMeta,
       argValues: [host, port],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleWifiConnectConstMeta => const TaskConstMeta(
+  TaskConstMeta get kCrateApiCommonWifiConnectConstMeta => const TaskConstMeta(
         debugName: "wifi_connect",
         argNames: ["host", "port"],
       );
 
   @override
-  void crateApiSimpleWifiDisconnect() {
+  void crateApiCommonWifiDisconnect() {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 22)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 40)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleWifiDisconnectConstMeta,
+      constMeta: kCrateApiCommonWifiDisconnectConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleWifiDisconnectConstMeta =>
+  TaskConstMeta get kCrateApiCommonWifiDisconnectConstMeta =>
       const TaskConstMeta(
         debugName: "wifi_disconnect",
         argNames: [],
       );
 
   @override
-  Future<Uint8List> crateApiSimpleWifiRead(
+  Future<Uint8List> crateApiCommonWifiRead(
       {required int bytesToRead, required int timeoutMs}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -689,65 +1231,65 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_u_32(bytesToRead, serializer);
         sse_encode_u_32(timeoutMs, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 23, port: port_);
+            funcId: 41, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleWifiReadConstMeta,
+      constMeta: kCrateApiCommonWifiReadConstMeta,
       argValues: [bytesToRead, timeoutMs],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleWifiReadConstMeta => const TaskConstMeta(
+  TaskConstMeta get kCrateApiCommonWifiReadConstMeta => const TaskConstMeta(
         debugName: "wifi_read",
         argNames: ["bytesToRead", "timeoutMs"],
       );
 
   @override
-  void crateApiSimpleWifiWrite({required List<int> data}) {
+  void crateApiCommonWifiWrite({required List<int> data}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(data, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 24)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 42)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
-      constMeta: kCrateApiSimpleWifiWriteConstMeta,
+      constMeta: kCrateApiCommonWifiWriteConstMeta,
       argValues: [data],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleWifiWriteConstMeta => const TaskConstMeta(
+  TaskConstMeta get kCrateApiCommonWifiWriteConstMeta => const TaskConstMeta(
         debugName: "wifi_write",
         argNames: ["data"],
       );
 
   @override
-  void crateApiSimpleWriteData({required List<int> data}) {
+  void crateApiCommonWriteData({required List<int> data}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(data, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 25)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 43)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleWriteDataConstMeta,
+      constMeta: kCrateApiCommonWriteDataConstMeta,
       argValues: [data],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleWriteDataConstMeta => const TaskConstMeta(
+  TaskConstMeta get kCrateApiCommonWriteDataConstMeta => const TaskConstMeta(
         debugName: "write_data",
         argNames: ["data"],
       );
@@ -819,6 +1361,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   int dco_decode_i_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
+  }
+
+  @protected
+  LabradorWavePayload dco_decode_labrador_wave_payload(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    return LabradorWavePayload(
+      requestId: dco_decode_u_8(arr[0]),
+      timerPeriod: dco_decode_u_16(arr[1]),
+      clockDivider: dco_decode_u_16(arr[2]),
+      tripleMask: dco_decode_u_8(arr[3]),
+      samples: dco_decode_list_prim_u_8_strict(arr[4]),
+    );
   }
 
   @protected
@@ -938,6 +1495,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   int sse_decode_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getInt32();
+  }
+
+  @protected
+  LabradorWavePayload sse_decode_labrador_wave_payload(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_requestId = sse_decode_u_8(deserializer);
+    var var_timerPeriod = sse_decode_u_16(deserializer);
+    var var_clockDivider = sse_decode_u_16(deserializer);
+    var var_tripleMask = sse_decode_u_8(deserializer);
+    var var_samples = sse_decode_list_prim_u_8_strict(deserializer);
+    return LabradorWavePayload(
+        requestId: var_requestId,
+        timerPeriod: var_timerPeriod,
+        clockDivider: var_clockDivider,
+        tripleMask: var_tripleMask,
+        samples: var_samples);
   }
 
   @protected
@@ -1072,6 +1646,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_i_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putInt32(self);
+  }
+
+  @protected
+  void sse_encode_labrador_wave_payload(
+      LabradorWavePayload self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_8(self.requestId, serializer);
+    sse_encode_u_16(self.timerPeriod, serializer);
+    sse_encode_u_16(self.clockDivider, serializer);
+    sse_encode_u_8(self.tripleMask, serializer);
+    sse_encode_list_prim_u_8_strict(self.samples, serializer);
   }
 
   @protected

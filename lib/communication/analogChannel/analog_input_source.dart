@@ -46,12 +46,17 @@ class AnalogInputSource {
     regenerateCalibration();
   }
 
+  int _gainIndex = 0;
+
   bool setGain(int index) {
     if (!gainEnabled) {
       logger.e("$_channelName: Analog gain is not available");
       return false;
     }
-    _gain = _gainValues[index];
+    if (index >= 0 && index < _gainValues.length) {
+      _gainIndex = index;
+      _gain = _gainValues[index];
+    }
     regenerateCalibration();
     return true;
   }
@@ -64,14 +69,16 @@ class AnalogInputSource {
     double A, B, intercept, slope;
     B = _range[1];
     A = _range[0];
-    if (_gain >= 0 && _gain <= 8) {
-      _gain = _gainValues[_gain.round()];
-      B /= _gain;
-      A /= _gain;
+    double gain = (_gainIndex >= 0 && _gainIndex < _gainValues.length)
+        ? _gainValues[_gainIndex]
+        : 1.0;
+    if (gain != 0) {
+      B /= gain;
+      A /= gain;
     }
-    slope = 2 * (B - A);
-    intercept = 2 * A;
-    if (!calibrationReady || _gain == 8) {
+    slope = B - A;
+    intercept = A;
+    if (!calibrationReady || _gainIndex == 8) {
       calPoly10 = Polynomial.fromCoefficients(
           DataType.float, [0, slope / 1023, intercept]);
       calPoly12 = Polynomial.fromCoefficients(
@@ -81,7 +88,7 @@ class AnalogInputSource {
     voltToCode10 = Polynomial.fromCoefficients(
         DataType.float, [0, 1023 / slope, -1023 * intercept / slope]);
     voltToCode12 = Polynomial.fromCoefficients(
-        DataType.float, [0, 4095.0, -4095 * intercept / slope]);
+        DataType.float, [0, 4095.0 / slope, -4095.0 * intercept / slope]);
   }
 
   List<double> cal12(List<double> raw) {

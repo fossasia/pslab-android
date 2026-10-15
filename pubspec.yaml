@@ -90,6 +90,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/images/guide_images/
+    - assets/firmware/
     - assets/yamnet_class_map.csv
 
 inno_bundle:

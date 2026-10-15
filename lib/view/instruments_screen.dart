@@ -28,7 +28,6 @@ class _InstrumentsScreenState extends State<InstrumentsScreen> {
   String _searchQuery = '';
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
   late List<_InstrumentData> _instrumentDatas;
-  bool _unresponsiveAlertQueued = false;
 
   void _onItemTapped(int index) {
     _InstrumentData instrument = _instrumentDatas[index];
@@ -89,75 +88,34 @@ class _InstrumentsScreenState extends State<InstrumentsScreen> {
     _filteredIndices = indices;
   }
 
-  void _onLegacyFirmware() {
-    if (getIt.get<BoardStateProvider>().legacyFirmwareNotifier.value ==
-        "LegacyFirmwareDetected") {
-      _showWarningDialog(appLocalizations.legacyFirmwareAlertTitle,
-          appLocalizations.legacyFirmwareAlertMessage);
-    }
-  }
-
-  void _onUnresponsiveDevice() {
-    final notifier = getIt.get<BoardStateProvider>().unresponsiveDeviceNotifier;
-    if (!notifier.value || _unresponsiveAlertQueued) return;
-    _unresponsiveAlertQueued = true;
-    _showWarningDialog(appLocalizations.unresponsiveDeviceAlertTitle,
-        appLocalizations.unresponsiveDeviceAlertMessage,
-        onShown: () => notifier.value = false,
-        onDismissed: () => _unresponsiveAlertQueued = false);
-  }
-
-  void _showWarningDialog(String title, String message,
-      {VoidCallback? onShown, VoidCallback? onDismissed}) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      onShown?.call();
-      showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            icon: const Icon(Icons.warning),
-            title: Text(title),
-            content: Text(message),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(appLocalizations.ok),
-              ),
-            ],
-          );
-        },
-      ).whenComplete(() => onDismissed?.call());
-    });
-  }
-
-  @override
-  void dispose() {
-    getIt
-        .get<BoardStateProvider>()
-        .legacyFirmwareNotifier
-        .removeListener(_onLegacyFirmware);
-    getIt
-        .get<BoardStateProvider>()
-        .unresponsiveDeviceNotifier
-        .removeListener(_onUnresponsiveDevice);
-    super.dispose();
-  }
-
   @override
   void initState() {
     super.initState();
-    getIt
-        .get<BoardStateProvider>()
-        .legacyFirmwareNotifier
-        .addListener(_onLegacyFirmware);
-    getIt
-        .get<BoardStateProvider>()
-        .unresponsiveDeviceNotifier
-        .addListener(_onUnresponsiveDevice);
-    _onUnresponsiveDevice();
+    getIt.get<BoardStateProvider>().legacyFirmwareNotifier.addListener(() {
+      if (getIt.get<BoardStateProvider>().legacyFirmwareNotifier.value ==
+          "LegacyFirmwareDetected") {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                icon: const Icon(Icons.warning),
+                title: Text(appLocalizations.legacyFirmwareAlertTitle),
+                content: Text(appLocalizations.legacyFirmwareAlertMessage),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(appLocalizations.ok),
+                  ),
+                ],
+              );
+            },
+          );
+        });
+      }
+    });
 
     _instrumentDatas = [
       _InstrumentData(appLocalizations.oscilloscope,

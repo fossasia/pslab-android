@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:pslab/communication/handler/base.dart';
 import 'package:pslab/src/rust/api/bootloader.dart';
-import 'package:pslab/src/rust/api/simple.dart' as rust_api;
+import 'package:pslab/src/rust/api/common.dart' as rust_api;
 
 class NativeFirmwareFlasher {
   final CommunicationHandler handler;

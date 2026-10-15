@@ -13,16 +13,16 @@ lazy_static = "1.4.0"
 ihex = "3.0"
 byteorder = "1.5"
 
-# Shared native (non-WASM) dependencies
+# Shared native dependencies (Desktop + Android, excluding iOS)
+[target.'cfg(all(not(target_family = "wasm"), not(target_os = "ios")))'.dependencies]
+rusb = { version = "0.9.4", features = ["vendored"] }
+
+# Shared native (non-WASM) dependencies (Desktop + Android + iOS)
 [target.'cfg(not(target_family = "wasm"))'.dependencies]
 tungstenite = "0.20.1"
 url = "2.4.0"
 
-# Android-specific dependencies
-[target.'cfg(target_os = "android")'.dependencies]
-rusb = "0.9.4"
-
-# Desktop platforms 
+# Desktop platforms
 [target.'cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))'.dependencies]
 serialport = "4.3.0"
 cpal = "0.15.2"
