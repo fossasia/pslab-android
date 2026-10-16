@@ -1393,12 +1393,6 @@ class OscilloscopeStateProvider extends ChangeNotifier {
       timebase = xAxisScale * 1000.0;
       oscilloscopeAxesScale.setXAxisScale(timebase);
       oscilloscopeAxesScale.setYAxisScale(yAxisScale);
-      for (final buffer in _waveformBuffer.values) {
-        if (buffer.isEmpty) continue;
-        final latest = buffer.last;
-        buffer.clear();
-        buffer.add(latest);
-      }
       notifyListeners();
       return true;
     } else {
