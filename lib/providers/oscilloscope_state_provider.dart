@@ -939,7 +939,7 @@ class OscilloscopeStateProvider extends ChangeNotifier {
     if (data is! String) return [];
 
     final coordinatePattern = RegExp(
-      r'(?:FlSpot)?\(\s*(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*,\s*(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*\)',
+      r'(?:FlSpot)?\(\s*(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*,\s*(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)(?:\s*,\s*-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\s*,\s*-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)?\s*\)',
     );
     return coordinatePattern.allMatches(data).map((match) {
       return FlSpot(
