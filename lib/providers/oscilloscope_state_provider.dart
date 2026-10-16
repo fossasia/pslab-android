@@ -958,11 +958,7 @@ class OscilloscopeStateProvider extends ChangeNotifier {
     }
     if (data is! String) return [];
 
-    return data
-        .split(RegExp(r'\],\s*\['))
-        .map(_parseSpotList)
-        .where((spots) => spots.isNotEmpty)
-        .toList();
+    return data.split(RegExp(r'\],\s*\[')).map(_parseSpotList).toList();
   }
 
   List<String> parseChannelsList(dynamic input) {
@@ -1397,7 +1393,12 @@ class OscilloscopeStateProvider extends ChangeNotifier {
       timebase = xAxisScale * 1000.0;
       oscilloscopeAxesScale.setXAxisScale(timebase);
       oscilloscopeAxesScale.setYAxisScale(yAxisScale);
-      _clearWaveformBuffers();
+      for (final buffer in _waveformBuffer.values) {
+        if (buffer.isEmpty) continue;
+        final latest = buffer.last;
+        buffer.clear();
+        buffer.add(latest);
+      }
       notifyListeners();
       return true;
     } else {
@@ -1431,8 +1432,7 @@ class OscilloscopeStateProvider extends ChangeNotifier {
   List<LineChartBarData> createPlotForChannel(String channelName) {
     return _createChannelPlots(
       channelName,
-      includeHistory:
-          isBufferOverlayEnabled() && isChannelSelected(channelName),
+      includeHistory: isBufferOverlayEnabled(),
     );
   }
 
@@ -1450,9 +1450,8 @@ class OscilloscopeStateProvider extends ChangeNotifier {
       final isCurrent = i == buffer.length - 1;
       if (!includeHistory && !isCurrent) continue;
 
-      final opacity = isCurrent
-          ? 1.0
-          : (1.0 - ((i + 1) / (historyCount + 1))).clamp(0.1, 0.6);
+      final opacity =
+          isCurrent ? 1.0 : ((i + 1) / (historyCount + 1)).clamp(0.1, 0.6);
       plots.add(
         LineChartBarData(
           spots: buffer[i],

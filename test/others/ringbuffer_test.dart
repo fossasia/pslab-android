@@ -3,27 +3,31 @@ import 'package:pslab/others/ringbuffer.dart';
 
 void main() {
   group('create ringbuffer and fill it', () {
-    late RingBuffer<String> ringbuffer;
-
     test('create ringbuffer', () {
-      ringbuffer = RingBuffer(3);
+      RingBuffer<String> ringbuffer = RingBuffer(3);
       expect(ringbuffer.length, 0);
     });
 
-    test('add first element', () {
+    test('add one element', () {
+      RingBuffer<String> ringbuffer = RingBuffer(3);
       ringbuffer.add('first');
       expect(ringbuffer.length, 1);
       expect(ringbuffer[0], 'first');
     });
 
-    test('add second element', () {
+    test('add two elements', () {
+      RingBuffer<String> ringbuffer = RingBuffer(3);
+      ringbuffer.add('first');
       ringbuffer.add('second');
       expect(ringbuffer.length, 2);
       expect(ringbuffer[0], 'first');
       expect(ringbuffer[1], 'second');
     });
 
-    test('add third element', () {
+    test('add three elements', () {
+      RingBuffer<String> ringbuffer = RingBuffer(3);
+      ringbuffer.add('first');
+      ringbuffer.add('second');
       ringbuffer.add('third');
       expect(ringbuffer.length, 3);
       expect(ringbuffer[0], 'first');
@@ -31,7 +35,11 @@ void main() {
       expect(ringbuffer[2], 'third');
     });
 
-    test('add fourth element', () {
+    test('add four elements', () {
+      RingBuffer<String> ringbuffer = RingBuffer(3);
+      ringbuffer.add('first');
+      ringbuffer.add('second');
+      ringbuffer.add('third');
       ringbuffer.add('fourth');
       expect(ringbuffer.length, 3);
       expect(ringbuffer[0], 'second');

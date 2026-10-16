@@ -41,7 +41,7 @@ class RingBuffer<T> with ListMixin<T> {
 
     final oldestIndex = (_index - _length + 1 + _capacity) % _capacity;
     final bufferIndex = (oldestIndex + index) % _capacity;
-    return _buffer[bufferIndex]!;
+    return _buffer[bufferIndex] as T;
   }
 
   @override
