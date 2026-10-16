@@ -1522,6 +1522,12 @@ class OscilloscopeStateProvider extends ChangeNotifier {
   }
 
   void setFourierTransform(bool enabled) {
+    if (enabled == isFourierTransformSelected) {
+      return;
+    }
+
+    _clearWaveformBuffers();
+
     isFourierTransformSelected = enabled;
 
     if (!enabled) {
