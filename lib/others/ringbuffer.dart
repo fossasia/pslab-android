@@ -48,6 +48,10 @@ class RingBuffer<T> with ListMixin<T> {
   void clear() {
     _index = -1;
     _length = 0;
+    // don't keep refernces to elements when buffer is cleared
+    for (int i = 0; i < _buffer.length; i++) {
+      _buffer[i] = null;
+    }
   }
 
   @override
