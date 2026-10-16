@@ -112,6 +112,7 @@ void main() {
     while (iter.moveNext()) {
       expect(iter.current, elements[i++]);
     }
+    expect(i, elements.length);
   });
 
   test('test reversed', () {
@@ -149,5 +150,6 @@ void main() {
     for (var element in ringbuffer) {
       expect(element, elements[i++]);
     }
+    expect(i, elements.length);
   });
 }
