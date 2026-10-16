@@ -479,10 +479,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_litert
-      sha256: "6e541d7d79a31ab5d67c0b9fd1f61ce5a1e88a7be86ffc7157b5ed14527ddf51"
+      sha256: "5626c0d0a62be4ede5ab0d58e3c5526c667fa9edce6020b8b48dd41e9090a4b7"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "3.9.4"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
