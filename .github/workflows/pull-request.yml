@@ -15,6 +15,13 @@ env:
   IPAD_DEVICE_MODEL: iPad Pro 13-inch (M5)
 
 jobs:
+  artifact-publication-tests:
+    name: Artifact publication tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 scripts/test_app_downloads.py
+
   changes:
     name: Detect Changes
     runs-on: ubuntu-latest

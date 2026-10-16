@@ -31,6 +31,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Test artifact publication
+        run: python3 scripts/test_app_downloads.py
+
       - name: Common Workflow
         uses: ./.github/actions/common
 
@@ -288,6 +291,9 @@ jobs:
     if: ${{ github.repository == 'fossasia/pslab-app' }}
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     concurrency:
       group: upload-to-app-branch
       cancel-in-progress: false
@@ -301,6 +307,8 @@ jobs:
           path: artifacts
 
       - name: Publish artifacts to app branch
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
@@ -321,7 +329,9 @@ jobs:
           
           find ../artifacts -type f \( -name '*debug*' -o -name '*profile*' \) -delete
 
-          echo "Copying new artifacts"
+          mkdir ../release-assets
+
+          echo "Preparing release assets"
 
           find ../artifacts -type f \( \
             -name '*.apk' -o \
@@ -332,17 +342,28 @@ jobs:
             -name '*.rpm' -o \
             -name '*.dmg' -o \
             -name '*.zip' \
-          \) -exec cp -v {} . \;
+          \) -exec cp -v {} ../release-assets/ \;
 
           echo "Renaming Android artifacts"
 
-          for file in app*; do
+          for file in ../release-assets/app*; do
             [ -e "$file" ] || continue
-            mv "$file" "pslab-$branch-${file#*-}"
+            name=$(basename "$file")
+            mv "$file" "../release-assets/pslab-$branch-${name#*-}"
           done
 
+          echo "Publishing development release"
+          tag="development-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          gh release create "$tag" ../release-assets/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --prerelease --latest=false \
+            --title "Development build $GITHUB_RUN_NUMBER" \
+            --notes "Development artifacts from $GITHUB_SHA."
+
           echo "Generating download page"
-          bash ../scripts/generate-app-download-page.sh "${{ github.repository }}" .
+          bash ../scripts/generate-app-download-page.sh "$GITHUB_REPOSITORY" . \
+            "https://github.com/$GITHUB_REPOSITORY/releases/download/$tag" ../release-assets
 
           git checkout --orphan temporary
           git add --all .

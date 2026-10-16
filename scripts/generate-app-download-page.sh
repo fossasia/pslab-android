@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Generate a simple download index for the `app` branch artifacts.
-# Links use GitHub raw URLs so browsers download files instead of opening blob pages.
+# The optional download base and asset directory support release-hosted binaries.
 set -euo pipefail
 
 repo="${1:?repository owner/name required, e.g. fossasia/pslab-app}"
 outdir="${2:-.}"
-raw_base="https://github.com/${repo}/raw/app"
+download_base="${3:-https://github.com/${repo}/raw/app}"
+assetsdir="${4:-$outdir}"
 outfile="${outdir%/}/index.html"
 
 {
@@ -33,7 +34,7 @@ outfile="${outdir%/}/index.html"
 EOF
 
   shopt -s nullglob
-  for file in "$outdir"/*; do
+  for file in "$assetsdir"/*; do
     [ -f "$file" ] || continue
     base=$(basename "$file")
     [ "$base" = "index.html" ] && continue
@@ -44,7 +45,7 @@ EOF
     escaped_name=$(printf '%s' "$base" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g')
     encoded_name=$(python3 -c 'import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=""))' "$base")
     printf '    <li><span class="name">%s</span><a href="%s/%s" download>Download</a></li>\n' \
-      "$escaped_name" "$raw_base" "$encoded_name"
+      "$escaped_name" "$download_base" "$encoded_name"
   done
 
   cat <<'EOF'

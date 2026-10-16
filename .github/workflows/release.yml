@@ -10,7 +10,7 @@ env:
 jobs:
   release:
     name: Release
-    if: ${{ github.repository == 'fossasia/pslab-app' }}
+    if: ${{ github.repository == 'fossasia/pslab-app' && !github.event.release.prerelease && !github.event.release.draft }}
     runs-on: ubuntu-latest
 
     steps:
