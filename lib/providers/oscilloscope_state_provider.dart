@@ -483,7 +483,6 @@ class OscilloscopeStateProvider extends ChangeNotifier {
   }
 
   Future<void> captureTask(List<String> channels) async {
-    print('captureTask $channels');
     List<List<FlSpot>> entries = [];
     List<List<FlSpot>> curveFitEntries = [];
     int noOfChannels = channels.length;
@@ -1381,8 +1380,6 @@ class OscilloscopeStateProvider extends ChangeNotifier {
         if (period > maxPeriod) {
           maxPeriod = period;
         }
-      } else {
-        print("URKS 1206");
       }
     }
     yRange = maxY - minY;
