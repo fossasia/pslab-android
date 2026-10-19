@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:pslab/src/rust/api/simple.dart' as rust_api;
+import 'package:pslab/src/rust/api/common.dart' as rust_api;
 import 'package:pslab/others/logger_service.dart';
 import 'base.dart';
 
@@ -13,6 +13,8 @@ class WifiCommsHandler implements CommunicationHandler {
   bool connected = false;
   @override
   bool deviceFound = false;
+  @override
+  Board? openedBoard;
 
   WebSocketChannel? _wsChannel;
   StreamSubscription? _wsSubscription;

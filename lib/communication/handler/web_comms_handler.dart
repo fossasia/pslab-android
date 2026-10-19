@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:web/web.dart' as web;
 import '../../others/logger_service.dart';
 import 'base.dart';
-import 'package:pslab/src/rust/api/simple.dart' as rust_api;
+import 'package:pslab/src/rust/api/common.dart' as rust_api;
 
 @JS()
 extension type Serial._(JSObject _) implements JSObject {
@@ -48,10 +48,17 @@ class WebCommsHandler implements CommunicationHandler {
   @override
   bool deviceFound = false;
 
+  @override
+  Board? openedBoard;
+
   SerialPort? _port;
   web.ReadableStreamDefaultReader? _reader;
   web.WritableStreamDefaultWriter? _writer;
   bool _isReading = false;
+
+  final List<int> _rxBuffer = [];
+  final List<Uint8List> _writeQueue = [];
+  bool _isWriting = false;
 
   @override
   Future<void> initialize() async {
@@ -79,20 +86,27 @@ class WebCommsHandler implements CommunicationHandler {
       await _port!.open(SerialOptions(baudRate: overrideBaud)).toDart;
 
       logger.d("Setting DTR/RTS signals...");
-      await _port!
-          .setSignals(
-              SerialOutputSignals(dataTerminalReady: true, requestToSend: true))
-          .toDart;
-      await Future.delayed(const Duration(milliseconds: 2000));
+      try {
+        await _port!
+            .setSignals(SerialOutputSignals(
+                dataTerminalReady: true, requestToSend: false))
+            .toDart;
+      } catch (e) {
+        logger.w("setSignals error (non-fatal): $e");
+      }
+      await Future.delayed(const Duration(milliseconds: 300));
 
       _writer = _port!.writable!.getWriter();
       _reader = _port!.readable!.getReader() as web.ReadableStreamDefaultReader;
 
       connected = true;
       _isReading = true;
+      _rxBuffer.clear();
+      _writeQueue.clear();
+      _isWriting = false;
       logger.i("Connected to Web Serial device.");
 
-      _pumpDataToRust();
+      _pumpData();
     } catch (e) {
       connected = false;
       logger.e("User cancelled or connection failed: $e");
@@ -100,8 +114,8 @@ class WebCommsHandler implements CommunicationHandler {
     }
   }
 
-  void _pumpDataToRust() async {
-    logger.d("Started Web data pump to Rust buffer.");
+  void _pumpData() async {
+    logger.d("Started Web Serial receive pump.");
     try {
       while (_isReading && connected && _reader != null) {
         final resultJS = await _reader!.read().toDart;
@@ -114,7 +128,11 @@ class WebCommsHandler implements CommunicationHandler {
         }
 
         if (result.value != null) {
-          rust_api.pushWebData(data: result.value!.toDart);
+          final data = result.value!.toDart;
+          _rxBuffer.addAll(data);
+          try {
+            rust_api.pushWebData(data: data);
+          } catch (_) {}
         }
       }
     } catch (e) {
@@ -128,12 +146,16 @@ class WebCommsHandler implements CommunicationHandler {
 
   @override
   bool isConnected() => connected;
+
   @override
   void close() async {
     if (!connected) return;
     logger.d("Closing Web Serial connection and unlocking streams...");
     _isReading = false;
     connected = false;
+    _rxBuffer.clear();
+    _writeQueue.clear();
+    _isWriting = false;
 
     try {
       if (_reader != null) {
@@ -157,36 +179,50 @@ class WebCommsHandler implements CommunicationHandler {
       logger.e("Error during Web Serial lock release: $e");
     }
 
-    rust_api.closeUsb();
+    try {
+      rust_api.closeUsb();
+    } catch (_) {}
   }
 
   @override
   void write(Uint8List src, int timeoutMillis) {
-    if (_writer != null && connected) {
-      logger.d("Writing data: $src");
-      _writer!.write(src.toJS).toDart;
+    if (!connected || _writer == null) return;
+    _writeQueue.add(Uint8List.fromList(src));
+    _flushWriteQueue();
+  }
+
+  Future<void> _flushWriteQueue() async {
+    if (_isWriting) return;
+    _isWriting = true;
+    try {
+      while (_writeQueue.isNotEmpty && connected && _writer != null) {
+        final chunk = _writeQueue.removeAt(0);
+        await _writer!.write(chunk.toJS).toDart;
+      }
+    } catch (e) {
+      logger.e("Error writing to Web Serial: $e");
+    } finally {
+      _isWriting = false;
     }
   }
 
   @override
   Future<int> read(Uint8List dest, int bytesToRead, int timeoutMillis) async {
     int numBytesRead = 0;
-    int bytesToBeReadTemp = bytesToRead;
     int elapsed = 0;
     const int checkInterval = 2;
 
     try {
       while (numBytesRead < bytesToRead && elapsed < timeoutMillis) {
-        final List<int> rustBuffer =
-            rust_api.readWebData(bytesToRead: bytesToBeReadTemp);
-        int readNow = rustBuffer.length;
+        if (_rxBuffer.isNotEmpty) {
+          int available = _rxBuffer.length;
+          int needed = bytesToRead - numBytesRead;
+          int take = available < needed ? available : needed;
 
-        if (readNow > 0) {
-          logger.d("Received chunk: $rustBuffer");
-          int readLength = readNow.clamp(0, bytesToBeReadTemp);
-          dest.setRange(numBytesRead, numBytesRead + readLength, rustBuffer);
-          numBytesRead += readLength;
-          bytesToBeReadTemp -= readLength;
+          for (int i = 0; i < take; i++) {
+            dest[numBytesRead + i] = _rxBuffer.removeAt(0);
+          }
+          numBytesRead += take;
 
           if (numBytesRead == bytesToRead) {
             break;
@@ -196,14 +232,14 @@ class WebCommsHandler implements CommunicationHandler {
         elapsed += checkInterval;
       }
 
-      if (numBytesRead == 0 && elapsed >= timeoutMillis) {
-        logger.w("Timeout: No signal on wire. Returning 0 bytes.");
+      if (numBytesRead < bytesToRead && elapsed >= timeoutMillis) {
+        logger.w(
+            "Web Serial timeout: Expected $bytesToRead bytes, got $numBytesRead bytes in ${elapsed}ms");
       }
     } catch (e) {
-      logger.e("Exception during read: $e");
+      logger.e("Exception during Web Serial read: $e");
     }
 
-    logger.d("Bytes Read: $numBytesRead");
     return numBytesRead;
   }
 }

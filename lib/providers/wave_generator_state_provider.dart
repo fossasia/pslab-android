@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:mp_audio_stream/mp_audio_stream.dart';
-import 'package:pslab/communication/science_lab.dart';
 import 'package:pslab/others/logger_service.dart';
 import 'package:pslab/others/wave_generator_constants.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/providers/wave_generator_config_provider.dart';
+
+import 'package:pslab/providers/board_state_provider.dart';
+import 'package:pslab/hal/wave_generator_interface.dart';
 
 enum WaveConst {
   waveType,
@@ -62,7 +64,7 @@ class WaveGeneratorStateProvider extends ChangeNotifier {
 
   late WaveGeneratorConstants waveGeneratorConstants;
   late List<List<FlSpot>> waveData;
-  late ScienceLab _scienceLab;
+  late BoardStateProvider _boardState;
 
   List<List<dynamic>> _recordedData = [];
   Position? currentPosition;
@@ -77,7 +79,7 @@ class WaveGeneratorStateProvider extends ChangeNotifier {
   WaveGeneratorStateProvider() {
     selectedAnalogWave = WaveConst.wave1;
     selectedDigitalWave = WaveConst.sqr1;
-    _scienceLab = getIt.get<ScienceLab>();
+    _boardState = getIt.get<BoardStateProvider>();
     propSelected = null;
     waveGeneratorConstants = WaveGeneratorConstants();
     waveData = [];
@@ -236,17 +238,19 @@ class WaveGeneratorStateProvider extends ChangeNotifier {
         await Geolocator.getCurrentPosition(locationSettings: locationSettings);
   }
 
-  void setAnalogSelectedWave(WaveConst wave) {
+  Future<void> setAnalogSelectedWave(WaveConst wave) async {
     selectedAnalogWave = wave;
     propSelected = null;
     previewWave();
+    await setWave();
     notifyListeners();
   }
 
-  void setDigitalSelectedWave(WaveConst wave) {
+  Future<void> setDigitalSelectedWave(WaveConst wave) async {
     selectedDigitalWave = wave;
     propSelected = null;
     previewWave();
+    await setWave();
     notifyListeners();
   }
 
@@ -256,10 +260,12 @@ class WaveGeneratorStateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setAnalogWaveType(int waveType) {
+  Future<void> setAnalogWaveType(int waveType) async {
     waveGeneratorConstants.wave[selectedAnalogWave]?[WaveConst.waveType] =
         waveType;
     previewWave();
+    await setWave();
+
     notifyListeners();
   }
 
@@ -330,7 +336,10 @@ class WaveGeneratorStateProvider extends ChangeNotifier {
     String waveType2 =
         shape2 == sin ? "sine" : (shape2 == triangular ? "tria" : "sawtooth");
 
-    if (_scienceLab.isConnected()) {
+    WaveGeneratorInterface? activeWaveGen =
+        _boardState.activeBoard?.waveGenerator;
+
+    if (activeWaveGen != null) {
       if (waveGeneratorConstants.modeSelected == WaveConst.square) {
         int ampW1 = waveGeneratorConstants.wave[WaveConst.wave1]
                 ?[WaveConst.amplitude] ??
@@ -339,51 +348,71 @@ class WaveGeneratorStateProvider extends ChangeNotifier {
                 ?[WaveConst.amplitude] ??
             30;
 
-        if (phase == WaveData.phaseMin.getValue) {
-          await _scienceLab.setSI1(freq1, waveType1,
-              amplitudeVolt: ampW1 / 10.0);
-          await _scienceLab.setSI2(freq2, waveType2,
-              amplitudeVolt: ampW2 / 10.0);
-        } else {
-          await _scienceLab.setWaves(freq1, phase, freq2, waveType1, waveType2,
-              amplitudeVolt1: ampW1 / 10.0, amplitudeVolt2: ampW2 / 10.0);
-        }
-      } else {
-        double freqSqr1 = waveGeneratorConstants
-            .wave[WaveConst.sqr1]![WaveConst.frequency]!
-            .toDouble();
-        double dutySqr1 = waveGeneratorConstants
-                .wave[WaveConst.sqr1]![WaveConst.duty]!
-                .toDouble() /
-            100;
-        double dutySqr2 = waveGeneratorConstants
-                .wave[WaveConst.sqr2]![WaveConst.duty]!
-                .toDouble() /
-            100;
-        double phaseSqr2 = waveGeneratorConstants
-                .wave[WaveConst.sqr2]![WaveConst.phase]!
-                .toDouble() /
-            360;
-        double dutySqr3 = waveGeneratorConstants
-                .wave[WaveConst.sqr3]![WaveConst.duty]!
-                .toDouble() /
-            100;
-        double phaseSqr3 = waveGeneratorConstants
-                .wave[WaveConst.sqr3]![WaveConst.phase]!
-                .toDouble() /
-            360;
-        double dutySqr4 = waveGeneratorConstants
-                .wave[WaveConst.sqr4]![WaveConst.duty]!
-                .toDouble() /
-            100;
-        double phaseSqr4 = waveGeneratorConstants
-                .wave[WaveConst.sqr4]![WaveConst.phase]!
-                .toDouble() /
-            360;
+        debugPrint(
+          'Sending Analog: CH1=${freq1}Hz $waveType1 (Amp: ${ampW1 / 10.0}V) | '
+          'CH2=${freq2}Hz $waveType2 (Amp: ${ampW2 / 10.0}V, Phase: $phase°)',
+        );
 
-        await _scienceLab.sqrPWM(freqSqr1, dutySqr1, phaseSqr2, dutySqr2,
-            phaseSqr3, dutySqr3, phaseSqr4, dutySqr4, false);
+        await activeWaveGen.generateAnalogWaves(
+          freq1: freq1,
+          freq2: freq2,
+          phase: phase,
+          waveType1: waveType1,
+          waveType2: waveType2,
+          amplitude1: ampW1 / 10.0,
+          amplitude2: ampW2 / 10.0,
+        );
+      } else {
+        double freqSqr1 = (waveGeneratorConstants.wave[WaveConst.sqr1]
+                    ?[WaveConst.frequency] ??
+                1000)
+            .toDouble();
+        double dutySqr1 = ((waveGeneratorConstants.wave[WaveConst.sqr1]
+                        ?[WaveConst.duty] ??
+                    50)
+                .toDouble()) /
+            100.0;
+
+        double phaseSqr2 =
+            (waveGeneratorConstants.wave[WaveConst.sqr2]?[WaveConst.phase] ?? 0)
+                .toDouble();
+        double dutySqr2 =
+            ((waveGeneratorConstants.wave[WaveConst.sqr2]?[WaveConst.duty] ?? 0)
+                    .toDouble()) /
+                100.0;
+
+        double phaseSqr3 =
+            (waveGeneratorConstants.wave[WaveConst.sqr3]?[WaveConst.phase] ?? 0)
+                .toDouble();
+        double dutySqr3 =
+            ((waveGeneratorConstants.wave[WaveConst.sqr3]?[WaveConst.duty] ?? 0)
+                    .toDouble()) /
+                100.0;
+
+        double phaseSqr4 =
+            (waveGeneratorConstants.wave[WaveConst.sqr4]?[WaveConst.phase] ?? 0)
+                .toDouble();
+        double dutySqr4 =
+            ((waveGeneratorConstants.wave[WaveConst.sqr4]?[WaveConst.duty] ?? 0)
+                    .toDouble()) /
+                100.0;
+
+        debugPrint(
+            'Sending Digital PWM: Freq=$freqSqr1 Hz, Duty1=$dutySqr1, Duty2=$dutySqr2, Duty3=$dutySqr3, Duty4=$dutySqr4');
+
+        await activeWaveGen.generateDigitalPwms(
+          freq: freqSqr1,
+          duty1: dutySqr1,
+          phase2: phaseSqr2,
+          duty2: dutySqr2,
+          phase3: phaseSqr3,
+          duty3: dutySqr3,
+          phase4: phaseSqr4,
+          duty4: dutySqr4,
+        );
       }
+    } else {
+      debugPrint('Hardware failed to trigger! activeWaveGen is NULL.');
     }
   }
 

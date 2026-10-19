@@ -32,14 +32,17 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
   late PowerSourceStateProvider _provider;
   late PowerSourceConfigProvider? _configProvider;
   bool _showGuide = false;
+  Future<void>? _recordingStartFuture;
   final TextEditingController _pv1Controller = TextEditingController();
   final TextEditingController _pv2Controller = TextEditingController();
   final TextEditingController _pv3Controller = TextEditingController();
   final TextEditingController _pcsController = TextEditingController();
+  final TextEditingController _psuController = TextEditingController();
   final FocusNode _pv1Focus = FocusNode();
   final FocusNode _pv2Focus = FocusNode();
   final FocusNode _pv3Focus = FocusNode();
   final FocusNode _pcsFocus = FocusNode();
+  final FocusNode _psuFocus = FocusNode();
 
   final FocusNode _keyboardFocusNode = FocusNode();
   Pin? _hoveredPin;
@@ -48,7 +51,8 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
       _pv1Focus.hasFocus ||
       _pv2Focus.hasFocus ||
       _pv3Focus.hasFocus ||
-      _pcsFocus.hasFocus;
+      _pcsFocus.hasFocus ||
+      _psuFocus.hasFocus;
 
   static const double _scrollStepUnit = 50.0;
   final Map<Pin, double> _scrollAccumulators = {};
@@ -108,7 +112,13 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
     _configProvider = PowerSourceConfigProvider();
     _provider.setConfigProvider(_configProvider!);
 
-    for (final focusNode in [_pv1Focus, _pv2Focus, _pv3Focus, _pcsFocus]) {
+    for (final focusNode in [
+      _pv1Focus,
+      _pv2Focus,
+      _pv3Focus,
+      _pcsFocus,
+      _psuFocus,
+    ]) {
       focusNode.addListener(_onFieldFocusChange);
     }
 
@@ -126,6 +136,27 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    for (final focusNode in [
+      _pv1Focus,
+      _pv2Focus,
+      _pv3Focus,
+      _pcsFocus,
+      _psuFocus,
+    ]) {
+      focusNode.removeListener(_onFieldFocusChange);
+      focusNode.dispose();
+    }
+    _pv1Controller.dispose();
+    _pv2Controller.dispose();
+    _pv3Controller.dispose();
+    _pcsController.dispose();
+    _psuController.dispose();
+    _keyboardFocusNode.dispose();
+    super.dispose();
+  }
+
   void _hideInstrumentGuide() {
     setState(() {
       _showGuide = false;
@@ -133,6 +164,20 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
   }
 
   List<Widget> _getPowerSourceContent() {
+    if (_provider.isLabrador) {
+      return [
+        InstrumentIntroText(text: appLocalizations.labradorPowerSourceIntro),
+        InstrumentBulletPoint(
+            text: appLocalizations.labradorPowerSourceBulletPoint1),
+        InstrumentBulletPoint(
+            text: appLocalizations.labradorPowerSourceBulletPoint2),
+        InstrumentBulletPoint(
+            text: appLocalizations.labradorPowerSourceBulletPoint3),
+        const InstrumentCompatibilitySection(
+          pslabRequired: false,
+        ),
+      ];
+    }
     return [
       InstrumentIntroText(text: appLocalizations.powerSourceIntro),
       InstrumentImage(imagePath: widget.powerSourceCircuit),
@@ -212,30 +257,21 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    _pv1Controller.dispose();
-    _pv2Controller.dispose();
-    _pv3Controller.dispose();
-    _pcsController.dispose();
-    _pv1Focus.dispose();
-    _pv2Focus.dispose();
-    _pv3Focus.dispose();
-    _pcsFocus.dispose();
-    _keyboardFocusNode.dispose();
-    super.dispose();
-  }
-
   Future<void> _toggleRecording() async {
     if (_provider.isRecording) {
-      final data = _provider.stopRecording();
-      await ExportHelper.handleSaveData(
-        context: context,
-        instrumentName: appLocalizations.powerSource.toLowerCase(),
-        data: data,
-      );
+      await _saveRecording();
     } else {
-      bool hasStarted = await _provider.startRecording();
+      final startFuture = _provider.startRecording();
+      _recordingStartFuture = startFuture;
+
+      late bool hasStarted;
+      try {
+        hasStarted = await startFuture;
+      } finally {
+        if (identical(_recordingStartFuture, startFuture)) {
+          _recordingStartFuture = null;
+        }
+      }
       if (!mounted) return;
       if (hasStarted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -259,6 +295,32 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
         );
       }
     }
+  }
+
+  Future<void> _saveRecording() async {
+    final data = _provider.stopRecording();
+    await ExportHelper.handleSaveData(
+      context: context,
+      instrumentName: appLocalizations.powerSource.toLowerCase(),
+      data: data,
+    );
+  }
+
+  Future<void> _handleBackPressed() async {
+    final startFuture = _recordingStartFuture;
+    if (startFuture != null) {
+      try {
+        await startFuture;
+      } catch (_) {
+        return;
+      }
+    }
+    if (!mounted) return;
+    if (_provider.isRecording) {
+      await _saveRecording();
+    }
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   Widget _buildPowerCard({
@@ -296,7 +358,8 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
               Expanded(
                 flex: 45,
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,6 +456,244 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
     );
   }
 
+  Widget _buildLabradorVerticalBoxes(
+      PowerSourceStateProvider provider, BoxConstraints constraints) {
+    final double value = provider.voltagePSU;
+    final String expectedText = value.toStringAsFixed(2);
+    if (!_psuFocus.hasFocus && _psuController.text != expectedText) {
+      _psuController.text = expectedText;
+      _psuController.selection =
+          TextSelection.collapsed(offset: expectedText.length);
+    }
+
+    final double contentWidth = constraints.maxWidth < 650
+        ? double.infinity
+        : (constraints.maxWidth * 0.55).clamp(460.0, 620.0);
+
+    return MouseRegion(
+      onEnter: (_) {
+        _hoveredPin = Pin.psu;
+        if (!_anyFieldFocused) _keyboardFocusNode.requestFocus();
+      },
+      onExit: (_) {
+        if (_hoveredPin == Pin.psu) _hoveredPin = null;
+      },
+      child: Listener(
+        onPointerSignal: (event) => _handlePointerScroll(
+          event,
+          Pin.psu,
+          provider.step,
+          provider.setPSU,
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: contentWidth),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Box 1: Input, Plus/Minus Stepper Buttons, Presets
+                  Card(
+                    color: scaffoldBackgroundColor,
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(
+                        color: primaryRed,
+                        width: 2,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            appLocalizations.psuLabelRange,
+                            style: const TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          decimal: true),
+                                  controller: _psuController,
+                                  focusNode: _psuFocus,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  onSubmitted: (v) async => await provider
+                                      .setPSU(double.tryParse(v) ?? value),
+                                  onTapOutside: (_) => _psuFocus.unfocus(),
+                                  decoration: InputDecoration(
+                                    suffixText: ' V',
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 12),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: powerSourceBorderLightRed),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: primaryRed, width: 2),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              SizedBox(
+                                height: 48,
+                                width: 52,
+                                child: IconButton.filled(
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 34,
+                                  tooltip: appLocalizations.decreaseValue,
+                                  color: scaffoldBackgroundColor,
+                                  onPressed: () async {
+                                    await provider
+                                        .setPSU(value - provider.step);
+                                  },
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: primaryRed,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              SizedBox(
+                                height: 48,
+                                width: 52,
+                                child: IconButton.filled(
+                                  icon: const Icon(Icons.arrow_drop_up),
+                                  iconSize: 34,
+                                  tooltip: appLocalizations.increaseValue,
+                                  color: scaffoldBackgroundColor,
+                                  onPressed: () async {
+                                    await provider
+                                        .setPSU(value + provider.step);
+                                  },
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: primaryRed,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 6,
+                            children: [4.5, 5.0, 6.0, 7.5, 9.0, 12.0].map((v) {
+                              final isSelected = (value - v).abs() < 0.05;
+                              return InkWell(
+                                onTap: () => provider.setPSU(v),
+                                borderRadius: BorderRadius.circular(4),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? primaryRed
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? primaryRed
+                                          : powerSourceBorderLightRed,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    '${v.toStringAsFixed(v == v.roundToDouble() ? 0 : 1)}V',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.black87,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Box 2: Rotary Dialer with Primary Red Border
+                  Card(
+                    color: scaffoldBackgroundColor,
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(
+                        color: primaryRed,
+                        width: 2,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const PowerSourceKnob(
+                            maxValue: 750,
+                            pin: Pin.psu,
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                appLocalizations.psuMinVoltage,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                appLocalizations.psuMaxVoltage,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -403,45 +704,49 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
         builder: (context, provider, _) {
           final powerSourceCards = [
             _buildPowerCard(
-                label: appLocalizations.pinPV1,
-                value: provider.voltagePV1,
-                suffix: ' V',
-                onValueChanged: provider.setPV1,
-                provider: provider,
-                maxValue: 1000,
-                pin: Pin.pv1,
-                controller: _pv1Controller,
-                focusNode: _pv1Focus),
+              label: appLocalizations.pinPV1,
+              value: provider.voltagePV1,
+              suffix: ' V',
+              onValueChanged: provider.setPV1,
+              provider: provider,
+              maxValue: 1000,
+              pin: Pin.pv1,
+              controller: _pv1Controller,
+              focusNode: _pv1Focus,
+            ),
             _buildPowerCard(
-                label: appLocalizations.pinPV2,
-                value: provider.voltagePV2,
-                suffix: ' V',
-                onValueChanged: provider.setPV2,
-                provider: provider,
-                maxValue: 660,
-                pin: Pin.pv2,
-                controller: _pv2Controller,
-                focusNode: _pv2Focus),
+              label: appLocalizations.pinPV2,
+              value: provider.voltagePV2,
+              suffix: ' V',
+              onValueChanged: provider.setPV2,
+              provider: provider,
+              maxValue: 660,
+              pin: Pin.pv2,
+              controller: _pv2Controller,
+              focusNode: _pv2Focus,
+            ),
             _buildPowerCard(
-                label: appLocalizations.pinPV3,
-                value: provider.voltagePV3,
-                suffix: ' V',
-                onValueChanged: provider.setPV3,
-                provider: provider,
-                maxValue: 330,
-                pin: Pin.pv3,
-                controller: _pv3Controller,
-                focusNode: _pv3Focus),
+              label: appLocalizations.pinPV3,
+              value: provider.voltagePV3,
+              suffix: ' V',
+              onValueChanged: provider.setPV3,
+              provider: provider,
+              maxValue: 330,
+              pin: Pin.pv3,
+              controller: _pv3Controller,
+              focusNode: _pv3Focus,
+            ),
             _buildPowerCard(
-                label: appLocalizations.pinPCS,
-                value: provider.currentPCS,
-                suffix: ' mA',
-                onValueChanged: provider.setPCS,
-                provider: provider,
-                maxValue: 330,
-                pin: Pin.pcs,
-                controller: _pcsController,
-                focusNode: _pcsFocus),
+              label: appLocalizations.pinPCS,
+              value: provider.currentPCS,
+              suffix: ' mA',
+              onValueChanged: provider.setPCS,
+              provider: provider,
+              maxValue: 330,
+              pin: Pin.pcs,
+              controller: _pcsController,
+              focusNode: _pcsFocus,
+            ),
           ];
 
           return Stack(
@@ -454,6 +759,7 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
                 onGuidePressed: _showInstrumentGuide,
                 onRecordPressed:
                     provider.isPlayingBack ? null : _toggleRecording,
+                onBackPressed: _handleBackPressed,
                 isRecording: provider.isRecording,
                 isPlayingBack: provider.isPlayingBack,
                 isPlaybackPaused: provider.isPlaybackPaused,
@@ -476,6 +782,10 @@ class _PowerSourceScreenState extends State<PowerSourceScreen> {
                     behavior: const ScrollBehavior(),
                     child: LayoutBuilder(
                       builder: (context, constraints) {
+                        if (provider.isLabrador) {
+                          return _buildLabradorVerticalBoxes(
+                              provider, constraints);
+                        }
                         final double rowHeight =
                             (constraints.maxHeight / 2).clamp(260.0, 480.0);
                         return constraints.maxWidth < 600

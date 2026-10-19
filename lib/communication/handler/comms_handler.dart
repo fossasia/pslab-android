@@ -3,21 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:pslab/communication/handler/base.dart';
 import 'package:pslab/others/logger_service.dart';
-import 'package:pslab/src/rust/api/simple.dart' as rust_api;
+import 'package:pslab/src/rust/api/common.dart' as rust_api;
 
-class PSLabBoard {
-  final String version;
-  final int vid;
-  final int pid;
-  const PSLabBoard(
-      {required this.version, required this.vid, required this.pid});
-}
-
-class PSLabCommunicationHandler implements CommunicationHandler {
-  static const List<PSLabBoard> supportedBoards = [
-    PSLabBoard(version: 'V6', vid: 0x10C4, pid: 0xEA60),
-    PSLabBoard(version: 'V5', vid: 1240, pid: 223),
-    PSLabBoard(version: 'Mini', vid: 0xCAFE, pid: 0x4010),
+class UsbCommunicationHandler implements CommunicationHandler {
+  static const List<Board> supportedBoards = [
+    Board(version: 'V6', vid: 0x10C4, pid: 0xEA60),
+    Board(version: 'V5', vid: 1240, pid: 223),
+    Board(version: 'Mini', vid: 0xCAFE, pid: 0x4010),
+    Board(version: 'EspoTek Labrador', vid: 0x03EB, pid: 0xBA94),
   ];
 
   static const MethodChannel _androidChannel = MethodChannel('usb_serial');
@@ -27,6 +20,10 @@ class PSLabCommunicationHandler implements CommunicationHandler {
 
   @override
   bool deviceFound = false;
+
+  @override
+  Board? openedBoard;
+
   String? targetPortName;
 
   @override
@@ -75,11 +72,13 @@ class PSLabCommunicationHandler implements CommunicationHandler {
 
             await rust_api.initAndroid(fd: fd);
             boardConnected = true;
+            openedBoard = board;
             break;
           } else {
             logger.d("Probing Desktop for ${board.version}...");
             await rust_api.initDesktop(vid: board.vid, pid: board.pid);
             boardConnected = true;
+            openedBoard = board;
             break;
           }
         } on PlatformException {
@@ -97,9 +96,11 @@ class PSLabCommunicationHandler implements CommunicationHandler {
     }
 
     try {
-      rust_api.setDtr(state: true);
-      rust_api.setRts(state: true);
-      await Future.delayed(const Duration(milliseconds: 250));
+      if (openedBoard?.version != 'EspoTek Labrador') {
+        rust_api.setDtr(state: true);
+        rust_api.setRts(state: true);
+        await Future.delayed(const Duration(milliseconds: 250));
+      }
 
       connected = true;
     } catch (e) {
@@ -130,6 +131,7 @@ class PSLabCommunicationHandler implements CommunicationHandler {
     if (!connected) return;
     rust_api.closeUsb();
     connected = false;
+    openedBoard = null;
   }
 
   @override
@@ -185,3 +187,5 @@ class PSLabCommunicationHandler implements CommunicationHandler {
     }
   }
 }
+
+typedef PSLabCommunicationHandler = UsbCommunicationHandler;

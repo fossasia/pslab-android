@@ -2,13 +2,13 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:pslab/l10n/app_localizations.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/theme/colors.dart';
 import 'package:pslab/view/widgets/common_scaffold_widget.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 
 import '../others/data_chart_analyzer.dart';
 import 'widgets/data_chart.dart';
@@ -106,11 +106,23 @@ class _LoggedDataChartScreenState extends State<LoggedDataChartScreen> {
           ),
         );
 
-        await Printing.sharePdf(
+        final outputFile = await FilePicker.saveFile(
+          dialogTitle: appLocalizations.exportToPdf,
+          fileName: '${widget.instrumentName.replaceAll(" ", "_")}_'
+              '${appLocalizations.chartReportPdf}',
           bytes: await pdf.save(),
-          filename:
-              '${widget.instrumentName.replaceAll(" ", "_")}_${appLocalizations.chartReportPdf}',
+          mimeType: 'application/pdf',
+          type: FileType.custom,
+          allowedExtensions: ['pdf'],
         );
+
+        if (outputFile != null && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(appLocalizations.fileSaved),
+            ),
+          );
+        }
       }
     } catch (e) {
       if (mounted) {

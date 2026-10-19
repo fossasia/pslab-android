@@ -4,9 +4,9 @@ import 'package:pslab/communication/commands_proto.dart';
 import 'package:pslab/communication/handler/base.dart';
 import 'package:pslab/others/logger_service.dart';
 
-import '../src/rust/api/simple.dart' as rust_api;
+import '../src/rust/api/common.dart' as rust_api;
 
-enum BoardType { binary, scpi, other }
+enum BoardType { binary, scpi, labrador, other }
 
 class PacketHandler {
   late Uint8List _buffer;
@@ -31,24 +31,29 @@ class PacketHandler {
 
   Future<String> getVersion() async {
     try {
-      String scpiResponse = await queryScpi("*IDN?", timeout: 50);
+      sendByte(_mCommandsProto.common);
+      sendByte(_mCommandsProto.getVersion);
+      int bytesRead = await _commonRead(versionStringLength + 1);
+
+      if (bytesRead >= versionStringLength) {
+        String candidate =
+            utf8.decode(_buffer.sublist(0, bytesRead)).split('\n').first.trim();
+        if (candidate.startsWith("PSLab")) {
+          version = candidate;
+          boardType = BoardType.binary;
+          logger.i("Detected PSLab Binary Board: $version");
+          return version;
+        }
+      }
+      String scpiResponse = await queryScpi("*IDN?", timeout: 100);
 
       if (scpiResponse.contains("PSLab Pico") ||
           scpiResponse.contains("PSLab Mini")) {
-        version = scpiResponse;
+        version = scpiResponse.trim();
         boardType = BoardType.scpi;
+        logger.i("Detected PSLab SCPI Board: $version");
         return version;
       }
-
-      sendByte(_mCommandsProto.common);
-      sendByte(_mCommandsProto.getVersion);
-      await _commonRead(versionStringLength + 1);
-
-      version = utf8
-          .decode(_buffer.sublist(0, versionStringLength + 1))
-          .split('\n')
-          .first;
-      boardType = BoardType.binary;
     } catch (e) {
       logger.e("Error in getting version: $e");
     }
@@ -184,7 +189,7 @@ class PacketHandler {
 
   Future<int> getFirmwareVersion() async {
     try {
-      if (boardType == BoardType.scpi) {
+      if (boardType == BoardType.scpi || boardType == BoardType.labrador) {
         return 3;
       }
       sendByte(_mCommandsProto.common);

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pslab/l10n/app_localizations.dart';
@@ -25,7 +26,10 @@ class ConnectDeviceScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<ConnectDeviceScreen> {
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
+  String _selectedDevice = 'PSLab';
   bool _isConnectingWifi = false;
+  bool _isConnectingLabrador = false;
+  bool _isConnectingPslab = false;
 
   @override
   void initState() {
@@ -86,6 +90,56 @@ class _HomeScreenState extends State<ConnectDeviceScreen> {
     }
   }
 
+  Future<void> _connectLabrador(BoardStateProvider provider) async {
+    setState(() => _isConnectingLabrador = true);
+    _showSnackBar(appLocalizations.connectingToLabrador);
+    try {
+      bool success = false;
+      if (kIsWeb) {
+        success = await provider.connectLabradorWeb();
+      } else {
+        await provider.initialize();
+        success = provider.pslabIsConnected && provider.isLabrador;
+      }
+      if (!mounted) return;
+      if (success || (provider.pslabIsConnected && provider.isLabrador)) {
+        _showSnackBar(appLocalizations.connectedToLabradorSuccess);
+      } else {
+        final err = provider.lastError ?? "";
+        _showSnackBar(
+            "${appLocalizations.couldNotConnectToLabrador}${err.isNotEmpty ? ': $err' : ''}");
+      }
+    } catch (e) {
+      if (!mounted) return;
+      _showSnackBar("${appLocalizations.connectionError}$e");
+    } finally {
+      if (mounted) {
+        setState(() => _isConnectingLabrador = false);
+      }
+    }
+  }
+
+  Future<void> _connectPslab(BoardStateProvider provider) async {
+    setState(() => _isConnectingPslab = true);
+    _showSnackBar(appLocalizations.connectingToPslab);
+    try {
+      await provider.initialize();
+      if (!mounted) return;
+      if (provider.pslabIsConnected) {
+        _showSnackBar(appLocalizations.deviceConnected);
+      } else {
+        _showSnackBar(appLocalizations.noDeviceFound);
+      }
+    } catch (e) {
+      if (!mounted) return;
+      _showSnackBar("${appLocalizations.connectionError}$e");
+    } finally {
+      if (mounted) {
+        setState(() => _isConnectingPslab = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
@@ -128,7 +182,7 @@ class _HomeScreenState extends State<ConnectDeviceScreen> {
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 20),
                                 child: Text(
-                                  '${appLocalizations.deviceConnected} via ${isWifiConnected ? "Wi-Fi" : "USB"}\n\nFirmware: $displayDeviceName',
+                                  '${appLocalizations.deviceConnected} via ${isWifiConnected ? "Wi-Fi" : (kIsWeb && provider.isLabrador ? "WebUSB" : (kIsWeb ? "Web Serial" : "USB"))}\n\nFirmware: $displayDeviceName',
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     fontSize: 18,
@@ -136,6 +190,35 @@ class _HomeScreenState extends State<ConnectDeviceScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: buttonForegroundColor,
+                                  backgroundColor: primaryRed,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
+                                  elevation: 0,
+                                ),
+                                icon: const Icon(Icons.power_settings_new,
+                                    color: Colors.white),
+                                label: Text(
+                                  appLocalizations.disconnectDevice,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  provider.disconnect();
+                                },
                               ),
                             ),
                           ] else ...[
@@ -156,9 +239,9 @@ class _HomeScreenState extends State<ConnectDeviceScreen> {
                               children: [
                                 Container(
                                   width: double.infinity,
-                                  margin: const EdgeInsets.only(top: 12),
+                                  margin: const EdgeInsets.only(top: 14),
                                   padding: const EdgeInsets.only(
-                                      top: 30, bottom: 20, left: 20, right: 20),
+                                      top: 28, bottom: 20, left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12),
@@ -177,168 +260,343 @@ class _HomeScreenState extends State<ConnectDeviceScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      // Header Row with Section Title and Red Border Dropdown
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          const Icon(Icons.cable,
-                                              color: Colors.black87, size: 20),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            appLocalizations.usbTitle,
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black87,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 12),
-                                      _stepText(appLocalizations.usbStep1),
-                                      const SizedBox(height: 8),
-                                      _stepText(appLocalizations.usbStep2),
-                                      const SizedBox(height: 8),
-                                      _stepText(appLocalizations.usbStep3),
-                                      const SizedBox(height: 8),
-                                      _stepText(appLocalizations.usbStep4),
-                                      const SizedBox(height: 8),
-                                      _stepText(appLocalizations.usbStep5),
-                                      const SizedBox(height: 20),
-                                      const Divider(thickness: 1),
-                                      const SizedBox(height: 20),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.wifi,
-                                              color: Colors.black87, size: 20),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            appLocalizations.wifiTitle,
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black87,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 12),
-                                      _stepText(appLocalizations.wifiStep1),
-                                      const SizedBox(height: 8),
-                                      _stepText(appLocalizations.wifiStep2),
-                                      const SizedBox(height: 8),
-                                      _stepText(appLocalizations.wifiStep3),
-                                      const SizedBox(height: 8),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 8.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 2.0, right: 8.0),
-                                              child: Icon(
-                                                  Icons.check_circle_outline,
-                                                  size: 16,
-                                                  color: Colors.black87),
-                                            ),
-                                            Expanded(
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    height: 1.4,
-                                                    color: Colors.black,
-                                                  ),
-                                                  children: [
-                                                    TextSpan(
-                                                        text: appLocalizations
-                                                            .wifiFlashingSetupCheck),
-                                                    WidgetSpan(
-                                                      alignment:
-                                                          PlaceholderAlignment
-                                                              .baseline,
-                                                      baseline: TextBaseline
-                                                          .alphabetic,
-                                                      child: InkWell(
-                                                        onTap: () async {
-                                                          final uri = Uri.parse(
-                                                              appLocalizations
-                                                                  .wifiFlashingSetupLinkUrl);
-                                                          if (await canLaunchUrl(
-                                                              uri)) {
-                                                            await launchUrl(
-                                                                uri);
-                                                          } else {
-                                                            logger.e(
-                                                                'Could not launch URL');
-                                                          }
-                                                        },
-                                                        child: Text(
-                                                          appLocalizations
-                                                              .wifiFlashingSetupLinkText,
-                                                          style: TextStyle(
-                                                            color: primaryRed,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const TextSpan(text: "."),
-                                                  ],
+                                          Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.cable,
+                                                color: Colors.black87,
+                                                size: 20,
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                appLocalizations.usbTitle,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black87,
                                                 ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            height: 36,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                  color: primaryRed,
+                                                  width: 1.5),
+                                            ),
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton<String>(
+                                                value: _selectedDevice,
+                                                icon: Icon(
+                                                    Icons.arrow_drop_down,
+                                                    color: primaryRed,
+                                                    size: 22),
+                                                isDense: true,
+                                                style: const TextStyle(
+                                                  color: Colors.black87,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13,
+                                                ),
+                                                items: const [
+                                                  DropdownMenuItem(
+                                                    value: 'PSLab',
+                                                    child: Text('PSLab'),
+                                                  ),
+                                                  DropdownMenuItem(
+                                                    value: 'EspoTek Labrador',
+                                                    child: Text(
+                                                        'EspoTek Labrador'),
+                                                  ),
+                                                ],
+                                                onChanged: (String? val) {
+                                                  if (val != null) {
+                                                    setState(() =>
+                                                        _selectedDevice = val);
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      if (_selectedDevice == 'PSLab') ...[
+                                        _stepText(appLocalizations.usbStep1),
+                                        const SizedBox(height: 8),
+                                        _stepText(appLocalizations.usbStep2),
+                                        const SizedBox(height: 8),
+                                        _stepText(appLocalizations.usbStep3),
+                                        const SizedBox(height: 8),
+                                        _stepText(appLocalizations.usbStep4),
+                                        const SizedBox(height: 8),
+                                        _stepText(appLocalizations.usbStep5),
+                                        const SizedBox(height: 16),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              backgroundColor: primaryRed,
+                                              foregroundColor:
+                                                  buttonForegroundColor,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12),
+                                              elevation: 0,
+                                            ),
+                                            icon: _isConnectingPslab
+                                                ? const SizedBox(
+                                                    width: 18,
+                                                    height: 18,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                                : const Icon(Icons.usb,
+                                                    color: Colors.white,
+                                                    size: 20),
+                                            label: Text(
+                                              _isConnectingPslab
+                                                  ? appLocalizations.connecting
+                                                  : (kIsWeb
+                                                      ? appLocalizations
+                                                          .connectPslabWebSerial
+                                                      : appLocalizations
+                                                          .connectPslab),
+                                              style: TextStyle(
+                                                color: buttonTextColor,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            onPressed: _isConnectingPslab
+                                                ? null
+                                                : () => _connectPslab(provider),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        const Divider(thickness: 1),
+                                        const SizedBox(height: 20),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.wifi,
+                                                color: Colors.black87,
+                                                size: 20),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              appLocalizations.wifiTitle,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black87,
                                               ),
                                             ),
                                           ],
                                         ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      _stepText(appLocalizations.wifiStep4),
-                                      const SizedBox(height: 20),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            backgroundColor: primaryRed,
-                                            foregroundColor:
-                                                buttonForegroundColor,
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 12),
-                                            elevation: 0,
-                                          ),
-                                          onPressed: _isConnectingWifi
-                                              ? null
-                                              : () => _connectWifi(provider),
-                                          child: _isConnectingWifi
-                                              ? const SizedBox(
-                                                  width: 20,
-                                                  height: 20,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    strokeWidth: 2,
-                                                    color: Colors.white,
-                                                  ),
-                                                )
-                                              : Text(
-                                                  appLocalizations
-                                                      .connectWifiButton,
-                                                  style: TextStyle(
-                                                    color: buttonTextColor,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    letterSpacing: 1.2,
+                                        const SizedBox(height: 12),
+                                        _stepText(appLocalizations.wifiStep1),
+                                        const SizedBox(height: 8),
+                                        _stepText(appLocalizations.wifiStep2),
+                                        const SizedBox(height: 8),
+                                        _stepText(appLocalizations.wifiStep3),
+                                        const SizedBox(height: 8),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 2.0, right: 8.0),
+                                                child: Icon(
+                                                    Icons.check_circle_outline,
+                                                    size: 16,
+                                                    color: Colors.black87),
+                                              ),
+                                              Expanded(
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      height: 1.4,
+                                                      color: Colors.black,
+                                                    ),
+                                                    children: [
+                                                      TextSpan(
+                                                          text: appLocalizations
+                                                              .wifiFlashingSetupCheck),
+                                                      WidgetSpan(
+                                                        alignment:
+                                                            PlaceholderAlignment
+                                                                .baseline,
+                                                        baseline: TextBaseline
+                                                            .alphabetic,
+                                                        child: InkWell(
+                                                          onTap: () async {
+                                                            final uri = Uri.parse(
+                                                                appLocalizations
+                                                                    .wifiFlashingSetupLinkUrl);
+                                                            if (await canLaunchUrl(
+                                                                uri)) {
+                                                              await launchUrl(
+                                                                  uri);
+                                                            } else {
+                                                              logger.e(
+                                                                  'Could not launch URL');
+                                                            }
+                                                          },
+                                                          child: Text(
+                                                            appLocalizations
+                                                                .wifiFlashingSetupLinkText,
+                                                            style: TextStyle(
+                                                              color: primaryRed,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .underline,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const TextSpan(text: "."),
+                                                    ],
                                                   ),
                                                 ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
+                                        const SizedBox(height: 8),
+                                        _stepText(appLocalizations.wifiStep4),
+                                        const SizedBox(height: 20),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              backgroundColor: primaryRed,
+                                              foregroundColor:
+                                                  buttonForegroundColor,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12),
+                                              elevation: 0,
+                                            ),
+                                            onPressed: _isConnectingWifi
+                                                ? null
+                                                : () => _connectWifi(provider),
+                                            child: _isConnectingWifi
+                                                ? const SizedBox(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    appLocalizations
+                                                        .connectWifiButton,
+                                                    style: TextStyle(
+                                                      color: buttonTextColor,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      letterSpacing: 1.2,
+                                                    ),
+                                                  ),
+                                          ),
+                                        ),
+                                      ] else ...[
+                                        _stepText(
+                                            appLocalizations.labradorStep1),
+                                        const SizedBox(height: 10),
+                                        _stepText(
+                                            appLocalizations.labradorStep2),
+                                        const SizedBox(height: 10),
+                                        _stepText(
+                                            appLocalizations.labradorStep3),
+                                        const SizedBox(height: 10),
+                                        _stepText(
+                                            appLocalizations.labradorStep4),
+                                        const SizedBox(height: 20),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              backgroundColor: primaryRed,
+                                              foregroundColor:
+                                                  buttonForegroundColor,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12),
+                                              elevation: 0,
+                                            ),
+                                            icon: _isConnectingLabrador
+                                                ? const SizedBox(
+                                                    width: 18,
+                                                    height: 18,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                                : const Icon(
+                                                    Icons.developer_board,
+                                                    color: Colors.white,
+                                                    size: 20),
+                                            label: Text(
+                                              _isConnectingLabrador
+                                                  ? appLocalizations.connecting
+                                                  : (kIsWeb
+                                                      ? appLocalizations
+                                                          .connectLabradorWebUSB
+                                                      : appLocalizations
+                                                          .connectLabrador),
+                                              style: TextStyle(
+                                                color: buttonTextColor,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            onPressed: _isConnectingLabrador
+                                                ? null
+                                                : () =>
+                                                    _connectLabrador(provider),
+                                          ),
+                                        ),
+                                      ],
                                     ],
                                   ),
                                 ),
@@ -356,7 +614,7 @@ class _HomeScreenState extends State<ConnectDeviceScreen> {
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: Text(
-                                        appLocalizations.stepsToConnectTitle,
+                                        appLocalizations.connectingToDevice,
                                         style: TextStyle(
                                           color: primaryRed,
                                           fontStyle: FontStyle.normal,

@@ -9,31 +9,40 @@ import 'package:pslab/others/logger_service.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/providers/settings_config_provider.dart';
 import 'package:pslab/others/science_lab_common.dart';
+import 'package:pslab/communication/handler/base.dart';
 import 'package:pslab/communication/handler/wifi_comms_handler.dart';
 import 'package:pslab/communication/handler/comms_handler.dart';
+import 'package:pslab/hal/hardware_board.dart';
+import 'package:pslab/hal/labrador_board.dart';
+import 'package:pslab/hal/pslab_board.dart';
+import 'package:pslab/communication/labrador/labrador_platform_manager.dart';
 
-import 'package:pslab/src/rust/api/simple.dart' as rust_api;
+import 'package:pslab/src/rust/api/common.dart' as rust_api;
 
 class BoardStateProvider extends ChangeNotifier {
   late SettingsConfigProvider configProvider;
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
+
   bool initialisationStatus = false;
   bool pslabIsConnected = false;
   bool hasPermission = false;
   late ScienceLabCommon scienceLabCommon;
+
   String pslabVersionID = 'Not Connected';
   String pslabVersionIDV6 = 'PSLab V6';
   String pslabVersionIDV5 = 'PSLab V5';
   String pslabVersionIDMini = 'PSLab Pico';
+  String pslabVersionIDLabrador = 'EspoTek Labrador';
+
   int pslabVersion = 0;
   int pslabFirmwareVersion = 0;
   bool _isProcessing = false;
 
+  HardwareBoard? activeBoard;
+
   String wifiHost = '192.168.4.1';
 
   final ValueNotifier<String?> legacyFirmwareNotifier = ValueNotifier(null);
-
-  final ValueNotifier<bool> unresponsiveDeviceNotifier = ValueNotifier(false);
 
   static const EventChannel _androidUsbEventChannel =
       EventChannel('io.pslab/usb_events');
@@ -49,18 +58,65 @@ class BoardStateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get isLabrador =>
+      activeBoard is LabradorHardwareBoard ||
+      pslabVersionID == pslabVersionIDLabrador;
+
+  String? get lastError => LabradorPlatformManager.instance.lastError;
+
+  Future<bool> connectLabradorWeb() async {
+    if (!kIsWeb) return false;
+    if (_isProcessing) return false;
+    _isProcessing = true;
+
+    try {
+      final success = await LabradorPlatformManager.instance.connectWeb();
+      if (success) {
+        pslabVersionID = pslabVersionIDLabrador;
+        pslabVersion = 8;
+        pslabFirmwareVersion = 1;
+        pslabIsConnected = true;
+
+        activeBoard = LabradorHardwareBoard(
+          version: pslabVersionIDLabrador,
+          vid: 0x03EB,
+          pid: 0xBA94,
+        );
+
+        ScienceLabCommon.communicationHandler.openedBoard = const Board(
+          version: 'EspoTek Labrador',
+          vid: 0x03EB,
+          pid: 0xBA94,
+        );
+        ScienceLabCommon.communicationHandler.connected = true;
+
+        notifyListeners();
+        return true;
+      }
+    } catch (e) {
+      logger.e("Failed to connect Labrador on Web: $e");
+    } finally {
+      _isProcessing = false;
+    }
+    return false;
+  }
+
+  Future<void> disconnect() async {
+    _resetConnectionState();
+  }
+
   Future<void> initialize() async {
     if (_isProcessing) return;
     _isProcessing = true;
 
-    if (!scienceLabCommon.isConnected()) {
+    if (!scienceLabCommon.isConnected() && activeBoard == null) {
       await scienceLabCommon.initialize();
 
       if (!kIsWeb &&
           (Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
         bool success = await _connectToDesktopDynamic();
         if (!success) {
-          logger.w("PSLab not found on any available COM port.");
+          logger.w("Device not found on any available USB/COM port.");
         }
       } else {
         bool portOpened = await scienceLabCommon.openDevice();
@@ -94,54 +150,78 @@ class BoardStateProvider extends ChangeNotifier {
   }
 
   Future<bool> _connectToDesktopDynamic() async {
-    if (ScienceLabCommon.communicationHandler is! PSLabCommunicationHandler) {
+    if (ScienceLabCommon.communicationHandler is! UsbCommunicationHandler) {
       return false;
     }
 
     final comms =
-        ScienceLabCommon.communicationHandler as PSLabCommunicationHandler;
+        ScienceLabCommon.communicationHandler as UsbCommunicationHandler;
+
     List<String> ports = rust_api.getAvailablePorts();
-    bool anyPortFailedHandshake = false;
 
     for (String port in ports) {
-      bool portOpened = false;
       try {
-        logger.d("Testing port $port for PSLab handshake...");
+        logger.d("Testing port $port for connection handshake...");
         comms.targetPortName = port;
-        portOpened = await scienceLabCommon.openDevice();
+        if (port == "USB_LABRADOR") {
+          rust_api.initLabradorDesktop();
+          logger.i("Found EspoTek Labrador on USB!");
+          pslabVersionID = pslabVersionIDLabrador;
+          pslabVersion = 8;
+          pslabIsConnected = true;
+
+          activeBoard = LabradorHardwareBoard(
+            version: pslabVersionIDLabrador,
+            vid: 0x03EB,
+            pid: 0xBA94,
+          );
+
+          comms.openedBoard = const Board(
+            version: 'EspoTek Labrador',
+            vid: 0x03EB,
+            pid: 0xBA94,
+          );
+          comms.connected = true;
+
+          notifyListeners();
+          return true;
+        }
+        bool portOpened = await scienceLabCommon.openDevice();
 
         if (portOpened) {
           await setPSLabVersionIDs();
+
           if (pslabVersionID == pslabVersionIDV6 ||
               pslabVersionID == pslabVersionIDV5 ||
               pslabVersionID == pslabVersionIDMini) {
             logger.i("Found PSLab on $port!");
             pslabIsConnected = true;
+
+            activeBoard = PSLabHardwareBoard(
+              version: pslabVersionID,
+              vid: 0x10C4,
+              pid: 0xEA60,
+            );
+
             await fetchFirmwareVersion();
+
             notifyListeners();
             return true;
           } else {
             logger.w(
                 "Device on $port failed handshake. Closing and moving to next port...");
-            anyPortFailedHandshake = true;
             comms.close();
             _resetConnectionState();
           }
         }
       } catch (e) {
         logger.w("Exception while testing $port: $e");
-        if (portOpened && !pslabIsConnected) {
-          anyPortFailedHandshake = true;
-        }
         comms.close();
         _resetConnectionState();
       }
     }
 
     comms.targetPortName = null;
-    if (anyPortFailedHandshake) {
-      _reportUnresponsiveDevice();
-    }
     return false;
   }
 
@@ -211,32 +291,57 @@ class BoardStateProvider extends ChangeNotifier {
   }
 
   Future<void> _validateHandshake() async {
-    try {
-      await setPSLabVersionIDs();
-    } catch (e) {
-      logger.w("Version handshake threw: $e");
-      pslabVersion = 0;
+    final openedBoard = ScienceLabCommon.communicationHandler.openedBoard;
+    if (openedBoard?.version == 'EspoTek Labrador') {
+      logger.i("Found EspoTek Labrador on Android via USB OTG!");
+      pslabVersionID = pslabVersionIDLabrador;
+      pslabVersion = 8;
+      pslabIsConnected = true;
+
+      activeBoard = LabradorHardwareBoard(
+        version: pslabVersionIDLabrador,
+        vid: 0x03EB,
+        pid: 0xBA94,
+      );
+
+      pslabFirmwareVersion = 1;
+      notifyListeners();
+      return;
     }
+
+    await setPSLabVersionIDs();
 
     if (pslabVersion == 0 || pslabVersionID == 'Not Connected') {
       logger.w(
           "Port opened, but device failed the Version Handshake. Rejecting generic device.");
       _resetConnectionState();
-      _reportUnresponsiveDevice();
     } else {
       logger.i("Handshake successful: $pslabVersionID");
       pslabIsConnected = true;
+
+      if (pslabVersionID == pslabVersionIDLabrador) {
+        activeBoard = LabradorHardwareBoard(
+          version: pslabVersionIDLabrador,
+          vid: 0x03EB,
+          pid: 0xBA94,
+        );
+      } else {
+        activeBoard = PSLabHardwareBoard(
+          version: pslabVersionID,
+          vid: 0x10C4,
+          pid: 0xEA60,
+        );
+      }
+
       await fetchFirmwareVersion();
     }
     notifyListeners();
   }
 
-  void _reportUnresponsiveDevice() {
-    unresponsiveDeviceNotifier.value = false;
-    unresponsiveDeviceNotifier.value = true;
-  }
-
   void _resetConnectionState() {
+    activeBoard?.disconnect();
+    activeBoard = null;
+    ScienceLabCommon.communicationHandler.openedBoard = null;
     scienceLabCommon.setConnected(false);
     pslabIsConnected = false;
     pslabVersionID = 'Not Connected';
@@ -247,14 +352,18 @@ class BoardStateProvider extends ChangeNotifier {
 
   Future<void> setPSLabVersionIDs() async {
     String rawVersion = await getIt.get<ScienceLab>().getVersion();
-
-    if (rawVersion.contains(pslabVersionIDMini)) {
+    rawVersion = rawVersion.trim();
+    if (rawVersion == pslabVersionIDLabrador ||
+        rawVersion.contains('EspoTek Labrador')) {
+      pslabVersionID = pslabVersionIDLabrador;
+      pslabVersion = 8;
+    } else if (rawVersion.contains(pslabVersionIDMini)) {
       pslabVersionID = pslabVersionIDMini;
       pslabVersion = 7;
-    } else if (rawVersion == pslabVersionIDV6) {
+    } else if (rawVersion.contains(pslabVersionIDV6)) {
       pslabVersionID = pslabVersionIDV6;
       pslabVersion = 6;
-    } else if (rawVersion == pslabVersionIDV5) {
+    } else if (rawVersion.contains(pslabVersionIDV5)) {
       pslabVersionID = pslabVersionIDV5;
       pslabVersion = 5;
     } else {
@@ -264,6 +373,10 @@ class BoardStateProvider extends ChangeNotifier {
   }
 
   Future<void> fetchFirmwareVersion() async {
+    if (pslabVersionID == pslabVersionIDLabrador) {
+      pslabFirmwareVersion = 1;
+      return;
+    }
     if (getIt.get<ScienceLab>().isConnected()) {
       pslabFirmwareVersion =
           await getIt.get<ScienceLab>().mPacketHandler.getFirmwareVersion();

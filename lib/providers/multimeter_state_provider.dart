@@ -6,8 +6,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:mp_audio_stream/mp_audio_stream.dart';
 import 'package:pslab/communication/science_lab.dart';
+import 'package:pslab/hal/hardware_board.dart';
+import 'package:pslab/hal/labrador_board.dart';
+import 'package:pslab/hal/multimeter_interface.dart';
 import 'package:pslab/l10n/app_localizations.dart';
 import 'package:pslab/others/logger_service.dart';
+import 'package:pslab/providers/board_state_provider.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/providers/multimeter_config_provider.dart';
 
@@ -17,6 +21,10 @@ class MultimeterStateProvider extends ChangeNotifier {
   late List<String> knobMarker;
   late int _selectedIndex = 0;
   late ScienceLab _scienceLab;
+  late BoardStateProvider _boardState;
+
+  bool get isConnected =>
+      _boardState.activeBoard?.isConnected == true || _scienceLab.isConnected();
 
   late bool isSwitchChecked;
   late bool isContinuityChecked;
@@ -50,6 +58,7 @@ class MultimeterStateProvider extends ChangeNotifier {
   MultimeterStateProvider() {
     _selectedIndex = 0;
     _scienceLab = getIt<ScienceLab>();
+    _boardState = getIt<BoardStateProvider>();
     isSwitchChecked = false;
     isContinuityChecked = false;
     value = appLocalizations.defaultValue;
@@ -225,13 +234,32 @@ class MultimeterStateProvider extends ChangeNotifier {
   }
 
   Future<void> _performMeasurement() async {
-    if (_isDisposed || _isProcessing || !_scienceLab.isConnected()) return;
+    if (_isDisposed || _isProcessing || !isConnected) return;
     _isProcessing = true;
     int currentIndex = _selectedIndex;
+
+    final HardwareBoard? activeBoard = _boardState.activeBoard;
+    final bool isLabrador = activeBoard is LabradorHardwareBoard ||
+        (activeBoard?.boardName.toLowerCase().contains('labrador') ?? false);
 
     try {
       switch (currentIndex) {
         case 3:
+          if (isLabrador) {
+            if (activeBoard?.multimeter != null) {
+              await activeBoard!.multimeter!.setMode(MultimeterMode.resistance);
+              final reading = await activeBoard.multimeter!.readMeasurement();
+              value = reading.value.isInfinite
+                  ? "Infinity"
+                  : reading.value.toStringAsFixed(2);
+              unit = reading.unit;
+            } else {
+              value = "N/A";
+              unit = "\u2126";
+            }
+            break;
+          }
+
           double? resistance;
           double? avgResistance = 0.0;
           int loops = 20;
@@ -282,6 +310,12 @@ class MultimeterStateProvider extends ChangeNotifier {
 
         case 4:
         case 1:
+          if (isLabrador) {
+            value = "PSLab Only";
+            unit = "pF";
+            break;
+          }
+
           double? capacitance = await _scienceLab.getCapacitance();
           if (capacitance == null) {
             value = "Cannot measure!";
@@ -310,6 +344,12 @@ class MultimeterStateProvider extends ChangeNotifier {
         case 6:
         case 7:
         case 8:
+          if (isLabrador) {
+            value = "PSLab Only";
+            unit = appLocalizations.unitHz;
+            break;
+          }
+
           String channel = knobMarker[currentIndex];
           double frequency = await _scienceLab.getFrequency(channel);
 
@@ -328,10 +368,37 @@ class MultimeterStateProvider extends ChangeNotifier {
           break;
 
         default:
-          double? voltage =
-              await _scienceLab.getVoltage(knobMarker[currentIndex], 1);
-          value = voltage.toStringAsFixed(2);
-          unit = appLocalizations.unitVolts;
+          String channel = knobMarker[currentIndex];
+          if (isLabrador) {
+            if (channel == 'CH3') {
+              value = "N/A";
+              unit = "(CH1/CH2)";
+            } else {
+              int chNum = (channel == 'CH2') ? 2 : 1;
+              if (activeBoard?.oscilloscope != null) {
+                await activeBoard!.oscilloscope!.configureChannel(chNum, true);
+                activeBoard.oscilloscope!.setAcCoupled(false);
+                final samples =
+                    await activeBoard.oscilloscope!.fetchSamples(50, chNum);
+                if (samples.isNotEmpty) {
+                  double avgV =
+                      samples.reduce((a, b) => a + b) / samples.length;
+                  value = avgV.toStringAsFixed(2);
+                  unit = appLocalizations.unitVolts;
+                } else {
+                  value = "0.00";
+                  unit = appLocalizations.unitVolts;
+                }
+              } else {
+                value = "0.00";
+                unit = appLocalizations.unitVolts;
+              }
+            }
+          } else {
+            double? voltage = await _scienceLab.getVoltage(channel, 1);
+            value = voltage.toStringAsFixed(2);
+            unit = appLocalizations.unitVolts;
+          }
       }
 
       if (_isDisposed) return;
@@ -456,7 +523,7 @@ class MultimeterStateProvider extends ChangeNotifier {
   }
 
   Future<bool> startRecording() async {
-    if (!_scienceLab.isConnected()) {
+    if (!isConnected) {
       return false;
     }
     if (_configProvider!.config.includeLocationData) {

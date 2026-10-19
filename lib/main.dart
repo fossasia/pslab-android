@@ -46,7 +46,11 @@ import 'package:pslab/src/rust/frb_generated.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await RustLib.init();
+  try {
+    await RustLib.init();
+  } catch (e, stack) {
+    debugPrint("RustLib.init error: $e\n$stack");
+  }
 
   if (!kIsWeb &&
       (Platform.isWindows || Platform.isLinux || Platform.isMacOS) &&

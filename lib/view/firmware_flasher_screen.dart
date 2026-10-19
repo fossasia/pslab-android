@@ -3,21 +3,28 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:pslab/l10n/app_localizations.dart';
 import 'package:pslab/providers/locator.dart';
+import 'package:pslab/providers/board_state_provider.dart';
+import 'package:pslab/hal/labrador_board.dart';
 import 'package:pslab/view/widgets/common_scaffold_widget.dart';
 import 'package:pslab/theme/colors.dart';
 
 import 'package:pslab/communication/handler/base.dart';
-import 'package:pslab/communication/handler/router/platform_handler.dart';
+import 'package:pslab/communication/pslab_communication/platform_handler.dart';
 import '../others/web_firmware_flasher.dart';
 import '../others/native_firmware_flasher.dart';
+import '../others/labrador_firmware_flasher.dart';
 
 enum FirmwareSource { github, local }
+
+enum LabradorFirmwareSource { builtin, local }
 
 class FirmwareFlasherScreen extends StatefulWidget {
   const FirmwareFlasherScreen({super.key});
@@ -29,17 +36,28 @@ class FirmwareFlasherScreen extends StatefulWidget {
 class _FirmwareFlasherScreenState extends State<FirmwareFlasherScreen> {
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
 
+  String _selectedTarget = 'PSLab';
+
   FirmwareSource _selectedSource = FirmwareSource.github;
+  List<GitHubRelease> _releases = [];
+  GitHubRelease? _selectedRelease;
+  GitHubAsset? _selectedAsset;
+
+  LabradorFirmwareSource _selectedLabradorSource =
+      LabradorFirmwareSource.builtin;
+  static const String _defaultLabradorHex = 'labrafirm_000c_03.hex';
+  String _selectedLabradorHex = _defaultLabradorHex;
+  final Map<String, String> _labradorFirmwareDescriptions = {
+    'labrafirm_000c_03.hex':
+        'Variant 03 (Bulk USB Transfer - Recommended for high-speed streaming in this app)',
+    'labrafirm_0007_01.hex': 'Variant 01 (Legacy Isochronous Streaming)',
+    'labrafirm_0007_02.hex': 'Variant 02 (Legacy Isochronous Streaming)',
+  };
 
   bool _isFlashing = false;
   bool _isLoadingRelease = false;
   double _progress = 0.0;
-
   String? _statusText;
-
-  List<GitHubRelease> _releases = [];
-  GitHubRelease? _selectedRelease;
-  GitHubAsset? _selectedAsset;
 
   String? _loadedHexContent;
   String? _loadedFileName;
@@ -50,8 +68,19 @@ class _FirmwareFlasherScreenState extends State<FirmwareFlasherScreen> {
   @override
   void initState() {
     super.initState();
+    final boardState = getIt.get<BoardStateProvider>();
+    if (boardState.isLabrador) {
+      _selectedTarget = 'EspoTek Labrador';
+    } else {
+      _selectedTarget = 'PSLab';
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _fetchGitHubReleases();
+      if (_selectedTarget == 'EspoTek Labrador') {
+        _selectBuiltInLabradorFirmware(_selectedLabradorHex);
+      } else {
+        _fetchGitHubReleases();
+      }
     });
   }
 
@@ -74,6 +103,27 @@ class _FirmwareFlasherScreenState extends State<FirmwareFlasherScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
+  }
+
+  void _onTargetChanged(String newTarget) async {
+    setState(() {
+      _selectedTarget = newTarget;
+      _loadedHexContent = null;
+      _loadedFileName = null;
+      _progress = 0.0;
+    });
+
+    if (newTarget == 'EspoTek Labrador') {
+      await _selectBuiltInLabradorFirmware(_selectedLabradorHex);
+    } else {
+      if (_releases.isEmpty) {
+        await _fetchGitHubReleases();
+      } else if (_selectedAsset != null) {
+        await _downloadAndPrepareAsset(_selectedAsset!);
+      } else {
+        setState(() => _statusText = appLocalizations.flasherStatusReady);
+      }
+    }
   }
 
   Future<void> _fetchGitHubReleases() async {
@@ -189,6 +239,54 @@ class _FirmwareFlasherScreenState extends State<FirmwareFlasherScreen> {
     }
   }
 
+  Future<void> _selectBuiltInLabradorFirmware(String assetFileName) async {
+    setState(() {
+      _isLoadingRelease = true;
+      _statusText =
+          "${appLocalizations.flasherLoadingBuiltin}$assetFileName...";
+    });
+    try {
+      final hexData =
+          await rootBundle.loadString('assets/firmware/$assetFileName');
+      if (!mounted) return;
+      setState(() {
+        _selectedLabradorHex = assetFileName;
+        _loadedHexContent = hexData;
+        _loadedFileName = assetFileName;
+        _statusText =
+            "${appLocalizations.flasherStatusReadyToFlash}$assetFileName";
+        _progress = 0.0;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _statusText = "${appLocalizations.flasherFailedLoadBuiltin}$e";
+      });
+    } finally {
+      if (mounted) {
+        setState(() => _isLoadingRelease = false);
+      }
+    }
+  }
+
+  Future<void> _jumpConnectedLabradorToBootloader(
+      BoardStateProvider provider) async {
+    try {
+      _showSnackBar(appLocalizations.flasherSendingBootloaderJump);
+      final board = provider.activeBoard;
+      if (board is LabradorHardwareBoard) {
+        await board.jumpToBootloader();
+      }
+      _showSnackBar(appLocalizations.flasherLabradorSwitchedBootloader);
+      setState(() {
+        _statusText = appLocalizations.flasherLabradorInBootloaderReady;
+      });
+    } catch (e) {
+      _showSnackBar("${appLocalizations.flasherErrorSwitchingBootloader}$e",
+          isError: true);
+    }
+  }
+
   Future<void> _pickLocalFile() async {
     try {
       final platformFile = await FilePicker.pickFile(
@@ -221,7 +319,15 @@ class _FirmwareFlasherScreenState extends State<FirmwareFlasherScreen> {
     }
   }
 
-  void _startFlashing() async {
+  void _onStartFlashingPressed() {
+    if (_selectedTarget == 'EspoTek Labrador') {
+      _startFlashingLabrador();
+    } else {
+      _startFlashingPslab();
+    }
+  }
+
+  void _startFlashingPslab() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       _showSnackBar(appLocalizations.flasherErrorIOSNotSupported,
           isError: true);
@@ -372,6 +478,82 @@ class _FirmwareFlasherScreenState extends State<FirmwareFlasherScreen> {
     }
   }
 
+  void _startFlashingLabrador() async {
+    if (_loadedHexContent == null || _loadedHexContent!.isEmpty) {
+      _showSnackBar(appLocalizations.flasherErrorSelectFirmwareFirst,
+          isError: true);
+      return;
+    }
+
+    bool? ready = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text(appLocalizations.flasherLabradorDialogTitle,
+            style: const TextStyle(
+                color: Colors.red, fontWeight: FontWeight.bold)),
+        content: Text(
+            "${appLocalizations.flasherLabradorDialogContent}\n\n$_loadedFileName"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(appLocalizations.flasherBtnCancel,
+                style: const TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: primaryRed, foregroundColor: Colors.white),
+            child: Text(appLocalizations.flasherBtnContinue,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+
+    if (ready != true) return;
+
+    setState(() {
+      _isFlashing = true;
+      _progress = 0.05;
+      _statusText = appLocalizations.flasherInitiatingLabrador;
+    });
+
+    final flasher = LabradorFirmwareFlasher(
+      onProgress: (prog, stat) {
+        if (mounted) {
+          setState(() {
+            _progress = prog;
+            _statusText = stat;
+          });
+        }
+      },
+      onSuccess: () {
+        if (mounted) {
+          setState(() {
+            _isFlashing = false;
+            _progress = 1.0;
+          });
+          _showSnackBar(appLocalizations.flasherLabradorSuccess);
+        }
+      },
+      onError: (err) {
+        if (mounted) {
+          setState(() {
+            _isFlashing = false;
+            _statusText = "${appLocalizations.flasherLabradorFailed}$err";
+          });
+          _showSnackBar(err, isError: true);
+        }
+      },
+    );
+
+    await flasher.flashFirmware(
+      hexContent: _loadedHexContent!,
+      hexFileName: _loadedFileName,
+    );
+  }
+
   Widget _buildOutlinedBox({required String title, required Widget child}) {
     const Color boxColor = Colors.white;
     return Stack(
@@ -408,140 +590,232 @@ class _FirmwareFlasherScreenState extends State<FirmwareFlasherScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    String currentStatus = _statusText ?? appLocalizations.flasherStatusReady;
-
-    return CommonScaffold(
-      title: appLocalizations.flasherTitle,
-      body: Container(
+  Widget _buildTargetSelector() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
         color: Colors.white,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: primaryRed, width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
             children: [
-              _buildOutlinedBox(
-                title: appLocalizations.flasherInstructionsTitle,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _StepText(appLocalizations.flasherInstStep1),
-                    _StepText(appLocalizations.flasherInstStep2),
-                    _StepText(appLocalizations.flasherInstStep3),
-                    _StepText(appLocalizations.flasherInstStep4),
-                  ],
+              Icon(Icons.developer_board, color: primaryRed, size: 22),
+              const SizedBox(width: 10),
+              Text(
+                appLocalizations.flasherTargetDevice,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
               ),
-              const SizedBox(height: 16),
-              _buildOutlinedBox(
-                title: appLocalizations.flasherSourceTitle,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SegmentedButton<FirmwareSource>(
-                      showSelectedIcon: false,
-                      style: SegmentedButton.styleFrom(
-                          selectedBackgroundColor: Colors.red[50],
-                          selectedForegroundColor: primaryRed),
-                      segments: [
-                        ButtonSegment(
-                            value: FirmwareSource.github,
-                            icon:
-                                const FaIcon(FontAwesomeIcons.github, size: 18),
-                            label: Text(appLocalizations.flasherSourceGithub)),
-                        ButtonSegment(
-                            value: FirmwareSource.local,
-                            icon: const Icon(Icons.folder_open),
-                            label: Text(appLocalizations.flasherSourceLocal)),
-                      ],
-                      selected: {_selectedSource},
-                      onSelectionChanged: _isFlashing
-                          ? null
-                          : (set) {
-                              setState(() {
-                                _selectedSource = set.first;
-                              });
-                            },
-                    ),
-                    const SizedBox(height: 16),
-                    if (_selectedSource == FirmwareSource.github)
-                      _buildGitHubPanel()
-                    else
-                      _buildLocalFilePanel(),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              _buildOutlinedBox(
-                title: appLocalizations.flasherStatusTitle,
-                child: Column(
-                  children: [
-                    if (_loadedFileName != null) ...[
-                      Text("${appLocalizations.flasherTarget}$_loadedFileName",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                              color: Colors.black),
-                          textAlign: TextAlign.center),
-                      const SizedBox(height: 12)
-                    ],
-                    Text(currentStatus,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: currentStatus.contains("error") ||
-                                    currentStatus.contains("Failed") ||
-                                    currentStatus.contains("failed")
-                                ? primaryRed
-                                : Colors.black)),
-                    const SizedBox(height: 12),
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: LinearProgressIndicator(
-                            value: _progress,
-                            minHeight: 12,
-                            backgroundColor: Colors.grey[200],
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                _progress == 1.0
-                                    ? Colors.green
-                                    : Colors.redAccent))),
-                    const SizedBox(height: 6),
-                    Align(
-                        alignment: Alignment.centerRight,
-                        child: Text("${(_progress * 100).toInt()}%",
-                            style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey))),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 54),
-                    backgroundColor: primaryRed,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6))),
-                onPressed: _isFlashing ? null : _startFlashing,
-                child: _isFlashing
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2))
-                    : Text(appLocalizations.flasherBtnStartFlash,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1)),
-              ),
-              const SizedBox(height: 24),
             ],
           ),
-        ),
+          Container(
+            height: 38,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: primaryRed, width: 1.5),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: _selectedTarget,
+                icon: Icon(Icons.arrow_drop_down, color: primaryRed, size: 22),
+                isDense: true,
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    value: 'PSLab',
+                    child: Text('PSLab V6'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'EspoTek Labrador',
+                    child: Text('EspoTek Labrador'),
+                  ),
+                ],
+                onChanged: _isFlashing
+                    ? null
+                    : (val) {
+                        if (val != null && val != _selectedTarget) {
+                          _onTargetChanged(val);
+                        }
+                      },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLabradorInstructions() {
+    return _buildOutlinedBox(
+      title: appLocalizations.flasherLabradorInstructionsTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _StepText(appLocalizations.flasherLabradorStepMethodA),
+          _StepText(appLocalizations.flasherLabradorStepPlugUSB),
+          _StepText(appLocalizations.flasherLabradorStepMethodB),
+          _StepText(appLocalizations.flasherLabradorStepEnumerate),
+          _StepText(appLocalizations.flasherLabradorStepSelectVariant),
+          Consumer<BoardStateProvider>(
+            builder: (context, provider, _) {
+              if (provider.isLabrador && provider.pslabIsConnected) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: primaryRed,
+                      side: BorderSide(color: primaryRed),
+                    ),
+                    icon: const Icon(Icons.restart_alt),
+                    label: Text(
+                      appLocalizations.flasherBtnJumpBootloader,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: _isFlashing
+                        ? null
+                        : () => _jumpConnectedLabradorToBootloader(provider),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLabradorSourcePanel() {
+    return _buildOutlinedBox(
+      title: appLocalizations.flasherSourceTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SegmentedButton<LabradorFirmwareSource>(
+            showSelectedIcon: false,
+            style: SegmentedButton.styleFrom(
+                selectedBackgroundColor: Colors.red[50],
+                selectedForegroundColor: primaryRed),
+            segments: [
+              ButtonSegment(
+                value: LabradorFirmwareSource.builtin,
+                icon: const Icon(Icons.memory, size: 18),
+                label: Text(appLocalizations.flasherBuiltinFirmware),
+              ),
+              ButtonSegment(
+                value: LabradorFirmwareSource.local,
+                icon: const Icon(Icons.folder_open, size: 18),
+                label: Text(appLocalizations.flasherCustomFile),
+              ),
+            ],
+            selected: {_selectedLabradorSource},
+            onSelectionChanged: _isFlashing
+                ? null
+                : (set) {
+                    setState(() {
+                      _selectedLabradorSource = set.first;
+                    });
+                    if (set.first == LabradorFirmwareSource.builtin) {
+                      _selectBuiltInLabradorFirmware(_selectedLabradorHex);
+                    } else {
+                      _loadedHexContent = null;
+                      _loadedFileName = null;
+                      _statusText = appLocalizations.flasherSelectCustomHex;
+                    }
+                  },
+          ),
+          const SizedBox(height: 16),
+          if (_selectedLabradorSource == LabradorFirmwareSource.builtin) ...[
+            Text(appLocalizations.flasherSelectFirmwareVariant,
+                style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black)),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade400),
+                  borderRadius: BorderRadius.circular(6)),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: _selectedLabradorHex,
+                  isExpanded: true,
+                  items: _labradorFirmwareDescriptions.keys.map((fname) {
+                    final bool isBulk = fname.contains("000c_03");
+                    return DropdownMenuItem(
+                      value: fname,
+                      child: Text(
+                        isBulk
+                            ? "$fname${appLocalizations.flasherBulkStreamingRecommended}"
+                            : fname,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight:
+                                isBulk ? FontWeight.bold : FontWeight.normal),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: _isFlashing
+                      ? null
+                      : (val) {
+                          if (val != null) {
+                            _selectBuiltInLabradorFirmware(val);
+                          }
+                        },
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: Colors.blue.shade200),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.info_outline,
+                      size: 20, color: Colors.blue.shade700),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _labradorFirmwareDescriptions[_selectedLabradorHex] ?? "",
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.blue.shade900,
+                          height: 1.3),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ] else ...[
+            _buildLocalFilePanel(),
+          ],
+        ],
       ),
     );
   }
@@ -685,6 +959,156 @@ class _FirmwareFlasherScreenState extends State<FirmwareFlasherScreen> {
           onPressed: _isFlashing ? null : _pickLocalFile,
         ),
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String currentStatus = _statusText ?? appLocalizations.flasherStatusReady;
+
+    return CommonScaffold(
+      title: appLocalizations.flasherTitle,
+      body: Container(
+        color: Colors.white,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTargetSelector(),
+              const SizedBox(height: 16),
+              if (_selectedTarget == 'EspoTek Labrador')
+                _buildLabradorInstructions()
+              else
+                _buildOutlinedBox(
+                  title: appLocalizations.flasherInstructionsTitle,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _StepText(appLocalizations.flasherInstStep1),
+                      _StepText(appLocalizations.flasherInstStep2),
+                      _StepText(appLocalizations.flasherInstStep3),
+                      _StepText(appLocalizations.flasherInstStep4),
+                    ],
+                  ),
+                ),
+              const SizedBox(height: 16),
+              if (_selectedTarget == 'EspoTek Labrador')
+                _buildLabradorSourcePanel()
+              else
+                _buildOutlinedBox(
+                  title: appLocalizations.flasherSourceTitle,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SegmentedButton<FirmwareSource>(
+                        showSelectedIcon: false,
+                        style: SegmentedButton.styleFrom(
+                            selectedBackgroundColor: Colors.red[50],
+                            selectedForegroundColor: primaryRed),
+                        segments: [
+                          ButtonSegment(
+                              value: FirmwareSource.github,
+                              icon: const FaIcon(FontAwesomeIcons.github,
+                                  size: 18),
+                              label:
+                                  Text(appLocalizations.flasherSourceGithub)),
+                          ButtonSegment(
+                              value: FirmwareSource.local,
+                              icon: const Icon(Icons.folder_open),
+                              label: Text(appLocalizations.flasherSourceLocal)),
+                        ],
+                        selected: {_selectedSource},
+                        onSelectionChanged: _isFlashing
+                            ? null
+                            : (set) {
+                                setState(() {
+                                  _selectedSource = set.first;
+                                });
+                              },
+                      ),
+                      const SizedBox(height: 16),
+                      if (_selectedSource == FirmwareSource.github)
+                        _buildGitHubPanel()
+                      else
+                        _buildLocalFilePanel(),
+                    ],
+                  ),
+                ),
+              const SizedBox(height: 16),
+              _buildOutlinedBox(
+                title: appLocalizations.flasherStatusTitle,
+                child: Column(
+                  children: [
+                    if (_loadedFileName != null) ...[
+                      Text("${appLocalizations.flasherTarget}$_loadedFileName",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              color: Colors.black),
+                          textAlign: TextAlign.center),
+                      const SizedBox(height: 12)
+                    ],
+                    Text(currentStatus,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: currentStatus.contains("error") ||
+                                    currentStatus.contains("Failed") ||
+                                    currentStatus.contains("failed")
+                                ? primaryRed
+                                : Colors.black)),
+                    const SizedBox(height: 12),
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: LinearProgressIndicator(
+                            value: _progress,
+                            minHeight: 12,
+                            backgroundColor: Colors.grey[200],
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                _progress == 1.0
+                                    ? Colors.green
+                                    : Colors.redAccent))),
+                    const SizedBox(height: 6),
+                    Align(
+                        alignment: Alignment.centerRight,
+                        child: Text("${(_progress * 100).toInt()}%",
+                            style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey))),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 54),
+                    backgroundColor: primaryRed,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6))),
+                onPressed: _isFlashing ? null : _onStartFlashingPressed,
+                child: _isFlashing
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2))
+                    : Text(
+                        _selectedTarget == 'EspoTek Labrador'
+                            ? "Flash Labrador Firmware"
+                            : appLocalizations.flasherBtnStartFlash,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1)),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

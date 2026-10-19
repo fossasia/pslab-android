@@ -6,7 +6,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.5.4
-  flutter: '3.47.5'
+  flutter: '3.47.7'
 
 dependencies:
   flutter:
@@ -15,28 +15,30 @@ dependencies:
     sdk: flutter
   intl: 0.20.3
 
-  cupertino_icons: ^1.0.9
+  cupertino_icons: ^2.0.0
   flutter_svg: ^2.3.0
   google_fonts: ^9.0.0
   fl_chart: ^1.2.0
   provider: ^6.1.5
   get_it: ^9.3.0
-  record: ^7.1.1
+  record: ^7.1.2
+  record_platform_interface: ^2.1.0
+  flutter_litert: ^3.9.4
   data: ^0.15.1
   logger: ^2.8.0
-  url_launcher: ^6.3.2
+  url_launcher: ^6.3.3
   font_awesome_flutter: ^11.0.0
-  package_info_plus: ^10.2.1
-  sensors_plus: ^7.1.0
+  package_info_plus: ^10.2.2
+  sensors_plus: ^7.1.1
   sleek_circular_slider: ^2.1.0
   gauge_indicator: ^0.6.0
   light: ^5.0.0
   connectivity_plus: ^7.3.1
   carousel_slider: ^5.1.1
   vibration: ^3.2.1
-  shared_preferences: ^2.5.5
+  shared_preferences: ^2.5.6
   csv: ^8.0.0
-  share_plus: ^13.3.0
+  share_plus: ^13.3.1
   path_provider: ^2.1.6
   file_picker: ^13.1.0
   flutter_screenutil: ^5.9.3
@@ -45,13 +47,12 @@ dependencies:
   latlong2: ^0.10.1
   geolocator: ^14.1.1
   wakelock_plus: ^1.8.0
-  image: ^4.10.1
+  image: ^4.12.0
   web: ^1.1.1
   mp_audio_stream: ^0.3.0
   ffi: ^2.2.0
   home_widget: ^0.10.0
-  girix_code_gauge: ^0.0.6
-  image_picker: ^1.2.3
+  image_picker: ^1.2.4
   rust_lib_pslab:
     path: rust_builder
   flutter_rust_bridge: 2.13.0
@@ -61,6 +62,7 @@ dependencies:
   freezed_annotation: ^3.1.0
   archive: ^4.3.0
   http: ^1.6.0
+  gx_gauge: ^1.0.1
 dev_dependencies:
   flutter_launcher_icons: ^0.14.1
   flutter_test:
@@ -70,11 +72,12 @@ dev_dependencies:
 
   flutter_lints: ^6.0.0
   flutter_oss_licenses: ^3.2.0
-  build_runner: ^2.16.1
+  build_runner: ^2.17.1
   freezed: ^4.0.2
 
 flutter:
   generate: true
+  uses-material-design: true
 
   fonts:
     - family: Digital-7
@@ -83,12 +86,12 @@ flutter:
         - asset: fonts/Digital-7-Italic.ttf
           style: italic
 
-  uses-material-design: true
-
   assets:
     - assets/icons/
     - assets/images/
     - assets/images/guide_images/
+    - assets/firmware/
+    - assets/yamnet_class_map.csv
 
 inno_bundle:
   id: b633ddbf-a022-4cbb-a459-4ba9fec0da51
