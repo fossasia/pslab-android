@@ -54,6 +54,18 @@ class _CompassScreenContentState extends State<CompassScreenContent> {
     super.initState();
     _provider = context.read<CompassProvider>();
     _configProvider = context.read<CompassConfigProvider>();
+    _provider.onPslabNotConnected = () {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            appLocalizations.pslabNotConnected,
+            style: TextStyle(color: snackBarContentColor),
+          ),
+          backgroundColor: snackBarBackgroundColor,
+        ),
+      );
+    };
 
     _provider.onPlaybackEnd = () {
       if (mounted && Navigator.canPop(context)) {

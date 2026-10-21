@@ -26,6 +26,8 @@ Sign up for the latest updates and test new features early by joining our [beta 
 * You can get a Pocket Science Lab device from the [FOSSASIA Shop](https://fossasia.com).
 * More resellers are listed on the [PSLab website](https://pslab.io/shop/).
 
+
+
 ## Communication
 
 * The PSLab [chat channel is on Gitter](https://gitter.im/fossasia/pslab).
@@ -126,9 +128,15 @@ Sign up for the latest updates and test new features early by joining our [beta 
 | OLED Display          | Displays graphics, animations, GIFs, and retro games on external I²C OLED displays | :heavy_check_mark: |
 | Sound Meter           | Measures ambient sound levels using the device microphone                           | :heavy_check_mark: |
 
-**Supported Devices:**
-- PSLab v5: VendorID `04d8`, ProductID `00df`
-- PSLab v6: VendorID `10c4`, ProductID `ea60`
+## Supported Hardware
+
+The PSLab app supports the following hardware devices:
+
+| Device | USB Vendor ID | USB Product ID | Firmware Requirement |
+|--------|--------------|---------------|----------------------|
+| [PSLab v5](https://pslab.io) | `04d8` | `00df` | Firmware v3.0 or higher |
+| [PSLab v6](https://pslab.io) | `10c4` | `ea60` | Latest firmware recommended |
+| [EspoTek Labrador](http://espotek.com/labrador) | `03EB` | `2FE4` | `labrafrim_000_c03.hex` |
 
 ## How to Use
 
