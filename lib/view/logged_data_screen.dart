@@ -834,24 +834,36 @@ class _LoggedDataScreenState extends State<LoggedDataScreen> {
                                             final data = await _dataService
                                                 .readDataFromFile(file);
                                             if (!context.mounted) return;
-                                            double latitude = 0;
-                                            double longitude = 0;
-                                            if (data[data.length - 1][
-                                                data[data.length - 1].length -
-                                                    2] is double) {
-                                              latitude = data[data.length - 1][
-                                                      data[data.length - 1]
-                                                              .length -
-                                                          2]
-                                                  .toDouble();
-                                              longitude = data[data.length - 1][
-                                                      data[data.length - 1]
-                                                              .length -
-                                                          1]
-                                                  .toDouble();
+                                            double? latitude;
+                                            double? longitude;
+                                            if (data.isNotEmpty) {
+                                              final lastRow = data.last;
+                                              final soundMeterName =
+                                                  appLocalizations.soundMeter;
+                                              if (instrumentName
+                                                      .toLowerCase() ==
+                                                  soundMeterName
+                                                      .toLowerCase()) {
+                                                if (lastRow.length >= 5) {
+                                                  latitude = _coordinateValue(
+                                                      lastRow[3]);
+                                                  longitude = _coordinateValue(
+                                                      lastRow[4]);
+                                                }
+                                              } else if (lastRow.length >= 2) {
+                                                // Existing behavior for other instruments.
+                                                latitude = _coordinateValue(
+                                                    lastRow[
+                                                        lastRow.length - 2]);
+                                                longitude = _coordinateValue(
+                                                    lastRow[
+                                                        lastRow.length - 1]);
+                                              }
                                             }
-                                            if (latitude == 0 &&
-                                                longitude == 0) {
+                                            if (latitude == null ||
+                                                longitude == null ||
+                                                (latitude == 0 &&
+                                                    longitude == 0)) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 SnackBar(
@@ -872,8 +884,8 @@ class _LoggedDataScreenState extends State<LoggedDataScreen> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => MapScreen(
-                                                  latitude: latitude,
-                                                  longitude: longitude,
+                                                  latitude: latitude!,
+                                                  longitude: longitude!,
                                                 ),
                                               ),
                                             );
@@ -971,5 +983,13 @@ class _LoggedDataScreenState extends State<LoggedDataScreen> {
     _keyboardFocusNode.dispose();
     _searchController.dispose();
     super.dispose();
+  }
+
+  double? _coordinateValue(dynamic value) {
+    if (value is num) return value.toDouble();
+    if (value is String) {
+      return double.tryParse(value.trim());
+    }
+    return null;
   }
 }
