@@ -26,6 +26,36 @@ Sign up for the latest updates and test new features early by joining our [beta 
 * You can get a Pocket Science Lab device from the [FOSSASIA Shop](https://fossasia.com).
 * More resellers are listed on the [PSLab website](https://pslab.io/shop/).
 
+## Supported Hardware
+
+The PSLab app supports the following hardware devices:
+
+| Device | USB Vendor ID | USB Product ID | Firmware Requirement | Notes |
+|--------|--------------|---------------|----------------------|-------|
+| [PSLab v5](https://pslab.io) | `04d8` | `00df` | Firmware v3.0 or higher | Legacy hardware; use `-DLEGACY_HARDWARE=true` flag when building firmware |
+| [PSLab v6](https://pslab.io) | `10c4` | `ea60` | Latest firmware recommended | Current generation PSLab hardware |
+| [EspoTek Labrador](http://espotek.com/labrador) | — | — | — | Open-source USB lab-on-a-board; 100% open hardware & software |
+
+### PSLab v5
+- **Microcontroller:** Microchip PIC24EP256GP204
+- **Firmware:** Requires firmware **v3.0 or higher** (check the [pslab-firmware](https://github.com/fossasia/pslab-firmware) repository)
+- **Connection:** USB (VendorID `04d8`, ProductID `00df`)
+
+### PSLab v6
+- **Microcontroller:** Microchip PIC24EP256GP204
+- **Firmware:** Latest firmware recommended
+- **Connection:** USB (VendorID `10c4`, ProductID `ea60`)
+- **Extras:** Includes ESP32 footprint for future Wi-Fi/Bluetooth support
+
+### EspoTek Labrador
+- **Website:** [espotek.com/labrador](http://espotek.com/labrador)
+- **GitHub:** [espotek-org/Labrador](https://github.com/espotek-org/Labrador)
+- **Connection:** Micro-USB (connects to PC, Raspberry Pi, or Android)
+- **Open Source:** Hardware (Creative Commons) and software (GPL)
+- **Instruments:** Oscilloscope (2ch, ~100 kHz), Waveform Generator (2ch), Logic Analyzer (2ch), Multimeter, Variable Power Supply
+
+> **Note:** To purchase a PSLab device, visit the [FOSSASIA Shop](https://fossasia.com) or check the [PSLab website](https://pslab.io/shop/) for resellers.
+
 ## Communication
 
 * The PSLab [chat channel is on Gitter](https://gitter.im/fossasia/pslab).
@@ -126,9 +156,7 @@ Sign up for the latest updates and test new features early by joining our [beta 
 | OLED Display          | Displays graphics, animations, GIFs, and retro games on external I²C OLED displays | :heavy_check_mark: |
 | Sound Meter           | Measures ambient sound levels using the device microphone                           | :heavy_check_mark: |
 
-**Supported Devices:**
-- PSLab v5: VendorID `04d8`, ProductID `00df`
-- PSLab v6: VendorID `10c4`, ProductID `ea60`
+For a full list of supported devices and firmware requirements, see the [Supported Hardware](#supported-hardware) section.
 
 ## How to Use
 
