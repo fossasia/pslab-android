@@ -54,7 +54,7 @@ class CompassProvider extends ChangeNotifier {
   CompassConfigProvider? _configProvider;
   Position? currentPosition;
   StreamSubscription? _locationStream;
-
+  bool _hasNotifiedPslabDisconnected = false;
   MagnetometerEvent get magnetometerEvent => _magnetometerEvent;
   AccelerometerEvent get accelerometerEvent => _accelerometerEvent;
   String get selectedAxis => _selectedAxis;
@@ -64,6 +64,7 @@ class CompassProvider extends ChangeNotifier {
   bool get isRecording => _isRecording;
   bool get isPlayingBack => _isPlayingBack;
   bool get isPlaybackPaused => _isPlaybackPaused;
+  VoidCallback? onPslabNotConnected;
 
   void setConfigProvider(CompassConfigProvider configProvider) {
     _configProvider?.removeListener(_onConfigChanged);
@@ -72,6 +73,9 @@ class CompassProvider extends ChangeNotifier {
   }
 
   void _onConfigChanged() {
+    if (_configProvider?.config.sensorSource != 'hmc5883l') {
+      _hasNotifiedPslabDisconnected = false;
+    }
     disposeSensors();
     initializeSensors();
   }
@@ -161,7 +165,12 @@ class CompassProvider extends ChangeNotifier {
       final scienceLab = getIt.get<ScienceLab>();
 
       if (!scienceLab.isConnected()) {
-        logger.w(appLocalizations.pslabNotConnected);
+        if (!_hasNotifiedPslabDisconnected) {
+          _hasNotifiedPslabDisconnected = true;
+          onPslabNotConnected?.call();
+          logger.w(appLocalizations.pslabNotConnected);
+        }
+
         _magnetometerSubscription = magnetometerEventStream(
           samplingPeriod: SensorInterval.gameInterval,
         ).listen(
@@ -176,6 +185,7 @@ class CompassProvider extends ChangeNotifier {
         );
         return;
       }
+      _hasNotifiedPslabDisconnected = false;
 
       final i2c = I2C(scienceLab.mPacketHandler);
       _hmc5883l = await HMC5883L.create(i2c, scienceLab);
