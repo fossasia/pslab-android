@@ -14,8 +14,10 @@ import 'package:pslab/others/logger_service.dart';
 import 'package:pslab/providers/board_state_provider.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/providers/multimeter_config_provider.dart';
+import 'package:pslab/services/ai_context_scooper.dart';
 
-class MultimeterStateProvider extends ChangeNotifier {
+class MultimeterStateProvider extends ChangeNotifier
+    implements AiContextScooper {
   MultimeterConfigProvider? _configProvider;
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
   late List<String> knobMarker;
@@ -59,6 +61,7 @@ class MultimeterStateProvider extends ChangeNotifier {
     _selectedIndex = 0;
     _scienceLab = getIt<ScienceLab>();
     _boardState = getIt<BoardStateProvider>();
+    AiContextRegistry.register(this);
     isSwitchChecked = false;
     isContinuityChecked = false;
     value = appLocalizations.defaultValue;
@@ -571,7 +574,29 @@ class MultimeterStateProvider extends ChangeNotifier {
 
     _stopBeepingStream();
     _audioStream?.uninit();
+    AiContextRegistry.unregister(this);
 
     super.dispose();
+  }
+
+  @override
+  String getInstrumentName() => 'Multimeter';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln(
+        'Connection: ${_scienceLab.isConnected() ? "Hardware Connected" : "Disconnected"}');
+    final selectedMode =
+        (_selectedIndex >= 0 && _selectedIndex < knobMarker.length)
+            ? knobMarker[_selectedIndex]
+            : 'Unknown';
+    buffer.writeln('Mode / Pin: $selectedMode');
+    buffer.writeln('Current Reading: $value $unit');
+    if (isContinuityChecked) {
+      buffer.writeln(
+          'Continuity Test: Active (${_isBeeping ? "Closed Circuit" : "Open Circuit"})');
+    }
+    return buffer.toString().trim();
   }
 }

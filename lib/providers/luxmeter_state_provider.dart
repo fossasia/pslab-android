@@ -15,8 +15,13 @@ import 'package:pslab/communication/peripherals/i2c.dart';
 import 'package:pslab/communication/science_lab.dart';
 import 'package:pslab/communication/sensors/bh1750.dart';
 import 'package:pslab/communication/sensors/tsl2561.dart';
+import '../services/ai_context_scooper.dart';
 
-class LuxMeterStateProvider extends ChangeNotifier {
+class LuxMeterStateProvider extends ChangeNotifier implements AiContextScooper {
+  LuxMeterStateProvider() {
+    AiContextRegistry.register(this);
+  }
+
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
 
   double _currentLux = 0.0;
@@ -402,6 +407,7 @@ class LuxMeterStateProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     if (_locationStream != null) {
       _locationStream!.cancel();
     }
@@ -510,5 +516,24 @@ class LuxMeterStateProvider extends ChangeNotifier {
     if (_currentTime <= 10) return 2;
     if (_currentTime <= 30) return 5;
     return 10;
+  }
+
+  @override
+  String getInstrumentName() => 'Lux Meter';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: Lux Meter');
+    buffer.writeln(
+        'Current Light Intensity: ${_currentLux.toStringAsFixed(1)} Lux');
+    buffer.writeln(
+        'Min: ${_luxMin.toStringAsFixed(1)} Lux, Max: ${_luxMax.toStringAsFixed(1)} Lux, Avg: ${getAverageLux().toStringAsFixed(1)} Lux');
+    buffer.writeln(
+        'Active Sensor: ${_bh1750 != null ? "BH1750 (I2C)" : (_tsl2561 != null ? "TSL2561 (I2C)" : "Built-in Device Light Sensor")}');
+    buffer.writeln('Sampling Time: ${_currentTime.toStringAsFixed(1)} s');
+    buffer.writeln(
+        'Status: ${_isPlayingBack ? "Playback Mode" : (_isRecording ? "Recording Active" : "Live Streaming")}');
+    return buffer.toString().trim();
   }
 }

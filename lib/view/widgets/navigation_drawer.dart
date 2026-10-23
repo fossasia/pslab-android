@@ -257,6 +257,39 @@ class _NavDrawerState extends State<NavDrawer> {
                 }
               },
             ),
+            ListTile(
+              selected: widget.selectedIndex == 14,
+              focusColor: listTileFocusColor,
+              dense: true,
+              leading: Icon(
+                Icons.auto_awesome,
+                color:
+                    widget.selectedIndex == 14 ? selectedMenuColor : menuColor,
+              ),
+              title: Text(
+                appLocalizations.aiAssistantTitle,
+                style: TextStyle(
+                  color: widget.selectedIndex == 14
+                      ? selectedMenuColor
+                      : Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+              onTap: () {
+                if (Navigator.canPop(context) &&
+                    ModalRoute.of(context)?.settings.name == '/aiAssistant') {
+                  Navigator.popUntil(
+                      context, ModalRoute.withName('/aiAssistant'));
+                } else {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/aiAssistant',
+                    (route) => route.isFirst,
+                  );
+                }
+              },
+            ),
             const Divider(),
             ListTile(
               selected: widget.selectedIndex == 5,

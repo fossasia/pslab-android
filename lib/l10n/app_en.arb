@@ -1017,5 +1017,65 @@
     "labradorPowerSourceIntro": "EspoTek Labrador provides a regulated DC power supply boost converter:",
     "labradorPowerSourceBulletPoint1": "PSU Output: 4.50 V to 12.00 V DC variable boost converter (0.75 W max). Connect to the Power Supply (Positive) pin.",
     "labradorPowerSourceBulletPoint2": "Hardware Jumper: Ensure the 3-pin jumper on the Labrador board has pins 1 and 2 bridged (towards the board edge) for PSU boost operation.",
-    "labradorPowerSourceBulletPoint3": "Note: EspoTek Labrador does not have an onboard constant current source (PCS); current is determined by your load resistance (I = V / R, up to 0.75 W max)."
+    "labradorPowerSourceBulletPoint3": "Note: EspoTek Labrador does not have an onboard constant current source (PCS); current is determined by your load resistance (I = V / R, up to 0.75 W max).",
+    "aiAssistantTitle": "AI Assistant",
+    "aiAuthStatusTitle": "AUTHENTICATION STATUS",
+    "aiConnectedOpenRouter": "Connected to OpenRouter",
+    "aiNotConnected": "Not Connected",
+    "aiActiveKey": "Active Key: {key}",
+    "@aiActiveKey": {
+        "placeholders": {
+            "key": {
+                "type": "String"
+            }
+        }
+    },
+    "aiTesting": "Testing...",
+    "aiTestConnection": "Test Connection",
+    "aiDisconnectOpenRouter": "Disconnect OpenRouter Account",
+    "aiOpenRouterSignInTitle": "OPENROUTER SIGN-IN (PKCE)",
+    "aiOpenRouterSignInDesc": "Connect your OpenRouter account securely via OAuth 2.0 PKCE to run hardware diagnostics with your personal rate limits and model preferences.",
+    "aiAuthenticating": "Authenticating...",
+    "aiSignInOpenRouter": "Sign in with OpenRouter",
+    "aiManualKeyTitle": "MANUAL API KEY OR AUTH CODE INPUT",
+    "aiManualKeyDesc": "Alternatively, configure a personal OpenRouter API key directly, or paste the authorization code shown in your browser. Credentials are stored encrypted in secure system storage.",
+    "aiManualKeyHint": "sk-or-v1-... or auth code / URL",
+    "aiEnterApiKey": "Please enter an API key.",
+    "aiApiKeySaved": "API key successfully saved.",
+    "aiSaveApiKey": "Save API Key",
+    "aiInferenceModelTitle": "INFERENCE MODEL SELECTION",
+    "aiInferenceModelDesc": "Select the neural inference model for circuit telemetry analysis and diagnostic calculations. Models with the FREE badge cost $0.00 and require no credits or payments.",
+    "aiModelAutoFree": "Auto Free Router (Recommended)",
+    "aiBadgeFree": "FREE",
+    "aiBadgePaid": "PAID",
+    "aiOverlayControlsTitle": "OVERLAY CONTROLS",
+    "aiFloatingAssistantTitle": "Floating Assistant",
+    "aiFloatingAssistantDesc": "Display a draggable floating assistant icon over instrument screens.",
+    "aiAutoAttachContextDesc": "Automatically attaches live instrument states and PSLab documentation when asking questions.",
+    "aiClearChatHistoryTooltip": "Clear Chat History",
+    "aiInspect": "Inspect",
+    "aiHide": "Hide",
+    "aiContext": "CONTEXT",
+    "aiStreamingResponse": "Streaming response...",
+    "aiConnectingToModel": "Connecting to {model}...",
+    "@aiConnectingToModel": {
+        "placeholders": {
+            "model": {
+                "type": "String"
+            }
+        }
+    },
+    "aiAskInstrumentHint": "Ask about this instrument or experiment...",
+    "aiConnectKeyHint": "Connect OpenRouter key in Settings...",
+    "aiYou": "You",
+    "aiMessageCopied": "Message copied to clipboard.",
+    "aiTelemetrySnapshotIncluded": "Telemetry Snapshot Included",
+    "aiErrorLabel": "Error",
+    "aiResponseCopied": "Response copied to clipboard.",
+    "aiTestSuccess": "Connected successfully! OpenRouter API responded.",
+    "aiTestNoKey": "No API key configured.",
+    "aiSignInCancelled": "Sign-in cancelled.",
+    "aiAuthTimedOut": "Authentication timed out. Please try again.",
+    "aiDisconnected": "Disconnected from OpenRouter.",
+    "aiNetworkError": "Unable to reach OpenRouter. Please check your internet connection."
 }

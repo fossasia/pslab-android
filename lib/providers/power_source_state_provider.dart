@@ -10,6 +10,7 @@ import 'package:pslab/others/logger_service.dart';
 import 'package:pslab/providers/board_state_provider.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/providers/power_source_config_provider.dart';
+import 'package:pslab/services/ai_context_scooper.dart';
 
 enum Pin {
   pv1,
@@ -19,7 +20,8 @@ enum Pin {
   psu,
 }
 
-class PowerSourceStateProvider extends ChangeNotifier {
+class PowerSourceStateProvider extends ChangeNotifier
+    implements AiContextScooper {
   late PowerSourceConfigProvider _configProvider;
   late double voltagePV1;
   late double voltagePV2;
@@ -82,6 +84,7 @@ class PowerSourceStateProvider extends ChangeNotifier {
     _scienceLab = getIt.get<ScienceLab>();
     _boardState = getIt.get<BoardStateProvider>();
     _isRecording = false;
+    AiContextRegistry.register(this);
   }
 
   void setConfigProvider(PowerSourceConfigProvider powerSourceConfigProvider) {
@@ -457,5 +460,43 @@ class PowerSourceStateProvider extends ChangeNotifier {
     _isRecording = false;
     notifyListeners();
     return _recordedData;
+  }
+
+  @override
+  void dispose() {
+    AiContextRegistry.unregister(this);
+    if (_locationStream != null) {
+      _locationStream!.cancel();
+    }
+    if (_loggingTimer != null) {
+      _loggingTimer!.cancel();
+    }
+    if (_playbackTimer != null) {
+      _playbackTimer!.cancel();
+    }
+    super.dispose();
+  }
+
+  @override
+  String getInstrumentName() => 'Power Source';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    final boardState = getIt.get<BoardStateProvider>();
+    final connected = boardState.pslabIsConnected ||
+        boardState.pslabVersionID != 'Not Connected';
+    buffer.writeln('Active Instrument: Power Source');
+    buffer.writeln(
+        'PSLab Board Hardware: ${connected ? "Connected (${boardState.pslabVersionID})" : "Disconnected (Simulation Mode)"}');
+    buffer.writeln(
+        'PV1 Voltage: ${voltagePV1.toStringAsFixed(2)} V (Bipolar range: +/- 5V)');
+    buffer.writeln(
+        'PV2 Voltage: ${voltagePV2.toStringAsFixed(2)} V (Range: +/- 3.3V)');
+    buffer.writeln(
+        'PV3 Voltage: ${voltagePV3.toStringAsFixed(2)} V (Range: 0 to 3.3V)');
+    buffer.writeln(
+        'PCS Current: ${currentPCS.toStringAsFixed(2)} mA (Constant Current: 0 to 3.3 mA)');
+    return buffer.toString().trim();
   }
 }

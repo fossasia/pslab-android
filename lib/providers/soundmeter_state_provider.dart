@@ -12,8 +12,14 @@ import 'package:pslab/providers/soundmeter_config_provider.dart';
 import 'package:pslab/others/permissions.dart';
 
 import 'package:pslab/others/sound_classification.dart';
+import '../services/ai_context_scooper.dart';
 
-class SoundMeterStateProvider extends ChangeNotifier {
+class SoundMeterStateProvider extends ChangeNotifier
+    implements AiContextScooper {
+  SoundMeterStateProvider() {
+    AiContextRegistry.register(this);
+  }
+
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
 
   double _currentDb = 0.0;
@@ -375,6 +381,7 @@ class SoundMeterStateProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     if (_locationStream != null) {
       _locationStream!.cancel();
     }
@@ -475,5 +482,23 @@ class SoundMeterStateProvider extends ChangeNotifier {
     if (_currentTime <= 10) return 2;
     if (_currentTime <= 30) return 5;
     return 10;
+  }
+
+  @override
+  String getInstrumentName() => 'Sound Meter';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: Sound Meter');
+    buffer.writeln(
+        'Current Sound Level: ${_currentDb.toStringAsFixed(1)} dB SPL');
+    buffer.writeln(
+        'Min: ${_dbMin.toStringAsFixed(1)} dB, Max: ${_dbMax.toStringAsFixed(1)} dB, Avg: ${getAverageDb().toStringAsFixed(1)} dB');
+    buffer.writeln('Sampling Time: ${_currentTime.toStringAsFixed(1)} s');
+    buffer.writeln('Input Source: Host Microphone via AudioJack');
+    buffer.writeln(
+        'Status: ${_isPlayingBack ? "Playback Mode" : (_isRecording ? "Recording Active" : "Live Listening")}');
+    return buffer.toString().trim();
   }
 }

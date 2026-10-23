@@ -13,10 +13,15 @@ import 'package:pslab/others/logger_service.dart';
 import '../others/oled_display.dart';
 import '../l10n/app_localizations.dart';
 import 'locator.dart';
+import '../services/ai_context_scooper.dart';
 
 enum GameModeType { racing, dino }
 
-class OledDisplayProvider extends ChangeNotifier {
+class OledDisplayProvider extends ChangeNotifier implements AiContextScooper {
+  OledDisplayProvider() {
+    AiContextRegistry.register(this);
+  }
+
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
   static const String lTag = "OLED_Provider";
 
@@ -1176,6 +1181,22 @@ class OledDisplayProvider extends ChangeNotifier {
     _runPhysics = false;
     _runHardware = false;
     isGifPlaying = false;
+    AiContextRegistry.unregister(this);
     super.dispose();
+  }
+
+  @override
+  String getInstrumentName() => 'OLED Display';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: OLED Display');
+    buffer.writeln(
+        'Hardware Status: ${_display != null ? "Connected (I2C: 0x3C)" : "Simulated / Standalone"}');
+    buffer.writeln(
+        'Active Mode: ${isGameMode ? "Game Mode ($selectedGameType)" : (isGifPlaying ? "GIF Animation Playback" : "Canvas Drawing ($activeTool)")}');
+    buffer.writeln('Display Resolution: 128x64 px monochrome');
+    return buffer.toString().trim();
   }
 }

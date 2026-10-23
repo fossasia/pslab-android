@@ -6,6 +6,7 @@ import 'package:pslab/l10n/app_localizations.dart';
 import 'package:pslab/providers/board_state_provider.dart';
 import 'package:pslab/providers/instrument_filter_provider.dart';
 import 'package:pslab/providers/locator.dart';
+import 'package:pslab/services/ai_context_scooper.dart';
 import 'package:pslab/view/widgets/applications_list_item.dart';
 import 'package:pslab/view/widgets/main_scaffold_widget.dart';
 
@@ -23,7 +24,8 @@ class _InstrumentData {
   _InstrumentData(this.heading, this.description, this.name);
 }
 
-class _InstrumentsScreenState extends State<InstrumentsScreen> {
+class _InstrumentsScreenState extends State<InstrumentsScreen>
+    implements AiContextScooper {
   List<int> _filteredIndices = <int>[];
   String _searchQuery = '';
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
@@ -91,6 +93,7 @@ class _InstrumentsScreenState extends State<InstrumentsScreen> {
   @override
   void initState() {
     super.initState();
+    AiContextRegistry.register(this);
     getIt.get<BoardStateProvider>().legacyFirmwareNotifier.addListener(() {
       if (getIt.get<BoardStateProvider>().legacyFirmwareNotifier.value ==
           "LegacyFirmwareDetected") {
@@ -282,5 +285,28 @@ class _InstrumentsScreenState extends State<InstrumentsScreen> {
               ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    AiContextRegistry.unregister(this);
+    super.dispose();
+  }
+
+  @override
+  String getInstrumentName() => 'Instruments Overview';
+
+  @override
+  String getLiveTelemetry() {
+    final board = getIt.get<BoardStateProvider>();
+    final connected =
+        board.pslabIsConnected || board.pslabVersionID != 'Not Connected';
+    final buffer = StringBuffer();
+    buffer.writeln('Active Screen: PSLab Instruments Catalog & Main Menu');
+    buffer.writeln(
+        'Hardware Connection: ${connected ? "Connected (${board.pslabVersionID})" : "Disconnected (Running standalone)"}');
+    buffer.writeln(
+        'Available Instruments: Oscilloscope, Multimeter, Logic Analyzer, Wave Generator, Power Source, Lux Meter, Accelerometer, Barometer, Compass, Gyroscope, Thermometer, Sound Meter, Gas Sensor, Robotic Arm, OLED Display.');
+    return buffer.toString().trim();
   }
 }

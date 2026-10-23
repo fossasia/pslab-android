@@ -15,6 +15,7 @@ import 'package:pslab/providers/wave_generator_config_provider.dart';
 
 import 'package:pslab/providers/board_state_provider.dart';
 import 'package:pslab/hal/wave_generator_interface.dart';
+import 'package:pslab/services/ai_context_scooper.dart';
 
 enum WaveConst {
   waveType,
@@ -51,7 +52,8 @@ enum WaveData {
   int get getValue => value;
 }
 
-class WaveGeneratorStateProvider extends ChangeNotifier {
+class WaveGeneratorStateProvider extends ChangeNotifier
+    implements AiContextScooper {
   WaveGeneratorConfigProvider? _configProvider;
   static final int sin = 1;
   static final int triangular = 2;
@@ -83,6 +85,7 @@ class WaveGeneratorStateProvider extends ChangeNotifier {
     propSelected = null;
     waveGeneratorConstants = WaveGeneratorConstants();
     waveData = [];
+    AiContextRegistry.register(this);
   }
 
   void setConfigProvider(WaveGeneratorConfigProvider configProvider) {
@@ -200,6 +203,7 @@ class WaveGeneratorStateProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     _stopAudioStream();
     isPlayingSound = false;
     super.dispose();
@@ -666,5 +670,50 @@ class WaveGeneratorStateProvider extends ChangeNotifier {
       ),
     );
     return plots;
+  }
+
+  @override
+  String getInstrumentName() => 'Wave Generator';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    final boardState = getIt.get<BoardStateProvider>();
+    final connected = boardState.pslabIsConnected ||
+        boardState.pslabVersionID != 'Not Connected';
+    buffer.writeln('Active Instrument: Wave Generator');
+    buffer.writeln(
+        'PSLab Board Hardware: ${connected ? "Connected (${boardState.pslabVersionID})" : "Disconnected (Simulation Mode)"}');
+    buffer.writeln(
+        'State: ${isAnalogActive ? "Analog Waves Active" : (isDigitalActive ? "Digital Waves Active" : "Standby")}');
+
+    final waveMap = waveGeneratorConstants.wave;
+    final w1Type = waveMap[WaveConst.wave1]?[WaveConst.waveType] ?? 1;
+    final w1TypeName = w1Type == sin
+        ? 'Sine'
+        : (w1Type == triangular ? 'Triangle' : 'Sawtooth');
+    final w1Freq = waveMap[WaveConst.wave1]?[WaveConst.frequency] ?? 1000;
+    final w1Phase = waveMap[WaveConst.wave1]?[WaveConst.phase] ?? 0;
+    buffer.writeln(
+        'W1 (Pin SI1 / W1): $w1TypeName at ${w1Freq}Hz (Phase: $w1Phase deg)');
+
+    final w2Type = waveMap[WaveConst.wave2]?[WaveConst.waveType] ?? 1;
+    final w2TypeName = w2Type == sin
+        ? 'Sine'
+        : (w2Type == triangular ? 'Triangle' : 'Sawtooth');
+    final w2Freq = waveMap[WaveConst.wave2]?[WaveConst.frequency] ?? 1000;
+    final w2Phase = waveMap[WaveConst.wave2]?[WaveConst.phase] ?? 0;
+    buffer.writeln(
+        'W2 (Pin SI2 / W2): $w2TypeName at ${w2Freq}Hz (Phase: $w2Phase deg)');
+
+    final sq1Freq = waveMap[WaveConst.sqr1]?[WaveConst.frequency] ?? 1000;
+    final sq1Duty = waveMap[WaveConst.sqr1]?[WaveConst.duty] ?? 50;
+    buffer.writeln('SQ1 (Pin SQ1): ${sq1Freq}Hz, Duty: $sq1Duty%');
+
+    final sq2Freq = waveMap[WaveConst.sqr2]?[WaveConst.frequency] ?? 1000;
+    final sq2Duty = waveMap[WaveConst.sqr2]?[WaveConst.duty] ?? 50;
+    buffer.writeln('SQ2 (Pin SQ2): ${sq2Freq}Hz, Duty: $sq2Duty%');
+
+    return buffer.toString().trim();
   }
 }

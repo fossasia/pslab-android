@@ -23,6 +23,7 @@ import '../hal/oscilloscope_interface.dart';
 import '../hal/labrador_oscilloscope.dart';
 import '../models/oscilloscope_recording_metadata.dart';
 import '../others/audio_jack.dart';
+import '../services/ai_context_scooper.dart';
 
 enum MODE { rising, falling, dual }
 
@@ -45,7 +46,8 @@ final Color curveFitColor = Colors.yellow;
 
 final Color xyPlotColor = Colors.red;
 
-class OscilloscopeStateProvider extends ChangeNotifier {
+class OscilloscopeStateProvider extends ChangeNotifier
+    implements AiContextScooper {
   late OscilloscopeConfigProvider _configProvider;
   late AudioJack _audioJack;
   late int _selectedIndex;
@@ -254,6 +256,7 @@ class OscilloscopeStateProvider extends ChangeNotifier {
     _analyticsClass = AnalyticsClass();
     oscilloscopeAxesScale = OscilloscopeAxesScale();
 
+    AiContextRegistry.register(this);
     monitor();
   }
 
@@ -958,7 +961,11 @@ class OscilloscopeStateProvider extends ChangeNotifier {
     }
     if (data is! String) return [];
 
-    return data.split(RegExp(r'\],\s*\[')).map(_parseSpotList).toList();
+    return data
+        .split(RegExp(r'\],\s*\['))
+        .map(_parseSpotList)
+        .where((spots) => spots.isNotEmpty)
+        .toList();
   }
 
   List<String> parseChannelsList(dynamic input) {
@@ -1393,6 +1400,7 @@ class OscilloscopeStateProvider extends ChangeNotifier {
       timebase = xAxisScale * 1000.0;
       oscilloscopeAxesScale.setXAxisScale(timebase);
       oscilloscopeAxesScale.setYAxisScale(yAxisScale);
+      _clearWaveformBuffers();
       notifyListeners();
       return true;
     } else {
@@ -1426,7 +1434,8 @@ class OscilloscopeStateProvider extends ChangeNotifier {
   List<LineChartBarData> createPlotForChannel(String channelName) {
     return _createChannelPlots(
       channelName,
-      includeHistory: isBufferOverlayEnabled(),
+      includeHistory:
+          isBufferOverlayEnabled() && isChannelSelected(channelName),
     );
   }
 
@@ -1541,6 +1550,7 @@ class OscilloscopeStateProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     _monitor = false;
     if (_timer.isActive) {
       _timer.cancel();
@@ -1551,5 +1561,46 @@ class OscilloscopeStateProvider extends ChangeNotifier {
     }
     _audioJack.disposeHardware();
     super.dispose();
+  }
+
+  @override
+  String getInstrumentName() => 'Oscilloscope';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    final boardState = getIt.get<BoardStateProvider>();
+    final connected = boardState.pslabIsConnected ||
+        boardState.pslabVersionID != 'Not Connected';
+    buffer.writeln(
+        'PSLab Board Hardware: ${connected ? "Connected (${boardState.pslabVersionID})" : "Not Connected (Simulation Mode for Board Channels)"}');
+    buffer.writeln(
+        'Active Channels: ${dataParamsChannels.isEmpty ? "None" : dataParamsChannels.join(", ")}');
+    buffer.writeln(
+        'Timebase: ${oscilloscopeAxesScale.xAxisScale.toStringAsFixed(2)} ms/div (Timebase slider: $timebaseSlider)');
+    buffer.writeln(
+        'Voltage Scale: +/- ${oscilloscopeAxesScale.yAxisScale.toStringAsFixed(2)} V');
+    buffer.writeln(
+        'Trigger: ${isTriggerSelected ? "Enabled on $triggerChannel at ${trigger.toStringAsFixed(2)}V" : "Disabled (Free Run)"}');
+
+    for (final channelName in dataParamsChannels) {
+      final measurements = OscilloscopeMeasurements.channel[channelName];
+      final freq = measurements?[ChannelMeasurements.frequency] ?? 0.0;
+      final vMin = measurements?[ChannelMeasurements.negativePeak] ?? 0.0;
+      final vMax = measurements?[ChannelMeasurements.positivePeak] ?? 0.0;
+      final vpp = (vMax - vMin).abs();
+      if (channelName.toUpperCase() == 'MIC') {
+        buffer.writeln(
+            '$channelName: Vmin=${vMin.toStringAsFixed(2)}V, Vmax=${vMax.toStringAsFixed(2)}V, Vpp=${vpp.toStringAsFixed(2)}V, Freq=${freq.toStringAsFixed(1)}Hz [Signal Origin: Host Device Microphone / OS Audio Subsystem - LIVE real-time acoustic input, completely independent of PSLab USB board]');
+      } else {
+        buffer.writeln(
+            '$channelName: Vmin=${vMin.toStringAsFixed(2)}V, Vmax=${vMax.toStringAsFixed(2)}V, Vpp=${vpp.toStringAsFixed(2)}V, Freq=${freq.toStringAsFixed(1)}Hz [Signal Origin: Physical PSLab Pin - ${connected ? "Live Hardware Pin ADC" : "Simulated Test Waveform"}]');
+      }
+    }
+
+    if (isXYPlotSelected) {
+      buffer.writeln('XY Plot: Active ($xyPlotAxis1 vs $xyPlotAxis2)');
+    }
+    return buffer.toString().trim();
   }
 }

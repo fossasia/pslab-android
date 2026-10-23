@@ -17,8 +17,14 @@ import 'package:pslab/communication/sensors/sht21.dart';
 
 import '../l10n/app_localizations.dart';
 import 'locator.dart';
+import '../services/ai_context_scooper.dart';
 
-class ThermometerStateProvider extends ChangeNotifier {
+class ThermometerStateProvider extends ChangeNotifier
+    implements AiContextScooper {
+  ThermometerStateProvider() {
+    AiContextRegistry.register(this);
+  }
+
   AppLocalizations appLocalizations = getIt.get<AppLocalizations>();
   ThermometerConfigProvider? _configProvider;
 
@@ -437,6 +443,7 @@ class ThermometerStateProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     if (_locationStream != null) {
       _locationStream!.cancel();
     }
@@ -517,5 +524,23 @@ class ThermometerStateProvider extends ChangeNotifier {
     if (_currentTime <= 10) return 2;
     if (_currentTime <= 30) return 5;
     return 10;
+  }
+
+  @override
+  String getInstrumentName() => 'Thermometer';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: Thermometer');
+    buffer.writeln(
+        'Current Temperature: ${getCurrentTemperature().toStringAsFixed(1)} °C');
+    buffer.writeln(
+        'Min: ${getMinTemperature().toStringAsFixed(1)} °C, Max: ${getMaxTemperature().toStringAsFixed(1)} °C, Avg: ${getAverageTemperature().toStringAsFixed(1)} °C');
+    buffer.writeln('Active Sensor: $_currentActiveSensor');
+    buffer.writeln('Sampling Time: ${_currentTime.toStringAsFixed(1)} s');
+    buffer.writeln(
+        'Status: ${_isPlayingBack ? "Playback Mode" : (_isRecording ? "Recording Active" : "Live Streaming")}');
+    return buffer.toString().trim();
   }
 }

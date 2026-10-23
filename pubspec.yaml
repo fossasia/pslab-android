@@ -63,6 +63,12 @@ dependencies:
   archive: ^4.3.0
   http: ^1.6.0
   gx_gauge: ^1.0.1
+  flutter_secure_storage: ^11.2.0
+  app_links: ^6.4.1
+  crypto: ^3.0.6
+  flutter_markdown: ^0.7.7+1
+  flutter_math_fork: ^0.7.4
+  markdown: ^7.3.0
 dev_dependencies:
   flutter_launcher_icons: ^0.14.1
   flutter_test:
@@ -92,6 +98,7 @@ flutter:
     - assets/images/guide_images/
     - assets/firmware/
     - assets/yamnet_class_map.csv
+    - assets/knowledge/
 
 inno_bundle:
   id: b633ddbf-a022-4cbb-a459-4ba9fec0da51
