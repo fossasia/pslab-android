@@ -17,7 +17,7 @@ runs:
       shell: bash
       run: |
         sudo apt-get update -y;
-        sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev yq libudev-dev libasound2-dev
+        sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev yq libudev-dev libasound2-dev libsecret-1-dev libjsoncpp-dev
 
     - name: Clone Flutter
       shell: bash
@@ -53,6 +53,7 @@ runs:
           -v ${{ inputs.VERSION_NAME }} \
           --prefix=/ \
           --depends libusb-1.0-0 \
+          --depends libsecret-1-0 \
           build/linux/arm64/release/bundle/bin/=/usr/bin \
           build/linux/arm64/release/bundle/lib/pslab/=/usr/lib/pslab \
           build/linux/arm64/release/bundle/share/pslab/=/usr/share/pslab \
@@ -68,6 +69,7 @@ runs:
           -v ${{ inputs.VERSION_NAME }} \
           --prefix=/ \
           --depends libusb1 \
+          --depends libsecret \
           build/linux/arm64/release/bundle/bin/=/usr/bin \
           build/linux/arm64/release/bundle/lib/pslab/=/usr/lib/pslab \
           build/linux/arm64/release/bundle/share/pslab/=/usr/share/pslab \
