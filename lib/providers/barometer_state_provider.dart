@@ -13,8 +13,10 @@ import 'package:pslab/communication/sensors/bmp180.dart';
 import 'package:pslab/providers/barometer_config_provider.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter/foundation.dart';
+import '../services/ai_context_scooper.dart';
 
-class BarometerStateProvider extends ChangeNotifier {
+class BarometerStateProvider extends ChangeNotifier
+    implements AiContextScooper {
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
 
   double _currentPressure = 0.0;
@@ -67,6 +69,7 @@ class BarometerStateProvider extends ChangeNotifier {
     _configProvider.addListener(_onConfigChanged);
     _currentSensorType = _configProvider.config.activeSensor;
     _currentUpdatePeriod = _configProvider.config.updatePeriod;
+    AiContextRegistry.register(this);
   }
 
   Future<void> _startGeoLocationUpdates() async {
@@ -427,6 +430,7 @@ class BarometerStateProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     if (_locationStream != null) {
       _locationStream!.cancel();
     }
@@ -576,4 +580,27 @@ class BarometerStateProvider extends ChangeNotifier {
   String get currentSensorType => _currentSensorType;
   bool get isBMP180Active => _currentSensorType == 'BMP180';
   bool get isBuiltInActive => _currentSensorType == 'In-built Sensor';
+
+  @override
+  String getInstrumentName() => 'Barometer';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: Barometer');
+    buffer.writeln(
+        'Current Pressure: ${_currentPressure.toStringAsFixed(2)} hPa');
+    buffer.writeln(
+        'Min Pressure: ${_pressureMin.toStringAsFixed(2)} hPa, Max: ${_pressureMax.toStringAsFixed(2)} hPa, Avg: ${getAveragePressure().toStringAsFixed(2)} hPa');
+    buffer.writeln(
+        'Current Altitude: ${getCurrentAltitude().toStringAsFixed(1)} m');
+    if (hasTemperatureData()) {
+      buffer.writeln(
+          'Sensor Temperature: ${_currentTemperature.toStringAsFixed(1)} °C');
+    }
+    buffer.writeln('Active Sensor: $_currentSensorType');
+    buffer.writeln(
+        'Status: ${_isPlayingBack ? "Playback Mode" : (_isRecording ? "Recording Active" : "Live Streaming")}');
+    return buffer.toString().trim();
+  }
 }

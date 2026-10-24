@@ -39,6 +39,10 @@ import 'package:pslab/view/thermometer_screen.dart';
 import 'package:pslab/view/wave_generator_screen.dart';
 import 'package:pslab/view/experiments_screen.dart';
 import 'package:pslab/view/oled_display_screen.dart';
+import 'package:pslab/providers/ai_assistant_provider.dart';
+import 'package:pslab/view/ai_settings_screen.dart';
+import 'package:pslab/view/widgets/ai_floating_assistant.dart';
+import 'package:pslab/services/ai_context_scooper.dart';
 import 'constants.dart';
 
 import 'package:pslab/src/rust/frb_generated.dart';
@@ -78,6 +82,9 @@ void main(List<String> args) async {
         ChangeNotifierProvider<SHT21Provider>(
           create: (context) => getIt<SHT21Provider>(),
         ),
+        ChangeNotifierProvider<AiAssistantProvider>(
+          create: (context) => AiAssistantProvider(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -99,6 +106,8 @@ class MyApp extends StatelessWidget {
         return Consumer<SettingsConfigProvider>(
           builder: (context, provider, child) {
             return MaterialApp(
+              navigatorKey: rootNavigatorKey,
+              navigatorObservers: [AiContextRegistry.routeObserver],
               debugShowCheckedModeBanner: false,
               locale: Locale(provider.config.languageCode),
               builder: (context, child) {
@@ -108,7 +117,7 @@ class MyApp extends StatelessWidget {
                   getIt<BoardStateProvider>().initialize();
                 }
                 appLocalizations = getIt.get<AppLocalizations>();
-                return child!;
+                return AiFloatingAssistantWrapper(child: child!);
               },
               theme: ThemeData(
                 colorSchemeSeed: Colors.white,
@@ -137,6 +146,8 @@ class MyApp extends StatelessWidget {
                 '/faq': (context) => _LocaleAware(child: FAQScreen()),
                 '/settings': (context) =>
                     const _LocaleAware(child: SettingsScreen()),
+                '/aiAssistant': (context) =>
+                    const _LocaleAware(child: AiSettingsScreen()),
                 '/aboutUs': (context) =>
                     const _LocaleAware(child: AboutUsScreen()),
                 '/softwareLicenses': (context) =>

@@ -11,8 +11,14 @@ import 'package:pslab/communication/science_lab.dart';
 
 import '../l10n/app_localizations.dart';
 import 'locator.dart';
+import '../services/ai_context_scooper.dart';
 
-class GasSensorStateProvider extends ChangeNotifier {
+class GasSensorStateProvider extends ChangeNotifier
+    implements AiContextScooper {
+  GasSensorStateProvider() {
+    AiContextRegistry.register(this);
+  }
+
   AppLocalizations appLocalizations = getIt.get<AppLocalizations>();
   ScienceLab? _scienceLab;
 
@@ -458,6 +464,7 @@ class GasSensorStateProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     disposeSensors();
     super.dispose();
   }
@@ -495,5 +502,24 @@ class GasSensorStateProvider extends ChangeNotifier {
     if (_currentTime <= 30) return 5;
     if (_currentTime <= 80) return 10;
     return 20;
+  }
+
+  @override
+  String getInstrumentName() => 'Gas Sensor';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: Gas Sensor');
+    buffer.writeln(
+        'Gas Reading: ${_currentValue.toStringAsFixed(2)} (Mode: $_activeMode)');
+    buffer.writeln(
+        'Min: ${getMinValue().toStringAsFixed(2)}, Max: ${getMaxValue().toStringAsFixed(2)}, Avg: ${getAverageValue().toStringAsFixed(2)}');
+    buffer.writeln(
+        'Status: ${_isCalibrating ? "Preheating/Calibrating" : (_isSensorAvailable ? "Sensor Active" : "Waiting for Sensor")}');
+    buffer.writeln('Sampling Time: ${_currentTime.toStringAsFixed(1)} s');
+    buffer.writeln(
+        'Mode: ${isPlayingData() ? "Playback Mode" : (_isRecording ? "Recording Active" : "Live Monitoring")}');
+    return buffer.toString().trim();
   }
 }

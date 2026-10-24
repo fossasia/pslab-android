@@ -12,8 +12,14 @@ import 'package:pslab/communication/science_lab.dart';
 import 'package:pslab/communication/sensors/mpu6050.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/communication/sensors/mpu925x.dart';
+import '../services/ai_context_scooper.dart';
 
-class AccelerometerStateProvider extends ChangeNotifier {
+class AccelerometerStateProvider extends ChangeNotifier
+    implements AiContextScooper {
+  AccelerometerStateProvider() {
+    AiContextRegistry.register(this);
+  }
+
   AccelerometerEvent _accelerometerEvent =
       AccelerometerEvent(0, 0, 0, DateTime.now());
   StreamSubscription? _accelerometerSubscription;
@@ -208,6 +214,7 @@ class AccelerometerStateProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     _locationStream?.cancel();
     disposeSensors();
     super.dispose();
@@ -456,5 +463,23 @@ class AccelerometerStateProvider extends ChangeNotifier {
       default:
         return 0;
     }
+  }
+
+  @override
+  String getInstrumentName() => 'Accelerometer';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: Accelerometer');
+    buffer.writeln(
+        'Current Acceleration: X=${_accelerometerEvent.x.toStringAsFixed(2)} m/s², Y=${_accelerometerEvent.y.toStringAsFixed(2)} m/s², Z=${_accelerometerEvent.z.toStringAsFixed(2)} m/s²');
+    buffer.writeln(
+        'X Range: [${_xMin.toStringAsFixed(2)}, ${_xMax.toStringAsFixed(2)}], Y Range: [${_yMin.toStringAsFixed(2)}, ${_yMax.toStringAsFixed(2)}], Z Range: [${_zMin.toStringAsFixed(2)}, ${_zMax.toStringAsFixed(2)}]');
+    buffer.writeln(
+        'Sensor Hardware: ${_mpu6050 != null ? "MPU6050 (I2C)" : (_mpu925x != null ? "MPU925X (I2C)" : "Device Internal Accelerometer")}');
+    buffer.writeln(
+        'Status: ${_isPlayingBack ? "Playback Mode" : (_isRecording ? "Recording Active" : "Live Streaming")}');
+    return buffer.toString().trim();
   }
 }

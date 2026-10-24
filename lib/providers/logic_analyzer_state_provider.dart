@@ -16,8 +16,10 @@ import 'package:pslab/providers/board_state_provider.dart';
 import 'package:pslab/hal/hardware_board.dart';
 import 'package:pslab/hal/labrador_board.dart';
 import 'package:pslab/hal/logic_analyzer_interface.dart';
+import 'package:pslab/services/ai_context_scooper.dart';
 
-class LogicAnalyzerStateProvider extends ChangeNotifier {
+class LogicAnalyzerStateProvider extends ChangeNotifier
+    implements AiContextScooper {
   LogicAnalyzerConfigProvider? _configProvider;
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
   static const singleChannelAxisMin = -0.1;
@@ -117,6 +119,7 @@ class LogicAnalyzerStateProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     _playbackTimer?.cancel();
     super.dispose();
   }
@@ -162,6 +165,27 @@ class LogicAnalyzerStateProvider extends ChangeNotifier {
     isProcessing = false;
     isData = false;
     updateAvailableChannels();
+    AiContextRegistry.register(this);
+  }
+
+  @override
+  String getInstrumentName() => 'Logic Analyzer';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    final board = getIt.get<BoardStateProvider>();
+    final connected =
+        board.pslabIsConnected || board.pslabVersionID != 'Not Connected';
+    buffer.writeln('Active Instrument: Logic Analyzer');
+    buffer.writeln(
+        'PSLab Board Hardware: ${connected ? "Connected (${board.pslabVersionID})" : "Disconnected (Simulation Mode)"}');
+    buffer.writeln(
+        'Active Channels: ${channels.isEmpty ? "None" : channels.join(", ")}');
+    buffer.writeln(
+        'Channel Mode: $channelMode (Channel count: ${channels.length})');
+    buffer.writeln('Trigger Channel: $channelSelectSpinner1');
+    return buffer.toString().trim();
   }
 
   void updateAvailableChannels() {

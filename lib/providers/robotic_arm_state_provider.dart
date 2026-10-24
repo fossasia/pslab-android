@@ -9,8 +9,10 @@ import 'package:pslab/others/logger_service.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/others/science_lab_common.dart';
 import 'package:vibration/vibration.dart';
+import '../services/ai_context_scooper.dart';
 
-class RoboticArmStateProvider extends ChangeNotifier {
+class RoboticArmStateProvider extends ChangeNotifier
+    implements AiContextScooper {
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
 
   final List<double> servoValues = [0, 0, 0, 0];
@@ -49,6 +51,7 @@ class RoboticArmStateProvider extends ChangeNotifier {
     _selectedMaxAngle = appLocalizations.angle180;
     _selectedDuration = appLocalizations.duration1Min;
     _initTimelineDegrees();
+    AiContextRegistry.register(this);
   }
 
   void _initTimelineDegrees() {
@@ -355,5 +358,30 @@ class RoboticArmStateProvider extends ChangeNotifier {
       'maxAngle': maxAngleVal,
       'dutyLabelPoints': dutyLabelPoints,
     };
+  }
+
+  @override
+  void dispose() {
+    _debounceTimer?.cancel();
+    _timelineTimer?.cancel();
+    timelineScrollController.dispose();
+    AiContextRegistry.unregister(this);
+    super.dispose();
+  }
+
+  @override
+  String getInstrumentName() => 'Robotic Arm';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: Robotic Arm');
+    buffer.writeln(
+        'Servo Angles: Servo1=${servoValues[0].toStringAsFixed(1)}°, Servo2=${servoValues[1].toStringAsFixed(1)}°, Servo3=${servoValues[2].toStringAsFixed(1)}°, Servo4=${servoValues[3].toStringAsFixed(1)}°');
+    buffer.writeln(
+        'PWM Frequency: $_selectedFrequency, Max Angle: $_selectedMaxAngle');
+    buffer.writeln(
+        'Timeline: Position=$timelinePosition/$totalTimelineItems, Status: ${isPlaying ? "Playing Sequence" : "Idle"}');
+    return buffer.toString().trim();
   }
 }

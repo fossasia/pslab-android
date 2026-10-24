@@ -12,8 +12,13 @@ import 'package:pslab/communication/science_lab.dart';
 import 'package:pslab/communication/sensors/mpu6050.dart';
 import 'package:pslab/providers/locator.dart';
 import 'package:pslab/communication/sensors/mpu925x.dart';
+import '../services/ai_context_scooper.dart';
 
-class GyroscopeProvider extends ChangeNotifier {
+class GyroscopeProvider extends ChangeNotifier implements AiContextScooper {
+  GyroscopeProvider() {
+    AiContextRegistry.register(this);
+  }
+
   StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;
   GyroscopeEvent _gyroscopeEvent = GyroscopeEvent(0, 0, 0, DateTime.now());
   Timer? _externalSensorTimer;
@@ -500,11 +505,30 @@ class GyroscopeProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    AiContextRegistry.unregister(this);
     if (_locationStream != null) {
       _locationStream!.cancel();
     }
     _playbackTimer?.cancel();
     disposeSensors();
     super.dispose();
+  }
+
+  @override
+  String getInstrumentName() => 'Gyroscope';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: Gyroscope');
+    buffer.writeln(
+        'Current Angular Velocity: X=${_gyroscopeEvent.x.toStringAsFixed(3)} rad/s, Y=${_gyroscopeEvent.y.toStringAsFixed(3)} rad/s, Z=${_gyroscopeEvent.z.toStringAsFixed(3)} rad/s');
+    buffer.writeln(
+        'X Range: [${_xMin.toStringAsFixed(3)}, ${_xMax.toStringAsFixed(3)}], Y Range: [${_yMin.toStringAsFixed(3)}, ${_yMax.toStringAsFixed(3)}], Z Range: [${_zMin.toStringAsFixed(3)}, ${_zMax.toStringAsFixed(3)}]');
+    buffer.writeln(
+        'Sensor Hardware: ${_mpu6050 != null ? "MPU6050 (I2C)" : (_mpu925x != null ? "MPU925X (I2C)" : "Device Internal Gyroscope")}');
+    buffer.writeln(
+        'Status: ${_isPlayingBack ? "Playback Mode" : (_isRecording ? "Recording Active" : "Live Streaming")}');
+    return buffer.toString().trim();
   }
 }

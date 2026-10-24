@@ -26,9 +26,8 @@ runs:
         sudo apt-get install -y pkg-config libudev-dev libusb-1.0-0-dev libasound2-dev
 
     - name: Install wasm-pack
-      uses: jetli/wasm-pack-action@v0.4.0
-      with:
-        version: 'latest'
+      shell: bash
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
     - name: Add WebAssembly to Rust
       shell: bash

@@ -13,8 +13,13 @@ import '../communication/sensors/hmc5883l.dart';
 import '../l10n/app_localizations.dart';
 import 'locator.dart';
 import 'compass_config_provider.dart';
+import '../services/ai_context_scooper.dart';
 
-class CompassProvider extends ChangeNotifier {
+class CompassProvider extends ChangeNotifier implements AiContextScooper {
+  CompassProvider() {
+    AiContextRegistry.register(this);
+  }
+
   AppLocalizations get appLocalizations => getIt.get<AppLocalizations>();
 
   MagnetometerEvent _magnetometerEvent =
@@ -385,6 +390,7 @@ class CompassProvider extends ChangeNotifier {
   @override
   void dispose() {
     _configProvider?.removeListener(_onConfigChanged);
+    AiContextRegistry.unregister(this);
     disposeSensors();
     _recordTimer?.cancel();
     _locationStream?.cancel();
@@ -512,5 +518,24 @@ class CompassProvider extends ChangeNotifier {
     }
     _updateCompassDirection();
     notifyListeners();
+  }
+
+  @override
+  String getInstrumentName() => 'Compass';
+
+  @override
+  String getLiveTelemetry() {
+    final buffer = StringBuffer();
+    buffer.writeln('Active Instrument: Compass');
+    buffer.writeln(
+        'Current Heading: ${_currentDegree.toStringAsFixed(1)}° (Axis: $_selectedAxis)');
+    buffer.writeln('Smoothed Heading: ${_smoothedHeading.toStringAsFixed(1)}°');
+    buffer.writeln(
+        'Magnetic Field: X=${_magnetometerEvent.x.toStringAsFixed(1)} µT, Y=${_magnetometerEvent.y.toStringAsFixed(1)} µT, Z=${_magnetometerEvent.z.toStringAsFixed(1)} µT');
+    buffer.writeln(
+        'Sensor Hardware: ${_hmc5883l != null ? "HMC5883L (I2C)" : "Device Internal Magnetometer"}');
+    buffer.writeln(
+        'Status: ${_isPlayingBack ? "Playback Mode" : (_isRecording ? "Recording Active" : "Live Streaming")}');
+    return buffer.toString().trim();
   }
 }
